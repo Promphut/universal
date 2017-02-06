@@ -1,7 +1,5 @@
 import React, { PropTypes } from 'react'
-import { injectGlobal, ThemeProvider } from 'styled-components'
-
-import theme from './themes/default'
+import { injectGlobal } from 'styled-components'
 
 injectGlobal`
   body {
@@ -11,14 +9,17 @@ injectGlobal`
 
 const App = ({ children }) => {
   return (
-    <ThemeProvider theme={theme}>
+    <div>
       {children}
-    </ThemeProvider>
+    </div>
   )
 }
 
 App.propTypes = {
-  children: PropTypes.any
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
+  ])
 }
 
 export default App
