@@ -1,34 +1,50 @@
-import React from 'react';
-import AppBar from 'material-ui/AppBar';
+import React, {Component} from 'react';
+import FontIcon from 'material-ui/FontIcon';
+import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
+import Paper from 'material-ui/Paper';
+import IconLocationOn from 'material-ui/svg-icons/communication/location-on';
+import {UpvoteBtn} from 'components'
 import IconButton from 'material-ui/IconButton';
-import NavigationClose from 'material-ui/svg-icons/navigation/close';
-import FlatButton from 'material-ui/FlatButton';
+import styled from 'styled-components'
 
-function handleTouchTap() {
-  alert('onTouchTap triggered on the title component');
-}
+const Downvote = styled.a`
+  text-decoration: underline;
+  color:#8F8F8F;
+  font-size:14px;
+`
 
-const styles = {
-  title: {
-    cursor: 'pointer',
+
+const styles={
+  Paper:{
+    width:'100%',
   },
-};
-
-/**
- * This example uses an [IconButton](/#/components/icon-button) on the left, has a clickable `title`
- * through the `onTouchTap` property, and a [FlatButton](/#/components/flat-button) on the right.
- */
-const AppBarMenu = () => {
-  return(
-    <AppBar
-      title={<span style={styles.title}>Title</span>}
-      onTitleTouchTap={handleTouchTap}
-      iconElementLeft={<IconButton><NavigationClose /></IconButton>}
-      iconElementRight={<FlatButton label="Save" />}
-    />
-  )
+  menuIcon:{
+    margin:'10px'
+  },
+  UpvoteBtn:{
+    marginLeft:'30px'
+  }
 }
-  
 
+
+
+class AppBarMenu extends Component {
+  state = {
+    selectedIndex: 0,
+  };
+
+  select = (index) => this.setState({selectedIndex: index});
+
+  render() {
+    return (
+      <Paper zDepth={1} style={styles.Paper}>
+        <IconButton style={styles.menuIcon}><FontIcon className="material-icons">menu</FontIcon></IconButton>
+        <img src='/aommoneyIcon.svg'/>
+        <UpvoteBtn style={styles.UpvoteBtn} text="Upvote | 18" />
+        <Downvote href='#'>Downvote</Downvote>
+      </Paper>
+    );
+  }
+}
 
 export default AppBarMenu;
