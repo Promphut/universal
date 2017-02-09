@@ -1,10 +1,10 @@
 import React from 'react'
-import { PageTemplate, AppBarExampleIconButton} from 'components'
+import { PageTemplate, AppBarMenu} from 'components'
 
 const HomePage = () => {
   return (
     <PageTemplate>
-      <AppBarExampleIconButton/>
+      <AppBarMenu/>
     </PageTemplate>
   )
 }
