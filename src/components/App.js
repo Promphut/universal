@@ -1,6 +1,11 @@
 import React, { PropTypes } from 'react'
 import { injectGlobal } from 'styled-components'
 
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
+
 injectGlobal`
   body {
     margin: 0;
@@ -9,9 +14,11 @@ injectGlobal`
 
 const App = ({ children }) => {
   return (
-    <div>
-      {children}
-    </div>
+    <MuiThemeProvider muiTheme={getMuiTheme()}>
+      <div>
+        {children}
+      </div>
+    </MuiThemeProvider>
   )
 }
 

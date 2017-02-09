@@ -4,6 +4,7 @@ import { AppContainer } from 'react-hot-loader'
 import { Router, browserHistory, applyRouterMiddleware } from 'react-router'
 import { useScroll } from 'react-router-scroll'
 
+
 import routes from 'routes'
 
 const root = document.getElementById('app')
