@@ -3,14 +3,13 @@ import FontIcon from 'material-ui/FontIcon';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 import Paper from 'material-ui/Paper';
 import IconLocationOn from 'material-ui/svg-icons/communication/location-on';
-import {UpvoteBtn,NewStoryBtn,SignUpBtn,MenuItemList} from 'components'
+import {UpvoteBtn,NewStoryBtn,SignUpBtn,MenuItemList,UserMenu} from 'components'
 import IconButton from 'material-ui/IconButton';
 import styled from 'styled-components'
 import Avatar from 'material-ui/Avatar';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
-
 const Menus = styled.a`
   text-decoration: none;
   color:#8F8F8F;
@@ -107,7 +106,9 @@ const AppBarMenuMain = React.createClass({
   getInitialState(){
     return{
       open:false,
-      anchorEl:{}
+      openUserMenu:false,
+      anchorEl:{},
+      anchorUserMenu:{}
     }
   },
 
@@ -119,10 +120,18 @@ const AppBarMenuMain = React.createClass({
       anchorEl: event.currentTarget,
     });
   },
+  toggleUserMenu(event){
+    event.preventDefault();
+    this.setState({
+      openUserMenu: true,
+      anchorUserMenu: event.currentTarget,
+    });
+  },
 
   handleRequestClose(){
     this.setState({
       open: false,
+      openUserMenu:false
     });
   },
   render(){
@@ -168,7 +177,10 @@ const AppBarMenuMain = React.createClass({
         <Paper zDepth={1} style={styles.Paper}>
           <IconButton style={styles.menuIcon}><FontIcon className="material-icons">menu</FontIcon></IconButton>
           <a href="#"><img src='/aommoneyIcon.svg' style={styles.icon}/></a>
-          <Avatar src='/icon.png' style={styles.Avatar} size={36}/>
+          <div>
+            <Avatar src='/icon.png' style={styles.Avatar} size={36} onClick={this.toggleUserMenu}/>
+            <UserMenu openPopUp={this.state.openUserMenu} anchor={this.state.anchorUserMenu} closePopUp={this.handleRequestClose}/>
+          </div>
           <NewStoryBtn style={styles.NewStoryBtn} />
           <MenuContainer>
             <Menus>Home</Menus>
