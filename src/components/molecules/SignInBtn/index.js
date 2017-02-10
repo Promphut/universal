@@ -4,26 +4,26 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 
 const Btn = styled.button`
-  background-color:#F7F8F9;
+  background-color:#00B2B4;
   color:#fff;
   width:auto;
   height:auto;
   font-size:14px;
-  border-radius:17px;
+  border-radius:20px;
   border:0;
-  padding:10px 20px 10px 20px;
+  padding:7px 20px 7px 20px;
+  position:relative;
   &:hover{
     cursor: pointer,
   } 
 `
 
-
 const styles = {
   button:{
-    borderRadius:'17px'
+    borderRadius:'20px'
   },
   btnStyle:{
-    borderRadius:'17px'
+    borderRadius:'20px'
   },
   icon:{
     color:'#fff',
@@ -35,21 +35,28 @@ const styles = {
   }
 };
 
-const UpvoteBtn = ({text,style,buttonStyle})=>{
+
+/*const b = <Btn style={style} type='button'>
+      <div>
+        <span style={styles.textInner}><span style={{fontSize:'20px'}}>+ </span> Story</span>
+      </div>
+    </Btn>*/
+
+const SignInBtn = ({style,buttonStyle})=>{
+
   var newStyle = Object.assign({},style,styles.button)
   var newBtnStyle = Object.assign({},buttonStyle,styles.btnStyle)
   return(
     <RaisedButton
       target="_blank"
-      label={text}
+      label='Story'
       labelColor="#fff"
-      labelStyle={{fontFamily:'Nunito'}}
       style={newStyle}
       buttonStyle={newBtnStyle}
-      backgroundColor="#E06048"
-      icon={<FontIcon className="muidocs-icon-custom-github" />}
+      backgroundColor="#00B2B4"
+      icon={<FontIcon className="material-icons" style={{fontSize:"18px"}}>add</FontIcon>}
     ></RaisedButton>
   )
 }
 
-export default UpvoteBtn
+export default SignInBtn

@@ -1,11 +1,22 @@
 import React from 'react'
-import { PageTemplate, AppBarMenu} from 'components'
+import { PageTemplate, AppBarMenu, AppBarMenuMain} from 'components'
+
+import styled from 'styled-components'
+
+var Container = styled.div`
+  width:100%;
+  background-color:#625254;
+  height:auto;
+`
 
 const HomePage = () => {
   return (
-    <PageTemplate>
-      <AppBarMenu/>
-    </PageTemplate>
+    <Container>
+      <AppBarMenu onScroll={1} logedIn={1} />
+      <div style={{height:'50px'}}></div>
+      <AppBarMenuMain onScroll={1} logedIn={1}/>
+      <div style={{height:'50px'}}></div>
+   </Container>
   )
 }
 
