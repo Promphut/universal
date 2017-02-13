@@ -12,14 +12,10 @@ injectGlobal`
   }
 `
 
-
-
 const App = ({ children }) => {
   return (
     <MuiThemeProvider muiTheme={getMuiTheme()}>
-      <div>
-        {children}
-      </div>
+      {children}
     </MuiThemeProvider>
   )
 }

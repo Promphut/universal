@@ -3,6 +3,7 @@ import { PageTemplate, AppBarMenu, AppBarMenuMain} from 'components'
 
 import styled from 'styled-components'
 
+
 var Container = styled.div`
   width:100%;
   background-color:#625254;
