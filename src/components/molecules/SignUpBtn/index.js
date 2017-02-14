@@ -3,20 +3,6 @@ import styled from 'styled-components'
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 
-const Btn = styled.button`
-  background-color:none;
-  color:#fff;
-  width:auto;
-  height:auto;
-  font-size:14px;
-  border-radius:20px;
-  border:0;
-  padding:7px 20px 7px 20px;
-  position:relative;
-  &:hover{
-    cursor: pointer,
-  } 
-`
 
 const styles = {
   button:{

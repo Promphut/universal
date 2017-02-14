@@ -8,7 +8,11 @@ import {HomePage, HomePage2, Page3} from 'components'
 const routes = (
   <Route path="/" component={App2}>
     <IndexRoute component={HomePage2} />
+
     <Route path='/article' component={Page3}/>
+
+    <Route path="/phet" component={HomePage} />
+
   </Route>
 )
 

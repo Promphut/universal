@@ -11,7 +11,7 @@ import MenuItem from 'material-ui/MenuItem';
 import Avatar from 'material-ui/Avatar';
 import styled from 'styled-components'
 
-import {Button} from 'components'
+import {PrimaryButton, SecondaryButton, Logo} from 'components'
 
 const styles = {
 	DefaultIcon: {
@@ -23,23 +23,22 @@ const styles = {
 
 const Wrapper = styled.div`
 	* { 
-		-webkit-box-sizing: border-box; 
-		-moz-box-sizing: border-box; 
-		-o-box-sizing: border-box; 
-		box-sizing: border-box; 
+		margin: 0; 
+		padding: 0; 
+	} 
 
+	.animate-me * {
 		-webkit-transition: .25s ease-in-out; 
 		-moz-transition: .25s ease-in-out; 
 		-o-transition: .25s ease-in-out; 
 		transition: .25s ease-in-out; 
-		margin: 0; 
-		padding: 0; 
 		-webkit-text-size-adjust: none; 
-	} 
+	}
 
 	#ld-toggle{
-		position: absolute;
-		opacity: 0;
+		/*position: absolute;
+		opacity: 0;*/
+		display: none;
 	}
 
 	#ld-toggle-area { 
@@ -65,9 +64,9 @@ const Wrapper = styled.div`
 		position: absolute; 
 		height: 2px; 
 		width: 20px; 
-		background: #8d8d8d; 
 		left: 20px; 
 		top: 23px; 
+		background: #8d8d8d; 
 		box-shadow: 0 6px 0 #8d8d8d, 0 12px 0 #8d8d8d; 
 	} 
 
@@ -121,8 +120,9 @@ const Wrapper = styled.div`
 
 
 	#rd-toggle{
-		position: absolute;
-		opacity: 0;
+		/*position: absolute;
+		opacity: 0;*/
+		display: none;
 	}
 
 	#rd-toggle-area { 
@@ -289,7 +289,38 @@ const Wrapper = styled.div`
 		display: block;
 	}
 
+	#container-bar #not-login * {
+		color: #8f8f8f;
+	}
 
+	#container-bar #not-login a:hover {
+		text-decoration: underline;
+	}
+
+	/* === For Bar-on-top class === */
+	.bar-on-top #container-bar {
+		background:none;
+		border:0;
+	}
+	.bar-on-top #container-bar .logo {
+		fill: #e2e2e2;
+	}
+	.bar-on-top #container-bar #not-login * {
+		color: #e2e2e2;
+	}
+	.bar-on-top #container-bar .secondary-btn button {
+		border-color: #fff !important;
+	}
+	.bar-on-top #container-bar .secondary-btn button span {
+		color: #fff !important;
+	}
+	.bar-on-top #ld-toggle-area:before {
+		background: #e2e2e2; 
+		box-shadow: 0 6px 0 #e2e2e2, 0 12px 0 #e2e2e2; 
+	}
+	.bar-on-top #top-nav ul li a {
+		color: #e2e2e2;
+	}
 `
 
 const DarkMenuItem = styled(MenuItem)`
@@ -297,7 +328,7 @@ const DarkMenuItem = styled(MenuItem)`
 	color: White;
 `
 
-const HideOnTablet = styled.span`
+const HideOnTablet = styled.div`
 	/* PORTRAIT TABLET */
 	@media (max-width: 640px) {
 		display:none;
@@ -319,14 +350,15 @@ const Container = styled.div`
 	border-bottom: 1px solid #e2e2e2;
 
 	> * {
-		flex: 1 auto;
+		flex: 1 0;
 	}
 `
 
 const TopBar = React.createClass({
 	getInitialState(){
 	    return{
-	    	loggedIn: false
+	    	loggedIn: this.props.loggedIn || false,
+	    	scrolling: false
 	    }
 	},
 
@@ -342,80 +374,101 @@ const TopBar = React.createClass({
 		dom(this.refs.rdToggle).checked = false;
 	},
 
+	mouseOver(){
+		// add "bar-on-top" class and rerender
+		this.setState({scrolling: true})
+	},
+
+	mouseOut(){
+		// remove "bar-on-top" class and rerender
+		this.setState({scrolling: false})
+	},
+
 	render(){
+		let loggedIn = this.state.loggedIn
+
 		return (
 			<Wrapper className="menu-font">
-				<input type="checkbox" id="ld-toggle" name="ld-toggle" ref="ldToggle"/>
-				<label htmlFor="ld-toggle" id="ld-toggle-area"></label>
-				<nav id="l-drawer" className="vertical-nav">
-					<IconButton iconStyle={styles.DefaultIcon} style={{top:20, left:20, position: 'absolute'}} onTouchTap={this.handleLDClose}><FontIcon className="material-icons">close</FontIcon></IconButton>
-					{/*<IconButton  iconStyle={styles.DefaultIcon} style={{top:20, right:20, position: 'absolute'}} onTouchTap={this.handleSearch}><FontIcon className="material-icons">search</FontIcon></IconButton>*/}
-					
-					<ul>
-						<li><Link to="/" style={{fontSize: 30}}>Home</Link></li>
-						<li><Link to="/" style={{fontSize: 40}}>Stories</Link></li>
-						<li><Divider /></li>
-						<li><Link to="/" style={{fontSize: 24}}>About Us</Link></li>
-						<li><Link to="/" style={{fontSize: 24}}>Contact</Link></li>
-						<li><Divider /></li>
-						<li><em style={{color:'#e2e2e2', fontSize:'18px'}}>Other Channels</em></li>
-						<li><Link to="/">Infographic Thailand</Link></li>
-					</ul>
-
-
-				</nav>
-
-				<Container>
-   					<header>
-   						<Link to="/#tohome" title="Title of AomMoney goes here.."><img alt="logo" src='/aommoneyIcon.svg'/></Link>
-   					</header>
-
-   					<nav id="top-nav">
-						<ul>
-							<li><a href="#">Home</a></li>
-							<li>
-								<a href="#">Stories &#9662;</a>
-								<ul className="dropdown">
-					                <li><a href="#">All</a></li>
-					                <li><a href="#">Saving</a></li>
-					                <li><a href="#">Fund</a></li>
-					                <li><a href="#">Stock</a></li>
-					                <li><a href="#">Money Ideas</a></li>
-					            </ul>
-							</li>
-							<li><a href="#">About Us</a></li>
-							<li><a href="#">Contact</a></li>
-						</ul>
-					</nav>
-
-					<HideOnTablet style={{textAlign:'right'}}><Button label="Story" iconName="add"/></HideOnTablet>
-				</Container>
-
-		        <input type="checkbox" id="rd-toggle" name="rd-toggle" ref="rdToggle" />
-				<label htmlFor="rd-toggle" id="rd-toggle-area"><Avatar src="/tmp/avatar.png" size={30}/></label>
-				<nav id="r-drawer" className="vertical-nav">
-					<IconButton iconStyle={{...styles.DefaultIcon, color:'#8f8f8f'}} style={{top:20, left:20, position: 'absolute'}} onTouchTap={this.handleRDClose}><FontIcon className="material-icons">close</FontIcon></IconButton>
-
-					{/*<DarkMenuItem primaryText="Editor Mode" leftIcon={<FontIcon className="material-icons">edit</FontIcon>}/>*/}
-
-					{/*<div className="dark-menu-item menu-font lighter-bg"><Link to="/#editormode"><FontIcon className="material-icons" color={'White'} style={{lineHeight:'20px', padding:'20px 20px 20px 40px'}}>edit</FontIcon> Editor Mode</Link></div>*/}
-					
-					<div className="content-font" style={{padding:'80px 40px 0 40px'}}>
-						<Link to="/#toprofile"><Avatar src="/tmp/avatar.png" size={70} style={{verticalAlign:'middle'}}/></Link>
-						<div style={{display:'inline-block', width:240, verticalAlign:'middle', fontSize:15, color:'#8f8f8f', paddingLeft:15}}><Link to="/#toprofile"><h3>Ochawin Chirasottikul</h3></Link>Writer of Money Ideas, Fund Investment, and Tax</div>
+				<div className={this.state.scrolling || 'bar-on-top'}>
+					<div className="animate-me">
+						<input type="checkbox" id="ld-toggle" name="ld-toggle" ref="ldToggle"/>
+						<label htmlFor="ld-toggle" id="ld-toggle-area"></label>
+						<nav id="l-drawer" className="vertical-nav">
+							<IconButton iconStyle={styles.DefaultIcon} style={{top:20, left:20, position: 'absolute'}} onTouchTap={this.handleLDClose}><FontIcon className="material-icons">close</FontIcon></IconButton>
+							{/*<IconButton  iconStyle={styles.DefaultIcon} style={{top:20, right:20, position: 'absolute'}} onTouchTap={this.handleSearch}><FontIcon className="material-icons">search</FontIcon></IconButton>*/}
+							
+							<ul>
+								<li><Link to="/" style={{fontSize: 30}}>Home</Link></li>
+								<li><Link to="/" style={{fontSize: 40}}>Stories</Link></li>
+								<li><Divider /></li>
+								<li><Link to="/" style={{fontSize: 24}}>About Us</Link></li>
+								<li><Link to="/" style={{fontSize: 24}}>Contact</Link></li>
+								<li><Divider /></li>
+								<li><em style={{color:'#e2e2e2', fontSize:'18px'}}>Other Channels</em></li>
+								<li><Link to="/">Infographic Thailand</Link></li>
+							</ul>
+						</nav>
 					</div>
-					
-					<Divider/>
 
-					<ul>
-						<li><a href="#">My Stories</a></li>
-						<li><a href="#">Edit Profile</a></li>
-						<li><Divider/></li>
-						<li><a href="#">Settings</a></li>
-						<li><a href="#">Log Out</a></li>
-					</ul>
+					<Container id="container-bar">
+	   					<header>
+	   						<Link to="/#tohome" title={this.props.title} style={{display:'block', marginTop:3}}><Logo fill={'#00B2B4'}/></Link>
+	   					</header>
 
-				</nav>
+	   					<nav id="top-nav" onMouseOver={this.mouseOver} onMouseOut={this.mouseOut}>
+							<ul>
+								<li><a href="#">Home</a></li>
+								<li>
+									<a href="#">Stories &#9662;</a>
+									<ul className="dropdown">
+						                <li><a href="#">All</a></li>
+						                <li><a href="#">Saving</a></li>
+						                <li><a href="#">Fund</a></li>
+						                <li><a href="#">Stock</a></li>
+						                <li><a href="#">Money Ideas</a></li>
+						            </ul>
+								</li>
+								<li><a href="#">About Us</a></li>
+								<li><a href="#">Contact</a></li>
+							</ul>
+						</nav>
+
+						<HideOnTablet style={{textAlign:'right'}}>
+							{loggedIn ? 
+								(<PrimaryButton label="Story" iconName="add" style={{verticalAlign:'middle'}}/>) : 
+								(<div id="not-login"><SecondaryButton label="Sign Up" style={{verticalAlign:'middle'}}/><span>&nbsp; or </span><Link to="/#tologin" style={{fontWeight:'bold'}}>Sign In</Link></div>
+							)}
+						</HideOnTablet>
+					</Container>
+
+					{loggedIn && (<div className="animate-me">
+						<input type="checkbox" id="rd-toggle" name="rd-toggle" ref="rdToggle" />
+						<label htmlFor="rd-toggle" id="rd-toggle-area"><Avatar src="/tmp/avatar.png" size={30}/></label>
+						<nav id="r-drawer" className="vertical-nav">
+							<IconButton iconStyle={{...styles.DefaultIcon, color:'#8f8f8f'}} style={{top:20, left:20, position: 'absolute'}} onTouchTap={this.handleRDClose}><FontIcon className="material-icons">close</FontIcon></IconButton>
+
+							{/*<DarkMenuItem primaryText="Editor Mode" leftIcon={<FontIcon className="material-icons">edit</FontIcon>}/>*/}
+
+							{/*<div className="dark-menu-item menu-font lighter-bg"><Link to="/#editormode"><FontIcon className="material-icons" color={'White'} style={{lineHeight:'20px', padding:'20px 20px 20px 40px'}}>edit</FontIcon> Editor Mode</Link></div>*/}
+							
+							<div className="content-font" style={{padding:'80px 40px 0 40px'}}>
+								<Link to="/#toprofile"><Avatar src="/tmp/avatar.png" size={70} style={{verticalAlign:'middle'}}/></Link>
+								<div style={{display:'inline-block', width:240, verticalAlign:'middle', fontSize:15, color:'#8f8f8f', paddingLeft:15}}><Link to="/#toprofile"><h3>Ochawin Chirasottikul</h3></Link>Writer of Money Ideas, Fund Investment, and Tax</div>
+							</div>
+							
+							<Divider/>
+
+							<ul>
+								<li><a href="#">My Stories</a></li>
+								<li><a href="#">Edit Profile</a></li>
+								<li><Divider/></li>
+								<li><a href="#">Settings</a></li>
+								<li><a href="#">Log Out</a></li>
+							</ul>
+
+						</nav>
+					</div>)}
+		        </div>
 			</Wrapper>
 		)
 	}
