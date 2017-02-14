@@ -50,9 +50,11 @@ const Content = styled.div`
 `
 
 const Main = styled.div`
-	background: deepskyblue;
-	flex: 3 790px;
+	flex: 3;
 	max-width: 790px;
+	@media (max-width: 480px) {
+		flex: 1;
+	}
 `
 
 const Aside = styled.div`
@@ -103,9 +105,13 @@ const HomePage2 = React.createClass({
 		      <Cover width={this.state.width} height={this.state.height}/>
 
 		      <Content>
+						<Main>
+							<ArticlePage/>
+			      </Main>
 			      
+			      <Aside><h2>Sidebar here</h2></Aside>
 		      </Content>
-          <ArticlePage/>
+          
 		      
 
 		      <Footer>This is footer</Footer>

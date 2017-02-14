@@ -6,7 +6,7 @@ import Avatar from 'material-ui/Avatar'
 import {CommentInput,CommentUser} from 'components'
 
 const Container = styled.div`
-  width:730px;
+  width:100%;
   margin:50px 0 50px 0;
 ` 
 const styles={
