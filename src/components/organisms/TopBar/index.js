@@ -289,6 +289,12 @@ const Wrapper = styled.div`
 		display: block;
 	}
 
+	#container-bar #not-login {
+		width: 180px;
+		display: inline-block;
+		margin-right: -40px;
+	}
+
 	#container-bar #not-login * {
 		color: #8f8f8f;
 	}
@@ -341,7 +347,7 @@ const Container = styled.div`
 	left: 0px; 
 	background: #FFF; 
 	display: flex;
-	flex-flow: row wrap;
+	flex-flow: row nowrap;
 	justify-content: space-between;
 	line-height: 60px; 
 	z-index: 1; 
@@ -374,14 +380,28 @@ const TopBar = React.createClass({
 		dom(this.refs.rdToggle).checked = false;
 	},
 
-	mouseOver(){
-		// add "bar-on-top" class and rerender
-		this.setState({scrolling: true})
+	mouseOver(e){
+		if(window.getScrollY() <= 60) this.setState({scrolling: true})
 	},
 
-	mouseOut(){
-		// remove "bar-on-top" class and rerender
-		this.setState({scrolling: false})
+	mouseOut(e){
+		if(window.getScrollY() <= 60) this.setState({scrolling: false})
+	},
+
+	componentDidMount() {
+		window.addEventListener('scroll', this.handleScroll);
+	},
+
+	componentWillUnmount() {
+		window.removeEventListener('scroll', this.handleScroll);
+	},
+
+	handleScroll(e) {
+		let top = e.srcElement.body.scrollTop,
+			scrolling = this.state.scrolling
+
+		if(top > 60 && !scrolling) this.setState({scrolling: true})
+		else if(top <= 60 && scrolling) this.setState({scrolling: false})
 	},
 
 	render(){
@@ -433,12 +453,12 @@ const TopBar = React.createClass({
 							</ul>
 						</nav>
 
-						<HideOnTablet style={{textAlign:'right'}}>
+						<div style={{textAlign:'right'}}>
 							{loggedIn ? 
-								(<PrimaryButton label="Story" iconName="add" style={{verticalAlign:'middle'}}/>) : 
+								(<HideOnTablet><PrimaryButton label="Story" iconName="add" style={{verticalAlign:'middle'}}/></HideOnTablet>) : 
 								(<div id="not-login"><SecondaryButton label="Sign Up" style={{verticalAlign:'middle'}}/><span>&nbsp; or </span><Link to="/#tologin" style={{fontWeight:'bold'}}>Sign In</Link></div>
 							)}
-						</HideOnTablet>
+						</div>
 					</Container>
 
 					{loggedIn && (<div className="animate-me">

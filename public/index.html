@@ -14,12 +14,22 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css" />
   
   <script type="text/javascript">
+    var doc = document.documentElement;
+    
     window.getWidth = () => {
-      return window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
+      return window.innerWidth || doc.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
     }
 
     window.getHeight = () => {
-      return window.innerHeight || document.documentElement.clientHeight || document.getElementsByTagName('body')[0].clientHeight;
+      return window.innerHeight || doc.clientHeight || document.getElementsByTagName('body')[0].clientHeight;
+    }
+
+    window.getScrollX = () => {
+      return (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0)
+    }
+
+    window.getScrollY = () => {
+      return (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0)
     }
   </script>
 </head>
