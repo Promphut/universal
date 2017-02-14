@@ -11,14 +11,26 @@ injectGlobal`
     color:#222;
   }
 
+  * {
+    -webkit-box-sizing: border-box; 
+    -moz-box-sizing: border-box; 
+    -o-box-sizing: border-box; 
+    box-sizing: border-box; 
+  }
+
   h3{
     font-size:19px;
     font-weight:bold;
     color:#222;
   }
 
-  a, a:hover{
-    text-decoration: none;  /* prevent underline */
+  a {
+    color: #8f8f8f;
+    text-decoration: none;
+  }
+  a:hover{
+    color: #222;
+    text-decoration: none;
   }
 
   /* FOR DESKTOP AND TABLET */

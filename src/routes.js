@@ -9,6 +9,7 @@ import {HomePage, HomePage2} from 'components'
 const routes = (
   <Route path="/" component={App2}>
     <IndexRoute component={HomePage2} />
+    <Route path="/phet" component={HomePage} />
   </Route>
 )
 

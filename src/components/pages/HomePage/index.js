@@ -13,9 +13,9 @@ var Container = styled.div`
 const HomePage = () => {
   return (
     <Container>
-      <AppBarMenu onScroll={1} logedIn={1} />
+      <AppBarMenu onScroll={0} logedIn={0} />
       <div style={{height:'50px'}}></div>
-      <AppBarMenuMain onScroll={1} logedIn={1}/>
+      <AppBarMenuMain onScroll={0} logedIn={1}/>
       <div style={{height:'50px'}}></div>
    </Container>
   )
