@@ -1,6 +1,6 @@
 import React from 'react'
-import { PageTemplate, TopBar, ArticlePage} from 'components'
-
+import { PageTemplate, TopBar, ArticlePage, RecommendArticle, TrendingSideBar} from 'components'
+import {Link} from 'react-router'
 import styled from 'styled-components'
 
 
@@ -44,24 +44,20 @@ const Content = styled.div`
 	flex-flow: row wrap;
 	justify-content: center;
 
-	> * {
-		flex: 1 0;
-	}
 `
 
 const Main = styled.div`
-	flex: 3;
+	flex: 9 790px;
 	max-width: 790px;
 	@media (max-width: 480px) {
-		flex: 1;
+		flex: 12;
 	}
 `
 
 const Aside = styled.div`
-	background: gold;
-	flex: 1 350px;
+	flex: 3 350px;
 	max-width: 350px;
-
+	margin-left:20px;
 	@media (max-width: 1160px) {
 		display:none;
 	}
@@ -73,16 +69,41 @@ const Footer = styled.div`
 	height:400px;
 `
 
+const RecommendContainer = styled.div`
+	overflow:hidden;
+	display:flex;
+	flex-flow: row wrap;
+	justify-content: center;
+	margin-top:60px;
+`
+const Recommend = styled.div`
+	flex:1 540px;
+	max-width:540px;
+	margin:10px 20px 0 0;
+`
+const rec = {
+	name:'Donald Trump’s First, Alarming Week',
+	column:'Money Ideas',
+	writer:'RYAN LIZZA',
+	vote:'18',
+	comment:'3'
+}
+const trending = {
+	name:'โมหจริตดินฮิปฮอปด็อกเตอร์โมหจริตแอดมิสชััน?',
+	vote:'18',
+	comment:11,
+	photo:'/tmp/story-list/1485309433041-Screen-Shot-2017-01-23-at-33221-PM-1.png'
+}
 const HomePage2 = React.createClass({
 	getInitialState(){
 		return {}
 	},
 
 	updateDimensions(){
-        this.setState({
-        	width: window.getWidth(), 
-        	height: window.getHeight()
-        });
+			this.setState({
+				width: window.getWidth(), 
+				height: window.getHeight()
+			});
     },
 
 	componentWillMount(){
@@ -109,10 +130,26 @@ const HomePage2 = React.createClass({
 							<ArticlePage/>
 			      </Main>
 			      
-			      <Aside><h2>Sidebar here</h2></Aside>
+			      <Aside><TrendingSideBar detail={trending}/></Aside>
 		      </Content>
-          
-		      
+						
+					<RecommendContainer>
+						<Recommend>
+							<div style={{fontSize:'19px',color:'#8f8f8f'}}>Recommends</div>
+							<Link to='#'><RecommendArticle detail={rec}/></Link>
+						</Recommend>
+						<Recommend>
+							<div style={{height:'22px'}}></div>
+							<Link to='#'><RecommendArticle detail={rec}/></Link>
+						</Recommend>
+						<Recommend>
+							<Link to='#'><RecommendArticle detail={rec}/></Link>
+						</Recommend>
+						<Recommend>
+							<Link to='#'><RecommendArticle detail={rec}/></Link>
+						</Recommend>
+					</RecommendContainer>
+				
 
 		      <Footer>This is footer</Footer>
 		   </Wrapper>

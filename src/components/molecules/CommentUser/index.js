@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 const Container = styled.div`
   width:100%;
-  margin:20px 0 20px 0;
+  margin:10px 0 10px 0;
 ` 
 const Name = styled.div`
   color:#222222;
@@ -30,10 +30,7 @@ const TextBtn = styled.div`
     cursor:pointer;
   }
 `
-const Child = styled.div`
-  margin-left:60px;
-  width:600px;
-`
+
 const ReplyBox = styled.textarea`
   width:500px;
   height:60px;
@@ -99,8 +96,8 @@ const CommentBox = React.createClass({
     return(
       <Container>
         <Link to="#"><Avatar src='/tmp/avatar.png' size={49} style={{float:'left',marginRight:'15px'}}/></Link>
-        <Name>{this.props.name} <Time>{this.props.date}</Time></Name>
-        <div><UserTag>@{this.props.target}</UserTag> {this.props.text}</div>
+        <Name>{this.props.data.name} <Time>{this.props.data.date}</Time></Name>
+        <div><UserTag>@{this.props.data.target}</UserTag> {this.props.data.text}</div>
         <div style={styles.cont}>
           <RaisedButton 
             label="Upvote | 18" 
@@ -114,9 +111,6 @@ const CommentBox = React.createClass({
           <TextBtn onClick={this.showReplyBox}>Reply</TextBtn>
         </div>
         {replyBox}
-        <Child>
-          {test}
-        </Child>
       </Container>
     )
   }
