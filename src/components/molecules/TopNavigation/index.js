@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import {Link} from 'react-router';
 
 const Nav = styled.nav`
-	flex: 2 40%;
+	flex: 2 40% !important;
 	text-align: center;
 
 	/* tablet, landscape iPad, lo-res laptops ands desktops */

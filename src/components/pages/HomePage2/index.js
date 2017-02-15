@@ -1,5 +1,5 @@
 import React from 'react'
-import { PageTemplate, TopBarWithNavigation} from 'components'
+import { PageTemplate, TopBarWithNavigation, OverlayImg } from 'components'
 
 import styled from 'styled-components'
 
@@ -8,36 +8,9 @@ const Wrapper = styled.div`
 	
 `
 
-const GradientOverlay = styled.div`
-	background: -moz-linear-gradient(-45deg,  rgba(202,130,172,0.3) 0%, rgba(49,77,170,0.3) 100%);
-	background: -webkit-linear-gradient(-45deg,  rgba(202,130,172,0.3) 0%,rgba(49,77,170,0.3) 100%);
-	background: linear-gradient(135deg,  rgba(202,130,172,0.3) 0%,rgba(49,77,170,0.3) 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4dca82ac', endColorstr='#4d314daa',GradientType=1 );
-
-	bottom:0; 
-	top:0; left:0; 
-	right:0; 
-	position:absolute; 
-	z-index:0
-`
-
-const Cover = React.createClass({
-	getInitialState(){
-		return {}
-	},
-
-	render(){return (
-			<div style={{
-				overflow:'hidden',
-				maxHeight: this.props.height-120+'px',
-				position:'relative'
-			}}>
-				<img src="/tmp/a-story/pic-min.jpg" style={{width: '100%'}}/>
-				<GradientOverlay />
-			</div>
-		)
-	}
-})
+const Cover = (props) => (
+	<OverlayImg src="/tmp/a-story/pic-min.jpg" width={props.width} height={props.height} opacity={0.3} style={{maxHeight: props.height-120+'px'}}/>
+)
 
 const Content = styled.div`
 	display: flex;
@@ -90,7 +63,7 @@ const HomePage2 = React.createClass({
 	render(){
 		return (
 		    <Wrapper>
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={false} />
+		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={true} />
 
 		      <Cover width={this.state.width} height={this.state.height}/>
 
