@@ -1,5 +1,5 @@
 import React from 'react'
-import { PageTemplate, TopBar} from 'components'
+import { PageTemplate, TopBarWithNavigation} from 'components'
 
 import styled from 'styled-components'
 
@@ -87,18 +87,10 @@ const HomePage2 = React.createClass({
         this.updateDimensions();
     },
 
-	componentDidMount(){
-		//window.addEventListener("resize", this.updateDimensions);
-	},
-
-	componentWillUnmount() {
-        //window.removeEventListener("resize", this.updateDimensions);
-    },
-
 	render(){
 		return (
 		    <Wrapper>
-		      <TopBar title={'Title of AomMoney goes here..'} loggedIn={false} />
+		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={false} />
 
 		      <Cover width={this.state.width} height={this.state.height}/>
 
