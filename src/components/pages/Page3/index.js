@@ -113,7 +113,7 @@ const HomePage2 = React.createClass({
 
 	componentDidMount(){
 		this.fixedTrending()
-		document.documentElement.addEventListener("scroll", console.log('sds'));
+		document.documentElement.addEventListener("scroll", );
 	},
 
 	fixedTrending(){
