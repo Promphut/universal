@@ -1,11 +1,14 @@
 import React from 'react'
-import { PageTemplate, TopBar, ArticlePage, RecommendArticle, TrendingSideBar} from 'components'
+import { PageTemplate, TopBarWithNavigation, ArticlePage, RecommendArticle, TrendingSideBar} from 'components'
 import {Link} from 'react-router'
 import styled from 'styled-components'
 import {findDOMNode as dom} from 'react-dom'
 
 const Wrapper = styled.div`
-	
+	.fixedPos{
+		position:fixed;
+		top:70px;
+	}
 `
 
 const GradientOverlay = styled.div`
@@ -56,11 +59,13 @@ const Main = styled.div`
 
 const Aside = styled.div`
 	flex: 3 350px;
+	position:relative;
 	max-width: 350px;
 	margin-left:20px;
 	@media (max-width: 1160px) {
 		display:none;
 	}
+	
 `
 
 const Footer = styled.div`
@@ -97,7 +102,10 @@ const trending = {
 const trendingArray = [trending,trending,trending,trending,trending]
 const HomePage2 = React.createClass({
 	getInitialState(){
-		return {}
+		return {
+			startPos:'',
+			stopPos:''
+		}
 	},
 
 	updateDimensions(){
@@ -112,17 +120,27 @@ const HomePage2 = React.createClass({
 	},
 
 	componentDidMount(){
-		this.fixedTrending()
-		document.documentElement.addEventListener("scroll", );
+		this.setState({
+			startPos:dom(this.refs.trendingBar).getBoundingClientRect().top,
+			stopPos:dom(this.refs.recommend).getBoundingClientRect().top
+		})
+		// var posTop = dom(this.refs.trendingBar).getBoundingClientRect().top
+		// var footPos = dom(this.refs.recommend).getBoundingClientRect().top
+		// var self = this
+		// window.addEventListener("scroll", function(event) {
+		// 	var top = this.scrollY
+		// 	if(top>600&&top<footPos-100){
+		// 		dom(self.refs.trendingBar).style.top = top-600+'px';
+		// 	}else if(top==0){
+		// 		dom(self.refs.trendingBar).style.top = posTop+'px';
+		// 	}else if(top>footPos-100){
+		// 		dom(self.refs.trendingBar).style.top = footPos-730+'px';
+		// 	}
+		// });
 	},
+                                  
+	fixedTrending(e){
 
-	fixedTrending(){
-		var offsets = dom(this.refs.trendingBar).getBoundingClientRect();
-    var posTop = offsets.top
-		console.log(posTop)
-    if(window.pageYOffset==posTop){
-			console.log('asdsadasdsadsad')
-		}
 	},
 
 	componentWillUnmount() {
@@ -134,9 +152,10 @@ const HomePage2 = React.createClass({
 	},
 
 	render(){
+		var {startPos,stopPos} = this.state
 		return (
 		    <Wrapper >
-		      <TopBar />
+		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={true} />
 
 		      <Cover width={this.state.width} height={this.state.height}/>
 
@@ -145,10 +164,10 @@ const HomePage2 = React.createClass({
 							<ArticlePage/>
 			      </Main>
 			      
-			      <Aside  id='trendingBar' ref='trendingBar'><TrendingSideBar detail={trendingArray} /></Aside>
+			      <Aside  id='trendingBar' className='' ref='trendingBar'><TrendingSideBar start={startPos} stop={stopPos} detail={trendingArray} /></Aside>
 		      </Content>
 						
-					<RecommendContainer>
+					<RecommendContainer ref='recommend'>
 						<Recommend>
 							<div style={{fontSize:'19px',color:'#8f8f8f'}}>Recommends</div>
 							<Link to='#'><RecommendArticle detail={rec}/></Link>
