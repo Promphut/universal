@@ -5,7 +5,6 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
-
 injectGlobal`
   body {
     color:#222;
@@ -85,6 +84,7 @@ injectGlobal`
     font-family: 'PT Sans', 'cs_prajad', sans-serif;
   }
 `
+
 injectTapEventPlugin();
 
 const muiTheme = getMuiTheme({
