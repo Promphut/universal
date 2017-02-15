@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon';
-import {WritedBy,TagBox,CommentBox} from 'components'
+import {WritedBy,TagBox,CommentBox,CommentUser,RecommendArticle} from 'components'
+import RaisedButton from 'material-ui/RaisedButton';
 
 const Wraper = styled.div`
   color:#222;
@@ -27,6 +28,43 @@ const Divider = styled.div`
   background-color:#E2E2E2;
   margin:20px 0 20px 0;
 `
+const CommentUserContainer = styled.div`
+  width:100%;
+
+`
+const Child = styled.div`
+  margin-left:60px;
+  width:80%;
+`
+var commentUserObj = {
+  id:'1',
+  name:'Jirunya Bewvy',
+  target:'Ochawin',
+  date:'10 hrs ago',
+  text:"Ruined the party last night as they rocked into Toronto and downed the Raptors on 'Drake night'.uined the party last night as they rocked into Toronto"
+}
+
+var a = [commentUserObj,commentUserObj,commentUserObj,commentUserObj,commentUserObj]
+
+const styles ={
+  button:{
+    width:'100%',
+    margin:'15px 0 15px 0',
+    height:'40px',
+    borderRadius:'15px'
+  },
+  btnStyle:{
+    width:'100%',
+    borderRadius:'15px'
+  }
+}
+
+const writerDetail = {
+    name:'Ochawin',
+    date:' 16 Nov 2016, 8:30pm',
+    column:'Money Ideas'
+}
+
 
 
 const ArticlePage = React.createClass({
@@ -39,11 +77,21 @@ Ruined the party last night as they rocked into Toronto and downed the Raptors o
     }
   },
 
+  renderComment(data,index){
+    return(
+      <div key={index}>
+        <CommentUser data={data}/>
+        <Child>
+        </Child>
+      </div>
+    )
+  },
+
   render(){
     return(
       <Wraper>
         <h1>{this.head}</h1>
-        <WritedBy writerName='Ochawin' date='16 Nov 2016, 8:30pm' column='Money Ideas'/>
+        <WritedBy detail={writerDetail}/>
         <Article>{this.article}</Article>
         <TagContainer>
           <TagBox text='MONEY IDEAS' style={{margin:'10px'}}/>
@@ -56,14 +104,28 @@ Ruined the party last night as they rocked into Toronto and downed the Raptors o
         <Divider/>
         <div style={{display:'flex'}}>
           <div style={{flex:'1'}}>
-            <WritedBy writerName='Ochawin' date='16 Nov 2016, 8:30pm' column='Money Ideas'/>
+            <WritedBy detail={writerDetail}/>
           </div>
           <div style={{flex:'1'}}>
-            <WritedBy writerName='Ochawin' date='16 Nov 2016, 8:30pm' column='Money Ideas'/>
+            <WritedBy detail={writerDetail}/>
           </div>
         </div>
         <Divider/>
         <CommentBox/>
+        <CommentUserContainer>
+          {a.map(this.renderComment)}
+          <RaisedButton 
+            label="Show more comments" 
+            target="_blank"
+            labelColor="#8F8F8F"
+            labelStyle={{fontSize:'15px',top:'11'}}
+            style={styles.button}
+            buttonStyle={styles.btnStyle}
+            backgroundColor="none"
+          />
+        </CommentUserContainer>
+
+        
       </Wraper>
     )
   }
