@@ -26,6 +26,11 @@ const Column = styled.div`
   color:#00B2B4;
   text-align:center;
 `
+function mapTrending(data,index){
+  return(
+    <Link to='#' key={index}><TrendingSideBarInner detail={data}/></Link>
+  )
+}
 
 const TrendingSideBar = ({style,detail})=>{
   return(
@@ -33,7 +38,8 @@ const TrendingSideBar = ({style,detail})=>{
       <Head>Trending Stories in</Head>
       <Column>Fund</Column>
       <Divider/>
-      <TrendingSideBarInner detail={detail}/>
+      {detail.map(mapTrending)}
+      <Divider/>
     </Container>
   )
 }

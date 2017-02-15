@@ -2,7 +2,7 @@ import React from 'react'
 import { PageTemplate, TopBar, ArticlePage, RecommendArticle, TrendingSideBar} from 'components'
 import {Link} from 'react-router'
 import styled from 'styled-components'
-
+import {findDOMNode as dom} from 'react-dom'
 
 const Wrapper = styled.div`
 	
@@ -94,6 +94,7 @@ const trending = {
 	comment:11,
 	photo:'/tmp/story-list/1485309433041-Screen-Shot-2017-01-23-at-33221-PM-1.png'
 }
+const trendingArray = [trending,trending,trending,trending,trending]
 const HomePage2 = React.createClass({
 	getInitialState(){
 		return {}
@@ -107,20 +108,34 @@ const HomePage2 = React.createClass({
     },
 
 	componentWillMount(){
-        this.updateDimensions();
-    },
+			this.updateDimensions();
+	},
 
 	componentDidMount(){
-		//window.addEventListener("resize", this.updateDimensions);
+		this.fixedTrending()
+		document.documentElement.addEventListener("scroll", console.log('sds'));
+	},
+
+	fixedTrending(){
+		var offsets = dom(this.refs.trendingBar).getBoundingClientRect();
+    var posTop = offsets.top
+		console.log(posTop)
+    if(window.pageYOffset==posTop){
+			console.log('asdsadasdsadsad')
+		}
 	},
 
 	componentWillUnmount() {
         //window.removeEventListener("resize", this.updateDimensions);
-    },
+  },
+
+	trendingScroll(e){
+		console.log(e)
+	},
 
 	render(){
 		return (
-		    <Wrapper>
+		    <Wrapper >
 		      <TopBar />
 
 		      <Cover width={this.state.width} height={this.state.height}/>
@@ -130,7 +145,7 @@ const HomePage2 = React.createClass({
 							<ArticlePage/>
 			      </Main>
 			      
-			      <Aside><TrendingSideBar detail={trending}/></Aside>
+			      <Aside  id='trendingBar' ref='trendingBar'><TrendingSideBar detail={trendingArray} /></Aside>
 		      </Content>
 						
 					<RecommendContainer>
