@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 import styled from 'styled-components'
-import {} from 'components'
+import {OverlayImg} from 'components'
 
 const Container = styled.div`
   width:324px;
@@ -12,7 +12,7 @@ const Name = styled.div`
   font-size:17px;
   width:190px;
 `
-const Img = styled.img`
+const Img = styled.div`
   width:127px;
   height:75px;
   float:right;
@@ -29,7 +29,7 @@ const TrendingSideBar = ({style,detail})=>{
   return(
     <Container style={{...style}}>
       <div>
-        <Img src={photo} />
+        <OverlayImg src={photo} style={{width:'127',height:'75',float:'right'}}/>
         <Name>{name}</Name>
         <Vote>{vote} Votes {''+ comment} Comments</Vote>
       </div>

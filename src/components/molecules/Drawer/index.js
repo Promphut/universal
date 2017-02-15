@@ -10,6 +10,8 @@ const HiddenToggle = styled.input`
 	&:checked + label { 
 		height: 100%; 
 		width: 100%;
+		-webkit-filter: blur(50px);
+		filter: blur(50px);
 		background: rgba(34,34,34,.57); 
 		cursor:initial;
 		z-index: 3;
