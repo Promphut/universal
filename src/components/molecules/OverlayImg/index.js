@@ -19,8 +19,6 @@ const OverlayImg = (props) => {
 OverlayImg.propTypes = {
 	// Mandatory
 	src: PropTypes.string.isRequired,
-	width: PropTypes.number.isRequired,
-	height: PropTypes.number.isRequired,
 
 	// Non mandatory
 	style: PropTypes.object,

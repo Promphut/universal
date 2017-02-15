@@ -9,7 +9,7 @@ const Wrapper = styled.div`
 `
 
 const Cover = (props) => (
-	<OverlayImg src="/tmp/a-story/pic-min.jpg" opacity={0.3} style={{maxHeight: props.height-120+'px'}}/>
+	<OverlayImg src="/tmp/a-story/pic-min.jpg" style={{maxHeight: props.height-120+'px'}}/>
 )
 
 const Content = styled.div`
