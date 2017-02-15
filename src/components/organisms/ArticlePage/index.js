@@ -5,7 +5,7 @@ import {WritedBy,TagBox,CommentBox} from 'components'
 
 const Wraper = styled.div`
   color:#222;
-  width:731px;
+  width:100%;
   margin:0 auto 0 auto;
 `
 const Head = styled.h1`
