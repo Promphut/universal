@@ -97,7 +97,8 @@ const ProfileAvatar = styled(Avatar)`
 const NotLogin = styled.div`
 	width: 180px;
 	display: inline-block;
-	margin-right: -40px;
+	margin-right: -50px;
+	font-size: 15px;
 
 	& * {
 		color: #8f8f8f;
