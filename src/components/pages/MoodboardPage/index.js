@@ -11,8 +11,14 @@ const Wrapper = styled.div`
 `
 
 const Flex = styled.div`
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
 	display: flex;
 
+	-webkit-flex-flow: row wrap;
+	justify-content: space-around;
 `
 
 const SubFont = styled.span`

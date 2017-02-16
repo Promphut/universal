@@ -6,6 +6,16 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
 injectGlobal`
+  /* FOR DESKTOP AND TABLET 
+  @media (min-width:481px) {
+    @import url('https://fonts.googleapis.com/css?family=Mitr|Nunito|PT+Sans|PT+Serif&subset=thai');
+  }
+
+  /* FOR MOBILE 
+  @media (max-width: 480px) {
+    @import url('https://fonts.googleapis.com/css?family=Mitr|Nunito|Roboto|Roboto+Slab');
+  }*/
+
   body {
     color:#222;
   }
@@ -32,58 +42,72 @@ injectGlobal`
     text-decoration: none;
   }
 
-  /* FOR DESKTOP AND TABLET
-  @media (min-width:481px) {
-    @import url('https://fonts.googleapis.com/css?family=Mitr|Nunito|PT+Sans|PT+Serif&subset=thai');
-  }*/
-
-  /* FOR MOBILE 
-  @media (max-width: 480px) {
-    @import url('https://fonts.googleapis.com/css?family=Mitr|Nunito|Roboto|Roboto+Slab');
-  }*/
-
+  
   @font-face {
     font-family: 'cs_prajad';
-    src: url('/fonts/csprajad-bolditalic-webfont.woff2') format('woff2'),
+    src: local('CS PraJad'),
+          url('/fonts/csprajad-bolditalic-webfont.woff2') format('woff2'),
          url('/fonts/csprajad-bolditalic-webfont.woff') format('woff');
     font-weight: bold;
     font-style: italic;
   }
   @font-face {
     font-family: 'cs_prajad';
-    src: url('/fonts/csprajad-bold-webfont.woff2') format('woff2'),
+    src: local('CS PraJad'),
+        url('/fonts/csprajad-bold-webfont.woff2') format('woff2'),
          url('/fonts/csprajad-bold-webfont.woff') format('woff');
     font-weight: bold;
     font-style: normal;
   }
   @font-face {
     font-family: 'cs_prajad';
-    src: url('/fonts/csprajad-italic-webfont.woff2') format('woff2'),
-         url('/fonts/csprajad-italic-webfont.woff') format('woff');
+    src: local('CS PraJad'),
+        url('/fonts/csprajad-italic-webfont.woff2') format('woff2'),
+         url('/fonts/csprajad-italic-webonft.woff') format('woff');
     font-weight: normal;
     font-style: italic;
   }
   @font-face {
     font-family: 'cs_prajad';
-    src: url('/fonts/csprajad-webfont.woff2') format('woff2'),
+    src: local('CS PraJad'),
+        url('/fonts/csprajad-webfont.woff2') format('woff2'),
          url('/fonts/csprajad-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
   }
 
+  /* FOR DESKTOP AND TABLET */
+  @media (min-width:481px) {
+    .menu-font {
+      font-family: 'Nunito', 'Mitr';
+      font-size: 16px;
+      font-weight: 400;
+    }
+    .title-font {
+      font-family: 'PT Serif', 'Mitr';
+      font-size: 36px;
+    }
+    .content-font {
+      font-family: 'PT Sans', 'cs_prajad', sans-serif;
+      font-size: 20px;
+    }
+  }
 
-  .menu-font {
-    font-family: 'Nunito', 'Mitr';
-    font-size: 16px;
-    font-weight: 400;
-  }
-  .title-font {
-    font-family: 'PT Serif', 'Mitr';
-    font-size: 36px;
-  }
-  .content-font {
-    font-family: 'PT Sans', 'cs_prajad', sans-serif;
-    font-size: 20px;
+  /* FOR MOBILE */
+  @media (max-width:480px) {
+    .menu-font {
+      font-family: 'Nunito', 'Mitr';
+      font-size: 16px;
+      font-weight: 400;
+    }
+    .title-font {
+      font-family: 'Roboto Slab', 'Mitr';
+      font-size: 36px;
+    }
+    .content-font {
+      font-family: 'Roboto', 'cs_prajad', sans-serif;
+      font-size: 20px;
+    }
   }
 `
 
