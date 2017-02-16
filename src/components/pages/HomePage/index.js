@@ -1,5 +1,5 @@
 import React from 'react'
-import {TopBarWithNavigation,SignUpFb,SignUp} from 'components'
+import {TopBarWithNavigation,SignUpFb,SignUp,SignInFb,SignIn} from 'components'
 import {Link} from 'react-router'
 import styled from 'styled-components'
 import {findDOMNode as dom} from 'react-dom'
@@ -107,6 +107,8 @@ const Homepage = React.createClass({
 		      </Content>
           <SignUpFb/>
           <SignUp/>
+          <SignInFb/>
+          <SignIn/>
 		   </Wrapper>
 		  )
 	}
