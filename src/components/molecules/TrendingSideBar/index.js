@@ -6,7 +6,6 @@ import {findDOMNode as dom} from 'react-dom'
 
 const Container = styled.div`
   width:324px;
-  margin-top:50px;
   position:relative;
 `
 
@@ -32,19 +31,21 @@ const Column = styled.div`
 const TrendingSideBar = React.createClass({
   getInitialState(){
     return{
-      startPos:'',
       stopPos:''
     }
   },
 
   componentDidMount(){
 		var self = this
+    var startPos = dom(self.refs.contain).getBoundingClientRect().top
+    //console.log(startPos)
 		window.addEventListener("scroll", function(event) {
 			var top = this.scrollY
-			if(top>600&&top<self.state.stopPos-100){
+			if(top>startPos+600&&top<self.state.stopPos-100){
 				dom(self.refs.contain).style.top = top-600+'px';
 			}else if(top==0){
-				dom(self.refs.contain).style.top = self.state.startPos+'px';
+				dom(self.refs.contain).style.top = startPos+'px';
+        //console.log(startPos+'px')
 			}else if(top>self.state.stopPos-100){
 				dom(self.refs.contain).style.top = self.state.stopPos-730+'px';
 			}
@@ -52,11 +53,8 @@ const TrendingSideBar = React.createClass({
 	},
 
   componentWillReceiveProps(nextProps){
-    if(nextProps.start != this.props.start){
-      this.setState({
-        startPos:nextProps.start,
-        stopPos:nextProps.stop
-      })
+    if(nextProps.stop != this.props.stop){
+      this.setState({stopPos:nextProps.stop})
     }
   },
 

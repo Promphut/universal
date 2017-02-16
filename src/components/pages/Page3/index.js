@@ -1,5 +1,5 @@
 import React from 'react'
-import { PageTemplate, TopBarWithNavigation, ArticlePage, RecommendArticle, TrendingSideBar} from 'components'
+import { PageTemplate, TopBarWithNavigation, ArticlePage, RecommendArticle, TrendingSideBar, ShareSideBar} from 'components'
 import {Link} from 'react-router'
 import styled from 'styled-components'
 import {findDOMNode as dom} from 'react-dom'
@@ -48,10 +48,18 @@ const Content = styled.div`
 	justify-content: center;
 
 `
+const Share = styled.div`
+	flex: 1 90px;
+	position:relative;
+	max-width: 90px;
+	@media (max-width: 1160px) {
+		display:none;
+	}
+`
 
 const Main = styled.div`
-	flex: 9 790px;
-	max-width: 790px;
+	flex: 8 730px;
+	max-width: 730px;
 	@media (max-width: 480px) {
 		flex: 12;
 	}
@@ -100,10 +108,9 @@ const trending = {
 	photo:'/tmp/story-list/1485309433041-Screen-Shot-2017-01-23-at-33221-PM-1.png'
 }
 const trendingArray = [trending,trending,trending,trending,trending]
-const HomePage2 = React.createClass({
+const Page3 = React.createClass({
 	getInitialState(){
 		return {
-			startPos:'',
 			stopPos:''
 		}
 	},
@@ -121,7 +128,6 @@ const HomePage2 = React.createClass({
 
 	componentDidMount(){
 		this.setState({
-			startPos:dom(this.refs.trendingBar).getBoundingClientRect().top,
 			stopPos:dom(this.refs.recommend).getBoundingClientRect().top
 		})
 		// var posTop = dom(this.refs.trendingBar).getBoundingClientRect().top
@@ -152,7 +158,7 @@ const HomePage2 = React.createClass({
 	},
 
 	render(){
-		var {startPos,stopPos} = this.state
+		var {stopPos} = this.state
 		return (
 		    <Wrapper >
 		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={true} />
@@ -160,11 +166,15 @@ const HomePage2 = React.createClass({
 		      <Cover width={this.state.width} height={this.state.height}/>
 
 		      <Content>
+						<Share ref='share'>
+							<ShareSideBar stop={stopPos}/>
+						</Share>
+
 						<Main>
 							<ArticlePage/>
 			      </Main>
 			      
-			      <Aside  id='trendingBar' className='' ref='trendingBar'><TrendingSideBar start={startPos} stop={stopPos} detail={trendingArray} /></Aside>
+			      <Aside  id='trendingBar' className='' ref='trendingBar'><TrendingSideBar stop={stopPos} detail={trendingArray} /></Aside>
 		      </Content>
 						
 					<RecommendContainer ref='recommend'>
@@ -191,4 +201,4 @@ const HomePage2 = React.createClass({
 	}
 });
 
-export default HomePage2;
+export default Page3;
