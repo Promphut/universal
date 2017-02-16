@@ -32,15 +32,15 @@ injectGlobal`
     text-decoration: none;
   }
 
-  /* FOR DESKTOP AND TABLET */
+  /* FOR DESKTOP AND TABLET
   @media (min-width:481px) {
-    @import url('https://fonts.googleapis.com/css?family=Mitr|Nunito|PT+Sans|PT+Serif');
-  }
+    @import url('https://fonts.googleapis.com/css?family=Mitr|Nunito|PT+Sans|PT+Serif&subset=thai');
+  }*/
 
-  /* FOR MOBILE */
+  /* FOR MOBILE 
   @media (max-width: 480px) {
     @import url('https://fonts.googleapis.com/css?family=Mitr|Nunito|Roboto|Roboto+Slab');
-  }
+  }*/
 
   @font-face {
     font-family: 'cs_prajad';
@@ -73,15 +73,17 @@ injectGlobal`
 
 
   .menu-font {
-    font-family: 'Nunito', 'Mitr', sans-serif;
+    font-family: 'Nunito', 'Mitr';
     font-size: 16px;
     font-weight: 400;
   }
   .title-font {
-    font-family: 'PT Serif', 'Mitr', sans-serif;
+    font-family: 'PT Serif', 'Mitr';
+    font-size: 36px;
   }
   .content-font {
     font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    font-size: 20px;
   }
 `
 
