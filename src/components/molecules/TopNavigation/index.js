@@ -28,8 +28,8 @@ const Nav = styled.nav`
 	}
 	& ul li a:hover {
 		background: #e2e2e2;
-		color: #222;
-		text-shadow:0px 0px 1px #222;	/* instead of bold */
+		color: #222 !important;
+		/* text-shadow:0px 0px 1px #222;	instead of bold */
 	}
 	& ul li ul.dropdown {
 		min-width: 230px;
@@ -48,7 +48,7 @@ const Nav = styled.nav`
 	}
 	& ul li ul.dropdown li a {
 		padding: 1em 2em;
-		color: #222;
+		color: #8f8f8f;
 	}
 	& ul li:hover ul.dropdown {
 		display: block;

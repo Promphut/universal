@@ -12,7 +12,7 @@ const SecondaryButton = (props) => {
 			className: 'secondary-btn secondary-large-btn',
 			label: props.label,
 			labelColor: '#00B2B4',
-			labelStyle: {fontWeight:'bold', fontSize:18, top:-2},
+			labelStyle: {fontWeight:'bold', fontSize:18, top:-2, fontFamily:"'Nunito', 'Mitr'"},
 			style: {borderRadius:'24px', height:'48px', lineHeight:'48px', background:'none', boxShadow:'none', ...props.style},
 	      	buttonStyle: {borderRadius: '24px', background: 'none', border:'2px solid #00B2B4', padding:'0 5px'}
 		}
@@ -34,7 +34,7 @@ const SecondaryButton = (props) => {
 			className: 'secondary-btn secondary-small-btn',
 			label: props.label,
 			labelColor: '#00B2B4',
-			labelStyle: {fontWeight:'bold', fontSize:15, top:-2},
+			labelStyle: {fontWeight:'bold', fontSize:15, top:-2, fontFamily:"'Nunito', 'Mitr'"},
 			style: {borderRadius:'17px', height:'35px', lineHeight:'35px', background:'none', boxShadow:'none', ...props.style},
 	      	buttonStyle: {borderRadius: '17px', background: 'none', border:'2px solid #00B2B4', padding:'0'}
 		}
@@ -57,7 +57,7 @@ const SecondaryButton = (props) => {
 			className: 'secondary-btn',
 			label: props.label,
 			labelColor: '#00B2B4',
-			labelStyle: {fontWeight:'bold', fontSize:15, top:-2},
+			labelStyle: {fontWeight:'bold', fontSize:15, top:-2, fontFamily:"'Nunito', 'Mitr'"},
 			style: {borderRadius:'20px', height:'40px', lineHeight:'40px', background:'none', boxShadow:'none', ...props.style},
 	      	buttonStyle: {borderRadius: '20px', background: 'none', border:'2px solid #00B2B4', padding:'0 2px'}
 		}

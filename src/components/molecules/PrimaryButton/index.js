@@ -11,7 +11,7 @@ const PrimaryButton = (props) => {
 			className: 'primary-btn primary-large-btn',
 			label: props.label,
 			labelColor: 'White',
-			labelStyle: {fontWeight:'bold', fontSize:18},
+			labelStyle: {fontWeight:'bold', fontSize:18, fontFamily:"'Nunito', 'Mitr'"},
 			style: {borderRadius:'24px', height:'48px', lineHeight:'48px', ...props.style},
 	      	buttonStyle: {borderRadius: '24px', backgroundColor: '#00B2B4', padding:'0 5px'}
 		}
@@ -33,7 +33,7 @@ const PrimaryButton = (props) => {
 			className: 'primary-btn primary-small-btn',
 			label: props.label,
 			labelColor: 'White',
-			labelStyle: {fontWeight:'bold', fontSize:13},
+			labelStyle: {fontWeight:'bold', fontSize:13, fontFamily:"'Nunito', 'Mitr'"},
 			style: {borderRadius:'17px', height:'35px', lineHeight:'35px', ...props.style},
 	      	buttonStyle: {borderRadius: '17px', backgroundColor: '#00B2B4', padding:'0'}
 		}
@@ -56,7 +56,7 @@ const PrimaryButton = (props) => {
 			className: 'primary-btn',
 			label: props.label,
 			labelColor: 'White',
-			labelStyle: {fontWeight:'bold', fontSize:15},
+			labelStyle: {fontWeight:'bold', fontSize:15, fontFamily:"'Nunito', 'Mitr'"},
 			style: {borderRadius:'20px', height:'40px', lineHeight:'40px', ...props.style},
 	      	buttonStyle: {borderRadius: '20px', backgroundColor: '#00B2B4', padding:'0 2px'}
 		}

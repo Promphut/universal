@@ -81,7 +81,7 @@ injectGlobal`
     .menu-font {
       font-family: 'Nunito', 'Mitr';
       font-size: 16px;
-      font-weight: 400;
+      font-weight: bold;
     }
     .title-font {
       font-family: 'PT Serif', 'Mitr';
@@ -98,7 +98,7 @@ injectGlobal`
     .menu-font {
       font-family: 'Nunito', 'Mitr';
       font-size: 16px;
-      font-weight: 400;
+      font-weight: bold;
     }
     .title-font {
       font-family: 'Roboto Slab', 'Mitr';
