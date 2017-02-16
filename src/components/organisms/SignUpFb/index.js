@@ -7,7 +7,6 @@ const Box = styled.div`
   width:476px;
   height:427px;
   background-color:#fff;
-  margin:15% auto 0 auto;
   padding:10px 0 10px 0;
 `
 const Head = styled.div`
@@ -44,27 +43,31 @@ var styles={
     fontWeight:'bold'
   }
 }
-const SignUpFb = ({text,style}) => {
-  return(
-    <Box>
-      <Head>Sign Up</Head>
-      <Text>ไม่พลาดทุกเรื่องราวการเงินดีๆ สมัครสมาชิค</Text>
+const SignUpFb = React.createClass({
+  render(){
+    return(
+      <Box>
+        <Head>Sign Up</Head>
+        <Text>ไม่พลาดทุกเรื่องราวการเงินดีๆ สมัครสมาชิค</Text>
 
-      <div style={styles.btnCon}>
-        <RaisedButton
-          label=" Sign Up"
-          labelPosition="after"
-          labelColor='white'
-          labelStyle={styles.labelBtn}
-          icon={<i className="fa fa-facebook" style={{color:'white',margin:'17px 10px 0 0'}} aria-hidden="true"></i>}
-          style={styles.button}
-          buttonStyle={styles.btn}
-        />
-      </div>
+        <div style={styles.btnCon}>
+          <RaisedButton
+            label=" Sign Up"
+            labelPosition="after"
+            labelColor='white'
+            labelStyle={styles.labelBtn}
+            icon={<i className="fa fa-facebook" style={{color:'white',margin:'17px 10px 0 0'}} aria-hidden="true"></i>}
+            style={styles.button}
+            buttonStyle={styles.btn}
+          />
+        </div>
 
-      <Text style={{marginTop:'10px'}}>Or <LinkUnderLine to="#">Sign Up with an E-mail</LinkUnderLine></Text>
-    </Box>
-  )
-}
+        <Text style={{marginTop:'10px'}}>Or <LinkUnderLine to='#' onClick={this.props.emailSignUp}>Sign Up with an E-mail</LinkUnderLine></Text>
+      </Box>
+    )
+  }
+})
+
+
 
 export default SignUpFb 

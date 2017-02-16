@@ -4,10 +4,9 @@ import Avatar from 'material-ui/Avatar'
 import RaisedButton from 'material-ui/RaisedButton';
 import {Link} from 'react-router'
 const Box = styled.div`
-  width:476px;
+  width:477px;
   height:427px;
   background-color:#fff;
-  margin:15% auto 0 auto;
   padding:10px 0 10px 0;
 `
 const Head = styled.div`
@@ -24,36 +23,51 @@ const Text = styled.div`
 const LinkUnderLine = styled(Link)`
   text-decoration:underline;
 `
+const Div = styled.div`
+  width:308px;
+  border-top:1px solid #E2E2E2;
+  padding-top:15px;
+  margin:70px auto 0 auto;
+`
+const NewLink = styled(Link)`
+  color:#C2C2C2;
+  font-size:14px;
+  font-family:'Nunito';
+`
 var styles={
   button:{
     background:'#3A579A',
     borderRadius:'24px',
     height:'48px',
-    width:'167px'
+    width:'307px'
   },
   btn:{
     background:'#3A579A',
     borderRadius:'24px',
   },
   btnCon:{
-    width:'167px',
-    margin:'70px auto 20px auto'
+    width:'307px',
+    margin:'60px auto 20px auto'
   },
   labelBtn:{
     top:'8px',
     fontWeight:'bold'
   }
 }
+const SignInFb = React.createClass({
+  getInitialState(){
+    return{
 
-const SignUpFb = ({text,style}) => {
+    }
+  },
+
+  render(){
   return(
     <Box>
-      <Head>Sign Up</Head>
-      <Text>ไม่พลาดทุกเรื่องราวการเงินดีๆ สมัครสมาชิค</Text>
-
+      <Head>Sign In</Head>
       <div style={styles.btnCon}>
         <RaisedButton
-          label=" Sign Up"
+          label=" Sign In with facebook"
           labelPosition="after"
           labelColor='white'
           labelStyle={styles.labelBtn}
@@ -62,10 +76,15 @@ const SignUpFb = ({text,style}) => {
           buttonStyle={styles.btn}
         />
       </div>
-
-      <Text style={{marginTop:'10px'}}>Or <LinkUnderLine to="#">Sign Up with an E-mail</LinkUnderLine></Text>
+      <Text style={{marginTop:'20px'}}>Or <LinkUnderLine to="#" onClick={this.props.emailSignIn}>Sign In with an E-mail</LinkUnderLine></Text>
+      <Div>
+        <NewLink to="#" style={{float:'left'}}>Forget Password?</NewLink>
+        <NewLink to="#" style={{float:'right'}}>Sign Up</NewLink>
+      </Div>
     </Box>
   )
-}
+  },
+})
 
-export default SignUpFb 
+
+export default SignInFb
