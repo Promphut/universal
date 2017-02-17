@@ -54,6 +54,67 @@ EDITOR PATHS:
 
 =================== SERVICE ENDPOINTS FOR MVP VERSION ================
 // TODO
+USER
+	Auth with FB 							GET 		/auth/facebook  
+	Generate Token 							POST 		/auth 												{username, password}			{token}
+	Get user's public detail 				GET 		/users/:uid 																		{user}
+	Update user's detail 					PATCH 		/users/:uid	 										{user} 							{user}
+	Get owner's private detail 				GET 		/users/:uid 		 								{token} 						{user} 
+	Upload user's profile pic 				POST 		/users/:uid/photo 									{token, photo} 					{sizes}
+	Register new user 						POST  		/users 												{email, password} 				{token, user}
+
+ADMIN
+	Add publisher's admin 					POST 		/publishers/:pid/admins/:uidOrEmail 				{token} 						{role, admins}
+	Get publisher's admins 					GET 		/publishers/:pid/admins 															{admins}
+	Remove publisher's admin 				DELETE 		/publishers/:pid/admins/:uid 						{token} 						{role/*, admins*/}
+
+WRITER
+	Add col's writer 						POST  		/publishers/:pid/columns/:cid/writers/:uidOrEmail 	{token} 						{role, writers}
+	Add col's editor 						POST  		/publishers/:pid/columns/:cid/editors/:uidOrEmail 	{token} 						{role, editors}
+	Remove col's writer 					DELETE 		/publishers/:pid/columns/:cid/writers/:uid 			{token}							{role/*, writers*/}
+	Remove col's editor 					DELETE 		/publishers/:pid/columns/:cid/editors/:uid 			{token}							{role/*, editors*/}
+	Get col's writers 						GET 		/publishers/:pid/columns/:cid/writers 												{writers}
+	Get col's editors 						GET 		/publishers/:pid/columns/:cid/editors 												{editors}	
+
+TAG
+	Create publisher tag 					POST 		/publishers/:pid/tags 								{token, tagName} 				{tag}
+	Get publisher's tag 					GET 		/publishers/:pid/tags 																{tags}
+	Remove publisher's tag 					DELETE 		/publishers/:pid/tags/:tid 							{token} 						{}
+	Add story's tag 						POST 		/publishers/:pid/stories/:sid/tags/:tid				{token} 						{tag}				cause we want tag slug back
+	Remove story's tag 						DELETE 		/publishers/:pid/stories/:sid/tags/:tid 			{token} 						{}
+
+PUBLISHER 
+//	Get publisher's public detail 			GET 		/publishers/:pid 																	{publisher, columns}
+	Update publisher's detail 				PATCH 		/publishers/:pid 									{token, publisher} 				{publisher} 
+	Upload publisher's cover photo 			POST 		/publishers/:pid/cover 								{token, cover} 					{cover} 			cover: {paths:[''], filename:''}
+	Upload publisher's logo 				POST 		/publishers/:pid/logo 								{token, logo} 					{logo}				logo: {paths:[''], filename:''}
+	Upload publisher's square logo  		POST 		/publishers/:pid/square-logo 						{token, square-logo} 			{square-logo} 		square-logo: {paths:[''], filename:''}
+
+COLUMN
+	Add publisher col 						POST 		/publishers/:pid/columns 							{token, col} 					{column}
+	Remove publisher col 					DELETE 		/publishers/:pid/columns/:cid 						{token} 						{}
+	Update col detail 						PATCH 		/publishers/:pid/columns/:cid 						{token} 						{column}
+	Upload col's cover 						POST 		/publishers/:pid/cover 								{token, cover} 					{cover}				cover: {paths:[''], filename:''}
+	Get publisher's cols
+	- ?sort : trending/latest/popular		GET 		/publishers/:pid/columns 							{sort}							{columns}
+	Get col's public detail 				GET 		/publishers/:pid/columns/:cid 														{column} 
+
+MENU
+	Get publisher and user navigation		GET 		/navigation											{?uid, pid} 					{navigation}
+
+STORIES
+	Create a story 							POST 		/publishers/:pid/stories/:sid 						{token, story} 					{story} 			no need for html, we just want slug back
+	Delete a story 							DELETE 		/publishers/:pid/stories/:sid 						{token} 						{}
+	Get story detail 						GET 		/publishers/:pid/stories/:sid 														{story}				including minor detail of column, tags
+	Update story detail 					PATCH 		/publishers/:pid/stories/:sid 						{token, story} 					{story}
+	Upload story cover 						POST 		/publishers/:pid/stories/:sid/cover 				{token, cover} 					{cover} 			cover: {paths:[''], filename:''}
+	Upload story portrait cover 			POST 		/publishers/:pid/stories/:sid/portrait-cover 		{token, portrait-cover} 		{portrait-cover} 	portrait-cover: {paths:[''], filename:''}
+
+FEED
+ 	Get feed 								GET 		/publishers/:pid/feed  								{filter, sort}					{stories:}
+ 	- ?sort : trending/latest/popular
+ 	- ?filter : ?type (e.g. all/story/video/qa), ?column, ?topic, ?program, ?tag
+
 
 
 ====================== PATHS FOR A FULL VERSION ======================
