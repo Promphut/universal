@@ -4,7 +4,7 @@ import FlatButton from 'material-ui/FlatButton';
 
 var styles={
   btn:{
-    float:'left',
+    //float:'left',
   },
   labelBtn:{
     color:'#E2E2E2',
@@ -12,22 +12,15 @@ var styles={
   }
 }
 
-const Box= styled.div`
-  overflow:hidden;
-  width:100%;
-`
-
 const BackButton = ({style})=>{
   return(
-    <Box style={{...style}}>
     <FlatButton
       label='Back'
       labelStyle={styles.labelBtn}
       labelPosition='after'
-      style={{...styles.btn}}
+      style={{...styles.btn,...style}}
       icon={<i className="fa fa-chevron-left" style={{color:'#E2E2E2'}} aria-hidden="true"></i>}
     />
-    </Box>
   )
 }
 

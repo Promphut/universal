@@ -11,10 +11,11 @@ const Box = styled.div`
   padding:10px 0 10px 0;
 `
 const Head = styled.div`
-  margin:70px auto 10px auto;
+  margin:60px auto 10px auto;
   text-align:center;
   font-size:42px;
   color:#00B2B4;
+  font-family:'Nunito';
 `
 const Text = styled.div`
   color:#8f8f8f;

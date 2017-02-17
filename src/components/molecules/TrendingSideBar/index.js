@@ -7,19 +7,27 @@ import {findDOMNode as dom} from 'react-dom'
 const Container = styled.div`
   width:324px;
   position:relative;
+
 `
 
 const Head = styled.div`
   color:#8F8F8F;
   font-size:20px;
+  width:171px;
   text-align:center;
-  margin:20px 0 15px 0;
+  margin:20px auto 15px auto;
+  border:1px solid #E2E2E2;
+  background:white;
+  padding:2px;
+  font-family:'Nunito'
 `
 const Divider =styled.div`
   height:1px;
   width:100%;
   background-color:#E2E2E2;
-  margin:15px 0 15px 0;
+  top:35px;
+  z-index:-5;
+  position:relative;
 `
 const Column = styled.div`
   font-weight:bold;
@@ -27,6 +35,8 @@ const Column = styled.div`
   color:#00B2B4;
   text-align:center;
 `
+
+//if height less than 900px remove last item
 
 const TrendingSideBar = React.createClass({
   getInitialState(){
@@ -38,17 +48,17 @@ const TrendingSideBar = React.createClass({
   componentDidMount(){
 		var self = this
     var startPos = dom(self.refs.contain).getBoundingClientRect().top
+    var height = dom(self.refs.contain).scrollHeight;
     //console.log(startPos)
 		window.addEventListener("scroll", function(event) {
 			var top = this.scrollY
-			if(top>startPos+600&&top<self.state.stopPos-100){
-				dom(self.refs.contain).style.top = top-600+'px';
-			}else if(top==0){
-				dom(self.refs.contain).style.top = startPos+'px';
-        //console.log(startPos+'px')
-			}else if(top>self.state.stopPos-100){
-				dom(self.refs.contain).style.top = self.state.stopPos-730+'px';
+			if(top>startPos+height&&top<self.state.stopPos){
+				dom(self.refs.contain).style.top = top-height+'px';
 			}
+      // else if(top==0){
+			// 	dom(self.refs.contain).style.top = startPos+'px';
+      //   //console.log(startPos+'px')
+			// }
 		});
 	},
 
@@ -67,9 +77,8 @@ const TrendingSideBar = React.createClass({
   render(){
     return(
       <Container style={{...this.props.style}} ref='contain'>
-        <Head>Trending Stories in</Head>
-        <Column>Fund</Column>
         <Divider/>
+        <Head>NOW TRENDING</Head>
         {this.props.detail.map(this.mapTrending)}
         <Divider/>
       </Container>

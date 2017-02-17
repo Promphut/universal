@@ -8,6 +8,38 @@ const Wraper = styled.div`
   color:#222;
   width:100%;
   margin:0 auto 0 auto;
+  @media (min-width:481px) {
+    .menu-font {
+      font-family: 'Nunito', 'Mitr';
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .title-font {
+      font-family: 'PT Serif', 'Mitr';
+      font-size: 36px;
+    }
+    .content-font {
+      font-family: 'PT Sans', 'cs_prajad', sans-serif;
+      font-size: 20px;
+    }
+  }
+
+  /* FOR MOBILE */
+  @media (max-width:480px) {
+    .menu-font {
+      font-family: 'Nunito', 'Mitr';
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .title-font {
+      font-family: 'Roboto Slab', 'Mitr';
+      font-size: 36px;
+    }
+    .content-font {
+      font-family: 'Roboto', 'cs_prajad', sans-serif;
+      font-size: 20px;
+    }
+  }
 `
 const Head = styled.h1`
   font-size:36px;
@@ -21,6 +53,7 @@ const TagContainer = styled.div`
   display:flex;
   flex-wrap:wrap;
   margin:40px 0 40px 0;
+  font-family:'PT Sans';
 `
 const Divider = styled.div`
   height:2px;
@@ -90,9 +123,9 @@ Ruined the party last night as they rocked into Toronto and downed the Raptors o
   render(){
     return(
       <Wraper>
-        <h1>{this.head}</h1>
+        <Head className='title-font'>{this.head}</Head>
         <WritedBy detail={writerDetail}/>
-        <Article>{this.article}</Article>
+        <Article className='content-font'>{this.article}</Article>
         <TagContainer>
           <TagBox text='MONEY IDEAS' style={{margin:'10px'}}/>
           <TagBox text='MONEY' style={{margin:'10px'}}/>

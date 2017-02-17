@@ -6,6 +6,24 @@ import {} from 'components'
 const Container = styled.div`
   width:540px;
   margin-top:30px;
+  @media (min-width:481px) {
+    .serif-font {
+      font-family: 'PT Serif', 'Mitr';
+    }
+    .sans-font {
+      font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    }
+  }
+
+  /* FOR MOBILE */
+  @media (max-width:480px) {
+    .serif-font {
+      font-family: 'Roboto Slab', 'Mitr';
+    }
+    .sans-font {
+      font-family: 'Roboto', 'cs_prajad', sans-serif;
+    }
+  }
 `
 const Img = styled.img`
   width:100%;
@@ -37,9 +55,9 @@ const RecommendArticle = ({detail})=>{
   return(
     <Container>
       <Img src='/tmp/story-list/1485309433041-Screen-Shot-2017-01-23-at-33221-PM-1.png'/>
-      <Div>in <Column>{column}</Column></Div>
-      <Name>{name}</Name>
-      <Div>By <strong>{writer}</strong> - {vote} Votes {comment} Comments</Div>
+      <Div className='sans-font'>in <Column>{column}</Column></Div>
+      <Name className='serif-font'>{name}</Name>
+      <Div className='sans-font'>By <strong>{writer}</strong> - {vote} Votes {comment} Comments</Div>
     </Container>
   )
 }

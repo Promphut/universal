@@ -1,5 +1,5 @@
 import React from 'react'
-import { PageTemplate, TopBarWithNavigation, ArticlePage, RecommendArticle, TrendingSideBar, ShareSideBar} from 'components'
+import { PageTemplate, TopBarWithNavigation, ArticlePage, RecommendArticle, TrendingSideBar, ShareSideBar,OverlayImg} from 'components'
 import {Link} from 'react-router'
 import styled from 'styled-components'
 import {findDOMNode as dom} from 'react-dom'
@@ -24,23 +24,9 @@ const GradientOverlay = styled.div`
 	z-index:0
 `
 
-const Cover = React.createClass({
-	getInitialState(){
-		return {}
-	},
-
-	render(){return (
-			<div style={{
-				overflow:'hidden',
-				maxHeight: this.props.height-120+'px',
-				position:'relative'
-			}}>
-				<img src="/tmp/a-story/pic-min.jpg" style={{width: '100%'}}/>
-				<GradientOverlay />
-			</div>
-		)
-	}
-})
+const Cover = (props) => (
+	<OverlayImg src="/tmp/a-story/pic-min.jpg" style={{maxHeight: props.height-120+'px'}}/>
+)
 
 const Content = styled.div`
 	display: flex;
@@ -49,9 +35,10 @@ const Content = styled.div`
 
 `
 const Share = styled.div`
-	flex: 1 90px;
+	flex: 1 150px;
 	position:relative;
-	max-width: 90px;
+	max-width: 150px;
+	margin-right:20px;
 	@media (max-width: 1160px) {
 		display:none;
 	}
@@ -69,7 +56,7 @@ const Aside = styled.div`
 	flex: 3 350px;
 	position:relative;
 	max-width: 350px;
-	margin-left:20px;
+	margin-left:80px;
 	@media (max-width: 1160px) {
 		display:none;
 	}
@@ -107,7 +94,7 @@ const trending = {
 	comment:11,
 	photo:'/tmp/story-list/1485309433041-Screen-Shot-2017-01-23-at-33221-PM-1.png'
 }
-const trendingArray = [trending,trending,trending,trending,trending]
+const trendingArray = [trending,trending,trending,trending,trending,trending]
 const Page3 = React.createClass({
 	getInitialState(){
 		return {
@@ -130,19 +117,6 @@ const Page3 = React.createClass({
 		this.setState({
 			stopPos:dom(this.refs.recommend).getBoundingClientRect().top
 		})
-		// var posTop = dom(this.refs.trendingBar).getBoundingClientRect().top
-		// var footPos = dom(this.refs.recommend).getBoundingClientRect().top
-		// var self = this
-		// window.addEventListener("scroll", function(event) {
-		// 	var top = this.scrollY
-		// 	if(top>600&&top<footPos-100){
-		// 		dom(self.refs.trendingBar).style.top = top-600+'px';
-		// 	}else if(top==0){
-		// 		dom(self.refs.trendingBar).style.top = posTop+'px';
-		// 	}else if(top>footPos-100){
-		// 		dom(self.refs.trendingBar).style.top = footPos-730+'px';
-		// 	}
-		// });
 	},
                                   
 	fixedTrending(e){
@@ -181,21 +155,14 @@ const Page3 = React.createClass({
 						<Recommend>
 							<div style={{fontSize:'19px',color:'#8f8f8f'}}>Recommends</div>
 							<Link to='#'><RecommendArticle detail={rec}/></Link>
+							<Link to='#'><RecommendArticle detail={rec}/></Link>
 						</Recommend>
 						<Recommend>
 							<div style={{height:'22px'}}></div>
 							<Link to='#'><RecommendArticle detail={rec}/></Link>
-						</Recommend>
-						<Recommend>
-							<Link to='#'><RecommendArticle detail={rec}/></Link>
-						</Recommend>
-						<Recommend>
 							<Link to='#'><RecommendArticle detail={rec}/></Link>
 						</Recommend>
 					</RecommendContainer>
-				
-
-		      <Footer>This is footer</Footer>
 		   </Wrapper>
 		  )
 	}

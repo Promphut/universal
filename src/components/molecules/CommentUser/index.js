@@ -8,6 +8,18 @@ import RaisedButton from 'material-ui/RaisedButton';
 const Container = styled.div`
   width:100%;
   margin:10px 0 10px 0;
+  @media (min-width:481px) {
+    .sans-font {
+      font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    }
+  }
+  /* FOR MOBILE */
+  @media (max-width:480px) {
+
+    .sans-font {
+      font-family: 'Roboto', 'cs_prajad', sans-serif;
+    }
+  }
 ` 
 const Name = styled.div`
   color:#222222;
@@ -96,7 +108,7 @@ const CommentBox = React.createClass({
     return(
       <Container>
         <Link to="#"><Avatar src='/tmp/avatar.png' size={49} style={{float:'left',marginRight:'15px'}}/></Link>
-        <Name>{this.props.data.name} <Time>{this.props.data.date}</Time></Name>
+        <Name className="sans-font">{this.props.data.name} <Time>{this.props.data.date}</Time></Name>
         <div><UserTag>@{this.props.data.target}</UserTag> {this.props.data.text}</div>
         <div style={styles.cont}>
           <RaisedButton 

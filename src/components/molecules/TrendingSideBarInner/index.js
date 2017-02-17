@@ -5,12 +5,24 @@ import {OverlayImg} from 'components'
 
 const Container = styled.div`
   width:324px;
-  margin:40px 0 40px 0;
+  margin:40px 0 0 0;
+  @media (min-width:481px) {
+    .sans-font {
+      font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    }
+  }
+  /* FOR MOBILE */
+  @media (max-width:480px) {
+    .sans-font {
+      font-family: 'Roboto', 'cs_prajad', sans-serif;
+    }
+  }
 `
 const Name = styled.div`
   color:#222;
   font-size:17px;
   width:190px;
+  font-weight:bold;
 `
 const Img = styled.div`
   width:127px;
@@ -30,8 +42,8 @@ const TrendingSideBar = ({style,detail})=>{
     <Container style={{...style}}>
       <div>
         <OverlayImg src={photo} style={{width:'127',height:'75',float:'right'}}/>
-        <Name>{name}</Name>
-        <Vote>{vote} Votes {''+ comment} Comments</Vote>
+        <Name className="sans-font">{name}</Name>
+        <Vote className="sans-font">{vote} Votes {''+ comment} Comments</Vote>
       </div>
     </Container>
   )

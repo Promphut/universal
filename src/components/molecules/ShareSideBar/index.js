@@ -16,9 +16,17 @@ const No = styled.div`
   color:#222222;
   font-size:36px;
   text-align:center;
-
+`
+const CirButton = styled.div`
+  width:61px;
+  height:61px;
+  border-radius:50%;
+  background-color:#3A579A;
+  padding:16px 0 0 20px;
+  margin:15px auto 15px auto;
 `
 
+//if height less than 900px remove last item
 
 const ShareSideBar = React.createClass({
   getInitialState(){
@@ -27,19 +35,19 @@ const ShareSideBar = React.createClass({
     }
   },
   componentDidMount(){
-    var self = this
+		var self = this
     var startPos = dom(self.refs.contain).getBoundingClientRect().top
+    var height = dom(self.refs.contain).scrollHeight;
     //console.log(startPos)
 		window.addEventListener("scroll", function(event) {
 			var top = this.scrollY
-			if(top>startPos+200&&top<self.state.stopPos-100){
-				dom(self.refs.contain).style.top = top-200+'px';
-			}else if(top==0){
-				dom(self.refs.contain).style.top = startPos+'px';
-        //console.log(startPos+'px')
-			}else if(top>self.state.stopPos-100){
-				dom(self.refs.contain).style.top = self.state.stopPos-350+'px';
+			if(top>startPos+height&&top<self.state.stopPos){
+				dom(self.refs.contain).style.top = top-height+'px';
 			}
+      // else if(top==0){
+			// 	dom(self.refs.contain).style.top = startPos+'px';
+      //   //console.log(startPos+'px')
+			// }
 		});
   },
 
@@ -55,7 +63,8 @@ const ShareSideBar = React.createClass({
         <Div>
           <No>217</No>
           <div style={{color:'#8F8F8F',fontSize:'16px',fontWeight:'blod',textAlign:'center'}}>shares</div>
-          <div style={{margin:'0 auto 0 auto'}}><FbIcon fill='#3A579A'/></div>
+          <CirButton><i className="fa fa-facebook fa-2x" aria-hidden="true" style={{color:'white'}}></i></CirButton>
+          <CirButton style={{backgroundColor:'#60AADE',paddingLeft:'18px'}}><i className="fa  fa-twitter fa-2x" aria-hidden="true" style={{color:'white'}}></i></CirButton>
         </Div>
       </Container>
   )

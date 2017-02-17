@@ -7,7 +7,33 @@ import {} from 'components'
 
 const Container = styled.div`
   overflow: auto;
-	width: 100%
+	width: 100%;
+  @media (min-width:481px) {
+    .menu-font {
+      font-family: 'Nunito', 'Mitr';
+      font-weight: bold;
+    }
+    .title-font {
+      font-family: 'PT Serif', 'Mitr';
+    }
+    .content-font {
+      font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    }
+  }
+  /* FOR MOBILE */
+  @media (max-width:480px) {
+    .menu-font {
+      font-family: 'Nunito', 'Mitr';
+      font-weight: bold;
+    }
+    .title-font {
+      font-family: 'Roboto Slab', 'Mitr';
+    }
+    .content-font {
+      font-family: 'Roboto', 'cs_prajad', sans-serif;
+    }
+  }
+  
 ` 
 const TextInput = styled.textarea`
   width:534px;

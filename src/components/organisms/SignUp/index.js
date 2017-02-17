@@ -6,20 +6,22 @@ import TextField from 'material-ui/TextField';
 
 const Box = styled.div`
   width:477px;
-  height:590px;
+  height:550px;
   background-color:#fff;
   padding:10px 0 10px 0;
 `
 const Head = styled.div`
-  margin:60px auto 10px auto;
+  margin:50px auto 10px auto;
   text-align:center;
   font-size:42px;
   color:#00B2B4;
+  font-family:'Nunito'
 `
 const Text = styled.div`
   color:#8f8f8f;
   font-size:18px;
   text-align:center;
+  font-family:'Mitr'
 `
 
 const InputBox = styled.div`
@@ -38,7 +40,7 @@ var styles={
     borderRadius:'24px',
   },
   btnCon:{
-    margin:'50px auto 20px auto'
+    margin:'40px auto 20px auto'
   },
 }
 const SignUp = ({text,style}) => {
@@ -52,21 +54,21 @@ const SignUp = ({text,style}) => {
           floatingLabelText="Email"
           type="email"
           fullWidth={true}
-          style={{marginTop:'20px'}}
+          style={{marginTop:'15px'}}
         /><br />
         <TextField
           hintText="Password Field"
           floatingLabelText="Password"
           type="password"
           fullWidth={true}
-          style={{marginTop:'20px'}}
+          style={{marginTop:'15px'}}
         /><br />
         <TextField
           hintText="Password Again"
           floatingLabelText="Password Again"
           type="password"
           fullWidth={true}
-          style={{marginTop:'20px'}}
+          style={{marginTop:'15px'}}
         /><br />
         <div style={styles.btnCon}><PrimaryButton label='Sign Up' /></div>
       </InputBox>

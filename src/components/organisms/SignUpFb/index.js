@@ -14,11 +14,13 @@ const Head = styled.div`
   text-align:center;
   font-size:42px;
   color:#00B2B4;
+  font-family:'Nunito'
 `
 const Text = styled.div`
   color:#8f8f8f;
   font-size:18px;
   text-align:center;
+  font-family:'Mitr'
 `
 const LinkUnderLine = styled(Link)`
   text-decoration:underline;
@@ -62,7 +64,7 @@ const SignUpFb = React.createClass({
           />
         </div>
 
-        <Text style={{marginTop:'10px'}}>Or <LinkUnderLine to='#' onClick={this.props.emailSignUp}>Sign Up with an E-mail</LinkUnderLine></Text>
+        <Text style={{marginTop:'10px',fontFamily:'Nunito'}}>Or <LinkUnderLine to='#' onClick={this.props.emailSignUp}>Sign Up with an E-mail</LinkUnderLine></Text>
       </Box>
     )
   }
