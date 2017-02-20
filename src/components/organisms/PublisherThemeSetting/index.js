@@ -141,8 +141,8 @@ const PublisherThemeSetting = React.createClass({
         background:'linear-gradient(135deg, '+primaryColor+' 0%, '+secondaryColor+' 100%)',
         backgroundClip:"text",
         textFillColor: "transparent",
-        webkitBackgroundClip:"text",
-        webkitTextFillColor: "transparent"
+        WebkitBackgroundClip:"text",
+        WebkitTextFillColor: "transparent"
       }
     }
     return(
