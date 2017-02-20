@@ -3,12 +3,16 @@ import styled from 'styled-components'
 import {PrimaryButton,SecondaryButton,UploadPicture} from 'components'
 import {List, ListItem} from 'material-ui/List';
 import FontIcon from 'material-ui/FontIcon'
-import ContentInbox from 'material-ui/svg-icons/content/inbox';
-import ActionGrade from 'material-ui/svg-icons/action/grade';
-import ContentSend from 'material-ui/svg-icons/content/send';
-import ContentDrafts from 'material-ui/svg-icons/content/drafts';
-import Divider from 'material-ui/Divider';
-import ActionInfo from 'material-ui/svg-icons/action/info';
+
+var styles = {
+  list:{
+    color:'white'
+  },
+  listItem:{
+    padding:'20px 20px 20px 20px',
+    color:"white"
+  }
+}
 
 const PublisherSettingMenu = React.createClass({
   getInitialState(){
@@ -19,11 +23,10 @@ const PublisherSettingMenu = React.createClass({
   render(){
     return(
       <List>
-        <ListItem primaryText="Inbox" leftIcon={<ContentInbox />} />
-        <ListItem primaryText="Starred" leftIcon={<ActionGrade />} />
-        <ListItem primaryText="Sent mail" leftIcon={<ContentSend />} />
-        <ListItem primaryText="Drafts" leftIcon={<ContentDrafts />} />
-        <ListItem primaryText="Inbox" leftIcon={<ContentInbox />} />
+        <ListItem style={{...styles.listItem}} primaryText="dashboard" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>dashboard</FontIcon>} />
+        <ListItem style={{...styles.listItem}} primaryText="Stories" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>description</FontIcon>} />
+        <ListItem style={{...styles.listItem}} primaryText="Contact and About" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>contacts</FontIcon>} />
+        <ListItem style={{...styles.listItem}} primaryText="Settings" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>settings</FontIcon>} />
       </List>
     )
   },
