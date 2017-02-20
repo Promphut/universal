@@ -72,19 +72,20 @@ const UploadPicture = React.createClass({
   render(){
     if(this.state.statePreview){
       var styleVisible = {
-        visibility:'visible'
+        //visibility:'visible'
+        display:'block'
       }
     }else{
       var styleVisible = {
-        visibility:'hidden'
+        //visibility:'hidden'
+        display:'none'
       }
     }
-
     return(
       <Container>
         {!this.state.statePreview?<Box className="menu-font" onClick={()=>(dom(this.refs.imageLoader).click())}>Upload Picture</Box>:''}
         <Preview ref='preview' style={{...styleVisible,backgroundImage:'url(/tmp/story-list/1486677858322-NTBTS_102_8586.jpeg)'}}>
-          <Filter>Change Picture</Filter>
+          <Filter onClick={()=>(dom(this.refs.imageLoader).click())}>Change Picture</Filter>
         </Preview>
         <input type="file" ref="imageLoader" name="imageLoader" onChange={this.upload} style={{visibility:'hidden'}}/>
       </Container>

@@ -1,5 +1,6 @@
 import React from 'react'
-import { TopBarWithNavigation, OverlayImg, PublisherProfileSetting } from 'components'
+import { TopBarWithNavigation, OverlayImg, PublisherProfileSetting,
+   PublisherPublishingSetting,PublisherAnalyticSetting,PublisherThemeSetting } from 'components'
 
 import styled from 'styled-components'
 
@@ -52,6 +53,9 @@ const PublisherSettingPage = React.createClass({
               </Aside>
               <Main>
                 <PublisherProfileSetting/>
+                <PublisherPublishingSetting/>
+                <PublisherAnalyticSetting/>
+                <PublisherThemeSetting />
               </Main>
             </Content>
           </Container>

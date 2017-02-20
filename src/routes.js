@@ -1,9 +1,6 @@
 import React from 'react'
 import { Route, IndexRoute } from 'react-router'
-
 import App from 'components/App'
-//import App from 'components/App'
-//import { HomePage, HomePage2, IndexPage } from 'components'
 import {HomePage, HomePage2, Page3, MoodboardPage, SignInPage,SignUpPage,PublisherSettingPage} from 'components'
 const routes = (
   <Route path="/" component={App}>
