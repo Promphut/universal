@@ -186,7 +186,7 @@ const trending = {
 	photo:'/tmp/story-list/1485309433041-Screen-Shot-2017-01-23-at-33221-PM-1.png'
 }
 
-const PublisherContactAndAboutPage = React.createClass({
+const PublisherDashboardPage = React.createClass({
 	getInitialState(){
 		return {
       totalView:182032,
@@ -345,5 +345,5 @@ const PublisherContactAndAboutPage = React.createClass({
 	}
 });
 
-export default PublisherContactAndAboutPage;
+export default PublisherDashboardPage;
 
