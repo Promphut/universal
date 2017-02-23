@@ -6,6 +6,8 @@ const ip = process.env.IP || '0.0.0.0'
 const port = process.env.PORT || 3000
 const DEBUG = process.env.NODE_ENV !== 'production'
 
+const configfile = require('./config')
+
 const config = {
   devtool: DEBUG ? 'eval' : false,
   entry: [
@@ -26,7 +28,11 @@ const config = {
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: path.join(__dirname, '/public/index.html')
-    })
+    }),
+    new webpack.DefinePlugin({
+      'config': JSON.stringify(configfile),
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+    }),
   ],
   module: {
     loaders: [
