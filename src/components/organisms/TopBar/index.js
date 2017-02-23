@@ -76,7 +76,7 @@ const Container = styled.div`
 	}
 `
 
-const EmptyBlock = styled.span`
+const Hamburger = styled.span`
 	content: ''; 
 	display: block; 
 	position: absolute; 
@@ -134,7 +134,7 @@ const TopBar = React.createClass({
 		return (
 			<Wrapper className="menu-font">
 				<div className={this.props.scrolling || 'bar-on-top'}>
-					<Drawer name="ld" position="left" toggleIcon={<EmptyBlock/>}>
+					<Drawer name="ld" position="left" toggleIcon={<Hamburger/>}>
 						<LeftNavigation/>
 					</Drawer>
 

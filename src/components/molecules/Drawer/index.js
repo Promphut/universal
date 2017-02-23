@@ -10,8 +10,6 @@ const HiddenToggle = styled.input`
 	&:checked + label { 
 		height: 100%; 
 		width: 100%;
-		-webkit-filter: blur(50px);
-		filter: blur(50px);
 		background: rgba(34,34,34,.57); 
 		cursor:initial;
 		z-index: 3;
@@ -42,7 +40,9 @@ const OverlayLabel = styled.label`
 const Drawer = React.createClass({
 	getChildContext() {
 		return {
-			onDrawerClose: this.handleDrawerClose
+			onDrawerClose: this.handleDrawerClose,
+			onDrawerShrink: this.handleDrawerShrink,
+			onDrawerExtend: this.handleDrawerExtend
 		}
 	},
 
@@ -54,14 +54,22 @@ const Drawer = React.createClass({
 		dom(this.refs[this.props.name+'Toggle']).checked = false;
 	},
 
+	handleDrawerShrink(){
+		//dom(this.refs.overlay).style.left = '-300px'
+	},
+
+	handleDrawerExtend(){
+
+	},
+
 	render(){
 		let name = this.props.name,
 			position = this.props.position || 'left'
 
 		return (
 			<AnimateMe>
-				<HiddenToggle type="checkbox" position={position} id={name+'-toggle'} ref={name+'Toggle'}/>
-				<OverlayLabel htmlFor={name+'-toggle'} id={name+'-toggle-area'} position={position}>{this.props.toggleIcon}</OverlayLabel>
+				<HiddenToggle type="checkbox" position={position} id={name+'-toggle'} ref={name+'Toggle'} />
+				<OverlayLabel htmlFor={name+'-toggle'} id={name+'-toggle-area'} ref={'overlay'} position={position}>{this.props.toggleIcon}</OverlayLabel>
 				
 				{this.props.children}
 			</AnimateMe>
@@ -75,7 +83,9 @@ Drawer.propTypes = {
 }
 
 Drawer.childContextTypes = {
-	onDrawerClose: PropTypes.func
+	onDrawerClose: PropTypes.func,
+	onDrawerShrink: PropTypes.func,
+	onDrawerExtend: PropTypes.func
 }
 
 export default Drawer

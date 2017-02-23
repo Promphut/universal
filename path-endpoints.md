@@ -55,18 +55,18 @@ EDITOR PATHS:
 =================== SERVICE ENDPOINTS FOR MVP VERSION ================
 // TODO
 USER
-	Auth with FB 							GET 		/auth/facebook  
-	Generate Token 							POST 		/auth 												{username, password}			{token}
-	Get user's public detail 				GET 		/users/:uid 																		{user}
-	Update user's detail 					PATCH 		/users/:uid	 										{user} 							{user}
-	Get owner's private detail 				GET 		/users/:uid 		 								{token} 						{user} 
-	Upload user's profile pic 				POST 		/users/:uid/photo 									{token, photo} 					{sizes}
-	Register new user 						POST  		/users 												{email, password} 				{token, user}
+*	Auth with FB 							GET 		/auth/facebook  
+*	Generate Token 							POST 		/auth 												{username, password}			{token}
+*	Get user's public detail 				GET 		/users/:uid 																		{user}
+*	Get owner's private detail 				GET 		/users/:uid 		 								{token} 						{user} 
+*	Update user's detail 					PATCH 		/users/:uid	 										{user} 							{user}
+*	Upload user's profile pic 				POST 		/users/:uid/photo 									{token, photo} 					{sizes}
+*	Register new user 						POST  		/users 												{email, password} 				{token, user}
 
 ADMIN
-	Add publisher's admin 					POST 		/publishers/:pid/admins/:uidOrEmail 				{token} 						{role, admins}
-	Get publisher's admins 					GET 		/publishers/:pid/admins 															{admins}
-	Remove publisher's admin 				DELETE 		/publishers/:pid/admins/:uid 						{token} 						{role/*, admins*/}
+*	Add publisher's admin 					POST 		/publishers/:pid/admins/:uidOrEmail 				{token} 						{role, admins}
+*	Get publisher's admins 					GET 		/publishers/:pid/admins 															{admins}
+*	Remove publisher's admin 				DELETE 		/publishers/:pid/admins/:uid 						{token} 						{role/*, admins*/}
 
 WRITER
 	Add col's writer 						POST  		/publishers/:pid/columns/:cid/writers/:uidOrEmail 	{token} 						{role, writers}
@@ -84,11 +84,12 @@ TAG
 	Remove story's tag 						DELETE 		/publishers/:pid/stories/:sid/tags/:tid 			{token} 						{}
 
 PUBLISHER 
-//	Get publisher's public detail 			GET 		/publishers/:pid 																	{publisher, columns}
-	Update publisher's detail 				PATCH 		/publishers/:pid 									{token, publisher} 				{publisher} 
-	Upload publisher's cover photo 			POST 		/publishers/:pid/cover 								{token, cover} 					{cover} 			cover: {paths:[''], filename:''}
-	Upload publisher's logo 				POST 		/publishers/:pid/logo 								{token, logo} 					{logo}				logo: {paths:[''], filename:''}
-	Upload publisher's square logo  		POST 		/publishers/:pid/square-logo 						{token, square-logo} 			{square-logo} 		square-logo: {paths:[''], filename:''}
+*	Get publisher's public detail 			GET 		/publishers/:pid 																	{publisher, columns}
+*	Get publisher's private detail 			GET 		/publishers/:pid 									{token}							{publisher, columns}
+*	Update publisher's detail 				PATCH 		/publishers/:pid 									{token, publisher} 				{publisher} 
+*	Upload publisher's cover photo 			POST 		/publishers/:pid/cover 								{token, cover} 					{cover} 			cover: {paths:[''], filename:''}
+*	Upload publisher's logo 				POST 		/publishers/:pid/logo 								{token, logo} 					{logo}				logo: {paths:[''], filename:''}
+*	Upload publisher's square logo  		POST 		/publishers/:pid/square-logo 						{token, square-logo} 			{square-logo} 		square-logo: {paths:[''], filename:''}
 
 COLUMN
 	Add publisher col 						POST 		/publishers/:pid/columns 							{token, col} 					{column}

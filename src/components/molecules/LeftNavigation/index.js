@@ -4,6 +4,7 @@ import {Link} from 'react-router';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import Divider from 'material-ui/Divider'
+import {findDOMNode as dom} from 'react-dom'
 
 const Nav = styled.nav`
 	position: fixed; 
@@ -30,6 +31,19 @@ const Nav = styled.nav`
 
 	& ul li {
 		padding: 10px;
+		color: White;
+	}
+
+	& ul li > * {
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+	& ul li .right-arrow { 
+		font-size: 20px; 
+		line-height: 40px; 
+		vertical-align: middle;
+		margin-left: 22px !important; 
 	}
 
 	& ul li a {
@@ -80,29 +94,44 @@ const LeftNavigation = React.createClass({
 
 	},
 
+	shrinkDrawer(e){
+		e.preventDefault() 
+
+		//dom(this.refs.nav).style.left = '-340px';
+		// call parent's method
+		this.context.onDrawerShrink()
+	},
+
 	render(){
 		return(
 			<Nav>
-				<CloseBtn onTouchTap={this.context.onDrawerClose}><FontIcon className="material-icons">close</FontIcon></CloseBtn>
-				<SearchBtn onTouchTap={this.onSearch}><FontIcon className="material-icons">search</FontIcon></SearchBtn>
-				
-				<ul>
-					<li><Link to="/" style={{fontSize: 30}}>Home</Link></li>
-					<li><Link to="/" style={{fontSize: 40}}>Stories</Link></li>
-					<li><Divider /></li>
-					<li><Link to="/" style={{fontSize: 24}}>About Us</Link></li>
-					<li><Link to="/" style={{fontSize: 24}}>Contact</Link></li>
-					<li><Divider /></li>
-					<li><em style={{color:'#e2e2e2', fontSize:'18px'}}>Other Channels</em></li>
-					<li><Link to="/">Infographic Thailand</Link></li>
-				</ul>
-			</Nav>	
+				<div className="menu">
+					<CloseBtn onTouchTap={this.context.onDrawerClose}><FontIcon className="material-icons">close</FontIcon></CloseBtn>
+					<SearchBtn onTouchTap={this.onSearch}><FontIcon className="material-icons">search</FontIcon></SearchBtn>
+					
+					<ul>
+						<li><Link to="/" style={{fontSize: 30}}>Home</Link></li>
+						<li><Link to="#" style={{fontSize: 40}} onClick={this.shrinkDrawer}>Stories</Link><span className="right-arrow">&#9656;</span></li>
+						<li><Divider /></li>
+						<li><Link to="/" style={{fontSize: 24}}>About Us</Link></li>
+						<li><Link to="/" style={{fontSize: 24}}>Contact</Link></li>
+						<li><Divider /></li>
+						<li><em style={{color:'#e2e2e2', fontSize:'18px'}}>Other Channels</em></li>
+						<li><Link to="/">Infographic Thailand</Link></li>
+					</ul>
+				</div>
+				<div className="submenu1">
+
+				</div>
+			</Nav>
 		)
 	}
 })
 
 LeftNavigation.contextTypes = {
-	onDrawerClose: PropTypes.func
+	onDrawerClose: PropTypes.func,
+	onDrawerShrink: PropTypes.func,
+	onDrawerExtend: PropTypes.func
 };
 
 export default LeftNavigation
