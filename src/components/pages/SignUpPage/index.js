@@ -3,6 +3,7 @@ import {SignUp,SignUpFb,Logo,BackButton,CloseButton} from 'components'
 import FlatButton from 'material-ui/FlatButton';
 import styled from 'styled-components'
 import {Link,browserHistory} from 'react-router'
+import Request from 'superagent';
 
 const Wrapper = styled.div`
 	width:100%;
@@ -72,6 +73,12 @@ const SignUpPage = React.createClass({
     this.setState({
       visible:!this.state.visible
     })
+  },
+
+  signup(){
+    Request
+      .post(con)
+
   },
 
 	render(){

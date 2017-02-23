@@ -6,11 +6,17 @@ const Container = styled.div`
 	position:relative;
 	overflow:hidden;
 `
+const styles={
+	img:{
+		backgroundSize:'cover',
+		backgroundPosition:'center'
+	}
+}
 
 const OverlayImg = (props) => {
 	return (
 		<Container style={{...props.style}}>
-			<img src={props.src} style={ {...(props.orientedBy==='height' ? {height: '100%'} : {width: '100%'}), ...props.imgStyle} }/>
+			<img src={props.src} style={ {...(props.orientedBy==='height' ? {height: '100%'} : {width: '100%'}), ...props.imgStyle,...styles.img} }/>
 			<GradientOverlay opacity={props.opacity} />
 		</Container>
 	)

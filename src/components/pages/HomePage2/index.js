@@ -1,5 +1,5 @@
 import React from 'react'
-import { PageTemplate, TopBarWithNavigation, OverlayImg } from 'components'
+import { PageTemplate, TopBarWithNavigation, OverlayImg, Thumpnail, ThumpnailSmall,ArticleBox,ArticleBoxLarge} from 'components'
 
 import styled from 'styled-components'
 
@@ -23,7 +23,6 @@ const Content = styled.div`
 `
 
 const Main = styled.div`
-	background: deepskyblue;
 	flex: 3 790px;
 	max-width: 790px;
 `
@@ -43,6 +42,27 @@ const Footer = styled.div`
 	background: lightgreen;
 	height:400px;
 `
+var mock = {
+	name:'ฟหกหฟก หฟกกฟหกหฟกฟหกห ',
+	time:'3',
+	photo:'tmp/16112046_10209835674580972_1744602643_n.jpg'
+}
+
+var mock2 = {
+	name:'ฟหกหฟก หฟกกฟหกหฟกฟหกห ฟหกฟหกหฟกหฟกหฟกห ดฟหกดหด หกดห',
+	time:'3',
+	photo:'tmp/story-list/1486591796200-GettyImages-591802466.jpeg',
+	writer:{
+		name:'Ochawin Chirasottikul',
+		photo:'tmp/avatar.png',
+		date:'10'
+	},
+	vote:'15',
+	comment:'11',
+	date:'10',
+	column:'Money Ideas'
+}
+
 
 const HomePage2 = React.createClass({
 	getInitialState(){
@@ -61,6 +81,7 @@ const HomePage2 = React.createClass({
     },
 
 	render(){
+		
 		return (
 		    <Wrapper>
 		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={true} />
@@ -69,7 +90,13 @@ const HomePage2 = React.createClass({
 
 		      <Content>
 			      <Main>
-			     	<h1>MICROSOFT SURFACE STUDIO REVIEW: A BEAUTIFUL INVADER OF APPLE'S BASE</h1>
+							<div className="row">
+								<Thumpnail detail={mock} style={{margin:'15px'}}/>
+						 		<ThumpnailSmall detail={mock} style={{margin:'15px'}}/>
+							</div>
+			     		<ArticleBox detail={mock2}/>
+							<ArticleBox detail={mock2}/>
+							<ArticleBoxLarge detail={mock2}/>
 			      </Main>
 			      
 			      <Aside><h2>Sidebar here</h2></Aside>
