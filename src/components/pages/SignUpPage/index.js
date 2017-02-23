@@ -44,7 +44,6 @@ const SignUpPage = React.createClass({
 
   componentWillReceiveProps(nextProps){
     if(nextProps.visible!=this.props.visible){
-      this.props.visible=this.props.visible
       this.setState({
         visible:nextProps.visible
       })
@@ -61,7 +60,7 @@ const SignUpPage = React.createClass({
   checkBack(e){
     e.preventDefault()
     if(this.state.statePage){
-      window.history.back();
+      browserHistory.goBack()
     }else{
       this.setState({
         statePage:!this.state.statePage
@@ -75,11 +74,19 @@ const SignUpPage = React.createClass({
     })
   },
 
-  signup(){
+  signupFacebook(){
     Request
-      .post(con)
-
+      .get(config.BACKURL+'/auth/facebook')
+      .set('Accept', 'application/json')
+      .end((err,res)=>{
+        console.log(res)
+      })
   },
+  signup(e){
+    console.log('asds')
+  },
+
+
 
 	render(){
     if(this.state.visible){
@@ -95,7 +102,7 @@ const SignUpPage = React.createClass({
             <BoxButton>
               <Link to='#' onClick={this.checkBack} ><BackButton style={{float:'left'}}/></Link>
             </BoxButton>
-            {this.state.statePage?<SignUpFb emailSignUp={this.changeStatePage}/>:<SignUp/>}
+            {this.state.statePage?<SignUpFb emailSignUp={this.changeStatePage} onClick={this.signupFacebook}/>:<SignUp onClick={this.signup}/>}
           </Container>
 		   </Wrapper>
 		  )
