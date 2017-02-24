@@ -10,6 +10,8 @@ const PrimaryButton = (props) => {
 		opt = {
 			className: 'primary-btn primary-large-btn',
 			label: props.label,
+			onClick:props.onClick,
+			type:props.type,
 			labelColor: 'White',
 			labelStyle: {fontWeight:'bold', fontSize:18, fontFamily:"'Nunito', 'Mitr'"},
 			style: {borderRadius:'24px', height:'48px', lineHeight:'48px', ...props.style},
@@ -33,6 +35,8 @@ const PrimaryButton = (props) => {
 			className: 'primary-btn primary-small-btn',
 			label: props.label,
 			labelColor: 'White',
+			onClick:props.onClick,
+			type:props.type,
 			labelStyle: {fontWeight:'bold', fontSize:13, fontFamily:"'Nunito', 'Mitr'"},
 			style: {borderRadius:'17px', height:'35px', lineHeight:'35px', ...props.style},
 	      	buttonStyle: {borderRadius: '17px', backgroundColor: '#00B2B4', padding:'0'}
@@ -56,6 +60,8 @@ const PrimaryButton = (props) => {
 			className: 'primary-btn',
 			label: props.label,
 			labelColor: 'White',
+			onClick:props.onClick,
+			type:props.type,
 			labelStyle: {fontWeight:'bold', fontSize:15, fontFamily:"'Nunito', 'Mitr'"},
 			style: {borderRadius:'20px', height:'40px', lineHeight:'40px', ...props.style},
 	      	buttonStyle: {borderRadius: '20px', backgroundColor: '#00B2B4', padding:'0 2px'}

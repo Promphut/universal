@@ -66,22 +66,22 @@ USER
 ADMIN
 *	Add publisher's admin 					POST 		/publishers/:pid/admins/:uidOrEmail 				{token} 						{role, admins}
 *	Get publisher's admins 					GET 		/publishers/:pid/admins 															{admins}
-*	Remove publisher's admin 				DELETE 		/publishers/:pid/admins/:uid 						{token} 						{role/*, admins*/}
+*	Remove publisher's admin 				DELETE 		/publishers/:pid/admins/:uid 						{token} 						{role, admins}
 
-WRITER
+WRITER AND EDITOR
 	Add col's writer 						POST  		/publishers/:pid/columns/:cid/writers/:uidOrEmail 	{token} 						{role, writers}
 	Add col's editor 						POST  		/publishers/:pid/columns/:cid/editors/:uidOrEmail 	{token} 						{role, editors}
-	Remove col's writer 					DELETE 		/publishers/:pid/columns/:cid/writers/:uid 			{token}							{role/*, writers*/}
-	Remove col's editor 					DELETE 		/publishers/:pid/columns/:cid/editors/:uid 			{token}							{role/*, editors*/}
+	Remove col's writer 					DELETE 		/publishers/:pid/columns/:cid/writers/:uid 			{token}							{role, writers}
+	Remove col's editor 					DELETE 		/publishers/:pid/columns/:cid/editors/:uid 			{token}							{role, editors}
 	Get col's writers 						GET 		/publishers/:pid/columns/:cid/writers 												{writers}
 	Get col's editors 						GET 		/publishers/:pid/columns/:cid/editors 												{editors}	
 
 TAG
 	Create publisher tag 					POST 		/publishers/:pid/tags 								{token, tagName} 				{tag}
 	Get publisher's tag 					GET 		/publishers/:pid/tags 																{tags}
-	Remove publisher's tag 					DELETE 		/publishers/:pid/tags/:tid 							{token} 						{}
+	Remove publisher's tag 					DELETE 		/publishers/:pid/tags/:tid 							{token} 						{tag}
 	Add story's tag 						POST 		/publishers/:pid/stories/:sid/tags/:tid				{token} 						{tag}				cause we want tag slug back
-	Remove story's tag 						DELETE 		/publishers/:pid/stories/:sid/tags/:tid 			{token} 						{}
+	Remove story's tag 						DELETE 		/publishers/:pid/stories/:sid/tags/:tid 			{token} 						{tag}
 
 PUBLISHER 
 *	Get publisher's public detail 			GET 		/publishers/:pid 																	{publisher, columns}
@@ -92,20 +92,20 @@ PUBLISHER
 *	Upload publisher's square logo  		POST 		/publishers/:pid/square-logo 						{token, square-logo} 			{square-logo} 		square-logo: {paths:[''], filename:''}
 
 COLUMN
-	Add publisher col 						POST 		/publishers/:pid/columns 							{token, col} 					{column}
-	Remove publisher col 					DELETE 		/publishers/:pid/columns/:cid 						{token} 						{}
-	Update col detail 						PATCH 		/publishers/:pid/columns/:cid 						{token} 						{column}
-	Upload col's cover 						POST 		/publishers/:pid/cover 								{token, cover} 					{cover}				cover: {paths:[''], filename:''}
-	Get publisher's cols
-	- ?sort : trending/latest/popular		GET 		/publishers/:pid/columns 							{sort}							{columns}
-	Get col's public detail 				GET 		/publishers/:pid/columns/:cid 														{column} 
+*	Add publisher col 						POST 		/publishers/:pid/columns 							{token, col} 					{column}
+*	Remove publisher col 					DELETE 		/publishers/:pid/columns/:cid 						{token} 						{column}
+*	Update col detail 						PATCH 		/publishers/:pid/columns/:cid 						{token} 						{column}
+*	Upload col's cover 						POST 		/publishers/:pid/cover 								{token, cover} 					{cover}				cover: {paths:[''], filename:''}
+*	Get publisher's cols 
+*	- ?sort : trending/latest/popular		GET 		/publishers/:pid/columns 							{sort}							{columns}
+*	Get col's public detail 				GET 		/publishers/:pid/columns/:cid 														{column} 
 
 MENU
 	Get publisher and user navigation		GET 		/navigation											{?uid, pid} 					{navigation}
 
 STORIES
 	Create a story 							POST 		/publishers/:pid/stories/:sid 						{token, story} 					{story} 			no need for html, we just want slug back
-	Delete a story 							DELETE 		/publishers/:pid/stories/:sid 						{token} 						{}
+	Delete a story 							DELETE 		/publishers/:pid/stories/:sid 						{token} 						{story}
 	Get story detail 						GET 		/publishers/:pid/stories/:sid 														{story}				including minor detail of column, tags
 	Update story detail 					PATCH 		/publishers/:pid/stories/:sid 						{token, story} 					{story}
 	Upload story cover 						POST 		/publishers/:pid/stories/:sid/cover 				{token, cover} 					{cover} 			cover: {paths:[''], filename:''}

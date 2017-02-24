@@ -84,7 +84,11 @@ const HomePage2 = React.createClass({
 		
 		return (
 		    <Wrapper>
+<<<<<<< HEAD
 		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={true} />
+=======
+		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={this.props.params.loggedIn} />
+>>>>>>> d2c7ca557f1eeac0e21764812c4ab07fd9081d8b
 
 		      <Cover width={this.state.width} height={this.state.height}/>
 

@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {findDOMNode as dom} from 'react-dom'
-import {Link} from 'react-router';
+import {Link,browserHistory} from 'react-router';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
@@ -128,6 +128,10 @@ const TopBar = React.createClass({
 		this.props.onScroll(e)
 	},
 
+	signup(){
+		browserHistory.push('/signup')
+	},
+
 	render(){
 		let loggedIn = this.props.loggedIn
 
@@ -148,7 +152,7 @@ const TopBar = React.createClass({
 						<div style={{textAlign:'right'}}>
 							{loggedIn ? 
 								(<HideOnTablet><PrimaryButton label="Story" iconName="add" style={{verticalAlign:'middle'}}/></HideOnTablet>) : 
-								(<NotLogin id="not-login"><SecondaryButton label="Sign Up" style={{verticalAlign:'middle'}}/><span>&nbsp; or </span><Link to="/#tologin" style={{fontWeight:'bold'}}>Sign In</Link></NotLogin>
+								(<NotLogin id="not-login"><SecondaryButton label="Sign Up" onClick={this.signup} style={{verticalAlign:'middle'}}/><span>&nbsp; or </span><Link to="/signin" style={{fontWeight:'bold'}}>Sign In</Link></NotLogin>
 							)}
 						</div>
 					</Container>

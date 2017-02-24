@@ -1,11 +1,26 @@
 import React from 'react'
 import { Route, IndexRoute } from 'react-router'
 import App from 'components/App'
-import {HomePage, HomePage2, Page3, MoodboardPage, SignInPage,SignUpPage,PublisherSettingPage,
-  ForgetPasswordPage,PublisherEditor,PublisherContactAndAboutPage,PublisherDashboardPage,
-  ColumnEditor,ColumnSettingPage,PublisherStoryPage} from 'components'
+import auth from 'components/auth'
+import Cookies from 'react-cookie'
+import {HomePage, HomePage2, Page3, MoodboardPage, SignInPage,SignUpPage,
+  PublisherSettingPage,ForgetPasswordPage,PublisherEditor,PublisherContactAndAboutPage,
+  PublisherDashboardPage,ColumnEditor,ColumnSettingPage,PublisherStoryPage} from 'components'
+
+
+const checkLogin=(nextState, replace, cb)=>{
+  let token = auth.getToken()
+	//console.log('token', token)
+  if(token){
+    nextState.params.loggedIn = true
+  }else{
+    nextState.params.loggedIn = false
+  }
+  cb()
+}
+
 const routes = (
-  <Route path="/" component={App}>
+  <Route path="/" component={App} onEnter={checkLogin}>
     <IndexRoute component={HomePage2} />
     <Route path='/article' component={Page3}/>
     <Route path="/mood" component={MoodboardPage} />

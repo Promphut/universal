@@ -61,6 +61,7 @@ const SignUpFb = React.createClass({
             icon={<i className="fa fa-facebook" style={{color:'white',margin:'17px 10px 0 0'}} aria-hidden="true"></i>}
             style={styles.button}
             buttonStyle={styles.btn}
+            onClick={this.props.onClick}
           />
         </div>
 

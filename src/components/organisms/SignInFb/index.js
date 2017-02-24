@@ -80,8 +80,8 @@ const SignInFb = React.createClass({
       </div>
       <Text style={{marginTop:'20px',fontFamily:'Nunito'}}>Or <LinkUnderLine to="#" onClick={this.props.emailSignIn}>Sign In with an E-mail</LinkUnderLine></Text>
       <Div>
-        <NewLink to="#" style={{float:'left'}}>Forget Password?</NewLink>
-        <NewLink to="#" style={{float:'right'}}>Sign Up</NewLink>
+        <NewLink to="/forget" style={{float:'left'}}>Forget Password?</NewLink>
+        <NewLink to="/signup" style={{float:'right'}}>Sign Up</NewLink>
       </Div>
     </Box>
   )

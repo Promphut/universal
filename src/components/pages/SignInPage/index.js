@@ -43,7 +43,6 @@ const SignInPage = React.createClass({
 
   componentWillReceiveProps(nextProps){
     if(nextProps.visible!=this.props.visible){
-      this.props.visible=this.props.visible
       this.setState({
         visible:nextProps.visible
       })
@@ -60,7 +59,7 @@ const SignInPage = React.createClass({
   checkBack(e){
     e.preventDefault()
     if(this.state.statePage){
-      window.history.back();
+      browserHistory.goBack()
     }else{
       this.setState({
         statePage:!this.state.statePage

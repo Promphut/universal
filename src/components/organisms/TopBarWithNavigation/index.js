@@ -19,6 +19,10 @@ const TopBarWithNavigation = React.createClass({
 			this.setState({scrolling: false})
 	},
 
+	componentDidMount(){
+
+	},
+
 	handleScroll(e) {
 		let top = e.srcElement.body.scrollTop,
 			scrolling = this.state.scrolling
