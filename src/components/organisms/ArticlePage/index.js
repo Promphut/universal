@@ -8,52 +8,35 @@ const Wraper = styled.div`
   color:#222;
   width:100%;
   margin:0 auto 0 auto;
-  @media (min-width:481px) {
-    .menu-font {
-      font-family: 'Nunito', 'Mitr';
-      font-size: 16px;
-      font-weight: bold;
-    }
-    .title-font {
-      font-family: 'PT Serif', 'Mitr';
-      font-size: 36px;
-    }
-    .content-font {
-      font-family: 'PT Sans', 'cs_prajad', sans-serif;
-      font-size: 20px;
-    }
-  }
-
-  /* FOR MOBILE */
-  @media (max-width:480px) {
-    .menu-font {
-      font-family: 'Nunito', 'Mitr';
-      font-size: 16px;
-      font-weight: bold;
-    }
-    .title-font {
-      font-family: 'Roboto Slab', 'Mitr';
-      font-size: 36px;
-    }
-    .content-font {
-      font-family: 'Roboto', 'cs_prajad', sans-serif;
-      font-size: 20px;
+  @media(max-width:480px){
+    .center{
+      justify-content: center;
     }
   }
 `
 const Head = styled.h1`
   font-size:36px;
   font-Weight:bold;
+  @media (max-width:480px){
+    font-size:24px;
+  }
 `
 const Article = styled.div`
   font-size:20px;
   margin-top:40px;
+  @media (max-width:480px){
+    font-size:16px;
+    margin-top:15px;
+  }
 `
 const TagContainer = styled.div`
   display:flex;
   flex-wrap:wrap;
   margin:40px 0 40px 0;
   font-family:'PT Sans';
+  @media (max-width:480px){
+    margin:20px 0 20px 0;
+  }
 `
 const Divider = styled.div`
   height:2px;
@@ -68,6 +51,14 @@ const CommentUserContainer = styled.div`
 const Child = styled.div`
   margin-left:60px;
   width:80%;
+`
+const NoComment = styled.div`
+  font-size:19px;
+  color:#8F8F8F;
+  margin:15px 0 15px 0;
+  @media (max-width:480px){
+    font-size:16px;
+  }
 `
 var commentUserObj = {
   id:'1',
@@ -97,7 +88,6 @@ const writerDetail = {
     date:' 16 Nov 2016, 8:30pm',
     column:'Money Ideas'
 }
-
 
 
 const ArticlePage = React.createClass({
@@ -135,16 +125,17 @@ Ruined the party last night as they rocked into Toronto and downed the Raptors o
           <TagBox text='MONEY' style={{margin:'10px'}}/>
         </TagContainer>
         <Divider/>
-        <div style={{display:'flex'}}>
-          <div style={{flex:'1'}}>
-            <WritedBy detail={writerDetail}/>
+        <div className='row center'>
+          <div className='col-md-6 col-sm-12'>
+            <WritedBy detail={writerDetail} />
           </div>
-          <div style={{flex:'1'}}>
-            <WritedBy detail={writerDetail}/>
+          <div className='col-md-6 col-sm-12'>
+            <WritedBy detail={writerDetail} />
           </div>
         </div>
         <Divider/>
-        <CommentBox/>
+        <NoComment>5 Comments</NoComment>
+        <CommentBox className="hidden-mob"/>
         <CommentUserContainer>
           {a.map(this.renderComment)}
           <RaisedButton 

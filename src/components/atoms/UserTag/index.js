@@ -7,17 +7,19 @@ var Tag = styled(Link)`
   font-weight:bold;
   font-style: italic;
   font-size:19px;
-
   &:hover{
     cursor:pointer;
     color:#00B2B4;
     opacity:0.5;
   }
+  @media(max-width:480px){
+    font-size:14px;
+  }
 `
 
 const UserTag = (props)=>{
   return(
-    <Tag {...props}/>
+    <Tag  style={{...props.style}} className={props.className}/>
   )
 }
 

@@ -16,15 +16,17 @@ const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
-
-	> * {
-		flex: 1 0;
-	}
 `
 
 const Main = styled.div`
 	flex: 3 790px;
 	max-width: 790px;
+	@media (max-width:480px) {
+    flex: 0 100%;
+		max-width: 100%;
+		min-width: 100%;
+		padding:0 15px 0 15px;
+  }
 `
 
 const Aside = styled.div`
@@ -94,17 +96,13 @@ const HomePage2 = React.createClass({
 								<Thumpnail detail={mock} style={{margin:'15px'}}/>
 						 		<ThumpnailSmall detail={mock} style={{margin:'15px'}}/>
 							</div>
-			     		<ArticleBox detail={mock2}/>
-							<ArticleBox detail={mock2}/>
-							<ArticleBoxLarge detail={mock2}/>
+								<ArticleBox detail={mock2} style={{margin:'0 auto 0 auto'}}/>
+								<ArticleBox detail={mock2} style={{margin:'0 auto 0 auto'}}/>
+								<ArticleBoxLarge detail={mock2} style={{margin:'0 auto 0 auto'}}/>
 			      </Main>
 			      
 			      <Aside><h2>Sidebar here</h2></Aside>
 		      </Content>
-
-		      
-
-		      <Footer>This is footer</Footer>
 		   </Wrapper>
 		  )
 	}

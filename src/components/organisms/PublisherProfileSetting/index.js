@@ -2,8 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 import {PrimaryButton,SecondaryButton,UploadPicture} from 'components'
 import TextField from 'material-ui/TextField';
+import Request from 'superagent'
 
-const Container = styled.div`
+const Container = styled.form`
   width:100%;
   padding:80px;
   border-bottom:1px solid #E2E2E2;
@@ -50,19 +51,50 @@ const TextStatus = styled.div`
 const PublisherProfileSetting = React.createClass({
   getInitialState(){
     return{
-      textStatus:'Unsave'
+      textStatus:'Unsave',
+      uploadPhoto:null
     }
   },
+
+  componentDidMount(){
+    this.getData()
+  },
+
+  getData(){
+    Request
+      .get(config.BACKURL+'/publishers/11')
+      .set('Accept','application/json')
+      .end((err,res)=>{
+        if(err)throw err 
+        else{
+          var {name,shortDesc} = res.body.publisher
+          document.getElementById('title').value = name
+          document.getElementById('description').value = shortDesc
+          this.setState({})
+        }
+        //console.log(res.body)
+      })
+  },
+
+  updateData(){
+
+  },
+
   render(){
+    var {uploadPhoto} = this.state
     return(
-      <Container>
+      <Container onSubmit={this.updateData}>
         <div  className="head sans-font">PROFILE</div>
         <Flex>
           <Title>
             <div className="sans-font">Title</div>
           </Title>
           <Edit>
-            <TextField defaultValue="Aommoney" />
+            <TextField 
+              defaultValue="Aommoney" 
+              id='title'
+            />
+
           </Edit>
         </Flex>
         <Flex>
@@ -78,6 +110,7 @@ const PublisherProfileSetting = React.createClass({
               floatingLabelFixed={true}
               rows={2}
               rowsMax={4}
+              id='description'
             />
           </Edit>
         </Flex>
@@ -86,7 +119,7 @@ const PublisherProfileSetting = React.createClass({
             <div className="sans-font">Cover picture</div>
           </Title>
           <Edit>
-            <UploadPicture/>
+            <UploadPicture src={uploadPhoto} path='/publishers/11/cover'/>
           </Edit>
         </Flex>
         <Flex>
@@ -116,7 +149,7 @@ const PublisherProfileSetting = React.createClass({
             </Social>
           </Edit>
         </Flex>
-        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus>{this.state.textStatus}</TextStatus></div>
+        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus>{this.state.textStatus}</TextStatus></div>
       </Container>
     )
   },

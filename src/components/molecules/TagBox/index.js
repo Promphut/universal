@@ -16,6 +16,10 @@ const Tag = styled.div`
     text-shadow:0 0 1px #8F8F8F;
     cursor:pointer;
   }
+  @media (max-width:480px){
+    font-size:13px;
+    padding:6px 10px 8px 10px;
+  }
 `
 
 const TagBox = ({text,style}) => {
