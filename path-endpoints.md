@@ -28,7 +28,7 @@ OWNER PATHS:
 	Owner's stories						/me/stories 
 	Owner's drafts						/me/stories/drafts
 
-	Owner's profile setting				/me/settings 
+	Owner's profile setting				/me/settings
 	Owner's account setting				/me/settings/account
 
 

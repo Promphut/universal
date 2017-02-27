@@ -8,6 +8,8 @@ import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import {Link} from 'react-router'
+import Request from 'superagent'
+
 const Container = styled.div`
   width:100%;
 `
@@ -226,20 +228,36 @@ const PublisherStoryPage = React.createClass({
 		return {
       value:1,
       role:'admin',
-      currentPage:1
+      currentPage:1,
+      article:[]
     }
 	},
 
+  getArticle(){
+    var self = this
+    Request
+      .get(config.BACKURL+'/publishers/11/stories')
+      .set('Accept','application/json')
+      .end((err,res)=>{
+        console.log(res.body)
+        if(err)throw err
+        else{
+          self.setState({
+            article:res.body.stories
+          })
+        }
+      })
+  },
 
 
   handleChange(event, index, value){this.setState({value})},
 
   componentDidMount(){
-
+    this.getArticle()
   },
 
   render(){
-    var {role,currentPage} = this.state
+    var {role,currentPage,article} = this.state
     var editable1 = ''
     var editable2 = ''
     if(role=='admin'){
@@ -316,13 +334,13 @@ const PublisherStoryPage = React.createClass({
             <TableBody 
               showRowHover={true}
               displayRowCheckbox={false}>
-              {tableData.map((data,index)=>(
+              {article.map((data,index)=>(
                 <TableRow key={index}>
                   <TableRowColumn style={{width:'45%',padding:'10px 0 10px 0'}}><TopArticle detail={trending} /></TableRowColumn>
-                  <TableRowColumn style={{width:'15%'}}>{data.view}</TableRowColumn>
-                  <TableRowColumn style={{width:'15%'}}>{data.share}</TableRowColumn>
-                  <TableRowColumn style={{width:'15%'}}>{data.no}</TableRowColumn>
-                  <TableRowColumn style={{width:'10%'}}>{data.no}</TableRowColumn>
+                  <TableRowColumn style={{width:'15%'}}>{data.writer.display}</TableRowColumn>
+                  <TableRowColumn style={{width:'15%'}}>{data.column.name}</TableRowColumn>
+                  <TableRowColumn style={{width:'15%'}}>{data.id}</TableRowColumn>
+                  <TableRowColumn style={{width:'10%'}}>{data.status?'Published':'Draft'}</TableRowColumn>
                 </TableRow>
               ))}
             </TableBody>

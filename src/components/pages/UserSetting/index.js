@@ -1,7 +1,5 @@
 import React from 'react'
-import { TopBarWithNavigation, OverlayImg, PublisherProfileSetting,
-   PublisherPublishingSetting,PublisherAnalyticSetting,PublisherThemeSetting,PublisherSettingMenu } from 'components'
-
+import { TopBarWithNavigation, UserSettingMenu } from 'components'
 import styled from 'styled-components'
 
 
@@ -37,7 +35,7 @@ const Aside = styled.div`
 	max-width: 255px;
 `
 
-const PublisherEditor = React.createClass({
+const UserSetting = React.createClass({
 	getInitialState(){
 		return {}
 	},
@@ -53,7 +51,7 @@ const PublisherEditor = React.createClass({
           <Container>
             <Content>
               <Aside>
-                <PublisherSettingMenu pathname={this.props.location.pathname}/>
+                <UserSettingMenu pathname={this.props.location.pathname}/>
               </Aside>
               <Main>
                 {this.props.children}
@@ -65,4 +63,4 @@ const PublisherEditor = React.createClass({
 	}
 });
 
-export default PublisherEditor
+export default UserSetting
