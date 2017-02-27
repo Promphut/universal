@@ -63,20 +63,22 @@ USER
 *	Upload user's profile pic 				POST 		/users/:uid/photo 									{token, photo} 					{sizes}
 *	Register new user 						POST  		/users 												{email, password} 				{token, user}
 
-ADMIN
+ROLE
 *	Add publisher's admin 					POST 		/publishers/:pid/admins/:uidOrEmail 				{token} 						{role, admins}
 *	Get publisher's admins 					GET 		/publishers/:pid/admins 															{admins}
 *	Remove publisher's admin 				DELETE 		/publishers/:pid/admins/:uid 						{token} 						{role, admins}
 
-WRITER AND EDITOR
-	Add col's writer 						POST  		/publishers/:pid/columns/:cid/writers/:uidOrEmail 	{token} 						{role, writers}
-	Add col's editor 						POST  		/publishers/:pid/columns/:cid/editors/:uidOrEmail 	{token} 						{role, editors}
-	Remove col's writer 					DELETE 		/publishers/:pid/columns/:cid/writers/:uid 			{token}							{role, writers}
-	Remove col's editor 					DELETE 		/publishers/:pid/columns/:cid/editors/:uid 			{token}							{role, editors}
-	Get col's writers 						GET 		/publishers/:pid/columns/:cid/writers 												{writers}
-	Get col's editors 						GET 		/publishers/:pid/columns/:cid/editors 												{editors}	
+*	Add col's writer 						POST  		/publishers/:pid/columns/:cid/writers/:uidOrEmail 	{token} 						{role, writers}
+*	Add col's editor 						POST  		/publishers/:pid/columns/:cid/editors/:uidOrEmail 	{token} 						{role, editors}
+*	Remove col's writer 					DELETE 		/publishers/:pid/columns/:cid/writers/:uid 			{token}							{role, writers}
+*	Remove col's editor 					DELETE 		/publishers/:pid/columns/:cid/editors/:uid 			{token}							{role, editors}
+*	Get col's writers 						GET 		/publishers/:pid/columns/:cid/writers 												{writers}
+*	Get col's editors 						GET 		/publishers/:pid/columns/:cid/editors 												{editors}	
+*	Get all publisher's writers				GET 		/publishers/:pid/writers 															{writers}
+*	Get all publisher's editors				GET 		/publishers/:pid/editors 															{editors}
 
 TAG
+    *** SHOULD EDIT THIS, TAG SHOULD STAND BY ITSELF, NOT TO DEPEND ON THE PUBLISHER ***
 	Create publisher tag 					POST 		/publishers/:pid/tags 								{token, tagName} 				{tag}
 	Get publisher's tag 					GET 		/publishers/:pid/tags 																{tags}
 	Remove publisher's tag 					DELETE 		/publishers/:pid/tags/:tid 							{token} 						{tag}
@@ -104,12 +106,12 @@ MENU
 	Get publisher and user navigation		GET 		/navigation											{?uid, pid} 					{navigation}
 
 STORIES
-	Create a story 							POST 		/publishers/:pid/stories/:sid 						{token, story} 					{story} 			no need for html, we just want slug back
-	Delete a story 							DELETE 		/publishers/:pid/stories/:sid 						{token} 						{story}
-	Get story detail 						GET 		/publishers/:pid/stories/:sid 														{story}				including minor detail of column, tags
-	Update story detail 					PATCH 		/publishers/:pid/stories/:sid 						{token, story} 					{story}
-	Upload story cover 						POST 		/publishers/:pid/stories/:sid/cover 				{token, cover} 					{cover} 			cover: {paths:[''], filename:''}
-	Upload story portrait cover 			POST 		/publishers/:pid/stories/:sid/portrait-cover 		{token, portrait-cover} 		{portrait-cover} 	portrait-cover: {paths:[''], filename:''}
+*	Create a story 							POST 		/stories/:sid 										{token, story} 					{story} 			no need for html, we just want slug back
+*	Delete a story 							DELETE 		/stories/:sid 										{token} 						{story}
+*	Get story detail 						GET 		/stories/:sid 						 												{story}				including minor detail of column, tags
+*	Update story detail 					PATCH 		/stories/:sid 										{token, story} 					{story}
+*	Upload story cover 						POST 		/stories/:sid/cover 								{token, cover} 					{cover} 			cover: {paths:[''], filename:''}
+*	Upload story portrait cover 			POST 		/stories/:sid/portrait-cover 						{token, portrait-cover} 		{portrait-cover} 	portrait-cover: {paths:[''], filename:''}
 
 FEED
  	Get feed 								GET 		/publishers/:pid/feed  								{filter, sort}					{stories:}
