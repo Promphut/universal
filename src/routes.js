@@ -3,6 +3,7 @@ import { Route, IndexRoute } from 'react-router'
 import App from 'components/App'
 import auth from 'components/auth'
 import Cookies from 'react-cookie'
+import Request from 'superagent'
 import {HomePage, HomePage2, Page3, MoodboardPage, SignInPage,SignUpPage,
   PublisherSettingPage,ForgetPasswordPage,PublisherEditor,PublisherContactAndAboutPage,
   PublisherDashboardPage,ColumnEditor,ColumnSettingPage,PublisherStoryPage} from 'components'
@@ -19,6 +20,23 @@ const checkLogin=(nextState, replace, cb)=>{
   cb()
 }
 
+const getPublisherId =(nextState, replace, cb)=>{
+  Request
+    .get(config.BACKURL+'/publishers/11')
+    .set('Accept','application/json')
+    .end((err,res)=>{
+      if(err){
+        throw err 
+        cb()
+      }
+      else{
+        nextState.params.publisher = res.body
+        cb()
+      }
+    })
+}
+
+
 const routes = (
   <Route path="/" component={App} onEnter={checkLogin}>
     <IndexRoute component={HomePage2} />
@@ -27,7 +45,7 @@ const routes = (
     <Route path="/forget" component={ForgetPasswordPage} />
     <Route path="/signin" component={()=>(<SignInPage visible={true}/>)} />
     <Route path="/signup" component={()=>(<SignUpPage visible={true}/>)} />
-    <Route path='editor' component={PublisherEditor}>
+    <Route path='editor' component={PublisherEditor} onEnter={getPublisherId}>
       <IndexRoute component={PublisherDashboardPage} />
       <Route path='settings' component={PublisherSettingPage}/>
       <Route path='stories' component={PublisherStoryPage}/>

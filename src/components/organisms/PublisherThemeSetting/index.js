@@ -6,7 +6,7 @@ import { ChromePicker } from 'react-color';
 import {findDOMNode as dom} from 'react-dom'
 import Menu from 'material-ui/Menu'
 import Popover from 'material-ui/Popover';
-const Container = styled.div`
+const Container = styled.form`
   width:100%;
   padding:80px;
   border-bottom:1px solid #E2E2E2;
@@ -83,8 +83,10 @@ const PublisherThemeSetting = React.createClass({
       open2: false,
       anchorEl1:{},
       anchorEl2:{},
-      primaryColor:'#00B2B4',
-      secondaryColor:'#CEF1B7'
+      primaryColor:'',
+      secondaryColor:'',
+      uploadSLogo:null,
+      uploadLogo:null
     }
   },
 
@@ -116,8 +118,45 @@ const PublisherThemeSetting = React.createClass({
   selectColor2(color){
     this.setState({ secondaryColor: color.hex });
   },
+
+  componentDidMount(){
+    this.setData()
+  },
+
+  setData(){
+    var {theme} = this.props.data.publisher
+    //document.getElementById('analytic').value = typeof analytic == "undefined" ?'': analytic.tagManagerId
+    this.setState({
+      primaryColor:typeof theme == "undefined" ? '#00B2B4': theme.primaryColor,
+      secondaryColor:typeof theme == "undefined" ? '#CEF1B7': theme.secondaryColor
+    })
+  },
+
+  updateData(e){
+    e.preventDefault()
+    var data = 
+    {
+      publisher : {
+        theme: {
+          primaryColor:this.state.primaryColor,
+          secondaryColor:this.state.secondaryColor
+        }
+    }}
+    Request
+      .patch(config.BACKURL+'/publishers/11?token='+auth.getToken())
+      .set('x-access-token', auth.getToken())
+      .set('Accept','application/json')
+      .send(data)
+      .end((err,res)=>{
+        if(err)throw err 
+        else{
+          this.setState({textStatus:'Saved successfully'})
+        }
+        //console.log(res.body)
+      })
+  },
   render(){
-    var {primaryColor,secondaryColor,anchorEl1,anchorEl2,open1,open2,textStatus} = this.state
+    var {primaryColor,secondaryColor,anchorEl1,anchorEl2,open1,open2,textStatus,uploadSLogo,uploadLogo} = this.state
     var styles={
       example1:{
         color:'white',
@@ -146,14 +185,14 @@ const PublisherThemeSetting = React.createClass({
       }
     }
     return(
-      <Container>
+      <Container onSubmit={this.updateData}>
         <div  className="head sans-font">Theme</div>
         <Flex>
           <Title>
             <div className="sans-font">Favicon</div>
           </Title>
           <Edit>
-            <UploadPicture/>
+            <UploadPicture src={uploadLogo} path='/publishers/11/cover' type='cover'/>
           </Edit>
         </Flex>
         <Flex>
@@ -161,7 +200,7 @@ const PublisherThemeSetting = React.createClass({
             <div className="sans-font">Small Logo(.svg)</div>
           </Title>
           <Edit>
-            <UploadPicture/>
+            <UploadPicture src={uploadSLogo} path='/publishers/11/slogo' type='slogo'/>
           </Edit>
         </Flex>
         <Flex>
@@ -169,7 +208,7 @@ const PublisherThemeSetting = React.createClass({
             <div className="sans-font">Large Logo(.svg)</div>
           </Title>
           <Edit>
-            <UploadPicture/>
+            <UploadPicture src={uploadLogo} path='/publishers/11/logo' type='logo'/>
           </Edit>
         </Flex>
         <Flex>
@@ -240,7 +279,7 @@ const PublisherThemeSetting = React.createClass({
             </div>
           </Edit>
         </Flex>
-        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus>{textStatus}</TextStatus></div>
+        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus>{textStatus}</TextStatus></div>
       </Container>
     )
   },
