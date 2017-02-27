@@ -9,6 +9,18 @@ const Wrapper = styled.div`
 		position:fixed;
 		top:70px;
 	}
+	.recommends{
+		font-size:19px;
+		color:#8F8F8F;
+	}
+	@media(max-width:480px){
+    .center{
+      justify-content: center;
+    }
+		.recommends{
+			font-size:16px;
+		}
+  }
 `
 
 const GradientOverlay = styled.div`
@@ -32,7 +44,6 @@ const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
-
 `
 const Share = styled.div`
 	flex: 1 150px;
@@ -48,7 +59,9 @@ const Main = styled.div`
 	flex: 8 730px;
 	max-width: 730px;
 	@media (max-width: 480px) {
-		flex: 12;
+		flex:0 100%;
+		max-width: 100%;
+		padding:0 15px 0 15px;
 	}
 `
 
@@ -60,21 +73,17 @@ const Aside = styled.div`
 	@media (max-width: 1160px) {
 		display:none;
 	}
-	
-`
-
-const Footer = styled.div`
-	text-align:center;
-	background: lightgreen;
-	height:400px;
 `
 
 const RecommendContainer = styled.div`
-	overflow:hidden;
-	display:flex;
-	flex-flow: row wrap;
-	justify-content: center;
+	flex:12 1160px;
+	max-width:1160px;
 	margin-top:60px;
+	@media (max-width: 480px) {
+		flex:0 100%;
+		max-width: 100%;
+		padding:0 15px 0 15px;
+	}
 `
 const Recommend = styled.div`
 	flex:1 540px;
@@ -150,19 +159,21 @@ const Page3 = React.createClass({
 			      
 			      <Aside  id='trendingBar' className='' ref='trendingBar'><TrendingSideBar stop={stopPos} detail={trendingArray} /></Aside>
 		      </Content>
-						
-					<RecommendContainer ref='recommend'>
-						<Recommend>
-							<div style={{fontSize:'19px',color:'#8f8f8f'}}>Recommends</div>
-							<Link to='#'><RecommendArticle detail={rec}/></Link>
-							<Link to='#'><RecommendArticle detail={rec}/></Link>
-						</Recommend>
-						<Recommend>
-							<div style={{height:'22px'}}></div>
-							<Link to='#'><RecommendArticle detail={rec}/></Link>
-							<Link to='#'><RecommendArticle detail={rec}/></Link>
-						</Recommend>
-					</RecommendContainer>
+					<Content>
+						<RecommendContainer ref='recommend'>
+							<div className='recommends sans-font'>Recommends</div>
+							<div className='row center'>
+								<div className='col-lg-6 col-md-6 col-sm-12'> 
+									<Link to='#'><RecommendArticle detail={rec}/></Link>
+									<Link to='#'><RecommendArticle detail={rec}/></Link>
+								</div>
+								<div className='col-lg-6 col-md-6 col-sm-12'>
+									<Link to='#'><RecommendArticle detail={rec}/></Link>
+									<Link to='#'><RecommendArticle detail={rec}/></Link>
+								</div>
+							</div>
+						</RecommendContainer>
+					</Content>
 		   </Wrapper>
 		  )
 	}

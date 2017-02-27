@@ -15,7 +15,7 @@ const styles={
 
 const OverlayImg = (props) => {
 	return (
-		<Container style={{...props.style}}>
+		<Container style={{...props.style}} className={props.className}>
 			<img src={props.src} style={ {...(props.orientedBy==='height' ? {height: '100%'} : {width: '100%'}), ...props.imgStyle,...styles.img} }/>
 			<GradientOverlay opacity={props.opacity} />
 		</Container>

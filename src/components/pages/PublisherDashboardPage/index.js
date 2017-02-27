@@ -4,6 +4,8 @@ import FontIcon from 'material-ui/FontIcon'
 import styled from 'styled-components'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import {TrendingSideBarInner} from 'components'
+import auth from 'components/auth'
+import Request from 'superagent'
 
 const Container = styled.div`
   width:100%;
@@ -85,11 +87,11 @@ const Name = styled.div`
   margin:0 0 0 15px;
 `
 const TopArticle = ({style,detail})=>{
-  var {name,comment,vote,photo} = detail
+  var {title,comment,votes,cover} = detail
   return(
     <Cont style={{...style}}>
-      <OverlayImg src={photo} style={{width:'87',height:'52',float:'left'}}/>
-      <Name className="sans-font">{name}</Name>
+      <OverlayImg src={cover} style={{width:'87',height:'52',float:'left'}}/>
+      <Name className="sans-font">{title}</Name>
     </Cont>
   )
 }
@@ -180,10 +182,10 @@ const styles = {
   }
 }
 const trending = {
-	name:'โมหจริตดินฮิปฮอปด็อกเตอร์โมหจ ริตแอดมิdsf fsdfsddsfdsfsdสชััน?',
-	vote:'18',
+	title:'โมหจริตดินฮิปฮอปด็อกเตอร์โมหจ ริตแอดมิdsf fsdfsddsfdsfsdสชััน?',
+	votes:'18',
 	comment:11,
-	photo:'/tmp/story-list/1485309433041-Screen-Shot-2017-01-23-at-33221-PM-1.png'
+	cover:'/tmp/story-list/1485309433041-Screen-Shot-2017-01-23-at-33221-PM-1.png'
 }
 
 const PublisherDashboardPage = React.createClass({
@@ -191,16 +193,67 @@ const PublisherDashboardPage = React.createClass({
 		return {
       totalView:182032,
       totalShare:16555,
-      totalStory:300
+      totalStory:300,
+      article:[],
+      writer:[],
+      column:[]
     }
 	},
 
   componentDidMount(){
+    this.getArticle()
+    this.getWriter()
+    this.getColumn()
+  },
 
+  getArticle(){
+    var self = this
+    Request
+      .get(config.BACKURL+'/publishers/11/stories')
+      .set('Accept','application/json')
+      .end((err,res)=>{
+        console.log(res.body)
+        if(err)throw err
+        else{
+          self.setState({
+            article:res.body.stories
+          })
+        }
+      })
+  },
+  getWriter(){
+    var self = this
+    Request
+      .get(config.BACKURL+'/publishers/11/writers')
+      .set('Accept','application/json')
+      .end((err,res)=>{
+        console.log(res.body)
+        if(err)throw err
+        else{
+          self.setState({
+            writer:res.body.stories
+          })
+        }
+      })
+  },
+  getColumn(){
+    var self = this
+    Request
+      .get(config.BACKURL+'/publishers/11/columns')
+      .set('Accept','application/json')
+      .end((err,res)=>{
+        console.log(res.body)
+        if(err)throw err
+        else{
+          self.setState({
+            column:res.body.stories
+          })
+        }
+      })
   },
 
   render(){
-    var {totalShare,totalStory,totalView} = this.state
+    var {totalShare,totalStory,totalView,article} = this.state
 		return (
       <Container>
         <Section1>

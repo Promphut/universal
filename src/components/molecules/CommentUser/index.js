@@ -4,20 +4,21 @@ import styled from 'styled-components'
 import Avatar from 'material-ui/Avatar'
 import {UserTag} from 'components'
 import RaisedButton from 'material-ui/RaisedButton';
+import FontIcon from 'material-ui/FontIcon'
 
 const Container = styled.div`
   width:100%;
+  overflow:hidden;
   margin:10px 0 10px 0;
-  @media (min-width:481px) {
-    .sans-font {
-      font-family: 'PT Sans', 'cs_prajad', sans-serif;
-    }
+  display:flex;
+  .text-detail{
+    color:#222;
+    font-size:17px;
   }
-  /* FOR MOBILE */
-  @media (max-width:480px) {
-
-    .sans-font {
-      font-family: 'Roboto', 'cs_prajad', sans-serif;
+  @media(max-width:480px){
+    .text-detail{
+      color:#222;
+      font-size:14px;
     }
   }
 ` 
@@ -25,10 +26,16 @@ const Name = styled.div`
   color:#222222;
   font-weight:bold;
   font-size:17px;
+  @media(max-width:480px){
+    font-size:14px
+  }
 `
 const Time = styled.span`
   color:#8F8F8F;
   font-size:15px;
+  @media(max-width:480px){
+    font-size:12px;
+  }
 `
 
 const TextBtn = styled.div`
@@ -41,6 +48,38 @@ const TextBtn = styled.div`
     color:#222;
     cursor:pointer;
   }
+  @media(max-width:480px){
+
+  }
+`
+
+const TextBtn2 = styled.div`
+  color:#C1C1C1;
+  font-size:14px;
+  float:left;
+  margin:10px 10px 0 0;
+  &:hover{
+    text-decoration:underline;
+    color:#222;
+    cursor:pointer;
+  }
+  @media(min-width:481px){
+    display:none;
+  }
+`
+var Tag = styled(Link)`
+  color:#00B2B4;
+  font-weight:bold;
+  font-style: italic;
+  font-size:19px;
+  &:hover{
+    cursor:pointer;
+    color:#00B2B4;
+    opacity:0.5;
+  }
+  @media(max-width:480px){
+    font-size:14px;
+  }
 `
 
 const ReplyBox = styled.textarea`
@@ -49,11 +88,18 @@ const ReplyBox = styled.textarea`
   border: 1px solid #C1C1C1;
   float:left;
 `
-
+const DetBox = styled.div`
+  float:left;
+` 
+const BtnBox = styled.div`
+  @media(max-width:480px){
+    display:none;
+  }
+`
 var styles = {
   button:{
     borderRadius:'20px',
-    margin:'15px 0 0 60px',
+    margin:'15px 0 0 0px',
     background:'none',
     boxShadow:'none',
     float:'left'
@@ -76,6 +122,7 @@ var styles = {
     borderRadius:'20px',
   },
 }
+
 
 var replyBox = ''
 const test = []
@@ -107,22 +154,25 @@ const CommentBox = React.createClass({
   render(){
     return(
       <Container>
-        <Link to="#"><Avatar src='/tmp/avatar.png' size={49} style={{float:'left',marginRight:'15px'}}/></Link>
-        <Name className="sans-font">{this.props.data.name} <Time>{this.props.data.date}</Time></Name>
-        <div><UserTag>@{this.props.data.target}</UserTag> {this.props.data.text}</div>
-        <div style={styles.cont}>
-          <RaisedButton 
-            label="Upvote | 18" 
-            target="_blank"
-            labelColor="#C1C1C1"
-            labelStyle={{fontSize:'12px',top:'-2px'}}
-            style={styles.button}
-            buttonStyle={styles.btnStyle}
-            backgroundColor="none"/>
-          <TextBtn>Downvote</TextBtn>
-          <TextBtn onClick={this.showReplyBox}>Reply</TextBtn>
-        </div>
-        {replyBox}
+        <div><Link to="#"><Avatar src='/tmp/avatar.png' size={49} style={{float:'left',marginRight:'15px',display:'block'}}/></Link></div>
+        <DetBox>
+          <Name className="sans-font">{this.props.data.name} <Time>{this.props.data.date}</Time></Name>
+          <div className="sans-font text-detail" ><Tag>@{this.props.data.target}</Tag> {this.props.data.text}</div>
+          <BtnBox>
+            <RaisedButton 
+              label="Upvote | 18" 
+              target="_blank"
+              labelColor="#C1C1C1"
+              labelStyle={{fontSize:'12px',top:'-2px'}}
+              style={styles.button}
+              buttonStyle={styles.btnStyle}
+              backgroundColor="none"/>
+            <TextBtn>Downvote</TextBtn>
+            <TextBtn onClick={this.showReplyBox}>Reply</TextBtn>
+          </BtnBox>
+          <TextBtn2><FontIcon className='material-icons' style={{color:'#C1C1C1',fontSize:'14px',marginRight:'10px'}}>favorite_border</FontIcon> 18 Votes</TextBtn2>
+          {replyBox}
+        </DetBox>
       </Container>
     )
   }

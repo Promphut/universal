@@ -1,8 +1,7 @@
 import React from 'react'
+import styled from 'styled-components'
 import { TopBarWithNavigation, OverlayImg, PublisherProfileSetting,
    PublisherPublishingSetting,PublisherAnalyticSetting,PublisherThemeSetting } from 'components'
-
-import styled from 'styled-components'
 
 const Container = styled.div`
   width:100%;
@@ -11,16 +10,21 @@ const Container = styled.div`
 
 const PublisherSettingPage = React.createClass({
 	getInitialState(){
+    this.publisher = this.props.params.publisher
 		return {}
 	},
+
+  componentDidMount(){
+
+  },
 
   render(){
 		return (
       <Container>
-        <PublisherProfileSetting/>
-        <PublisherPublishingSetting/>
-        <PublisherAnalyticSetting/>
-        <PublisherThemeSetting />
+        <PublisherProfileSetting data={this.publisher}/>
+        <PublisherPublishingSetting data={this.publisher}/>
+        <PublisherAnalyticSetting data={this.publisher}/>
+        <PublisherThemeSetting data={this.publisher}/>
       </Container>
 		  )
 	}

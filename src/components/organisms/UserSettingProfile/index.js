@@ -49,7 +49,7 @@ const TextStatus = styled.div`
   float:left;
   margin:10px 0 0 15px;
 ` 
-const PublisherProfileSetting = React.createClass({
+const UserSettingProfile = React.createClass({
   getInitialState(){
     return{
       textStatus:'Unsave',
@@ -57,45 +57,45 @@ const PublisherProfileSetting = React.createClass({
     }
   },
 
-  componentDidMount(){
-    this.setData()
-  },
+  // componentDidMount(){
+  //   this.setData()
+  // },
 
-  setData(){
-    var {name,shortDesc,channels} = this.props.data.publisher
-    document.getElementById('title').value = typeof name =="undefined" ?'':name 
-    document.getElementById('description').value = typeof shortDesc == "undefined" ?'':shortDesc
-    document.getElementById('sc-fb').value = typeof channels == "undefined" ?'':channels.fb
-    document.getElementById('sc-twt').value = typeof channels == "undefined" ?'':channels.twt
-    document.getElementById('sc-ig').value = typeof channels == "undefined" ?'':channels.ig
-    document.getElementById('sc-yt').value = typeof channels == "undefined" ?'':channels.yt
-  },
+  // setData(){
+  //   var {name,shortDesc,channels} = this.props.data.publisher
+  //   document.getElementById('title').value = typeof name =="undefined" ?'':name 
+  //   document.getElementById('description').value = typeof shortDesc == "undefined" ?'':shortDesc
+  //   document.getElementById('sc-fb').value = typeof channels == "undefined" ?'':channels.fb
+  //   document.getElementById('sc-twt').value = typeof channels == "undefined" ?'':channels.twt
+  //   document.getElementById('sc-ig').value = typeof channels == "undefined" ?'':channels.ig
+  //   document.getElementById('sc-yt').value = typeof channels == "undefined" ?'':channels.yt
+  // },
 
-  updateData(e){
-    e.preventDefault()
-    var data = {publisher : {
-      name:document.getElementById('title').value,
-      shortDesc:document.getElementById('description').value,
-      channels:{
-        fb:document.getElementById('sc-fb').value,
-        twt:document.getElementById('sc-twt').value,
-        ig:document.getElementById('sc-ig').value,
-        yt:document.getElementById('sc-yt').value
-      },
-    }}
-    Request
-      .patch(config.BACKURL+'/publishers/11?token='+auth.getToken())
-      .set('x-access-token', auth.getToken())
-      .set('Accept','application/json')
-      .send(data)
-      .end((err,res)=>{
-        if(err)throw err 
-        else{
-          this.setState({textStatus:'Saved successfully'})
-        }
-        //console.log(res.body)
-      })
-  },
+  // updateData(e){
+  //   e.preventDefault()
+  //   var data = {publisher : {
+  //     name:document.getElementById('title').value,
+  //     shortDesc:document.getElementById('description').value,
+  //     channels:{
+  //       fb:document.getElementById('sc-fb').value,
+  //       twt:document.getElementById('sc-twt').value,
+  //       ig:document.getElementById('sc-ig').value,
+  //       yt:document.getElementById('sc-yt').value
+  //     },
+  //   }}
+  //   Request
+  //     .patch(config.BACKURL+'/publishers/11?token='+auth.getToken())
+  //     .set('x-access-token', auth.getToken())
+  //     .set('Accept','application/json')
+  //     .send(data)
+  //     .end((err,res)=>{
+  //       if(err)throw err 
+  //       else{
+  //         this.setState({textStatus:'Saved successfully'})
+  //       }
+  //       //console.log(res.body)
+  //     })
+  // },
 
   render(){
     var {uploadPhoto} = this.state
@@ -104,19 +104,26 @@ const PublisherProfileSetting = React.createClass({
         <div  className="head sans-font">PROFILE</div>
         <Flex>
           <Title>
-            <div className="sans-font">Title</div>
+            <div className="sans-font">Display name</div>
           </Title>
           <Edit>
             <TextField 
-              defaultValue="Aommoney" 
+              defaultValue="Ochawin Chirasottikul" 
               id='title'
             />
-
           </Edit>
         </Flex>
         <Flex>
           <Title>
-            <div className="sans-font">Tagline</div>
+            <div className="sans-font">Profile picture</div>
+          </Title>
+          <Edit>
+            <UploadPicture src={uploadPhoto} path='/publishers/11/cover' type='cover'/>
+          </Edit>
+        </Flex>
+        <Flex>
+          <Title>
+            <div className="sans-font">Tell people about me</div>
           </Title>
           <Edit>
             <TextField
@@ -133,10 +140,13 @@ const PublisherProfileSetting = React.createClass({
         </Flex>
         <Flex>
           <Title>
-            <div className="sans-font">Cover picture</div>
+            <div className="sans-font">Current living city</div>
           </Title>
           <Edit>
-            <UploadPicture src={uploadPhoto} path='/publishers/11/cover' type='cover'/>
+            <TextField 
+              defaultValue="Bangkok, Thailand" 
+              id='title'
+            />
           </Edit>
         </Flex>
         <Flex>
@@ -174,4 +184,4 @@ const PublisherProfileSetting = React.createClass({
 
 
 
-export default PublisherProfileSetting
+export default UserSettingProfile

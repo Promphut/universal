@@ -120,7 +120,11 @@ injectGlobal`
     .serif-font{
        font-family: 'Roboto Slab', 'Mitr';
     }
+    .hidden-mob{
+      display:none;
+    }
   }
+
   
   .container {
     position: relative;

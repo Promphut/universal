@@ -2,8 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 import {PrimaryButton,SecondaryButton} from 'components'
 import TextField from 'material-ui/TextField';
+import auth from 'components/auth'
+import Request from 'superagent'
 
-const Container = styled.div`
+const Container = styled.form`
   width:100%;
   padding:80px;
   border-bottom:1px solid #E2E2E2;
@@ -55,28 +57,61 @@ const TextArea = styled.textarea`
   color:#8F8F8F;
   margin:20px 0 0 0;
 `
-var analytic = `<script>
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');ga('create', 'UA-47600482-1', 'auto');ga('send', 'pageview');`
+// var analytic = `<script>
+// (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+//   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');ga('create', 'UA-47600482-1', 'auto');ga('send', 'pageview');`
 const PublisherAnalyticSetting = React.createClass({
   getInitialState(){
     return{
       textStatus:'Unsave'
     }
   },
+
+  componentDidMount(){
+    this.setData()
+  },
+
+  setData(){
+    var {analytic} = this.props.data.publisher
+    document.getElementById('analytic').value = typeof analytic == "undefined" ?'': analytic.tagManagerId
+    this.setState({})
+  },
+
+  updateData(e){
+    e.preventDefault()
+    var data = {publisher : {
+      analytic:{
+        tagManagerId:document.getElementById('analytic').value,
+      }
+    }}
+    Request
+      .patch(config.BACKURL+'/publishers/11?token='+auth.getToken())
+      .set('x-access-token', auth.getToken())
+      .set('Accept','application/json')
+      .send(data)
+      .end((err,res)=>{
+        if(err)throw err 
+        else{
+          this.setState({textStatus:'Saved successfully'})
+        }
+        //console.log(res.body)
+      })
+  },
+
+
   render(){
     return(
-      <Container>
+      <Container onSubmit={this.updateData} >
         <div  className="head sans-font">ANALYTIC</div>
         <Flex>
           <Title>
             <div className="sans-font">Google Analytic</div>
           </Title>
           <Edit>
-            <TextArea value={analytic}/>
+            <TextArea id='analytic'/>
           </Edit>
         </Flex>
-        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus>{this.state.textStatus}</TextStatus></div>
+        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus>{this.state.textStatus}</TextStatus></div>
       </Container>
     )
   },

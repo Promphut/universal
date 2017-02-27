@@ -4,8 +4,10 @@ import {PrimaryButton,SecondaryButton,UploadPicture} from 'components'
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import Request from 'superagent'
+import auth from 'components/auth'
 
-const Container = styled.div`
+const Container = styled.form`
   width:100%;
   padding:80px;
   border-bottom:1px solid #E2E2E2;
@@ -62,10 +64,47 @@ const SendBox = styled.div`
 `
 const PublisherContact = React.createClass({
   getInitialState(){
+  
     return{
       textStatus:'Unsave',
       value:1
     }
+  },
+
+  componentDidMount(){
+    this.setData()
+  },
+
+  setData(){
+    var {contact} = this.props.data.publisher
+    this.setState({value:typeof contact.catName=="undefined"?1:contact.catName})
+    document.getElementById('toEmail').value = typeof contact.toEmail=="undefined"?'':contact.toEmail
+    document.getElementById('desc').value = typeof contact.desc== "undefined"?'':contact.desc
+  },
+
+  updateData(e){
+    e.preventDefault()
+    var data = {
+      publisher : {
+        contact:{
+          catName:this.state.value,
+          toEmail:document.getElementById('toEmail').value,
+          desc:document.getElementById('desc').value
+        },
+      }
+    }
+    Request
+      .patch(config.BACKURL+'/publishers/11?token='+auth.getToken())
+      .set('x-access-token', auth.getToken())
+      .set('Accept','application/json')
+      .send(data)
+      .end((err,res)=>{
+        if(err)throw err 
+        else{
+          this.setState({textStatus:'Saved successfully'})
+        }
+        //console.log(res.body)
+      })
   },
 
   handleChange(event, index, value){
@@ -74,7 +113,7 @@ const PublisherContact = React.createClass({
 
   render(){
     return(
-      <Container>
+      <Container onSubmit={this.updateData}>
         <div  className="head sans-font">Contact</div>
         <Flex>
           <Title>
@@ -93,20 +132,21 @@ const PublisherContact = React.createClass({
                 <MenuItem value={4} primaryText="Weekends" />
                 <MenuItem value={5} primaryText="Weekly" />
               </SelectField>
-              <AddTag>
+              <a href="#"><AddTag>
                 <i className="fa fa-plus" style={{float:'left',margin:'20px 10px 0 0'}} aria-hidden="true"></i> 
                 <div style={{float:'left',margin:'20px 20px 0 0'}}>New</div>
-              </AddTag>
-              <AddTag>
+              </AddTag></a>
+              <a href="#"><AddTag>
                 <i className="fa fa-trash" style={{float:'left',margin:'20px 10px 0 0'}} aria-hidden="true"></i> 
                 <div style={{float:'left',margin:'20px 20px 0 0'}}>Delete Selected</div>
-              </AddTag>
+              </AddTag></a>
             </div>
             <SendBox>
               <TextField
                 defaultValue="unknow@mail.com"
                 floatingLabelText="Sent to email"
                 floatingLabelFixed={true}
+                id='toEmail'
               /><br/><br/>
               <TextField
                 defaultValue="Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown "
@@ -114,13 +154,14 @@ const PublisherContact = React.createClass({
                 fullWidth={true}
                 floatingLabelText="Description"
                 floatingLabelFixed={true}
+                id='desc'
                 rows={2}
                 rowsMax={10}
               />
             </SendBox>
           </Edit>
         </Flex>
-        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus>{this.state.textStatus}</TextStatus></div>
+        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus>{this.state.textStatus}</TextStatus></div>
       </Container>
     )
   },

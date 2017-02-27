@@ -6,10 +6,24 @@ import {OverlayImg} from 'components'
 const Container = styled.div`
   width:203px;
   display:inline;
+  .imgWidth{
+    width:203px;
+    height:290px;
+  }
+  @media (max-width:480px) {
+    width:135px;
+    .imgWidth{
+      width:135px;
+      height:193px;
+    }
+  }
 `
 const Div = styled.div`
   color:#8F8F8F;
   font-size:13px;
+  @media (max-width:480px) {
+    font-size:11px;
+  }
 `
 const Column = styled.span`
   font-weight:bold;
@@ -17,15 +31,18 @@ const Column = styled.span`
 const Name = styled.div`
   color:#222;
   font-weight:bold;
-  font-size:16px;
+  font-size:17px;
   margin:10px 0 0 0;
+  @media (max-width:480px) {
+    font-size:13px;
+  }
 `
 
 const ThumpnailSmall = ({detail,style})=>{
   var {name,time,photo} = detail
   return(
     <Container style={{...style}}>
-      <OverlayImg src={photo} style={{width:'203px',height:'290px'}}/>
+      <OverlayImg src={photo} className='imgWidth'/>
       <Name className='sans-font'>{name}</Name>
       <Div className='sans-font'>{time} min read</Div>
     </Container>

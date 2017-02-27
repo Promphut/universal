@@ -12,27 +12,61 @@ const Container = styled.div`
   width:731px;
   padding:20px 0 20px 0;
   border-bottom:1px solid #e2e2e2;
-  overflow:hidden; 
+  overflow:hidden;
+  .imgWidth{
+    width:445px;
+    height:260px;
+    float:left;
+  }
+  @media (max-width:480px) {
+    width:297px;
+    .imgWidth{
+      float:none;
+      width:297px;
+      height:175px;
+    }
+  }  
 `
 const Div = styled.div`
   color:#8F8F8F;
   font-size:13px;
+  @media (max-width:480px) {
+    font-size:12px;
+  } 
 `
 const Name = styled.div`
   color:#222;
   font-weight:bold;
-  font-size:18px;
+  font-size:19px;
+  @media (max-width:480px) {
+    font-size:15px;
+  } 
 `
 const BoxText = styled.div`
   float:left;
   width:286px;
   padding-left:15px;
+  @media (max-width:480px) {
+    width:100%;
+    padding-left:0px;
+    margin-top:10px;
+  } 
 `
 const DropDown = styled.div`
   float:right;
   &:hover{
     cursor:pointer;
   }
+`
+const DivMob = styled.div`
+  @media (min-width:481px) {
+    display:none;
+  } 
+`
+const DivDes = styled.div`
+  @media (max-width:480px) {
+    display:none;
+  } 
 `
 
 const ArticleBoxLarge = React.createClass({
@@ -61,9 +95,8 @@ const ArticleBoxLarge = React.createClass({
     var {name,photo,writer,column,vote,comment,date} = detail
     return(
       <Container style={{...style}}>
-        <OverlayImg src={photo} style={{width:'445px',height:'260px',float:'left'}}/>
-        <BoxText className='sans-font'>
-          <DropDown onClick={this.handleTouchTap}><FontIcon className="material-icons" style={{color:'#8f8f8f'}}>keyboard_arrow_down</FontIcon>
+        <DivMob>
+          <DropDown  onClick={this.handleTouchTap}><FontIcon className="material-icons" style={{color:'#8f8f8f'}}>keyboard_arrow_down</FontIcon>
             <Popover
               open={this.state.open}
               anchorEl={this.state.anchorEl}
@@ -80,6 +113,28 @@ const ArticleBoxLarge = React.createClass({
             </Popover>
           </DropDown>
           <Div>A story of <span style={{textDecoration:'underline'}}>{column}</span></Div>
+        </DivMob>
+        <OverlayImg src={photo} className='imgWidth'/>
+        <BoxText className='sans-font'>
+          <DivDes>
+            <DropDown  onClick={this.handleTouchTap}><FontIcon className="material-icons" style={{color:'#8f8f8f'}}>keyboard_arrow_down</FontIcon>
+              <Popover
+                open={this.state.open}
+                anchorEl={this.state.anchorEl}
+                anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+                targetOrigin={{horizontal: 'left', vertical: 'top'}}
+                onRequestClose={this.handleRequestClose}
+              >
+                <Menu>
+                  <MenuItem primaryText="Refresh" />
+                  <MenuItem primaryText="Help &amp; feedback" />
+                  <MenuItem primaryText="Settings" />
+                  <MenuItem primaryText="Sign out" />
+                </Menu>
+              </Popover>
+            </DropDown>
+            <Div>A story of <span style={{textDecoration:'underline'}}>{column}</span></Div>
+          </DivDes>
           <Name >{name}</Name>
           <div className="row" style={{margin:'10px 0 10px 0'}}>
             <Avatar src={writer.photo}/>

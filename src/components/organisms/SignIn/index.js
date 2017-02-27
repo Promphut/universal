@@ -65,6 +65,7 @@ const SignIn = React.createClass({
     e.preventDefault()
     var data = {}
     var self = this
+    var i = 0
     var input = dom(this.refs.signinForm).getElementsByTagName("input")
     input = [].slice.call(input)
     input.forEach((field,index)=>{
@@ -74,24 +75,31 @@ const SignIn = React.createClass({
         this.state['errText'+index] = ''
         this.setState({})
       }else{
-        this.state['errText'+index] = 'This field is required'
+        this.state['errText'+index] = <p>This field is required</p>
         this.setState({})
+        i++
       }
     })
-    //console.log(data)
-    Request
-      .post(config.BACKURL+'/auth')
-      .set('Accept','application/json')
-      .send(data)
-      .end((err,res)=>{
-        console.log(res.body)
-        if(err)this.setState({errText0:res.body.error,errText1:res.body.error,errText2:res.body.error})
-        else {
-          auth.setCookieAndToken(res.body)
-          browserHistory.push('/')
-        }
-      })
+    if(i==0){
+      Request
+        .post(config.BACKURL+'/auth')
+        .set('Accept','application/json')
+        .send(data)
+        .end((err,res)=>{
+          console.log(res.body)
+          if(err){
+            this.setState({
+              errText0: <p>{res.body.error}</p>,
+              errText1: <p>{res.body.error}</p>
+            })
+          }else {
+            auth.setCookieAndToken(res.body)
+            browserHistory.push('/')
+          }
+        })
+    }else{return}
   },
+
   render(){
     var {onClick,style} = this.props
     var {errText0,errText1,errText2} = this.state
@@ -105,7 +113,7 @@ const SignIn = React.createClass({
             type="email"
             fullWidth={true}
             style={{marginTop:'20px'}}
-            name='email'
+            name='username'
             errorText={errText0}
           /><br />
           <TextField

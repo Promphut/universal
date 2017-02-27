@@ -5,7 +5,10 @@ import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import Editor from 'react-md-editor';
-const Container = styled.div`
+import auth from 'components/auth'
+import Request from 'superagent'
+
+const Container = styled.form`
   width:100%;
   padding:80px;
   border-bottom:1px solid #E2E2E2;
@@ -127,9 +130,40 @@ const PublisherAbout = React.createClass({
     }
   },
 
+  componentDidMount(){
+    this.setData()
+  },
+
+  setData(){
+    var {aboutUs} = this.props.data.publisher
+    this.setState({code:typeof aboutUs=="undefined"?'# markdown !!!':aboutUs})
+  },
+
+  updateData(e){
+    e.preventDefault()
+    var data = {
+      publisher : {
+        aboutUs:this.state.code
+      }
+    }
+    Request
+      .patch(config.BACKURL+'/publishers/11?token='+auth.getToken())
+      .set('x-access-token', auth.getToken())
+      .set('Accept','application/json')
+      .send(data)
+      .end((err,res)=>{
+        if(err)throw err 
+        else{
+          this.setState({textStatus:'Saved successfully'})
+        }
+        //console.log(res.body)
+      })
+  },
+
   handleChange(event, index, value){
     this.setState({value})
   },
+
   updateCode(newCode){
       this.setState({
           code: newCode
@@ -138,14 +172,14 @@ const PublisherAbout = React.createClass({
 
   render(){
     return(
-      <Container>
+      <Container onSubmit={this.updateData}>
         <div  className="head sans-font">About Us</div>
         <Flex>
           <Edit>
             <Editor value={this.state.code} onChange={this.updateCode} />
           </Edit>
         </Flex>
-        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus>{this.state.textStatus}</TextStatus></div>
+        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' type="submit" style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus>{this.state.textStatus}</TextStatus></div>
       </Container>
     )
   },

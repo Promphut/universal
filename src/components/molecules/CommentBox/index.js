@@ -9,14 +9,6 @@ const Container = styled.div`
   width:100%;
   margin:50px 0 30px 0;
 ` 
-const styles={
-  NoComment:{
-    fontSize:'19px',
-    color:'#8F8F8F',
-    margin:'15px 0 15px 0'
-  }
-}
-
 
 const CommentBox = React.createClass({
   getInitialState(){
@@ -26,9 +18,9 @@ const CommentBox = React.createClass({
   },
 
   render(){
+    var {style,className} = this.props
     return(
-      <Container>
-        <div style={styles.NoComment}>5 Comments</div>
+      <Container style={{...style}} className={className}>
         <CommentInput/>
       </Container>
     )
