@@ -9,9 +9,7 @@ const Wrapper = styled.div`
 	
 `
 
-const Cover = (props) => (
-	<OverlayImg src="/tmp/a-story/pic-min.jpg" style={{maxHeight: props.height-120+'px'}}/>
-)
+
 
 const Content = styled.div`
 	display: flex;
@@ -60,6 +58,14 @@ const TextLine = styled.div`
 	border-bottom:1px solid #E2E2E2;
 	padding-bottom:11px;
 `
+const ColumnName = styled.h1`
+  color:#fff;
+  font-size:48px;
+  font-weight:bold;
+  position:relative;
+  top:-300px;
+  left:354px;
+`
 
 const Footer = styled.div`
 	text-align:center;
@@ -89,7 +95,7 @@ var mock2 = {
 
 var arr = [mock,mock,mock,mock]
 
-const HomePage2 = React.createClass({
+const ColumnPage = React.createClass({
 	getInitialState(){
 		return {}
 	},
@@ -117,7 +123,9 @@ const HomePage2 = React.createClass({
 
 		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={this.props.params.loggedIn} />
 
-		      <Cover width={this.state.width} height={this.state.height}/>
+		      <OverlayImg src="/tmp/a-story/pic-min.jpg" style={{width:'100%',height:'510px'}}/>
+
+          <ColumnName className='serif-font'>Fund</ColumnName>
 
 					<Content >
 						<Feed>
@@ -145,4 +153,4 @@ const HomePage2 = React.createClass({
 	}
 });
 
-export default HomePage2;
+export default ColumnPage;

@@ -4,6 +4,8 @@ import {PrimaryButton,SecondaryButton,UploadPicture} from 'components'
 import TextField from 'material-ui/TextField';
 import Request from 'superagent'
 import auth from 'components/auth'
+import RaisedButton from 'material-ui/RaisedButton';
+import FontIcon from 'material-ui/FontIcon'
 
 const Container = styled.form`
   width:100%;
@@ -49,6 +51,27 @@ const TextStatus = styled.div`
   float:left;
   margin:10px 0 0 15px;
 ` 
+
+const styles = {
+  button: {
+    margin: 12,
+    borderRadius:'10px',
+  },
+  btn:{
+    borderRadius:'10px',
+    backgroundColor:'#3A589B'
+  },
+  exampleImageInput: {
+    cursor: 'pointer',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+    width: '100%',
+    opacity: 0,
+  },
+};
 const UserSettingProfile = React.createClass({
   getInitialState(){
     return{
@@ -124,18 +147,30 @@ const UserSettingProfile = React.createClass({
           </Flex>
           <Flex>
             <Title>
-              <div className="sans-font">Social Channels</div>
+              <div className="sans-font">Social Connect </div>
             </Title>
             <Edit>
               <Social className="sans-font">
-                <i className="fa fa-facebook" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i> 
-                <div style={{float:'left',margin:'15px 20px 0 0'}}>facebook.com/</div>
-                <TextField style={{float:'left',margin:'5px 0 0 0'}} id='sc-fb' />
+                <RaisedButton
+                  href="https://facebook.com"
+                  target="_blank"
+                  label="Connect"
+                  labelStyle={{color:'white'}}
+                  style={{...styles.button}}
+                  buttonStyle={{...styles.btn}}
+                  icon={<i className="fa fa-facebook" style={{color:'white',margin:'0 5px 0 14px'}} aria-hidden="true"></i>}
+                />
               </Social>
               <Social className="sans-font">
-                <i className="fa fa-twitter" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i> 
-                <div style={{float:'left',margin:'15px 20px 0 0'}}>twitter.com/</div>
-                <TextField style={{float:'left',margin:'5px 0 0 0'}} id='sc-twt' />
+                <RaisedButton
+                  href="https://twitter.com"
+                  target="_blank"
+                  label="Connect"
+                  labelStyle={{color:'white'}}
+                  style={{...styles.button}}
+                  buttonStyle={{...styles.btn,backgroundColor:'#60AADE'}}
+                  icon={<i className="fa fa-twitter" style={{color:'white'}} aria-hidden="true"></i>}
+                />
               </Social>
             </Edit>
           </Flex>

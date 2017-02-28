@@ -10,7 +10,7 @@ import MenuItem from 'material-ui/MenuItem'
 
 const Container = styled.div`
   width:731px;
-  padding:20px 0 20px 0;
+  padding:30px 0 30px 0;
   border-bottom:1px solid #e2e2e2;
   overflow:hidden;
   .imgWidth{
@@ -18,8 +18,19 @@ const Container = styled.div`
     height:149px;
     float:left;
   }
+  .des-hidden{
+    display:block;
+  }
+  @media (min-width:481px) {
+    .des-hidden{
+      display:none;
+    }
+  } 
   @media (max-width:480px) {
     width:297px;
+    .mob-hidden{
+      display:none;
+    }
     .imgWidth{
       float:none;
       width:297px;
@@ -64,9 +75,7 @@ const DivMob = styled.div`
   } 
 `
 const DivDes = styled.div`
-  @media (max-width:480px) {
-    display:none;
-  } 
+
 `
 
 const ArticleBox = React.createClass({
@@ -95,26 +104,7 @@ const ArticleBox = React.createClass({
     var {name,photo,writer,column,vote,comment,date} = detail
     return(
       <Container style={{...style}}>
-        <DivMob>
-          <DropDown  onClick={this.handleTouchTap}><FontIcon className="material-icons" style={{color:'#8f8f8f'}}>keyboard_arrow_down</FontIcon>
-            <Popover
-              open={this.state.open}
-              anchorEl={this.state.anchorEl}
-              anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-              targetOrigin={{horizontal: 'left', vertical: 'top'}}
-              onRequestClose={this.handleRequestClose}
-            >
-              <Menu>
-                <MenuItem primaryText="Refresh" />
-                <MenuItem primaryText="Help &amp; feedback" />
-                <MenuItem primaryText="Settings" />
-                <MenuItem primaryText="Sign out" />
-              </Menu>
-            </Popover>
-          </DropDown>
-          <Div>A story of <span style={{textDecoration:'underline'}}>{column}</span></Div>
-        </DivMob>
-        <OverlayImg src={photo} className='imgWidth'/>
+        <OverlayImg src={photo} className='imgWidth mob-hidden' />
         <BoxText className='sans-font'>
           <DivDes>
             <DropDown  onClick={this.handleTouchTap}><FontIcon className="material-icons" style={{color:'#8f8f8f'}}>keyboard_arrow_down</FontIcon>
@@ -135,6 +125,7 @@ const ArticleBox = React.createClass({
             </DropDown>
             <Div>A story of <span style={{textDecoration:'underline'}}>{column}</span></Div>
           </DivDes>
+          <OverlayImg src={photo} className='imgWidth des-hidden'/>
           <Name >{name}</Name>
           <div className="row" style={{margin:'10px 0 10px 0'}}>
             <Avatar src={writer.photo}/>

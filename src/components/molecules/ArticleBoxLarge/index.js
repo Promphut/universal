@@ -10,7 +10,7 @@ import MenuItem from 'material-ui/MenuItem'
 
 const Container = styled.div`
   width:731px;
-  padding:20px 0 20px 0;
+  padding:30px 0 30px 0;
   border-bottom:1px solid #e2e2e2;
   overflow:hidden;
   .imgWidth{
