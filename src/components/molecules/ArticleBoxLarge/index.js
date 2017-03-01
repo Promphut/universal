@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 import styled from 'styled-components'
-import {OverlayImg} from 'components'
+import {BGImg} from 'components'
 import Avatar from 'material-ui/Avatar';
 import FontIcon from 'material-ui/FontIcon'
 import Popover from 'material-ui/Popover'
@@ -18,8 +18,20 @@ const Container = styled.div`
     height:260px;
     float:left;
   }
+  .des-hidden{
+    display:block;
+  }
+  @media (min-width:481px) {
+    .des-hidden{
+      display:none;
+    }
+  } 
   @media (max-width:480px) {
     width:297px;
+    padding:10px 0 20px 0;
+    .mob-hidden{
+      display:none;
+    }
     .imgWidth{
       float:none;
       width:297px;
@@ -58,15 +70,8 @@ const DropDown = styled.div`
     cursor:pointer;
   }
 `
-const DivMob = styled.div`
-  @media (min-width:481px) {
-    display:none;
-  } 
-`
 const DivDes = styled.div`
-  @media (max-width:480px) {
-    display:none;
-  } 
+
 `
 
 const ArticleBoxLarge = React.createClass({
@@ -95,26 +100,7 @@ const ArticleBoxLarge = React.createClass({
     var {name,photo,writer,column,vote,comment,date} = detail
     return(
       <Container style={{...style}}>
-        <DivMob>
-          <DropDown  onClick={this.handleTouchTap}><FontIcon className="material-icons" style={{color:'#8f8f8f'}}>keyboard_arrow_down</FontIcon>
-            <Popover
-              open={this.state.open}
-              anchorEl={this.state.anchorEl}
-              anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-              targetOrigin={{horizontal: 'left', vertical: 'top'}}
-              onRequestClose={this.handleRequestClose}
-            >
-              <Menu>
-                <MenuItem primaryText="Refresh" />
-                <MenuItem primaryText="Help &amp; feedback" />
-                <MenuItem primaryText="Settings" />
-                <MenuItem primaryText="Sign out" />
-              </Menu>
-            </Popover>
-          </DropDown>
-          <Div>A story of <span style={{textDecoration:'underline'}}>{column}</span></Div>
-        </DivMob>
-        <OverlayImg src={photo} className='imgWidth'/>
+        <BGImg src={photo} className='imgWidth mob-hidden' />
         <BoxText className='sans-font'>
           <DivDes>
             <DropDown  onClick={this.handleTouchTap}><FontIcon className="material-icons" style={{color:'#8f8f8f'}}>keyboard_arrow_down</FontIcon>
@@ -135,6 +121,7 @@ const ArticleBoxLarge = React.createClass({
             </DropDown>
             <Div>A story of <span style={{textDecoration:'underline'}}>{column}</span></Div>
           </DivDes>
+          <BGImg src={photo} className='imgWidth des-hidden'/>
           <Name >{name}</Name>
           <div className="row" style={{margin:'10px 0 10px 0'}}>
             <Avatar src={writer.photo}/>

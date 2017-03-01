@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 import styled from 'styled-components'
-import {OverlayImg} from 'components'
+import {BGImg} from 'components'
 import Avatar from 'material-ui/Avatar';
 import FontIcon from 'material-ui/FontIcon'
 import Popover from 'material-ui/Popover'
@@ -28,6 +28,7 @@ const Container = styled.div`
   } 
   @media (max-width:480px) {
     width:297px;
+    padding:10px 0 20px 0;
     .mob-hidden{
       display:none;
     }
@@ -69,11 +70,6 @@ const DropDown = styled.div`
     cursor:pointer;
   }
 `
-const DivMob = styled.div`
-  @media (min-width:481px) {
-    display:none;
-  } 
-`
 const DivDes = styled.div`
 
 `
@@ -99,12 +95,11 @@ const ArticleBox = React.createClass({
   },
 
   render(){
-    
     var {detail,style} = this.props
     var {name,photo,writer,column,vote,comment,date} = detail
     return(
       <Container style={{...style}}>
-        <OverlayImg src={photo} className='imgWidth mob-hidden' />
+        <BGImg src={photo} className='imgWidth mob-hidden' />
         <BoxText className='sans-font'>
           <DivDes>
             <DropDown  onClick={this.handleTouchTap}><FontIcon className="material-icons" style={{color:'#8f8f8f'}}>keyboard_arrow_down</FontIcon>
@@ -125,7 +120,7 @@ const ArticleBox = React.createClass({
             </DropDown>
             <Div>A story of <span style={{textDecoration:'underline'}}>{column}</span></Div>
           </DivDes>
-          <OverlayImg src={photo} className='imgWidth des-hidden'/>
+          <BGImg src={photo} className='imgWidth des-hidden'/>
           <Name >{name}</Name>
           <div className="row" style={{margin:'10px 0 10px 0'}}>
             <Avatar src={writer.photo}/>

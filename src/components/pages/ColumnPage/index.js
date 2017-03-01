@@ -1,16 +1,13 @@
 import React from 'react'
-import { PageTemplate, TopBarWithNavigation, OverlayImg, Thumpnail, 
-	ThumpnailSmall,ArticleBox,ArticleBoxLarge,ThumpnailRow,TopColumnSidebar,TopWriterSidebar,More} from 'components'
-
+import { TopBarWithNavigation,ArticleBox,ArticleBoxLarge,More,TrendingSideBar,BGImg,StoryMenu } from 'components'
+import {findDOMNode as dom} from 'react-dom'
 import styled from 'styled-components'
-
+import FlatButton from 'material-ui/FlatButton';
+import FontIcon from 'material-ui/FontIcon';
 
 const Wrapper = styled.div`
 	
 `
-
-
-
 const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
@@ -19,14 +16,13 @@ const Content = styled.div`
 `
 
 const Main = styled.div`
-	flex: 3 790px;
-	max-width: 790px;
-	@media (max-width:480px) {
-    flex: 0 100%;
+	flex: 8 730px;
+	max-width: 730px;
+	@media (max-width: 480px) {
+		flex:0 100%;
 		max-width: 100%;
-		min-width: 100%;
 		padding:0 15px 0 15px;
-  }
+	}
 `
 const Feed = styled.div`
 	flex: 12 1120px;
@@ -38,11 +34,11 @@ const Feed = styled.div`
 		padding:0 15px 0 15px;
   }
 `
-
 const Aside = styled.div`
-	flex: 1 350px;
-	max-width: 350px;
-
+	flex: 3 325px;
+	position:relative;
+	max-width: 325px;
+	margin-left:60px;
 	@media (max-width: 1160px) {
 		display:none;
 	}
@@ -51,20 +47,22 @@ const Text = styled.div`
 	color:#8F8F8F;
 	font-size:19px;
 `
-
 const TextLine = styled.div`
 	color:#8F8F8F;
 	font-size:19px;
 	border-bottom:1px solid #E2E2E2;
 	padding-bottom:11px;
 `
-const ColumnName = styled.h1`
+const ColumnName = styled.div`
   color:#fff;
   font-size:48px;
   font-weight:bold;
-  position:relative;
-  top:-300px;
-  left:354px;
+`
+const ColumnDetail = styled.div`
+	color:#fff;
+  font-size:16px;
+	font-family:'Mitr';
+	margin-top:15px;
 `
 
 const Footer = styled.div`
@@ -93,26 +91,36 @@ var mock2 = {
 	column:'Money Ideas'
 }
 
+const trending = {
+	name:'โมหจริตดินฮิปฮอปด็อกเตอร์โมหจริตแอดมิสชััน?',
+	vote:'18',
+	comment:11,
+	photo:'/tmp/story-list/1485309433041-Screen-Shot-2017-01-23-at-33221-PM-1.png'
+}
+const trendingArray = [trending,trending,trending,trending,trending,trending]
 var arr = [mock,mock,mock,mock]
 
 const ColumnPage = React.createClass({
 	getInitialState(){
-		return {}
+		return {
+			stopPos:0
+		}
 	},
 
-	updateDimensions(){
-        this.setState({
-        	width: window.getWidth(), 
-        	height: window.getHeight()
-        });
-    },
-
-	componentWillMount(){
-        this.updateDimensions();
-    },
+	componentDidMount(){
+		this.setState({
+			stopPos:dom(this.refs.more).getBoundingClientRect().top
+		})
+	},
 
 	render(){
 		var article = []
+		var ChildCover = 
+			<div style={{margin:'170px 0 0 20%',width:'700px'}}>
+				<ColumnName className='serif-font'>Fund</ColumnName>
+				<ColumnDetail >โมหจริต ละตินฮิปฮอปด็อกเตอร์โมหจริตแอดมิสชัน บร็อคโคลีคีตปฏิภาณเมจิค โอเวอร์คลิปโปรโมชั่นแบล็คสงบสุข ยังไงอึ้มไรเฟิลบร็อกโคลี ฮ็อตมั้ย แอ็กชั่นแอ็กชั่น อุปสงค์ฟลุกซีนีเพล็กซ์เลกเชอร์อิเหนา บัลลาสต์โรแมนติก</ColumnDetail>
+			</div>
+
 		for(let i=0;i<5;i++){
 			article.push(
 				i%3==0?<ArticleBoxLarge detail={mock2} key={i}/>:<ArticleBox detail={mock2} key={i}/>
@@ -120,32 +128,19 @@ const ColumnPage = React.createClass({
 		}
 		return (
 		    <Wrapper>
-
 		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={this.props.params.loggedIn} />
-
-		      <OverlayImg src="/tmp/a-story/pic-min.jpg" style={{width:'100%',height:'510px'}}/>
-
-          <ColumnName className='serif-font'>Fund</ColumnName>
-
-					<Content >
-						<Feed>
-							<div className='row' style={{display:'block',overflow:'hidden'}}>
-								<Text className='sans-font' style={{float:'left'}}>Trending Now</Text>
-								<Text className='sans-font' style={{fontSize:'14',float:'right',margin:'5px'}}>View more</Text>
-							</div>
-							<ThumpnailRow detail={arr} style={{margin:'20px 0 30px 0'}}/>
-							<ThumpnailRow detail={arr} size='small' style={{margin:'30px 0 30px 0'}}/>
-						</Feed>
-					</Content>	
+					<BGImg src="/tmp/a-story/pic-min.jpg" style={{width:'100%',height:'510px'}} child={ChildCover}/>
+					
 		      <Content >
 			      <Main>
+							<StoryMenu style={{padding:'15px 0 15px 0',margin:'0 0 50px 0'}} next='FUND'/>
 							<TextLine className='sans-font'>Lastest</TextLine>
 							{article}
-							<More style={{margin:'30px auto 30px auto'}}/>
+							<More style={{margin:'30px auto 30px auto'}} />
+							<div ref='more'></div>
 			      </Main>
 			      <Aside>
-							<TopColumnSidebar />
-							<TopWriterSidebar/>
+							<TrendingSideBar detail={trendingArray} stop={this.state.stopPos}/>
 						</Aside>
 		      </Content>
 		   </Wrapper>

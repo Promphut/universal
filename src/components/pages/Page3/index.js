@@ -1,14 +1,10 @@
 import React from 'react'
-import { PageTemplate, TopBarWithNavigation, ArticlePage, RecommendArticle, TrendingSideBar, ShareSideBar,OverlayImg} from 'components'
+import { PageTemplate, TopBarWithNavigation, ArticlePage, RecommendArticle, TrendingSideBar, ShareSideBar,BGImg} from 'components'
 import {Link} from 'react-router'
 import styled from 'styled-components'
 import {findDOMNode as dom} from 'react-dom'
 
 const Wrapper = styled.div`
-	.fixedPos{
-		position:fixed;
-		top:70px;
-	}
 	.recommends{
 		font-size:19px;
 		color:#8F8F8F;
@@ -36,10 +32,6 @@ const GradientOverlay = styled.div`
 	z-index:0
 `
 
-const Cover = (props) => (
-	<OverlayImg src="/tmp/a-story/pic-min.jpg" style={{maxHeight: props.height-120+'px'}}/>
-)
-
 const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
@@ -49,7 +41,7 @@ const Share = styled.div`
 	flex: 1 150px;
 	position:relative;
 	max-width: 150px;
-	margin-right:20px;
+	margin-right:10px;
 	@media (max-width: 1160px) {
 		display:none;
 	}
@@ -66,10 +58,10 @@ const Main = styled.div`
 `
 
 const Aside = styled.div`
-	flex: 3 350px;
+	flex: 3 325px;
 	position:relative;
-	max-width: 350px;
-	margin-left:80px;
+	max-width: 325px;
+	margin-left:60px;
 	@media (max-width: 1160px) {
 		display:none;
 	}
@@ -112,14 +104,14 @@ const Page3 = React.createClass({
 	},
 
 	updateDimensions(){
-			this.setState({
-				width: window.getWidth(), 
-				height: window.getHeight()
-			});
-    },
+		this.setState({
+			width: window.getWidth(), 
+			height: window.getHeight()
+		});
+	},
 
 	componentWillMount(){
-			this.updateDimensions();
+		this.updateDimensions();
 	},
 
 	componentDidMount(){
@@ -128,17 +120,6 @@ const Page3 = React.createClass({
 		})
 	},
                                   
-	fixedTrending(e){
-
-	},
-
-	componentWillUnmount() {
-        //window.removeEventListener("resize", this.updateDimensions);
-  },
-
-	trendingScroll(e){
-		console.log(e)
-	},
 
 	render(){
 		var {stopPos} = this.state
@@ -146,7 +127,7 @@ const Page3 = React.createClass({
 		    <Wrapper >
 		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={true} />
 
-		      <Cover width={this.state.width} height={this.state.height}/>
+		      <BGImg style={{width:'100%',height:'90vh'}} src='/tmp/a-story/pic-min.jpg'/>
 
 		      <Content>
 						<Share ref='share'>
@@ -157,7 +138,7 @@ const Page3 = React.createClass({
 							<ArticlePage/>
 			      </Main>
 			      
-			      <Aside  id='trendingBar' className='' ref='trendingBar'><TrendingSideBar stop={stopPos} detail={trendingArray} /></Aside>
+			      <Aside  id='trendingBar' ref='trendingBar'><TrendingSideBar stop={stopPos} detail={trendingArray} /></Aside>
 		      </Content>
 					<Content>
 						<RecommendContainer ref='recommend'>

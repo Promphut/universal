@@ -97,6 +97,9 @@ injectGlobal`
     .serif-font{
        font-family: 'PT Serif', 'Mitr';
     }
+    .nunito-font{
+      font-family: 'Nunito', 'Mitr';
+    }
   }
 
   /* FOR MOBILE */

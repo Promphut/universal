@@ -31,31 +31,43 @@ const CirButton = styled.div`
 const ShareSideBar = React.createClass({
   getInitialState(){
     return{
-      stopPos:''
+      stopPos:this.props.stop
     }
   },
   componentDidMount(){
-		var self = this
-    var startPos = dom(self.refs.contain).getBoundingClientRect().top
-    var height = dom(self.refs.contain).scrollHeight;
-    //console.log(startPos)
+    this.Slider()
+	},
+
+  Slider(){
+    var self = this
+    var item = dom(self.refs.contain)
+    var startPos = item.getBoundingClientRect().top
+    var height = item.scrollHeight;
+    var direction = 0
 		window.addEventListener("scroll", function(event) {
 			var top = this.scrollY
-			if(top>startPos+height&&top<self.state.stopPos){
-				dom(self.refs.contain).style.top = top-height+'px';
-			}
-      // else if(top==0){
-			// 	dom(self.refs.contain).style.top = startPos+'px';
-      //   //console.log(startPos+'px')
-			// }
+      var stopPos = typeof self.state.stopPos=='undefined'?top+100:self.state.stopPos
+      //console.log(height +' : '+startPos+' : '+top +' : '+stopPos)
+      if(top>direction){
+        if(top>=startPos-60&&top<=stopPos-height){
+          item.style.top = top-startPos+'px';
+        }
+      }else{
+        if(top>=startPos&&top<=stopPos-height){
+          item.style.top =  top-startPos+'px';
+        }
+      }
+      direction = top
 		});
   },
+
 
   componentWillReceiveProps(nextProps){
     if(nextProps.stop != this.props.stop){
       this.setState({stopPos:nextProps.stop})
     }
   },
+
 
   render(){
     return(

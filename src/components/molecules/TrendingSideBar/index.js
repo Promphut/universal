@@ -7,9 +7,7 @@ import {findDOMNode as dom} from 'react-dom'
 const Container = styled.div`
   width:324px;
   position:relative;
-
 `
-
 const Head = styled.div`
   color:#8F8F8F;
   font-size:20px;
@@ -41,26 +39,36 @@ const Column = styled.div`
 const TrendingSideBar = React.createClass({
   getInitialState(){
     return{
-      stopPos:''
+      stopPos:this.props.stop
     }
   },
 
-  componentDidMount(){
-		var self = this
-    var startPos = dom(self.refs.contain).getBoundingClientRect().top
-    var height = dom(self.refs.contain).scrollHeight;
-    //console.log(startPos)
-		window.addEventListener("scroll", function(event) {
-			var top = this.scrollY
-			if(top>startPos+height&&top<self.state.stopPos){
-				dom(self.refs.contain).style.top = top-height+'px';
-			}
-      // else if(top==0){
-			// 	dom(self.refs.contain).style.top = startPos+'px';
-      //   //console.log(startPos+'px')
-			// }
-		});
-	},
+  // componentDidMount(){
+  //   this.Slider()
+	// },
+
+  // Slider(){
+  //   var self = this
+  //   var item = dom(self.refs.contain)
+  //   var startPos = item.getBoundingClientRect().top
+  //   var height = item.scrollHeight;
+  //   var direction = 0
+	// 	window.addEventListener("scroll", function(event) {
+	// 		var top = this.scrollY
+  //     var stopPos = self.state.stopPos
+  //     //console.log(height +' : '+startPos+' : '+top +' : '+stopPos)
+  //     if(top>direction){
+  //       if(top>=startPos-60&&top<=stopPos-height){
+  //         item.style.top = top-startPos+'px';
+  //       }
+  //     }else{
+  //       if(top>=startPos&&top<=stopPos-height){
+  //         item.style.top =  top-startPos+'px';
+  //       }
+  //     }
+  //     direction = top
+	// 	});
+  // },
 
   componentWillReceiveProps(nextProps){
     if(nextProps.stop != this.props.stop){
@@ -68,18 +76,13 @@ const TrendingSideBar = React.createClass({
     }
   },
 
-  mapTrending(data,index){
-    return(
-      <Link to='#' key={index}><TrendingSideBarInner detail={data}/></Link>
-    )
-  },
-
   render(){
+    var {style,detail} = this.props
     return(
-      <Container style={{...this.props.style}} ref='contain'>
+      <Container style={{...style}} ref='contain'>
         <Divider/>
         <Head>NOW TRENDING</Head>
-        {this.props.detail.map(this.mapTrending)}
+        {detail.map((data,index)=><Link to='#' key={index}><TrendingSideBarInner detail={data}/></Link>)}
         <Divider/>
       </Container>
     )
