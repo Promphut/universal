@@ -67,7 +67,8 @@ const PublisherContact = React.createClass({
   
     return{
       textStatus:'Unsave',
-      value:1
+      value:1,
+      error:false
     }
   },
 
@@ -84,6 +85,7 @@ const PublisherContact = React.createClass({
 
   updateData(e){
     e.preventDefault()
+    var self = this
     var data = {
       publisher : {
         contact:{
@@ -99,11 +101,10 @@ const PublisherContact = React.createClass({
       .set('Accept','application/json')
       .send(data)
       .end((err,res)=>{
-        if(err)throw err 
+        if(err) self.setState({textStatus:res.body.error.message,error:true})
         else{
-          this.setState({textStatus:'Saved successfully'})
+          self.setState({textStatus:'Saved successfully',error:false})
         }
-        //console.log(res.body)
       })
   },
 
@@ -112,6 +113,7 @@ const PublisherContact = React.createClass({
   },
 
   render(){
+    var {error,textStatus,value} = this.state
     return(
       <Container onSubmit={this.updateData}>
         <div  className="head sans-font">Contact</div>
@@ -161,7 +163,7 @@ const PublisherContact = React.createClass({
             </SendBox>
           </Edit>
         </Flex>
-        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus>{this.state.textStatus}</TextStatus></div>
+        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error?'#D8000C':'#00B2B4'}}>{textStatus}</TextStatus></div>
       </Container>
     )
   },

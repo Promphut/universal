@@ -1,7 +1,7 @@
 import Request from 'superagent'
 import helpers from './helpers'
 import Cookies from 'react-cookie'
-
+import _ from 'lodash'
 const ROLES = {
   MEMBER: 0, 
   EDITOR: 1, 

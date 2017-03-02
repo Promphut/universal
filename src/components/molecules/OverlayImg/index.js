@@ -2,35 +2,41 @@ import React, {PropTypes} from 'react'
 import styled, {css} from 'styled-components'
 import {GradientOverlay} from 'components'
 
-const Container = styled.div`
-	position:relative;
-	overflow:hidden;
+const Img = styled.div`
+  display:block;
+  background-position:center;
+  background-size:cover;
+  overflow:auto;
 `
-const styles={
-	img:{
-		backgroundSize:'cover',
-		backgroundPosition:'center'
-	}
-}
+const Filter = styled(GradientOverlay)`
+  position:relative;
+  display:block;
+  overflow:auto;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+`
 
-const OverlayImg = (props) => {
+const OverlayImg = ({style,className,src,opacity,child}) => {
 	return (
-		<Container style={{...props.style}} className={props.className}>
-			<img src={props.src} style={ {...(props.orientedBy==='height' ? {height: '100%'} : {width: '100%'}), ...props.imgStyle,...styles.img} }/>
-			<GradientOverlay opacity={props.opacity} />
-		</Container>
+			<Img style={{...style,backgroundImage:'url('+src+')'}} className={className}>
+        <Filter opacity={opacity} >
+          {child}
+        </Filter>
+      </Img>
 	)
 }
 
-OverlayImg.propTypes = {
-	// Mandatory
-	src: PropTypes.string.isRequired,
+// OverlayImg.propTypes = {
+// 	// Mandatory
+// 	src: PropTypes.string.isRequired,
 
-	// Non mandatory
-	style: PropTypes.object,
-	orientedBy: PropTypes.string,
-	imgStyle: PropTypes.object,
-	opacity: PropTypes.number
-}
+// 	// Non mandatory
+// 	style: PropTypes.object,
+// 	orientedBy: PropTypes.string,
+// 	imgStyle: PropTypes.object,
+// 	opacity: PropTypes.number
+// }
 
 export default OverlayImg;

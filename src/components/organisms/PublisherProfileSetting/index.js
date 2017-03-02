@@ -52,6 +52,7 @@ const TextStatus = styled.div`
 const PublisherProfileSetting = React.createClass({
   getInitialState(){
     return{
+      error:false,
       textStatus:'Unsave',
       uploadPhoto:null
     }
@@ -89,16 +90,15 @@ const PublisherProfileSetting = React.createClass({
       .set('Accept','application/json')
       .send(data)
       .end((err,res)=>{
-        if(err)throw err 
+        if(err)this.setState({textStatus:res.body.error.message,error:true})
         else{
-          this.setState({textStatus:'Saved successfully'})
+          this.setState({textStatus:'Saved successfully',error:false})
         }
-        //console.log(res.body)
       })
   },
 
   render(){
-    var {uploadPhoto} = this.state
+    var {uploadPhoto,textStatus,error} = this.state
     return(
       <Container onSubmit={this.updateData}>
         <div  className="head sans-font">PROFILE</div>
@@ -125,8 +125,8 @@ const PublisherProfileSetting = React.createClass({
               fullWidth={true}
               floatingLabelText="80 characters"
               floatingLabelFixed={true}
-              rows={2}
-              rowsMax={4}
+              rows={3}
+              rowsMax={10}
               id='description'
             />
           </Edit>
@@ -166,7 +166,7 @@ const PublisherProfileSetting = React.createClass({
             </Social>
           </Edit>
         </Flex>
-        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus>{this.state.textStatus}</TextStatus></div>
+        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus  style={{color:error?'#D8000C':'#00B2B4'}}>{textStatus}</TextStatus></div>
       </Container>
     )
   },

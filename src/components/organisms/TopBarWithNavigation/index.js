@@ -1,10 +1,10 @@
 import React, {PropTypes} from 'react'
 import {TopBar, TopNavigation} from 'components'
-
+import auth from 'components/auth'
 const TopBarWithNavigation = React.createClass({
 	getInitialState(){
 	    return{
-	    	loggedIn: this.props.loggedIn || false,
+	    	loggedIn: false,
 	    	scrolling: false
 	    }
 	},
@@ -19,8 +19,21 @@ const TopBarWithNavigation = React.createClass({
 			this.setState({scrolling: false})
 	},
 
-	componentDidMount(){
+	componentWillReceiveProps(nextProps){
+		if(nextProps.loggedIn!=this.props.loggedIn){
+			this.setState({
+				loggedIn:nextProps.loggedIn
+			})
+		}
+	},
 
+	componentDidMount(){
+		
+	},
+
+	componentWillMount(){
+		var token = auth.getToken()
+		if(token) this.setState({loggedIn:true})
 	},
 
 	handleScroll(e) {

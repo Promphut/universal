@@ -6,6 +6,7 @@ import FontIcon from 'material-ui/FontIcon'
 import {Link,browserHistory} from 'react-router'
 import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar'
+
 var styles = {
   list:{
     color:'white'
@@ -25,6 +26,7 @@ const SelectableList = makeSelectable(List);
 
 const UserSettingMenu = React.createClass({
   getInitialState(){
+    this.user = this.props.user
     return{
       selectedIndex:this.props.pathname
     }
@@ -38,7 +40,7 @@ const UserSettingMenu = React.createClass({
   },
 
   componentDidMount(){
-
+    console.log(this.user)
   },
 
   changePath(e){
@@ -46,9 +48,10 @@ const UserSettingMenu = React.createClass({
   },  
 
   render(){
+    var {display,pic} = this.user.user
     return(
       <SelectableList value={this.state.selectedIndex}>
-        <ListItem style={{...styles.listItem,padding:'30px 20px 30px 20px'}} primaryText={<User>Ochawin Chirasottikul</User>} leftAvatar={<Avatar src="/tmp/avatar.png" style={{marginTop:'12px'}} size={50}/>} />
+        <ListItem style={{...styles.listItem,padding:'30px 20px 30px 20px'}} primaryText={<User>{display}</User>} leftAvatar={<Avatar src={pic.medium} style={{marginTop:'12px'}} size={50}/>} />
         <Divider />
         <ListItem style={{...styles.listItem,padding:'35px 20px 35px 20px'}} onClick={()=>this.changePath('/me/stories')} value='/me/stories' primaryText="My Stories" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>description</FontIcon>} />
         <Divider />

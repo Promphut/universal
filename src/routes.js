@@ -12,35 +12,62 @@ import {HomePage, HomePage2, Page3, MoodboardPage, SignInPage,SignUpPage,
 
 const checkLogin=(nextState, replace, cb)=>{
   let token = auth.getToken()
-	//console.log('token', token)
-  if(token){
-    nextState.params.loggedIn = true
-  }else{
-    nextState.params.loggedIn = false
-  }
   cb()
 }
 
-const getPublisherId =(nextState, replace, cb)=>{
-  Request
-    .get(config.BACKURL+'/publishers/11')
-    .set('Accept','application/json')
-    .end((err,res)=>{
-      if(err){
-        throw err 
-        cb()
-      }
-      else{
-        nextState.params.publisher = res.body
-        cb()
-      }
+const getUserId = (nextState, replace, cb)=>{
+  var user = auth.getUser()
+  if(user){
+    Request
+      .get(config.BACKURL+'/users/'+user._id)
+      .set('Accept','application/json')
+      .end((err,res)=>{
+        if(err){
+          throw err 
+        }
+        else{
+          nextState.params.user = res.body
+          cb()
+        }
+      })
+  }else{
+    replace({
+      pathname:'/signin',
+      state: { nextPathname: nextState.location.pathname }
     })
+    cb()
+  }
+}
+
+const getPublisherId =(nextState, replace, cb)=>{
+  if(auth.isAdmin(11)){
+    var user = auth.getUser()
+    Request
+      .get(config.BACKURL+'/publishers/11')
+      .set('Accept','application/json')
+      .end((err,res)=>{
+        if(err){
+          throw err 
+        }
+        else{
+          nextState.params.publisher = res.body
+          nextState.params.user = user
+          cb()
+        }
+      })
+  }else{
+    replace({
+      pathname:'/',
+      state: { nextPathname: nextState.location.pathname }
+    })
+    cb()
+  }
 }
 
 
 const routes = (
-  <Route path="/" component={App} onEnter={checkLogin}>
-    <IndexRoute component={HomePage2} />
+  <Route path="/" component={App} >
+    <IndexRoute component={HomePage2}/>
     <Route path='article' component={Page3}/>
     <Route path='column' component={ColumnPage}/>
     <Route path='publisher' component={PublisherPage}/>
@@ -53,13 +80,13 @@ const routes = (
       <Route path='settings' component={PublisherSettingPage} onEnter={getPublisherId}/>
       <Route path='stories' component={PublisherStoryPage} onEnter={getPublisherId}/>
       <Route path='contact' component={PublisherContactAndAboutPage} onEnter={getPublisherId}/>
-      <Route path='columns' >
+      <Route path='columns/:cid' >
         <Route path='settings' component={ColumnSettingPage}/>
       </Route>
     </Route>
-    <Route path='me' component={UserSetting}>
-      <Route path='settings' component={UserSettingProfile}/>
-      <Route path='settings/account' component={UserSettingAccount}/>
+    <Route path='me' component={UserSetting} onEnter={getUserId}>
+      <Route path='settings' component={UserSettingProfile} onEnter={getUserId}/>
+      <Route path='settings/account' component={UserSettingAccount} onEnter={getUserId}/>
       <Route path='stories' component={UserSettingStory}/>
       <Route path='stories/drafts' component={UserSettingProfile}/>
     </Route>

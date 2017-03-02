@@ -78,6 +78,7 @@ const Example = styled.div`
 const PublisherThemeSetting = React.createClass({
   getInitialState(){
     return{
+      error:false,
       textStatus:'Unsave',
       open1: false,
       open2: false,
@@ -134,6 +135,7 @@ const PublisherThemeSetting = React.createClass({
 
   updateData(e){
     e.preventDefault()
+    var self = this
     var data = 
     {
       publisher : {
@@ -148,15 +150,14 @@ const PublisherThemeSetting = React.createClass({
       .set('Accept','application/json')
       .send(data)
       .end((err,res)=>{
-        if(err)throw err 
+        if(err) self.setState({textStatus:res.body.error.message,error:true})
         else{
-          this.setState({textStatus:'Saved successfully'})
+          self.setState({textStatus:'Saved successfully',error:false})
         }
-        //console.log(res.body)
       })
   },
   render(){
-    var {primaryColor,secondaryColor,anchorEl1,anchorEl2,open1,open2,textStatus,uploadSLogo,uploadLogo} = this.state
+    var {primaryColor,secondaryColor,anchorEl1,anchorEl2,open1,open2,textStatus,uploadSLogo,uploadLogo,error} = this.state
     var styles={
       example1:{
         color:'white',
@@ -279,7 +280,7 @@ const PublisherThemeSetting = React.createClass({
             </div>
           </Edit>
         </Flex>
-        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus>{textStatus}</TextStatus></div>
+        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error?'#D8000C':'#00B2B4'}}>{textStatus}</TextStatus></div>
       </Container>
     )
   },

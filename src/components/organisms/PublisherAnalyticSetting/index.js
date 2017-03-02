@@ -63,7 +63,8 @@ const TextArea = styled.textarea`
 const PublisherAnalyticSetting = React.createClass({
   getInitialState(){
     return{
-      textStatus:'Unsave'
+      textStatus:'Unsave',
+      error:false
     }
   },
 
@@ -73,15 +74,16 @@ const PublisherAnalyticSetting = React.createClass({
 
   setData(){
     var {analytic} = this.props.data.publisher
-    document.getElementById('analytic').value = typeof analytic == "undefined" ?'': analytic.tagManagerId
+    document.getElementById('tagManagerId').value = typeof analytic == "undefined" ?'': analytic.tagManagerId
     this.setState({})
   },
 
   updateData(e){
     e.preventDefault()
+    var self = this
     var data = {publisher : {
       analytic:{
-        tagManagerId:document.getElementById('analytic').value,
+        tagManagerId:document.getElementById('tagManagerId').value,
       }
     }}
     Request
@@ -90,28 +92,28 @@ const PublisherAnalyticSetting = React.createClass({
       .set('Accept','application/json')
       .send(data)
       .end((err,res)=>{
-        if(err)throw err 
+        if(err) self.setState({textStatus:res.body.error.message,error:true})
         else{
-          this.setState({textStatus:'Saved successfully'})
+          self.setState({textStatus:'Saved successfully',error:false})
         }
-        //console.log(res.body)
       })
   },
 
 
   render(){
+    var {textStatus,error} =this.state
     return(
       <Container onSubmit={this.updateData} >
         <div  className="head sans-font">ANALYTIC</div>
         <Flex>
           <Title>
-            <div className="sans-font">Google Analytic</div>
+            <div className="sans-font">Google Tag<br/> Manager ID</div>
           </Title>
           <Edit>
-            <TextArea id='analytic'/>
+             <TextField id='tagManagerId' name='tagManagerId' style={{marginTop:'20px'}}/>
           </Edit>
         </Flex>
-        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus>{this.state.textStatus}</TextStatus></div>
+        <div className='sans-font row' style={{marginTop:'80px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error?'#D8000C':'#00B2B4'}}>{textStatus}</TextStatus></div>
       </Container>
     )
   },

@@ -86,7 +86,7 @@ const SignIn = React.createClass({
         .set('Accept','application/json')
         .send(data)
         .end((err,res)=>{
-          console.log(res.body)
+          //console.log(res.body)
           if(err){
             this.setState({
               errText0: <p>{res.body.error}</p>,

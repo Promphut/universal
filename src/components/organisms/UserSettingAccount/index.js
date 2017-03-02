@@ -6,6 +6,7 @@ import Request from 'superagent'
 import auth from 'components/auth'
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon'
+import {findDOMNode as dom}from 'react-dom';
 
 const Container = styled.form`
   width:100%;
@@ -74,64 +75,79 @@ const styles = {
 };
 const UserSettingProfile = React.createClass({
   getInitialState(){
+    this.user = this.props.params.user
     return{
-      textStatus:'Unsave',
-      uploadPhoto:null
+      error1:false,
+      error2:false,
+      textStatus1:'Unsave',
+      textStatus2:'Unsave',
     }
   },
 
-  // componentDidMount(){
-  //   this.setData()
-  // },
+  componentDidMount(){
+    //console.log(this.user.user)
+    this.setData()
+  },
 
-  // setData(){
-  //   var {name,shortDesc,channels} = this.props.data.publisher
-  //   document.getElementById('title').value = typeof name =="undefined" ?'':name 
-  //   document.getElementById('description').value = typeof shortDesc == "undefined" ?'':shortDesc
-  //   document.getElementById('sc-fb').value = typeof channels == "undefined" ?'':channels.fb
-  //   document.getElementById('sc-twt').value = typeof channels == "undefined" ?'':channels.twt
-  //   document.getElementById('sc-ig').value = typeof channels == "undefined" ?'':channels.ig
-  //   document.getElementById('sc-yt').value = typeof channels == "undefined" ?'':channels.yt
-  // },
+  setData(){
+    var {username,email} = this.user.user
+    document.getElementById('username').value = typeof username =="undefined" ?'':username
+    document.getElementById('email').value = typeof email == "undefined" ?'':email
+  },
 
-  // updateData(e){
-  //   e.preventDefault()
-  //   var data = {publisher : {
-  //     name:document.getElementById('title').value,
-  //     shortDesc:document.getElementById('description').value,
-  //     channels:{
-  //       fb:document.getElementById('sc-fb').value,
-  //       twt:document.getElementById('sc-twt').value,
-  //       ig:document.getElementById('sc-ig').value,
-  //       yt:document.getElementById('sc-yt').value
-  //     },
-  //   }}
-  //   Request
-  //     .patch(config.BACKURL+'/publishers/11?token='+auth.getToken())
-  //     .set('x-access-token', auth.getToken())
-  //     .set('Accept','application/json')
-  //     .send(data)
-  //     .end((err,res)=>{
-  //       if(err)throw err 
-  //       else{
-  //         this.setState({textStatus:'Saved successfully'})
-  //       }
-  //       //console.log(res.body)
-  //     })
-  // },
+  updateData(e){
+    e.preventDefault()
+    var data = {}
+    var self = this
+    var input = dom(this.refs.form1).getElementsByTagName("input")
+    input = [].slice.call(input)
+    input.forEach((field,index)=>{
+      data[field.name] = field.value
+    })
+    var user = {
+      user:data
+    }
+    //console.log(user)
+    Request
+      .patch(config.BACKURL+'/users/'+this.user.user._id+'?token='+auth.getToken())
+      .set('x-access-token', auth.getToken())
+      .set('Accept','application/json')
+      .send(user)
+      .end((err,res)=>{
+        if(err) self.setState({textStatus1:res.body.error.message,error1:true})
+        else{
+          self.setState({textStatus1:'Saved successfully',error1:false})
+        }
+      })
+  },
+  signFB(e){
+    e.preventDefault()
+    var self = this
+    Request
+      .get(config.BACKURL+'/auth/facebook')
+      .set('Accept','application/json')
+      .end((err,res)=>{
+        if(err) self.setState({textStatus2:'Connect with Facebook fail',error2:true,})
+        else{
+          self.setState({
+            textStatus2:'Connect with Facebook successfully',error2:false,
+          })
+        }
+      })
+  },
 
   render(){
-    var {uploadPhoto} = this.state
+    var {textStatus1,error1,textStatus2,error2} = this.state
     return(
       <div>
-        <Container onSubmit={this.updateData}>
+        <Container onSubmit={this.updateData} ref='form1'>
           <div  className="head sans-font">ACCOUNT</div>
           <Flex>
             <Title>
               <div className="sans-font">Username</div>
             </Title>
             <Edit>
-              <TextField  defaultValue="Ochawin" id='title'/>
+              <TextField id='username' name='username'/>
             </Edit>
           </Flex>
           <Flex>
@@ -139,10 +155,7 @@ const UserSettingProfile = React.createClass({
               <div className="sans-font">Email</div>
             </Title>
             <Edit>
-              <TextField 
-                defaultValue="ochawin@gmail.com" 
-                id='title'
-              />
+              <TextField id='email' name='email'/>
             </Edit>
           </Flex>
           <Flex>
@@ -152,8 +165,7 @@ const UserSettingProfile = React.createClass({
             <Edit>
               <Social className="sans-font">
                 <RaisedButton
-                  href="https://facebook.com"
-                  target="_blank"
+                  onClick={this.signFB}
                   label="Connect"
                   labelStyle={{color:'white'}}
                   style={{...styles.button}}
@@ -163,8 +175,7 @@ const UserSettingProfile = React.createClass({
               </Social>
               <Social className="sans-font">
                 <RaisedButton
-                  href="https://twitter.com"
-                  target="_blank"
+                  onClick={this.signTWT}
                   label="Connect"
                   labelStyle={{color:'white'}}
                   style={{...styles.button}}
@@ -174,17 +185,17 @@ const UserSettingProfile = React.createClass({
               </Social>
             </Edit>
           </Flex>
-          <div className='sans-font' style={{marginTop:'30px',overflow:'hidden'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus>{this.state.textStatus}</TextStatus></div>
+          <div className='sans-font' style={{marginTop:'30px',overflow:'hidden'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error1?'#D8000C':'#00B2B4'}}>{textStatus1}</TextStatus></div>
         </Container>
 
-        <Container onSubmit={this.updateData}>
+        <Container onSubmit={this.changePWD}>
           <div  className="head sans-font">CHANGE PASSWORD</div>
           <Flex>
             <Title>
               <div className="sans-font">Old Password</div>
             </Title>
             <Edit>
-              <TextField  defaultValue="Ochawin" id='title' type='password'/>
+              <TextField id='passwordOld' type='password' name='passwordOld' autoComplete="off"/>
             </Edit>
           </Flex>
           <Flex>
@@ -192,10 +203,7 @@ const UserSettingProfile = React.createClass({
               <div className="sans-font">New Password</div>
             </Title>
             <Edit>
-              <TextField 
-                defaultValue="ochawin@gmail.com" 
-                id='title' type='password'
-              />
+              <TextField id='passwordNew1' type='password' name='passwordNew1' autoComplete="off"/>
             </Edit>
           </Flex>
           <Flex>
@@ -203,13 +211,10 @@ const UserSettingProfile = React.createClass({
               <div className="sans-font">Retype Again</div>
             </Title>
             <Edit>
-              <TextField 
-                defaultValue="ochawin@gmail.com" 
-                id='title' type='password'
-              />
+              <TextField id='passwordNew2' type='password' name='passwordNew2' autoComplete="off"/>
             </Edit>
           </Flex>
-          <div className='sans-font' style={{marginTop:'30px',overflow:'hidden'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus>{this.state.textStatus}</TextStatus></div>
+          <div className='sans-font' style={{marginTop:'30px',overflow:'hidden'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error2?'#D8000C':'#00B2B4'}}>{textStatus2}</TextStatus></div>
         </Container>
       </div>
     )

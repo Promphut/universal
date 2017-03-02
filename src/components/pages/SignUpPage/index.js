@@ -74,20 +74,6 @@ const SignUpPage = React.createClass({
     })
   },
 
-  signupFacebook(){
-    Request
-      .get(config.BACKURL+'/auth/facebook')
-      .set('Accept', 'application/json')
-      .end((err,res)=>{
-        console.log(res)
-      })
-  },
-  signup(e){
-    console.log('asds')
-  },
-
-
-
 	render(){
     if(this.state.visible){
       var styles={}
@@ -102,7 +88,7 @@ const SignUpPage = React.createClass({
             <BoxButton>
               <Link to='#' onClick={this.checkBack} ><BackButton style={{float:'left'}}/></Link>
             </BoxButton>
-            {this.state.statePage?<SignUpFb emailSignUp={this.changeStatePage} onClick={this.signupFacebook}/>:<SignUp onClick={this.signup}/>}
+            {this.state.statePage?<SignUpFb emailSignUp={this.changeStatePage}/>:<SignUp onClick={this.signup}/>}
           </Container>
 		   </Wrapper>
 		  )

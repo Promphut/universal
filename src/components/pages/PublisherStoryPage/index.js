@@ -9,7 +9,10 @@ import MenuItem from 'material-ui/MenuItem';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import {Link} from 'react-router'
 import Request from 'superagent'
-
+import auth from 'components/auth'
+import Snackbar from 'material-ui/Snackbar';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton'
 const Container = styled.div`
   width:100%;
 `
@@ -175,7 +178,7 @@ const styles = {
     fill:'white'
   },
   menuItem:{
-    padding:'15px',
+    padding:'15px 40px 15px 15px',
   },
   newColumn:{
     color:'#00B2B4',
@@ -225,11 +228,14 @@ const TopArticle = ({style,detail})=>{
 
 const PublisherStoryPage = React.createClass({
 	getInitialState(){
+    this.user = this.props.params.user
 		return {
-      value:1,
+      value:'all',
       role:'admin',
       currentPage:1,
-      article:[]
+      article:[],
+      column:[],
+      dialog:false
     }
 	},
 
@@ -239,7 +245,7 @@ const PublisherStoryPage = React.createClass({
       .get(config.BACKURL+'/publishers/11/stories')
       .set('Accept','application/json')
       .end((err,res)=>{
-        console.log(res.body)
+        //console.log(res.body)
         if(err)throw err
         else{
           self.setState({
@@ -249,36 +255,101 @@ const PublisherStoryPage = React.createClass({
       })
   },
 
+  handleOpen(e){
+    e.preventDefault()
+    this.setState({dialog: true});
+  },
 
-  handleChange(event, index, value){this.setState({value})},
+  handleClose(e){
+    this.setState({dialog: false});
+  },
+
+  getColumn(){
+    var self = this
+    Request
+      .get(config.BACKURL+'/publishers/11/columns')
+      .set('Accept','application/json')
+      .end((err,res)=>{
+        console.log(res.body)
+        if(err)throw err
+        else{
+          self.setState({
+            column:res.body.columns
+          })
+        }
+      })
+  },
+
+  removeColumn(){
+    var self = this
+    Request
+      .delete(config.BACKURL+'/publishers/11/columns/'+this.state.value+'?token='+auth.getToken())
+      .set('x-access-token', auth.getToken())
+      .set('Accept','application/json')
+      .end((err,res)=>{
+        //console.log(res.body)
+        if(err)throw err
+        else{
+          self.setState({dialog:false})
+          self.getColumn()
+        }
+      })
+  },
+
+  handleChange(event, index, value){
+    this.setState({value})
+    //console.log(value)
+  },
 
   componentDidMount(){
     this.getArticle()
+    this.getColumn()
   },
 
   render(){
-    var {role,currentPage,article} = this.state
+    var {role,currentPage,article,column,value} = this.state
     var editable1 = ''
     var editable2 = ''
     if(role=='admin'){
       editable1=<div className='row'>
-                  <FontIcon className="material-icons" style={{display:'inline',color:'#8f8f8f',margin:'0 15px 0 0'}}>mode_edit</FontIcon>
-                  <FontIcon className="material-icons" style={{display:'inline',color:'#8f8f8f'}}>delete</FontIcon>
+                  <Link to={"/editor/columns/"+ this.state.value +"/settings"}><FontIcon className="material-icons" style={{display:'inline',color:'#8f8f8f',margin:'0 15px 0 0'}}>mode_edit</FontIcon></Link>
+                  <FontIcon onClick={this.handleOpen} className="material-icons" style={{display:'inline',color:'#8f8f8f'}}>delete</FontIcon>
                 </div>
       editable2=<div className='row'>
-                  <IconEdit to="#"><FontIcon className="material-icons" onClick={()=>{console.log('test')}} style={{color:'white'}}>mode_edit</FontIcon></IconEdit>
-                  <IconEdit to="#"><FontIcon className="material-icons" onClick={()=>{console.log('test')}} style={{color:'white'}}>delete</FontIcon></IconEdit>
+                  <IconEdit to={"/editor/columns/"+ this.state.value +"/settings"}><FontIcon className="material-icons" style={{color:'white'}}>mode_edit</FontIcon></IconEdit>
+                  <IconEdit to="#" onClick={this.handleOpen} ><FontIcon className="material-icons"  style={{color:'white'}}>delete</FontIcon></IconEdit>
                 </div>
     }else if(role=='editor'){
-      editable1=<div className='row'><FontIcon className="material-icons" onClick={()=>{console.log('test')}} style={{marginLeft:'15px',color:'#8f8f8f'}}>mode_edit</FontIcon></div>
-      editable2=<IconEdit to="#"><FontIcon className="material-icons" onClick={()=>{console.log('test')}} style={{color:'white'}}>mode_edit</FontIcon></IconEdit>
+      editable1=<Link to={"/editor/columns/"+ this.state.value +"/settings"}><div className='row'><FontIcon className="material-icons"  style={{marginLeft:'15px',color:'#8f8f8f'}}>mode_edit</FontIcon></Link></div>
+      editable2=<IconEdit to={"/editor/columns/"+ this.state.value +"/settings"}><FontIcon className="material-icons" style={{color:'white'}}>mode_edit</FontIcon></IconEdit>
             
     }else if(role=='writer'){
       editable1=''
       editable2=''
     }
+    const actions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onTouchTap={this.handleClose}
+      />,
+      <FlatButton
+        label="Confirm"
+        secondary={true}
+        onTouchTap={this.removeColumn}
+      />,
+    ];
 		return (
       <Container>
+        <Dialog
+          actions={actions}
+          modal={false}
+          contentStyle={{width:'600px'}}
+          open={this.state.dialog}
+          onRequestClose={this.handleClose}
+        >
+          <p style={{fontSize:'20px'}}>Are you sure to remove this column ?</p>
+        </Dialog>
         <div className='row' style={{padding:'30px 15px 20px 30px'}}>
           <DropDownMenu
             value={this.state.value}
@@ -289,16 +360,16 @@ const PublisherStoryPage = React.createClass({
             underlineStyle={{...styles.underline}}
             selectedMenuItemStyle={{...styles.selected}}
             menuItemStyle={{...styles.menuItem}}
-          >
-            <MenuItem value={1} primaryText="All Stories" />
-            <MenuItem value={2} primaryText="Every Night" 
-                    rightIcon={editable1}/>
-            <MenuItem value={3} primaryText="Weeknights" 
-                    rightIcon={editable1}/>
-            <MenuItem value={4} primaryText="+ New Column" style={{...styles.newColumn}} />
-            <MenuItem value={5} primaryText="Show inactive columns"style={{...styles.showInactive}} />
+            menuStyle={{width:330}}
+          > 
+            <MenuItem value='all' primaryText="All Stories" />
+            {column.map((data,index)=>(
+              <MenuItem value={data._id} key={index} primaryText={data.name} rightIcon={editable1}/>
+            ))}
+            <MenuItem value='new column' primaryText="+ New Column" style={{...styles.newColumn}} />
+            <MenuItem value='inactive' primaryText="Show inactive columns"style={{...styles.showInactive}} />
           </DropDownMenu>
-          {editable2}
+          {value!='all'?editable2:''}
         </div>
         <div className='row'>
           <div className='col-6'>

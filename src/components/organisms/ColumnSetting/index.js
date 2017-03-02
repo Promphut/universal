@@ -3,7 +3,8 @@ import styled from 'styled-components'
 import {PrimaryButton,SecondaryButton,UploadPicture} from 'components'
 import TextField from 'material-ui/TextField';
 import Chip from 'material-ui/Chip';
-
+import auth from 'components/auth'
+import Request from 'superagent'
 const Container = styled.div`
   width:100%;
   padding:80px;
@@ -89,7 +90,7 @@ const ColumnSetting = React.createClass({
               <div className="sans-font">Name</div>
             </Title>
             <Edit>
-              <TextField defaultValue="Money Ideas" />
+              <TextField id='name' name='name'/>
             </Edit>
           </Flex>
           <Flex>
@@ -99,7 +100,7 @@ const ColumnSetting = React.createClass({
             <Edit>
               <Social className="sans-font"> 
                 <div style={{float:'left',margin:'15px 20px 0 0'}}>/money-ideas</div>
-                <TextField style={{float:'left',margin:'5px 0 0 0'}} defaultValue="money-ideas" />
+                <TextField style={{float:'left',margin:'5px 0 0 0'}} id='url' name='url'/>
               </Social>
               <Desc className='sans-font'>Note that changing slug will affect the whole URL structure of this publisher, meaning that previously used URLs won't be able to be accessed anymore. Are you sure to edit?</Desc>
             </Edit>
@@ -115,8 +116,10 @@ const ColumnSetting = React.createClass({
                 fullWidth={true}
                 floatingLabelText="140 characters"
                 floatingLabelFixed={true}
-                rows={2}
-                rowsMax={4}
+                rows={3}
+                rowsMax={6}
+                id='description'
+                name='shortDesc'
               />
             </Edit>
           </Flex>
@@ -125,7 +128,7 @@ const ColumnSetting = React.createClass({
               <div className="sans-font">Cover picture</div>
             </Title>
             <Edit>
-              <UploadPicture/>
+              <UploadPicture />
             </Edit>
           </Flex>
         </Container>
@@ -145,7 +148,7 @@ const ColumnSetting = React.createClass({
                   >
                     {data.label}
                   </Chip>
-                ), this)}
+                ))}
                 <Admin className="sans-font">Add an admin...</Admin>
               </div>
             </Edit>

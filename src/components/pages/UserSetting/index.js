@@ -37,6 +37,7 @@ const Aside = styled.div`
 
 const UserSetting = React.createClass({
 	getInitialState(){
+    this.user = this.props.params.user
 		return {}
 	},
 
@@ -51,7 +52,7 @@ const UserSetting = React.createClass({
           <Container>
             <Content>
               <Aside>
-                <UserSettingMenu pathname={this.props.location.pathname}/>
+                <UserSettingMenu pathname={this.props.location.pathname} user={this.user}/>
               </Aside>
               <Main>
                 {this.props.children}

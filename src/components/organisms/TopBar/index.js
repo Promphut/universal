@@ -9,7 +9,7 @@ import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import Avatar from 'material-ui/Avatar';
 import styled from 'styled-components'
-
+import auth from 'components/auth'
 import {PrimaryButton, SecondaryButton, Logo, Drawer, LeftNavigation, RightNavigation} from 'components'
 
 const Wrapper = styled.div`
@@ -134,7 +134,7 @@ const TopBar = React.createClass({
 
 	render(){
 		let loggedIn = this.props.loggedIn
-
+		var user = auth.getUser()
 		return (
 			<Wrapper className="menu-font">
 				<div className={this.props.scrolling || 'bar-on-top'}>
@@ -158,8 +158,8 @@ const TopBar = React.createClass({
 					</Container>
 
 					{loggedIn && (
-					<Drawer name="rd" position="right" toggleIcon={<ProfileAvatar src="/tmp/avatar.png" size={30}/>}>
-						<RightNavigation/>
+					<Drawer name="rd" position="right" toggleIcon={<ProfileAvatar src={user.pic.medium} size={30}/>}>
+						<RightNavigation user={user}/>
 					</Drawer>)}
 		        </div>
 			</Wrapper>

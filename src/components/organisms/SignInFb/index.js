@@ -2,7 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 import Avatar from 'material-ui/Avatar'
 import RaisedButton from 'material-ui/RaisedButton';
-import {Link} from 'react-router'
+import {Link,browserHistory} from 'react-router'
+import Request from 'superagent'
+
 const Box = styled.div`
   width:477px;
   height:427px;
@@ -63,6 +65,19 @@ const SignInFb = React.createClass({
     }
   },
 
+  signupFB(e){
+    e.preventDefault()
+    Request
+      .get(config.BACKURL+'/auth/facebook')
+      .set('Accept','application/json')
+      .end((err,res)=>{
+        if(err) throw err
+        else{
+          browserHistory.push('/')
+        }
+      })
+  },  
+
   render(){
   return(
     <Box>
@@ -72,6 +87,7 @@ const SignInFb = React.createClass({
           label=" Sign In with facebook"
           labelPosition="after"
           labelColor='white'
+          onClick={this.signupFB}
           labelStyle={styles.labelBtn}
           icon={<i className="fa fa-facebook" style={{color:'white',margin:'17px 10px 0 0'}} aria-hidden="true"></i>}
           style={styles.button}

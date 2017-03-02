@@ -9,7 +9,7 @@ import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import Avatar from 'material-ui/Avatar';
 import styled from 'styled-components'
-
+import auth from 'components/auth'
 const Nav = styled.nav`
 	position: fixed; 
 	top: 0; 
@@ -100,7 +100,9 @@ const RightNavigation = React.createClass({
 
 	},
 
+
 	render(){
+		var user = auth.getUser()
 		return(
 			<Nav>
 				<CloseBtn onTouchTap={this.context.onDrawerClose}><FontIcon className="material-icons">close</FontIcon></CloseBtn>
@@ -110,18 +112,18 @@ const RightNavigation = React.createClass({
 				{/*<div className="dark-menu-item menu-font lighter-bg"><Link to="/#editormode"><FontIcon className="material-icons" color={'White'} style={{lineHeight:'20px', padding:'20px 20px 20px 40px'}}>edit</FontIcon> Editor Mode</Link></div>*/}
 				
 				<Profile className="content-font">
-					<Link to="/#toprofile"><Avatar src="/tmp/avatar.png" size={70}/></Link>
-					<div><Link to="/#toprofile"><h3>Ochawin Chirasottikul</h3></Link>Writer of Money Ideas, Fund Investment, and Tax</div>
+					<Link to="/me/settings"><Avatar src={user.pic.medium}size={70}/></Link>
+					<div><Link to="/me/settings"><h3>{user.display}</h3></Link>{user.shortDesc}</div>
 				</Profile>
 				
 				<Divider/>
 
 				<ul>
-					<li><a href="#">My Stories</a></li>
-					<li><a href="#">Edit Profile</a></li>
+					<li><Link to='/me/stories'>My Stories</Link></li>
+					<li><Link to='/me/settings'>Edit Profile</Link></li>
 					<li><Divider/></li>
-					<li><a href="#">Settings</a></li>
-					<li><a href="#">Log Out</a></li>
+					<li><Link to='/me/settings/account'>Settings</Link></li>
+					<li><Link to='#'>Log Out</Link></li>
 				</ul>
 			</Nav>
 		)

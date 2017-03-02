@@ -7,6 +7,10 @@ import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import AutoComplete from 'material-ui/AutoComplete';
 import Chip from 'material-ui/Chip';
+import Request from 'superagent'
+import auth from 'components/auth'
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton'
 
 const Container = styled.div`
   width:100%;
@@ -89,42 +93,90 @@ const dataSource3 = [
 const PublisherPublishingSetting = React.createClass({
   getInitialState(){
     return{
-      chipData: [
-        {key: 0, label: 'TAXBUGNOMS'},
-        {key: 1, label: 'DR.NUT FUNDCLINIC'},
-        {key: 2, label: 'MR.AOMMONEY'},
-        {key: 3, label: 'INSURANGER'},
-      ],
-      textStatus:'Unsave'
+      admin: [],
+      textStatus:'Unsave',
+      error:false,
+      dialog:false,
+      adminRemoveName:''
     }
   },
-  handleRequestDelete(key){
-    this.chipData = this.state.chipData;
-    const chipToDelete = this.chipData.map((chip) => chip.key).indexOf(key);
-    this.chipData.splice(chipToDelete, 1);
-    this.setState({chipData: this.chipData});
+  deleteAdmin(){
+    var {admin,adminRemoveName} = this.state
+    const chipToDelete = admin.map((data,index) => data.id).indexOf(adminRemoveName.id);
+    var self = this
+    admin.splice(chipToDelete, 1);
+    Request
+      .delete(config.BACKURL+'/publishers/11/admins/'+adminRemoveName.id+'?token='+auth.getToken())
+      .set('x-access-token', auth.getToken())
+      .set('Accept','application/json')
+      .end((err,res)=>{
+        if(err)throw err
+        else{
+          self.setState({dialog: false,adminRemoveName:{},admin: admin});
+        }
+      })
   },
-  renderChip(data) {
-    return (
-      <Chip
-        key={data.key}
-        onRequestDelete={() => this.handleRequestDelete(data.key)}
-        style={{margin:'4px'}}
-      >
-        {data.label}
-      </Chip>
-    );
+
+  handleOpen(admin){
+    //console.log(admin)
+    this.setState({dialog: true,adminRemoveName:admin});
   },
+
+  handleClose(e){
+    this.setState({dialog: false});
+  },
+
+  getAdmin(){
+    var self=this
+    Request
+      .get(config.BACKURL+'/publishers/11/admins?token='+auth.getToken())
+      .end((err,res)=>{
+        //console.log(res.body.admins)
+        self.setState({admin:res.body.admins})
+      })
+  },
+  componentDidMount(){
+    this.getAdmin()
+  },
+
+  addAdmin(){
+
+  },
+  getSource(){
+
+  },
+
   render(){
+    var {admin,textStatus,error,adminRemoveName,dialog} = this.state
     var menu=[]
     for(let i=0;i<10;i++){
       menu.push(
         <MenuItem key={i} primaryText="Help &amp; feedback" />
       )
     }
-
+    const actions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onTouchTap={this.handleClose}
+      />,
+      <FlatButton
+        label="Confirm"
+        secondary={true}
+        onTouchTap={this.deleteAdmin}
+      />,
+    ];
     return(
       <Container>
+        <Dialog
+          actions={actions}
+          modal={false}
+          contentStyle={{width:'600px'}}
+          open={dialog}
+          onRequestClose={this.handleClose}
+        >
+          <p style={{fontSize:'20px'}}>Are you sure to remove {adminRemoveName.display} ?</p>
+        </Dialog>
         <div  className="head sans-font">PUBLISHING</div>
         <Flex>
           <Title>
@@ -165,12 +217,26 @@ const PublisherPublishingSetting = React.createClass({
           </Title>
           <Edit>
             <div className='row' style={{marginTop:'15px'}}>
-              {this.state.chipData.map(this.renderChip, this)}
-              <Admin className="sans-font">Add an admin...</Admin>
+              {admin.map((data,index)=>(
+                <Chip
+                  key={data.id}
+                  onRequestDelete={() => this.handleOpen(data)}
+                  style={{margin:'4px'}}
+                >
+                  {data.display}
+                </Chip>
+              ))}
+              <AutoComplete
+                hintText="Add an admin..."
+                filter={AutoComplete.noFilter}
+                dataSource={dataSource3}
+                onUpdateInput={this.getSource}
+                onNewRequest={this.addAdmin}
+              />
             </div>
           </Edit>
         </Flex>
-        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus>{this.state.textStatus}</TextStatus></div>
+        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error?'#D8000C':'#00B2B4'}}>{this.state.textStatus}</TextStatus></div>
       </Container>
     )
   },
