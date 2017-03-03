@@ -40,8 +40,8 @@ const getUserId = (nextState, replace, cb)=>{
 }
 
 const getPublisherId =(nextState, replace, cb)=>{
-  if(auth.isAdmin(11)){
-    var user = auth.getUser()
+  var user = auth.getUser()
+  if(true){
     Request
       .get(config.BACKURL+'/publishers/11')
       .set('Accept','application/json')
@@ -64,6 +64,23 @@ const getPublisherId =(nextState, replace, cb)=>{
   }
 }
 
+const getColumnId = (nextState, replace, cb)=>{
+  //console.log(nextState.params)
+  var user = auth.getUser()
+  Request
+    .get(config.BACKURL+'/publishers/11/columns/'+nextState.params.cid)
+    .set('Accept','application/json')
+    .end((err,res)=>{
+      if(err){
+        throw err 
+      }
+      else{
+        nextState.params.column = res.body
+        nextState.params.user = user
+        cb()
+      }
+    })
+}
 
 const routes = (
   <Route path="/" component={App} >
@@ -81,7 +98,7 @@ const routes = (
       <Route path='stories' component={PublisherStoryPage} onEnter={getPublisherId}/>
       <Route path='contact' component={PublisherContactAndAboutPage} onEnter={getPublisherId}/>
       <Route path='columns/:cid' >
-        <Route path='settings' component={ColumnSettingPage}/>
+        <Route path='settings' component={ColumnSettingPage} onEnter={getColumnId}/>
       </Route>
     </Route>
     <Route path='me' component={UserSetting} onEnter={getUserId}>

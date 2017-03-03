@@ -94,7 +94,7 @@ const Name = styled.div`
   word-wrap: break-word;      /* IE */ 
   padding-right:5px;
   overflow: hidden;
-  width:270px;
+  max-width:230px;
   margin:0 0 0 15px;
 `
 
@@ -217,43 +217,26 @@ const Page = styled.div`
 `
 
 const TopArticle = ({style,detail})=>{
-  var {name,comment,vote,photo} = detail
+  var {title,cover} = detail
   return(
     <Cont style={{...style}}>
-      <OverlayImg src={photo} style={{width:'87',height:'52',float:'left'}}/>
-      <Name className="sans-font">{name}</Name>
+      <OverlayImg src={cover} style={{width:'87',height:'52',float:'left'}}/>
+      <Name className="sans-font">{title}</Name>
     </Cont>
   )
 }
 
 const PublisherStoryPage = React.createClass({
 	getInitialState(){
-    this.user = this.props.params.user
 		return {
       value:'all',
       role:'admin',
       currentPage:1,
       article:[],
       column:[],
-      dialog:false
+      dialog:false,
     }
 	},
-
-  getArticle(){
-    var self = this
-    Request
-      .get(config.BACKURL+'/publishers/11/stories')
-      .set('Accept','application/json')
-      .end((err,res)=>{
-        //console.log(res.body)
-        if(err)throw err
-        else{
-          self.setState({
-            article:res.body.stories
-          })
-        }
-      })
-  },
 
   handleOpen(e){
     e.preventDefault()
@@ -270,7 +253,7 @@ const PublisherStoryPage = React.createClass({
       .get(config.BACKURL+'/publishers/11/columns')
       .set('Accept','application/json')
       .end((err,res)=>{
-        console.log(res.body)
+        //console.log(res.body)
         if(err)throw err
         else{
           self.setState({
@@ -278,6 +261,35 @@ const PublisherStoryPage = React.createClass({
           })
         }
       })
+  },
+
+  getStory(filter={publisher:config.PID},sort='lastest'){
+    var self = this
+    var fil = JSON.stringify(filter)
+    //var path = encodeURIComponent('/publishers/'+config.PID+'/feed?type=story&filter='+fil+'&sort='+sort)
+    //console.log(config.BACKURL+path)
+    Request
+      .get(config.BACKURL+'/publishers/'+config.PID+'/feed?type=story&filter='+fil+'&sort='+sort)
+      .set('Accept','application/json')
+      .end((err,res)=>{
+        if(err)throw err
+        else{
+          console.log(res.body)
+          self.setState({
+            article:res.body.feed
+          })
+        }
+      })
+  },
+
+  recent(){
+    if(typeof this.state.value === 'number') this.getStory({publisher:config.PID,column:this.state.value},'lastest')
+    else this.getStory({publisher:config.PID},'lastest')
+  },
+
+  popular(){
+    if(typeof this.state.value === 'number') this.getStory({publisher:config.PID,column:this.state.value},'popular')
+    else this.getStory({publisher:config.PID},'popular')
   },
 
   removeColumn(){
@@ -298,12 +310,20 @@ const PublisherStoryPage = React.createClass({
 
   handleChange(event, index, value){
     this.setState({value})
+    if(typeof value === 'number'){
+      this.getStory({column:value})
+    }
     //console.log(value)
   },
 
+  changePage(){
+    if(typeof this.state.value === 'number') this.getStory({publisher:config.PID,column:this.state.value},'popular')
+    else this.getStory({publisher:config.PID},'popular')
+  },
+
   componentDidMount(){
-    this.getArticle()
     this.getColumn()
+    this.getStory()
   },
 
   render(){
@@ -320,7 +340,7 @@ const PublisherStoryPage = React.createClass({
                   <IconEdit to="#" onClick={this.handleOpen} ><FontIcon className="material-icons"  style={{color:'white'}}>delete</FontIcon></IconEdit>
                 </div>
     }else if(role=='editor'){
-      editable1=<Link to={"/editor/columns/"+ this.state.value +"/settings"}><div className='row'><FontIcon className="material-icons"  style={{marginLeft:'15px',color:'#8f8f8f'}}>mode_edit</FontIcon></Link></div>
+      editable1=<div className='row'><Link to={"/editor/columns/"+ this.state.value +"/settings"}><FontIcon className="material-icons"  style={{marginLeft:'15px',color:'#8f8f8f'}}>mode_edit</FontIcon></Link></div>
       editable2=<IconEdit to={"/editor/columns/"+ this.state.value +"/settings"}><FontIcon className="material-icons" style={{color:'white'}}>mode_edit</FontIcon></IconEdit>
             
     }else if(role=='writer'){
@@ -381,9 +401,9 @@ const PublisherStoryPage = React.createClass({
           </div>
           <div className='col-6'>
             <Section1 className="sans-font">
-              <TabHead>Recent</TabHead>
+              <TabHead onClick={this.recent}>Recent</TabHead>
               <TabHead>Trending</TabHead>
-              <TabHead>Most Popular</TabHead>
+              <TabHead onClick={this.popular}>Most Popular</TabHead>
               <FontIcon className="material-icons" style={{float:'right',margin:'0 0 0 0',color:'#8f8f8f'}}>search</FontIcon>
             </Section1>
           </div>
@@ -395,11 +415,11 @@ const PublisherStoryPage = React.createClass({
               displaySelectAll={false}
               adjustForCheckbox={false}>
               <TableRow>
-                <TableHeaderColumn style={{width:'45%'}}>Title</TableHeaderColumn>
+                <TableHeaderColumn style={{width:'40%'}}>Title</TableHeaderColumn>
                 <TableHeaderColumn style={{width:'15%'}}>Writer</TableHeaderColumn>
                 <TableHeaderColumn style={{width:'15%'}}>Column</TableHeaderColumn>
                 <TableHeaderColumn style={{width:'15%'}}>stats</TableHeaderColumn>
-                <TableHeaderColumn style={{width:'10%'}}>Published</TableHeaderColumn>
+                <TableHeaderColumn style={{width:'15%'}}>Published</TableHeaderColumn>
               </TableRow>
             </TableHeader>
             <TableBody 
@@ -407,11 +427,11 @@ const PublisherStoryPage = React.createClass({
               displayRowCheckbox={false}>
               {article.map((data,index)=>(
                 <TableRow key={index}>
-                  <TableRowColumn style={{width:'45%',padding:'10px 0 10px 0'}}><TopArticle detail={trending} /></TableRowColumn>
+                  <TableRowColumn style={{width:'40%',padding:'10px 0 10px 0'}}><TopArticle detail={data} /></TableRowColumn>
                   <TableRowColumn style={{width:'15%'}}>{data.writer.display}</TableRowColumn>
                   <TableRowColumn style={{width:'15%'}}>{data.column.name}</TableRowColumn>
-                  <TableRowColumn style={{width:'15%'}}>{data.id}</TableRowColumn>
-                  <TableRowColumn style={{width:'10%'}}>{data.status?'Published':'Draft'}</TableRowColumn>
+                  <TableRowColumn style={{width:'15%'}}>{'vote : '+data.votes.total}<br/>{'comment : '+data.comments.count}</TableRowColumn>
+                  <TableRowColumn style={{width:'15%'}}>{data.status?'Published':'Draft'}</TableRowColumn>
                 </TableRow>
               ))}
             </TableBody>

@@ -52,6 +52,7 @@ const TextStatus = styled.div`
 const PublisherProfileSetting = React.createClass({
   getInitialState(){
     return{
+      publisher:{},
       error:false,
       textStatus:'Unsave',
       uploadPhoto:null
@@ -59,11 +60,26 @@ const PublisherProfileSetting = React.createClass({
   },
 
   componentDidMount(){
-    this.setData()
+     this.getPublisherId()
+  },
+
+  getPublisherId(){
+    var self = this
+    var user = auth.getUser()
+    Request
+      .get(config.BACKURL+'/publishers/'+config.PID)
+      .set('Accept','application/json')
+      .end((err,res)=>{
+        if(err) throw err 
+        else{
+          self.setState({publisher:res.body.publisher})
+          self.setData()
+        }
+      })
   },
 
   setData(){
-    var {name,shortDesc,channels} = this.props.data.publisher
+    var {name,shortDesc,channels} = this.state.publisher
     document.getElementById('title').value = typeof name =="undefined" ?'':name 
     document.getElementById('description').value = typeof shortDesc == "undefined" ?'':shortDesc
     document.getElementById('sc-fb').value = typeof channels == "undefined" ?'':channels.fb
@@ -85,7 +101,7 @@ const PublisherProfileSetting = React.createClass({
       },
     }}
     Request
-      .patch(config.BACKURL+'/publishers/11?token='+auth.getToken())
+      .patch(config.BACKURL+'/publishers/'+config.PID+'?token='+auth.getToken())
       .set('x-access-token', auth.getToken())
       .set('Accept','application/json')
       .send(data)

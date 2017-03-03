@@ -100,13 +100,14 @@ const PublisherPublishingSetting = React.createClass({
       adminRemoveName:''
     }
   },
+
   deleteAdmin(){
     var {admin,adminRemoveName} = this.state
     const chipToDelete = admin.map((data,index) => data.id).indexOf(adminRemoveName.id);
     var self = this
     admin.splice(chipToDelete, 1);
     Request
-      .delete(config.BACKURL+'/publishers/11/admins/'+adminRemoveName.id+'?token='+auth.getToken())
+      .delete(config.BACKURL+'/publishers/'+config.PID+'/admins/'+adminRemoveName.id+'?token='+auth.getToken())
       .set('x-access-token', auth.getToken())
       .set('Accept','application/json')
       .end((err,res)=>{
@@ -129,12 +130,15 @@ const PublisherPublishingSetting = React.createClass({
   getAdmin(){
     var self=this
     Request
-      .get(config.BACKURL+'/publishers/11/admins?token='+auth.getToken())
+      .get(config.BACKURL+'/publishers/'+config.PID+'/admins?token='+auth.getToken())
       .end((err,res)=>{
-        //console.log(res.body.admins)
-        self.setState({admin:res.body.admins})
+        if(err) throw err
+        else{
+          self.setState({admin:res.body.admins})
+        }
       })
   },
+
   componentDidMount(){
     this.getAdmin()
   },

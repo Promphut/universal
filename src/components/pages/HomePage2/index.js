@@ -1,23 +1,20 @@
 import React from 'react'
 import { PageTemplate, TopBarWithNavigation, OverlayImg, Thumpnail, 
 	ThumpnailSmall,ArticleBox,ArticleBoxLarge,ThumpnailRow,TopColumnSidebar,TopWriterSidebar,More} from 'components'
-
 import styled from 'styled-components'
-
+import Request from 'superagent'
+import auth from 'components/auth'
+import slider from 'react-slick'
 
 const Wrapper = styled.div`
 	
 `
 
-const Cover = (props) => (
-	<OverlayImg src="/tmp/a-story/pic-min.jpg" style={{maxHeight: props.height-120+'px'}}/>
-)
-
 const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
-	padding:50px 0 50px 0;
+	padding:50px 0 0 0;
 `
 
 const Main = styled.div`
@@ -104,7 +101,21 @@ const HomePage2 = React.createClass({
 	componentWillMount(){
 		this.updateDimensions();
 	},
+	componentDidMount(){
+		this.getFeed()
+	},
 
+	getFeed(){
+		var path = JSON.stringify('publishers/11/feed?type=story&filter={status:1}&sort=lastest')
+		//console.log(path)
+		Request
+			.get(config.BACKURL+'publishers/11/feed')
+			.set('Accept','application/json')
+			.end((err,res)=>{
+				console.log(res)
+			})
+	},
+	
 	render(){
 		var article = []
 		for(let i=0;i<5;i++){
@@ -112,12 +123,13 @@ const HomePage2 = React.createClass({
 				i%3==0?<ArticleBoxLarge detail={mock2} key={i}/>:<ArticleBox detail={mock2} key={i}/>
 			)
 		}
+
 		return (
 		    <Wrapper>
 
 		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={this.props.params.loggedIn} />
 
-		      <Cover width={this.state.width} height={this.state.height}/>
+		      <OverlayImg style={{width:'100%',height:'90vh'}} src="/tmp/a-story/pic-min.jpg"/>
 
 					<Content >
 						<Feed>

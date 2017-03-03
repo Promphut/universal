@@ -132,12 +132,27 @@ const PublisherAbout = React.createClass({
   },
 
   componentDidMount(){
-    this.setData()
+    this.getPublisherId()
+  },
+
+  getPublisherId(){
+    var self = this
+    var user = auth.getUser()
+    Request
+      .get(config.BACKURL+'/publishers/'+config.PID)
+      .set('Accept','application/json')
+      .end((err,res)=>{
+        if(err) throw err 
+        else{
+          self.setState({publisher:res.body})
+          self.setData()
+        }
+      })
   },
 
   setData(){
-    var {aboutUs} = this.props.data.publisher
-    this.setState({code:typeof aboutUs=="undefined"?'# markdown !!!':aboutUs})
+    var {aboutUs} = this.state.publisher
+    this.setState({code:!aboutUs?'# markdown !!!':aboutUs})
   },
 
   updateData(e){
@@ -148,7 +163,7 @@ const PublisherAbout = React.createClass({
       }
     }
     Request
-      .patch(config.BACKURL+'/publishers/11?token='+auth.getToken())
+      .patch(config.BACKURL+'/publishers/'+config.PID+'?token='+auth.getToken())
       .set('x-access-token', auth.getToken())
       .set('Accept','application/json')
       .send(data)
@@ -157,7 +172,6 @@ const PublisherAbout = React.createClass({
         else{
           this.setState({textStatus:'Saved successfully',error:false})
         }
-        //console.log(res.body)
       })
   },
 

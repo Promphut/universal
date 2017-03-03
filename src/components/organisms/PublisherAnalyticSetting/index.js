@@ -63,18 +63,34 @@ const TextArea = styled.textarea`
 const PublisherAnalyticSetting = React.createClass({
   getInitialState(){
     return{
+      publisher:{},
       textStatus:'Unsave',
       error:false
     }
   },
 
   componentDidMount(){
-    this.setData()
+     this.getPublisherId()
+  },
+
+  getPublisherId(){
+    var self = this
+    var user = auth.getUser()
+    Request
+      .get(config.BACKURL+'/publishers/'+config.PID)
+      .set('Accept','application/json')
+      .end((err,res)=>{
+        if(err) throw err 
+        else{
+          self.setState({publisher:res.body.publisher})
+          self.setData()
+        }
+      })
   },
 
   setData(){
-    var {analytic} = this.props.data.publisher
-    document.getElementById('tagManagerId').value = typeof analytic == "undefined" ?'': analytic.tagManagerId
+    var {analytic} = this.state.publisher
+    document.getElementById('tagManagerId').value = !analytic?'': analytic.tagManagerId
     this.setState({})
   },
 
@@ -87,7 +103,7 @@ const PublisherAnalyticSetting = React.createClass({
       }
     }}
     Request
-      .patch(config.BACKURL+'/publishers/11?token='+auth.getToken())
+      .patch(config.BACKURL+'/publishers/'+config.PID+'?token='+auth.getToken())
       .set('x-access-token', auth.getToken())
       .set('Accept','application/json')
       .send(data)

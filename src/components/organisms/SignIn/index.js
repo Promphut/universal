@@ -89,8 +89,8 @@ const SignIn = React.createClass({
           //console.log(res.body)
           if(err){
             this.setState({
-              errText0: <p>{res.body.error}</p>,
-              errText1: <p>{res.body.error}</p>
+              errText0: <p>{res.body.error.message}</p>,
+              errText1: <p>{res.body.error.message}</p>
             })
           }else {
             auth.setCookieAndToken(res.body)

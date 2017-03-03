@@ -73,11 +73,26 @@ const PublisherContact = React.createClass({
   },
 
   componentDidMount(){
-    this.setData()
+     this.getPublisherId()
+  },
+
+  getPublisherId(){
+    var self = this
+    var user = auth.getUser()
+    Request
+      .get(config.BACKURL+'/publishers/'+config.PID)
+      .set('Accept','application/json')
+      .end((err,res)=>{
+        if(err) throw err 
+        else{
+          self.setState({publisher:res.body.publisher})
+          self.setData()
+        }
+      })
   },
 
   setData(){
-    var {contact} = this.props.data.publisher
+    var {contact} = this.state.publisher
     this.setState({value:typeof contact.catName=="undefined"?1:contact.catName})
     document.getElementById('toEmail').value = typeof contact.toEmail=="undefined"?'':contact.toEmail
     document.getElementById('desc').value = typeof contact.desc== "undefined"?'':contact.desc
@@ -96,7 +111,7 @@ const PublisherContact = React.createClass({
       }
     }
     Request
-      .patch(config.BACKURL+'/publishers/11?token='+auth.getToken())
+      .patch(config.BACKURL+'/publishers/'+config.PID+'?token='+auth.getToken())
       .set('x-access-token', auth.getToken())
       .set('Accept','application/json')
       .send(data)

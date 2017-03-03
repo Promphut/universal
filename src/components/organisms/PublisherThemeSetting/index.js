@@ -6,6 +6,8 @@ import { ChromePicker } from 'react-color';
 import {findDOMNode as dom} from 'react-dom'
 import Menu from 'material-ui/Menu'
 import Popover from 'material-ui/Popover';
+import Request from 'superagent'
+import auth from 'components/auth'
 const Container = styled.form`
   width:100%;
   padding:80px;
@@ -78,6 +80,7 @@ const Example = styled.div`
 const PublisherThemeSetting = React.createClass({
   getInitialState(){
     return{
+      publisher:{},
       error:false,
       textStatus:'Unsave',
       open1: false,
@@ -121,16 +124,31 @@ const PublisherThemeSetting = React.createClass({
   },
 
   componentDidMount(){
-    this.setData()
+    this.getPublisherId()
   },
 
   setData(){
-    var {theme} = this.props.data.publisher
+    var {theme} = this.state.publisher
     //document.getElementById('analytic').value = typeof analytic == "undefined" ?'': analytic.tagManagerId
     this.setState({
-      primaryColor:typeof theme == "undefined" ? '#00B2B4': theme.primaryColor,
-      secondaryColor:typeof theme == "undefined" ? '#CEF1B7': theme.secondaryColor
+      primaryColor: !theme? '#00B2B4': theme.primaryColor,
+      secondaryColor: !theme? '#CEF1B7': theme.secondaryColor
     })
+  },
+
+  getPublisherId(){
+    var self = this
+    var user = auth.getUser()
+    Request
+      .get(config.BACKURL+'/publishers/'+config.PID)
+      .set('Accept','application/json')
+      .end((err,res)=>{
+        if(err) throw err 
+        else{
+          self.setState({publisher:res.body.publisher})
+          self.setData()
+        }
+      })
   },
 
   updateData(e){
@@ -145,7 +163,7 @@ const PublisherThemeSetting = React.createClass({
         }
     }}
     Request
-      .patch(config.BACKURL+'/publishers/11?token='+auth.getToken())
+      .patch(config.BACKURL+'/publishers/'+config.PID+'?token='+auth.getToken())
       .set('x-access-token', auth.getToken())
       .set('Accept','application/json')
       .send(data)

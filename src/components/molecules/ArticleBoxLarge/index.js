@@ -29,6 +29,8 @@ const Container = styled.div`
   @media (max-width:480px) {
     width:297px;
     padding:10px 0 20px 0;
+    margin-left:auto;
+    margin-right:auto;
     .mob-hidden{
       display:none;
     }
