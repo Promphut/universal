@@ -302,17 +302,21 @@ const PublisherStoryPage = React.createClass({
 
   filterPublished(){
     if(typeof this.state.value === 'number'){
-      this.setState({filter:{publisher:config.PID,column:value,status:1}})
+      this.setState({filter:{publisher:config.PID,column:this.state.value,status:1}})
+      this.getStory()
     }else{
       this.setState({publisher:config.PID,status:1})
+      this.getStory()
     }
   },
 
   filterDraft(){
     if(typeof this.state.value === 'number'){
-      this.setState({filter:{publisher:config.PID,column:value,status:0}})
+      this.setState({filter:{publisher:config.PID,column:this.state.value,status:0}})
+      this.getStory()
     }else{
       this.setState({publisher:config.PID,status:0})
+      this.getStory()
     }
   },
 
@@ -339,7 +343,8 @@ const PublisherStoryPage = React.createClass({
   },
 
   changePage(e){
-    this.setState({page:e})
+    this.setState({page:e,currentPage:e})
+    this.getStory()
   },
 
   componentDidMount(){
