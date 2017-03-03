@@ -235,6 +235,9 @@ const PublisherStoryPage = React.createClass({
       article:[],
       column:[],
       dialog:false,
+      page:0,
+      sort:'lastest',
+      filter:{publisher:config.PID}
     }
 	},
 
@@ -263,35 +266,6 @@ const PublisherStoryPage = React.createClass({
       })
   },
 
-  getStory(filter={publisher:config.PID},sort='lastest'){
-    var self = this
-    var fil = JSON.stringify(filter)
-    //var path = encodeURIComponent('/publishers/'+config.PID+'/feed?type=story&filter='+fil+'&sort='+sort)
-    //console.log(config.BACKURL+path)
-    Request
-      .get(config.BACKURL+'/publishers/'+config.PID+'/feed?type=story&filter='+fil+'&sort='+sort)
-      .set('Accept','application/json')
-      .end((err,res)=>{
-        if(err)throw err
-        else{
-          console.log(res.body)
-          self.setState({
-            article:res.body.feed
-          })
-        }
-      })
-  },
-
-  recent(){
-    if(typeof this.state.value === 'number') this.getStory({publisher:config.PID,column:this.state.value},'lastest')
-    else this.getStory({publisher:config.PID},'lastest')
-  },
-
-  popular(){
-    if(typeof this.state.value === 'number') this.getStory({publisher:config.PID,column:this.state.value},'popular')
-    else this.getStory({publisher:config.PID},'popular')
-  },
-
   removeColumn(){
     var self = this
     Request
@@ -308,17 +282,64 @@ const PublisherStoryPage = React.createClass({
       })
   },
 
-  handleChange(event, index, value){
-    this.setState({value})
-    if(typeof value === 'number'){
-      this.getStory({column:value})
-    }
-    //console.log(value)
+  getStory(){
+    var self = this
+    var {page,sort,filter,value} = this.state
+    var fil = JSON.stringify(filter)
+    Request
+      .get(config.BACKURL+'/publishers/'+config.PID+'/feed?type=story&filter='+fil+'&sort='+sort+'&page='+page)
+      .set('Accept','application/json')
+      .end((err,res)=>{
+        if(err)throw err
+        else{
+          console.log(res.body)
+          self.setState({
+            article:res.body.feed
+          })
+        }
+      })
   },
 
-  changePage(){
-    if(typeof this.state.value === 'number') this.getStory({publisher:config.PID,column:this.state.value},'popular')
-    else this.getStory({publisher:config.PID},'popular')
+  filterPublished(){
+    if(typeof this.state.value === 'number'){
+      this.setState({filter:{publisher:config.PID,column:value,status:1}})
+    }else{
+      this.setState({publisher:config.PID,status:1})
+    }
+  },
+
+  filterDraft(){
+    if(typeof this.state.value === 'number'){
+      this.setState({filter:{publisher:config.PID,column:value,status:0}})
+    }else{
+      this.setState({publisher:config.PID,status:0})
+    }
+  },
+
+  recent(){
+    this.setState({sort:'lastest'})
+    this.getStory()
+  },
+
+  popular(){
+    this.setState({sort:'popular'})
+    this.getStory()
+  },
+
+  handleChange(event, index, value){
+    if(typeof value === 'number'){
+      this.setState({value,filter:{publisher:config.PID,column:value}})
+      this.getStory()
+    }else if(value == 'all'){
+      this.setState({value,filter:{publisher:config.PID}})
+      this.getStory()
+    }else{
+      this.setState({value})
+    }
+  },
+
+  changePage(e){
+    this.setState({page:e})
   },
 
   componentDidMount(){
@@ -394,8 +415,8 @@ const PublisherStoryPage = React.createClass({
         <div className='row'>
           <div className='col-6'>
             <Section1 className="sans-font">
-              <TabHead>19 Published</TabHead>
-              <TabHead>7 Drafted</TabHead>
+              <TabHead onClick={this.filterPublished}>19 Published</TabHead>
+              <TabHead onClick={this.filterDraft}>7 Drafted</TabHead>
               <TabHead>3 Scheduled</TabHead>
             </Section1>
           </div>
@@ -441,7 +462,7 @@ const PublisherStoryPage = React.createClass({
           <Pagination 
             currentPage={currentPage} 
             totalPages={8} 
-            onChange={(e)=>{this.setState({currentPage:e})}}
+            onChange={(e)=>{this.changePage(e)}}
           />
         </Page>
       </Container>
