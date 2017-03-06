@@ -15,18 +15,20 @@ FRONTEND PATHS:
 		All Columns 					/stories/columns 
 		Column Index					/stories/:column-slug
 		
-		Story Page						/stories/:column-slug/:story-slug
+		Story Page						/stories/:column-slug/:story-slug/:sid
 
 
 	USER:
 		Public Profile					/@:username 
 		Public stories					/@:username/stories
+		Public story page 				/@:username/stories/:story-slug/:sid
 		Public upvotes					/@:username/upvotes
 
 
 OWNER PATHS:
 	Owner's stories						/me/stories 
 	Owner's drafts						/me/stories/drafts
+	Owner's story 						/me/stories/:sid
 
 	Owner's profile setting				/me/settings
 	Owner's account setting				/me/settings/account
@@ -114,9 +116,11 @@ STORIES
 *	Upload story portrait cover 			POST 		/stories/:sid/portrait-cover 						{token, portrait-cover} 		{portrait-cover} 	portrait-cover: {paths:[''], filename:''}
 
 FEED
- 	Get feed 								GET 		/publishers/:pid/feed  								{filter, sort}					{stories:}
- 	- ?sort : trending/latest/popular
- 	- ?filter : ?type (e.g. all/story/video/qa), ?column, ?topic, ?program, ?tag
+ *	Get feed 								GET 		/publishers/:pid/feed  								{type, (sort), (sortby), (filter)}		{feed, count}	feed response is like [{type:'story', ...}, {type:'video', ...}]
+ 	- type : 'all'. 'story', 'video', 'qa'
+ 	- ?sort : trending/latest/popular, Note for a story: popular=most viewed, latest=published, trending=unsupported yet
+ 	- ?sortby : depend on the type, e.g. for a story: 'published', 'writer', 'created', 'title', etc.
+ 	- ?filter : depend on the type, e.g. for a story: 'column', 'topic', 'program', 'tag'
 
 
 
