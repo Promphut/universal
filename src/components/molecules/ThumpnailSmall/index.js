@@ -38,16 +38,34 @@ const Name = styled.div`
   }
 `
 
-const ThumpnailSmall = ({detail,style})=>{
-  var {name,time,photo} = detail
-  return(
-    <Container style={{...style}}>
-      <OverlayImg src={photo} className='imgWidth'/>
-      <Name className='sans-font'>{name}</Name>
-      <Div className='sans-font'>{time} min read</Div>
-    </Container>
-  )
-}
+const ThumpnailSmall = React.createClass({
+  getInitialState(){
+    return{
+      detail:this.props.detail
+    }
+  },
+  componentWillReceiveProps(nextProps){
+    if(nextProps.detail!=this.props.detail){
+      this.setState({
+        detail:nextProps.detail
+      })
+    }
+  },
+  render(){
+    var {detail,style} = this.props
+    var {detail} = this.state
+    var {title,updated,coverMobile} = detail
+    return(
+      <Container style={{...style}}>
+        <OverlayImg src={coverMobile} className='imgWidth'/>
+        <Name className='sans-font'>{title}</Name>
+        <Div className='sans-font'>5 min read</Div>
+      </Container>
+    )
+  }
+})
+
+
     
 
 

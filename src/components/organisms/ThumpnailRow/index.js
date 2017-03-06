@@ -15,7 +15,22 @@ const Box = styled.div`
   flex:1;
 `
 
-const ThumpnailRow = ({detail,style,size})=>{
+const ThumpnailRow = React.createClass({
+  getInitialState(){
+    return{
+      detail:this.props.detail
+    }
+  },
+  componentWillReceiveProps(nextProps){
+    if(nextProps.detail!=this.props.detail){
+      this.setState({
+        detail:nextProps.detail
+      })
+    }
+  },
+  render(){
+  var {size,style} = this.props
+  var {detail} = this.state
   var thumpnail = []
   var No = size=='small'?5:4
   var settings = {
@@ -42,10 +57,15 @@ const ThumpnailRow = ({detail,style,size})=>{
       }
     ]
   };
-  for(let i=0;i<No;i++){
-    thumpnail.push(
-      size=='small'?<Box key={i}><ThumpnailSmall detail={detail[1]}  /></Box>:<Box key={i}><Thumpnail  detail={detail[1]}/></Box>
-    )
+  if(detail.length!=0){
+    for(let i=0;i<9;i++){
+      thumpnail.push(
+        size=='small'?<Box key={i}><ThumpnailSmall detail={detail[i]}  /></Box>:<Box key={i}><Thumpnail  detail={detail[i]}/></Box>
+      )
+    }
+  }else{
+    thumpnail=[]
+    console.log(detail)
   }
   return(
     <Container style={{...style}}>
@@ -55,6 +75,8 @@ const ThumpnailRow = ({detail,style,size})=>{
     </Container>
   )
 }
+})
+
     
 
 

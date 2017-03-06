@@ -7,6 +7,7 @@ import FontIcon from 'material-ui/FontIcon'
 import Popover from 'material-ui/Popover'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
+import moment from 'moment'
 
 const Container = styled.div`
   width:731px;
@@ -99,10 +100,10 @@ const ArticleBoxLarge = React.createClass({
 
   render(){
     var {detail,style} = this.props
-    var {name,photo,writer,column,vote,comment,date} = detail
+    var {title,cover,writer,column,votes,comments,updated} = detail
     return(
       <Container style={{...style}}>
-        <BGImg src={photo} className='imgWidth mob-hidden' />
+        <BGImg src={cover} className='imgWidth mob-hidden' />
         <BoxText className='sans-font'>
           <DivDes>
             <DropDown  onClick={this.handleTouchTap}><FontIcon className="material-icons" style={{color:'#8f8f8f'}}>keyboard_arrow_down</FontIcon>
@@ -121,18 +122,18 @@ const ArticleBoxLarge = React.createClass({
                 </Menu>
               </Popover>
             </DropDown>
-            <Div>A story of <span style={{textDecoration:'underline'}}>{column}</span></Div>
+            <Div>A story of <span style={{textDecoration:'underline'}}>{column.name}</span></Div>
           </DivDes>
-          <BGImg src={photo} className='imgWidth des-hidden'/>
-          <Name >{name}</Name>
+          <BGImg src={cover} className='imgWidth des-hidden'/>
+          <Name style={{marginTop:'15px'}}>{title}</Name>
           <div className="row" style={{margin:'10px 0 10px 0'}}>
-            <Avatar src={writer.photo}/>
+            <Avatar src={writer.pic.medium}/>
             <div style={{margin:'5px 0 0 8px'}}>
-              <Name style={{fontSize:'14px'}}>{writer.name} </Name>
-              <Div stlye={{fontSize:'12px'}}>{writer.date} hrs ago</Div>
+              <Name style={{fontSize:'14px'}}>{writer.display} </Name>
+              <Div stlye={{fontSize:'12px'}}>{moment(updated).fromNow()} hrs ago</Div>
             </div>
           </div>
-          <Div style={{margin:'10px 0 0 0'}}>{vote} Votes  <span style={{marginLeft:'15px'}}>{comment} Comments</span> <span style={{float:'right'}}>Read 5 min</span></Div>
+          <Div style={{margin:'10px 0 0 0'}}>{votes.total} Votes  <span style={{marginLeft:'15px'}}>{comments.count} Comments</span> <span style={{float:'right'}}>Read 5 min</span></Div>
         </BoxText>
       </Container>
     )

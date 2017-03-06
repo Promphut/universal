@@ -292,7 +292,7 @@ const PublisherStoryPage = React.createClass({
       .end((err,res)=>{
         if(err)throw err
         else{
-          console.log(res.body)
+          //console.log(res.body)
           self.setState({
             article:res.body.feed
           })
@@ -321,7 +321,7 @@ const PublisherStoryPage = React.createClass({
   },
 
   recent(){
-    this.setState({sort:'lastest'})
+    this.setState({sort:'latest'})
     this.getStory()
   },
 
@@ -343,7 +343,8 @@ const PublisherStoryPage = React.createClass({
   },
 
   changePage(e){
-    this.setState({page:e,currentPage:e})
+    //console.log(e-1)
+    this.setState({page:e-1,currentPage:e})
     this.getStory()
   },
 

@@ -2,24 +2,32 @@ import React, {PropTypes} from 'react'
 import styled, {css} from 'styled-components'
 import FlatButton from 'material-ui/FlatButton'
 import FontIcon from 'material-ui/FontIcon'
+import IconButton from 'material-ui/IconButton';
 
-const StoryMenu = ({style,className,child,next}) => {
+const StoryMenu = ({style,className,child,path,linkPath}) => {
+  //console.log(window.location.pathname)
 	return (
 			<div className={className+' row'} style={{...style}}>
+        <IconButton 
+          style={{padding:'0px'}}
+          iconStyle={{fontSize:'35px',color:'#8f8f8f'}}>
+          <FontIcon className="material-icons" >apps</FontIcon>
+        </IconButton>
         <FlatButton
           label="STORIES"
-          buttonStyle={{padding:'10px'}}
+          href='/stories'
           className='nunito-font'
-          labelStyle={{fontSize:'18px',color:'#8f8f8f'}}
-          icon={<FontIcon className="material-icons" style={{fontSize:'35px',color:'#8f8f8f'}}>apps</FontIcon>}
+          style={{marginTop:'5px'}}
+          labelStyle={{fontSize:'18px',color:window.location.pathname=='/stories'?'#00B2B4':'#8f8f8f',fontWeight:window.location.pathname=='/stories'?'bold':'normal'}}
         />
-        <FontIcon className="material-icons" style={{fontSize:'35px',color:'#8f8f8f'}}>chevron_right</FontIcon>
-        <FlatButton
+        {!path?'':<FlatButton
           label={next}
-          buttonStyle={{padding:'10px'}}
           className='nunito-font'
+          style={{marginTop:'5px'}}
+          href={linkPath}
+          icon={<FontIcon className="material-icons" style={{fontSize:'35px',color:'#8f8f8f'}}>chevron_right</FontIcon>}
           labelStyle={{fontSize:'18px',color:'#00B2B4',fontWeight:'bold'}}
-        />
+        />}
         {child}
       </div>
 	)

@@ -76,18 +76,18 @@ const Name = styled.div`
   float:left;
   height:52px;
   word-wrap: break-word;
-     white-space: pre-wrap;      /* Webkit */    
-   white-space: -moz-pre-wrap; /* Firefox */     
-   white-space: -pre-wrap;     /* Opera <7 */    
-   white-space: -o-pre-wrap;   /* Opera 7 */     
-   word-wrap: break-word;      /* IE */ 
+  white-space: pre-wrap;      /* Webkit */    
+  white-space: -moz-pre-wrap; /* Firefox */     
+  white-space: -pre-wrap;     /* Opera <7 */    
+  white-space: -o-pre-wrap;   /* Opera 7 */     
+  word-wrap: break-word;      /* IE */ 
   padding-right:5px;
   overflow: hidden;
-  width:270px;
+  max-width:230px;
   margin:0 0 0 15px;
 `
 const TopArticle = ({style,detail})=>{
-  var {title,comment,votes,cover} = detail
+  var {title,cover} = detail
   return(
     <Cont style={{...style}}>
       <OverlayImg src={cover} style={{width:'87',height:'52',float:'left'}}/>
@@ -95,7 +95,6 @@ const TopArticle = ({style,detail})=>{
     </Cont>
   )
 }
-
 const tableData = [
   {
     name: 'John Smith',
@@ -208,15 +207,16 @@ const PublisherDashboardPage = React.createClass({
 
   getArticle(){
     var self = this
+    var fil = JSON.stringify({})
     Request
-      .get(config.BACKURL+'/publishers/11/stories')
+      .get(config.BACKURL+'/publishers/'+config.PID+'/feed?type=story')
       .set('Accept','application/json')
       .end((err,res)=>{
-        console.log(res.body)
+        console.log('article',res.body)
         if(err)throw err
         else{
           self.setState({
-            article:res.body.stories
+            article:res.body.feed
           })
         }
       })
@@ -224,10 +224,10 @@ const PublisherDashboardPage = React.createClass({
   getWriter(){
     var self = this
     Request
-      .get(config.BACKURL+'/publishers/11/writers')
+      .get(config.BACKURL+'/publishers/'+config.PID+'/writers')
       .set('Accept','application/json')
       .end((err,res)=>{
-        console.log(res.body)
+        console.log('Writer',res.body)
         if(err)throw err
         else{
           self.setState({
@@ -239,10 +239,10 @@ const PublisherDashboardPage = React.createClass({
   getColumn(){
     var self = this
     Request
-      .get(config.BACKURL+'/publishers/11/columns')
+      .get(config.BACKURL+'/publishers/'+config.PID+'/columns')
       .set('Accept','application/json')
       .end((err,res)=>{
-        console.log(res.body)
+        console.log('Column',res.body)
         if(err)throw err
         else{
           self.setState({
@@ -253,7 +253,7 @@ const PublisherDashboardPage = React.createClass({
   },
 
   render(){
-    var {totalShare,totalStory,totalView,article} = this.state
+    var {totalShare,totalStory,totalView,article,writer,column} = this.state
 		return (
       <Container>
         <Section1>
@@ -371,23 +371,23 @@ const PublisherDashboardPage = React.createClass({
               displaySelectAll={false}
               adjustForCheckbox={false}>
               <TableRow>
-                <TableHeaderColumn style={{...styles.thead,width:'45%'}}>Top Articles</TableHeaderColumn>
+                <TableHeaderColumn style={{...styles.thead,width:'40%'}}>Top Articles</TableHeaderColumn>
                 <TableHeaderColumn style={{width:'15%'}}>Writer</TableHeaderColumn>
                 <TableHeaderColumn style={{width:'15%'}}>Column</TableHeaderColumn>
                 <TableHeaderColumn style={{width:'15%'}}>stats</TableHeaderColumn>
-                <TableHeaderColumn style={{width:'10%'}}>Published</TableHeaderColumn>
+                <TableHeaderColumn style={{width:'15%'}}>Published</TableHeaderColumn>
               </TableRow>
             </TableHeader>
             <TableBody 
               showRowHover={true}
               displayRowCheckbox={false}>
-              {tableData.map((data,index)=>(
+              {article.map((data,index)=>(
                 <TableRow key={index}>
-                  <TableRowColumn style={{width:'45%',padding:'10px 0 10px 0'}}><TopArticle detail={trending} /></TableRowColumn>
-                  <TableRowColumn style={{width:'15%'}}>{data.view}</TableRowColumn>
-                  <TableRowColumn style={{width:'15%'}}>{data.share}</TableRowColumn>
-                  <TableRowColumn style={{width:'15%'}}>{data.no}</TableRowColumn>
-                  <TableRowColumn style={{width:'10%'}}>{data.no}</TableRowColumn>
+                  <TableRowColumn style={{width:'40%',padding:'10px 0 10px 0'}}><TopArticle detail={data} /></TableRowColumn>
+                  <TableRowColumn style={{width:'15%'}}>{data.writer.display}</TableRowColumn>
+                  <TableRowColumn style={{width:'15%'}}>{data.column.name}</TableRowColumn>
+                  <TableRowColumn style={{width:'15%'}}>{'vote : '+data.votes.total}<br/>{'comment : '+data.comments.count}</TableRowColumn>
+                  <TableRowColumn style={{width:'15%'}}>{data.status?'Published':'Draft'}</TableRowColumn>
                 </TableRow>
               ))}
             </TableBody>

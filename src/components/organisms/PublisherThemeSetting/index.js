@@ -8,6 +8,7 @@ import Menu from 'material-ui/Menu'
 import Popover from 'material-ui/Popover';
 import Request from 'superagent'
 import auth from 'components/auth'
+
 const Container = styled.form`
   width:100%;
   padding:80px;
@@ -22,6 +23,12 @@ const Container = styled.form`
     font-family:'Nunito';
     font-size:18px;
     text-transform: uppercase;
+  }
+  .backgroundClip{
+    background-clip:text;
+    text-fill-color: transparent;
+    -Webkit-background-clip:text;
+    -Webkit-text-fill-color: transparent;
   }
 `
 const Flex = styled.div`
@@ -197,10 +204,6 @@ const PublisherThemeSetting = React.createClass({
       example5:{
         background:primaryColor,
         background:'linear-gradient(135deg, '+primaryColor+' 0%, '+secondaryColor+' 100%)',
-        backgroundClip:"text",
-        textFillColor: "transparent",
-        WebkitBackgroundClip:"text",
-        WebkitTextFillColor: "transparent"
       }
     }
     return(
@@ -290,7 +293,7 @@ const PublisherThemeSetting = React.createClass({
                   <strong className="serif-font" style={{fontSize:'17px',color:'white'}}>White Color</strong><br/>
                   <strong className="serif-font" style={{fontSize:'17px',color:'#222'}}>Black Color</strong>
                 </div>
-                <div style={{...styles.example5,textAlign:'center',height:'82px',padding:'18px 0 0 0'}}>
+                <div className='backgroundClip' style={{...styles.example5,textAlign:'center',height:'82px',padding:'18px 0 0 0',backgroundClip:"text",textFillColor: "transparent",WebkitBackgroundClip:"text",WebkitTextFillColor: "transparent"}}>
                   <strong className="serif-font" style={{fontSize:'24px'}}>
                     Primary and <br/>Secondary Header</strong>
                 </div>

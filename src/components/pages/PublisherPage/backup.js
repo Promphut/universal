@@ -1,10 +1,9 @@
 import React from 'react'
-import { TopBarWithNavigation,ArticleBox,ArticleBoxLarge,More,TrendingSideBar,BGImg,StoryMenu } from 'components'
+import { TopBarWithNavigation,ArticleBox,ArticleBoxLarge,More,TrendingSideBar,BGImg } from 'components'
 import {findDOMNode as dom} from 'react-dom'
 import styled from 'styled-components'
-import FlatButton from 'material-ui/FlatButton';
-import FontIcon from 'material-ui/FontIcon';
-import Request from 'superagent'
+import { StickyContainer, Sticky } from 'react-sticky';
+
 const Wrapper = styled.div`
 	
 `
@@ -100,69 +99,51 @@ const trending = {
 const trendingArray = [trending,trending,trending,trending,trending,trending]
 var arr = [mock,mock,mock,mock]
 
-const ColumnPage = React.createClass({
+const PublisherPage = React.createClass({
 	getInitialState(){
 		return {
-			stopPos:0,
-			feed:[],
-			popular:[]
+			stopPos:0
 		}
 	},
 
 	componentDidMount(){
-		this.getFeed()
 		this.setState({
 			stopPos:dom(this.refs.more).getBoundingClientRect().top
 		})
 	},
 
-	getFeed(){
-		var filter = JSON.stringify({column:21,status:1})
-		//console.log(path)
-		Request
-			.get(config.BACKURL+'/publishers/'+config.PID+'/feed?type=story&filter='+filter+'&sort=latest')
-			.set('Accept','application/json')
-			.end((err,res)=>{
-				if(err) throw err
-				else{
-					//console.log(res.body)
-					this.setState({feed:res.body.feed})
-				}
-			})
-
-	},
-
 	render(){
-		//var article = []
-		var {feed} = this.state
-		var ChildCover = 
-			<div style={{margin:'170px 0 0 20%',width:'700px'}}>
-				<ColumnName className='serif-font'>Fund</ColumnName>
-				<ColumnDetail >โมหจริต ละตินฮิปฮอปด็อกเตอร์โมหจริตแอดมิสชัน บร็อคโคลีคีตปฏิภาณเมจิค โอเวอร์คลิปโปรโมชั่นแบล็คสงบสุข ยังไงอึ้มไรเฟิลบร็อกโคลี ฮ็อตมั้ย แอ็กชั่นแอ็กชั่น อุปสงค์ฟลุกซีนีเพล็กซ์เลกเชอร์อิเหนา บัลลาสต์โรแมนติก</ColumnDetail>
-			</div>
+		var article = []
+
+		for(let i=0;i<5;i++){
+			article.push(
+				i%3==0?<ArticleBoxLarge detail={mock2} key={i}/>:<ArticleBox detail={mock2} key={i}/>
+			)
+		}
 		return (
-		    <Wrapper>
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={this.props.params.loggedIn} />
-					<BGImg src="/tmp/a-story/pic-min.jpg" style={{width:'100%',height:'510px'}} child={ChildCover}/>
+		    <StickyContainer>
+					<BGImg src="/tmp/a-story/pic-min.jpg" style={{width:'100%',height:'510px'}} />
 					
-		      <Content >
+						<Sticky>
+							<TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={this.props.params.loggedIn} />
+						</Sticky>
+					
+		      <Content style={{marginTop:'100px'}}>
 			      <Main>
-							<StoryMenu style={{padding:'15px 0 15px 0',margin:'0 0 50px 0'}} next='FUND'/>
 							<TextLine className='sans-font'>Lastest</TextLine>
-							{/*{article}*/}
-							{feed.map((data,index)=>(
-								index%3==0?<ArticleBoxLarge detail={data} key={index}/>:<ArticleBox detail={data} key={index}/>
-							))}
+							{article}
 							<More style={{margin:'30px auto 30px auto'}} />
 							<div ref='more'></div>
 			      </Main>
 			      <Aside>
-							<TrendingSideBar detail={trendingArray} stop={this.state.stopPos}/>
+							<Sticky topOffset={80}>
+								<TrendingSideBar detail={trendingArray} stop={this.state.stopPos}/>
+							</Sticky>
 						</Aside>
 		      </Content>
-		   </Wrapper>
+		   </StickyContainer>
 		  )
 	}
 });
 
-export default ColumnPage;
+export default PublisherPage;
