@@ -11,6 +11,7 @@ import Request from 'superagent'
 import auth from 'components/auth'
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton'
+import {findDOMNode as dom} from 'react-dom'
 
 const Container = styled.div`
   width:100%;
@@ -97,7 +98,10 @@ const PublisherPublishingSetting = React.createClass({
       textStatus:'Unsave',
       error:false,
       dialog:false,
-      adminRemoveName:''
+      adminRemoveName:'',
+      userToAdmin:[],
+      searchText:'',
+      autoState:false
     }
   },
 
@@ -146,12 +150,31 @@ const PublisherPublishingSetting = React.createClass({
   addAdmin(){
 
   },
-  getSource(){
-
+  handleUpdateInput(text){
+    var self = this
+    var inp = text.split('').length
+    var a = []
+    //this.setState({userToAdmin:[text,text+text]})
+    if(inp==3){
+      Request
+        .get(config.BACKURL+'/users?keyword='+text)
+        .set('Accept','application/json')
+        .end((err,res)=>{
+          if(err) throw err
+          else{
+            res.body.users.map((data,index)=>{
+              a[index] = {text:data.username,value:data.id}
+            })
+            self.setState({userToAdmin:a})
+            self.setState({autoState:true})
+            document.getElementById('text').focus()
+          }
+        }) 
+    }
   },
 
   render(){
-    var {admin,textStatus,error,adminRemoveName,dialog} = this.state
+    var {admin,textStatus,error,adminRemoveName,dialog,userToAdmin,searchText,autoState} = this.state
     var menu=[]
     for(let i=0;i<10;i++){
       menu.push(
@@ -231,11 +254,14 @@ const PublisherPublishingSetting = React.createClass({
                 </Chip>
               ))}
               <AutoComplete
+                key="editor1"
                 hintText="Add an admin..."
-                filter={AutoComplete.noFilter}
-                dataSource={dataSource3}
-                onUpdateInput={this.getSource}
-                onNewRequest={this.addAdmin}
+                dataSource={userToAdmin}
+                onUpdateInput={this.handleUpdateInput}
+                openOnFocus={true}
+                open={autoState}
+                menuCloseDelay={0}
+                id='text'
               />
             </div>
           </Edit>

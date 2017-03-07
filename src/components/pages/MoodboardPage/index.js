@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {PrimaryButton, SecondaryButton} from 'components'
+import {PrimaryButton, SecondaryButton,AutoComplete} from 'components'
 
 const Wrapper = styled.div`
 	padding:30px;
@@ -25,6 +25,7 @@ const SubFont = styled.span`
 	color: #8f8f8f;
 	font-size: .85em;
 `
+const aa = [{text:'ada',value:1},{text:'adadsf',value:2}]
 
 const MoodboardPage = React.createClass({
 	getInitialState(){
@@ -54,6 +55,8 @@ const MoodboardPage = React.createClass({
 					<br/><br/>
 
 					Secondary without icon: <SecondaryButton label="Remove Story"/>
+
+					Auto Complete : <AutoComplete dataSource={aa}/>
 				</section>
 
 

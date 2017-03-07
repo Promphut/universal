@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 import styled from 'styled-components'
-import {TrendingSideBarInner} from 'components'
+import {BGImg} from 'components'
 import {findDOMNode as dom} from 'react-dom'
+import Request from 'superagent'
 
 const Container = styled.div`
   width:324px;
@@ -35,17 +36,64 @@ const Column = styled.div`
 `
 
 //if height less than 900px remove last item
+const Con = styled.div`
+  width:100%;
+  margin:40px 0 0 0;
+`
+const Name = styled.div`
+  color:#222;
+  font-size:17px;
+  width:190px;
+  font-weight:bold;
+`
+const Img = styled.div`
+  width:127px;
+  height:75px;
+  float:right;
+  background-position:center;
+  background-size:cover;
+`
+const Vote = styled.div`
+  color:#8F8F8F;
+  font-size:13px;
+  margin-top:15px;
+`
+const TrendingSideBarInner = ({style,detail,index})=>{
+  var {title,comments,votes,cover} = detail
+  return(
+    <Con style={{...style}}>
+      <BGImg src={cover} style={{width:'127',height:'75',float:'right'}}/>
+      <Name className="sans-font">{index+'.'+title}</Name>
+      <Vote className="sans-font">{votes.total} Votes {''+ comments.count} Comments</Vote>
+    </Con>
+  )
+}
 
 const TrendingSideBar = React.createClass({
   getInitialState(){
     return{
-      stopPos:this.props.stop
+      popular:[]
     }
   },
 
-  // componentDidMount(){
-  //   this.Slider()
-	// },
+  componentDidMount(){
+    this.getPopular()
+    //this.Slider()
+	},
+
+  getPopular(){
+    var self =this
+    Request
+      .get(config.BACKURL+'/publishers/'+config.PID+'/feed?type=story&sort=latest,status=1')
+      .set('Accept','application/json')
+      .end((err,res)=>{
+        if(err)throw err
+        else{
+          console.log(res.body)
+          self.setState({popular:res.body.feed})
+        }
+      })
+  },
 
   // Slider(){
   //   var self = this
@@ -70,19 +118,27 @@ const TrendingSideBar = React.createClass({
 	// 	});
   // },
 
-  componentWillReceiveProps(nextProps){
-    if(nextProps.stop != this.props.stop){
-      this.setState({stopPos:nextProps.stop})
-    }
-  },
+  // componentWillReceiveProps(nextProps){
+  //   if(nextProps.stop != this.props.stop){
+  //     this.setState({stopPos:nextProps.stop})
+  //   }
+  // },
 
   render(){
-    var {style,detail} = this.props
+    var {popular} = this.state
+    var {style} = this.props
+    var tn = []
+    for(let i=0;i<6;i++){
+      tn.push(
+        <Link to="{popular[i].url}" key={i}><TrendingSideBarInner detail={popular[i]} index={i+1}/></Link>
+      )
+    }
     return(
       <Container style={{...style}} ref='contain'>
         <Divider/>
         <Head>NOW TRENDING</Head>
-        {detail.map((data,index)=><Link to='#' key={index}><TrendingSideBarInner detail={data}/></Link>)}
+        {popular.length!=0?tn:[]}
+        {/*{detail.map((data,index)=><Link to='#' key={index}><TrendingSideBarInner detail={data}/></Link>)}*/}
         <Divider/>
       </Container>
     )

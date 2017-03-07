@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 import styled from 'styled-components'
-import {BGimg} from 'components'
+import {BGImg} from 'components'
 import Slider from 'react-slick'
 import Request from 'superagent'
-
+import FontIcon from 'material-ui/FontIcon'
 const Container = styled.div`
   width:203px;
   display:inline;
@@ -23,6 +23,7 @@ const Container = styled.div`
 const Div = styled.div`
   color:#8F8F8F;
   font-size:13px;
+  margin-top:5px;
   @media (max-width:480px) {
     font-size:11px;
   }
@@ -41,12 +42,12 @@ const Name = styled.div`
 `
 
 const ThumpnailSmall = ({detail,style})=>{
-    var {title,updated,coverMobile} = detail
+    var {name,updated,cover} = detail
     return(
       <Container style={{...style}}>
-        <BGImg src={coverMobile} className='imgWidth'/>
-        <Name className='sans-font'>{title}</Name>
-        <Div className='sans-font'>5 min read</Div>
+        <BGImg src={cover} className='imgWidth'/>
+        <Name className='sans-font'>{name}</Name>
+        <Div className='sans-font'>1145 Stories</Div>
       </Container>
     )
 }
@@ -66,7 +67,7 @@ const Box = styled.div`
 const ColumnThumpnailRow= React.createClass({
   getInitialState(){
     return{
-      detail:this.props.detail
+      column:[],
     }
   },
   componentWillReceiveProps(nextProps){
@@ -80,30 +81,32 @@ const ColumnThumpnailRow= React.createClass({
     this.getColumn()
   },
   getColumn(){
+    var self = this
     Request
     .get(config.BACKURL+'/publishers/'+config.PID+'/columns')
     .set('Accept','application/json')
     .end((err,res)=>{
       if(err) throw err
       else{
-        console.log(res.body)
+        //console.log(res.body)
+        self.setState({column:res.body.columns})
       }
     })
   },
   render(){
   var {size,style,sortBy} = this.props
-  var {detail} = this.state
+  var {column} = this.state
   var thumpnail = []
-  var No = size=='small'?5:4
   var settings = {
     centerMode: false,
     slidesToShow: 5,
     speed: 300,
-    arrows: false,
     draggable: false,
-    infinite: false,
     initialSlide:0,
     slickGoTo:0,
+    slidesToScroll:3,
+    nextArrow:<button type='button' style={{top:'50px',position:'relative'}}><FontIcon className='material-icons' style={{color:'#8F8F8F',fontSize:'90px',top:'-70px',left:'-40',position:'relative'}}>keyboard_arrow_right</FontIcon></button>,
+    prevArrow:<button type='button'><FontIcon className='material-icons' style={{color:'#8F8F8F',fontSize:'90px',top:'-70px',left:'-50',position:'relative'}}>keyboard_arrow_left</FontIcon></button>,
     responsive: [
       {
         breakpoint: 480,
@@ -119,21 +122,16 @@ const ColumnThumpnailRow= React.createClass({
       }
     ]
   };
-  // if(detail.length!=0){
-  //   for(let i=0;i<9;i++){
-  //     thumpnail.push(
-  //       size=='small'?<Box key={i}><ThumpnailSmall detail={detail[i]}  /></Box>:<Box key={i}><ThumpnailSmall  detail={detail[i]}/></Box>
-  //     )
-  //   }
-  // }else{
-  //   thumpnail=[]
-  //   console.log(detail)
-  // }
+  for(let i=0;i<column.length;i++){
+    thumpnail.push(
+      <Box key={i}><ThumpnailSmall detail={column[i]}  /></Box>
+    )
+  }
   return(
     <Con style={{...style}}>
-      {/*<Slider {...settings}>
+      {column.length!=0?<Slider {...settings}>
       {thumpnail}
-      </Slider>*/}
+      </Slider>:''}
     </Con>
   )
 }

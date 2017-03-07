@@ -90,9 +90,6 @@ const AllStory = React.createClass({
 
 	componentDidMount(){
 		this.getFeed()
-		this.setState({
-			stopPos:dom(this.refs.more).getBoundingClientRect().top
-		})
 	},
 
 	getFeed(){
@@ -141,10 +138,9 @@ const AllStory = React.createClass({
 								index%3==0?<ArticleBoxLarge detail={data} key={index}/>:<ArticleBox detail={data} key={index}/>
 							))}
 							<More style={{margin:'30px auto 30px auto'}} />
-							<div ref='more'></div>
 			      </Main>
 			      <Aside>
-							{/*<TrendingSideBar detail={trendingArray} stop={this.state.stopPos}/>*/}
+							<TrendingSideBar/>
 						</Aside>
 		      </Content>
 		   </Wrapper>
