@@ -1,6 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import {PrimaryButton, SecondaryButton,AutoComplete} from 'components'
+import {PrimaryButton, SecondaryButton,AutoComplete,EditMenu} from 'components'
+import Menu from 'material-ui/Menu'
+import MenuItem from 'material-ui/MenuItem'
+import Popover from 'material-ui/Popover'
 
 const Wrapper = styled.div`
 	padding:30px;
@@ -25,19 +28,47 @@ const SubFont = styled.span`
 	color: #8f8f8f;
 	font-size: .85em;
 `
+
+
+const BoxMenu = styled.div`
+  height:60px;
+  background:#00B2B4;
+  min-width:60px;
+`
+
+const Menu2 = styled.div`
+  font-size:18px;
+  color:white;
+  min-height:60px;
+  paddind:10px 15px 10px 15px; 
+`
 const aa = [{text:'ada',value:1},{text:'adadsf',value:2}]
 
 const MoodboardPage = React.createClass({
 	getInitialState(){
-		return {}
+		return {
+			alert:false,
+
+		}
+	},
+
+	handleRequestClose(){
+		this.setState({
+			alert:false
+		})
+	},
+
+	openPop(){
+		this.setState({alert:true})
 	},
 
 	render(){
+		var {alert,alertDesc,alertWhere} = this.state
 		return (
 			<Wrapper>
 				<h1>Medium Buttons</h1>
 				<section>
-					Primary : <PrimaryButton label="Remove Story" iconName="grade"/>&nbsp;&nbsp;
+					Primary : <PrimaryButton label="Remove Story" iconName="grade" onClick={this.openPop}/>&nbsp;&nbsp;
 					<PrimaryButton label="Remove Story" iconName="search"/>&nbsp;&nbsp;
 					<PrimaryButton label="Remove Story" iconName="add"/>&nbsp;&nbsp;
 					<PrimaryButton label="Remove Story" icon={<i className="fa fa-facebook" aria-hidden="true"></i>}/>&nbsp;&nbsp;
@@ -57,6 +88,19 @@ const MoodboardPage = React.createClass({
 					Secondary without icon: <SecondaryButton label="Remove Story"/>
 
 					Auto Complete : <AutoComplete dataSource={aa}/>
+
+					Edit menu :        
+					
+					<Popover
+						open={alert}
+						anchorEl={alertWhere}
+						onRequestClose={this.handleRequestClose}
+						description={alertDesc}
+						anchorOrigin={{horizontal:"right",vertical:"center"}}
+						targetOrigin={{horizontal:"left",vertical:"center"}}
+						>
+						<BoxMenu><Menu2>sadsad</Menu2></BoxMenu>
+					</Popover>
 				</section>
 
 

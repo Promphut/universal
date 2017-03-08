@@ -11,15 +11,14 @@ const Container = styled.div`
 const PublisherContactAndAboutPage = React.createClass({
   
 	getInitialState(){
-  this.publisher = this.props.params.publisher
 		return {}
 	},
 
   render(){
 		return (
       <Container>
-        <PublisherContact data={this.publisher}/>
-        <PublisherAbout data={this.publisher}/>
+        <PublisherContact />
+        <PublisherAbout />
       </Container>
 		  )
 	}

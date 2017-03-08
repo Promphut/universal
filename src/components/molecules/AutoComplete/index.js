@@ -50,7 +50,6 @@ const AutoComplete = React.createClass({
     next(e)
   },
 
-
   render(){
     var {style,className,type,id,value,hintText,floatingLabelFixed,floatingLabelText,rows,rowsMax,multiline,errorText,inputStyle,underlineStyle,onChange,name,defaultValue,dataSource} = this.props
     

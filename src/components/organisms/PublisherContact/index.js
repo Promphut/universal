@@ -78,24 +78,23 @@ const PublisherContact = React.createClass({
 
   getPublisherId(){
     var self = this
-    var user = auth.getUser()
     Request
       .get(config.BACKURL+'/publishers/'+config.PID)
       .set('Accept','application/json')
       .end((err,res)=>{
         if(err) throw err 
         else{
-          self.setState({publisher:res.body.publisher})
+          self.setState({publisher:res.body})
           self.setData()
         }
       })
   },
 
   setData(){
-    var {contact} = this.state.publisher
-    this.setState({value:typeof contact.catName=="undefined"?1:contact.catName})
-    document.getElementById('toEmail').value = typeof contact.toEmail=="undefined"?'':contact.toEmail
-    document.getElementById('desc').value = typeof contact.desc== "undefined"?'':contact.desc
+    var {contact} = this.state.publisher.publisher
+    this.setState({value:typeof contact =="undefined"?1:contact.catName})
+    document.getElementById('toEmail').value = typeof contact=="undefined"?'':contact.toEmail
+    document.getElementById('desc').value = typeof contact== "undefined"?'':contact.desc
   },
 
   updateData(e){
@@ -127,6 +126,12 @@ const PublisherContact = React.createClass({
     this.setState({value})
   },
 
+  createContact(e){
+    e.preventDefault()
+    //console.log(e)
+    
+  },
+
   render(){
     var {error,textStatus,value} = this.state
     return(
@@ -149,7 +154,7 @@ const PublisherContact = React.createClass({
                 <MenuItem value={4} primaryText="Weekends" />
                 <MenuItem value={5} primaryText="Weekly" />
               </SelectField>
-              <a href="#"><AddTag>
+              <a href="#" onClick={this.createContact}><AddTag>
                 <i className="fa fa-plus" style={{float:'left',margin:'20px 10px 0 0'}} aria-hidden="true"></i> 
                 <div style={{float:'left',margin:'20px 20px 0 0'}}>New</div>
               </AddTag></a>

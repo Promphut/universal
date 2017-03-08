@@ -1,5 +1,5 @@
 import React from 'react'
-import { TopBarWithNavigation, OverlayImg, Pagination} from 'components'
+import { TopBarWithNavigation, OverlayImg, Pagination,Alert,EditMenu} from 'components'
 import FontIcon from 'material-ui/FontIcon'
 import styled from 'styled-components'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
@@ -13,6 +13,7 @@ import auth from 'components/auth'
 import Snackbar from 'material-ui/Snackbar';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton'
+
 const Container = styled.div`
   width:100%;
 `
@@ -97,73 +98,6 @@ const Name = styled.div`
   max-width:230px;
   margin:0 0 0 15px;
 `
-
-const tableData = [
-  {
-    name: 'John Smith',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-  {
-    name: 'Randal White',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-  {
-    name: 'Stephanie Sanders',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-  {
-    name: 'Steve Brown',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-  {
-    name: 'Joyce Whitten',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-  {
-    name: 'Samuel Roberts',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-  {
-    name: 'Adam Moore',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-  {
-    name: 'Adam Moore',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-  {
-    name: 'Adam Moore',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-];
-
 const styles = {
   label:{
     fontSize:'30px'
@@ -209,6 +143,19 @@ const IconEdit = styled(Link)`
   }
 `
 
+const BoxMenu = styled.div`
+  height:60px;
+  background:#00B2B4;
+  min-width:60px;
+`
+
+const Menu2 = styled.div`
+  font-size:18px;
+  color:white;
+  min-height:60px;
+  paddind:10px 15px 10px 15px; 
+`
+
 const Page = styled.div`
   display: flex;
 	flex-flow: row wrap;
@@ -237,7 +184,8 @@ const PublisherStoryPage = React.createClass({
       dialog:false,
       page:0,
       sort:'lastest',
-      filter:{publisher:config.PID}
+      filter:{publisher:config.PID},
+      alert:true,
     }
 	},
 
@@ -353,8 +301,27 @@ const PublisherStoryPage = React.createClass({
     this.getStory()
   },
 
+  handleTouchTap(event){
+    // This prevents ghost click.
+    event.preventDefault();
+    this.setState({
+      alert: true,
+      alertWhere: event.currentTarget,
+    });
+  },
+
+  handleRequestClose(){
+    this.setState({
+      alert: false,
+    });
+  },
+
+  testHover(e){
+    console.log(e)
+  },
+
   render(){
-    var {role,currentPage,article,column,value} = this.state
+    var {role,currentPage,article,column,value,alert,alertDesc,alertWhere} = this.state
     var editable1 = ''
     var editable2 = ''
     if(role=='admin'){
@@ -388,6 +355,12 @@ const PublisherStoryPage = React.createClass({
     ];
 		return (
       <Container>
+        {/*<Alert 
+          open={alert}
+          anchorEl={alertWhere}
+          onRequestClose={this.handleRequestClose}
+          description={alertDesc} />*/}
+
         <Dialog
           actions={actions}
           modal={false}
@@ -416,7 +389,7 @@ const PublisherStoryPage = React.createClass({
             <MenuItem value='new column' primaryText="+ New Column" style={{...styles.newColumn}} />
             <MenuItem value='inactive' primaryText="Show inactive columns"style={{...styles.showInactive}} />
           </DropDownMenu>
-          {value!='all'?editable2:''}
+          {value!='all'?editable2:<div className='row'><Link to={"/editor/columns/"+ this.state.value +"/settings"}><FontIcon className="material-icons" onMouseOver={this.testHover} style={{marginLeft:'15px',color:'#8f8f8f'}}>mode_edit</FontIcon></Link></div>}
         </div>
         <div className='row'>
           <div className='col-6'>

@@ -77,20 +77,39 @@ const UserSettingProfile = React.createClass({
   getInitialState(){
     this.user = this.props.params.user
     return{
+      user:{},
       error1:false,
       error2:false,
       textStatus1:'Unsave',
       textStatus2:'Unsave',
+      errText0:null,
+      errText1:null,
+      errText2:null
     }
   },
 
   componentDidMount(){
     //console.log(this.user.user)
-    this.setData()
+    this.getUserDetail()
+  },
+
+  getUserDetail(){
+    var self = this
+    Request
+      .get(config.BACKURL+'/users/'+this.user.user._id)
+      .set('Accept','application/json')
+      .end((err,res)=>{
+        if(err) self.setState({textStatus1:res.body.error.message,error1:true})
+        else{
+          self.setState({user:res.body.user})
+          console.log(res.body.user)
+          self.setData()
+        }
+      })
   },
 
   setData(){
-    var {username,email} = this.user.user
+    var {username,email} = this.state.user
     document.getElementById('username').value = typeof username =="undefined" ?'':username
     document.getElementById('email').value = typeof email == "undefined" ?'':email
   },
@@ -99,7 +118,7 @@ const UserSettingProfile = React.createClass({
     e.preventDefault()
     var data = {}
     var self = this
-    var input = dom(this.refs.form1).getElementsByTagName("input")
+    var input = e.target.getElementsByTagName("input")
     input = [].slice.call(input)
     input.forEach((field,index)=>{
       data[field.name] = field.value
@@ -135,9 +154,58 @@ const UserSettingProfile = React.createClass({
         }
       })
   },
+  changePWD(e){
+    e.preventDefault()
+    var data = {}
+    var self = this
+    var input = e.target.getElementsByTagName("input")
+    var er = 0
+    input = [].slice.call(input)
+    input.forEach((field,index)=>{
+      if(field.value!=''){
+        //console.log(field.name+':'+field.value)
+        data[field.name] = field.value
+      }else{
+        er+=1
+        this.state['errText'+index] = 'This field is required'
+        this.setState({})
+      }
+    })
+    //console.log(data)
+    var send = {oldPassword:data.oldPassword,newPassword:data.newPassword}
+    if(er!=0){
+      return
+    }else{
+      if(data.newPassword===data.newPassword2){
+        Request
+          .post(config.BACKURL+'/users')
+          .set('Accept','application/json')
+          .send({send})
+          .end((err,res)=>{
+            //console.log(res.body)
+            if(err) this.setState({errText0:res.body.error.message,errText1:res.body.error.message,errText2:res.body.error.message})
+            else{
+              auth.setCookieAndToken(res.body)
+              browserHistory.push('/')
+            }
+          })
+        //console.log(send)
+      }else{
+        this.setState({errText2:'Wrong Password'})
+      }
+    }
+  },
+  checkPWD(e){
+    //console.log(e.target.value)
+    var pass1 = e.target.value
+    //console.log(pass1)
+    if(e.target.value!==pass1)this.setState({errText2:'Wrong Password'})
+    else this.setState({errText2:''})
+  },
 
   render(){
-    var {textStatus1,error1,textStatus2,error2} = this.state
+    var {textStatus1,error1,textStatus2,error2,errText0,errText2,errText1} = this.state
+
     return(
       <div>
         <Container onSubmit={this.updateData} ref='form1'>
@@ -147,7 +215,7 @@ const UserSettingProfile = React.createClass({
               <div className="sans-font">Username</div>
             </Title>
             <Edit>
-              <TextField id='username' name='username'/>
+              <TextField id='username' name='username' key='username'/>
             </Edit>
           </Flex>
           <Flex>
@@ -155,7 +223,7 @@ const UserSettingProfile = React.createClass({
               <div className="sans-font">Email</div>
             </Title>
             <Edit>
-              <TextField id='email' name='email'/>
+              <TextField id='email' name='email' key='email'/>
             </Edit>
           </Flex>
           <Flex>
@@ -173,7 +241,7 @@ const UserSettingProfile = React.createClass({
                   icon={<i className="fa fa-facebook" style={{color:'white',margin:'0 5px 0 14px'}} aria-hidden="true"></i>}
                 />
               </Social>
-              <Social className="sans-font">
+              {/*<Social className="sans-font">
                 <RaisedButton
                   onClick={this.signTWT}
                   label="Connect"
@@ -182,20 +250,28 @@ const UserSettingProfile = React.createClass({
                   buttonStyle={{...styles.btn,backgroundColor:'#60AADE'}}
                   icon={<i className="fa fa-twitter" style={{color:'white'}} aria-hidden="true"></i>}
                 />
-              </Social>
+              </Social>*/}
             </Edit>
           </Flex>
           <div className='sans-font' style={{marginTop:'30px',overflow:'hidden'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error1?'#D8000C':'#00B2B4'}}>{textStatus1}</TextStatus></div>
         </Container>
 
-        <Container onSubmit={this.changePWD}>
+        <Container onSubmit={this.changePWD} autoComplete="off">
           <div  className="head sans-font">CHANGE PASSWORD</div>
           <Flex>
             <Title>
               <div className="sans-font">Old Password</div>
             </Title>
             <Edit>
-              <TextField id='passwordOld' type='password' name='passwordOld' autoComplete="off"/>
+              <TextField
+                hintText="Old Password"
+                type="password"
+                name='oldPassword'
+                id='oldPassword'
+                errorText={errText0}
+                autoComplete="off"
+                key='oldPassword'
+              />  
             </Edit>
           </Flex>
           <Flex>
@@ -203,7 +279,15 @@ const UserSettingProfile = React.createClass({
               <div className="sans-font">New Password</div>
             </Title>
             <Edit>
-              <TextField id='passwordNew1' type='password' name='passwordNew1' autoComplete="off"/>
+              <TextField
+                hintText="New Password"
+                type="password"
+                name='newPassword'
+                id='newPassword'
+                errorText={errText1}
+                autoComplete="off"
+                key='newPassword'
+              />
             </Edit>
           </Flex>
           <Flex>
@@ -211,7 +295,16 @@ const UserSettingProfile = React.createClass({
               <div className="sans-font">Retype Again</div>
             </Title>
             <Edit>
-              <TextField id='passwordNew2' type='password' name='passwordNew2' autoComplete="off"/>
+              <TextField
+                hintText="New Password Agian"
+                type="password"
+                name='newPassword2'
+                id='newPassword2'
+                errorText={errText2}
+                autoComplete="off"
+                onBlur={this.checkPWD}
+                key='newPassword2'
+              />
             </Edit>
           </Flex>
           <div className='sans-font' style={{marginTop:'30px',overflow:'hidden'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error2?'#D8000C':'#00B2B4'}}>{textStatus2}</TextStatus></div>

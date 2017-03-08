@@ -84,7 +84,7 @@ const SignUp = React.createClass({
         .send(send)
         .end((err,res)=>{
           //console.log(res.body)
-          if(err)this.setState({errText0:res.body.error,errText1:res.body.error,errText2:res.body.error})
+          if(err)this.setState({errText0:res.body.error.message,errText1:res.body.error.message,errText2:res.body.error.message})
           else{
             auth.setCookieAndToken(res.body)
             browserHistory.push('/')

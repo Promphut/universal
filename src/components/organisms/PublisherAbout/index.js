@@ -151,7 +151,7 @@ const PublisherAbout = React.createClass({
   },
 
   setData(){
-    var {aboutUs} = this.state.publisher
+    var {aboutUs} = this.state.publisher.publisher
     this.setState({code:!aboutUs?'# markdown !!!':aboutUs})
   },
 
