@@ -11,7 +11,8 @@ var styles = {
   },
   listItem:{
     padding:'20px 20px 20px 20px',
-    color:"white"
+    color:"white",
+    fontFamily:'nunito'
   }
 }
 
@@ -42,10 +43,10 @@ const PublisherSettingMenu = React.createClass({
   render(){
     return(
       <SelectableList value={this.state.selectedIndex}>
-        <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/editor/')} value='/editor/' primaryText="dashboard" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>dashboard</FontIcon>} />
-        <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/editor/stories')} value='/editor/stories' primaryText="Stories" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>description</FontIcon>} />
-        <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/editor/contact')} value='/editor/contact' primaryText="Contact and About" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>contacts</FontIcon>} />
-        <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/editor/settings')} value='/editor/settings' primaryText="Settings" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>settings</FontIcon>} />
+        <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/editor/')} value='/editor/' className='nunito-font' primaryText="dashboard" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>dashboard</FontIcon>} />
+        <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/editor/stories')} value='/editor/stories' className='nunito-font' primaryText="Stories" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>description</FontIcon>} />
+        <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/editor/contact')} value='/editor/contact' className='nunito-font' primaryText="Contact and About" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>contacts</FontIcon>} />
+        <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/editor/settings')} value='/editor/settings' className='nunito-font' primaryText="Settings" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>settings</FontIcon>} />
       </SelectableList>
     )
   },

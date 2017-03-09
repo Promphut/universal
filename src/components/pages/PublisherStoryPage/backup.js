@@ -1,5 +1,5 @@
 import React from 'react'
-import { TopBarWithNavigation, OverlayImg, Pagination,Alert,EditMenu,BoxMenu,MenuList} from 'components'
+import { TopBarWithNavigation, OverlayImg, Pagination,Alert,EditMenu} from 'components'
 import FontIcon from 'material-ui/FontIcon'
 import styled from 'styled-components'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
@@ -13,7 +13,7 @@ import auth from 'components/auth'
 import Snackbar from 'material-ui/Snackbar';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton'
-import IconButton from 'material-ui/IconButton'
+
 const Container = styled.div`
   width:100%;
 `
@@ -142,6 +142,20 @@ const IconEdit = styled(Link)`
     cursor:pointer;
   }
 `
+
+const BoxMenu = styled.div`
+  height:60px;
+  background:#00B2B4;
+  min-width:60px;
+`
+
+const Menu2 = styled.div`
+  font-size:18px;
+  color:white;
+  min-height:60px;
+  paddind:10px 15px 10px 15px; 
+`
+
 const Page = styled.div`
   display: flex;
 	flex-flow: row wrap;
@@ -167,11 +181,11 @@ const PublisherStoryPage = React.createClass({
       currentPage:1,
       article:[],
       column:[],
+      dialog:false,
       page:0,
       sort:'lastest',
       filter:{publisher:config.PID},
-      alert:false,
-      editState:false,
+      alert:true,
     }
 	},
 
@@ -306,29 +320,56 @@ const PublisherStoryPage = React.createClass({
     console.log(e)
   },
 
-  openEdit(e){
-    e.preventDefault();
-    this.setState({
-      editState: true,
-      editWhere: e.currentTarget,
-    });
-  },
-
-  closeEdit(){
-    this.setState({
-      editState: false,
-    });
-  },
-
   render(){
-    var {role,currentPage,article,column,value,alert,alertDesc,alertWhere,editState,editWhere} = this.state
+    var {role,currentPage,article,column,value,alert,alertDesc,alertWhere} = this.state
+    var editable1 = ''
+    var editable2 = ''
+    if(role=='admin'){
+      editable1=<div className='row'>
+                  <Link to={"/editor/columns/"+ this.state.value +"/settings"}><FontIcon className="material-icons" style={{display:'inline',color:'#8f8f8f',margin:'0 15px 0 0'}}>mode_edit</FontIcon></Link>
+                  <FontIcon onClick={this.handleOpen} className="material-icons" style={{display:'inline',color:'#8f8f8f'}}>delete</FontIcon>
+                </div>
+      editable2=<div className='row'>
+                  <IconEdit to={"/editor/columns/"+ this.state.value +"/settings"}><FontIcon className="material-icons" style={{color:'white'}}>mode_edit</FontIcon></IconEdit>
+                  <IconEdit to="#" onClick={this.handleOpen} ><FontIcon className="material-icons"  style={{color:'white'}}>delete</FontIcon></IconEdit>
+                </div>
+    }else if(role=='editor'){
+      editable1=<div className='row'><Link to={"/editor/columns/"+ this.state.value +"/settings"}><FontIcon className="material-icons"  style={{marginLeft:'15px',color:'#8f8f8f'}}>mode_edit</FontIcon></Link></div>
+      editable2=<IconEdit to={"/editor/columns/"+ this.state.value +"/settings"}><FontIcon className="material-icons" style={{color:'white'}}>mode_edit</FontIcon></IconEdit>
+            
+    }else if(role=='writer'){
+      editable1=''
+      editable2=''
+    }
+    const actions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onTouchTap={this.handleClose}
+      />,
+      <FlatButton
+        label="Confirm"
+        secondary={true}
+        onTouchTap={this.removeColumn}
+      />,
+    ];
 		return (
       <Container>
-        <Alert 
+        {/*<Alert 
           open={alert}
           anchorEl={alertWhere}
           onRequestClose={this.handleRequestClose}
-          description={alertDesc} />
+          description={alertDesc} />*/}
+
+        <Dialog
+          actions={actions}
+          modal={false}
+          contentStyle={{width:'600px'}}
+          open={this.state.dialog}
+          onRequestClose={this.handleClose}
+        >
+          <p style={{fontSize:'20px'}}>Are you sure to remove this column ?</p>
+        </Dialog>
         <div className='row' style={{padding:'30px 15px 20px 30px'}}>
           <DropDownMenu
             value={this.state.value}
@@ -343,30 +384,12 @@ const PublisherStoryPage = React.createClass({
           > 
             <MenuItem value='all' primaryText="All Stories" />
             {column.map((data,index)=>(
-              <MenuItem value={data._id} key={index} primaryText={data.name} />
+              <MenuItem value={data._id} key={index} primaryText={data.name} rightIcon={editable1}/>
             ))}
             <MenuItem value='new column' primaryText="+ New Column" style={{...styles.newColumn}} />
             <MenuItem value='inactive' primaryText="Show inactive columns"style={{...styles.showInactive}} />
           </DropDownMenu>
-          <IconButton
-            className='hoverIcon'
-            style={{marginTop:'5px'}}
-            iconStyle={{color:'#8f8f8f'}}
-            onClick={this.openEdit}
-          > 
-            <FontIcon className='material-icons'>settings</FontIcon>
-            <EditMenu
-              open={editState}
-              anchorEl={editWhere}
-              onRequestClose={this.closeEdit}
-              >
-              <BoxMenu>
-                <MenuList>sadsad</MenuList>
-                <MenuList>sadsad</MenuList>
-                <MenuList>sadsad</MenuList>
-              </BoxMenu>
-            </EditMenu>
-          </IconButton>
+          {value!='all'?editable2:<div className='row'><Link to={"/editor/columns/"+ this.state.value +"/settings"}><FontIcon className="material-icons" onMouseOver={this.testHover} style={{marginLeft:'15px',color:'#8f8f8f'}}>mode_edit</FontIcon></Link></div>}
         </div>
         <div className='row'>
           <div className='col-6'>

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {PrimaryButton, SecondaryButton,AutoComplete,EditMenu} from 'components'
+import {PrimaryButton, SecondaryButton,AutoComplete,EditMenu,BoxMenu,MenuList,DropdownWithIcon} from 'components'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import Popover from 'material-ui/Popover'
@@ -29,25 +29,12 @@ const SubFont = styled.span`
 	font-size: .85em;
 `
 
-
-const BoxMenu = styled.div`
-  height:60px;
-  background:#00B2B4;
-  min-width:60px;
-`
-
-const Menu2 = styled.div`
-  font-size:18px;
-  color:white;
-  min-height:60px;
-  paddind:10px 15px 10px 15px; 
-`
 const aa = [{text:'ada',value:1},{text:'adadsf',value:2}]
 
 const MoodboardPage = React.createClass({
 	getInitialState(){
 		return {
-			alert:false,
+			alert:false, 
 
 		}
 	},
@@ -91,7 +78,7 @@ const MoodboardPage = React.createClass({
 
 					Edit menu :        
 					
-					<Popover
+					<EditMenu
 						open={alert}
 						anchorEl={alertWhere}
 						onRequestClose={this.handleRequestClose}
@@ -99,9 +86,15 @@ const MoodboardPage = React.createClass({
 						anchorOrigin={{horizontal:"right",vertical:"center"}}
 						targetOrigin={{horizontal:"left",vertical:"center"}}
 						>
-						<BoxMenu><Menu2>sadsad</Menu2></BoxMenu>
-					</Popover>
+						<BoxMenu>
+							<MenuList>sadsad</MenuList>
+							<MenuList>sadsad</MenuList>
+							<MenuList>sadsad</MenuList>
+						</BoxMenu>
+					</EditMenu>
 				</section>
+
+				DropDownMenu:<DropdownWithIcon/>
 
 
 				<h1>Large Buttons</h1>
