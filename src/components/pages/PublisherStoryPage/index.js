@@ -1,5 +1,5 @@
 import React from 'react'
-import { TopBarWithNavigation, OverlayImg, Pagination,Alert,EditMenu,BoxMenu,MenuList} from 'components'
+import { TopBarWithNavigation, OverlayImg, Pagination,Alert,EditMenu,BoxMenu,MenuList,DropdownWithIcon} from 'components'
 import FontIcon from 'material-ui/FontIcon'
 import styled from 'styled-components'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
@@ -7,13 +7,16 @@ import Popover from 'material-ui/Popover'
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import DropDownMenu from 'material-ui/DropDownMenu';
-import {Link} from 'react-router'
+import {Link,browserHistory} from 'react-router'
 import Request from 'superagent'
 import auth from 'components/auth'
 import Snackbar from 'material-ui/Snackbar';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton'
 import IconButton from 'material-ui/IconButton'
+import TextField from 'material-ui/TextField'
+import CircularProgress from 'material-ui/CircularProgress';
+
 const Container = styled.div`
   width:100%;
 `
@@ -69,17 +72,6 @@ const Second = styled.div`
 `
 const Cont = styled.div`
   width:100%;
-  @media (min-width:481px) {
-    .sans-font {
-      font-family: 'PT Sans', 'cs_prajad', sans-serif;
-    }
-  }
-  /* FOR MOBILE */
-  @media (max-width:480px) {
-    .sans-font {
-      font-family: 'Roboto', 'cs_prajad', sans-serif;
-    }
-  }
 `
 const Name = styled.div`
   color:#222;
@@ -149,6 +141,14 @@ const Page = styled.div`
   padding:30px 0 30px 0;
 `
 
+const Onload =styled.div`
+  position:relative;
+  width:100%;
+  height:500px;
+  padding-top:200px;
+  background:white;
+`
+
 const TopArticle = ({style,detail})=>{
   var {title,cover} = detail
   return(
@@ -167,24 +167,18 @@ const PublisherStoryPage = React.createClass({
       currentPage:1,
       article:[],
       column:[],
+      columnArray:[],
       page:0,
       sort:'lastest',
       filter:{publisher:config.PID},
       alert:false,
-      editState:false,
+      alertConfirm:function(){},
+      alertLoading:false,
+      onLoad:false
     }
 	},
 
-  handleOpen(e){
-    e.preventDefault()
-    this.setState({dialog: true});
-  },
-
-  handleClose(e){
-    this.setState({dialog: false});
-  },
-
-  getColumn(){
+  getColumn(cb=function(){}){
     var self = this
     Request
       .get(config.BACKURL+'/publishers/11/columns')
@@ -193,12 +187,16 @@ const PublisherStoryPage = React.createClass({
         //console.log(res.body)
         if(err)throw err
         else{
+          var a = res.body.columns.map((data,index)=>({value:data.id,text:data.name}))
+          a.unshift({value:'all',text:'All Stories'})
           self.setState({
-            column:res.body.columns
+            column:res.body.columns,
+            columnArray:a
           })
+          cb()
         }
       })
-  },
+  },              
 
   removeColumn(){
     var self = this
@@ -210,13 +208,15 @@ const PublisherStoryPage = React.createClass({
         //console.log(res.body)
         if(err)throw err
         else{
-          self.setState({dialog:false})
+          self.setState({alert:false})
           self.getColumn()
         }
       })
   },
 
   getStory(){
+    //console.log('getStory')
+    this.setState({onLoad:true})
     var self = this
     var {page,sort,filter,value} = this.state
     var fil = JSON.stringify(filter)
@@ -228,8 +228,10 @@ const PublisherStoryPage = React.createClass({
         else{
           //console.log(res.body)
           self.setState({
-            article:res.body.feed
+            article:res.body.feed,
+            onLoad:false
           })
+          
         }
       })
   },
@@ -288,7 +290,6 @@ const PublisherStoryPage = React.createClass({
   },
 
   handleTouchTap(event){
-    // This prevents ghost click.
     event.preventDefault();
     this.setState({
       alert: true,
@@ -302,91 +303,111 @@ const PublisherStoryPage = React.createClass({
     });
   },
 
-  testHover(e){
-    console.log(e)
+  selectItem(e,value){
+    if(typeof value === 'number'){
+      this.setState({value,filter:{publisher:config.PID,column:value}})
+      this.getStory()
+    }else if(value == 'all'){
+      this.setState({value,filter:{publisher:config.PID}})
+      this.getStory()
+    }else{
+      this.setState({value})
+      this.getStory()
+    }
   },
 
-  openEdit(e){
-    e.preventDefault();
-    this.setState({
-      editState: true,
-      editWhere: e.currentTarget,
-    });
+  goEditPage(){
+    browserHistory.push('/editor/columns/'+this.state.value+'/settings')
   },
 
-  closeEdit(){
+  alertDelete(e){
     this.setState({
-      editState: false,
-    });
+      alert:true,
+      alertWhere:e.currentTarget,
+      alertDesc:'Delete is permanent. Are you sure?',
+      alertConfirm:this.removeColumn})
   },
+
+  alertNew(e){
+    this.setState({
+      alert:true,
+      alertWhere:e.currentTarget,
+      alertChild:<div className='row'><TextField hintText="Column Name" id='newColName' style={{width:'170px',margin:'10px 15px 0 15px'}}/></div>,
+      alertConfirm:this.newColumn
+    })
+  },
+
+  newColumn(){
+    this.setState({alertLoading:true})
+    var self = this
+    var column = {
+      column:{
+        name:document.getElementById('newColName').value,
+        shortDesc:''
+      }
+    } 
+    Request
+      .post(config.BACKURL+'/publishers/'+config.PID+'/columns?token='+auth.getToken())
+      .set('Accept','application/json')
+      .send(column)
+      .end((err,res)=>{
+        if(err)throw err
+        else{
+          //console.log(res.body)
+          self.getColumn(()=>{
+            //console.log(res.body)
+            self.setState({value:res.body.column.id,alertLoading:false,alert:false})
+            self.getStory()
+          }) 
+        }
+      })
+  },
+
 
   render(){
-    var {role,currentPage,article,column,value,alert,alertDesc,alertWhere,editState,editWhere} = this.state
-		return (
+    var {role,currentPage,article,column,value,alert,alertDesc,alertWhere,alertLoading,alertChild,alertConfirm,columnArray,onLoad} = this.state
+    //console.log(this.state)
+    return (
       <Container>
         <Alert 
           open={alert}
           anchorEl={alertWhere}
           onRequestClose={this.handleRequestClose}
-          description={alertDesc} />
+          description={alertDesc}
+          child={alertChild} 
+          loading={alertLoading}
+          confirm={alertConfirm}/>
         <div className='row' style={{padding:'30px 15px 20px 30px'}}>
-          <DropDownMenu
-            value={this.state.value}
-            onChange={this.handleChange}
-            autoWidth={false}
-            style={{display:'inline'}}
-            labelStyle={{...styles.label}}
-            underlineStyle={{...styles.underline}}
-            selectedMenuItemStyle={{...styles.selected}}
-            menuItemStyle={{...styles.menuItem}}
-            menuStyle={{width:330}}
-          > 
-            <MenuItem value='all' primaryText="All Stories" />
-            {column.map((data,index)=>(
-              <MenuItem value={data._id} key={index} primaryText={data.name} />
-            ))}
-            <MenuItem value='new column' primaryText="+ New Column" style={{...styles.newColumn}} />
-            <MenuItem value='inactive' primaryText="Show inactive columns"style={{...styles.showInactive}} />
-          </DropDownMenu>
-          <IconButton
-            className='hoverIcon'
-            style={{marginTop:'5px'}}
-            iconStyle={{color:'#8f8f8f'}}
-            onClick={this.openEdit}
-          > 
-            <FontIcon className='material-icons'>settings</FontIcon>
-            <EditMenu
-              open={editState}
-              anchorEl={editWhere}
-              onRequestClose={this.closeEdit}
-              >
-              <BoxMenu>
-                <MenuList>sadsad</MenuList>
-                <MenuList>sadsad</MenuList>
-                <MenuList>sadsad</MenuList>
-              </BoxMenu>
-            </EditMenu>
-          </IconButton>
+          <DropdownWithIcon
+            onChange={this.selectItem} 
+            menuItem={!columnArray?null:columnArray} 
+            value={value}
+            editMenu={
+              [<MenuList onClick={this.goEditPage} key="edit">Edit</MenuList>,
+               <MenuList onClick={this.alertDelete} key='delete'>Delete</MenuList>,
+               <MenuList onClick={this.alertNew} key='new'>+ new column</MenuList>]}
+            />
         </div>
         <div className='row'>
           <div className='col-6'>
             <Section1 className="sans-font">
               <TabHead onClick={this.filterPublished}>19 Published</TabHead>
               <TabHead onClick={this.filterDraft}>7 Drafted</TabHead>
-              <TabHead>3 Scheduled</TabHead>
+              {/*<TabHead>3 Scheduled</TabHead>*/}
             </Section1>
           </div>
           <div className='col-6'>
             <Section1 className="sans-font">
               <TabHead onClick={this.recent}>Recent</TabHead>
-              <TabHead>Trending</TabHead>
+              {/*<TabHead>Trending</TabHead>*/}
               <TabHead onClick={this.popular}>Most Popular</TabHead>
-              <FontIcon className="material-icons" style={{float:'right',margin:'0 0 0 0',color:'#8f8f8f'}}>search</FontIcon>
+              {/*<FontIcon className="material-icons" style={{float:'right',margin:'0 0 0 0',color:'#8f8f8f'}}>search</FontIcon>*/}
             </Section1>
           </div>
         </div>
 
         <Section2 style={{padding:'40px 5px 40px 5px'}}>
+          {onLoad?<Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>:
           <Table >
             <TableHeader 
               displaySelectAll={false}
@@ -402,7 +423,7 @@ const PublisherStoryPage = React.createClass({
             <TableBody 
               showRowHover={true}
               displayRowCheckbox={false}>
-              {article.map((data,index)=>(
+              {article?article.map((data,index)=>(
                 <TableRow key={index}>
                   <TableRowColumn style={{width:'40%',padding:'10px 0 10px 0'}}><TopArticle detail={data} /></TableRowColumn>
                   <TableRowColumn style={{width:'15%'}}>{data.writer.display}</TableRowColumn>
@@ -410,9 +431,9 @@ const PublisherStoryPage = React.createClass({
                   <TableRowColumn style={{width:'15%'}}>{'vote : '+data.votes.total}<br/>{'comment : '+data.comments.count}</TableRowColumn>
                   <TableRowColumn style={{width:'15%'}}>{data.status?'Published':'Draft'}</TableRowColumn>
                 </TableRow>
-              ))}
+              )):''}
             </TableBody>
-          </Table>
+          </Table>}
         </Section2>
         <Page >
           <Pagination 

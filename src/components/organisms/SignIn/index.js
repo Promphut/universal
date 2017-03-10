@@ -108,6 +108,7 @@ const SignIn = React.createClass({
         <Head>Email Sign In</Head>
         <InputBox onSubmit={this.signin} ref='signinForm'>
           <TextField
+            autoFocus
             hintText="Email"
             floatingLabelText="Email"
             type="email"

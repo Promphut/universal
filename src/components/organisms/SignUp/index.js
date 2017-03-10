@@ -110,6 +110,7 @@ const SignUp = React.createClass({
         <Text>ไม่พลาดทุกเรื่องราวการเงินดีๆ สมัครสมาชิค</Text>
         <InputBox onSubmit={this.signup} ref='signupForm'>
           <TextField
+            autoFocus
             hintText="Email"
             floatingLabelText="Email"
             type="email"

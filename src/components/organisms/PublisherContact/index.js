@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {PrimaryButton,SecondaryButton,UploadPicture} from 'components'
+import {PrimaryButton,SecondaryButton,UploadPicture,DropdownWithIcon,Alert,MenuList} from 'components'
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -68,7 +68,8 @@ const PublisherContact = React.createClass({
     return{
       textStatus:'Unsave',
       value:1,
-      error:false
+      error:false,
+      alert:false,
     }
   },
 
@@ -132,8 +133,24 @@ const PublisherContact = React.createClass({
     
   },
 
+  selectItem(e,val){
+    this.setState({value:val})
+  },
+
+  handleRequestClose(){
+    this.setState({alert:false})
+  },
+
+  alertDelete(e){
+    this.setState({alert:true,alertWhere:e.currentTarget,alertDesc:'Delete is permanent. Are you sure?',alertConfirm:this.deleteCate})
+  },
+
+  deleteCate(){
+    
+  },
+
   render(){
-    var {error,textStatus,value} = this.state
+    var {error,textStatus,value,alert,alertConfirm,alertWhere,alertChild,alertDesc} = this.state
     return(
       <Container onSubmit={this.updateData}>
         <div  className="head sans-font">Contact</div>
@@ -142,27 +159,21 @@ const PublisherContact = React.createClass({
             <div className="sans-font">Categories</div>
           </Title>
           <Edit>
-            <div style={{overflowY:'hidden'}}>
-              <SelectField
-                value={this.state.value}
-                onChange={this.handleChange}
-                style={{width:'200px',float:'left',marginRight:'15px'}}
-              >
-                <MenuItem value={1} primaryText="Never" />
-                <MenuItem value={2} primaryText="Every Night" />
-                <MenuItem value={3} primaryText="Weeknights" />
-                <MenuItem value={4} primaryText="Weekends" />
-                <MenuItem value={5} primaryText="Weekly" />
-              </SelectField>
-              <a href="#" onClick={this.createContact}><AddTag>
-                <i className="fa fa-plus" style={{float:'left',margin:'20px 10px 0 0'}} aria-hidden="true"></i> 
-                <div style={{float:'left',margin:'20px 20px 0 0'}}>New</div>
-              </AddTag></a>
-              <a href="#"><AddTag>
-                <i className="fa fa-trash" style={{float:'left',margin:'20px 10px 0 0'}} aria-hidden="true"></i> 
-                <div style={{float:'left',margin:'20px 20px 0 0'}}>Delete Selected</div>
-              </AddTag></a>
-            </div>
+            <Alert 
+              open={alert}
+              anchorEl={alertWhere}
+              onRequestClose={this.handleRequestClose}
+              description={alertDesc}
+              child={alertChild} 
+              confirm={alertConfirm}/>
+              <DropdownWithIcon
+                onChange={this.selectItem} 
+                menuItem={[{value:1,text:'General'}]} 
+                value={value}
+                editMenu={
+                  [<MenuList onClick={this.alertDelete} key='delete'>Delete</MenuList>,
+                  <MenuList onClick={this.alertDelete} key='new'>+ New Category</MenuList>]}
+                />
             <SendBox>
               <TextField
                 defaultValue="unknow@mail.com"

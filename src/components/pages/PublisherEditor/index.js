@@ -42,7 +42,7 @@ const PublisherEditor = React.createClass({
 		return {}
 	},
 
-  componentDidMount(){
+  componentDidMount(){ 
     
   },
 

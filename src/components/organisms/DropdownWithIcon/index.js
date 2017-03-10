@@ -54,10 +54,19 @@ const List = styled(MenuItem)`
 const DropdownWithIcon = React.createClass({
   getInitialState(){
     return{
-      value:'All',
+      value:this.props.value||'',
       editState:false,
       editWhere:{},
       open:false,
+      menuItem:this.props.menuItem||[]
+    }
+  },
+
+  componentWillReceiveProps(nextProps){
+    if(nextProps.value!=this.props.value){
+      this.setState({value:nextProps.value})
+    }else if(nextProps.menuItem!=this.props.menuItem){
+      this.setState({menuItem:nextProps.menuItem})
     }
   },
 
@@ -78,14 +87,14 @@ const DropdownWithIcon = React.createClass({
     })
   },
 
-  selected(e,val){
-    //console.log(val)
-    this.setState({value:val,open:false})
-    //this.setState({value})
-  },
+  // selected(e,val){
+  //   //console.log(val)
+  //   this.setState({value:val,open:false})
+  //   //this.setState({value})
+  // },
 
   onFocus(e,item,ind){
-    //console.log(e.target)
+    this.setState({open:false})
   },
 
   closeEdit(){
@@ -97,8 +106,8 @@ const DropdownWithIcon = React.createClass({
   },
 
   render(){
-    var {style,className,children} = this.props
-    var {value,editState,editWhere,open,active,focus} = this.state
+    var {style,className,children,labelStyle,editMenu,value,onChange} = this.props
+    var {value,editState,editWhere,open,active,focus,anchorEl,menuItem} = this.state
     return(
         <div className='row'>
           <FlatButton 
@@ -107,29 +116,33 @@ const DropdownWithIcon = React.createClass({
             labelPosition="before"
             labelStyle={{fontSize:'22px'}}
             style={{width:'330px',height:'60px',border:open||editState?'1px solid #e2e2e2':'none'}}>
-            <div stlye={{display:'block',overflow:'hidden',position:"relative",width:'100%'}}>
-              <Text className='nunito-font'>{value}</Text>
+            <div >
+              <Text className='nunito-font' style={{...labelStyle}} >{menuItem?menuItem.map((data,index)=>{
+                if(data.value==value){
+                  return data.text
+                }
+                }):''}</Text>
               <FontIcon className='material-icons' style={{fontSize:'30px',color:'#8f8f8f',float:'right',top:'8px'}}>keyboard_arrow_down</FontIcon>
             </div>
             <Popover
-              open={this.state.open}
-              anchorEl={this.state.anchorEl}
+              open={open}
+              anchorEl={anchorEl}
               anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
               targetOrigin={{horizontal: 'left', vertical: 'top'}}
               onRequestClose={this.handleRequestClose}
             >
               <Menu 
                 style={{width:'300px'}}
-                onChange={this.selected}
+                onChange={onChange}
+                maxHeight={400}
                 selectedMenuItemStyle={{...styles.selected}}
                 menuItemStyle={{...styles.menuItem}}
                 onItemTouchTap={this.onFocus}
                 value={value}
               >
-                <MenuItem value='All' >asdsad</MenuItem>
-                <MenuItem value='eee' >asdsad</MenuItem>
-                <MenuItem value='ddd' >asdsad</MenuItem>
-                <MenuItem value='sss' >asdsad</MenuItem>
+                {menuItem?menuItem.map((data,index)=>(
+                  <MenuItem value={data.value} key={index}>{data.text}</MenuItem>
+                )):''}
               </Menu>
             </Popover>
           </FlatButton>
@@ -146,9 +159,7 @@ const DropdownWithIcon = React.createClass({
               onRequestClose={this.closeEdit}
               >
               <BoxMenu>
-                <MenuList>sadsad</MenuList>
-                <MenuList>sadsad</MenuList>
-                <MenuList>sadsad</MenuList>
+                {editMenu||''}
               </BoxMenu>
             </EditMenu>
           </IconButton>

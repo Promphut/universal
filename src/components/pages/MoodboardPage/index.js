@@ -94,7 +94,7 @@ const MoodboardPage = React.createClass({
 					</EditMenu>
 				</section>
 
-				DropDownMenu:<DropdownWithIcon/>
+				DropDownMenu:<DropdownWithIcon />
 
 
 				<h1>Large Buttons</h1>
