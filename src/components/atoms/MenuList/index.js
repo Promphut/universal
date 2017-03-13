@@ -30,7 +30,6 @@ const Anim = styled.button`
   }
 `
 
-
 const MenuList = ({onClick,style,className,children,type,id})=>{
   return(
     <List  style={{...style}} className={className} >

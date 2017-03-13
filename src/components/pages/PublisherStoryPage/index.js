@@ -16,6 +16,7 @@ import FlatButton from 'material-ui/FlatButton'
 import IconButton from 'material-ui/IconButton'
 import TextField from 'material-ui/TextField'
 import CircularProgress from 'material-ui/CircularProgress';
+import moment from 'moment'
 
 const Container = styled.div`
   width:100%;
@@ -87,7 +88,7 @@ const Name = styled.div`
   word-wrap: break-word;      /* IE */ 
   padding-right:5px;
   overflow: hidden;
-  max-width:230px;
+  max-width:220px;
   margin:0 0 0 15px;
 `
 const styles = {
@@ -174,7 +175,11 @@ const PublisherStoryPage = React.createClass({
       alert:false,
       alertConfirm:function(){},
       alertLoading:false,
-      onLoad:false
+      onLoad:false,
+      snackbar:false,     
+      snackbarMS:'',
+      articleStatus:'published',
+      editStory:false,
     }
 	},
 
@@ -208,7 +213,7 @@ const PublisherStoryPage = React.createClass({
         //console.log(res.body)
         if(err)throw err
         else{
-          self.setState({alert:false})
+          self.setState({alert:false,alertDesc:'',snackbar:true,snackbarMS:'Delete Column Complete !'})
           self.getColumn()
         }
       })
@@ -226,7 +231,7 @@ const PublisherStoryPage = React.createClass({
       .end((err,res)=>{
         if(err)throw err
         else{
-          //console.log(res.body)
+          console.log(res.body)
           self.setState({
             article:res.body.feed,
             onLoad:false
@@ -238,20 +243,20 @@ const PublisherStoryPage = React.createClass({
 
   filterPublished(){
     if(typeof this.state.value === 'number'){
-      this.setState({filter:{publisher:config.PID,column:this.state.value,status:1}})
+      this.setState({filter:{publisher:config.PID,column:this.state.value,status:1,articleStatus:'published'}})
       this.getStory()
     }else{
-      this.setState({publisher:config.PID,status:1})
+      this.setState({publisher:config.PID,status:1,articleStatus:'published'})
       this.getStory()
     }
   },
 
   filterDraft(){
     if(typeof this.state.value === 'number'){
-      this.setState({filter:{publisher:config.PID,column:this.state.value,status:0}})
+      this.setState({filter:{publisher:config.PID,column:this.state.value,status:0,articleStatus:'drafted'}})
       this.getStory()
     }else{
-      this.setState({publisher:config.PID,status:0})
+      this.setState({publisher:config.PID,status:0,articleStatus:'drafted'})
       this.getStory()
     }
   },
@@ -300,6 +305,7 @@ const PublisherStoryPage = React.createClass({
   handleRequestClose(){
     this.setState({
       alert: false,
+      alertDesc:''
     });
   },
 
@@ -356,19 +362,51 @@ const PublisherStoryPage = React.createClass({
           //console.log(res.body)
           self.getColumn(()=>{
             //console.log(res.body)
-            self.setState({value:res.body.column.id,alertLoading:false,alert:false})
+            self.setState({value:res.body.column.id,alertLoading:false,alert:false,snackbar:true,snackbarMS:'Create New Column Complete!'})
             self.getStory()
           }) 
         }
       })
   },
 
+  closeSnackbar(){
+    this.setState({snackbar:false})
+  },
+
+  closeEditStory(){
+    this.setState({editStory:false})
+  },
+
+  editStory(e){
+    //console.log(e.currentTarget)
+    this.setState({editStory:true,editStoryWhere:e.currentTarget})
+  },
 
   render(){
-    var {role,currentPage,article,column,value,alert,alertDesc,alertWhere,alertLoading,alertChild,alertConfirm,columnArray,onLoad} = this.state
+    var { editStory,editStoryWhere,articleStatus,snackbar,snackbarMS,role,currentPage,article,column,value,alert,alertDesc,alertWhere,alertLoading,alertChild,alertConfirm,columnArray,onLoad} = this.state
     //console.log(this.state)
     return (
       <Container>
+        <Snackbar
+          open={snackbar}
+          message={snackbarMS}
+          autoHideDuration={4000}
+          onRequestClose={this.closeSnackbar}
+          style={{backgroundColor:'#00B2B4'}}
+          bodyStyle={{backgroundColor:'#00B2B4',textAlign:'center'}}
+          className="nunito-font"
+        />
+        <Popover
+          open={editStory}
+          anchorEl={editStoryWhere}
+          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+          targetOrigin={{horizontal: 'left', vertical: 'top'}}
+          onRequestClose={this.closeEditStory}
+        >
+          <MenuItem style={{border:'2px solid #00B2B4',color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>edit</FontIcon>}>Edit story</MenuItem>
+          <MenuItem style={{border:'2px solid #00B2B4',color:'#fff',fontSize:'17px',backgroundColor:'#00B2B4'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#fff'}}>delete</FontIcon>}>Delete</MenuItem>
+          <MenuItem style={{border:'2px solid #00B2B4',color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>drafts</FontIcon>}>Unpublish</MenuItem>
+        </Popover>
         <Alert 
           open={alert}
           anchorEl={alertWhere}
@@ -414,10 +452,11 @@ const PublisherStoryPage = React.createClass({
               adjustForCheckbox={false}>
               <TableRow>
                 <TableHeaderColumn style={{width:'40%'}}>Title</TableHeaderColumn>
-                <TableHeaderColumn style={{width:'15%'}}>Writer</TableHeaderColumn>
-                <TableHeaderColumn style={{width:'15%'}}>Column</TableHeaderColumn>
+                <TableHeaderColumn style={{width:'10%',textAlign:'center'}}>Writer</TableHeaderColumn>
+                <TableHeaderColumn style={{width:'15%',textAlign:'center'}}>Column</TableHeaderColumn>
                 <TableHeaderColumn style={{width:'15%'}}>stats</TableHeaderColumn>
                 <TableHeaderColumn style={{width:'15%'}}>Published</TableHeaderColumn>
+                <TableHeaderColumn style={{width:'5%'}}></TableHeaderColumn>
               </TableRow>
             </TableHeader>
             <TableBody 
@@ -426,10 +465,11 @@ const PublisherStoryPage = React.createClass({
               {article?article.map((data,index)=>(
                 <TableRow key={index}>
                   <TableRowColumn style={{width:'40%',padding:'10px 0 10px 0'}}><TopArticle detail={data} /></TableRowColumn>
-                  <TableRowColumn style={{width:'15%'}}>{data.writer.display}</TableRowColumn>
-                  <TableRowColumn style={{width:'15%'}}>{data.column.name}</TableRowColumn>
+                  <TableRowColumn style={{width:'10%',paddingRight:0,paddingLeft:0,textAlign:'center'}}>{data.writer.display}</TableRowColumn>
+                  <TableRowColumn style={{width:'15%',paddingRight:0,paddingLeft:0,textAlign:'center'}}>{data.column.name}</TableRowColumn>
                   <TableRowColumn style={{width:'15%'}}>{'vote : '+data.votes.total}<br/>{'comment : '+data.comments.count}</TableRowColumn>
-                  <TableRowColumn style={{width:'15%'}}>{data.status?'Published':'Draft'}</TableRowColumn>
+                  <TableRowColumn style={{width:'15%',wordWrap:'break-word',whiteSpace:'pre-wrap'}}>{articleStatus=='published'?moment(data.published).format('lll'):moment(data.created).format('lll')}</TableRowColumn>
+                  <TableHeaderColumn style={{width:'5%',paddingRight:0,paddingLeft:0,textAlign:'center',cursor:'pointer'}} ><FontIcon className='material-icons' onClick={this.editStory} style={{color:'#bfbfbf'}}>more_vert</FontIcon></TableHeaderColumn>
                 </TableRow>
               )):''}
             </TableBody>

@@ -6,6 +6,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import Request from 'superagent'
 import auth from 'components/auth'
+import Snackbar from 'material-ui/Snackbar';
 
 const Container = styled.form`
   width:100%;
@@ -70,6 +71,11 @@ const PublisherContact = React.createClass({
       value:1,
       error:false,
       alert:false,
+      snackbar:false,
+      snackbarMS:'',
+      cate:[
+        {value:1,text:'General'}
+      ]
     }
   },
 
@@ -77,7 +83,7 @@ const PublisherContact = React.createClass({
      this.getPublisherId()
   },
 
-  getPublisherId(){
+  getPublisherId(cb=function(){}){
     var self = this
     Request
       .get(config.BACKURL+'/publishers/'+config.PID)
@@ -85,14 +91,16 @@ const PublisherContact = React.createClass({
       .end((err,res)=>{
         if(err) throw err 
         else{
+          //console.log(res.body)
           self.setState({publisher:res.body})
           self.setData()
+          cb()
         }
       })
   },
 
   setData(){
-    var {contact} = this.state.publisher.publisher
+    var {contactCat} = this.state.publisher.publisher
     this.setState({value:typeof contact =="undefined"?1:contact.catName})
     document.getElementById('toEmail').value = typeof contact=="undefined"?'':contact.toEmail
     document.getElementById('desc').value = typeof contact== "undefined"?'':contact.desc
@@ -103,7 +111,7 @@ const PublisherContact = React.createClass({
     var self = this
     var data = {
       publisher : {
-        contact:{
+        contactCat:{
           catName:this.state.value,
           toEmail:document.getElementById('toEmail').value,
           desc:document.getElementById('desc').value
@@ -138,7 +146,7 @@ const PublisherContact = React.createClass({
   },
 
   handleRequestClose(){
-    this.setState({alert:false})
+    this.setState({alert:false,alertDesc:''})
   },
 
   alertDelete(e){
@@ -146,13 +154,51 @@ const PublisherContact = React.createClass({
   },
 
   deleteCate(){
-    
+    var self = this
+    Request
+      .delete(config.BACKURL+'/publishers/'+config.PID+'/contactcats/'+this.state.value)
+      .end((err,res)=>{
+        if(err)throw err
+        else{
+          self.setState({alert:false,alertDesc:'',snackbar:true,snackbarMS:'Delete Category Complete !'})
+        }
+      })
+  },
+
+  alertNew(e){
+    this.setState({
+      alert:true,
+      alertWhere:e.currentTarget,
+      alertChild:<div className='row'><TextField hintText="Column Name" id='newCate' style={{width:'170px',margin:'10px 15px 0 15px'}}/></div>,
+      alertConfirm:this.newCate
+    })
+  },
+
+  newCate(){
+    var val = 2
+    var cate = this.state.cate.push({value:val,text:document.getElementById('newCate').value})
+    this.setState({cate:cate,alert:false,alertDesc:'',alertChild:'',snackbar:true,snackbarMS:'Create New Category Complete !'})
+    this.setState({value:val})
+  },
+
+
+  closeSnackbar(){
+    this.setState({snackbar:false,snackbarMS:''})
   },
 
   render(){
-    var {error,textStatus,value,alert,alertConfirm,alertWhere,alertChild,alertDesc} = this.state
+    var {error,textStatus,value,alert,alertConfirm,alertWhere,alertChild,alertDesc,snackbar,snackbarMS,cate} = this.state
     return(
       <Container onSubmit={this.updateData}>
+        <Snackbar
+          open={snackbar}
+          message={snackbarMS}
+          autoHideDuration={4000}
+          onRequestClose={this.closeSnackbar}
+          style={{backgroundColor:'#00B2B4'}}
+          bodyStyle={{backgroundColor:'#00B2B4',textAlign:'center'}}
+          className="nunito-font"
+        />
         <div  className="head sans-font">Contact</div>
         <Flex>
           <Title>
@@ -168,11 +214,11 @@ const PublisherContact = React.createClass({
               confirm={alertConfirm}/>
               <DropdownWithIcon
                 onChange={this.selectItem} 
-                menuItem={[{value:1,text:'General'}]} 
+                menuItem={cate} 
                 value={value}
                 editMenu={
                   [<MenuList onClick={this.alertDelete} key='delete'>Delete</MenuList>,
-                  <MenuList onClick={this.alertDelete} key='new'>+ New Category</MenuList>]}
+                  <MenuList onClick={this.alertNew} key='new'>+ New Category</MenuList>]}
                 />
             <SendBox>
               <TextField

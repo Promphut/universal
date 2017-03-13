@@ -114,12 +114,8 @@ const ArticleBoxLarge = React.createClass({
                 targetOrigin={{horizontal: 'left', vertical: 'top'}}
                 onRequestClose={this.handleRequestClose}
               >
-                <Menu>
-                  <MenuItem primaryText="Refresh" />
-                  <MenuItem primaryText="Help &amp; feedback" />
-                  <MenuItem primaryText="Settings" />
-                  <MenuItem primaryText="Sign out" />
-                </Menu>
+                <MenuItem style={{border:'2px solid #00B2B4',color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>share</FontIcon>}>Share</MenuItem>
+                <MenuItem style={{border:'2px solid #00B2B4',color:'#fff',fontSize:'17px',backgroundColor:'#00B2B4'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#fff'}}>link</FontIcon>}>Copy Link</MenuItem>
               </Popover>
             </DropDown>
             <Div>A story of <span style={{textDecoration:'underline'}}>{column.name}</span></Div>
