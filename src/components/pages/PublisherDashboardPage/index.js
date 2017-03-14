@@ -6,6 +6,7 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import {TrendingSideBarInner} from 'components'
 import auth from 'components/auth'
 import Request from 'superagent'
+import moment from 'moment'
 
 const Container = styled.div`
   width:100%;
@@ -207,9 +208,9 @@ const PublisherDashboardPage = React.createClass({
 
   getArticle(){
     var self = this
-    var fil = JSON.stringify({})
+    var fil = JSON.stringify({publisher:config.PID,status: 1})
     Request
-      .get(config.BACKURL+'/publishers/'+config.PID+'/feed?type=story')
+      .get(config.BACKURL+'/publishers/'+config.PID+'/feed?type=story&filter='+fil)
       .set('Accept','application/json')
       .end((err,res)=>{
         console.log('article',res.body)
@@ -231,7 +232,7 @@ const PublisherDashboardPage = React.createClass({
         if(err)throw err
         else{
           self.setState({
-            writer:res.body.stories
+            writer:res.body.writers
           })
         }
       })
@@ -246,7 +247,7 @@ const PublisherDashboardPage = React.createClass({
         if(err)throw err
         else{
           self.setState({
-            column:res.body.stories
+            column:res.body.columns
           })
         }
       })
@@ -326,14 +327,14 @@ const PublisherDashboardPage = React.createClass({
                 <TableBody 
                   showRowHover={true}
                   displayRowCheckbox={false}>
-                  {tableData.map((data,index)=>(
+                  {writer?writer.map((data,index)=>(
                     <TableRow key={index}>
-                      <TableRowColumn style={{...styles.col1}}>{data.name}</TableRowColumn>
-                      <TableRowColumn style={{...styles.col2}}>{data.view}</TableRowColumn>
-                      <TableRowColumn style={{...styles.col2}}>{data.share}</TableRowColumn>
-                      <TableRowColumn style={{...styles.col4}}>{data.no}</TableRowColumn>
+                      <TableRowColumn style={{...styles.col1}}>{data.display}</TableRowColumn>
+                      <TableRowColumn style={{...styles.col2}}>{data.id}</TableRowColumn>
+                      <TableRowColumn style={{...styles.col2}}>{data.id}</TableRowColumn>
+                      <TableRowColumn style={{...styles.col4}}>{data.id}</TableRowColumn>
                     </TableRow>
-                  ))}
+                  )):''}
                 </TableBody>
               </Table>
             </div>
@@ -352,14 +353,14 @@ const PublisherDashboardPage = React.createClass({
                 <TableBody 
                   showRowHover={true}
                   displayRowCheckbox={false}>
-                  {tableData.map((data,index)=>(
+                  {column?column.map((data,index)=>(
                     <TableRow key={index}>
                       <TableRowColumn style={{...styles.col1}}>{data.name}</TableRowColumn>
-                      <TableRowColumn style={{...styles.col2}}>{data.view}</TableRowColumn>
-                      <TableRowColumn style={{...styles.col2}}>{data.share}</TableRowColumn>
-                      <TableRowColumn style={{...styles.col4}}>{data.no}</TableRowColumn>
+                      <TableRowColumn style={{...styles.col2}}>{data.id}</TableRowColumn>
+                      <TableRowColumn style={{...styles.col2}}>{data.id}</TableRowColumn>
+                      <TableRowColumn style={{...styles.col4}}>{data.id}</TableRowColumn>
                     </TableRow>
-                  ))}
+                  )):''}
                 </TableBody>
               </Table>
             </div>
@@ -372,8 +373,8 @@ const PublisherDashboardPage = React.createClass({
               adjustForCheckbox={false}>
               <TableRow>
                 <TableHeaderColumn style={{...styles.thead,width:'40%'}}>Top Articles</TableHeaderColumn>
-                <TableHeaderColumn style={{width:'15%'}}>Writer</TableHeaderColumn>
-                <TableHeaderColumn style={{width:'15%'}}>Column</TableHeaderColumn>
+                <TableHeaderColumn style={{width:'15%',paddingRight:0,paddingLeft:0,textAlign:'center'}}>Writer</TableHeaderColumn>
+                <TableHeaderColumn style={{width:'15%',paddingRight:0,paddingLeft:0,textAlign:'center'}}>Column</TableHeaderColumn>
                 <TableHeaderColumn style={{width:'15%'}}>stats</TableHeaderColumn>
                 <TableHeaderColumn style={{width:'15%'}}>Published</TableHeaderColumn>
               </TableRow>
@@ -381,15 +382,15 @@ const PublisherDashboardPage = React.createClass({
             <TableBody 
               showRowHover={true}
               displayRowCheckbox={false}>
-              {article.map((data,index)=>(
+              {article?article.map((data,index)=>(
                 <TableRow key={index}>
                   <TableRowColumn style={{width:'40%',padding:'10px 0 10px 0'}}><TopArticle detail={data} /></TableRowColumn>
-                  <TableRowColumn style={{width:'15%'}}>{data.writer.display}</TableRowColumn>
-                  <TableRowColumn style={{width:'15%'}}>{data.column.name}</TableRowColumn>
+                  <TableRowColumn style={{width:'15%',paddingRight:0,paddingLeft:0,textAlign:'center'}}>{data.writer.display}</TableRowColumn>
+                  <TableRowColumn style={{width:'15%',paddingRight:0,paddingLeft:0,textAlign:'center'}}>{data.column.name}</TableRowColumn>
                   <TableRowColumn style={{width:'15%'}}>{'vote : '+data.votes.total}<br/>{'comment : '+data.comments.count}</TableRowColumn>
-                  <TableRowColumn style={{width:'15%'}}>{data.status?'Published':'Draft'}</TableRowColumn>
+                  <TableRowColumn style={{width:'15%',wordWrap:'break-word',whiteSpace:'pre-wrap'}}>{moment(data.published).format('lll')}</TableRowColumn>
                 </TableRow>
-              ))}
+              )):''}
             </TableBody>
           </Table>
         </Section2>

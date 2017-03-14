@@ -10,8 +10,8 @@ import Request from 'superagent'
 const Wrapper = styled.div`
   background-color:#E5E5E5;
   .imgWidth{
-    width:222px;
-    height:123px;
+    width:255px;
+    height:141px;
   }
   @media (max-width:480px) {
     .imgWidth{
@@ -60,11 +60,13 @@ const ColumnName = styled.div`
   font-size:24px;
   font-weight:bold;
   margin-top:10px;
+  color:white;
 `
 const Column = styled.div`
 	color:#8F8F8F;
   font-size:14px;
-  margin-top:10px;
+  margin-top:2px;
+  color:white;
 `
 const Feed = styled.div`
 	flex: 12 1120px;
@@ -80,8 +82,37 @@ const Feed = styled.div`
 const Box = styled.div`
   width:255px;
   background:white;
+  height:257px;
+  margin:0 auto 0 auto;
+`
+const Blur = styled.div`
+background: rgba(255,255,255,0);
+background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 89%, rgba(255,255,255,1) 100%);
+background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(255,255,255,0)), color-stop(89%, rgba(255,255,255,1)), color-stop(100%, rgba(255,255,255,1)));
+background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 89%, rgba(255,255,255,1) 100%);
+background: -o-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 89%, rgba(255,255,255,1) 100%);
+background: -ms-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 89%, rgba(255,255,255,1) 100%);
+background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 89%, rgba(255,255,255,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff', GradientType=0 );
+  position:relative;
+  width:100%;
+  height:117px;
+  opacity:1;
+`
+const Desc = styled.div`
+  font-size:14px;
+  white-space: pre-wrap;      /* Webkit */    
+  white-space: -moz-pre-wrap; /* Firefox */     
+  white-space: -pre-wrap;     /* Opera <7 */    
+  white-space: -o-pre-wrap;   /* Opera 7 */     
+  word-wrap: break-word;      /* IE */ 
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position:relative;
+  color:#222;
+  background:white;
+  height:120px;
   padding:15px;
-  height:356px;
 `
 
 // const ColumnTN = ()=>{
@@ -94,31 +125,30 @@ const AllColumn = React.createClass({
 	getInitialState(){
 		return {
 			stopPos:0,
-			feed:[],
+			column:[],
 			popular:[]
 		}
 	},
 
 	componentDidMount(){
-		this.getFeed()
+		this.getColumn()
 	},
 
-	getFeed(){
+	getColumn(){
 		var filter = JSON.stringify({status:1})
 		Request
-			.get(config.BACKURL+'/publishers/'+config.PID+'/feed?type=story&filter='+filter+'&sort=latest')
+			.get(config.BACKURL+'/publishers/'+config.PID+'/columns')
 			.set('Accept','application/json')
 			.end((err,res)=>{
 				if(err) throw err
 				else{
-					//console.log(res.body)
-					this.setState({feed:res.body.feed})
+					console.log(res.body)
+					this.setState({column:res.body.columns})
 				}
 			})
 	},
 
-	render(){
-		var c = []  
+	render(){ 
     var settings = {
       centerMode: false,
       slidesToShow: 4,
@@ -143,25 +173,14 @@ const AllColumn = React.createClass({
         }
       ]
     };
-		var {feed} = this.state
-    for(var i=0;i<9;i++){
-      c.push(
-        <div style={{flex:1}}><Box key={i}>
-          <BGImg src='/tmp/story-list/1486687443533-Dakota.jpeg' className='imgWidth' style={{margin:'0 auto 0 auto'}}/>
-          <ColumnName className='serif-font'>Money Ideas</ColumnName>
-          <Column className='sans-font' >Recents from 131 Stories</Column>
-          <ColumnName className='sans-font' style={{fontSize:'14px'}}>1.โมหจริต ละตินฮิปฮอปด็อกเตอร์โมหจริตแอดมิสชัน</ColumnName>
-          <ColumnName className='sans-font' style={{fontSize:'14px'}}>2.โมหจริต ละตินฮิปฮอปด็อกเตอร์โมหจริตแอดมิสชัน</ColumnName>
-        </Box></div>
-      )
-    }
+		var {column} = this.state
 		return (
 		    <Wrapper>
 		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={this.props.params.loggedIn} />
 					<Content >
             <Feed>
               <div className='row' style={{width:'100%'}}><StoryMenu style={{padding:'15px 0 15px 0',marginTop:'20px',float:'left'}}/></div>
-              <div style={{margin:'20px 0 20px 0'}}>
+              {/*<div style={{margin:'20px 0 20px 0'}}>
                 <Slider {...settings} >
                   {c}
                 </Slider>
@@ -170,7 +189,25 @@ const AllColumn = React.createClass({
                 <Slider {...settings} >
                   {c}
                 </Slider>
-              </div> 
+              </div> */}
+              <div className='row'>
+                {column?column.map((data,index)=>(
+                  <div className='col-3' key={index} style={{margin:'20px 0 20px 0'}}>
+                    <Box>
+                      <BGImg src={data.cover} opacity={0.6} className='imgWidth' style={{margin:'0 auto 0 auto'}}>
+                        <div style={{margin:'80px 0 0 15px'}}>
+                          <ColumnName className='serif-font'>{data.name}</ColumnName>
+                          <Column className='sans-font' >131 Stories</Column>
+                        </div>
+                      </BGImg>
+                        <Desc className='sans-font' >
+                          {data.created}
+                        </Desc>     
+                      <Blur style={{top:'-120px'}}></Blur>     
+                    </Box>
+                  </div>
+                )):''}
+              </div>
             </Feed>
           </Content>
 		   </Wrapper>

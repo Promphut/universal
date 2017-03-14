@@ -21,7 +21,7 @@ const Nav = styled.nav`
 	background: -moz-linear-gradient(-45deg,  rgba(0,178,180,0.75) 0%, rgba(206,241,183,0.75) 100%); /* FF3.6-15 */
 	background: -webkit-linear-gradient(-45deg,  rgba(0,178,180,0.75) 0%,rgba(206,241,183,0.75) 100%); /* Chrome10-25,Safari5.1-6 */
 	background: linear-gradient(135deg,  rgba(0,178,180,0.75) 0%,rgba(206,241,183,0.75) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#bf00b2b4\', endColorstr=\'#bfcef1b7\',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */ 
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\#bf00b2b4\, endColorstr=\#bfcef1b7\,GradientType=1 ); /* IE6-9 fallback on horizontal gradient */ 
 
 	& ul {
 		margin: 70px 60px 0 60px;
@@ -58,6 +58,9 @@ const Nav = styled.nav`
 	& ul hr {
 		margin: 20px 0 !important;
 		background-color: #e2e2e2 !important;
+	}
+	.animate{
+
 	}
 `
 
@@ -96,10 +99,10 @@ const LeftNavigation = React.createClass({
 
 	shrinkDrawer(e){
 		e.preventDefault() 
-
 		//dom(this.refs.nav).style.left = '-340px';
 		// call parent's method
-		this.context.onDrawerShrink()
+		//console.log(e)
+		//this.context.onDrawerShrink()
 	},
 
 	render(){
@@ -120,7 +123,7 @@ const LeftNavigation = React.createClass({
 						<li><Link to="/">Infographic Thailand</Link></li>
 					</ul>
 				</div>
-				<div className="submenu1">
+				<div className="submenu1" style={{background:'red',position:'relative',top:'-1000px'}}>
 
 				</div>
 			</Nav>

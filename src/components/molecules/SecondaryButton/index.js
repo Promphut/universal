@@ -14,9 +14,11 @@ const SecondaryButton = (props) => {
 			labelColor: '#00B2B4',
 			onClick:props.onClick,
 			type:props.type,
-			labelStyle: {fontWeight:'bold', fontSize:18, top:-2, fontFamily:"'Nunito', 'Mitr'"},
+			rippleStyle:{borderRadius: '24px'},
+			overlayStyle:{borderRadius: '24px'},
+			labelStyle: {fontWeight:'bold', fontSize:18, top:-2, fontFamily:"Nunito Mitr"},
 			style: {borderRadius:'24px', height:'48px', lineHeight:'48px', background:'none', boxShadow:'none', ...props.style},
-	      	buttonStyle: {borderRadius: '24px', background: 'none', border:'2px solid #00B2B4', padding:'0 5px'}
+	    buttonStyle: {borderRadius: '24px', background: 'none', border:'2px solid #00B2B4', padding:'0 5px'}
 		}
 
 		defaultStyle = {
@@ -38,9 +40,11 @@ const SecondaryButton = (props) => {
 			labelColor: '#00B2B4',
 			onClick:props.onClick,
 			type:props.type,
+			rippleStyle:{borderRadius:'17px'},
+			overlayStyle:{borderRadius:'17px'},
 			labelStyle: {fontWeight:'bold', fontSize:15, top:-2, fontFamily:"'Nunito', 'Mitr'"},
 			style: {borderRadius:'17px', height:'35px', lineHeight:'35px', background:'none', boxShadow:'none', ...props.style},
-	      	buttonStyle: {borderRadius: '17px', background: 'none', border:'2px solid #00B2B4', padding:'0'}
+	    buttonStyle: {borderRadius: '17px', background: 'none', border:'2px solid #00B2B4', padding:'0'}
 		}
 
 		defaultStyle = {
@@ -63,9 +67,11 @@ const SecondaryButton = (props) => {
 			labelColor: '#00B2B4',
 			onClick:props.onClick,
 			type:props.type,
+			overlayStyle:{borderRadius: '20px'},
+			rippleStyle:{borderRadius: '20px'},
 			labelStyle: {fontWeight:'bold', fontSize:15, top:-2, fontFamily:"'Nunito', 'Mitr'"},
 			style: {borderRadius:'20px', height:'40px', lineHeight:'40px', background:'none', boxShadow:'none', ...props.style},
-	      	buttonStyle: {borderRadius: '20px', background: 'none', border:'2px solid #00B2B4', padding:'0 2px'}
+	    buttonStyle: {borderRadius: '20px', background: 'none', border:'2px solid #00B2B4', padding:'0 2px'}
 		}
 
 		defaultStyle = {

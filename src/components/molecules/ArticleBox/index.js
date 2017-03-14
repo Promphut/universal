@@ -83,6 +83,7 @@ const ArticleBox = React.createClass({
       open:false
     }
   },
+  
   handleTouchTap(event){
     event.preventDefault();
     this.setState({

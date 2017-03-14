@@ -40,7 +40,7 @@ const UserSettingMenu = React.createClass({
   },
 
   componentDidMount(){
-    console.log(this.user)
+    //console.log(this.user)
   },
 
   changePath(e){
