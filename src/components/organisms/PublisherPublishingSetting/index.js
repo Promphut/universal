@@ -64,14 +64,14 @@ const Desc = styled.div`
   color:#C2C2C2;
   font-size:14px;
   font-style:italic;
-` 
+`
 const TextStatus = styled.div`
   color:#00B2B4;
   font-size:15px;
   font-style:italic;
   float:left;
   margin:10px 0 0 15px;
-` 
+`
 const Admin = styled.div`
   color:#8F8F8F;
   font-size:18px;
@@ -100,8 +100,28 @@ const PublisherPublishingSetting = React.createClass({
       dialog:false,
       adminRemoveName:'',
       userToAdmin:[],
-      searchText:'',
-      autoState:false
+      selectedTag: undefined,
+      autoState:false,
+      tags: [
+        'Red',
+        'Orange',
+        'Yellow',
+        'Green',
+        'Blue',
+        'Purple',
+        'Black',
+        'White',
+      ],
+      initTags: [
+        'Red',
+        'Orange',
+        'Yellow',
+        'Green',
+        'Blue',
+        'Purple',
+        'Black',
+        'White',
+      ]
     }
   },
 
@@ -169,16 +189,28 @@ const PublisherPublishingSetting = React.createClass({
             self.setState({autoState:true})
             document.getElementById('text').focus()
           }
-        }) 
+        })
     }
   },
-
+  filterTags(event, searchText) {
+    this.setState({
+      tags: _.filter(this.state.initTags, tag => tag.toLowerCase().indexOf(searchText.toLowerCase()) !== -1)
+    }, () => {
+      this.refs.searchText.focus()
+    })
+  },
+  changeItem(event, menuItem, index) {
+    this.setState({
+      selectedTag: index
+    })
+  },
   render(){
-    var {admin,textStatus,error,adminRemoveName,dialog,userToAdmin,searchText,autoState} = this.state
+    var {admin,textStatus,error,adminRemoveName,dialog,userToAdmin,searchText,selectedTag,autoState,tags} = this.state
     var menu=[]
-    for(let i=0;i<10;i++){
+    for(let i=0;i<tags.length;i++){
       menu.push(
-        <MenuItem key={i} primaryText="Help &amp; feedback" />
+        // <MenuItem key={i} primaryText="Help &amp; feedback" />
+        <MenuItem key={i} value={i} primaryText={tags[i]} />
       )
     }
     const actions = [
@@ -211,27 +243,30 @@ const PublisherPublishingSetting = React.createClass({
           </Title>
           <Edit>
             <div className='row'>
-              <AutoComplete
+              <TextField
                 hintText="Search Tags ..."
-                filter={AutoComplete.noFilter}
-                dataSource={dataSource3}
+                ref="searchText"
+                onChange={this.filterTags}
               />
               <i className="fa  fa-search" style={{float:'left',margin:'20px 10px 0 0',color:'#8f8f8f'}} aria-hidden="true"></i>
             </div>
             <div className='row'>
               <Paper style={style} className="col-7">
-                <Menu>
+                <Menu
+                  selectedMenuItemStyle={{backgroundColor: '#00B2B4', color: 'black'}}
+                  value={selectedTag}
+                  onItemTouchTap={this.changeItem}>
                   {menu}
                 </Menu>
               </Paper>
               <div className="col-4">
                 <AddTag>
-                  <i className="fa fa-plus" style={{float:'left',margin:'20px 10px 0 0'}} aria-hidden="true"></i> 
+                  <i className="fa fa-plus" style={{float:'left',margin:'20px 10px 0 0'}} aria-hidden="true"></i>
                   <div style={{float:'left',margin:'20px 20px 0 0'}}>New</div>
                 </AddTag>
                 <AddTag>
-                  <i className="fa fa-trash" style={{float:'left',margin:'20px 10px 0 0'}} aria-hidden="true"></i> 
-                  <div style={{float:'left',margin:'20px 20px 0 0'}}>Delete Selected</div>
+                  <i className="fa fa-trash" style={(selectedTag === undefined) ? {float:'left',margin:'20px 10px 0 0', opacity:0.5} : {float:'left',margin:'20px 10px 0 0'}} aria-hidden="true"></i>
+                  <div style={(selectedTag === undefined) ? {float:'left',margin:'20px 20px 0 0', opacity:0.5} : {float:'left',margin:'20px 20px 0 0'}}>Delete Selected</div>
                 </AddTag>
               </div>
             </div>

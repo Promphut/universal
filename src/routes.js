@@ -4,11 +4,11 @@ import App from 'components/App'
 import auth from 'components/auth'
 import Cookies from 'react-cookie'
 import Request from 'superagent'
+import _ from 'lodash'
 import {HomePage, HomePage2, Page3, MoodboardPage, SignInPage,SignUpPage,
   PublisherSettingPage,ForgetPasswordPage,PublisherEditor,PublisherContactAndAboutPage,
   PublisherDashboardPage,ColumnEditor,ColumnSettingPage,PublisherStoryPage,UserSetting,UserSettingProfile,
   UserSettingAccount, UserSettingStory,ColumnPage,PublisherPage,UserStory,AllStory,AllColumn } from 'components'
-
 
 const checkLogin=(nextState, replace, cb)=>{
   let token = auth.getToken()
@@ -23,7 +23,7 @@ const getUserId = (nextState, replace, cb)=>{
       .set('Accept','application/json')
       .end((err,res)=>{
         if(err){
-          throw err 
+          throw err
         }
         else{
           nextState.params.user = res.body
@@ -47,7 +47,7 @@ const getPublisherId =(nextState, replace, cb)=>{
       .set('Accept','application/json')
       .end((err,res)=>{
         if(err){
-          throw err 
+          throw err
         }
         else{
           nextState.params.publisher = res.body
@@ -72,7 +72,7 @@ const getColumnId = (nextState, replace, cb)=>{
     .set('Accept','application/json')
     .end((err,res)=>{
       if(err){
-        throw err 
+        throw err
       }
       else{
         nextState.params.column = res.body
