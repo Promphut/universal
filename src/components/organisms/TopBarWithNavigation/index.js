@@ -49,8 +49,15 @@ const TopBarWithNavigation = React.createClass({
 
 	render(){
 		return (
-			<TopBar onScroll={this.handleScroll} scrolling={this.state.scrolling} loggedIn={this.state.loggedIn} title={this.props.title}>
-				<TopNavigation onMouseOver={this.handleNavbarMouseOver} onMouseOut={this.handleNavbarMouseOut} />
+			<TopBar 
+				onScroll={this.handleScroll} 
+				scrolling={this.state.scrolling} 
+				loggedIn={this.state.loggedIn} 
+				title={this.props.title}
+				onMouseOver={this.handleNavbarMouseOver} 
+				onMouseOut={this.handleNavbarMouseOut}
+				>
+				<TopNavigation  />
 			</TopBar>
 		)
 	}

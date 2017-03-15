@@ -9,7 +9,9 @@ import MenuItem from 'material-ui/MenuItem';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import {Link} from 'react-router'
 import Request from 'superagent'
-
+import CircularProgress from 'material-ui/CircularProgress';
+import moment from 'moment'
+import auth from 'components/auth'
 const Container = styled.div`
   width:100%;
 `
@@ -65,17 +67,6 @@ const Second = styled.div`
 `
 const Cont = styled.div`
   width:100%;
-  @media (min-width:481px) {
-    .sans-font {
-      font-family: 'PT Sans', 'cs_prajad', sans-serif;
-    }
-  }
-  /* FOR MOBILE */
-  @media (max-width:480px) {
-    .sans-font {
-      font-family: 'Roboto', 'cs_prajad', sans-serif;
-    }
-  }
 `
 const Name = styled.div`
   color:#222;
@@ -91,108 +82,9 @@ const Name = styled.div`
   word-wrap: break-word;      /* IE */ 
   padding-right:5px;
   overflow: hidden;
-  width:270px;
+  max-width:220px;
   margin:0 0 0 15px;
 `
-
-const tableData = [
-  {
-    name: 'John Smith',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-  {
-    name: 'Randal White',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-  {
-    name: 'Stephanie Sanders',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-  {
-    name: 'Steve Brown',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-  {
-    name: 'Joyce Whitten',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-  {
-    name: 'Samuel Roberts',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-  {
-    name: 'Adam Moore',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-  {
-    name: 'Adam Moore',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-  {
-    name: 'Adam Moore',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-];
-
-const styles = {
-  label:{
-    fontSize:'30px'
-  },
-  underline:{
-    background:'none',
-    border:'none'
-  },
-  selected:{
-    backgroundColor:'#00B2B4',
-    color:'white',
-    fill:'white'
-  },
-  menuItem:{
-    padding:'15px',
-  },
-  newColumn:{
-    color:'#00B2B4',
-    fontWeight:'bold'
-  },
-  showInactive:{
-    textDecoration:'underline',
-    color:'#8F8F8F'
-  }
-}
-const trending = {
-	name:'โมหจริตดินฮิปฮอปด็อกเตอร์โมหจ ริตแอดมิdsf fsdfsddsfdsfsdสชััน?',
-	vote:'18',
-	comment:11,
-	photo:'/tmp/story-list/1485309433041-Screen-Shot-2017-01-23-at-33221-PM-1.png'
-}
-
 const IconEdit = styled(Link)`
   background-color:#00B2B4;
   color:white;
@@ -205,119 +97,216 @@ const IconEdit = styled(Link)`
     cursor:pointer;
   }
 `
-
 const Page = styled.div`
   display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
   padding:30px 0 30px 0;
 `
-
+const MyStory = styled.div`
+  font-size:32px;
+  color:#222;
+`
+const Onload =styled.div`
+  position:relative;
+  width:100%;
+  height:500px;
+  padding-top:200px;
+  background:white;
+`
 const TopArticle = ({style,detail})=>{
-  var {name,comment,vote,photo} = detail
+  var {title,cover} = detail
   return(
     <Cont style={{...style}}>
-      <OverlayImg src={photo} style={{width:'87',height:'52',float:'left'}}/>
-      <Name className="sans-font">{name}</Name>
+      <OverlayImg src={cover} style={{width:'87',height:'52',float:'left'}}/>
+      <Name className="sans-font">{title}</Name>
     </Cont>
   )
 }
-
 const UserSettingStory = React.createClass({
 	getInitialState(){
+    this.user = this.props.params.user.user
 		return {
       value:1,
       role:'admin',
       currentPage:1,
-      article:[]
+      article:[],
+      articleStatus:'published',
+      page:0,
+      sort:'latest',
+      filter:{writer:this.user._id,status:1},
+      onLoad:false,
+      editStory:false,
+      count:0,
+      articleSelectedId:0
     }
 	},
 
   getArticle(){
+    this.setState({onLoad:true})
     var self = this
+    var {page,sort,filter} = this.state
+    //console.log(filter)
+    var fil = JSON.stringify(filter)
     Request
-      .get(config.BACKURL+'/publishers/11/stories')
+      .get(config.BACKURL+'/publishers/'+config.PID+'/feed?type=story&filter='+fil+'&sort='+sort+'&page='+page)
       .set('Accept','application/json')
       .end((err,res)=>{
-        console.log(res.body)
         if(err)throw err
         else{
+          //console.log(res.body)
           self.setState({
-            article:res.body.stories
+            article:res.body.feed,
+            count:res.body.count,
+            onLoad:false
           })
         }
       })
   },
 
-
   handleChange(event, index, value){this.setState({value})},
 
   componentDidMount(){
     this.getArticle()
+    //console.log(this.user)
   },
 
+
+  editStory(e,data){
+    this.setState({editStory:true,editStoryWhere:e.currentTarget,articleSelectedId:data})
+  },
+
+  closeEditStory(){
+    this.setState({editStory:false})
+  },
+
+  filterByPub(){
+    this.setState({filter:{writer:this.user._id,status:1},articleStatus:'published'},()=>{this.getArticle()})
+  },
+
+  filterByDra(){
+    this.setState({filter:{writer:this.user._id,status:0},articleStatus:'drafted'},()=>{this.getArticle()})
+    
+  },
+
+  changePage(e){
+    this.setState({page:e-1,currentPage:e},()=>{this.getArticle()})
+    
+  },
+
+  deleteArticle(){
+    var self = this
+    this.setState({editStory:false})
+    Request
+      .delete(config.BACKURL+'/stories/'+this.state.articleSelectedId+'?token='+auth.getToken())
+      .end((err,res)=>{
+        if(err) throw err
+        else{
+          self.getArticle()
+        }
+      })
+  },
+
+  unpublishArticle(){
+    var self = this
+    this.setState({editStory:false})
+    Request
+      .patch(config.BACKURL+'/stories/'+this.state.articleSelectedId+'?token='+auth.getToken())
+      .send({story:{status:0}})
+      .end((err,res)=>{
+        if(err) throw err
+        else{
+          self.getArticle()
+        }
+      })
+  },
+
+  publishArticle(){
+    var self = this
+    this.setState({editStory:false})
+    Request
+      .patch(config.BACKURL+'/stories/'+this.state.articleSelectedId+'?token='+auth.getToken())
+      .send({story:{status:1}})
+      .end((err,res)=>{
+        if(err) throw err
+        else{
+          self.getArticle()
+        }
+      })
+  },
+
+  goEditArticle(){
+    browserHistory.push('/editor/stories/'+articleSelectedId+'/edit')
+  },
+
+
+
   render(){
-    var {role,currentPage,article} = this.state
+    var {articleSelectedId,role,currentPage,article,articleStatus,onLoad,editStory,editStoryWhere,count} = this.state
 		return (
       <Container>
         <div className='row' style={{padding:'30px 15px 20px 30px'}}>
-          <DropDownMenu
-            value={this.state.value}
-            onChange={this.handleChange}
-            autoWidth={false}
-            style={{display:'inline'}}
-            labelStyle={{...styles.label}}
-            underlineStyle={{...styles.underline}}
-            selectedMenuItemStyle={{...styles.selected}}
-            menuItemStyle={{...styles.menuItem}}
-          >
-            <MenuItem value={1} primaryText="All Stories" />
-          </DropDownMenu>
+          <MyStory className='nunito-font'>My Stories</MyStory>   
         </div>
         <div className='row'>
           <div className='col-12'>
             <Section1 className="sans-font">
-              <TabHead>19 Published</TabHead>
-              <TabHead>7 Drafted</TabHead>
-              <TabHead>3 Scheduled</TabHead>
-              <FontIcon className="material-icons" style={{float:'right',margin:'0 0 0 0',color:'#8f8f8f'}}>search</FontIcon>
+              <TabHead onClick={this.filterByPub} style={articleStatus=='published'?{fontWeight:'bold',color:'#222'}:{}} >{!count[1]?0:count[1]+' '} Published</TabHead>
+              <TabHead onClick={this.filterByDra} style={articleStatus=='drafted'?{fontWeight:'bold',color:'#222'}:{}} >{!count[0]?0:count[0]+' '} Drafted</TabHead>
+              {/*<TabHead>3 Scheduled</TabHead>*/}
+              {/*<FontIcon className="material-icons" style={{float:'right',margin:'0 0 0 0',color:'#8f8f8f'}}>search</FontIcon>*/}
             </Section1>
           </div>
         </div>
+        <Popover
+          open={editStory}
+          anchorEl={editStoryWhere}
+          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+          targetOrigin={{horizontal: 'left', vertical: 'top'}}
+          onRequestClose={this.closeEditStory}
+        >
+          <MenuItem onClick={this.goEditArticle} style={{border:'2px solid #00B2B4',color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>edit</FontIcon>}>Edit story</MenuItem>
+          <MenuItem onClick={this.deleteArticle} style={{border:'2px solid #00B2B4',color:'#fff',fontSize:'17px',backgroundColor:'#00B2B4'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#fff'}}>delete</FontIcon>}>Delete</MenuItem>
+          {articleStatus=='published'?<MenuItem onClick={this.unpublishArticle} style={{border:'2px solid #00B2B4',color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>drafts</FontIcon>}>Unpublish</MenuItem>
+          :<MenuItem onClick={this.publishArticle} style={{border:'2px solid #00B2B4',color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>assignment_turned_in</FontIcon>}>publish</MenuItem>}
+        </Popover>
 
         <Section2 style={{padding:'40px 5px 40px 5px'}}>
+          {onLoad?<Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>:
           <Table >
             <TableHeader 
               displaySelectAll={false}
               adjustForCheckbox={false}>
               <TableRow>
-                <TableHeaderColumn style={{width:'45%'}}>Title</TableHeaderColumn>
-                <TableHeaderColumn style={{width:'15%'}}>Writer</TableHeaderColumn>
-                <TableHeaderColumn style={{width:'15%'}}>Column</TableHeaderColumn>
+                <TableHeaderColumn style={{width:'40%'}}>Title</TableHeaderColumn>
+                <TableHeaderColumn style={{width:'10%',textAlign:'center'}}>Writer</TableHeaderColumn>
+                <TableHeaderColumn style={{width:'15%',textAlign:'center'}}>Column</TableHeaderColumn>
                 <TableHeaderColumn style={{width:'15%'}}>stats</TableHeaderColumn>
-                <TableHeaderColumn style={{width:'10%'}}>Published</TableHeaderColumn>
+                <TableHeaderColumn style={{width:'15%'}}>{articleStatus=='published'?'Published':'Drafted'}</TableHeaderColumn>
+                <TableHeaderColumn style={{width:'5%'}}></TableHeaderColumn>
               </TableRow>
             </TableHeader>
             <TableBody 
               showRowHover={true}
               displayRowCheckbox={false}>
-              {article.map((data,index)=>(
+              {article?article.map((data,index)=>(
                 <TableRow key={index}>
-                  <TableRowColumn style={{width:'45%',padding:'10px 0 10px 0'}}><TopArticle detail={trending} /></TableRowColumn>
-                  <TableRowColumn style={{width:'15%'}}>{data.writer.display}</TableRowColumn>
-                  <TableRowColumn style={{width:'15%'}}>{data.column.name}</TableRowColumn>
-                  <TableRowColumn style={{width:'15%'}}>{data.id}</TableRowColumn>
-                  <TableRowColumn style={{width:'10%'}}>{data.status?'Published':'Draft'}</TableRowColumn>
+                  <TableRowColumn style={{width:'40%',padding:'10px 0 10px 0'}}><TopArticle detail={data} /></TableRowColumn>
+                  <TableRowColumn style={{width:'10%',paddingRight:0,paddingLeft:0,textAlign:'center'}}>{data.writer.display}</TableRowColumn>
+                  <TableRowColumn style={{width:'15%',paddingRight:0,paddingLeft:0,textAlign:'center'}}>{data.column.name}</TableRowColumn>
+                  <TableRowColumn style={{width:'15%'}}>{'vote : '+data.votes.total}<br/>{'comment : '+data.comments.count}</TableRowColumn>
+                  <TableRowColumn style={{width:'15%',wordWrap:'break-word',whiteSpace:'pre-wrap'}}>{articleStatus=='published'?moment(data.published).format('lll'):moment(data.created).format('lll')}</TableRowColumn>
+                  <TableHeaderColumn style={{width:'5%',paddingRight:0,paddingLeft:0,textAlign:'center',cursor:'pointer'}} ><FontIcon className='material-icons' onClick={(e)=>{this.editStory(e,data.id)}} style={{color:'#bfbfbf'}}>more_vert</FontIcon></TableHeaderColumn>
                 </TableRow>
-              ))}
+              )):''}
             </TableBody>
-          </Table>
+          </Table>}
         </Section2>
         <Page >
           <Pagination 
             currentPage={currentPage} 
             totalPages={8} 
-            onChange={(e)=>{this.setState({currentPage:e})}}
+            onChange={this.changePage}
           />
         </Page>
       </Container>

@@ -136,7 +136,7 @@ const TopBar = React.createClass({
 		let loggedIn = this.props.loggedIn
 		var user = auth.getUser()
 		return (
-			<Wrapper className="menu-font">
+			<Wrapper className="menu-font" onMouseOver={this.props.onMouseOver} onMouseOut={this.props.onMouseOut}>
 				<div className={this.props.scrolling || 'bar-on-top'}>
 					<Drawer name="ld" position="left" toggleIcon={<Hamburger/>}>
 						<LeftNavigation/>
@@ -144,7 +144,7 @@ const TopBar = React.createClass({
 
 					<Container id="container-bar">
 	   					<header>
-	   						<Link to="/#tohome" id="logo" title={this.props.title} style={{display:'block', marginTop:3}}><Logo fill={'#00B2B4'}/></Link>
+	   						<Link to="/" id="logo" title={this.props.title} style={{display:'block', marginTop:3}}><Logo fill={'#00B2B4'}/></Link>
 	   					</header>
 
 	   					{this.props.children}

@@ -106,7 +106,7 @@ const routes = (
     <Route path='me' component={UserSetting} onEnter={getUserId}>
       <Route path='settings' component={UserSettingProfile} onEnter={getUserId}/>
       <Route path='settings/account' component={UserSettingAccount} onEnter={getUserId}/>
-      <Route path='stories' component={UserSettingStory}/>
+      <Route path='stories' component={UserSettingStory} onEnter={getUserId}/>
       <Route path='stories/drafts' component={UserSettingProfile}/>
     </Route>
     <Route path='@:username' component={UserStory}/>

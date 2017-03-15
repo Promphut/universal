@@ -1,6 +1,6 @@
 import React from 'react'
-import styled from 'styled-components'
-import {PrimaryButton, SecondaryButton,AutoComplete,EditMenu,BoxMenu,MenuList,DropdownWithIcon} from 'components'
+import styled,{keyframes} from 'styled-components'
+import {PrimaryButton, SecondaryButton,AutoComplete,EditMenu,BoxMenu,MenuList,DropdownWithIcon,LeftMenu} from 'components'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import Popover from 'material-ui/Popover'
@@ -11,6 +11,41 @@ const Wrapper = styled.div`
 	& section {
 		padding: 15px;
 	}
+	.slide-in {
+    animation: slide-in 0.5s forwards;
+    -webkit-animation: slide-in 0.5s forwards;
+  }
+
+  .slide-out {
+		animation: slide-out 0.5s forwards;
+		-webkit-animation: slide-out 0.5s forwards;
+  }
+      
+  @keyframes slide-in {
+      100% { transform: translateX(0%); }
+  }
+
+  @-webkit-keyframes slide-in {
+      100% { -webkit-transform: translateX(0%); }
+  }
+      
+  @keyframes slide-out {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-100%); }
+  }
+
+  @-webkit-keyframes slide-out {
+      0% { -webkit-transform: translateX(0%); }
+      100% { -webkit-transform: translateX(-100%); }
+  }
+`
+const slideOut = keyframes`
+	from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
 `
 
 const Flex = styled.div`
@@ -28,6 +63,12 @@ const SubFont = styled.span`
 	color: #8f8f8f;
 	font-size: .85em;
 `
+const RedBox = styled.div`
+	background:red;
+	width:100px;
+	height:100px;
+
+`
 
 const aa = [{text:'ada',value:1},{text:'adadsf',value:2}]
 
@@ -35,11 +76,11 @@ const MoodboardPage = React.createClass({
 	getInitialState(){
 		return {
 			alert:false, 
-
 		}
 	},
 
-	handleRequestClose(){
+	handleRequestClose(e){
+		//console.log(e)
 		this.setState({
 			alert:false
 		})
@@ -53,6 +94,7 @@ const MoodboardPage = React.createClass({
 		var {alert,alertDesc,alertWhere} = this.state
 		return (
 			<Wrapper>
+				<LeftMenu open={alert} close={this.handleRequestClose}/>
 				<h1>Medium Buttons</h1>
 				<section>
 					Primary : <PrimaryButton label="Remove Story" iconName="grade" onClick={this.openPop}/>&nbsp;&nbsp;
@@ -74,11 +116,13 @@ const MoodboardPage = React.createClass({
 
 					Secondary without icon: <SecondaryButton label="Remove Story"/>
 
+					<RedBox />
+
 					Auto Complete : <AutoComplete dataSource={aa}/>
 
 					Edit menu :        
 					
-					<EditMenu
+					{/*<EditMenu
 						open={alert}
 						anchorEl={alertWhere}
 						onRequestClose={this.handleRequestClose}
@@ -91,7 +135,7 @@ const MoodboardPage = React.createClass({
 							<MenuList>sadsad</MenuList>
 							<MenuList>sadsad</MenuList>
 						</BoxMenu>
-					</EditMenu>
+					</EditMenu>*/}
 				</section>
 
 				DropDownMenu:<DropdownWithIcon />

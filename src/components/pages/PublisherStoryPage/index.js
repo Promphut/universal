@@ -116,12 +116,12 @@ const styles = {
     color:'#8F8F8F'
   }
 }
-const trending = {
-	name:'โมหจริตดินฮิปฮอปด็อกเตอร์โมหจ ริตแอดมิdsf fsdfsddsfdsfsdสชััน?',
-	vote:'18',
-	comment:11,
-	photo:'/tmp/story-list/1485309433041-Screen-Shot-2017-01-23-at-33221-PM-1.png'
-}
+// const trending = {
+// 	name:'โมหจริตดินฮิปฮอปด็อกเตอร์โมหจ ริตแอดมิdsf fsdfsddsfdsfsdสชััน?',
+// 	vote:'18',
+// 	comment:11,
+// 	photo:'/tmp/story-list/1485309433041-Screen-Shot-2017-01-23-at-33221-PM-1.png'
+// }
 
 const IconEdit = styled(Link)`
   background-color:#00B2B4;
@@ -170,8 +170,8 @@ const PublisherStoryPage = React.createClass({
       column:[],
       columnArray:[],
       page:0,
-      sort:'lastest',
-      filter:{publisher:config.PID},
+      sort:'latest',
+      filter:{publisher:config.PID,status:1},
       alert:false,
       alertConfirm:function(){},
       alertLoading:false,
@@ -180,6 +180,8 @@ const PublisherStoryPage = React.createClass({
       snackbarMS:'',
       articleStatus:'published',
       editStory:false,
+      count:0,
+      articleSelectedId:0,
     }
 	},
 
@@ -224,6 +226,7 @@ const PublisherStoryPage = React.createClass({
     this.setState({onLoad:true})
     var self = this
     var {page,sort,filter,value} = this.state
+    //console.log(filter)
     var fil = JSON.stringify(filter)
     Request
       .get(config.BACKURL+'/publishers/'+config.PID+'/feed?type=story&filter='+fil+'&sort='+sort+'&page='+page)
@@ -231,9 +234,10 @@ const PublisherStoryPage = React.createClass({
       .end((err,res)=>{
         if(err)throw err
         else{
-          console.log(res.body)
+          //console.log(res.body)
           self.setState({
             article:res.body.feed,
+            count:res.body.count,
             onLoad:false
           })
           
@@ -242,51 +246,42 @@ const PublisherStoryPage = React.createClass({
   },
 
   filterPublished(){
-    if(typeof this.state.value === 'number'){
-      this.setState({filter:{publisher:config.PID,column:this.state.value,status:1,articleStatus:'published'}})
-      this.getStory()
+    if(this.state.value != 'all'){
+      this.setState({filter:{publisher:config.PID,column:this.state.value,status:1},articleStatus:'published'},()=>{this.getStory()})
     }else{
-      this.setState({publisher:config.PID,status:1,articleStatus:'published'})
-      this.getStory()
+      this.setState({filter:{publisher:config.PID,status:1},articleStatus:'published'},()=>{this.getStory()})
     }
   },
 
   filterDraft(){
-    if(typeof this.state.value === 'number'){
-      this.setState({filter:{publisher:config.PID,column:this.state.value,status:0,articleStatus:'drafted'}})
-      this.getStory()
+    if(this.state.value != 'all'){
+      this.setState({filter:{publisher:config.PID,column:this.state.value,status:0},articleStatus:'drafted'},()=>{this.getStory()})
     }else{
-      this.setState({publisher:config.PID,status:0,articleStatus:'drafted'})
-      this.getStory()
+      this.setState({filter:{publisher:config.PID,status:0},articleStatus:'drafted'},()=>{this.getStory()})
     }
   },
 
   recent(){
-    this.setState({sort:'latest'})
-    this.getStory()
+    this.setState({sort:'latest'},()=>{this.getStory()})
   },
 
   popular(){
-    this.setState({sort:'popular'})
-    this.getStory()
+    this.setState({sort:'popular'},()=>{this.getStory()})
   },
 
-  handleChange(event, index, value){
-    if(typeof value === 'number'){
-      this.setState({value,filter:{publisher:config.PID,column:value}})
-      this.getStory()
-    }else if(value == 'all'){
-      this.setState({value,filter:{publisher:config.PID}})
-      this.getStory()
-    }else{
-      this.setState({value})
-    }
-  },
+  // handleChange(event, index, value){
+  //   if(typeof value === 'number'){
+  //     this.setState({value,filter:{publisher:config.PID,column:value}},()=>{this.getStory()})
+  //   }else if(value == 'all'){
+  //     this.setState({value,filter:{publisher:config.PID}},()=>{this.getStory()})
+  //   }else{
+  //     this.setState({value},()=>{this.getStory()})
+  //   }
+  // },
 
   changePage(e){
     //console.log(e-1)
-    this.setState({page:e-1,currentPage:e})
-    this.getStory()
+    this.setState({page:e-1,currentPage:e},()=>{this.getStory()})
   },
 
   componentDidMount(){
@@ -310,14 +305,12 @@ const PublisherStoryPage = React.createClass({
   },
 
   selectItem(e,value){
-    if(typeof value === 'number'){
-      this.setState({value,filter:{publisher:config.PID,column:value}})
-      this.getStory()
-    }else if(value == 'all'){
-      this.setState({value,filter:{publisher:config.PID}})
+    console.log(value)
+    if(value == 'all'){
+      this.setState({value:value,filter:{publisher:config.PID,status:1}})
       this.getStory()
     }else{
-      this.setState({value})
+      this.setState({value:value,filter:{publisher:config.PID,column:value,status:1}})
       this.getStory()
     }
   },
@@ -377,13 +370,58 @@ const PublisherStoryPage = React.createClass({
     this.setState({editStory:false})
   },
 
-  editStory(e){
-    //console.log(e.currentTarget)
-    this.setState({editStory:true,editStoryWhere:e.currentTarget})
+  editStory(e,data){
+    //console.log(data)
+    this.setState({editStory:true,editStoryWhere:e.currentTarget,articleSelectedId:data})
+  },
+
+  deleteArticle(){
+    var self = this
+    this.setState({editStory:false})
+    Request
+      .delete(config.BACKURL+'/stories/'+this.state.articleSelectedId+'?token='+auth.getToken())
+      .end((err,res)=>{
+        if(err) throw err
+        else{
+          self.getStory()
+        }
+      })
+  },
+
+  unpublishArticle(){
+    var self = this
+    this.setState({editStory:false})
+    Request
+      .patch(config.BACKURL+'/stories/'+this.state.articleSelectedId+'?token='+auth.getToken())
+      .send({story:{status:0}})
+      .end((err,res)=>{
+        if(err) throw err
+        else{
+          self.getStory()
+        }
+      })
+  },
+
+  publishArticle(){
+    var self = this
+    this.setState({editStory:false})
+    Request
+      .patch(config.BACKURL+'/stories/'+this.state.articleSelectedId+'?token='+auth.getToken())
+      .send({story:{status:1}})
+      .end((err,res)=>{
+        if(err) throw err
+        else{
+          self.getStory()
+        }
+      })
+  },
+
+  goEditArticle(){
+    browserHistory.push('/editor/stories/'+articleSelectedId+'/edit')
   },
 
   render(){
-    var { editStory,editStoryWhere,articleStatus,snackbar,snackbarMS,role,currentPage,article,column,value,alert,alertDesc,alertWhere,alertLoading,alertChild,alertConfirm,columnArray,onLoad} = this.state
+    var { sort,count,editStory,editStoryWhere,articleStatus,snackbar,snackbarMS,role,currentPage,article,column,value,alert,alertDesc,alertWhere,alertLoading,alertChild,alertConfirm,columnArray,onLoad} = this.state
     //console.log(this.state)
     return (
       <Container>
@@ -403,9 +441,10 @@ const PublisherStoryPage = React.createClass({
           targetOrigin={{horizontal: 'left', vertical: 'top'}}
           onRequestClose={this.closeEditStory}
         >
-          <MenuItem style={{border:'2px solid #00B2B4',color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>edit</FontIcon>}>Edit story</MenuItem>
-          <MenuItem style={{border:'2px solid #00B2B4',color:'#fff',fontSize:'17px',backgroundColor:'#00B2B4'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#fff'}}>delete</FontIcon>}>Delete</MenuItem>
-          <MenuItem style={{border:'2px solid #00B2B4',color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>drafts</FontIcon>}>Unpublish</MenuItem>
+          <MenuItem onClick={this.goEditArticle} style={{border:'2px solid #00B2B4',color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>edit</FontIcon>}>Edit story</MenuItem>
+          <MenuItem onClick={this.deleteArticle} style={{border:'2px solid #00B2B4',color:'#fff',fontSize:'17px',backgroundColor:'#00B2B4'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#fff'}}>delete</FontIcon>}>Delete</MenuItem>
+          {articleStatus=='published'?<MenuItem onClick={this.unpublishArticle} style={{border:'2px solid #00B2B4',color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>drafts</FontIcon>}>Unpublish</MenuItem>
+          :<MenuItem onClick={this.publishArticle} style={{border:'2px solid #00B2B4',color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>assignment_turned_in</FontIcon>}>publish</MenuItem>}
         </Popover>
         <Alert 
           open={alert}
@@ -429,16 +468,16 @@ const PublisherStoryPage = React.createClass({
         <div className='row'>
           <div className='col-6'>
             <Section1 className="sans-font">
-              <TabHead onClick={this.filterPublished}>19 Published</TabHead>
-              <TabHead onClick={this.filterDraft}>7 Drafted</TabHead>
+              <TabHead onClick={this.filterPublished} style={articleStatus=='published'?{fontWeight:'bold',color:'#222'}:{}}>{!count[1]?0:count[1]+' '} Published</TabHead>
+              <TabHead onClick={this.filterDraft} style={articleStatus=='drafted'?{fontWeight:'bold',color:'#222'}:{}}>{!count[0]?0:count[0]+' '} Drafted</TabHead>
               {/*<TabHead>3 Scheduled</TabHead>*/}
             </Section1>
           </div>
           <div className='col-6'>
             <Section1 className="sans-font">
-              <TabHead onClick={this.recent}>Recent</TabHead>
+              <TabHead onClick={this.recent} style={sort=='latest'?{fontWeight:'bold',color:'#222'}:{}}>Recent</TabHead>
               {/*<TabHead>Trending</TabHead>*/}
-              <TabHead onClick={this.popular}>Most Popular</TabHead>
+              <TabHead onClick={this.popular} style={sort=='popular'?{fontWeight:'bold',color:'#222'}:{}}>Most Popular</TabHead>
               {/*<FontIcon className="material-icons" style={{float:'right',margin:'0 0 0 0',color:'#8f8f8f'}}>search</FontIcon>*/}
             </Section1>
           </div>
@@ -455,7 +494,7 @@ const PublisherStoryPage = React.createClass({
                 <TableHeaderColumn style={{width:'10%',textAlign:'center'}}>Writer</TableHeaderColumn>
                 <TableHeaderColumn style={{width:'15%',textAlign:'center'}}>Column</TableHeaderColumn>
                 <TableHeaderColumn style={{width:'15%'}}>stats</TableHeaderColumn>
-                <TableHeaderColumn style={{width:'15%'}}>Published</TableHeaderColumn>
+                <TableHeaderColumn style={{width:'15%'}}>{articleStatus=='published'?'Published':'Drafted'}</TableHeaderColumn>
                 <TableHeaderColumn style={{width:'5%'}}></TableHeaderColumn>
               </TableRow>
             </TableHeader>
@@ -469,7 +508,7 @@ const PublisherStoryPage = React.createClass({
                   <TableRowColumn style={{width:'15%',paddingRight:0,paddingLeft:0,textAlign:'center'}}>{data.column.name}</TableRowColumn>
                   <TableRowColumn style={{width:'15%'}}>{'vote : '+data.votes.total}<br/>{'comment : '+data.comments.count}</TableRowColumn>
                   <TableRowColumn style={{width:'15%',wordWrap:'break-word',whiteSpace:'pre-wrap'}}>{articleStatus=='published'?moment(data.published).format('lll'):moment(data.created).format('lll')}</TableRowColumn>
-                  <TableHeaderColumn style={{width:'5%',paddingRight:0,paddingLeft:0,textAlign:'center',cursor:'pointer'}} ><FontIcon className='material-icons' onClick={this.editStory} style={{color:'#bfbfbf'}}>more_vert</FontIcon></TableHeaderColumn>
+                  <TableHeaderColumn style={{width:'5%',paddingRight:0,paddingLeft:0,textAlign:'center',cursor:'pointer'}} ><FontIcon className='material-icons' onClick={(e)=>{this.editStory(e,data.id)}} style={{color:'#bfbfbf'}}>more_vert</FontIcon></TableHeaderColumn>
                 </TableRow>
               )):''}
             </TableBody>
