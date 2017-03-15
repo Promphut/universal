@@ -165,6 +165,7 @@ const PublisherPublishingSetting = React.createClass({
 
   componentDidMount(){
     this.getAdmin()
+    document.addEventListener('click', this.handleClickOutside)
   },
 
   addAdmin(){
@@ -203,6 +204,15 @@ const PublisherPublishingSetting = React.createClass({
     this.setState({
       selectedTag: index
     })
+  },
+  handleClickOutside(evt) {
+    const area = dom(this.refs.menu);
+
+    if (!area.contains(evt.target)) {
+      this.setState({
+        selectedTag: undefined
+      })
+    }
   },
   render(){
     var {admin,textStatus,error,adminRemoveName,dialog,userToAdmin,searchText,selectedTag,autoState,tags} = this.state
@@ -245,8 +255,8 @@ const PublisherPublishingSetting = React.createClass({
             <div className='row'>
               <TextField
                 hintText="Search Tags ..."
-                ref="searchText"
                 onChange={this.filterTags}
+                ref="searchText"
               />
               <i className="fa  fa-search" style={{float:'left',margin:'20px 10px 0 0',color:'#8f8f8f'}} aria-hidden="true"></i>
             </div>
@@ -255,7 +265,9 @@ const PublisherPublishingSetting = React.createClass({
                 <Menu
                   selectedMenuItemStyle={{backgroundColor: '#00B2B4', color: 'black'}}
                   value={selectedTag}
-                  onItemTouchTap={this.changeItem}>
+                  onItemTouchTap={this.changeItem}
+                  disableAutoFocus={true}
+                  ref="menu">
                   {menu}
                 </Menu>
               </Paper>
