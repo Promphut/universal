@@ -7,7 +7,7 @@ import Request from 'superagent'
 import {HomePage, HomePage2, Page3, MoodboardPage, SignInPage,SignUpPage,
   PublisherSettingPage,ForgetPasswordPage,PublisherEditor,PublisherContactAndAboutPage,
   PublisherDashboardPage,ColumnEditor,ColumnSettingPage,PublisherStoryPage,UserSetting,UserSettingProfile,
-  UserSettingAccount, UserSettingStory,ColumnPage,PublisherPage,UserStory,AllStory,AllColumn } from 'components'
+  UserSettingAccount, UserSettingStory,ColumnPage,PublisherPage,UserStory,AllStory,AllColumn,NewStory } from 'components'
 
 
 const checkLogin=(nextState, replace, cb)=>{
@@ -99,6 +99,7 @@ const routes = (
       <Route path='settings' component={PublisherSettingPage} onEnter={getPublisherId}/>
       <Route path='stories' component={PublisherStoryPage} onEnter={getPublisherId}/>
       <Route path='contact' component={PublisherContactAndAboutPage} onEnter={getPublisherId}/>
+      <Route path='stories/new' component={NewStory}/>
       <Route path='columns/:cid' >
         <Route path='settings' component={ColumnSettingPage} onEnter={getColumnId}/>
       </Route>
