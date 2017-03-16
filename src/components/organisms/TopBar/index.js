@@ -13,10 +13,10 @@ import auth from 'components/auth'
 import {PrimaryButton, SecondaryButton, Logo, Drawer, LeftNavigation, RightNavigation} from 'components'
 
 const Wrapper = styled.div`
-	* { 
-		margin: 0; 
-		padding: 0; 
-	} 
+	* {
+		margin: 0;
+		padding: 0;
+	}
 
 	/* === For Bar-on-top class === */
 	.bar-on-top #container-bar {
@@ -36,13 +36,13 @@ const Wrapper = styled.div`
 		color: #fff !important;
 	}
 	.bar-on-top #ld-toggle-area > span {
-		background: #e2e2e2; 
-		box-shadow: 0 6px 0 #e2e2e2, 0 12px 0 #e2e2e2; 
+		background: #e2e2e2;
+		box-shadow: 0 6px 0 #e2e2e2, 0 12px 0 #e2e2e2;
 	}
 	.bar-on-top #top-nav ul li a {
 		color: #e2e2e2;
 	}
-	
+
 `
 
 const DarkMenuItem = styled(MenuItem)`
@@ -58,15 +58,15 @@ const HideOnTablet = styled.div`
 `
 
 const Container = styled.div`
-	width: 100%; 
-	position: fixed; 
-	left: 0px; 
-	background: #FFF; 
+	width: 100%;
+	position: fixed;
+	left: 0px;
+	background: #FFF;
 	display: flex;
 	flex-flow: row nowrap;
 	justify-content: space-between;
-	line-height: 60px; 
-	z-index: 1; 
+	line-height: 60px;
+	z-index: 1;
 	height:60px;
 	padding:0 70px;
 	border-bottom: 1px solid #e2e2e2;
@@ -77,21 +77,21 @@ const Container = styled.div`
 `
 
 const Hamburger = styled.span`
-	content: ''; 
-	display: block; 
-	position: absolute; 
-	height: 2px; 
-	width: 20px; 
-	left: 20px; 
-	top: 23px; 
-	background: #8d8d8d; 
-	box-shadow: 0 6px 0 #8d8d8d, 0 12px 0 #8d8d8d; 
+	content: '';
+	display: block;
+	position: absolute;
+	height: 2px;
+	width: 20px;
+	left: 20px;
+	top: 23px;
+	background: #8d8d8d;
+	box-shadow: 0 6px 0 #8d8d8d, 0 12px 0 #8d8d8d;
 `
 
 const ProfileAvatar = styled(Avatar)`
 	right: 15px;
 	top: 15px;
-	position: absolute; 
+	position: absolute;
 `
 
 const NotLogin = styled.div`
@@ -112,7 +112,7 @@ const NotLogin = styled.div`
 const TopBar = React.createClass({
 	getInitialState(){
 	    return{
-	    	
+
 	    }
 	},
 
@@ -150,8 +150,8 @@ const TopBar = React.createClass({
 	   					{this.props.children}
 
 						<div style={{textAlign:'right'}}>
-							{loggedIn ? 
-								(<HideOnTablet><PrimaryButton label="Story" iconName="add" style={{verticalAlign:'middle'}}/></HideOnTablet>) : 
+							{loggedIn ?
+								(<HideOnTablet><PrimaryButton label="Story" iconName="add" style={{verticalAlign:'middle'}}/></HideOnTablet>) :
 								(<NotLogin id="not-login"><SecondaryButton label="Sign Up" onClick={this.signup} style={{verticalAlign:'middle'}}/><span>&nbsp; or </span><Link to="/signin" style={{fontWeight:'bold'}}>Sign In</Link></NotLogin>
 							)}
 						</div>

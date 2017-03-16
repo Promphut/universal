@@ -15,7 +15,7 @@ const Container = styled.div`
   z-index:10;
   display:${props=> props.open?'block':'none'};
   animation: ${props=> props.open?displayNone:displayBlock} 0.5s forwards;
-  
+
 `
 
 const Container2 = styled.div`
@@ -76,6 +76,7 @@ const fadeIn = keyframes`
   }
 `
 const fadeOut = keyframes`
+  from {
     opacity:1;
   }
   to {
@@ -83,30 +84,59 @@ const fadeOut = keyframes`
   }
 `
 
-
+const hiddenMenu = keyframes`
+  0% {
+    opacity: 1;
+    display: block;
+  }
+  10% {
+    opacity: 1;
+    display: block;
+  }
+  100% {
+    opacity: 0;
+    display: none;
+  }
+`
+const showMenu = keyframes`
+  0% {
+    opacity: 0;
+    display: none;
+  }
+  10% {
+    opacity: 0;
+    display: none;
+  }
+  100% {
+    opacity: 1;
+    display: block;
+  }
+`
 
 const Nav = styled.nav`
-	position: relative; 
-	top: 0; 
-	left:0; 
-	height: 100%; 
-	width: 400px; 
-	overflow-x: hidden; 
-	overflow-y: auto; 
-	padding: 40px; 
-	-webkit-overflow-scrolling: touch; 
+	position: relative;
+	top: 0;
+	left:0;
+	height: 100%;
+	width: 400px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	padding: 40px;
+	-webkit-overflow-scrolling: touch;
 	z-index:11;
-  animation: ${props=> props.open?slideOut:slideIn} 0.8s forwards;
+  animation: ${props=> props.open?slideOut:slideIn} 0.6s forwards;
 
 	background: -moz-linear-gradient(-45deg,  rgba(0,178,180,0.75) 0%, rgba(206,241,183,0.75) 100%); /* FF3.6-15 */
 	background: -webkit-linear-gradient(-45deg,  rgba(0,178,180,0.75) 0%,rgba(206,241,183,0.75) 100%); /* Chrome10-25,Safari5.1-6 */
 	background: linear-gradient(135deg,  rgba(0,178,180,0.75) 0%,rgba(206,241,183,0.75) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\#bf00b2b4\, endColorstr=\#bfcef1b7\,GradientType=1 ); /* IE6-9 fallback on horizontal gradient */ 
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\#bf00b2b4\, endColorstr=\#bfcef1b7\,GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 
 	& ul {
-		margin: 70px 60px 0 60px;
-		list-style-type:none; 
-		font-size: 20px; 
+		// margin: 70px 60px 0 60px;
+		margin: 40px 0px 0px;
+    padding: 0px;
+		list-style-type:none;
+		font-size: 20px;
 	}
 
 	& ul li {
@@ -119,16 +149,17 @@ const Nav = styled.nav`
 		vertical-align: middle;
 	}
 
-	& ul li .right-arrow { 
-		font-size: 20px; 
-		line-height: 40px; 
+	& ul li .arrow {
+		font-size: 32px !important;
+		line-height: 40px;
 		vertical-align: middle;
-		margin-left: 22px !important; 
+		margin-left: 140px !important;
+    color: #FFF !important;
 	}
 
 	& ul li a {
 		text-decoration:none
-		color:#FFF; 
+		color:#FFF;
 	}
 
 	& ul li a:hover {
@@ -139,63 +170,82 @@ const Nav = styled.nav`
 		margin: 20px 0 !important;
 		background-color: #e2e2e2 !important;
 	}
-`
-const Nav2 = styled.div`
-	position: absolute; 
-	top: 0; 
-	left:0; 
-	height: 100%; 
-	width: 400px; 
-	overflow-x: hidden; 
-	overflow-y: auto; 
-	padding: 40px; 
-	-webkit-overflow-scrolling: touch; 
-	z-index:11;
-  display: ${props=> !props.open?'none':'block'};
-  animation: slideOut 0.8s forwards;
 
-	background: -moz-linear-gradient(-45deg,  rgba(0,178,180,0.75) 0%, rgba(206,241,183,0.75) 100%); /* FF3.6-15 */
-	background: -webkit-linear-gradient(-45deg,  rgba(0,178,180,0.75) 0%,rgba(206,241,183,0.75) 100%); /* Chrome10-25,Safari5.1-6 */
-	background: linear-gradient(135deg,  rgba(0,178,180,0.75) 0%,rgba(206,241,183,0.75) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\#bf00b2b4\, endColorstr=\#bfcef1b7\,GradientType=1 ); /* IE6-9 fallback on horizontal gradient */ 
-
-	& ul {
-		margin: 70px 60px 0 60px;
-		list-style-type:none; 
-		font-size: 20px; 
-	}
-
-	& ul li {
-		padding: 10px;
-		color: White;
-	}
-
-	& ul li > * {
-		display: inline-block;
+  & ul li .arrow {
+		font-size: 32px !important;
+		line-height: 40px;
 		vertical-align: middle;
+		margin-left: 140px !important;
+    color: #FFF !important;
 	}
 
-	& ul li .right-arrow { 
-		font-size: 20px; 
-		line-height: 40px; 
-		vertical-align: middle;
-		margin-left: 22px !important; 
-	}
+  & ul li .arrow.toggleUp {
+    transform: rotate(0deg);
+    transition-duration: 1s
+  }
 
-	& ul li a {
-		text-decoration:none
-		color:#FFF; 
-	}
-
-	& ul li a:hover {
-		text-decoration: underline;
-	}
-
-	& ul hr {
-		margin: 20px 0 !important;
-		background-color: #e2e2e2 !important;
-	}
+  & ul li .arrow.toggleDown {
+    transform: rotate(180deg);
+    transition-duration: 1s
+  }
 `
+
+// const Nav2 = styled.div`
+// 	position: absolute;
+// 	top: 0;
+// 	left:0;
+// 	height: 100%;
+// 	width: 400px;
+// 	overflow-x: hidden;
+// 	overflow-y: auto;
+// 	padding: 40px;
+// 	-webkit-overflow-scrolling: touch;
+// 	z-index:11;
+//   display: ${props=> !props.open?'none':'block'};
+//   animation: slideOut 0.8s forwards;
+//
+// 	background: -moz-linear-gradient(-45deg,  rgba(0,178,180,0.75) 0%, rgba(206,241,183,0.75) 100%); /* FF3.6-15 */
+// 	background: -webkit-linear-gradient(-45deg,  rgba(0,178,180,0.75) 0%,rgba(206,241,183,0.75) 100%); /* Chrome10-25,Safari5.1-6 */
+// 	background: linear-gradient(135deg,  rgba(0,178,180,0.75) 0%,rgba(206,241,183,0.75) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+// 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\#bf00b2b4\, endColorstr=\#bfcef1b7\,GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+//
+// 	& ul {
+// 		margin: 70px 60px 0 60px;
+// 		list-style-type:none;
+// 		font-size: 20px;
+// 	}
+//
+// 	& ul li {
+// 		padding: 10px;
+// 		color: White;
+// 	}
+//
+// 	& ul li > * {
+// 		display: inline-block;
+// 		vertical-align: middle;
+// 	}
+//
+// 	& ul li .right-arrow {
+// 		font-size: 20px;
+// 		line-height: 40px;
+// 		vertical-align: middle;
+// 		margin-left: 22px !important;
+// 	}
+//
+// 	& ul li a {
+// 		text-decoration:none
+// 		color:#FFF;
+// 	}
+//
+// 	& ul li a:hover {
+// 		text-decoration: underline;
+// 	}
+//
+// 	& ul hr {
+// 		margin: 20px 0 !important;
+// 		background-color: #e2e2e2 !important;
+// 	}
+// `
 
 const CloseBtn = styled(IconButton)`
 	top: 20px;
@@ -209,11 +259,16 @@ const CloseBtn = styled(IconButton)`
 	}
 `
 const MiniMenu = styled.div`
-  position:relative;
-  top:0;
-  left:0;
-  width:70px;
-  height:100%;
+  // position:relative;
+  // top:0;
+  // left:0;
+  // width:70px;
+  // height:100%;
+  height: ${props => props.height};
+  overflow: hidden;
+  transition: height 0.5s;
+  padding-left: 40px;
+  font-size: 24px;
 `
 
 const SearchBtn = styled(IconButton)`
@@ -233,44 +288,66 @@ const LeftMenu = React.createClass({
 		return {
       open:this.props.open,
       miniMenu:false,
+      toggleArrow: 'toggleUp',
+      height: 0
     }
 	},
 
 	shrinkDrawer(e){
-		e.preventDefault() 
-    console.log(e)
+		e.preventDefault()
 		this.setState({
-      miniMenu:true
+      miniMenu:!this.state.miniMenu
     })
+
+    var {toggleArrow} = this.state
+    if (this.state.toggleArrow === 'toggleUp') {
+      this.state.toggleArrow = 'toggleDown'
+    } else {
+      this.state.toggleArrow = 'toggleUp'
+    }
+
+    this.state.height = (this.state.miniMenu) ? 0 : 300
 	},
 
 	render(){
-    //console.log(this.props.open)
+    var {miniMenu, toggleArrow, height} = this.state
     var {open,close} = this.props
+
 		return(
       <Container open={open} >
       <Container2  onClick={close} />
         <Nav open={open}>
           <div className="menu">
             <CloseBtn onTouchTap={close}><FontIcon className="material-icons">close</FontIcon></CloseBtn>
-            <SearchBtn onTouchTap={this.onSearch}><FontIcon className="material-icons">search</FontIcon></SearchBtn>
+            {/* <SearchBtn onTouchTap={this.onSearch}><FontIcon className="material-icons">search</FontIcon></SearchBtn>*/}
             <ul>
-              <li><Link to="/" style={{fontSize: 30}}>Home</Link></li>
-              <li><Link to="#" style={{fontSize: 40}} onClick={this.shrinkDrawer}>Stories</Link></li>
-              <li><Divider /></li>
+              <li><Link to="/" style={{fontSize: 24}}>Home</Link></li>
               <li><Link to="/" style={{fontSize: 24}}>About Us</Link></li>
+              <Divider />
+              <li><Link to="#" style={{fontSize: 40}} onClick={this.shrinkDrawer}>Stories
+                <FontIcon className={'material-icons arrow ' + toggleArrow}>keyboard_arrow_down</FontIcon>
+              </Link></li>
+              <MiniMenu height={height+'px'}>
+                <li><Link to="/">All</Link></li>
+                <li><Link to="/">Saving</Link></li>
+                <li><Link to="/">Fund</Link></li>
+                <li><Link to="/">Stock</Link></li>
+                <li><Link to="/">Money Ideas</Link></li>
+                <li><Link to="/">Retirement</Link></li>
+              </MiniMenu>
+              <Divider />
               <li><Link to="/" style={{fontSize: 24}}>Contact</Link></li>
-              <li><Divider /></li>
+              {/*<Divider />
               <li><em style={{color:'#e2e2e2', fontSize:'18px'}}>Other Channels</em></li>
-              <li><Link to="/">Infographic Thailand</Link></li>
+              <li><Link to="/">Infographic Thailand</Link></li>*/}
             </ul>
           </div>
         </Nav>
-        <Nav2 >
+        {/*<Nav2 >
           <MiniMenu open={this.state.miniMenu}>
 
           </MiniMenu>
-        </Nav2>    
+        </Nav2>*/}
       </Container>
 		)
 	}
