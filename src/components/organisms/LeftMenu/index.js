@@ -133,7 +133,7 @@ const Nav = styled.nav`
 
 	& ul {
 		// margin: 70px 60px 0 60px;
-		margin: 40px 0px 0px;
+		margin: 70px 40px;
     padding: 0px;
 		list-style-type:none;
 		font-size: 20px;
@@ -190,63 +190,6 @@ const Nav = styled.nav`
   }
 `
 
-// const Nav2 = styled.div`
-// 	position: absolute;
-// 	top: 0;
-// 	left:0;
-// 	height: 100%;
-// 	width: 400px;
-// 	overflow-x: hidden;
-// 	overflow-y: auto;
-// 	padding: 40px;
-// 	-webkit-overflow-scrolling: touch;
-// 	z-index:11;
-//   display: ${props=> !props.open?'none':'block'};
-//   animation: slideOut 0.8s forwards;
-//
-// 	background: -moz-linear-gradient(-45deg,  rgba(0,178,180,0.75) 0%, rgba(206,241,183,0.75) 100%); /* FF3.6-15 */
-// 	background: -webkit-linear-gradient(-45deg,  rgba(0,178,180,0.75) 0%,rgba(206,241,183,0.75) 100%); /* Chrome10-25,Safari5.1-6 */
-// 	background: linear-gradient(135deg,  rgba(0,178,180,0.75) 0%,rgba(206,241,183,0.75) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-// 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\#bf00b2b4\, endColorstr=\#bfcef1b7\,GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-//
-// 	& ul {
-// 		margin: 70px 60px 0 60px;
-// 		list-style-type:none;
-// 		font-size: 20px;
-// 	}
-//
-// 	& ul li {
-// 		padding: 10px;
-// 		color: White;
-// 	}
-//
-// 	& ul li > * {
-// 		display: inline-block;
-// 		vertical-align: middle;
-// 	}
-//
-// 	& ul li .right-arrow {
-// 		font-size: 20px;
-// 		line-height: 40px;
-// 		vertical-align: middle;
-// 		margin-left: 22px !important;
-// 	}
-//
-// 	& ul li a {
-// 		text-decoration:none
-// 		color:#FFF;
-// 	}
-//
-// 	& ul li a:hover {
-// 		text-decoration: underline;
-// 	}
-//
-// 	& ul hr {
-// 		margin: 20px 0 !important;
-// 		background-color: #e2e2e2 !important;
-// 	}
-// `
-
 const CloseBtn = styled(IconButton)`
 	top: 20px;
 	left: 20px;
@@ -267,7 +210,7 @@ const MiniMenu = styled.div`
   height: ${props => props.height};
   overflow: hidden;
   transition: height 0.5s;
-  padding-left: 40px;
+  margin-left: 40px !important;
   font-size: 24px;
 `
 
@@ -306,7 +249,7 @@ const LeftMenu = React.createClass({
       this.state.toggleArrow = 'toggleUp'
     }
 
-    this.state.height = (this.state.miniMenu) ? 0 : 300
+    this.state.height = (this.state.miniMenu) ? 0 : 325
 	},
 
 	render(){

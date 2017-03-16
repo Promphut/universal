@@ -43,6 +43,27 @@ const Wrapper = styled.div`
 		color: #e2e2e2;
 	}
 
+ 	.hamburger {
+		float: left;
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-khtml-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+		height:60px !important;
+		width: 60px !important;
+		display: block !important;
+		position: fixed !important;
+		background: rgba(255,255,255,.0) !important;
+		z-index:2;
+		cursor:pointer;
+	}
+
+	.bar-on-top .hamburger div span {
+		background: #e2e2e2 !important;
+		box-shadow: 0 6px 0 #e2e2e2, 0 12px 0 #e2e2e2 !important;
+	}
 `
 
 const DarkMenuItem = styled(MenuItem)`
@@ -86,6 +107,18 @@ const Hamburger = styled.span`
 	top: 23px;
 	background: #8d8d8d;
 	box-shadow: 0 6px 0 #8d8d8d, 0 12px 0 #8d8d8d;
+
+	-webkit-transition: .25s ease-in-out;
+	-moz-transition: .25s ease-in-out;
+	-o-transition: .25s ease-in-out;
+	transition: .25s ease-in-out;
+	-webkit-text-size-adjust: none;
+
+	.bar-on-to {
+		background: #e2e2e2 !important;
+		box-shadow: 0 6px 0 #e2e2e2, 0 12px 0 #e2e2e2 !important;
+
+	}
 `
 
 const ProfileAvatar = styled(Avatar)`
@@ -112,7 +145,7 @@ const NotLogin = styled.div`
 const TopBar = React.createClass({
 	getInitialState(){
 	    return{
-
+				alert:false,
 	    }
 	},
 
@@ -132,19 +165,34 @@ const TopBar = React.createClass({
 		browserHistory.push('/signup')
 	},
 
+	handleRequestClose(e){
+		//console.log(e)
+		this.setState({
+			alert:false
+		})
+	},
+
+	openPop(){
+		this.setState({alert:true})
+		console.log('openPop')
+	},
+
 	render(){
+		var {alert} = this.state
 		let loggedIn = this.props.loggedIn
 		var user = auth.getUser()
 		return (
 			<Wrapper className="menu-font" onMouseOver={this.props.onMouseOver} onMouseOut={this.props.onMouseOut}>
 				<div className={this.props.scrolling || 'bar-on-top'}>
+{/*
 					<Drawer name="ld" position="left" toggleIcon={<Hamburger/>}>
-						<LeftNavigation/>
-					</Drawer>
-						{/*<IconButton style={{float:'left',width:'60px',height:'60px'}}>
-							<FontIcon className='material-icons' style={{fontSize:'30px'}}>menu</FontIcon>
-						</IconButton>*/}
+						<LeftMenu open={alert} close={this.handleRequestClose}/>
+					</Drawer>*/}
 
+					<IconButton className="hamburger" onClick={this.openPop}>
+						<Hamburger/>
+					</IconButton>
+					<LeftMenu open={alert} close={this.handleRequestClose}/>
 
 					<Container id="container-bar">
 	   					<header>
