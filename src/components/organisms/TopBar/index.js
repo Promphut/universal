@@ -10,7 +10,7 @@ import MenuItem from 'material-ui/MenuItem';
 import Avatar from 'material-ui/Avatar';
 import styled from 'styled-components'
 import auth from 'components/auth'
-import {PrimaryButton, SecondaryButton, Logo, Drawer, LeftNavigation, RightNavigation} from 'components'
+import {PrimaryButton, SecondaryButton, Logo, Drawer, LeftNavigation, RightNavigation,LeftMenu} from 'components'
 
 const Wrapper = styled.div`
 	* {
@@ -141,6 +141,10 @@ const TopBar = React.createClass({
 					<Drawer name="ld" position="left" toggleIcon={<Hamburger/>}>
 						<LeftNavigation/>
 					</Drawer>
+						{/*<IconButton style={{float:'left',width:'60px',height:'60px'}}>
+							<FontIcon className='material-icons' style={{fontSize:'30px'}}>menu</FontIcon>
+						</IconButton>*/}
+
 
 					<Container id="container-bar">
 	   					<header>
