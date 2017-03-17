@@ -65,34 +65,35 @@ const SignInFb = React.createClass({
     }
   },
 
-  signupFB(e){
-    e.preventDefault()
-    Request
-      .get(config.BACKURL+'/auth/facebook?publisher='+config.PID)
-      .set('Accept','application/json')
-      .end((err,res)=>{
-        if(err) throw err
-        else{
-          browserHistory.push('/')
-        }
-      })
-  },  
+  // signupFB(e){
+  //   e.preventDefault()
+  //   Request
+  //     .get(config.BACKURL+'/auth/facebook?publisher='+config.PID)
+  //     .set('Accept','application/json')
+  //     .end((err,res)=>{
+  //       if(err) throw err
+  //       else{
+  //         browserHistory.push('/')
+  //       }
+  //     })
+  // },  
 
   render(){
   return(
     <Box>
       <Head>Sign In</Head>
       <div style={styles.btnCon}>
-        <RaisedButton
-          label=" Sign In with facebook"
-          labelPosition="after"
-          labelColor='white'
-          onClick={this.signupFB}
-          labelStyle={styles.labelBtn}
-          icon={<i className="fa fa-facebook" style={{color:'white',margin:'17px 10px 0 0'}} aria-hidden="true"></i>}
-          style={styles.button}
-          buttonStyle={styles.btn}
-        />
+        <a href={config.BACKURL+'/auth/facebook?publisher='+config.PID}>
+          <RaisedButton
+            label=" Sign In with facebook"
+            labelPosition="after"
+            labelColor='white'
+            labelStyle={styles.labelBtn}
+            icon={<i className="fa fa-facebook" style={{color:'white',margin:'17px 10px 0 0'}} aria-hidden="true"></i>}
+            style={styles.button}
+            buttonStyle={styles.btn}
+          />
+        </a>
       </div>
       <Text style={{marginTop:'20px',fontFamily:'Nunito'}}>Or <LinkUnderLine to="#" onClick={this.props.emailSignIn}>Sign In with an E-mail</LinkUnderLine></Text>
       <Div>
