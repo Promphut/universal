@@ -10,7 +10,7 @@ import MenuItem from 'material-ui/MenuItem';
 import Avatar from 'material-ui/Avatar';
 import styled from 'styled-components'
 import auth from 'components/auth'
-import {PrimaryButton, SecondaryButton, Logo, Drawer, LeftNavigation, RightNavigation,LeftMenu} from 'components'
+import {PrimaryButton, SecondaryButton, Logo, Drawer, LeftNavigation, RightNavigation, LeftMenu, RightMenu} from 'components'
 
 const Wrapper = styled.div`
 	* {
@@ -113,18 +113,14 @@ const Hamburger = styled.span`
 	-o-transition: .25s ease-in-out;
 	transition: .25s ease-in-out;
 	-webkit-text-size-adjust: none;
-
-	.bar-on-to {
-		background: #e2e2e2 !important;
-		box-shadow: 0 6px 0 #e2e2e2, 0 12px 0 #e2e2e2 !important;
-
-	}
 `
 
 const ProfileAvatar = styled(Avatar)`
 	right: 15px;
 	top: 15px;
-	position: absolute;
+	position: fixed;
+	z-index:2;
+	cursor:pointer;
 `
 
 const NotLogin = styled.div`
@@ -145,7 +141,8 @@ const NotLogin = styled.div`
 const TopBar = React.createClass({
 	getInitialState(){
 	    return{
-				alert:false,
+				alertLeft: false,
+				alertRight: false
 	    }
 	},
 
@@ -165,34 +162,37 @@ const TopBar = React.createClass({
 		browserHistory.push('/signup')
 	},
 
-	handleRequestClose(e){
-		//console.log(e)
-		this.setState({
-			alert:false
-		})
+	handleRequestClose(side){
+		if (side === 'left') {
+			this.setState({alertLeft: false})
+		} else if (side === 'right') {
+			this.setState({alertRight: false})
+		}
 	},
 
-	openPop(){
-		this.setState({alert:true})
-		console.log('openPop')
+	openPop(side){
+		if (side === 'left') {
+			this.setState({alertLeft: true})
+		} else if (side === 'right') {
+			this.setState({alertRight: true})
+		}
 	},
 
 	render(){
-		var {alert} = this.state
+		var {alertLeft, alertRight} = this.state
 		let loggedIn = this.props.loggedIn
 		var user = auth.getUser()
 		return (
 			<Wrapper className="menu-font" onMouseOver={this.props.onMouseOver} onMouseOut={this.props.onMouseOut}>
 				<div className={this.props.scrolling || 'bar-on-top'}>
-{/*
-					<Drawer name="ld" position="left" toggleIcon={<Hamburger/>}>
+					{/*<Drawer name="ld" position="left" toggleIcon={<Hamburger/>}>
 						<LeftMenu open={alert} close={this.handleRequestClose}/>
 					</Drawer>*/}
 
-					<IconButton className="hamburger" onClick={this.openPop}>
+					<IconButton className="hamburger" onClick={() => this.openPop('left')}>
 						<Hamburger/>
 					</IconButton>
-					<LeftMenu open={alert} close={this.handleRequestClose}/>
+					<LeftMenu open={alertLeft} close={() => this.handleRequestClose('left')}/>
 
 					<Container id="container-bar">
 	   					<header>
@@ -210,9 +210,12 @@ const TopBar = React.createClass({
 					</Container>
 
 					{loggedIn && (
-					<Drawer name="rd" position="right" toggleIcon={<ProfileAvatar src={user.pic.medium} size={30}/>}>
-						<RightNavigation user={user}/>
-					</Drawer>)}
+						// <Drawer name="rd" position="right" toggleIcon={<ProfileAvatar src={user.pic.medium} size={30}/>}>
+						// 	<RightNavigation user={user}/>
+						// </Drawer>
+						<ProfileAvatar src={user.pic.medium} size={30} onClick={() => this.openPop('right')}/>
+					)}
+					<RightMenu open={alertRight} close={() => this.handleRequestClose('right')}/>
 		        </div>
 			</Wrapper>
 		)

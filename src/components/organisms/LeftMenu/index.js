@@ -15,7 +15,6 @@ const Container = styled.div`
   z-index:10;
   display:${props=> props.open?'block':'none'};
   animation: ${props=> props.open?displayNone:displayBlock} 0.5s forwards;
-
 `
 
 const Container2 = styled.div`
@@ -25,8 +24,9 @@ const Container2 = styled.div`
   top:0;
   left:0;
   z-index:10;
-  background:rgba(0,0,0,0.6);
+  background:rgba(0,0,0,0.8);
   animation: ${props=> props.open?fadeOut:fadeIn} 0.5s forwards;
+  // filter:url(#blur);
 `
 
 const displayNone = keyframes`
@@ -84,35 +84,6 @@ const fadeOut = keyframes`
   }
 `
 
-const hiddenMenu = keyframes`
-  0% {
-    opacity: 1;
-    display: block;
-  }
-  10% {
-    opacity: 1;
-    display: block;
-  }
-  100% {
-    opacity: 0;
-    display: none;
-  }
-`
-const showMenu = keyframes`
-  0% {
-    opacity: 0;
-    display: none;
-  }
-  10% {
-    opacity: 0;
-    display: none;
-  }
-  100% {
-    opacity: 1;
-    display: block;
-  }
-`
-
 const Nav = styled.nav`
 	position: relative;
 	top: 0;
@@ -148,15 +119,7 @@ const Nav = styled.nav`
 		display: inline-block;
 		vertical-align: middle;
 	}
-
-	& ul li .arrow {
-		font-size: 32px !important;
-		line-height: 40px;
-		vertical-align: middle;
-		margin-left: 140px !important;
-    color: #FFF !important;
-	}
-
+  
 	& ul li a {
 		text-decoration:none
 		color:#FFF;
@@ -164,6 +127,7 @@ const Nav = styled.nav`
 
 	& ul li a:hover {
 		text-decoration: underline;
+		text-shadow:0px 0px 1px #222;
 	}
 
 	& ul hr {
@@ -258,7 +222,7 @@ const LeftMenu = React.createClass({
 
 		return(
       <Container open={open} >
-      <Container2  onClick={close} />
+        <Container2 onClick={close} />
         <Nav open={open}>
           <div className="menu">
             <CloseBtn onTouchTap={close}><FontIcon className="material-icons">close</FontIcon></CloseBtn>
@@ -286,11 +250,11 @@ const LeftMenu = React.createClass({
             </ul>
           </div>
         </Nav>
-        {/*<Nav2 >
-          <MiniMenu open={this.state.miniMenu}>
-
-          </MiniMenu>
-        </Nav2>*/}
+        <svg>
+          <filter id="blur" width="110%" height="110%">
+            <feGaussianBlur stdDeviation="20 20" edgeMode="duplicate" />
+          </filter>
+        </svg>
       </Container>
 		)
 	}
