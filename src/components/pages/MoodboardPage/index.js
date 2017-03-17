@@ -20,7 +20,7 @@ const Wrapper = styled.div`
 		animation: slide-out 0.5s forwards;
 		-webkit-animation: slide-out 0.5s forwards;
   }
-      
+
   @keyframes slide-in {
       100% { transform: translateX(0%); }
   }
@@ -28,7 +28,7 @@ const Wrapper = styled.div`
   @-webkit-keyframes slide-in {
       100% { -webkit-transform: translateX(0%); }
   }
-      
+
   @keyframes slide-out {
       0% { transform: translateX(0%); }
       100% { transform: translateX(-100%); }
@@ -75,7 +75,7 @@ const aa = [{text:'ada',value:1},{text:'adadsf',value:2}]
 const MoodboardPage = React.createClass({
 	getInitialState(){
 		return {
-			alert:false, 
+			alert:true, 
 		}
 	},
 
@@ -120,8 +120,8 @@ const MoodboardPage = React.createClass({
 
 					Auto Complete : <AutoComplete dataSource={aa}/>
 
-					Edit menu :        
-					
+					Edit menu :
+
 					{/*<EditMenu
 						open={alert}
 						anchorEl={alertWhere}
