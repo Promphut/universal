@@ -19,13 +19,19 @@
     .medium-insert-images figure:first-child img, .mediumInsert figure:first-child img {
       margin-top: 0; }
   .medium-insert-images.medium-insert-images-left, .medium-insert-images-left.mediumInsert, .mediumInsert.small {
-    max-width: 33.33%;
+    max-width: 50%;
     float: left;
     margin: 0 30px 20px 0; }
   .medium-insert-images.medium-insert-images-right, .medium-insert-images-right.mediumInsert {
-    max-width: 33.33%;
+    max-width: 50%;
     float: right;
     margin: 0 0 20px 30px; }
+  .medium-insert-images.medium-insert-images-full, .medium-insert-images-full.mediumInsert {
+    position:absolute;
+    width: 100%;
+    height: auto;
+    left:0px;
+    margin: 0 0 20px 0; }
   .medium-insert-images.medium-insert-images-grid, .medium-insert-images-grid.mediumInsert {
     display: -webkit-box;
     display: -webkit-flex;
