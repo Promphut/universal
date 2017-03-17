@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react'
 import {TopBar, TopNavigation} from 'components'
 import auth from 'components/auth'
+
 const TopBarWithNavigation = React.createClass({
 	getInitialState(){
 	    return{
@@ -32,8 +33,8 @@ const TopBarWithNavigation = React.createClass({
 	},
 
 	componentWillMount(){
-		var token = auth.getToken()
-		if(token) this.setState({loggedIn:true})
+		if(auth.loggedIn()) 
+			this.setState({loggedIn:true})
 	},
 
 	handleScroll(e) {

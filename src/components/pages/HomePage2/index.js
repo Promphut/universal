@@ -81,6 +81,9 @@ const HomePage2 = React.createClass({
 
 	componentWillMount(){
 		//this.updateDimensions();
+
+		// when enter this page, update the token.
+     	auth.updateCookie()
 	},
 	componentDidMount(){
 		this.getFeed()
@@ -117,7 +120,7 @@ const HomePage2 = React.createClass({
 		return (
 		    <Wrapper>
 
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={this.props.params.loggedIn}  />
+		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={this.props.params.loggedIn} />
 
 		      {/*<OverlayImg style={{width:'100%',height:'90vh'}} src="/tmp/a-story/pic-min.jpg"/>*/}
 

@@ -145,7 +145,7 @@ const NotLogin = styled.div`
 const TopBar = React.createClass({
 	getInitialState(){
 	    return{
-				alert:false,
+			alert:false,
 	    }
 	},
 
@@ -174,18 +174,21 @@ const TopBar = React.createClass({
 
 	openPop(){
 		this.setState({alert:true})
-		console.log('openPop')
+		//console.log('openPop')
 	},
 
 	render(){
-		var {alert} = this.state
-		let loggedIn = this.props.loggedIn
-		var user = auth.getUser()
+		let {alert} = this.state,
+			loggedIn = this.props.loggedIn,
+			user = auth.getUser()
+
+		//console.log('user',user)
+
 		return (
 			<Wrapper className="menu-font" onMouseOver={this.props.onMouseOver} onMouseOut={this.props.onMouseOut}>
 				<div className={this.props.scrolling || 'bar-on-top'}>
-{/*
-					<Drawer name="ld" position="left" toggleIcon={<Hamburger/>}>
+					
+					{/*<Drawer name="ld" position="left" toggleIcon={<Hamburger/>}>
 						<LeftMenu open={alert} close={this.handleRequestClose}/>
 					</Drawer>*/}
 

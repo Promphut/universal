@@ -50,28 +50,28 @@ helpers = {
 		helpers.setJSON('cookie', cookieAndToken.cookie)
 	},
 
-	// Set article viewed flag in cookie
-	viewArticle(aid){
-		let viewed = helpers.getJSON('viewed') || []
-		if(viewed && aid!=null){
-			viewed.push(aid)
-			viewed = _.uniq(viewed)
-			//console.log('viewed', viewed)
-			helpers.setJSON('viewed', viewed)
-		}
-	},
+	// // Set article viewed flag in cookie
+	// viewArticle(aid){
+	// 	let viewed = helpers.getJSON('viewed') || []
+	// 	if(viewed && aid!=null){
+	// 		viewed.push(aid)
+	// 		viewed = _.uniq(viewed)
+	// 		//console.log('viewed', viewed)
+	// 		helpers.setJSON('viewed', viewed)
+	// 	}
+	// },
 
-	getArticlesViewed(articles){
-		let viewed = helpers.getJSON('viewed') || []
+	// getArticlesViewed(articles){
+	// 	let viewed = helpers.getJSON('viewed') || []
 
-		if(viewed && articles && articles.length>0) { 
-			articles.forEach(a => {
-				a.viewed = viewed.indexOf(a._id)!==-1
-			})
+	// 	if(viewed && articles && articles.length>0) { 
+	// 		articles.forEach(a => {
+	// 			a.viewed = viewed.indexOf(a._id)!==-1
+	// 		})
 
-			//console.log('articles', articles)
-		}
-	}
+	// 		//console.log('articles', articles)
+	// 	}
+	// }
 }
 
 module.exports = helpers

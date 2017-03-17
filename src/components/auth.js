@@ -77,7 +77,7 @@ auth = {
     //console.log('token', token)
     if(token){
       Request
-      .get(config.BACKURL + '/menu/me?token='+token)
+      .get(config.BACKURL + '/me/menu?token='+token)
       .set('Accept', 'application/json')
       .end((err, res) => {
         if(err || !res.ok) return 
@@ -120,13 +120,18 @@ auth = {
   },
 
 
-  socialLogin(token, cookie, cb){
-    //console.log('socialLogin', token, cookie)
+  // socialLogin(token, cookie, cb){
+  //   //console.log('socialLogin', token, cookie)
+  //   if(token==null || cookie==null) return 
+
+  //   helpers.setCookieAndToken({token: token, cookie: cookie})
+
+  //   if(cb) cb
+  // },
+
+  syncTokenAndCookie(token, cookie){
     if(token==null || cookie==null) return 
-
     helpers.setCookieAndToken({token: token, cookie: cookie})
-
-    if(cb) cb
   },
 
   getToken() {
@@ -154,7 +159,8 @@ auth = {
   },
 
   loggedIn() {
-    return !!auth.getToken()
+    //console.log('token', auth.getToken(), auth.getUser())
+    return !!auth.getToken() && !!auth.getUser()
   },
 
   onChange() {}
