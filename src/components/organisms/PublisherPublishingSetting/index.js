@@ -186,9 +186,7 @@ const PublisherPublishingSetting = React.createClass({
             res.body.users.map((data,index)=>{
               a[index] = {text:data.username,value:data.id}
             })
-            self.setState({userToAdmin:a})
-            self.setState({autoState:true})
-            document.getElementById('text').focus()
+            self.setState({userToAdmin:a,autoState:true},()=>{dom(this.refs.text).focus()})
           }
         })
     }
@@ -308,7 +306,7 @@ const PublisherPublishingSetting = React.createClass({
                 openOnFocus={true}
                 open={autoState}
                 menuCloseDelay={0}
-                id='text'
+                ref='text'
               />
             </div>
           </Edit>

@@ -19,7 +19,15 @@ const config = {
     publicPath: '/'
   },
   resolve: {
-    modulesDirectories: ['src', 'node_modules']
+    modulesDirectories: ['src', 'node_modules'],
+    extensions: ['', '.js'],
+    alias: {
+        'load-image': 'blueimp-load-image/js/load-image.js',
+        'load-image-meta': 'blueimp-load-image/js/load-image-meta.js',
+        'load-image-exif': 'blueimp-load-image/js/load-image-exif.js',
+        'canvas-to-blob': 'blueimp-canvas-to-blob/js/canvas-to-blob.js',
+        'jquery-ui/widget': 'blueimp-file-upload/js/vendor/jquery.ui.widget.js'
+    }
   },
   plugins: [
     new webpack.DefinePlugin({
@@ -42,7 +50,10 @@ const config = {
       { test: /\.woff$/, loader: 'url?prefix=fonts/&limit=8000&mimetype=application/font-woff' },
       { test: /\.ttf$/, loader: 'file?prefix=fonts/' },
       { test: /\.eot$/, loader: 'file?prefix=fonts/' },
-      { test: /\.json$/, loader: 'json' }
+      { test: /\.json$/, loader: 'json' },
+      { test: /\.css$/, loader: "style!css" },
+      { test: require.resolve("blueimp-file-upload"),loader: "imports?define=>false" },
+      { test: require.resolve("medium-editor-insert-plugin"),loader: "imports?define=>false" },
     ]
   }
 }

@@ -10,42 +10,71 @@ import Snackbar from 'material-ui/Snackbar';
 import FontIcon from 'material-ui/FontIcon'
 import RaisedButton from 'material-ui/RaisedButton'
 
+import $ from 'jquery';
+
+import "blueimp-file-upload/js/vendor/jquery.ui.widget.js";
+import "blueimp-file-upload/js/jquery.iframe-transport.js";
+import "blueimp-file-upload/js/jquery.fileupload.js";
+import "blueimp-file-upload/js/jquery.fileupload-image.js";
+
+import MediumEditor from 'medium-editor'
+require('medium-editor-insert-plugin')($);
+
 const Container = styled.form`
   width:100%;
-  padding:80px;
+  padding:60px;
   border-bottom:1px solid #E2E2E2;
 `
 const Paper = styled.div`
   position:relative;
   width:100%;
-
+  min-height:500px;
+  &:focus{
+    outline: none;
+  }s
 `
 const Title = styled.textarea`
+  margin:15px 0 0 0;
   font-size:36px;
   font-weight:bold;
+  overflowY:hidden;
   color:#8f8f8f;
   width:100%;
-  
+  outline: none;
+  border:none;
+  resize: none;
+  &:focus{
+    outline: none;
+  }
 `
 
 const PublisherContact = React.createClass({
   getInitialState(){
   
     return{
-      textStatus:'Unsave',
-      value:1,
-      error:false,
-      alert:false,
-      snackbar:false,
-      snackbarMS:'',
-      cate:[
-        {value:1,text:'General'}
-      ]
+      story:'Write a story ...'
     }
   },
 
   componentDidMount(){
-
+    this.editor = new MediumEditor('#paper');
+    $('#paper').mediumInsert({
+        editor: this.editor,
+        // addons: {
+        //     images: {
+        //         deleteScript: '/image/files/', // (string) A relative path to a delete script
+        //         deleteMethod: 'DELETE',
+        //         preview: true, // (boolean) Show an image before it is uploaded (only in browsers that support this feature)
+        //         captions: true, // (boolean) Enable captions
+        //         captionPlaceholder: 'upload image', // (string) Caption placeholder
+        //         fileUploadOptions: { // (object) File upload configuration. See https://github.com/blueimp/jQuery-File-Upload/wiki/Options
+        //             url: '/image', // (string) A relative path to an upload script
+        //             acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i // (regexp) Regexp of accepted file types
+        //         }
+        //     }
+        // }
+    });
+    this.editor.setContent(this.state.story)
   },
 
  
@@ -67,6 +96,7 @@ const PublisherContact = React.createClass({
           />
         </div>
 
+        <Title placeholder='Title' className='serif-font'></Title>
 
         <Paper id='paper'>
 
