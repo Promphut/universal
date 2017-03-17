@@ -8,7 +8,8 @@ import _ from 'lodash'
 import {HomePage, HomePage2, Page3, MoodboardPage, SignInPage,SignUpPage,
   PublisherSettingPage,ForgetPasswordPage,PublisherEditor,PublisherContactAndAboutPage,
   PublisherDashboardPage,ColumnEditor,ColumnSettingPage,PublisherStoryPage,UserSetting,UserSettingProfile,
-  UserSettingAccount, UserSettingStory,ColumnPage,PublisherPage,UserStory,AllStory,AllColumn,NewStory } from 'components'
+  UserSettingAccount, UserSettingStory,ColumnPage,PublisherPage,UserStory,AllStory,AllColumn,NewStory,NotFoundPage, ErrorPage } from 'components'
+import api from './api'
 
 const checkLogin=(nextState, replace, cb)=>{
   let token = auth.getToken()
@@ -82,6 +83,37 @@ const getColumnId = (nextState, replace, cb)=>{
     })
 }
 
+// =====================================
+
+const toSignin = (nextState, replace, next) => {
+  return () => {
+    replace({
+      pathname:'/signin',
+      state: { nextPathname: nextState.location.pathname }
+    })
+    next()
+  }
+}
+
+const toError = (nextState, replace, next) => {
+  return (err) => {
+    replace({
+      pathname: '/error',
+      state: { error: err }
+    })
+    next()
+  }
+}
+
+const getFromUsername = (nextState, replace, next) => {
+  api.getUserFromUsername(nextState.params.username)
+  .then(user => {
+    nextState.params.user = user
+    next()
+  })
+  .catch(toError(nextState, replace, next))
+}
+
 const routes = (
   <Route path="/" component={App} >
     <IndexRoute component={HomePage2}/>
@@ -104,13 +136,17 @@ const routes = (
         <Route path='settings' component={ColumnSettingPage} onEnter={getColumnId}/>
       </Route>
     </Route>
-    <Route path='me' component={UserSetting} onEnter={getUserId}>
-      <Route path='settings' component={UserSettingProfile} onEnter={getUserId}/>
-      <Route path='settings/account' component={UserSettingAccount} onEnter={getUserId}/>
-      <Route path='stories' component={UserSettingStory} onEnter={getUserId}/>
+    <Route path='me' component={UserSetting}>
+      <Route path='settings' component={UserSettingProfile}/>
+      <Route path='settings/account' component={UserSettingAccount}/>
+      <Route path='stories' component={UserSettingStory}/>
       <Route path='stories/drafts' component={UserSettingProfile}/>
     </Route>
-    <Route path='@:username' component={UserStory}/>
+    <Route path='@:username' onEnter={getFromUsername} component={UserStory}/>
+    
+    <Route path='error' component={ErrorPage}/>
+    <Route path='404' component={NotFoundPage}/>
+    <Route path='*' component={NotFoundPage}/>
   </Route>
 )
 

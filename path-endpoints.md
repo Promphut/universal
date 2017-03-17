@@ -24,6 +24,10 @@ FRONTEND PATHS:
 		Public story page 				/@:username/stories/:story-slug/:sid
 		Public upvotes					/@:username/upvotes
 
+	TAG:
+		Tag page 						/tags/:tag-slug
+		(future) Trending tags 			/tags
+
 
 OWNER PATHS:
 	Owner's stories						/me/stories 
@@ -81,11 +85,16 @@ ROLE
 
 TAG
     *** SHOULD EDIT THIS, TAG SHOULD STAND BY ITSELF, NOT TO DEPEND ON THE PUBLISHER ***
-	Create publisher tag 					POST 		/publishers/:pid/tags 								{token, tagName} 				{tag}
-	Get publisher's tag 					GET 		/publishers/:pid/tags 																{tags}
-	Remove publisher's tag 					DELETE 		/publishers/:pid/tags/:tid 							{token} 						{tag}
-	Add story's tag 						POST 		/publishers/:pid/stories/:sid/tags/:tid				{token} 						{tag}				cause we want tag slug back
-	Remove story's tag 						DELETE 		/publishers/:pid/stories/:sid/tags/:tid 			{token} 						{tag}
+*	Create publisher tag 					POST 		/publishers/:pid/tags 								{token, tagName} 				{tag}
+*	Get publisher's tags 					GET 		/publishers/:pid/tags 								{(keyword)}						{tags}
+*	Remove publisher's tag 					DELETE 		/publishers/:pid/tags/:tid 							{token} 						{tag}
+*	Get public tag detail 					GET 		/publishers/:pid/tags/:tid 															{tag}
+*	Add story's tag 						POST 		/publishers/:pid/stories/:sid/tags/:tid				{token} 						{tag}				cause we want tag slug back
+*	Remove story's tag 						DELETE 		/publishers/:pid/stories/:sid/tags/:tid 			{token} 						{tag}
+
+CONTACT
+	Contact submitted 						POST  		/publishers/:pid/contacts 							{contact}						{contact} 			*this method will send an email as well
+	Get contacts 							GET 		/publishers/:pid/contacts															{contacts}
 
 PUBLISHER 
 *	Get publisher's public detail 			GET 		/publishers/:pid 																	{publisher, columns}
@@ -122,7 +131,13 @@ FEED
  	- ?sortby : depend on the type, e.g. for a story: 'published', 'writer', 'created', 'title', etc.
  	- ?filter : depend on the type, e.g. for a story: 'column', 'topic', 'program', 'tag'
 
+SLUG
+*	Get column by slug 						GET 		/slugs/publishers/:pid/:column-slug 				{(token)} 						{column}			same as get column (private & public)
+*	Get user by username 					GET			/slugs/users/:username								{(token)} 						{user} 				same as get user (private & public)
+	Get tag by tag slug 					GET 		/slugs/tags/:tag 									{(token)} 						{tag} 				same as get tag (private & public)
 
+COMMENT
+	G
 
 ====================== PATHS FOR A FULL VERSION ======================
 
