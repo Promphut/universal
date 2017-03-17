@@ -14,7 +14,7 @@ const config = {
     path.join(__dirname, 'src')
   ],
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'dist/'),// path.join(__dirname, 'dist'),
     filename: 'app.[hash].js',
     publicPath: '/'
   },

@@ -48,7 +48,9 @@ const UserSettingMenu = React.createClass({
   },  
 
   render(){
-    var {display,pic} = this.user.user
+    var {display, pic} = this.user
+    if(!display || !pic) return (<div></div>)
+
     return(
       <SelectableList value={this.state.selectedIndex}>
         <ListItem style={{...styles.listItem,padding:'30px 20px 30px 20px'}} primaryText={<User>{display}</User>} leftAvatar={<Avatar src={pic.medium} style={{marginTop:'12px'}} size={50}/>} />

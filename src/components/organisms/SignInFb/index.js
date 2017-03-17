@@ -68,7 +68,7 @@ const SignInFb = React.createClass({
   signupFB(e){
     e.preventDefault()
     Request
-      .get(config.BACKURL+'/auth/facebook')
+      .get(config.BACKURL+'/auth/facebook?publisher='+config.PID)
       .set('Accept','application/json')
       .end((err,res)=>{
         if(err) throw err
