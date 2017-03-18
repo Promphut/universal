@@ -116,35 +116,44 @@ const getUserFromUsername = (nextState, replace, next) => {
   .catch(toError(nextState, replace, next))
 }
 
-const syncTokenAndCookie = (nextState, replace, next) => {
-  // auth token might be sent via querystring, login 
-  let query = nextState.location.query
+// const syncTokenAndCookie = (nextState, replace, next) => {
+//   // auth token might be sent via querystring, login 
+//   let query = nextState.location.query
 
-  let token = (query && query.token) ? query.token : null
+//   let token = (query && query.token) ? query.token : null
   
-  let cookie = null
-  try {
-    cookie = (query && query.cookie) ? JSON.parse(query.cookie) : null
-  }
-  catch(e) {}
+//   let cookie = null
+//   try {
+//     cookie = (query && query.cookie) ? JSON.parse(query.cookie) : null
+//   }
+//   catch(e) {}
 
-  auth.syncTokenAndCookie(token, cookie)
+//   auth.syncTokenAndCookie(token, cookie)
 
-  next()
+//   next()
+// }
+
+const logout = (nextState, replace, next) => {
+  auth.logout(() => {
+    window.location = '/'
+  })
 }
 
 const routes = (
   <Route path="/" component={App} >
-    <IndexRoute component={HomePage2} onEnter={syncTokenAndCookie}/>
+    {/*<IndexRoute component={HomePage2} onEnter={syncTokenAndCookie}/>*/}
+    <IndexRoute component={HomePage2} />
     <Route path='article' component={Page3}/>
     <Route path='column' component={ColumnPage}/>
     <Route path='stories' component={AllStory}/>
     <Route path='stories/columns' component={AllColumn}/>
     <Route path='publisher' component={PublisherPage}/>
     <Route path="mood" component={MoodboardPage} />
+
     <Route path="forget" component={ForgetPasswordPage} />
     <Route path="signin" component={()=>(<SignInPage visible={true}/>)} />
     <Route path="signup" component={()=>(<SignUpPage visible={true}/>)} />
+    <Route path="logout" onEnter={logout} />
     
     <Route path='editor' component={PublisherEditor} onEnter={getPublisherId}>
       <IndexRoute component={PublisherDashboardPage} onEnter={getPublisherId}/>

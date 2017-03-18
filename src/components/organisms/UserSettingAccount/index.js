@@ -185,7 +185,7 @@ const UserSettingProfile = React.createClass({
             //console.log(res.body)
             if(err) this.setState({errText0:res.body.error.message,errText1:res.body.error.message,errText2:res.body.error.message})
             else{
-              auth.setCookieAndToken(res.body)
+              //auth.setCookieAndToken(res.body)
               browserHistory.push('/')
             }
           })

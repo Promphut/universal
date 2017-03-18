@@ -83,8 +83,9 @@ const HomePage2 = React.createClass({
 		//this.updateDimensions();
 
 		// when enter this page, update the token.
-     	auth.updateCookie()
+     	//auth.updateCookie()
 	},
+
 	componentDidMount(){
 		this.getFeed()
 	},

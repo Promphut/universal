@@ -17,7 +17,7 @@ helpers = {
 	// Get cookie string by name
 	get(cookieName){
 		//return Cookies.get(cookieName, domain)
-		return Cookies.load(cookieName, domain)
+		return Cookies.load(cookieName, domain) || null
 		//return Cookies.load(cookieName)
 	},
 
@@ -39,16 +39,18 @@ helpers = {
 	},
 
 	// Get "cookie" object in cookies
-	getCookie(){
-		return helpers.getJSON('cookie')
-	},
+	// getCookie(){
+	// 	return helpers.getJSON('cookie')
+	// },
 
-	setCookieAndToken(cookieAndToken){
-		if(!cookieAndToken || cookieAndToken.token==null || !cookieAndToken.cookie) return 
-		//console.log('setCookieAndToken', cookieAndToken)
-		helpers.set('token', cookieAndToken.token)
-		helpers.setJSON('cookie', cookieAndToken.cookie)
-	},
+	// setCookieAndToken(cookieAndToken){
+	// 	if(!cookieAndToken || cookieAndToken.token==null || !cookieAndToken.cookie) return 
+	// 	//console.log('setCookieAndToken', cookieAndToken)
+	// 	helpers.set('token', cookieAndToken.token)
+	// 	//helpers.setJSON('cookie', cookieAndToken.cookie)
+	// 	helpers.setJSON('user', cookieAndToken.user)
+	// 	helpers.setJSON('roles', cookieAndToken.roles)
+	// },
 
 	// // Set article viewed flag in cookie
 	// viewArticle(aid){

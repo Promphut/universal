@@ -157,7 +157,7 @@ const RightMenu = React.createClass({
 	},
 
 	render(){
-    let {open,close} = this.props,
+    let {open, close} = this.props,
         user = this.props.user
 
 		return(
@@ -177,7 +177,7 @@ const RightMenu = React.createClass({
     					<li><Link to='/me/settings'>Edit Profile</Link></li>
     					<li><Divider/></li>
     					<li><Link to='/me/settings/account'>Settings</Link></li>
-    					<li><Link to='#'>Log Out</Link></li>
+    					<li><Link to='/logout'>Log Out</Link></li>
     				</ul>
           </div>
         </Nav>

@@ -6,11 +6,14 @@ import TextField from 'material-ui/TextField';
 import {findDOMNode as dom}from 'react-dom';
 import Request from 'superagent'
 import auth from 'components/auth'
+import api from '../../../api'
+
 const Box = styled.div`
   width:477px;
   background-color:#fff;
   padding:10px 0 10px 0;
 `
+
 const Head = styled.div`
   margin:60px auto 10px auto;
   text-align:center;
@@ -18,11 +21,13 @@ const Head = styled.div`
   color:#00B2B4;
   font-family:'Nunito';
 `
+
 const Text = styled.div`
   color:#8f8f8f;
   font-size:18px;
   text-align:center;
 `
+
 const Div = styled.div`
   width:308px;
   border-top:1px solid #E2E2E2;
@@ -30,15 +35,18 @@ const Div = styled.div`
   overflow:hidden;
   margin:50px auto 0 auto;
 `
+
 const NewLink = styled(Link)`
   color:#C2C2C2;
   font-size:14px;
   font-family:'Nunito';
 `
+
 const InputBox = styled.form`
   width:308px;
   margin:0 auto 0 auto;
 `
+
 var styles={
   button:{
     background:'#3A579A',
@@ -54,6 +62,7 @@ var styles={
     margin:'50px auto 20px auto'
   },
 }
+
 const SignIn = React.createClass({
   getInitialState(){
     return{
@@ -61,43 +70,60 @@ const SignIn = React.createClass({
       errText1:'',
     }
   },
+
   signin(e){
     e.preventDefault()
-    var data = {}
-    var self = this
-    var i = 0
-    var input = dom(this.refs.signinForm).getElementsByTagName("input")
+
+    let self = this,
+        data = {},
+        i = 0,
+        input = dom(this.refs.signinForm).getElementsByTagName("input")
+
     input = [].slice.call(input)
-    input.forEach((field,index)=>{
+
+    input.forEach((field,index) => {
       if(field.value!=''){
         //console.log(field.name+':'+field.value)
         data[field.name] = field.value
         this.state['errText'+index] = ''
         this.setState({})
-      }else{
+      } else {
         this.state['errText'+index] = 'This field is required'
         this.setState({})
         i++
       }
     })
+
     if(i==0){
-      Request
-        .post(config.BACKURL+'/auth')
-        .set('Accept','application/json')
-        .send(data)
-        .end((err,res)=>{
-          //console.log(res.body)
-          if(err){
-            this.setState({
-              errText0: res.body.error.message,
-              errText1: res.body.error.message
-            })
-          }else {
-            auth.setCookieAndToken(res.body)
-            browserHistory.push('/')
-          }
+      api.signin(data)
+      .then(res => {
+        auth.setCookieAndToken(res)
+        browserHistory.push('/')
+      })
+      .catch(err => {
+        this.setState({
+          errText0: err.message,
+          errText1: err.message
         })
-    }else{return}
+      })
+
+      // Request
+      // .post(config.BACKURL+'/auth')
+      // .set('Accept','application/json')
+      // .send(data)
+      // .end((err,res)=>{
+      //   //console.log(res.body)
+      //   if(err){
+      //     this.setState({
+      //       errText0: res.body.error.message,
+      //       errText1: res.body.error.message
+      //     })
+      //   }else {
+      //     //auth.setCookieAndToken(res.body)
+      //     browserHistory.push('/')
+      //   }
+      //})
+    }
   },
 
   render(){
@@ -136,7 +162,6 @@ const SignIn = React.createClass({
     )
   }
 })
-
 
 
 export default SignIn
