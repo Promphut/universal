@@ -179,9 +179,9 @@ const TopBar = React.createClass({
 	},
 
 	render(){
-		var {alertLeft, alertRight} = this.state
-		let loggedIn = this.props.loggedIn
-		var user = auth.getUser()
+		let {alertLeft, alertRight} = this.state,
+			loggedIn = this.props.loggedIn,
+			user = auth.getUser()
 
 		return (
 			<Wrapper className="menu-font" onMouseOver={this.props.onMouseOver} onMouseOut={this.props.onMouseOut}>
@@ -211,13 +211,13 @@ const TopBar = React.createClass({
 						</div>
 					</Container>
 
-					{loggedIn && (
+					{loggedIn && 
 						// <Drawer name="rd" position="right" toggleIcon={<ProfileAvatar src={user.pic.medium} size={30}/>}>
 						// 	<RightNavigation user={user}/>
 						// </Drawer>
 						<ProfileAvatar src={user.pic.medium} size={30} onClick={() => this.openPop('right')}/>
-					)}
-					<RightMenu open={alertRight} close={() => this.handleRequestClose('right')}/>
+					}
+					{loggedIn && <RightMenu open={alertRight} close={() => this.handleRequestClose('right')} user={user}/>}
 		        </div>
 			</Wrapper>
 		)

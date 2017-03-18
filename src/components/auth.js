@@ -20,6 +20,7 @@ auth = {
       if(err || !res.ok){
         cb({ authenticated: false })
       } else {
+        console.log('_loginRequest', res.body)
         cb({
           authenticated: true,
           token: res.body.token,
@@ -81,7 +82,7 @@ auth = {
       .set('Accept', 'application/json')
       .end((err, res) => {
         if(err || !res.ok) return 
-
+        //console.log('updateCookie', res.body)
         // Set cookie
         helpers.setCookieAndToken(res.body)
 

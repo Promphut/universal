@@ -94,25 +94,25 @@ const HomePage2 = React.createClass({
 		var filter = JSON.stringify({status:1})
 		//console.log(path)
 		Request
-			.get(config.BACKURL+'/publishers/'+config.PID+'/feed?type=story&filter='+filter+'&sort=latest')
-			.set('Accept','application/json')
-			.end((err,res)=>{
-				if(err) throw err
-				else{
-					//console.log(res.body)
-					self.setState({feed:res.body.feed})
-				}
-			})
+		.get(config.BACKURL+'/publishers/'+config.PID+'/feed?type=story&filter='+filter+'&sort=latest')
+		.set('Accept','application/json')
+		.end((err,res)=>{
+			if(err) throw err
+			else{
+				//console.log(res.body)
+				self.setState({feed:res.body.feed})
+			}
+		})
 		Request
-			.get(config.BACKURL+'/publishers/'+config.PID+'/feed?type=story&filter='+filter+'&sort=popular')
-			.set('Accept','application/json')
-			.end((err,res)=>{
-				if(err) throw err
-				else{
-					self.setState({popular:res.body.feed})
-					//console.log(self.state.popular)
-				}
-			})
+		.get(config.BACKURL+'/publishers/'+config.PID+'/feed?type=story&filter='+filter+'&sort=popular')
+		.set('Accept','application/json')
+		.end((err,res)=>{
+			if(err) throw err
+			else{
+				self.setState({popular:res.body.feed})
+				//console.log(self.state.popular)
+			}
+		})
 	},
 	
 	render(){
@@ -120,15 +120,15 @@ const HomePage2 = React.createClass({
 		return (
 		    <Wrapper>
 
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={this.props.params.loggedIn} />
-
+		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
+		      {/*<TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={this.props.params.loggedIn} />*/}
 		      {/*<OverlayImg style={{width:'100%',height:'90vh'}} src="/tmp/a-story/pic-min.jpg"/>*/}
 
 					<Content style={{paddingTop:'100px'}}>
 						<Feed>
 							<div className='row' style={{display:'block',overflow:'hidden'}}>
 								<Text className='sans-font' style={{float:'left'}}>Trending Now</Text>
-								<Text className='sans-font' style={{fontSize:'14',float:'right',margin:'5px'}}>View more</Text>
+								<Text className='sans-font' style={{fontSize:'14px',float:'right',margin:'5px'}}>View more</Text>
 							</div>
 							{popular.length!=0?<ThumpnailRow detail={popular} style={{margin:'20px 0 30px 0'}}/>:''}
 							{popular.length!=0?<ThumpnailRow detail={popular} size='small' style={{margin:'30px 0 30px 0'}}/>:''}
@@ -136,7 +136,7 @@ const HomePage2 = React.createClass({
 					</Content>	
 		      <Content >
 			      <Main>
-							<TextLine className='sans-font'>Lastest</TextLine>
+							<TextLine className='sans-font'>Latest</TextLine>
 							{/*{article}*/}
 							{feed.map((data,index)=>(
 								index%3==0?<ArticleBoxLarge detail={data} key={index}/>:<ArticleBox detail={data} key={index}/>
