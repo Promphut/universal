@@ -6,7 +6,7 @@ import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import Request from 'superagent'
 const Wrapper = styled.div`
-	
+
 `
 const Content = styled.div`
 	display: flex;
@@ -103,48 +103,64 @@ var arr = [mock,mock,mock,mock]
 const ColumnPage = React.createClass({
 	getInitialState(){
 		return {
-			stopPos:0,
-			feed:[],
-			popular:[]
+			stopPos: 0,
+			column: {},
+			feed: [],
+			popular: []
 		}
 	},
 
-	componentDidMount(){
+	componentDidMount() {
 		this.getFeed()
 		this.setState({
 			stopPos:dom(this.refs.more).getBoundingClientRect().top
 		})
 	},
 
-	getFeed(){
-		var filter = JSON.stringify({column:21,status:1})
-		//console.log(path)
+	getFeed() {
+		const columnName = 'money-ideas'
 		Request
-			.get(config.BACKURL+'/publishers/'+config.PID+'/feed?type=story&filter='+filter+'&sort=latest')
-			.set('Accept','application/json')
-			.end((err,res)=>{
-				if(err) throw err
-				else{
-					//console.log(res.body)
-					this.setState({feed:res.body.feed})
+			.get(config.BACKURL + '/slugs/publishers/' + config.PID + '/' + columnName)
+			.set('Accept', 'application/json')
+			.end((err, res) => {
+				if (err) throw err
+				else {
+					const column = res.body.column
+					const columnDesc = {
+						name: column.name,
+						shortDesc: column.shortDesc
+					}
+					this.setState({column: columnDesc})
+					const filter = JSON.stringify({column: column.id, status: 1})
+
+					Request
+						.get(config.BACKURL + '/publishers/' + config.PID + '/feed?type=story&filter=' + filter + '&sort=latest')
+						.set('Accept','application/json')
+						.end((err, res) => {
+							if (err) throw err
+							else {
+								const feed = res.body.feed
+								console.log(feed)
+								this.setState({feed})
+							}
+						})
 				}
 			})
-
 	},
 
 	render(){
 		//var article = []
-		var {feed} = this.state
-		var ChildCover = 
+		var {column, feed} = this.state
+		var ChildCover =
 			<div style={{margin:'170px 0 0 20%',width:'700px'}}>
-				<ColumnName className='serif-font'>Fund</ColumnName>
-				<ColumnDetail >โมหจริต ละตินฮิปฮอปด็อกเตอร์โมหจริตแอดมิสชัน บร็อคโคลีคีตปฏิภาณเมจิค โอเวอร์คลิปโปรโมชั่นแบล็คสงบสุข ยังไงอึ้มไรเฟิลบร็อกโคลี ฮ็อตมั้ย แอ็กชั่นแอ็กชั่น อุปสงค์ฟลุกซีนีเพล็กซ์เลกเชอร์อิเหนา บัลลาสต์โรแมนติก</ColumnDetail>
+				<ColumnName className='serif-font'>{column.name}</ColumnName>
+				<ColumnDetail >{column.shortDesc}</ColumnDetail>
 			</div>
 		return (
 		    <Wrapper>
 		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={this.props.params.loggedIn} />
 					<BGImg src="/tmp/a-story/pic-min.jpg" style={{width:'100%',height:'510px'}} child={ChildCover}/>
-					
+
 		      <Content >
 			      <Main>
 							<StoryMenu style={{padding:'15px 0 15px 0',margin:'0 0 50px 0'}} next='FUND'/>
