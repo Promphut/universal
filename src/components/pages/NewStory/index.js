@@ -60,19 +60,20 @@ const PublisherContact = React.createClass({
     this.editor = new MediumEditor('#paper');
     $('#paper').mediumInsert({
         editor: this.editor,
-        // addons: {
-        //     images: {
-        //         deleteScript: '/image/files/', // (string) A relative path to a delete script
-        //         deleteMethod: 'DELETE',
-        //         preview: true, // (boolean) Show an image before it is uploaded (only in browsers that support this feature)
-        //         captions: true, // (boolean) Enable captions
-        //         captionPlaceholder: 'upload image', // (string) Caption placeholder
-        //         fileUploadOptions: { // (object) File upload configuration. See https://github.com/blueimp/jQuery-File-Upload/wiki/Options
-        //             url: '/image', // (string) A relative path to an upload script
-        //             acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i // (regexp) Regexp of accepted file types
-        //         }
-        //     }
-        // }
+        addons: {
+            images: {
+                // autoGrid:2,
+                // deleteScript: '/image/files/', // (string) A relative path to a delete script
+                // deleteMethod: 'DELETE',
+                // preview: true, // (boolean) Show an image before it is uploaded (only in browsers that support this feature)
+                // captions: true, // (boolean) Enable captions
+                // captionPlaceholder: 'upload image', // (string) Caption placeholder
+                // fileUploadOptions: { // (object) File upload configuration. See https://github.com/blueimp/jQuery-File-Upload/wiki/Options
+                //     url: '/image', // (string) A relative path to an upload script
+                //     acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i // (regexp) Regexp of accepted file types
+                // }
+            }
+        }
     });
     this.editor.setContent(this.state.story)
   },

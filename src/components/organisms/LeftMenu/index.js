@@ -5,6 +5,7 @@ import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import Divider from 'material-ui/Divider'
 import {findDOMNode as dom} from 'react-dom'
+import helpers from '../../helpers'
 
 const Container = styled.div`
   position:fixed;
@@ -200,27 +201,46 @@ const LeftMenu = React.createClass({
     }
 	},
 
+  // getMenuFromCookie() {
+  //   let cookie = helpers.getCookie()
+  //   console.log('cookie', cookie)
+  //   return (cookie && cookie.menu)? cookie.menu : null
+  // },
+
+  componentWillMount(){
+    //this.menu = this.getMenuFromCookie()
+    //console.log('MENU', this.)
+  },
+
 	shrinkDrawer(e){
 		e.preventDefault()
 		this.setState({
       miniMenu:!this.state.miniMenu
     })
 
-    var {toggleArrow} = this.state
+    let {toggleArrow} = this.state
     if (this.state.toggleArrow === 'toggleUp') {
       this.state.toggleArrow = 'toggleDown'
     } else {
       this.state.toggleArrow = 'toggleUp'
     }
 
-    this.state.height = (this.state.miniMenu) ? 0 : 325
+    let menu = this.props.menu
+    let height = ((menu && menu.column ? menu.column : []).length+1) * 55
+    this.state.height = (this.state.miniMenu) ? 0 : height
 	},
 
 	render(){
-    var {miniMenu, toggleArrow, height} = this.state
-    var {open,close} = this.props
+    let {miniMenu, toggleArrow, height} = this.state
+    let {open, close, menu} = this.props
+    let cols = menu && menu.column ? menu.column : []
 
-		return(
+    // Menu items from menu props
+    let items = []
+    for(let i=0; i<cols.length; i++) 
+      items.push(<li key={i}><Link to={'/stories/'+cols[i].slug}>{cols[i].name}</Link></li>)
+
+		return (
       <Container open={open} >
         <Container2 onClick={close} />
         <Nav open={open}>
@@ -230,19 +250,21 @@ const LeftMenu = React.createClass({
             <ul>
               <li><Link to="/" style={{fontSize: 24}}>Home</Link></li>
               <li><Link to="/" style={{fontSize: 24}}>About Us</Link></li>
+             
               <Divider />
+              
               <li><Link to="#" style={{fontSize: 40}} onClick={this.shrinkDrawer}>Stories
                 <FontIcon className={'material-icons arrow ' + toggleArrow}>keyboard_arrow_down</FontIcon>
               </Link></li>
+
               <MiniMenu height={height+'px'}>
-                <li><Link to="/">All</Link></li>
-                <li><Link to="/">Saving</Link></li>
-                <li><Link to="/">Fund</Link></li>
-                <li><Link to="/">Stock</Link></li>
-                <li><Link to="/">Money Ideas</Link></li>
-                <li><Link to="/">Retirement</Link></li>
+                {items}
+                {/*The last one is 'all columns'*/}
+                <li key={999}><Link to={'/stories/columns'}>All Columns</Link></li>
               </MiniMenu>
+
               <Divider />
+
               <li><Link to="/" style={{fontSize: 24}}>Contact</Link></li>
               {/*<Divider />
               <li><em style={{color:'#e2e2e2', fontSize:'18px'}}>Other Channels</em></li>
@@ -260,5 +282,10 @@ const LeftMenu = React.createClass({
 	}
 })
 
+LeftMenu.propTypes = {
+  // menu: PropTypes.object,
+  // open: PropTypes.func.isRequired,
+  // close: PropTypes.func.isRequired
+}
 
 export default LeftMenu

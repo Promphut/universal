@@ -7,7 +7,7 @@ import TextField from 'material-ui/TextField';
 import {findDOMNode as dom}from 'react-dom';
 import Request from 'superagent'
 import auth from 'components/auth'
-
+import api from '../../../api'
 
 const Box = styled.div`
   width:477px;
@@ -64,32 +64,49 @@ const SignUp = React.createClass({
     var self = this
     var input = dom(this.refs.signupForm).getElementsByTagName("input")
     input = [].slice.call(input)
-    input.forEach((field,index)=>{
+    input.forEach((field,index) => {
       if(field.value!=''){
         //console.log(field.name+':'+field.value)
         data[field.name] = field.value
         this.state['errText'+index] = ''
         this.setState({})
-      }else{
+      } else {
         this.state['errText'+index] = 'This field is required'
         this.setState({})
       }
     })
     //console.log(data)
-    var send = {email:data.email,password:data.password1}
+    var data = {
+      email:data.email,
+      password:data.password1,
+      publisher: config.PID
+    }
+
     if(data.password1===data.password2){
-      Request
-        .post(config.BACKURL+'/users')
-        .set('Accept','application/json')
-        .send(send)
-        .end((err,res)=>{
-          //console.log(res.body)
-          if(err)this.setState({errText0:res.body.error.message,errText1:res.body.error.message,errText2:res.body.error.message})
-          else{
-            auth.setCookieAndToken(res.body)
-            browserHistory.push('/')
-          }
+      api.signup(data)
+      .then(res => {
+        auth.setCookieAndToken(res)
+        browserHistory.push('/')
+      })
+      .catch(err => {
+        this.setState({
+          errText0:err.message,
+          errText1:err.message,
+          errText2:err.message
         })
+      })
+      // Request
+      //   .post(config.BACKURL+'/users')
+      //   .set('Accept','application/json')
+      //   .send(send)
+      //   .end((err,res)=>{
+      //     //console.log(res.body)
+      //     if(err)this.setState({errText0:res.body.error.message,errText1:res.body.error.message,errText2:res.body.error.message})
+      //     else{
+      //       //auth.setCookieAndToken(res.body)
+      //       browserHistory.push('/')
+      //     }
+      //   })
     }else{
       this.setState({errText2:'Wrong Password'})
     }

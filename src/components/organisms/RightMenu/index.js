@@ -157,8 +157,8 @@ const RightMenu = React.createClass({
 	},
 
 	render(){
-    var {open,close} = this.props
-		var user = auth.getUser()
+    let {open, close} = this.props,
+        user = this.props.user
 
 		return(
       <Container open={open} >
@@ -166,6 +166,7 @@ const RightMenu = React.createClass({
         <Nav open={open}>
           <div className="menu">
             <CloseBtn onTouchTap={close}><FontIcon className="material-icons">close</FontIcon></CloseBtn>
+            
             <Profile className="content-font">
               <Link to="/me/settings"><Avatar src={user.pic.medium}size={70}/></Link>
               <div><Link to="/me/settings"><h3>{user.display}</h3></Link>{user.shortDesc}</div>
@@ -176,7 +177,7 @@ const RightMenu = React.createClass({
     					<li><Link to='/me/settings'>Edit Profile</Link></li>
     					<li><Divider/></li>
     					<li><Link to='/me/settings/account'>Settings</Link></li>
-    					<li><Link to='#'>Log Out</Link></li>
+    					<li><Link to='/logout'>Log Out</Link></li>
     				</ul>
           </div>
         </Nav>

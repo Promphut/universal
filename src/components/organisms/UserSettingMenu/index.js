@@ -31,6 +31,7 @@ const UserSettingMenu = React.createClass({
       selectedIndex:this.props.pathname
     }
   },
+  
   componentWillReceiveProps(nextProps){
     if(nextProps!=this.props){
       this.setState({

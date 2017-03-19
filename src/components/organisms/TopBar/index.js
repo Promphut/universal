@@ -11,6 +11,7 @@ import Avatar from 'material-ui/Avatar';
 import styled from 'styled-components'
 import auth from 'components/auth'
 import {PrimaryButton, SecondaryButton, Logo, Drawer, LeftNavigation, RightNavigation, LeftMenu, RightMenu} from 'components'
+import api from '../../../api'
 
 const Wrapper = styled.div`
 	* {
@@ -141,17 +142,60 @@ const NotLogin = styled.div`
 const TopBar = React.createClass({
 	getInitialState(){
 	    return{
-				alertLeft: false,
-				alertRight: false
+			alertLeft: false,
+			alertRight: false,
+
+			status: 'LOADING'
+			// these are fetched from server
+			// to compose menu and user mini profile (on left and right menu).
+			// menu: null,
+			// user: null,
+			// roles: []
 	    }
 	},
 
+	componentWillMount(){
+		let self = this,
+			// Get from cookie, else get from query 
+			token = auth.getToken() || browserHistory.getCurrentLocation().query.token
+
+		//console.log('token', token)
+		// request cookieAndToken from server
+		api.getCookieAndToken(token)
+		.then(result => {
+			// 1. Update newly fetch cookie
+			auth.setCookieAndToken(result)
+
+			// 2. Set the state to "loggedin" or "unloggedin"
+			this.menu = result.menu
+			this.user = result.user
+			this.roles = result.roles
+
+			if(this.user && token)
+				this.setState({
+					status: 'LOGGEDIN'
+				})
+			else 
+				this.setState({
+					status: 'UNLOGGEDIN'
+				})
+			// 2. Reset 
+			// self.setState({
+			// 	menu: result.menu,
+			// 	user: result.user,
+			// 	roles: result.roles
+			// })
+		})
+	},
+
 	componentDidMount() {
-		if(this.props.onScroll) window.addEventListener('scroll', this.handleScroll);
+		if(this.props.onScroll) 
+			window.addEventListener('scroll', this.handleScroll);
 	},
 
 	componentWillUnmount() {
-		if(this.props.onScroll) window.removeEventListener('scroll', this.handleScroll);
+		if(this.props.onScroll) 
+			window.removeEventListener('scroll', this.handleScroll);
 	},
 
 	handleScroll(e) {
@@ -179,12 +223,14 @@ const TopBar = React.createClass({
 	},
 
 	render(){
-		var {alertLeft, alertRight} = this.state
-		let loggedIn = this.props.loggedIn
-		var user = auth.getUser()
+		let {alertLeft, alertRight, status} = this.state
+			//loggedIn = this.props.loggedIn,
+			//user = auth.getUser()
+		//console.log('TopBar', loggedIn, user)
 		return (
 			<Wrapper className="menu-font" onMouseOver={this.props.onMouseOver} onMouseOut={this.props.onMouseOut}>
 				<div className={this.props.scrolling || 'bar-on-top'}>
+
 					{/*<Drawer name="ld" position="left" toggleIcon={<Hamburger/>}>
 						<LeftMenu open={alert} close={this.handleRequestClose}/>
 					</Drawer>*/}
@@ -192,7 +238,7 @@ const TopBar = React.createClass({
 					<IconButton className="hamburger" onClick={() => this.openPop('left')}>
 						<Hamburger/>
 					</IconButton>
-					<LeftMenu open={alertLeft} close={() => this.handleRequestClose('left')}/>
+					<LeftMenu menu={this.menu} open={alertLeft} close={() => this.handleRequestClose('left')}/>
 
 					<Container id="container-bar">
 	   					<header>
@@ -202,20 +248,18 @@ const TopBar = React.createClass({
 	   					{this.props.children}
 
 						<div style={{textAlign:'right'}}>
-							{loggedIn ?
-								(<HideOnTablet><PrimaryButton label="Story" iconName="add" style={{verticalAlign:'middle'}}/></HideOnTablet>) :
-								(<NotLogin id="not-login"><SecondaryButton label="Sign Up" onClick={this.signup} style={{verticalAlign:'middle'}}/><span>&nbsp; or </span><Link to="/signin" style={{fontWeight:'bold'}}>Sign In</Link></NotLogin>
-							)}
+							{status=='LOGGEDIN' && <HideOnTablet><PrimaryButton label="Story" iconName="add" style={{verticalAlign:'middle'}}/></HideOnTablet>}
+							{status=='UNLOGGEDIN' &&  <NotLogin id="not-login"><SecondaryButton label="Sign Up" onClick={this.signup} style={{verticalAlign:'middle'}}/><span>&nbsp; or </span><Link to="/signin" style={{fontWeight:'bold'}}>Sign In</Link></NotLogin>}
 						</div>
 					</Container>
 
-					{loggedIn && (
+					{status=='LOGGEDIN' && 
 						// <Drawer name="rd" position="right" toggleIcon={<ProfileAvatar src={user.pic.medium} size={30}/>}>
 						// 	<RightNavigation user={user}/>
 						// </Drawer>
-						<ProfileAvatar src={user.pic.medium} size={30} onClick={() => this.openPop('right')}/>
-					)}
-					<RightMenu open={alertRight} close={() => this.handleRequestClose('right')}/>
+						<ProfileAvatar src={this.user.pic.medium} size={30} onClick={() => this.openPop('right')}/>
+					}
+					{status=='LOGGEDIN' && <RightMenu open={alertRight} close={() => this.handleRequestClose('right')} user={this.user}/>}
 		        </div>
 			</Wrapper>
 		)
@@ -226,7 +270,9 @@ TopBar.propTypes = {
   onScroll: PropTypes.func,
   scrolling: PropTypes.bool,
   loggedIn: PropTypes.bool,
-  title: PropTypes.string
+  title: PropTypes.string,
+  onMouseOver: PropTypes.func,
+  onMouseOut: PropTypes.func
 }
 
 export default TopBar;
