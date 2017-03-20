@@ -4,7 +4,9 @@ import {PrimaryButton,SecondaryButton,UploadPicture} from 'components'
 import TextField from 'material-ui/TextField';
 import Request from 'superagent'
 import auth from 'components/auth'
-import {findDOMNode as dom}from 'react-dom';
+import {findDOMNode as dom} from 'react-dom';
+import api from 'components/api'
+import utils from 'components/utils'
 
 const Container = styled.form`
   width:100%;
@@ -21,12 +23,14 @@ const Container = styled.form`
     font-size:18px;
   }
 `
+
 const Flex = styled.div`
   display:flex;
   items-align:center;
   flex-flow: row wrap;
   margin:50px 0 0 50px;
 `
+
 const Title = styled.div`
   flex:2 150px;
   max-width:150px;
@@ -34,15 +38,18 @@ const Title = styled.div`
   font-size:17px;
   padding-top:15px;
 `
+
 const Edit = styled.div`
   flex:6 450px;
   max-width:450px;
 `
+
 const Social = styled.div`
   color:#8F8F8F;
   font-size:19px;
   overflow:hidden;
 `
+
 const TextStatus = styled.div`
   color:#00B2B4;
   font-size:15px;
@@ -50,72 +57,94 @@ const TextStatus = styled.div`
   float:left;
   margin:10px 0 0 15px;
 ` 
+
 const UserSettingProfile = React.createClass({
   getInitialState(){
-    this.user = this.props.params.user
-    return{
+    return {
       error:false,
       textStatus:'Unsave',
-      uploadPhoto:null
+
+      user: {
+        display: '',
+        shortDesc: '',
+        city: '',
+        channels: {
+          fb:'',
+          twt: '',
+          ig: '',
+          yt: ''
+        },
+        pic: {
+          medium: ''
+        }
+      }
     }
   },
 
   componentDidMount(){
-    this.setData()
+    api.getUser()
+    .then(user => {
+      this.user = user
+      this.setState({
+        user: user
+      })
+    })
+
+    //self.display.focus()
   },
 
-  setData(){
-    var {display,shortDesc,pic,city,channels} = this.user.user
-    document.getElementById('display').value = typeof display =="undefined" ?'':display
-    document.getElementById('description').value = typeof shortDesc == "undefined" ?'':shortDesc
-    document.getElementById('city').value = typeof city == "undefined" ?'':city
-    document.getElementById('fb').value = typeof channels == "undefined" ?'':channels.fb
-    document.getElementById('twt').value = typeof channels == "undefined" ?'':channels.twt
-    document.getElementById('ig').value = typeof channels == "undefined" ?'':channels.ig
-    document.getElementById('yt').value = typeof channels == "undefined" ?'':channels.yt
-    this.setState({
-      uploadPhoto:typeof pic == "undefined" ?null:pic.medium
+  updateCookie(){
+    // * If user object is editted, we must reset the local cookie user as well.
+    let token = auth.getToken()
+    // 1. Fetch menu, user, and roles information
+    api.getCookieAndToken(token)
+    .then(result => {
+      // 2. Update newly fetch cookie
+      auth.setCookieAndToken(result)
     })
   },
 
   updateData(e){
     e.preventDefault()
-    var data = {}
-    var self = this
-    var input = dom(this.refs.userProfile).getElementsByTagName("input")
-    input = [].slice.call(input)
-    input.forEach((field,index)=>{
-      data[field.name] = field.value
-    })
-    data['shortDesc'] = document.getElementById('description').value
-    var user = {
-      user:{
-        display:data.display,
-        shortDesc:data.shortDesc,
-        city:data.city,
-        channels:{
-          fb:data.fb,
-          twt:data.twt,
-          ig:data.ig,
-          yt:data.yt
-        }
+
+    let user = this.state.user
+    api.updateUser(user)
+    .then(u => {
+      if(!u) {
+        return this.setState({
+          textStatus: 'Cannot save the user, try again.',
+          error:true
+        })
       }
-    }
-    Request
-      .patch(config.BACKURL+'/users/'+this.user.user._id+'?token='+auth.getToken())
-      .set('x-access-token', auth.getToken())
-      .set('Accept','application/json')
-      .send(user)
-      .end((err,res)=>{
-        if(err) this.setState({textStatus:res.body.error.message,error:true})
-        else{
-          this.setState({textStatus:'Saved successfully',error:false})
-        }
+
+      this.setState({
+        textStatus:'Saved successfully',
+        error:false
       })
+
+      this.updateCookie()
+    })
+    .catch(err => {
+      this.setState({
+        textStatus: err.message,
+        error:true
+      })
+    })
+  },
+
+  userChanged(e){
+    const name = e.target.name
+    let user = {...this.state.user}
+    utils.set(user, name, e.target.value)
+
+    this.setState({
+      user: user
+    })
   },
 
   render(){
-    var {uploadPhoto,textStatus,error} = this.state
+    var {textStatus, error, user} = this.state
+    //console.log('user.pic.medium', user.pic.medium)
     return(
       <Container onSubmit={this.updateData} ref='userProfile'>
         <div  className="head sans-font">PROFILE</div>
@@ -124,7 +153,7 @@ const UserSettingProfile = React.createClass({
             <div className="sans-font">Display name</div>
           </Title>
           <Edit>
-            <TextField id='display'name='display'/>
+            <TextField name='display' value={user.display} onChange={this.userChanged} ref={input => {this.display = input}}/>
           </Edit>
         </Flex>
         <Flex>
@@ -132,7 +161,7 @@ const UserSettingProfile = React.createClass({
             <div className="sans-font">Profile picture</div>
           </Title>
           <Edit>
-            <UploadPicture src={uploadPhoto} path='/publishers/11/cover' type='cover'/>
+            <UploadPicture src={user.pic.medium} path={'/users/'+user._id+'/photo'} type='photo'/>
           </Edit>
         </Flex>
         <Flex>
@@ -148,9 +177,9 @@ const UserSettingProfile = React.createClass({
               floatingLabelFixed={true}
               rows={2}
               rowsMax={4}
-              id='description'
               name='shortDesc'
-            />
+              value={user.shortDesc}
+              onChange={this.userChanged}/>
           </Edit>
         </Flex>
         <Flex>
@@ -159,7 +188,7 @@ const UserSettingProfile = React.createClass({
           </Title>
           <Edit>
             <TextField 
-              defaultValue="Bangkok, Thailand" id='city' name='city'/>
+              defaultValue="Bangkok, Thailand" name='city' value={user.city} onChange={this.userChanged}/>
           </Edit>
         </Flex>
         <Flex>
@@ -170,22 +199,22 @@ const UserSettingProfile = React.createClass({
             <Social className="sans-font">
               <i className="fa fa-facebook" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i> 
               <div style={{float:'left',margin:'15px 20px 0 0'}}>facebook.com/</div>
-              <TextField style={{float:'left',margin:'5px 0 0 0'}} id='fb' name='fb'/>
+              <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.fb' value={user.channels.fb} onChange={this.userChanged}/>
             </Social>
             <Social className="sans-font">
               <i className="fa fa-twitter" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i> 
               <div style={{float:'left',margin:'15px 20px 0 0'}}>twitter.com/</div>
-              <TextField style={{float:'left',margin:'5px 0 0 0'}} id='twt' name='twt'/>
+              <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.twt' value={user.channels.twt} onChange={this.userChanged}/>
             </Social>
             <Social className="sans-font">
               <i className="fa fa-instagram" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i> 
               <div style={{float:'left',margin:'15px 20px 0 0'}}>instagram.com/</div>
-              <TextField style={{float:'left',margin:'5px 0 0 0'}} id='ig' name='ig'/>
+              <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.ig' value={user.channels.ig} onChange={this.userChanged}/>
             </Social>
             <Social className="sans-font">
               <i className="fa fa-youtube-play" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i> 
               <div style={{float:'left',margin:'15px 20px 0 0'}}>youtube.com/</div>
-              <TextField style={{float:'left',margin:'5px 0 0 0'}} id='yt' name='yt'/>
+              <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.yt' value={user.channels.yt} onChange={this.userChanged}/>
             </Social>
           </Edit>
         </Flex>

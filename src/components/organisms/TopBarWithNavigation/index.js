@@ -25,17 +25,16 @@ const TopBarWithNavigation = React.createClass({
 	},
 
 	componentWillMount(){
-		let self = this,
-			// Get from cookie, else get from query 
-			token = auth.getToken() || browserHistory.getCurrentLocation().query.token
+		// Get from cookie, else get from query 
+		let token = browserHistory.getCurrentLocation().query.token || auth.getToken()
 
-		// Fetch menu, user, and roles information
+		// 1. Fetch menu, user, and roles information
 		api.getCookieAndToken(token)
 		.then(result => {
-			// 1. Update newly fetch cookie
+			// 2. Update newly fetch cookie
 			auth.setCookieAndToken(result)
 
-			// 2. Set the state to "loggedin" or "unloggedin"
+			// 3. Set the state to "loggedin" or "unloggedin"
 			this.menu = result.menu
 			this.user = result.user
 			this.roles = result.roles

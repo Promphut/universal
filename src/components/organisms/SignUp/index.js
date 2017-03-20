@@ -61,7 +61,6 @@ const SignUp = React.createClass({
   signup(e){
     e.preventDefault()
     let data = {},
-        self = this,
         input = dom(this.refs.signupForm).getElementsByTagName("input")
     
     input = [].slice.call(input)
@@ -69,11 +68,11 @@ const SignUp = React.createClass({
       if(field.value!=''){
         //console.log(field.name+':'+field.value)
         data[field.name] = field.value
-        self.state['errText'+index] = ''
-        self.setState({})
+        this.state['errText'+index] = ''
+        this.setState({})
       } else {
-        self.state['errText'+index] = 'This field is required'
-        self.setState({})
+        this.state['errText'+index] = 'This field is required'
+        this.setState({})
       }
     })
     //console.log(data)
@@ -92,12 +91,12 @@ const SignUp = React.createClass({
       .catch(err => {
 
         if(err.errors)
-          self.setState({
+          this.setState({
             errText0:err.errors.email && err.errors.email.message,
             errText1:err.errors.password && err.errors.password.message
           })
         else
-          self.setState({
+          this.setState({
             errText0:err.message,
             errText1:err.message
           })

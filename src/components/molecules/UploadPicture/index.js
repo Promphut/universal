@@ -57,6 +57,7 @@ const Filter = styled.div`
 
 const UploadPicture = React.createClass({
   getInitialState(){
+
     this.maxMB = this.props.maxMB ? parseFloat(this.props.maxMB) : 5
 		this.allowTypes = '|jpg|png|jpeg|gif|webp|svg|'
     return{
@@ -67,6 +68,13 @@ const UploadPicture = React.createClass({
       err:false
     }
   },
+
+  componentWillReceiveProps(nextProps){
+    this.setState({
+      src: nextProps.src
+    })
+  },
+
   isFiletypeValid(file){
 		let type = '|' + file.type.slice(file.type.lastIndexOf('/') + 1) + '|';
 		var fileTypeValid = this.allowTypes.indexOf(type) !== -1
@@ -78,7 +86,6 @@ const UploadPicture = React.createClass({
 	},
 
   upload(e){
-    var self = this
     var reader = new FileReader();
     var file = e.target.files[0]
 
@@ -101,32 +108,34 @@ const UploadPicture = React.createClass({
 		}
 
     reader.onload = (event)=>{
-        self.setState({statePreview:true,src:event.target.result})
+        this.setState({statePreview:true,src:event.target.result})
     }
+
     reader.onloadend = (event) => {
-    	Request.post(config.BACKURL+this.props.path+'?token='+auth.getToken())
-		    .set('x-access-token', auth.getToken())
-	      .attach(this.props.type, file, file.name)
-	      .end((err, res) => {
-	    	  let msg = 'Upload complete!'
-          var err = false
-	    	  if(err) {
-            msg = 'Upload Error : '+res.body.status
-            err = true
-          }
-	    	  self.setState({
-	    		  file: '',
-	    		  msg: msg,
-            err:err
-	    	  })
-          //console.log(res.body)
-		    })
+    	Request.post(config.BACKURL + this.props.path)
+	    .set('x-access-token', auth.getToken())
+      .attach(this.props.type, file, file.name)
+      .end((err, res) => {
+    	  let msg = 'Upload complete!'
+        var err = false
+    	  if(err) {
+          msg = 'Upload Error : '+res.body.status
+          err = true
+        }
+    	  this.setState({
+    		  file: '',
+    		  msg: msg,
+          err:err
+    	  })
+        //console.log(res.body)
+	    })
     }      
     reader.readAsDataURL(file);     
   },
 
   render(){
     var {msg,src,statePreview,err} = this.state
+    
     var description = <Des className='sans-font'>{msg}</Des>
     return(
       <Container encType="multipart/form-data">

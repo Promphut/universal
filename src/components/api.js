@@ -12,18 +12,42 @@ api.err = (err) => {
 		throw err
 }
 
-api.getUserFromCookie = () => {
-	let u = auth.getUser()
+api.userNotFoundPromise = () => {
+	return Promise.reject(new NotFoundError('User is not found.'))
+}
 
-	if(u){
+api.getUser = (uid) => {
+	if(!uid) {
+		let u = auth.getUser()
+		uid = u ? u._id : null
+	}
+
+	if(uid!=null){
 		return Request
-		.get(config.BACKURL+'/users/'+u._id)
+		.get(config.BACKURL+'/users/'+uid)
 		.set('Accept','application/json')
 		.then(res => {
 			return res.body.user
 		}, api.err)
 	} 
-	else return Promise.reject(new NotFoundError('User is not found.'))
+	else return api.userNotFoundPromise()
+}
+
+api.updateUser = (user) => {
+	let token = auth.getToken()
+
+	if(!token) return api.userNotFoundPromise()
+
+	//console.log('update', user)
+
+	return Request
+	.patch(config.BACKURL+'/users/'+user._id)
+	.set('x-access-token', token)
+	.set('Accept','application/json')
+	.send({user: user})
+	.then(res => {
+		return res.body.user
+	}, api.err)
 }
 
 api.getUserFromUsername = (username, cb) => {
@@ -34,7 +58,7 @@ api.getUserFromUsername = (username, cb) => {
 		return res.body.user
 	})
 	.catch(err => {
-		return Promise.reject(new NotFoundError('User is not found.'))
+		return api.userNotFoundPromise()
 	})
 }
 
