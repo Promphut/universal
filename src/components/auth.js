@@ -12,6 +12,7 @@ const ROLES = {
 let auth = {}
 auth = {
   setCookieAndToken(cookieAndToken){
+   // console.log('setCookieAndToken', cookieAndToken)
     if(cookieAndToken.token) cookies.set('token', cookieAndToken.token)
     if(cookieAndToken.user) cookies.setJSON('user', cookieAndToken.user)
     if(cookieAndToken.roles) cookies.setJSON('roles', cookieAndToken.roles)
@@ -30,35 +31,45 @@ auth = {
     return cookies.getJSON('roles')
   },
 
-  isAdmin(pid){
-    pid = parseInt(pid)
-    if(_.isNaN(pid)) throw new Error('pid must be specified.')
+  // hasRoleOf(roleName, ofId){
+  //   ofId = parseInt(ofId)
+  //   if(_.isNaN(ofId)) throw new Error('ofId must be specified.')
 
-    let user = cookies.getUser(), 
-        roles = cookies.getRoles()
+  //   return auth['is'+roleName](ofId)
+  // },
 
-    return _.filter(roles, {type:ROLES.ADMIN, user:user._id, publisher:pid}).length > 0 
-  },
+  // isAdmin(pid){
+  //   pid = parseInt(pid)
+  //   if(_.isNaN(pid)) throw new Error('pid must be specified.')
 
-  isWriter(cid){
-    cid = parseInt(cid)
-    if(_.isNaN(cid)) throw new Error('cid must be specified.')
+  //   let user = cookies.getUser(), 
+  //       roles = cookies.getRoles()
+  //   if(!user || !roles) return false // this user hasn't logged in, authorization will be false.
 
-    let user = cookies.getUser(), 
-        roles = cookies.getRoles()
+  //   return _.filter(roles, {type:ROLES.ADMIN, user:user._id, publisher:pid}).length > 0 
+  // },
 
-    return _.filter(roles, {type:ROLES.WRITER, user:user._id, column:cid}).length > 0 
-  },
+  // isWriter(cid){
+  //   cid = parseInt(cid)
+  //   if(_.isNaN(cid)) throw new Error('cid must be specified.')
 
-  isEditor(cid){
-    cid = parseInt(cid)
-    if(_.isNaN(cid)) throw new Error('cid must be specified.')
+  //   let user = cookies.getUser(), 
+  //       roles = cookies.getRoles()
+  //   if(!user || !roles) return false // this user hasn't logged in, authorization will be false.
+
+  //   return _.filter(roles, {type:ROLES.WRITER, user:user._id, column:cid}).length > 0 
+  // },
+
+  // isEditor(cid){
+  //   cid = parseInt(cid)
+  //   if(_.isNaN(cid)) throw new Error('cid must be specified.')
     
-    let user = cookies.getUser(), 
-        roles = cookies.getRoles()
+  //   let user = cookies.getUser(), 
+  //       roles = cookies.getRoles()
+  //   if(!user || !roles) return false // this user hasn't logged in, authorization will be false.
 
-    return _.filter(roles, {type:ROLES.EDITOR, user:user._id, column:cid}).length > 0 
-  },
+  //   return _.filter(roles, {type:ROLES.EDITOR, user:user._id, column:cid}).length > 0 
+  // },
 
   logout(cb) {
     cookies.remove('token')
@@ -70,6 +81,7 @@ auth = {
   },
 
   loggedIn() {
+    //console.log('auth.loggedIn', auth.getToken(), auth.getUser())
     return !!auth.getToken() && !!auth.getUser()
   }
 }

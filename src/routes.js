@@ -104,8 +104,34 @@ const toError = (nextState, replace, next) => {
 }
 
 const loggedIn = (nextState, replace, next) => {
+  //console.log('loggedIn', auth.loggedIn())
   if(auth.loggedIn()) return next()
   toSignin(nextState, replace, next)()
+}
+
+const hasRoles = (roles) => {
+  return (nextState, replace, next) => {
+    let authorized = false,
+        user = auth.getUser(), 
+        roles = auth.getRoles() || []
+
+    if(!user) return toSignin(nextState, replace, next)()
+
+    roles.forEach(role => {
+      role = _.capitalize(role)
+      let compare
+
+      if(role==='ADMIN') compare = {type:ROLES.ADMIN, user:user._id, publisher:nextState.params.pid || nextState.location.query.pid}
+      else if(role==='EDITOR') compare = {type:ROLES.EDITOR, user:user._id, column:nextState.params.cid || nextState.location.query.cid}
+      else if(role==='WRITER') compare = {type:ROLES.WRITER, user:user._id, column:nextState.params.cid || nextState.location.query.cid}
+      
+      authorized = authorized || (_.filter(roles, compare).length > 0)
+    })
+    
+    if(!authorized) return toError(nextState, replace, next)(new Error('Unauthorized access'))
+
+    next()
+  }
 }
 
 const getUserFromUsername = (nextState, replace, next) => {
@@ -133,7 +159,7 @@ const routes = (
       <Route path='columns' component={AllColumn}/>
       <Route path=':columns' component={ColumnPage}/>
     </Route>
-    <Route path='publisher' component={PublisherPage}/>
+    <Route path='publisher' component={PublisherPage} onEnter={hasRoles([])}/>
     <Route path="mood" component={MoodboardPage} />
     <Route path="about" component={AboutPage} />
     <Route path="contact" component={ContactPage} />

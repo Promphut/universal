@@ -26,7 +26,7 @@ cookies = {
 		let json 
 
 		try{
-		  json = JSON.parse(helpers.get(cookieName))
+		  json = JSON.parse(cookies.get(cookieName))
 		} 
 		catch(err) {json = null}
 
@@ -40,17 +40,17 @@ cookies = {
 	
 	// // Set article viewed flag in cookie
 	// viewArticle(aid){
-	// 	let viewed = helpers.getJSON('viewed') || []
+	// 	let viewed = cookies.getJSON('viewed') || []
 	// 	if(viewed && aid!=null){
 	// 		viewed.push(aid)
 	// 		viewed = _.uniq(viewed)
 	// 		//console.log('viewed', viewed)
-	// 		helpers.setJSON('viewed', viewed)
+	// 		cookies.setJSON('viewed', viewed)
 	// 	}
 	// },
 
 	// getArticlesViewed(articles){
-	// 	let viewed = helpers.getJSON('viewed') || []
+	// 	let viewed = cookies.getJSON('viewed') || []
 
 	// 	if(viewed && articles && articles.length>0) { 
 	// 		articles.forEach(a => {

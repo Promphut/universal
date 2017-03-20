@@ -49,7 +49,6 @@ var styles={
   },
 }
 
-
 const SignUp = React.createClass({
   getInitialState(){
     return{
@@ -58,25 +57,27 @@ const SignUp = React.createClass({
       errText2:'',
     }
   },
+
   signup(e){
     e.preventDefault()
-    var data = {}
-    var self = this
-    var input = dom(this.refs.signupForm).getElementsByTagName("input")
+    let data = {},
+        self = this,
+        input = dom(this.refs.signupForm).getElementsByTagName("input")
+    
     input = [].slice.call(input)
     input.forEach((field,index) => {
       if(field.value!=''){
         //console.log(field.name+':'+field.value)
         data[field.name] = field.value
-        this.state['errText'+index] = ''
-        this.setState({})
+        self.state['errText'+index] = ''
+        self.setState({})
       } else {
-        this.state['errText'+index] = 'This field is required'
-        this.setState({})
+        self.state['errText'+index] = 'This field is required'
+        self.setState({})
       }
     })
     //console.log(data)
-    var data = {
+    data = {
       email:data.email,
       password:data.password1,
       publisher: config.PID
@@ -89,39 +90,35 @@ const SignUp = React.createClass({
         browserHistory.push('/')
       })
       .catch(err => {
-        this.setState({
-          errText0:err.message,
-          errText1:err.message,
-          errText2:err.message
-        })
+
+        if(err.errors)
+          self.setState({
+            errText0:err.errors.email && err.errors.email.message,
+            errText1:err.errors.password && err.errors.password.message
+          })
+        else
+          self.setState({
+            errText0:err.message,
+            errText1:err.message
+          })
       })
-      // Request
-      //   .post(config.BACKURL+'/users')
-      //   .set('Accept','application/json')
-      //   .send(send)
-      //   .end((err,res)=>{
-      //     //console.log(res.body)
-      //     if(err)this.setState({errText0:res.body.error.message,errText1:res.body.error.message,errText2:res.body.error.message})
-      //     else{
-      //       //auth.setCookieAndToken(res.body)
-      //       browserHistory.push('/')
-      //     }
-      //   })
-    }else{
-      this.setState({errText2:'Wrong Password'})
-    }
+    } 
+    else this.setState({errText2:'Wrong Password'})
   },
+
   checkPWD(e){
     //console.log(e.target.value)
-    var pass1 = document.getElementsByName('password1')[0].value
+    let pass1 = document.getElementsByName('password1')[0].value
     //console.log(pass1)
     if(e.target.value!==pass1)this.setState({errText2:'Wrong Password'})
     else this.setState({errText2:''})
   },
+
   render(){
-    var {onClick,style} = this.props
-    var {errText0,errText1,errText2} = this.state
-    return(
+    let {onClick,style} = this.props
+    let {errText0,errText1,errText2} = this.state
+
+    return (
       <Box style={{...style}}>
         <Head>Email Sign Up</Head>
         <Text>ไม่พลาดทุกเรื่องราวการเงินดีๆ สมัครสมาชิค</Text>
@@ -159,7 +156,7 @@ const SignUp = React.createClass({
         </InputBox>
       </Box>
     )
-  },
+  }
 })
 
 
