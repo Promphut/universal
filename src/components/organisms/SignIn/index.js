@@ -98,14 +98,19 @@ const SignIn = React.createClass({
       api.signin(data)
       .then(res => {
         auth.setCookieAndToken(res)
-
-        //console.log('signin', res, self.props.nextPathname)
+        
         browserHistory.push(self.props.nextPathname)
       }, err => {
-        self.setState({
-          errText0: err.message,
-          errText1: err.message
-        })
+        if(err.errors)
+          self.setState({
+            errText0: err.errors.username && err.errors.username.message,
+            errText1: err.errors.password && err.errors.password.message
+          })
+        else
+          self.setState({
+            errText0: err.message,
+            errText1: err.message
+          })
       })
     }
   },

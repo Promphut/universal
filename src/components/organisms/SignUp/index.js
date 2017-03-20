@@ -90,17 +90,17 @@ const SignUp = React.createClass({
         browserHistory.push('/')
       })
       .catch(err => {
-        let msg = ''
 
-        if(err.errors && err.errors.email)
-          msg = err.errors.email.message
+        if(err.errors)
+          self.setState({
+            errText0:err.errors.email && err.errors.email.message,
+            errText1:err.errors.password && err.errors.password.message
+          })
         else
-          msg = err.message
-
-        self.setState({
-          errText0:msg,
-          errText1:msg
-        })
+          self.setState({
+            errText0:err.message,
+            errText1:err.message
+          })
       })
     } 
     else this.setState({errText2:'Wrong Password'})
