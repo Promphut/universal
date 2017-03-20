@@ -2,25 +2,46 @@ import React from 'react'
 import styled from 'styled-components'
 import FlatButton from 'material-ui/FlatButton';
 
-var styles = {
+const styles = {
   btn: {
-    //float:'left',
+    float:'left',
+    margin: '20px 0px',
+    borderRadius: '20px'
   },
-  labelBtn: {
-    color: '#E2E2E2',
-    fontWeight: 'bold'
+  labelStyle: {
+    fontSize: '15px',
+    color: '#FFF',
+    textTransform: 'none'
+  },
+  iconStyle: {
+    fontSize: '14px',
+    color: '#FFF',
+    padding: '0px 0px 0px 5px'
   }
 }
 
-const ShareButton = ({style}) => {
+const label = (text, number) => {
+  return (
+    <span>
+      {text}
+      <span style={{
+        borderLeft: '1px solid rgba(0, 0, 0, .1)',
+        padding: '10px 0px 10px 6px',
+        marginLeft: '8px'
+      }}>{number}</span>
+    </span>
+  )
+}
+
+const ShareButton = ({className, number, color, style}) => {
   return (
     <FlatButton
-      label = 'Share'
-      labelStyle = {styles.labelBtn}
-      labelPosition = 'after'
-      backgroundColor="#a4c639"
+      label = {label('Share', number)}
+      labelStyle = {styles.labelStyle}
+      backgroundColor={'rgb(' + color + ')'}
+      hoverColor={'rgba(' + color + ', .8)'}
+      icon = {<i className={className} style={styles.iconStyle} aria-hidden="true"></i>}
       style = {{...styles.btn, ...style}}
-      icon = {<i className="fa fa-facebook" style={{color:'#FFF'}} aria-hidden="true"></i>}
     />
   )
 }

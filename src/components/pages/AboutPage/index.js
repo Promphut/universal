@@ -30,7 +30,8 @@ const AboutPage = React.createClass({
         <Wrapper>
           <Head className='title-font'>About Us</Head>
           <Article className='content-font'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas enim quae atque quo, consectetur? At dolor inventore officia alias sapiente dolores, eum amet esse quisquam eligendi, molestiae quaerat deleniti. Molestiae.</Article>
-          <ShareButton />
+          <ShareButton className='fa fa-facebook' number='112' color='58,88,155'/>
+          <ShareButton className='fa fa-twitter' number='118' color='96,170,222' style={{marginLeft: '15px'}}/>
       </Wrapper>
      </AboutContainer>
     )

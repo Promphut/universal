@@ -26,7 +26,6 @@ const Container2 = styled.div`
   z-index:10;
   background:rgba(0,0,0,0.8);
   animation: ${props=> props.open?fadeOut:fadeIn} 0.5s forwards;
-  filter:url(#blur);
 `
 
 const displayNone = keyframes`
@@ -260,14 +259,6 @@ const LeftMenu = React.createClass({
             </ul>
           </div>
         </Nav>
-        <svg>
-          <filter id="blur" width="110%" height="110%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="1.7" result="blur"/>
-            <g id="rect">
-              <rect x="10" y="30" width="40" height="40" stroke="black" stroke-width="2"/>
-            </g>
-          </filter>
-        </svg>
       </Container>
 		)
 	}
