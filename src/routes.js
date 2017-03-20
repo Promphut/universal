@@ -5,11 +5,22 @@ import auth from 'components/auth'
 import Cookies from 'react-cookie'
 import Request from 'superagent'
 import _ from 'lodash'
+<<<<<<< HEAD
 import {HomePage2, Page3, MoodboardPage, SignInPage,SignUpPage,
   PublisherSettingPage,ForgetPasswordPage,PublisherEditor,PublisherContactAndAboutPage,
   PublisherDashboardPage,ColumnEditor,ColumnSettingPage,PublisherStoryPage,UserSetting,UserSettingProfile,
   UserSettingAccount, UserSettingStory,ColumnPage,PublisherPage,UserStory,AllStory,AllColumn,NewStory,NotFoundPage, ErrorPage } from 'components'
 import api from 'components/api'
+=======
+import {
+    HomePage2, Page3, MoodboardPage, SignInPage, SignUpPage,
+    PublisherDashboardPage,ColumnEditor,ColumnSettingPage,PublisherStoryPage,UserSetting,
+    PublisherSettingPage, ForgetPasswordPage, PublisherEditor, PublisherContactAndAboutPage,
+    UserSettingProfile, UserSettingAccount, UserSettingStory, ColumnPage, PublisherPage,
+    UserStory, AllStory, AllColumn, NewStory, NotFoundPage, ErrorPage, AboutPage, ContactPage
+  } from 'components'
+import api from './api'
+>>>>>>> 8f7e4473503a398e9cf890665e26ba474a97c8c7
 
 
 const getUserId = (nextState, replace, cb)=>{
@@ -117,11 +128,11 @@ const getUserFromUsername = (nextState, replace, next) => {
 }
 
 // const syncTokenAndCookie = (nextState, replace, next) => {
-//   // auth token might be sent via querystring, login 
+//   // auth token might be sent via querystring, login
 //   let query = nextState.location.query
 
 //   let token = (query && query.token) ? query.token : null
-  
+
 //   let cookie = null
 //   try {
 //     cookie = (query && query.cookie) ? JSON.parse(query.cookie) : null
@@ -144,17 +155,21 @@ const routes = (
     {/*<IndexRoute component={HomePage2} onEnter={syncTokenAndCookie}/>*/}
     <IndexRoute component={HomePage2} />
     <Route path='article' component={Page3}/>
-    <Route path='column' component={ColumnPage}/>
-    <Route path='stories' component={AllStory}/>
-    <Route path='stories/columns' component={AllColumn}/>
+    <Route path='stories'>
+      <IndexRoute component={AllStory}/>
+      <Route path='columns' component={AllColumn}/>
+      <Route path=':columns' component={ColumnPage}/>
+    </Route>
     <Route path='publisher' component={PublisherPage}/>
     <Route path="mood" component={MoodboardPage} />
+    <Route path="about" component={AboutPage} />
+    <Route path="contact" component={ContactPage} />
 
     <Route path="forget" component={ForgetPasswordPage} />
     <Route path="signin" component={()=>(<SignInPage visible={true}/>)} />
     <Route path="signup" component={()=>(<SignUpPage visible={true}/>)} />
     <Route path="logout" onEnter={logout} />
-    
+
     <Route path='editor' component={PublisherEditor} onEnter={getPublisherId}>
       <IndexRoute component={PublisherDashboardPage} onEnter={getPublisherId}/>
       <Route path='settings' component={PublisherSettingPage} onEnter={getPublisherId}/>
@@ -174,7 +189,7 @@ const routes = (
     </Route>
 
     <Route path='@:username' onEnter={getUserFromUsername} component={UserStory}/>
-    
+
     <Route path='error' component={ErrorPage}/>
     <Route path='404' component={NotFoundPage}/>
     <Route path='*' component={NotFoundPage}/>

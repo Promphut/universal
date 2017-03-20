@@ -26,7 +26,7 @@ const Container2 = styled.div`
   z-index:10;
   background:rgba(0,0,0,0.8);
   animation: ${props=> props.open?fadeOut:fadeIn} 0.5s forwards;
-  // filter:url(#blur);
+  filter:url(#blur);
 `
 
 const displayNone = keyframes`
@@ -119,7 +119,7 @@ const Nav = styled.nav`
 		display: inline-block;
 		vertical-align: middle;
 	}
-  
+
 	& ul li a {
 		text-decoration:none
 		color:#FFF;
@@ -225,7 +225,7 @@ const LeftMenu = React.createClass({
 
     // Menu items from menu props
     let items = []
-    for(let i=0; i<cols.length; i++) 
+    for(let i=0; i<cols.length; i++)
       items.push(<li key={i}><Link to={'/stories/'+cols[i].slug}>{cols[i].name}</Link></li>)
 
 		return (
@@ -237,10 +237,10 @@ const LeftMenu = React.createClass({
             {/* <SearchBtn onTouchTap={this.onSearch}><FontIcon className="material-icons">search</FontIcon></SearchBtn>*/}
             <ul>
               <li><Link to="/" style={{fontSize: 24}}>Home</Link></li>
-              <li><Link to="/" style={{fontSize: 24}}>About Us</Link></li>
-             
+              <li><Link to="/about" style={{fontSize: 24}}>About Us</Link></li>
+
               <Divider />
-              
+
               <li><Link to="#" style={{fontSize: 40}} onClick={this.shrinkDrawer}>Stories
                 <FontIcon className={'material-icons arrow ' + toggleArrow}>keyboard_arrow_down</FontIcon>
               </Link></li>
@@ -253,7 +253,7 @@ const LeftMenu = React.createClass({
 
               <Divider />
 
-              <li><Link to="/" style={{fontSize: 24}}>Contact</Link></li>
+              <li><Link to="/contact" style={{fontSize: 24}}>Contact</Link></li>
               {/*<Divider />
               <li><em style={{color:'#e2e2e2', fontSize:'18px'}}>Other Channels</em></li>
               <li><Link to="/">Infographic Thailand</Link></li>*/}
@@ -262,7 +262,10 @@ const LeftMenu = React.createClass({
         </Nav>
         <svg>
           <filter id="blur" width="110%" height="110%">
-            <feGaussianBlur stdDeviation="20 20" edgeMode="duplicate" />
+            <feGaussianBlur in="SourceAlpha" stdDeviation="1.7" result="blur"/>
+            <g id="rect">
+              <rect x="10" y="30" width="40" height="40" stroke="black" stroke-width="2"/>
+            </g>
           </filter>
         </svg>
       </Container>

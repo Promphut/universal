@@ -73,12 +73,12 @@ const TopNavigation = ({onMouseOver, onMouseOut, menu}) => {
 				<li>
 					<Link to="/">Stories &#9662;</Link>
 					<ul className="dropdown">
-		                {items}
-		                <li key={999}><Link to={'/stories/columns'}>All Columns</Link></li>
-		            </ul>
+		                		{items}
+		                		<li key={999}><Link to={'/stories/columns'}>All Columns</Link></li>
+		            		</ul>
 				</li>
-				<li><Link to="/">About Us</Link></li>
-				<li><Link to="/">Contact</Link></li>
+				<li><Link to="/about">About Us</Link></li>
+				<li><Link to="/contact">Contact</Link></li>
 			</ul>
 		</Nav>
 	)
