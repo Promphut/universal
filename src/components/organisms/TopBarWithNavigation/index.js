@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react'
+import {browserHistory} from 'react-router'
 import {TopBar, TopNavigation} from 'components'
 import auth from 'components/auth'
 import api from 'components/api'

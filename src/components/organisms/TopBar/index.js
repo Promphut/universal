@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {findDOMNode as dom} from 'react-dom'
-import {Link,browserHistory} from 'react-router';
+import {Link, browserHistory} from 'react-router';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
@@ -145,43 +145,6 @@ const TopBar = React.createClass({
 	    }
 	},
 
-<<<<<<< HEAD
-=======
-	componentWillMount(){
-		let self = this,
-			// Get from cookie, else get from query
-			token = auth.getToken() || browserHistory.getCurrentLocation().query.token
-
-		//console.log('token', token)
-		// request cookieAndToken from server
-		api.getCookieAndToken(token)
-		.then(result => {
-			// 1. Update newly fetch cookie
-			auth.setCookieAndToken(result)
-
-			// 2. Set the state to "loggedin" or "unloggedin"
-			this.menu = result.menu
-			this.user = result.user
-			this.roles = result.roles
-
-			if(this.user && token)
-				this.setState({
-					status: 'LOGGEDIN'
-				})
-			else
-				this.setState({
-					status: 'UNLOGGEDIN'
-				})
-			// 2. Reset
-			// self.setState({
-			// 	menu: result.menu,
-			// 	user: result.user,
-			// 	roles: result.roles
-			// })
-		})
-	},
-
->>>>>>> 8f7e4473503a398e9cf890665e26ba474a97c8c7
 	componentDidMount() {
 		if(this.props.onScroll)
 			window.addEventListener('scroll', this.handleScroll);
@@ -225,8 +188,6 @@ const TopBar = React.createClass({
 		return (
 			<Wrapper className="menu-font" onMouseOver={this.props.onMouseOver} onMouseOut={this.props.onMouseOut}>
 				<div className={this.props.scrolling || 'bar-on-top'}>
-<<<<<<< HEAD
-
 					<IconButton className="hamburger" onClick={() => this.openPop('left')}>
 						<Hamburger/>
 					</IconButton>
@@ -250,39 +211,6 @@ const TopBar = React.createClass({
 					}
 					{status=='LOGGEDIN' && <RightMenu open={alertRight} close={() => this.handleRequestClose('right')} user={user}/>}
 		        </div>
-=======
-				{
-					/*<Drawer name="ld" position="left" toggleIcon={<Hamburger/>}>
-					<LeftMenu open={alert} close={this.handleRequestClose}/>
-					</Drawer>*/
-				}
-				<IconButton className="hamburger" onClick={() => this.openPop('left')}>
-					<Hamburger/>
-				</IconButton>
-				<LeftMenu menu={this.menu} open={alertLeft} close={() => this.handleRequestClose('left')}/>
-
-				<Container id="container-bar">
-					<header>
-						<Link to="/" id="logo" title={this.props.title} style={{display:'block', marginTop:3}}><Logo fill={'#00B2B4'}/></Link>
-					</header>
-
-					{this.props.children}
-
-					<div style={{textAlign:'right'}}>
-						{status=='LOGGEDIN' && <HideOnTablet><PrimaryButton label="Story" iconName="add" style={{verticalAlign:'middle'}}/></HideOnTablet>}
-						{status=='UNLOGGEDIN' &&  <NotLogin id="not-login"><SecondaryButton label="Sign Up" onClick={this.signup} style={{verticalAlign:'middle'}}/><span>&nbsp; or </span><Link to="/signin" style={{fontWeight:'bold'}}>Sign In</Link></NotLogin>}
-					</div>
-				</Container>
-
-				{status=='LOGGEDIN' &&
-					// <Drawer name="rd" position="right" toggleIcon={<ProfileAvatar src={user.pic.medium} size={30}/>}>
-					// 	<RightNavigation user={user}/>
-					// </Drawer>
-					<ProfileAvatar src={this.user.pic.medium} size={30} onClick={() => this.openPop('right')}/>
-				}
-				{status=='LOGGEDIN' && <RightMenu open={alertRight} close={() => this.handleRequestClose('right')} user={this.user}/>}
-				</div>
->>>>>>> 8f7e4473503a398e9cf890665e26ba474a97c8c7
 			</Wrapper>
 		)
 	}

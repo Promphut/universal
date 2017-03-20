@@ -5,13 +5,6 @@ import auth from 'components/auth'
 import Cookies from 'react-cookie'
 import Request from 'superagent'
 import _ from 'lodash'
-<<<<<<< HEAD
-import {HomePage2, Page3, MoodboardPage, SignInPage,SignUpPage,
-  PublisherSettingPage,ForgetPasswordPage,PublisherEditor,PublisherContactAndAboutPage,
-  PublisherDashboardPage,ColumnEditor,ColumnSettingPage,PublisherStoryPage,UserSetting,UserSettingProfile,
-  UserSettingAccount, UserSettingStory,ColumnPage,PublisherPage,UserStory,AllStory,AllColumn,NewStory,NotFoundPage, ErrorPage } from 'components'
-import api from 'components/api'
-=======
 import {
     HomePage2, Page3, MoodboardPage, SignInPage, SignUpPage,
     PublisherDashboardPage,ColumnEditor,ColumnSettingPage,PublisherStoryPage,UserSetting,
@@ -19,9 +12,7 @@ import {
     UserSettingProfile, UserSettingAccount, UserSettingStory, ColumnPage, PublisherPage,
     UserStory, AllStory, AllColumn, NewStory, NotFoundPage, ErrorPage, AboutPage, ContactPage
   } from 'components'
-import api from './api'
->>>>>>> 8f7e4473503a398e9cf890665e26ba474a97c8c7
-
+import api from 'components/api'
 
 const getUserId = (nextState, replace, cb)=>{
   var user = auth.getUser()
@@ -113,7 +104,6 @@ const toError = (nextState, replace, next) => {
 }
 
 const loggedIn = (nextState, replace, next) => {
-  //console.log('auth', auth.loggedIn())
   if(auth.loggedIn()) return next()
   toSignin(nextState, replace, next)()
 }
@@ -126,23 +116,6 @@ const getUserFromUsername = (nextState, replace, next) => {
   })
   .catch(toError(nextState, replace, next))
 }
-
-// const syncTokenAndCookie = (nextState, replace, next) => {
-//   // auth token might be sent via querystring, login
-//   let query = nextState.location.query
-
-//   let token = (query && query.token) ? query.token : null
-
-//   let cookie = null
-//   try {
-//     cookie = (query && query.cookie) ? JSON.parse(query.cookie) : null
-//   }
-//   catch(e) {}
-
-//   auth.syncTokenAndCookie(token, cookie)
-
-//   next()
-// }
 
 const logout = (nextState, replace, next) => {
   auth.logout(() => {
