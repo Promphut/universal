@@ -5,6 +5,13 @@ const _ = require('lodash'),
 
 let api =  {}
 
+api.err = (err) => {
+	if(err.response && err.response.body.error)
+		throw err.response.body.error
+	else 
+		throw err
+}
+
 api.getUserFromCookie = () => {
 	let u = auth.getUser()
 
@@ -14,7 +21,7 @@ api.getUserFromCookie = () => {
 		.set('Accept','application/json')
 		.then(res => {
 			return res.body.user
-		})
+		}, api.err)
 	} 
 	else return Promise.reject(new NotFoundError('User is not found.'))
 }
@@ -37,7 +44,7 @@ api.getCookieAndToken = (token) => {
     .set('Accept', 'application/json')
     .then(res => {
       return res.body
-    })
+    }, api.err)
 }
 
 api.signin = (data) => {
@@ -47,7 +54,7 @@ api.signin = (data) => {
     .set('Accept', 'application/json')
     .then(res => {
     	return res.body
-    })
+    }, api.err)
 }
 
 api.signup = (data) => {
@@ -57,7 +64,7 @@ api.signup = (data) => {
     .set('Accept', 'application/json')
     .then(res => {
     	return res.body
-    })
+    }, api.err)
 }
 
 module.exports = api

@@ -101,8 +101,7 @@ const SignIn = React.createClass({
 
         //console.log('signin', res, self.props.nextPathname)
         browserHistory.push(self.props.nextPathname)
-      })
-      .catch(err => {
+      }, err => {
         self.setState({
           errText0: err.message,
           errText1: err.message
