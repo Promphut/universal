@@ -276,7 +276,7 @@ const LeftMenu = React.createClass({
           <filter id="blur" width="110%" height="110%">
             <feGaussianBlur in="SourceAlpha" stdDeviation="1.7" result="blur"/>
             <g id="rect">
-              <rect x="10" y="30" width="40" height="40" stroke="black" stroke-width="2"/>
+              <rect x="10" y="30" width="40" height="40" stroke="black" strokeWidth="2"/>
             </g>
           </filter>
         </svg>

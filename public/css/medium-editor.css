@@ -169,6 +169,16 @@
   -webkit-animation: medium-editor-pop-upwards 160ms forwards linear;
           animation: medium-editor-pop-upwards 160ms forwards linear; }
 
+  .custom-class-h1 {
+    font-size: 28px;
+    font-weight:bold;
+    color:#222;
+  }
+  .custom-class-h2 {
+    font-size: 20px;
+    color:#bfbfbf;
+  }      
+
 .medium-editor-action-bold {
   font-weight: bolder; }
 

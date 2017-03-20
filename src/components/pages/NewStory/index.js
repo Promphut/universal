@@ -24,6 +24,30 @@ const Container = styled.form`
   width:100%;
   padding:60px;
   border-bottom:1px solid #E2E2E2;
+
+  .medium-editor-insert-plugin p {
+    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    font-size: 18px;
+  }
+  .medium-editor-insert-plugin h2 {
+    font-size: 28px;
+    font-weight:bold;
+    color:#222;
+  }
+  .medium-editor-insert-plugin h3 {
+    font-size: 20px;
+    font-weight:normal;
+    color:#bfbfbf;
+  }
+  .medium-editor-insert-plugin blockquote {
+    font-size: 20px;
+    font-family: 'PT Serif', 'Mitr';
+    font-weight:normal;
+    color:#222;
+    border-left: 1px solid #E2E2E2;
+    padding-left:20px;
+    display:inline-block;
+  }          
 `
 const Paper = styled.div`
   position:relative;
@@ -31,14 +55,14 @@ const Paper = styled.div`
   min-height:500px;
   &:focus{
     outline: none;
-  }s
+  }
 `
 const Title = styled.textarea`
   margin:15px 0 0 0;
   font-size:36px;
   font-weight:bold;
   overflowY:hidden;
-  color:#8f8f8f;
+  color:#222;
   width:100%;
   outline: none;
   border:none;
@@ -57,7 +81,77 @@ const PublisherContact = React.createClass({
   },
 
   componentDidMount(){
-    this.editor = new MediumEditor('#paper');
+    this.editor = new MediumEditor('#paper',{
+      toolbar: {
+        buttons: [
+            {
+                name: 'bold',
+                contentDefault: '<span class="fa fa-bold" ></span>',
+            },
+            {
+                name: 'italic',
+                contentDefault: '<span class="fa fa-italic" ></span>',
+            },
+            {
+                name: 'underline',
+                contentDefault: '<span class="fa fa-underline" ></span>',
+            },
+            {
+                name: 'h1',
+                action: 'append-h2',
+                aria: 'Header',
+                tagNames: ['h2'],
+                style:
+                  { prop: 'font-size', value: '28px' }
+                ,
+                contentDefault: '<span class="fa fa-header" style="font-size:24px"><span>',
+                classList: ['custom-class-h1'],
+                attrs: {
+                    'data-custom-attr': 'attr-value-h1'
+                }
+            },
+            {
+                name: 'h2',
+                action: 'append-h3',
+                aria: 'Subheader',
+                tagNames: ['h3'],
+                // style:[
+                //   { prop: 'font-size', value: '20px' },
+                //   { prop: 'color', value: '#bfbfbf' }
+                // ],
+                contentDefault: '<span class="fa fa-header" style="font-size:14px"><span>',
+                classList: ['custom-class-h2'],
+                attrs: {
+                    'data-custom-attr': 'attr-value-h2'
+                }
+            },
+            {
+                name: 'quote',
+                contentDefault: '<span class="fa fa-quote-left" ></span>',
+            },   
+            {
+                name: 'anchor',
+                contentDefault: '<span class="fa fa-link" ></span>',
+            },   
+            {
+                name: 'justifyLeft',
+                contentDefault: '<span class="fa fa-align-left" ></span>',
+            },
+                        {
+                name: 'justifyCenter',
+                contentDefault: '<span class="fa fa-align-center" ></span>',
+            },
+            {
+                name: 'justifyRight',
+                contentDefault: '<span class="fa fa-align-right" ></span>',
+            }
+        ]
+    },
+    targetBlank: true,
+    placeholder: {
+        text: 'Write a story ...'
+    }
+    });
     $('#paper').mediumInsert({
         editor: this.editor,
         addons: {
@@ -75,7 +169,7 @@ const PublisherContact = React.createClass({
             }
         }
     });
-    this.editor.setContent(this.state.story)
+    //this.editor.setContent(this.state.story)
   },
 
  
