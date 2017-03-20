@@ -9,7 +9,7 @@ import {HomePage2, Page3, MoodboardPage, SignInPage,SignUpPage,
   PublisherSettingPage,ForgetPasswordPage,PublisherEditor,PublisherContactAndAboutPage,
   PublisherDashboardPage,ColumnEditor,ColumnSettingPage,PublisherStoryPage,UserSetting,UserSettingProfile,
   UserSettingAccount, UserSettingStory,ColumnPage,PublisherPage,UserStory,AllStory,AllColumn,NewStory,NotFoundPage, ErrorPage } from 'components'
-import api from './api'
+import api from 'components/api'
 
 
 const getUserId = (nextState, replace, cb)=>{

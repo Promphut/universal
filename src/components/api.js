@@ -1,5 +1,5 @@
 const _ = require('lodash'),
-	auth = require('./components/auth'),
+	auth = require('./auth'),
 	Request = require('superagent'),
 	{NotFoundError} = require('./error')
 
@@ -48,20 +48,6 @@ api.signin = (data) => {
     .then(res => {
     	return res.body
     })
-    // .end((err, res) => {
-    //   //console.log('err res', err, res)
-    //   if(err || !res.ok){
-    //     cb({ authenticated: false })
-    //   } else {
-    //     //console.log('_loginRequest', res.body)
-    //     cb({
-    //       authenticated: true,
-    //       //token: res.body.token,
-    //       //user: res.body.user
-    //       //cookie: res.body.cookie
-    //     })
-    //   }
-    // })
 }
 
 api.signup = (data) => {
@@ -72,16 +58,6 @@ api.signup = (data) => {
     .then(res => {
     	return res.body
     })
-    // .end((err, res) => {
-    //   //console.log('err res', err, res)
-    //   if(!err && res.ok && res.body.token) {
-    //     //helpers.setCookieAndToken(res.body)
-    //     // Only cookie.user, but no cookie.menu to set for a newly registered user
-    //     if(cb) cb(true)
-    //   }
-    //   else if (cb) cb(false)
-  
-    // })
 }
 
 module.exports = api

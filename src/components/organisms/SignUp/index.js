@@ -7,7 +7,7 @@ import TextField from 'material-ui/TextField';
 import {findDOMNode as dom}from 'react-dom';
 import Request from 'superagent'
 import auth from 'components/auth'
-import api from '../../../api'
+import api from 'components/api'
 
 const Box = styled.div`
   width:477px;

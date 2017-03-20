@@ -127,7 +127,7 @@ const UserStory = React.createClass({
 		var {feed} = this.state
 		return (
 		    <Wrapper>
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={this.props.params.loggedIn} />
+		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 		      <Content >
 			      <Main style={{marginTop:'100px'}}>
               			<UserDetail user={this.props.params.user}/>

@@ -45,7 +45,7 @@ const ColumnEditor = React.createClass({
   render(){
 		return (
 		    <Wrapper>
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={false} />
+		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
           <Container>
             <Content>
               <Aside>

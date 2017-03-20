@@ -9,9 +9,7 @@ import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import Avatar from 'material-ui/Avatar';
 import styled from 'styled-components'
-import auth from 'components/auth'
 import {PrimaryButton, SecondaryButton, Logo, Drawer, LeftNavigation, RightNavigation, LeftMenu, RightMenu} from 'components'
-import api from '../../../api'
 
 const Wrapper = styled.div`
 	* {
@@ -143,49 +141,8 @@ const TopBar = React.createClass({
 	getInitialState(){
 	    return{
 			alertLeft: false,
-			alertRight: false,
-
-			status: 'LOADING'
-			// these are fetched from server
-			// to compose menu and user mini profile (on left and right menu).
-			// menu: null,
-			// user: null,
-			// roles: []
+			alertRight: false
 	    }
-	},
-
-	componentWillMount(){
-		let self = this,
-			// Get from cookie, else get from query 
-			token = auth.getToken() || browserHistory.getCurrentLocation().query.token
-
-		//console.log('token', token)
-		// request cookieAndToken from server
-		api.getCookieAndToken(token)
-		.then(result => {
-			// 1. Update newly fetch cookie
-			auth.setCookieAndToken(result)
-
-			// 2. Set the state to "loggedin" or "unloggedin"
-			this.menu = result.menu
-			this.user = result.user
-			this.roles = result.roles
-
-			if(this.user && token)
-				this.setState({
-					status: 'LOGGEDIN'
-				})
-			else 
-				this.setState({
-					status: 'UNLOGGEDIN'
-				})
-			// 2. Reset 
-			// self.setState({
-			// 	menu: result.menu,
-			// 	user: result.user,
-			// 	roles: result.roles
-			// })
-		})
 	},
 
 	componentDidMount() {
@@ -223,22 +180,19 @@ const TopBar = React.createClass({
 	},
 
 	render(){
-		let {alertLeft, alertRight, status} = this.state
-			//loggedIn = this.props.loggedIn,
-			//user = auth.getUser()
-		//console.log('TopBar', loggedIn, user)
+		let {alertLeft, alertRight} = this.state
+		let status = this.props.status || 'UNLOGGEDIN',
+			user = this.props.user,
+			menu = this.props.menu
+
 		return (
 			<Wrapper className="menu-font" onMouseOver={this.props.onMouseOver} onMouseOut={this.props.onMouseOut}>
 				<div className={this.props.scrolling || 'bar-on-top'}>
 
-					{/*<Drawer name="ld" position="left" toggleIcon={<Hamburger/>}>
-						<LeftMenu open={alert} close={this.handleRequestClose}/>
-					</Drawer>*/}
-
 					<IconButton className="hamburger" onClick={() => this.openPop('left')}>
 						<Hamburger/>
 					</IconButton>
-					<LeftMenu menu={this.menu} open={alertLeft} close={() => this.handleRequestClose('left')}/>
+					<LeftMenu menu={menu} open={alertLeft} close={() => this.handleRequestClose('left')}/>
 
 					<Container id="container-bar">
 	   					<header>
@@ -254,12 +208,9 @@ const TopBar = React.createClass({
 					</Container>
 
 					{status=='LOGGEDIN' && 
-						// <Drawer name="rd" position="right" toggleIcon={<ProfileAvatar src={user.pic.medium} size={30}/>}>
-						// 	<RightNavigation user={user}/>
-						// </Drawer>
-						<ProfileAvatar src={this.user.pic.medium} size={30} onClick={() => this.openPop('right')}/>
+						<ProfileAvatar src={user.pic.medium} size={30} onClick={() => this.openPop('right')}/>
 					}
-					{status=='LOGGEDIN' && <RightMenu open={alertRight} close={() => this.handleRequestClose('right')} user={this.user}/>}
+					{status=='LOGGEDIN' && <RightMenu open={alertRight} close={() => this.handleRequestClose('right')} user={user}/>}
 		        </div>
 			</Wrapper>
 		)
@@ -269,10 +220,14 @@ const TopBar = React.createClass({
 TopBar.propTypes = {
   onScroll: PropTypes.func,
   scrolling: PropTypes.bool,
-  loggedIn: PropTypes.bool,
+  status: PropTypes.string,
+  
   title: PropTypes.string,
   onMouseOver: PropTypes.func,
-  onMouseOut: PropTypes.func
+  onMouseOut: PropTypes.func,
+
+  menu: PropTypes.object,
+  user: PropTypes.object
 }
 
 export default TopBar;

@@ -125,7 +125,7 @@ const PublisherPage = React.createClass({
 					<BGImg src="/tmp/a-story/pic-min.jpg" style={{width:'100%',height:'510px'}} />
 					
 						<Sticky>
-							<TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={this.props.params.loggedIn} />
+							<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 						</Sticky>
 					
 		      <Content style={{marginTop:'100px'}}>

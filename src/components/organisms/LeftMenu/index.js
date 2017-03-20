@@ -5,7 +5,6 @@ import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import Divider from 'material-ui/Divider'
 import {findDOMNode as dom} from 'react-dom'
-import helpers from '../../helpers'
 
 const Container = styled.div`
   position:fixed;
@@ -200,17 +199,6 @@ const LeftMenu = React.createClass({
       height: 0
     }
 	},
-
-  // getMenuFromCookie() {
-  //   let cookie = helpers.getCookie()
-  //   console.log('cookie', cookie)
-  //   return (cookie && cookie.menu)? cookie.menu : null
-  // },
-
-  componentWillMount(){
-    //this.menu = this.getMenuFromCookie()
-    //console.log('MENU', this.)
-  },
 
 	shrinkDrawer(e){
 		e.preventDefault()

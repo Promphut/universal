@@ -2,7 +2,7 @@ import React from 'react'
 import {browserHistory} from 'react-router'
 import { TopBarWithNavigation, UserSettingMenu } from 'components'
 import styled from 'styled-components'
-import api from '../../../api'
+import api from 'components/api'
 
 const Wrapper = styled.div`
   width:100%;
@@ -55,7 +55,7 @@ const UserSetting = React.createClass({
   render(){
 		return (
 		    <Wrapper>
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={false} />
+		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
           <Container>
             <Content>
               <Aside>
