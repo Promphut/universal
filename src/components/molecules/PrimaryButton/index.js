@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 
@@ -14,20 +15,22 @@ const PrimaryButton = (props) => {
 			type:props.type,
 			children:props.children,
 			labelColor: 'White',
-			labelStyle: {fontWeight:'bold', fontSize:18, fontFamily:"'Nunito', 'Mitr'"},
+			labelStyle: {fontWeight:'bold', fontSize:18, fontFamily:"'Nunito', 'Mitr'", color: 'White'},
 			style: {borderRadius:'24px', height:'48px', lineHeight:'48px', ...props.style},
-	      	buttonStyle: {borderRadius: '24px', backgroundColor: '#00B2B4', padding:'0 5px'}
+    	buttonStyle: {borderRadius: '24px', backgroundColor: '#00B2B4', padding:'0 5px'},
+			backgroundColor: '#00B2B4',
+			hoverColor: '#00B2B4'
 		}
 
 		defaultStyle = {
 			icon: {
-				color: 'White', 
-				margin:'-4px 0px 0 18px', 
+				color: 'White',
+				margin:'-4px 0px 0 18px',
 				fontSize: '18px',
 				width: 18
 			},
 			fontIcon: {
-				fontSize:"22px", 
+				fontSize:"22px",
 				marginTop:-4
 			}
 		}
@@ -39,20 +42,22 @@ const PrimaryButton = (props) => {
 			onClick:props.onClick,
 			children:props.children,
 			type:props.type,
-			labelStyle: {fontWeight:'bold', fontSize:13, fontFamily:"'Nunito', 'Mitr'"},
+			labelStyle: {fontWeight:'bold', fontSize:13, fontFamily:"'Nunito', 'Mitr'", color: 'White'},
 			style: {borderRadius:'17px', height:'35px', lineHeight:'35px', ...props.style},
-	      	buttonStyle: {borderRadius: '17px', backgroundColor: '#00B2B4', padding:'0'}
+    	buttonStyle: {borderRadius: '17px', backgroundColor: '#00B2B4', padding:'0'},
+			backgroundColor: '#00B2B4',
+			hoverColor: '#00B2B4'
 		}
 
 		defaultStyle = {
 			icon: {
-				color: 'White', 
-				margin:'-1px 0 0 14px', 
+				color: 'White',
+				margin:'-1px 0 0 14px',
 				fontSize: '13px',
 				width: 13
 			},
 			fontIcon: {
-				fontSize:"16px", 
+				fontSize:"16px",
 				marginTop:-2
 			}
 		}
@@ -65,32 +70,38 @@ const PrimaryButton = (props) => {
 			onClick:props.onClick,
 			children:props.children,
 			type:props.type,
-			labelStyle: {fontWeight:'bold', fontSize:15, fontFamily:"'Nunito', 'Mitr'"},
+			labelStyle: {fontWeight:'bold', fontSize:15, fontFamily:"'Nunito', 'Mitr'", color: 'White'},
 			style: {borderRadius:'20px', height:'40px', lineHeight:'40px', ...props.style},
-	      	buttonStyle: {borderRadius: '20px', backgroundColor: '#00B2B4', padding:'0 2px'}
+  		buttonStyle: {borderRadius: '20px', backgroundColor: '#00B2B4', padding:'0 2px'},
+			backgroundColor: '#00B2B4',
+			hoverColor: '#00B2B4'
 		}
 
 		defaultStyle = {
 			icon: {
-				color: 'White', 
-				margin:'-2px 0px 0 15px', 
+				color: 'White',
+				margin:'-2px 0px 0 15px',
 				fontSize: '15px',
 				width: 15
 			},
 			fontIcon: {
-				fontSize:"18px", 
+				fontSize:"18px",
 				marginTop:-2
 			}
 		}
 	}
-	
+
 
 	if(props.iconName) {
 		opt.icon = <FontIcon className="material-icons" style={defaultStyle.fontIcon}>{props.iconName}</FontIcon>
 	} else if(props.icon) {
 		// Create react element from inputted icon, and copy all its props
-		let newProps = {...props.icon.props, style:{...defaultStyle.icon ,...props.icon.props.style}} 
+		let newProps = {...props.icon.props, style:{...defaultStyle.icon ,...props.icon.props.style}}
 		opt.icon = React.createElement('i', newProps, props.icon.children)
+	}
+
+	if (props.buttonStyle === "Flat") {
+		return React.createElement(FlatButton, opt, null)
 	}
 
 	return React.createElement(RaisedButton, opt, null)
