@@ -2,6 +2,7 @@ import React from 'react'
 import { TopBarWithNavigation,BGImg,StoryMenu,} from 'components'
 import {findDOMNode as dom} from 'react-dom'
 import styled from 'styled-components'
+import {Link} from 'react-router';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import Slider from 'react-slick'
@@ -84,6 +85,7 @@ const Box = styled.div`
   background:white;
   height:257px;
   margin:0 auto 0 auto;
+  cursor: pointer;
 `
 const Blur = styled.div`
 background: rgba(255,255,255,0);
@@ -101,11 +103,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
 `
 const Desc = styled.div`
   font-size:14px;
-  white-space: pre-wrap;      /* Webkit */    
-  white-space: -moz-pre-wrap; /* Firefox */     
-  white-space: -pre-wrap;     /* Opera <7 */    
-  white-space: -o-pre-wrap;   /* Opera 7 */     
-  word-wrap: break-word;      /* IE */ 
+  white-space: pre-wrap;      /* Webkit */
+  white-space: -moz-pre-wrap; /* Firefox */
+  white-space: -pre-wrap;     /* Opera <7 */
+  white-space: -o-pre-wrap;   /* Opera 7 */
+  word-wrap: break-word;      /* IE */
   overflow: hidden;
   text-overflow: ellipsis;
   position:relative;
@@ -142,13 +144,12 @@ const AllColumn = React.createClass({
 			.end((err,res)=>{
 				if(err) throw err
 				else{
-					console.log(res.body)
 					this.setState({column:res.body.columns})
 				}
 			})
 	},
 
-	render(){ 
+	render(){
     var settings = {
       centerMode: false,
       slidesToShow: 4,
@@ -184,7 +185,7 @@ const AllColumn = React.createClass({
                 <Slider {...settings} >
                   {c}
                 </Slider>
-              </div>  
+              </div>
               <div style={{margin:'20px 0 20px 0'}}>
                 <Slider {...settings} >
                   {c}
@@ -193,6 +194,7 @@ const AllColumn = React.createClass({
               <div className='row'>
                 {column?column.map((data,index)=>(
                   <div className='col-3' key={index} style={{margin:'20px 0 20px 0'}}>
+                    <Link to={'/stories/' + data.slug} >
                     <Box>
                       <BGImg src={data.cover} opacity={0.6} className='imgWidth' style={{margin:'0 auto 0 auto'}}>
                         <div style={{margin:'80px 0 0 15px'}}>
@@ -202,9 +204,10 @@ const AllColumn = React.createClass({
                       </BGImg>
                         <Desc className='sans-font' >
                           {data.created}
-                        </Desc>     
-                      <Blur style={{top:'-120px'}}></Blur>     
+                        </Desc>
+                      <Blur style={{top:'-120px'}}></Blur>
                     </Box>
+                    </Link>
                   </div>
                 )):''}
               </div>

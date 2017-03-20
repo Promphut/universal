@@ -118,7 +118,7 @@ const ColumnPage = React.createClass({
 	},
 
 	getFeed() {
-		const columnName = 'money-ideas'
+		const columnName = this.props.params.columns
 		Request
 			.get(config.BACKURL + '/slugs/publishers/' + config.PID + '/' + columnName)
 			.set('Accept', 'application/json')
@@ -140,7 +140,6 @@ const ColumnPage = React.createClass({
 							if (err) throw err
 							else {
 								const feed = res.body.feed
-								console.log(feed)
 								this.setState({feed})
 							}
 						})

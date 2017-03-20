@@ -138,4 +138,3 @@ const ColumnThumpnailRow= React.createClass({
 })
 
 export default ColumnThumpnailRow;
-
