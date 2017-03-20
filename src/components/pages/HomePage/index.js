@@ -92,7 +92,7 @@ const Homepage = React.createClass({
 		var {stopPos} = this.state
 		return (
 		    <Wrapper >
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={true} />
+		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 
 		      <Content>
 						<Share ref='share'>

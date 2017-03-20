@@ -1,12 +1,16 @@
 import React, {PropTypes} from 'react'
+import {browserHistory} from 'react-router'
 import {TopBar, TopNavigation} from 'components'
 import auth from 'components/auth'
+import api from 'components/api'
 
 const TopBarWithNavigation = React.createClass({
 	getInitialState(){
-	    return{
+	    return {
 	    	loggedIn: false,
-	    	scrolling: false
+	    	scrolling: false,
+
+	    	status: 'LOADING'
 	    }
 	},
 
@@ -20,21 +24,31 @@ const TopBarWithNavigation = React.createClass({
 			this.setState({scrolling: false})
 	},
 
-	componentWillReceiveProps(nextProps){
-		if(nextProps.loggedIn!=this.props.loggedIn){
-			this.setState({
-				loggedIn:nextProps.loggedIn
-			})
-		}
-	},
-
-	componentDidMount(){
-		
-	},
-
 	componentWillMount(){
-		if(auth.loggedIn()) 
-			this.setState({loggedIn:true})
+		let self = this,
+			// Get from cookie, else get from query 
+			token = auth.getToken() || browserHistory.getCurrentLocation().query.token
+
+		// Fetch menu, user, and roles information
+		api.getCookieAndToken(token)
+		.then(result => {
+			// 1. Update newly fetch cookie
+			auth.setCookieAndToken(result)
+
+			// 2. Set the state to "loggedin" or "unloggedin"
+			this.menu = result.menu
+			this.user = result.user
+			this.roles = result.roles
+
+			if(this.user && token)
+				this.setState({
+					status: 'LOGGEDIN'
+				})
+			else 
+				this.setState({
+					status: 'UNLOGGEDIN'
+				})
+		})
 	},
 
 	handleScroll(e) {
@@ -49,22 +63,25 @@ const TopBarWithNavigation = React.createClass({
 	},
 
 	render(){
+		let {status} = this.state
+
 		return (
 			<TopBar 
 				onScroll={this.handleScroll} 
 				scrolling={this.state.scrolling} 
-				loggedIn={this.state.loggedIn} 
+				status={this.state.status} 
 				title={this.props.title}
 				onMouseOver={this.handleNavbarMouseOver} 
-				onMouseOut={this.handleNavbarMouseOut}>
-				<TopNavigation  />
+				onMouseOut={this.handleNavbarMouseOut}
+				user={this.user}
+				menu={this.menu}>
+				<TopNavigation menu={this.menu} />
 			</TopBar>
 		)
 	}
 })
 
 TopBarWithNavigation.propTypes = {
-	loggedIn: PropTypes.bool,
 	title: PropTypes.string
 }
 

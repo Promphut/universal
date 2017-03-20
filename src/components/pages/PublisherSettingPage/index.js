@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { TopBarWithNavigation, OverlayImg, PublisherProfileSetting,
+import { OverlayImg, PublisherProfileSetting,
    PublisherPublishingSetting,PublisherAnalyticSetting,PublisherThemeSetting } from 'components'
 import auth from 'components/auth'
 import Request from 'superagent'

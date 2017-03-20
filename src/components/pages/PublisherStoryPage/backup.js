@@ -1,5 +1,5 @@
 import React from 'react'
-import { TopBarWithNavigation, OverlayImg, Pagination,Alert,EditMenu} from 'components'
+import { OverlayImg, Pagination,Alert,EditMenu} from 'components'
 import FontIcon from 'material-ui/FontIcon'
 import styled from 'styled-components'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';

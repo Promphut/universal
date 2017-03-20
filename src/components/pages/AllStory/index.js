@@ -113,7 +113,7 @@ const AllStory = React.createClass({
 		var {feed} = this.state
 		return (
 		    <Wrapper>
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={this.props.params.loggedIn} />
+		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 					<Content >
             <Feed>
               <div className='row' style={{width:'100%'}}><StoryMenu style={{padding:'15px 0 15px 0',marginTop:'20px',float:'left'}}/></div>

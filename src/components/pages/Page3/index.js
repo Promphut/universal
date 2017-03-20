@@ -125,7 +125,7 @@ const Page3 = React.createClass({
 		var {stopPos} = this.state
 		return (
 		    <Wrapper >
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={true} />
+		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 
 		      <BGImg style={{width:'100%',height:'90vh'}} src='/tmp/a-story/pic-min.jpg'/>
 
