@@ -17,20 +17,20 @@ const SecondaryButton = (props) => {
 			labelPosition:props.labelPosition,
 			rippleStyle:{borderRadius: '24px'},
 			overlayStyle:{borderRadius: '24px'},
-			labelStyle: {fontWeight:'bold', fontSize:18, top:-2, fontFamily:"Nunito Mitr"},
+			labelStyle: {fontWeight:'bold', fontSize:18, top:-2, fontFamily:"Nunito Mitr", ...props.labelStyle},
 			style: {borderRadius:'24px', height:'48px', lineHeight:'48px', background:'none', boxShadow:'none', ...props.style},
 	    buttonStyle: {borderRadius: '24px', background: 'none', border:'2px solid #00B2B4', padding:'0 5px'}
 		}
 
 		defaultStyle = {
 			icon: {
-				color: '#00B2B4', 
-				margin:'-8px 0px 0 15px', 
+				color: '#00B2B4',
+				margin:'-8px 0px 0 15px',
 				fontSize: '18px',
 				width: 18
 			},
 			fontIcon: {
-				fontSize:"22px", 
+				fontSize:"22px",
 				marginTop:-8
 			}
 		}
@@ -44,20 +44,20 @@ const SecondaryButton = (props) => {
 			type:props.type,
 			rippleStyle:{borderRadius:'17px'},
 			overlayStyle:{borderRadius:'17px'},
-			labelStyle: {fontWeight:'bold', fontSize:15, top:-2, fontFamily:"'Nunito', 'Mitr'"},
+			labelStyle: {fontWeight:'bold', fontSize:15, top:-2, fontFamily:"'Nunito', 'Mitr'", ...props.labelStyle},
 			style: {borderRadius:'17px', height:'35px', lineHeight:'35px', background:'none', boxShadow:'none', ...props.style},
 	    buttonStyle: {borderRadius: '17px', background: 'none', border:'2px solid #00B2B4', padding:'0'}
 		}
 
 		defaultStyle = {
 			icon: {
-				color: '#00B2B4', 
-				margin:'-4px 0px 0 14px', 
+				color: '#00B2B4',
+				margin:'-4px 0px 0 14px',
 				fontSize: '13px',
 				width: 13
 			},
 			fontIcon: {
-				fontSize:"16px", 
+				fontSize:"16px",
 				marginTop:-5
 			}
 		}
@@ -72,30 +72,30 @@ const SecondaryButton = (props) => {
 			type:props.type,
 			overlayStyle:{borderRadius: '20px'},
 			rippleStyle:{borderRadius: '20px'},
-			labelStyle: {fontWeight:'bold', fontSize:15, top:-2, fontFamily:"'Nunito', 'Mitr'"},
+			labelStyle: {fontWeight:'bold', fontSize:15, top:-2, fontFamily:"'Nunito', 'Mitr'", ...props.labelStyle},
 			style: {borderRadius:'20px', height:'40px', lineHeight:'40px', background:'none', boxShadow:'none', ...props.style},
 	    buttonStyle: {borderRadius: '20px', background: 'none', border:'2px solid #00B2B4', padding:'0 2px'}
 		}
 
 		defaultStyle = {
 			icon: {
-				color: '#00B2B4', 
-				margin:'-6px 0px 0 15px', 
+				color: '#00B2B4',
+				margin:'-6px 0px 0 15px',
 				fontSize: '15px',
 				width: 15
 			},
 			fontIcon: {
-				fontSize:"18px", 
+				fontSize:"18px",
 				marginTop:-6
 			}
 		}
 	}
-	
+
 	if(props.iconName) {
 		opt.icon = <FontIcon className="material-icons" style={defaultStyle.fontIcon}>{props.iconName}</FontIcon>
 	} else if(props.icon) {
 		// Create react element from inputted icon, and copy all its props
-		let newProps = {...props.icon.props, style:{...defaultStyle.icon ,...props.icon.props.style}} 
+		let newProps = {...props.icon.props, style:{...defaultStyle.icon ,...props.icon.props.style}}
 		opt.icon = React.createElement('i', newProps, props.icon.children)
 	}
 
