@@ -81,15 +81,19 @@ const UserSettingProfile = React.createClass({
     }
   },
 
-  componentDidMount(){
+  fetechUser(e){
+    if(e) e.preventDefault()
+
     api.getUser()
     .then(user => {
-      this.user = user
       this.setState({
         user: user
       })
     })
+  },
 
+  componentDidMount(){
+    this.fetechUser()
     //self.display.focus()
   },
 
@@ -218,7 +222,7 @@ const UserSettingProfile = React.createClass({
             </Social>
           </Edit>
         </Flex>
-        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error?'#D8000C':'#00B2B4'}}>{textStatus}</TextStatus></div>
+        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.fetechUser} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error?'#D8000C':'#00B2B4'}}>{textStatus}</TextStatus></div>
       </Container>
     )
   },
