@@ -1,5 +1,5 @@
 import React from 'react'
-import { TopBarWithNavigation, OverlayImg, PublisherContact,PublisherAbout} from 'components'
+import { OverlayImg, PublisherContact,PublisherAbout} from 'components'
 
 import styled from 'styled-components'
 

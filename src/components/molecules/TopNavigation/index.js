@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react'
 import styled from 'styled-components'
-import {Link} from 'react-router';
+import {Link} from 'react-router'
 
 const Nav = styled.nav`
 	flex: 2 40% !important;
@@ -58,7 +58,14 @@ const Nav = styled.nav`
 	}
 `
 
-const TopNavigation = ({onMouseOver, onMouseOut}) => {
+const TopNavigation = ({onMouseOver, onMouseOut, menu}) => {
+	let cols = menu && menu.column ? menu.column : []
+
+    // Menu items from menu props
+    let items = []
+    for(let i=0; i<cols.length; i++) 
+      items.push(<li key={i}><Link to={'/stories/'+cols[i].slug}>{cols[i].name}</Link></li>)
+
 	return (
 		<Nav id="top-nav" onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
 			<ul>
@@ -66,15 +73,12 @@ const TopNavigation = ({onMouseOver, onMouseOut}) => {
 				<li>
 					<Link to="/">Stories &#9662;</Link>
 					<ul className="dropdown">
-            <li><Link to="/stories/columns">All</Link></li>
-            <li><Link to="/stories/saving">Saving</Link></li>
-            <li><Link to="/stories/fund">Fund</Link></li>
-            <li><Link to="/stories/stock">Stock</Link></li>
-            <li><Link to="/stories/money-ideas">Money Ideas</Link></li>
-          </ul>
+		                		{items}
+		                		<li key={999}><Link to={'/stories/columns'}>All Columns</Link></li>
+		            		</ul>
 				</li>
-				<li><Link to="/">About Us</Link></li>
-				<li><Link to="/">Contact</Link></li>
+				<li><Link to="/about">About Us</Link></li>
+				<li><Link to="/contact">Contact</Link></li>
 			</ul>
 		</Nav>
 	)
@@ -83,7 +87,9 @@ const TopNavigation = ({onMouseOver, onMouseOut}) => {
 
 TopNavigation.propTypes = {
   onMouseOver: PropTypes.func,
-  onMouseOut: PropTypes.func
+  onMouseOut: PropTypes.func,
+
+  menu: PropTypes.object
 }
 
 export default TopNavigation;

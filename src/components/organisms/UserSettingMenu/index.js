@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
 import styled from 'styled-components'
 import {PrimaryButton,SecondaryButton,UploadPicture} from 'components'
 import {List, ListItem, makeSelectable} from 'material-ui/List';
@@ -6,6 +6,7 @@ import FontIcon from 'material-ui/FontIcon'
 import {Link,browserHistory} from 'react-router'
 import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar'
+import auth from 'components/auth'
 
 var styles = {
   list:{
@@ -26,8 +27,7 @@ const SelectableList = makeSelectable(List);
 
 const UserSettingMenu = React.createClass({
   getInitialState(){
-    this.user = this.props.user
-    return{
+    return {
       selectedIndex:this.props.pathname
     }
   },
@@ -40,16 +40,12 @@ const UserSettingMenu = React.createClass({
     }
   },
 
-  componentDidMount(){
-    //console.log(this.user)
-  },
-
   changePath(e){
     browserHistory.push(e)
   },  
 
   render(){
-    var {display, pic} = this.user
+    let {display, pic} = this.props.user
     if(!display || !pic) return (<div></div>)
 
     return(
@@ -65,6 +61,8 @@ const UserSettingMenu = React.createClass({
   },
 })
 
-
+UserSettingMenu.propTypes = {
+  user: PropTypes.object
+}
 
 export default UserSettingMenu

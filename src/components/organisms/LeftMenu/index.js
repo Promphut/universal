@@ -5,7 +5,6 @@ import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import Divider from 'material-ui/Divider'
 import {findDOMNode as dom} from 'react-dom'
-import helpers from '../../helpers'
 
 const Container = styled.div`
   position:fixed;
@@ -27,7 +26,6 @@ const Container2 = styled.div`
   z-index:10;
   background:rgba(0,0,0,0.8);
   animation: ${props=> props.open?fadeOut:fadeIn} 0.5s forwards;
-  filter:url(#blur);
 `
 
 const displayNone = keyframes`
@@ -201,17 +199,6 @@ const LeftMenu = React.createClass({
     }
 	},
 
-  // getMenuFromCookie() {
-  //   let cookie = helpers.getCookie()
-  //   console.log('cookie', cookie)
-  //   return (cookie && cookie.menu)? cookie.menu : null
-  // },
-
-  componentWillMount(){
-    //this.menu = this.getMenuFromCookie()
-    //console.log('MENU', this.)
-  },
-
 	shrinkDrawer(e){
 		e.preventDefault()
 		this.setState({
@@ -249,7 +236,7 @@ const LeftMenu = React.createClass({
             {/* <SearchBtn onTouchTap={this.onSearch}><FontIcon className="material-icons">search</FontIcon></SearchBtn>*/}
             <ul>
               <li><Link to="/" style={{fontSize: 24}}>Home</Link></li>
-              <li><Link to="/" style={{fontSize: 24}}>About Us</Link></li>
+              <li><Link to="/about" style={{fontSize: 24}}>About Us</Link></li>
 
               <Divider />
 
@@ -265,7 +252,7 @@ const LeftMenu = React.createClass({
 
               <Divider />
 
-              <li><Link to="/" style={{fontSize: 24}}>Contact</Link></li>
+              <li><Link to="/contact" style={{fontSize: 24}}>Contact</Link></li>
               {/*<Divider />
               <li><em style={{color:'#e2e2e2', fontSize:'18px'}}>Other Channels</em></li>
               <li><Link to="/">Infographic Thailand</Link></li>*/}

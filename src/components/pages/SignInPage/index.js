@@ -74,6 +74,13 @@ const SignInPage = React.createClass({
   },
 
 	render(){
+    //console.log('PROP', this.props, this.props.params, this.props.location, this.location, browserHistory.getCurrentLocation())
+    
+    let state = browserHistory.getCurrentLocation().state,
+        nextPathname = '/'
+    if(state && state.nextPathname) nextPathname = state.nextPathname
+
+
     if(this.state.visible){
       var styles={}
     }else{
@@ -87,7 +94,7 @@ const SignInPage = React.createClass({
             <BoxButton>
               <Link to='#' onClick={this.checkBack} ><BackButton style={{float:'left'}}/></Link>
             </BoxButton>
-            {this.state.statePage?<SignInFb emailSignIn={this.changeStatePage}/>:<SignIn/>}
+            {this.state.statePage?<SignInFb emailSignIn={this.changeStatePage} nextPathname={nextPathname}/>:<SignIn nextPathname={nextPathname}/>}
           </Container>
 		   </Wrapper>
       )
@@ -100,7 +107,7 @@ const SignInPage = React.createClass({
               <Link to='#' onClick={this.checkBack} ><BackButton style={{float:'left'}}/></Link>
               <CloseButton style={{float:'right',paddingTop:'0px'}}/>
             </BoxButton>
-            {this.state.statePage?<SignInFb emailSignIn={this.changeStatePage}/>:<SignIn/>}
+            {this.state.statePage?<SignInFb emailSignIn={this.changeStatePage} nextPathname={nextPathname}/>:<SignIn nextPathname={nextPathname}/>}
           </Container>
 		   </Modal>
       )

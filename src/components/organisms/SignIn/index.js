@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
 import {Link,browserHistory} from 'react-router'
 import styled from 'styled-components'
 import {PrimaryButton} from 'components'
@@ -6,7 +6,7 @@ import TextField from 'material-ui/TextField';
 import {findDOMNode as dom}from 'react-dom';
 import Request from 'superagent'
 import auth from 'components/auth'
-import api from '../../../api'
+import api from 'components/api'
 
 const Box = styled.div`
   width:477px;
@@ -85,11 +85,11 @@ const SignIn = React.createClass({
       if(field.value!=''){
         //console.log(field.name+':'+field.value)
         data[field.name] = field.value
-        this.state['errText'+index] = ''
-        this.setState({})
+        self.state['errText'+index] = ''
+        self.setState({})
       } else {
-        this.state['errText'+index] = 'This field is required'
-        this.setState({})
+        self.state['errText'+index] = 'This field is required'
+        self.setState({})
         i++
       }
     })
@@ -98,37 +98,27 @@ const SignIn = React.createClass({
       api.signin(data)
       .then(res => {
         auth.setCookieAndToken(res)
-        browserHistory.push('/')
+        
+        browserHistory.push(self.props.nextPathname)
+      }, err => {
+        if(err.errors)
+          self.setState({
+            errText0: err.errors.username && err.errors.username.message,
+            errText1: err.errors.password && err.errors.password.message
+          })
+        else
+          self.setState({
+            errText0: err.message,
+            errText1: err.message
+          })
       })
-      .catch(err => {
-        this.setState({
-          errText0: err.message,
-          errText1: err.message
-        })
-      })
-
-      // Request
-      // .post(config.BACKURL+'/auth')
-      // .set('Accept','application/json')
-      // .send(data)
-      // .end((err,res)=>{
-      //   //console.log(res.body)
-      //   if(err){
-      //     this.setState({
-      //       errText0: res.body.error.message,
-      //       errText1: res.body.error.message
-      //     })
-      //   }else {
-      //     //auth.setCookieAndToken(res.body)
-      //     browserHistory.push('/')
-      //   }
-      //})
     }
   },
 
   render(){
-    var {onClick,style} = this.props
-    var {errText0,errText1,errText2} = this.state
+    let {onClick, style} = this.props,
+        {errText0, errText1, errText2} = this.state
+
     return(
       <Box>
         <Head>Email Sign In</Head>
@@ -162,6 +152,10 @@ const SignIn = React.createClass({
     )
   }
 })
+
+SignIn.propTypes = {
+  nextPathname: PropTypes.string.isRequired
+}
 
 
 export default SignIn

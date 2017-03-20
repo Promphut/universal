@@ -5,12 +5,14 @@ import auth from 'components/auth'
 import Cookies from 'react-cookie'
 import Request from 'superagent'
 import _ from 'lodash'
-import {HomePage2, Page3, MoodboardPage, SignInPage,SignUpPage,
-  PublisherSettingPage,ForgetPasswordPage,PublisherEditor,PublisherContactAndAboutPage,
-  PublisherDashboardPage,ColumnEditor,ColumnSettingPage,PublisherStoryPage,UserSetting,UserSettingProfile,
-  UserSettingAccount, UserSettingStory,ColumnPage,PublisherPage,UserStory,AllStory,AllColumn,NewStory,NotFoundPage, ErrorPage } from 'components'
-import api from './api'
-
+import {
+    HomePage2, Page3, MoodboardPage, SignInPage, SignUpPage,
+    PublisherDashboardPage,ColumnEditor,ColumnSettingPage,PublisherStoryPage,UserSetting,
+    PublisherSettingPage, ForgetPasswordPage, PublisherEditor, PublisherContactAndAboutPage,
+    UserSettingProfile, UserSettingAccount, UserSettingStory, ColumnPage, PublisherPage,
+    UserStory, AllStory, AllColumn, NewStory, NotFoundPage, ErrorPage, AboutPage, ContactPage
+  } from 'components'
+import api from 'components/api'
 
 const getUserId = (nextState, replace, cb)=>{
   var user = auth.getUser()
@@ -102,9 +104,34 @@ const toError = (nextState, replace, next) => {
 }
 
 const loggedIn = (nextState, replace, next) => {
-  //console.log('auth', auth.loggedIn())
+  //console.log('loggedIn', auth.loggedIn())
   if(auth.loggedIn()) return next()
   toSignin(nextState, replace, next)()
+}
+
+const hasRoles = (roles) => {
+  return (nextState, replace, next) => {
+    let authorized = false,
+        user = auth.getUser(), 
+        roles = auth.getRoles() || []
+
+    if(!user) return toSignin(nextState, replace, next)()
+
+    roles.forEach(role => {
+      role = _.capitalize(role)
+      let compare
+
+      if(role==='ADMIN') compare = {type:ROLES.ADMIN, user:user._id, publisher:nextState.params.pid || nextState.location.query.pid}
+      else if(role==='EDITOR') compare = {type:ROLES.EDITOR, user:user._id, column:nextState.params.cid || nextState.location.query.cid}
+      else if(role==='WRITER') compare = {type:ROLES.WRITER, user:user._id, column:nextState.params.cid || nextState.location.query.cid}
+      
+      authorized = authorized || (_.filter(roles, compare).length > 0)
+    })
+    
+    if(!authorized) return toError(nextState, replace, next)(new Error('Unauthorized access'))
+
+    next()
+  }
 }
 
 const getUserFromUsername = (nextState, replace, next) => {
@@ -115,23 +142,6 @@ const getUserFromUsername = (nextState, replace, next) => {
   })
   .catch(toError(nextState, replace, next))
 }
-
-// const syncTokenAndCookie = (nextState, replace, next) => {
-//   // auth token might be sent via querystring, login
-//   let query = nextState.location.query
-
-//   let token = (query && query.token) ? query.token : null
-
-//   let cookie = null
-//   try {
-//     cookie = (query && query.cookie) ? JSON.parse(query.cookie) : null
-//   }
-//   catch(e) {}
-
-//   auth.syncTokenAndCookie(token, cookie)
-
-//   next()
-// }
 
 const logout = (nextState, replace, next) => {
   auth.logout(() => {
@@ -149,8 +159,10 @@ const routes = (
       <Route path='columns' component={AllColumn}/>
       <Route path=':columns' component={ColumnPage}/>
     </Route>
-    <Route path='publisher' component={PublisherPage}/>
+    <Route path='publisher' component={PublisherPage} onEnter={hasRoles([])}/>
     <Route path="mood" component={MoodboardPage} />
+    <Route path="about" component={AboutPage} />
+    <Route path="contact" component={ContactPage} />
 
     <Route path="forget" component={ForgetPasswordPage} />
     <Route path="signin" component={()=>(<SignInPage visible={true}/>)} />

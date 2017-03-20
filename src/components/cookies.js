@@ -2,8 +2,8 @@ import Cookies from 'react-cookie'
 
 const domain = {domain:config.DOMAIN, path:'/'}
 
-var helpers = {}
-helpers = {
+var cookies = {}
+cookies = {
 	// Set cookie string by name
 	set(cookieName, str){ 
 		Cookies.save(cookieName, str, domain)
@@ -26,7 +26,7 @@ helpers = {
 		let json 
 
 		try{
-		  json = JSON.parse(helpers.get(cookieName))
+		  json = JSON.parse(cookies.get(cookieName))
 		} 
 		catch(err) {json = null}
 
@@ -37,34 +37,20 @@ helpers = {
 	remove(cookieName){
 		Cookies.remove(cookieName, domain)
 	},
-
-	// Get "cookie" object in cookies
-	// getCookie(){
-	// 	return helpers.getJSON('cookie')
-	// },
-
-	// setCookieAndToken(cookieAndToken){
-	// 	if(!cookieAndToken || cookieAndToken.token==null || !cookieAndToken.cookie) return 
-	// 	//console.log('setCookieAndToken', cookieAndToken)
-	// 	helpers.set('token', cookieAndToken.token)
-	// 	//helpers.setJSON('cookie', cookieAndToken.cookie)
-	// 	helpers.setJSON('user', cookieAndToken.user)
-	// 	helpers.setJSON('roles', cookieAndToken.roles)
-	// },
-
+	
 	// // Set article viewed flag in cookie
 	// viewArticle(aid){
-	// 	let viewed = helpers.getJSON('viewed') || []
+	// 	let viewed = cookies.getJSON('viewed') || []
 	// 	if(viewed && aid!=null){
 	// 		viewed.push(aid)
 	// 		viewed = _.uniq(viewed)
 	// 		//console.log('viewed', viewed)
-	// 		helpers.setJSON('viewed', viewed)
+	// 		cookies.setJSON('viewed', viewed)
 	// 	}
 	// },
 
 	// getArticlesViewed(articles){
-	// 	let viewed = helpers.getJSON('viewed') || []
+	// 	let viewed = cookies.getJSON('viewed') || []
 
 	// 	if(viewed && articles && articles.length>0) { 
 	// 		articles.forEach(a => {
@@ -76,4 +62,4 @@ helpers = {
 	// }
 }
 
-module.exports = helpers
+module.exports = cookies

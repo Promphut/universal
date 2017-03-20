@@ -1,8 +1,8 @@
 import React from 'react'
-import {browserHistory} from 'react-router'
+//import {browserHistory} from 'react-router'
 import { TopBarWithNavigation, UserSettingMenu } from 'components'
 import styled from 'styled-components'
-import api from '../../../api'
+import auth from 'components/auth'
 
 const Wrapper = styled.div`
   width:100%;
@@ -42,20 +42,24 @@ const UserSetting = React.createClass({
 		return {}
 	},
 
+  componentWillMount(){
+    this.user = auth.getUser()
+  },
+
   componentDidMount(){
-    api.getUserFromCookie()
-    .then(user => {
-      this.user = user
-    })
-    .catch(err => {
-      browserHistory.push('/signin');
-    })
+    // api.getUser()
+    // .then(user => {
+    //   this.user = user
+    // })
+    // .catch(err => {
+    //   browserHistory.push('/signin');
+    // })
   },
 
   render(){
 		return (
 		    <Wrapper>
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={false} />
+		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
           <Container>
             <Content>
               <Aside>
