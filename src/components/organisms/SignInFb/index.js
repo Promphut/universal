@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
 import styled from 'styled-components'
 import Avatar from 'material-ui/Avatar'
 import RaisedButton from 'material-ui/RaisedButton';
@@ -83,7 +83,7 @@ const SignInFb = React.createClass({
     <Box>
       <Head>Sign In</Head>
       <div style={styles.btnCon}>
-        <a href={config.BACKURL+'/auth/facebook?publisher='+config.PID}>
+        <a href={config.BACKURL+'/auth/facebook?publisher='+config.PID+'&nextpathname='+encodeURIComponent(this.props.nextPathname)}>
           <RaisedButton
             label=" Sign In with facebook"
             labelPosition="after"
@@ -104,6 +104,10 @@ const SignInFb = React.createClass({
   )
   },
 })
+
+SignInFb.propTypes = {
+  nextPathname: PropTypes.string.isRequired
+}
 
 
 export default SignInFb
