@@ -5,10 +5,13 @@ import auth from 'components/auth'
 import Cookies from 'react-cookie'
 import Request from 'superagent'
 import _ from 'lodash'
-import {HomePage2, Page3, MoodboardPage, SignInPage,SignUpPage,
-  PublisherSettingPage,ForgetPasswordPage,PublisherEditor,PublisherContactAndAboutPage,
-  PublisherDashboardPage,ColumnEditor,ColumnSettingPage,PublisherStoryPage,UserSetting,UserSettingProfile,
-  UserSettingAccount, UserSettingStory,ColumnPage,PublisherPage,UserStory,AllStory,AllColumn,NewStory,NotFoundPage, ErrorPage } from 'components'
+import {
+    HomePage2, Page3, MoodboardPage, SignInPage, SignUpPage,
+    PublisherDashboardPage,ColumnEditor,ColumnSettingPage,PublisherStoryPage,UserSetting,
+    PublisherSettingPage, ForgetPasswordPage, PublisherEditor, PublisherContactAndAboutPage,
+    UserSettingProfile, UserSettingAccount, UserSettingStory, ColumnPage, PublisherPage,
+    UserStory, AllStory, AllColumn, NewStory, NotFoundPage, ErrorPage, AboutPage, ContactPage
+  } from 'components'
 import api from './api'
 
 
@@ -151,6 +154,8 @@ const routes = (
     </Route>
     <Route path='publisher' component={PublisherPage}/>
     <Route path="mood" component={MoodboardPage} />
+    <Route path="about" component={AboutPage} />
+    <Route path="contact" component={ContactPage} />
 
     <Route path="forget" component={ForgetPasswordPage} />
     <Route path="signin" component={()=>(<SignInPage visible={true}/>)} />

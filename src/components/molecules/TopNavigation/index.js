@@ -73,8 +73,8 @@ const TopNavigation = ({onMouseOver, onMouseOut}) => {
             <li><Link to="/stories/money-ideas">Money Ideas</Link></li>
           </ul>
 				</li>
-				<li><Link to="/">About Us</Link></li>
-				<li><Link to="/">Contact</Link></li>
+				<li><Link to="/about">About Us</Link></li>
+				<li><Link to="/contact">Contact</Link></li>
 			</ul>
 		</Nav>
 	)
