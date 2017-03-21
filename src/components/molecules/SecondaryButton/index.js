@@ -19,7 +19,7 @@ const SecondaryButton = (props) => {
 			overlayStyle:{borderRadius: '24px'},
 			labelStyle: {fontWeight:'bold', fontSize:18, top:-2, fontFamily:"Nunito Mitr", ...props.labelStyle},
 			style: {borderRadius:'24px', height:'48px', lineHeight:'48px', background:'none', boxShadow:'none', ...props.style},
-	    buttonStyle: {borderRadius: '24px', background: 'none', border:'2px solid #00B2B4', padding:'0 5px'}
+	    buttonStyle: {borderRadius: '24px', background: 'none', border:'2px solid #00B2B4', padding:'0 5px', ...props.buttonStyle}
 		}
 
 		defaultStyle = {
@@ -46,7 +46,7 @@ const SecondaryButton = (props) => {
 			overlayStyle:{borderRadius:'17px'},
 			labelStyle: {fontWeight:'bold', fontSize:15, top:-2, fontFamily:"'Nunito', 'Mitr'", ...props.labelStyle},
 			style: {borderRadius:'17px', height:'35px', lineHeight:'35px', background:'none', boxShadow:'none', ...props.style},
-	    buttonStyle: {borderRadius: '17px', background: 'none', border:'2px solid #00B2B4', padding:'0'}
+	    buttonStyle: {borderRadius: '17px', background: 'none', border:'2px solid #00B2B4', padding:'0', ...props.buttonStyle}
 		}
 
 		defaultStyle = {
@@ -74,7 +74,7 @@ const SecondaryButton = (props) => {
 			rippleStyle:{borderRadius: '20px'},
 			labelStyle: {fontWeight:'bold', fontSize:15, top:-2, fontFamily:"'Nunito', 'Mitr'", ...props.labelStyle},
 			style: {borderRadius:'20px', height:'40px', lineHeight:'40px', background:'none', boxShadow:'none', ...props.style},
-	    buttonStyle: {borderRadius: '20px', background: 'none', border:'2px solid #00B2B4', padding:'0 2px'}
+	    buttonStyle: {borderRadius: '20px', background: 'none', border:'2px solid #00B2B4', padding:'0 2px', ...props.buttonStyle}
 		}
 
 		defaultStyle = {

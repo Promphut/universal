@@ -111,14 +111,19 @@ const ColumnPage = React.createClass({
 	},
 
 	componentDidMount() {
-		this.getFeed()
+		const columnName = this.props.params.columns
+		this.getFeed(columnName)
 		this.setState({
 			stopPos:dom(this.refs.more).getBoundingClientRect().top
 		})
 	},
 
-	getFeed() {
-		const columnName = this.props.params.columns
+	componentWillReceiveProps(nextProps) {
+		const columnName = nextProps.params.columns
+		this.getFeed(columnName)
+	},
+
+	getFeed(columnName) {
 		Request
 			.get(config.BACKURL + '/slugs/publishers/' + config.PID + '/' + columnName)
 			.set('Accept', 'application/json')

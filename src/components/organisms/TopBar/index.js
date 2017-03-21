@@ -106,6 +106,7 @@ const Hamburger = styled.span`
 	top: 23px;
 	background: #8d8d8d;
 	box-shadow: 0 6px 0 #8d8d8d, 0 12px 0 #8d8d8d;
+	z-index: 10000;
 
 	-webkit-transition: .25s ease-in-out;
 	-moz-transition: .25s ease-in-out;
@@ -139,10 +140,10 @@ const NotLogin = styled.div`
 
 const TopBar = React.createClass({
 	getInitialState(){
-	    return{
+    return {
 			alertLeft: false,
 			alertRight: false
-	    }
+    }
 	},
 
 	componentDidMount() {
@@ -206,7 +207,7 @@ const TopBar = React.createClass({
 						</div>
 					</Container>
 
-					{status=='LOGGEDIN' && 
+					{status=='LOGGEDIN' &&
 						<ProfileAvatar src={user.pic.medium} size={30} onClick={() => this.openPop('right')}/>
 					}
 					{status=='LOGGEDIN' && <RightMenu open={alertRight} close={() => this.handleRequestClose('right')} user={user}/>}
@@ -220,7 +221,7 @@ TopBar.propTypes = {
   onScroll: PropTypes.func,
   scrolling: PropTypes.bool,
   status: PropTypes.string,
-  
+
   title: PropTypes.string,
   onMouseOver: PropTypes.func,
   onMouseOut: PropTypes.func,

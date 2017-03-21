@@ -9,9 +9,12 @@ const Container = styled.form`
   width:227px;
 `
 const Box = styled.div`
-  width:100%;
-  height:56px;
-  padding-top:17px;
+  position:relative;
+  top:0px;
+  left:0px;
+  width:${props => props.width};
+  height:${props => props.height};
+  padding-top:58px;
   border-radius:10px;
   border:1px dashed #C2C2C2;
   background-color:#F4F4F4;
@@ -30,8 +33,11 @@ const Des = styled.div`
 ` 
 
 const Preview = styled.div`
-  width:100%;
-  height:108px;
+  position:relative;
+  top:0px;
+  left:0px;
+  width:${props => props.width};
+  height:${props => props.height};
   font-size:14px;
   background-size:cover;
   background-position:center;
@@ -42,12 +48,15 @@ const Preview = styled.div`
   }
 `
 const Filter = styled.div`
-  width:100%;
-  height:100%;
+  position:relative;
+  top:0px;
+  left:0px;
+  width:${props => props.width};
+  height:${props => props.height};
   background:rgba(0,0,0,0.5);
   text-align:center;
   font-size:14px;
-  padding-top:48px;
+  padding-top:58px;
   color:#fff;
   &:hover{
     cursor:pointer;
@@ -135,13 +144,14 @@ const UploadPicture = React.createClass({
 
   render(){
     var {msg,src,statePreview,err} = this.state
+    var {label,style,type,width,height} = this.props
     
     var description = <Des className='sans-font'>{msg}</Des>
     return(
-      <Container encType="multipart/form-data">
-        {!statePreview?<Box className="menu-font" onClick={()=>(dom(this.refs.imageLoader).click())}>Upload Picture</Box>:''}
-        <Preview ref='preview' style={{display:statePreview?'block':'none',backgroundImage:'url('+src+')'}}>
-          <Filter onClick={()=>(dom(this.refs.imageLoader).click())}>Change Picture</Filter>
+      <Container encType="multipart/form-data" style={{...style,width:width,height:height}}>
+        {!statePreview?<Box width={width} height={height} className="menu-font" onClick={()=>(dom(this.refs.imageLoader).click())}>{label?label:"Upload Picture"}</Box>:''}
+        <Preview width={width} height={height} ref='preview' style={{display:statePreview?'block':'none',backgroundImage:'url('+src+')'}}>
+          <Filter width={width} height={height} onClick={()=>(dom(this.refs.imageLoader).click())} >Change Picture</Filter>
         </Preview>
         {msg!=''?<Des className='sans-font' style={{color:err?'#D8000C':'#00B2B4'}}>{msg}</Des>:''}
         <input type="file" ref="imageLoader" name="imageLoader" onChange={this.upload} style={{visibility:'hidden'}}/>

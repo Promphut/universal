@@ -55,7 +55,7 @@ const AboutContainer = React.createClass({
     return (
       <StickyContainer>
 				<BGImg src="/tmp/a-story/pic-min.jpg" style={{width:'100%',height:'510px'}} />
-        <Sticky>
+        <Sticky style={{zIndex: '999'}}>
           <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
         </Sticky>
         <Content>

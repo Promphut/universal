@@ -14,12 +14,16 @@ const PrimaryButton = (props) => {
 			onClick:props.onClick,
 			type:props.type,
 			children:props.children,
-			labelColor: 'White',
 			labelStyle: {fontWeight:'bold', fontSize:18, fontFamily:"'Nunito', 'Mitr'", color: 'White'},
 			style: {borderRadius:'24px', height:'48px', lineHeight:'48px', ...props.style},
-    	buttonStyle: {borderRadius: '24px', backgroundColor: '#00B2B4', padding:'0 5px'},
-			backgroundColor: '#00B2B4',
-			hoverColor: '#00B2B4'
+			backgroundColor: '#00B2B4'
+		}
+
+		if (props.buttonStyle === "Flat") {
+			opt['hoverColor'] = '#00B2B4'
+		} else {
+			opt['labelColor'] = 'White'
+			opt['buttonStyle'] = {borderRadius: '24px', backgroundColor: '#00B2B4', padding:'0 5px'}
 		}
 
 		defaultStyle = {
@@ -38,15 +42,19 @@ const PrimaryButton = (props) => {
 		opt = {
 			className: 'primary-btn primary-small-btn',
 			label: props.label,
-			labelColor: 'White',
 			onClick:props.onClick,
 			children:props.children,
 			type:props.type,
 			labelStyle: {fontWeight:'bold', fontSize:13, fontFamily:"'Nunito', 'Mitr'", color: 'White'},
 			style: {borderRadius:'17px', height:'35px', lineHeight:'35px', ...props.style},
-    	buttonStyle: {borderRadius: '17px', backgroundColor: '#00B2B4', padding:'0'},
-			backgroundColor: '#00B2B4',
-			hoverColor: '#00B2B4'
+			backgroundColor: '#00B2B4'
+		}
+
+		if (props.buttonStyle === "Flat") {
+			opt['hoverColor'] = '#00B2B4'
+		} else {
+			opt['labelColor'] = 'White'
+			opt['buttonStyle'] = {borderRadius: '17px', backgroundColor: '#00B2B4', padding:'0'}
 		}
 
 		defaultStyle = {
@@ -66,15 +74,19 @@ const PrimaryButton = (props) => {
 		opt = {
 			className: 'primary-btn',
 			label: props.label,
-			labelColor: 'White',
 			onClick:props.onClick,
 			children:props.children,
 			type:props.type,
 			labelStyle: {fontWeight:'bold', fontSize:15, fontFamily:"'Nunito', 'Mitr'", color: 'White'},
 			style: {borderRadius:'20px', height:'40px', lineHeight:'40px', ...props.style},
-  		buttonStyle: {borderRadius: '20px', backgroundColor: '#00B2B4', padding:'0 2px'},
-			backgroundColor: '#00B2B4',
-			hoverColor: '#00B2B4'
+			backgroundColor: '#00B2B4'
+		}
+
+		if (props.buttonStyle === "Flat") {
+			opt['hoverColor'] = '#00B2B4'
+		} else {
+			opt['labelColor'] = 'White'
+			opt['buttonStyle'] = {borderRadius: '20px', backgroundColor: '#00B2B4', padding:'0 2px'}
 		}
 
 		defaultStyle = {
@@ -90,7 +102,6 @@ const PrimaryButton = (props) => {
 			}
 		}
 	}
-
 
 	if(props.iconName) {
 		opt.icon = <FontIcon className="material-icons" style={defaultStyle.fontIcon}>{props.iconName}</FontIcon>
