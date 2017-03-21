@@ -147,7 +147,7 @@ const UserSettingProfile = React.createClass({
   },
 
   render(){
-    var {textStatus, error, user} = this.state
+    let {textStatus, error, user} = this.state
     //console.log('user.pic.medium', user.pic.medium)
     return(
       <Container onSubmit={this.updateData} ref='userProfile'>
@@ -203,22 +203,22 @@ const UserSettingProfile = React.createClass({
             <Social className="sans-font">
               <i className="fa fa-facebook" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i>
               <div style={{float:'left',margin:'15px 20px 0 0'}}>facebook.com/</div>
-              <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.fb' value={user.channels.fb} onChange={this.userChanged}/>
+              <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.fb' value={user.channels && user.channels.fb} onChange={this.userChanged}/>
             </Social>
             <Social className="sans-font">
               <i className="fa fa-twitter" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i>
               <div style={{float:'left',margin:'15px 20px 0 0'}}>twitter.com/</div>
-              <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.twt' value={user.channels.twt} onChange={this.userChanged}/>
+              <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.twt' value={user.channels && user.channels.twt} onChange={this.userChanged}/>
             </Social>
             <Social className="sans-font">
               <i className="fa fa-instagram" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i>
               <div style={{float:'left',margin:'15px 20px 0 0'}}>instagram.com/</div>
-              <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.ig' value={user.channels.ig} onChange={this.userChanged}/>
+              <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.ig' value={user.channels && user.channels.ig} onChange={this.userChanged}/>
             </Social>
             <Social className="sans-font">
               <i className="fa fa-youtube-play" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i>
               <div style={{float:'left',margin:'15px 20px 0 0'}}>youtube.com/</div>
-              <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.yt' value={user.channels.yt} onChange={this.userChanged}/>
+              <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.yt' value={user.channels && user.channels.yt} onChange={this.userChanged}/>
             </Social>
           </Edit>
         </Flex>

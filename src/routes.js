@@ -143,6 +143,15 @@ const getUserFromUsername = (nextState, replace, next) => {
   .catch(toError(nextState, replace, next))
 }
 
+const getColumnFromSlug = (nextState, replace, next) => {
+  api.getColumnFromSlug(nextState.params.columnSlug)
+  .then(col => {
+    nextState.params.column = col
+    next()
+  })
+  .catch(toError(nextState, replace, next))
+}
+
 const logout = (nextState, replace, next) => {
   auth.logout(() => {
     window.location = '/'
@@ -157,7 +166,7 @@ const routes = (
     <Route path='stories'>
       <IndexRoute component={AllStory}/>
       <Route path='columns' component={AllColumn}/>
-      <Route path=':columns' component={ColumnPage}/>
+      <Route path=':columnSlug' component={ColumnPage} onEnter={getColumnFromSlug}/>
     </Route>
     <Route path='publisher' component={PublisherPage} onEnter={hasRoles([])}/>
     <Route path="mood" component={MoodboardPage} />

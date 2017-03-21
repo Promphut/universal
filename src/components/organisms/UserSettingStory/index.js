@@ -182,7 +182,7 @@ const UserSettingStory = React.createClass({
 
     let {currentPage, sort} = this.state
 
-    api.getFeed('story', this.getCurrentFilter(), sort, currentPage, this.FEED_LIMIT)
+    api.getFeed('story', this.getCurrentFilter(), sort, null, currentPage, this.FEED_LIMIT)
     .then(result => {
       //console.log('getFeed()', result)
       this.setState({

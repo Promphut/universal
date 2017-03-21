@@ -15,7 +15,9 @@ api.err = (err) => {
 api.userNotFoundPromise = () => {
 	return Promise.reject(new NotFoundError('User is not found.'))
 }
-
+api.columnNotFoundPromise = () => {
+	return Promise.reject(new NotFoundError('Column is not found.'))
+}
 // uid and token are optional
 // if token is specified, it'll be used to make request as well.
 // uid will be auto-get if not supplied.
@@ -66,9 +68,9 @@ api.updateUser = (user) => {
 	}, api.err)
 }
 
-api.getUserFromUsername = (username, cb) => {
+api.getUserFromUsername = (username) => {
 	return Request
-	.get(config.BACKURL+'/slugs/users/'+username)
+	.get(config.BACKURL+'/slugs/users/' + encodeURIComponent(username))
 	.set('Accept','application/json')
 	.then(res => {
 		return res.body.user
@@ -78,9 +80,21 @@ api.getUserFromUsername = (username, cb) => {
 	})
 }
 
+api.getColumnFromSlug = (slug) => {
+	return Request
+	.get(config.BACKURL + '/slugs/publishers/' + config.PID + '/' + encodeURIComponent(slug))
+	.set('Accept', 'application/json')
+	.then(res => {
+		return res.body.column
+	})
+	.catch(err => {
+		return api.columnNotFoundPromise()
+	})
+}
+
 api.getCookieAndToken = (token) => {
 	return Request
-    .get(config.BACKURL + '/me/menu' + (token ? '?token='+token : ''))
+    .get(config.BACKURL + '/publishers/'+config.PID+'/menu' + (token ? '?token='+token : ''))
     .set('Accept', 'application/json')
     .then(res => {
       return res.body
@@ -107,12 +121,13 @@ api.signup = (data) => {
     }, api.err)
 }
 
-api.getFeed = (type, filter, sort, page, limit) => {
+api.getFeed = (type, filter, sort, sortby, page, limit) => {
 	//console.log('filter', JSON.stringify(filter))
 	return Request
 	.get(config.BACKURL+'/publishers/'+config.PID+'/feed?type='+type)
 	.query({filter: filter && JSON.stringify(filter)})
 	.query({sort: sort})
+	.query({sortby: sortby})
 	.query({page: page})
 	.query({limit: limit})
 	.set('Accept','application/json')

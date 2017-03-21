@@ -58,7 +58,7 @@ const Vote = styled.div`
   font-size:13px;
   margin-top:15px;
 `
-const TrendingSideBarInner = ({style,detail,index})=>{
+const TrendingSideBarInner = ({style,detail, index})=>{
   var {title,comments,votes,cover} = detail
   return(
     <Con style={{...style}}>
@@ -89,7 +89,7 @@ const TrendingSideBar = React.createClass({
       .end((err,res)=>{
         if(err)throw err
         else{
-          console.log(res.body)
+          console.log('TrendingSideBar', res.body)
           self.setState({popular:res.body.feed})
         }
       })
