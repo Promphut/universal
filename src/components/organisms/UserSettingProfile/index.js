@@ -56,7 +56,7 @@ const TextStatus = styled.div`
   font-style:italic;
   float:left;
   margin:10px 0 0 15px;
-` 
+`
 
 const UserSettingProfile = React.createClass({
   getInitialState(){
@@ -187,7 +187,7 @@ const UserSettingProfile = React.createClass({
             <div className="sans-font">Current living city</div>
           </Title>
           <Edit>
-            <TextField 
+            <TextField
               defaultValue="Bangkok, Thailand" name='city' value={user.city} onChange={this.userChanged}/>
           </Edit>
         </Flex>
@@ -197,22 +197,22 @@ const UserSettingProfile = React.createClass({
           </Title>
           <Edit>
             <Social className="sans-font">
-              <i className="fa fa-facebook" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i> 
+              <i className="fa fa-facebook" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i>
               <div style={{float:'left',margin:'15px 20px 0 0'}}>facebook.com/</div>
               <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.fb' value={user.channels.fb} onChange={this.userChanged}/>
             </Social>
             <Social className="sans-font">
-              <i className="fa fa-twitter" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i> 
+              <i className="fa fa-twitter" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i>
               <div style={{float:'left',margin:'15px 20px 0 0'}}>twitter.com/</div>
               <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.twt' value={user.channels.twt} onChange={this.userChanged}/>
             </Social>
             <Social className="sans-font">
-              <i className="fa fa-instagram" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i> 
+              <i className="fa fa-instagram" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i>
               <div style={{float:'left',margin:'15px 20px 0 0'}}>instagram.com/</div>
               <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.ig' value={user.channels.ig} onChange={this.userChanged}/>
             </Social>
             <Social className="sans-font">
-              <i className="fa fa-youtube-play" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i> 
+              <i className="fa fa-youtube-play" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i>
               <div style={{float:'left',margin:'15px 20px 0 0'}}>youtube.com/</div>
               <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.yt' value={user.channels.yt} onChange={this.userChanged}/>
             </Social>
