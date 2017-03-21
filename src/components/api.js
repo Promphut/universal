@@ -16,7 +16,10 @@ api.userNotFoundPromise = () => {
 	return Promise.reject(new NotFoundError('User is not found.'))
 }
 
-api.getUser = (uid) => {
+// uid and token are optional
+// if token is specified, it'll be used to make request as well.
+// uid will be auto-get if not supplied.
+api.getUser = (uid, token) => {
 	if(!uid) {
 		let u = auth.getUser()
 		uid = u ? u._id : null
@@ -24,13 +27,27 @@ api.getUser = (uid) => {
 
 	if(uid!=null){
 		return Request
-		.get(config.BACKURL+'/users/'+uid)
+		.get(config.BACKURL+'/users/'+uid+'?'+(token?'token='+token+'&':''))
 		.set('Accept','application/json')
 		.then(res => {
 			return res.body.user
 		}, api.err)
 	} 
 	else return api.userNotFoundPromise()
+}
+
+api.changePassword = (data) => {
+	let token = auth.getToken(),
+		uid = auth.getUser()._id
+
+	return Request
+    .post(config.BACKURL+'/users/'+uid+'/password')
+    .set('x-access-token', token)
+    .set('Accept','application/json')
+    .send(data)
+    .then(res => {
+    	return res.body
+    }, api.err)
 }
 
 api.updateUser = (user) => {

@@ -31,6 +31,7 @@ const TopBarWithNavigation = React.createClass({
 		// 1. Fetch menu, user, and roles information
 		api.getCookieAndToken(token)
 		.then(result => {
+			console.log('TopBarWithNavigation', result)
 			// 2. Update newly fetch cookie
 			auth.setCookieAndToken(result)
 

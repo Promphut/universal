@@ -1,5 +1,4 @@
 import React from 'react'
-import {browserHistory} from 'react-router'
 import styled from 'styled-components'
 import {PrimaryButton,SecondaryButton,UploadPicture} from 'components'
 import TextField from 'material-ui/TextField';
@@ -7,9 +6,7 @@ import Request from 'superagent'
 import auth from 'components/auth'
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon'
-import {findDOMNode as dom}from 'react-dom'
-import api from 'components/api'
-import utils from 'components/utils'
+import {findDOMNode as dom}from 'react-dom';
 
 const Container = styled.form`
   width:100%;
@@ -26,14 +23,12 @@ const Container = styled.form`
     font-size:18px;
   }
 `
-
 const Flex = styled.div`
   display:flex;
   items-align:center;
   flex-flow: row wrap;
   margin:50px 0 0 50px;
 `
-
 const Title = styled.div`
   flex:2 150px;
   max-width:150px;
@@ -41,18 +36,15 @@ const Title = styled.div`
   font-size:17px;
   padding-top:15px;
 `
-
 const Edit = styled.div`
   flex:6 450px;
   max-width:450px;
 `
-
 const Social = styled.div`
   color:#8F8F8F;
   font-size:19px;
   overflow:hidden;
 `
-
 const TextStatus = styled.div`
   color:#00B2B4;
   font-size:15px;
@@ -81,14 +73,11 @@ const styles = {
     opacity: 0,
   },
 };
-
 const UserSettingProfile = React.createClass({
   getInitialState(){
-    return {
-      user:{
-        username:'',
-        email: ''
-      },
+    this.user = this.props.params.user
+    return{
+      user:{},
       error1:false,
       error2:false,
       textStatus1:'Unsave',
@@ -99,84 +88,76 @@ const UserSettingProfile = React.createClass({
     }
   },
 
-  fetechUser(e){
-    if(e) e.preventDefault()
-
-    api.getUser(null, auth.getToken())
-    .then(user => {
-      console.log('user', user)
-      this.setState({
-        user: user
-      })
-    })
-  },
-
   componentDidMount(){
-    this.fetechUser()
+    //console.log(this.user.user)
+    this.getUserDetail()
   },
 
+  getUserDetail(){
+    var self = this
+    Request
+      .get(config.BACKURL+'/users/'+this.user.user._id)
+      .set('Accept','application/json')
+      .end((err,res)=>{
+        if(err) self.setState({textStatus1:res.body.error.message,error1:true})
+        else{
+          self.setState({user:res.body.user})
+          console.log(res.body.user)
+          self.setData()
+        }
+      })
+  },
 
-  updateCookie(){
-    // * If user object is editted, we must reset the local cookie user as well.
-    let token = auth.getToken()
-    // 1. Fetch menu, user, and roles information
-    api.getCookieAndToken(token)
-    .then(result => {
-      // 2. Update newly fetch cookie
-      auth.setCookieAndToken(result)
-    })
+  setData(){
+    var {username,email} = this.state.user
+    document.getElementById('username').value = typeof username =="undefined" ?'':username
+    document.getElementById('email').value = typeof email == "undefined" ?'':email
   },
 
   updateData(e){
     e.preventDefault()
-
-    let user = this.state.user
-    api.updateUser(user)
-    .then(u => {
-      if(!u) {
-        return this.setState({
-          textStatus1: 'Cannot save the user, try again.',
-          error1:true
-        })
-      }
-
-      this.setState({
-        textStatus1:'Saved successfully',
-        error1:false
-      })
-
-      this.updateCookie()
+    var data = {}
+    var self = this
+    var input = e.target.getElementsByTagName("input")
+    input = [].slice.call(input)
+    input.forEach((field,index)=>{
+      data[field.name] = field.value
     })
-    .catch(err => {
-      this.setState({
-        textStatus1: err.message,
-        error1:true
+    var user = {
+      user:data
+    }
+    //console.log(user)
+    Request
+      .patch(config.BACKURL+'/users/'+this.user.user._id+'?token='+auth.getToken())
+      .set('x-access-token', auth.getToken())
+      .set('Accept','application/json')
+      .send(user)
+      .end((err,res)=>{
+        if(err) self.setState({textStatus1:res.body.error.message,error1:true})
+        else{
+          self.setState({textStatus1:'Saved successfully',error1:false})
+        }
       })
-    })
   },
-
   signFB(e){
     e.preventDefault()
-
+    var self = this
     Request
-    .get(config.BACKURL+'/auth/facebook?publisher='+config.PID)
-    .set('Accept','application/json')
-    .end((err,res)=>{
-      if(err) this.setState({textStatus2:'Connect with Facebook fail',
-          error2:true
-        })
-      else 
-        this.setState({
-          textStatus2:'Connect with Facebook successfully',
-          error2:false,
-        })
-    })
+      .get(config.BACKURL+'/auth/facebook')
+      .set('Accept','application/json')
+      .end((err,res)=>{
+        if(err) self.setState({textStatus2:'Connect with Facebook fail',error2:true,})
+        else{
+          self.setState({
+            textStatus2:'Connect with Facebook successfully',error2:false,
+          })
+        }
+      })
   },
-
   changePWD(e){
     e.preventDefault()
-
     var data = {}
+    var self = this
     var input = e.target.getElementsByTagName("input")
     var er = 0
     input = [].slice.call(input)
@@ -184,71 +165,57 @@ const UserSettingProfile = React.createClass({
       if(field.value!=''){
         //console.log(field.name+':'+field.value)
         data[field.name] = field.value
-      } else {
+      }else{
         er+=1
         this.state['errText'+index] = 'This field is required'
         this.setState({})
       }
     })
-
-    var send = {
-      oldPassword:data.oldPassword,
-      newPassword:data.newPassword
-    }
-
+    //console.log(data)
+    var send = {oldPassword:data.oldPassword,newPassword:data.newPassword}
     if(er!=0){
       return
-    } else {
+    }else{
       if(data.newPassword===data.newPassword2){
-        api.changePassword(send)
-        .then(res => {
-          // force to relogin
-          browserHistory.push('/logout')
-        })
-        .catch(err => {
-          this.setState({
-            errText0:err.message,
-            errText1:err.message,
-            errText2:err.message
+        Request
+          .post(config.BACKURL+'/users')
+          .set('Accept','application/json')
+          .send({send})
+          .end((err,res)=>{
+            //console.log(res.body)
+            if(err) this.setState({errText0:res.body.error.message,errText1:res.body.error.message,errText2:res.body.error.message})
+            else{
+              //auth.setCookieAndToken(res.body)
+              browserHistory.push('/')
+            }
           })
-        })
-      } else {
+        //console.log(send)
+      }else{
         this.setState({errText2:'Wrong Password'})
       }
     }
   },
-
   checkPWD(e){
     //console.log(e.target.value)
     var pass1 = e.target.value
     //console.log(pass1)
-    if(e.target.value!==pass1) this.setState({errText2:'Wrong Password'})
+    if(e.target.value!==pass1)this.setState({errText2:'Wrong Password'})
     else this.setState({errText2:''})
   },
 
-  userChanged(e){
-    const name = e.target.name
-    let user = {...this.state.user}
-    utils.set(user, name, e.target.value)
-
-    this.setState({
-      user: user
-    })
-  },
-
   render(){
-    let {textStatus1,error1,textStatus2,error2,errText0,errText2,errText1,user} = this.state
+    var {textStatus1,error1,textStatus2,error2,errText0,errText2,errText1} = this.state
 
     return(
       <div>
-        <Container onSubmit={this.updateData}>
+        <Container onSubmit={this.updateData} ref='form1'>
           <div  className="head sans-font">ACCOUNT</div>
           <Flex>
             <Title>
               <div className="sans-font">Username</div>
             </Title>
             <Edit>
-              <TextField name='username' value={user.username} onChange={this.userChanged}/>
+              <TextField id='username' name='username' key='username'/>
             </Edit>
           </Flex>
           <Flex>
@@ -256,10 +223,10 @@ const UserSettingProfile = React.createClass({
               <div className="sans-font">Email</div>
             </Title>
             <Edit>
-              <TextField name='email' value={user.email} onChange={this.userChanged}/>
+              <TextField id='email' name='email' key='email'/>
             </Edit>
           </Flex>
-          {/*<Flex>
+          <Flex>
             <Title>
               <div className="sans-font">Social Connect </div>
             </Title>
@@ -274,9 +241,19 @@ const UserSettingProfile = React.createClass({
                   icon={<i className="fa fa-facebook" style={{color:'white',margin:'0 5px 0 14px'}} aria-hidden="true"></i>}
                 />
               </Social>
+              {/*<Social className="sans-font">
+                <RaisedButton
+                  onClick={this.signTWT}
+                  label="Connect"
+                  labelStyle={{color:'white'}}
+                  style={{...styles.button}}
+                  buttonStyle={{...styles.btn,backgroundColor:'#60AADE'}}
+                  icon={<i className="fa fa-twitter" style={{color:'white'}} aria-hidden="true"></i>}
+                />
+              </Social>*/}
             </Edit>
-          </Flex>*/}
-          <div className='sans-font' style={{marginTop:'30px',overflow:'hidden'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.fetechUser} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error1?'#D8000C':'#00B2B4'}}>{textStatus1}</TextStatus></div>
+          </Flex>
+          <div className='sans-font' style={{marginTop:'30px',overflow:'hidden'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error1?'#D8000C':'#00B2B4'}}>{textStatus1}</TextStatus></div>
         </Container>
 
         <Container onSubmit={this.changePWD} autoComplete="off">
@@ -290,8 +267,10 @@ const UserSettingProfile = React.createClass({
                 hintText="Old Password"
                 type="password"
                 name='oldPassword'
+                id='oldPassword'
                 errorText={errText0}
                 autoComplete="off"
+                key='oldPassword'
               />  
             </Edit>
           </Flex>
@@ -304,8 +283,10 @@ const UserSettingProfile = React.createClass({
                 hintText="New Password"
                 type="password"
                 name='newPassword'
+                id='newPassword'
                 errorText={errText1}
                 autoComplete="off"
+                key='newPassword'
               />
             </Edit>
           </Flex>
@@ -318,9 +299,11 @@ const UserSettingProfile = React.createClass({
                 hintText="New Password Agian"
                 type="password"
                 name='newPassword2'
+                id='newPassword2'
                 errorText={errText2}
                 autoComplete="off"
                 onBlur={this.checkPWD}
+                key='newPassword2'
               />
             </Edit>
           </Flex>
