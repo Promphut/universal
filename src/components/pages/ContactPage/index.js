@@ -2,9 +2,27 @@ import React from 'react'
 import styled from 'styled-components'
 import {AboutContainer, PrimaryButton, SecondaryButton} from 'components'
 import TextField from 'material-ui/TextField'
+import FontIcon from 'material-ui/FontIcon'
+import FlatButton from 'material-ui/FlatButton'
+import auth from 'components/auth'
 import api from 'components/api'
 
 const Wrapper = styled.div`
+`
+
+const Dropdown = styled.div`
+  display: inline-block;
+  height: 50px;
+`
+
+const DropdownContent = styled.div`
+  display: ${props => props.dropdown ? 'block' : 'none'}
+  position: absolute;
+  margin: 5px;
+  padding: 0px;
+  border: 2px solid rgba(0,178,180,1);
+  background: white;
+  z-index: 1;
 `
 
 const Head = styled.h1`
@@ -58,36 +76,38 @@ const ContactPage = React.createClass({
     return {
       user: {},
       head: "Hi there!",
-      username: '',
-      email: '',
-      tel: '',
-      saved: false
+      message: {},
+      problems: [],
+      saved: false,
+      dropdown: false
     }
   },
 
   componentDidMount(){
-    api.getUser()
+    this.state.problems = ['problem 1', 'problem 2', 'problem 3', 'problem 4']
+
+    api.getUser(null, auth.getToken())
     .then(user => {
-      this.user = user
       this.setState({
-        head: 'Hello ' + user.display + '!',
         user,
-        username: user.display,
-        email: '',
-        tel: '',
+        head: 'Hello ' + user.display + '!',
+        message: {
+          username: user.display,
+          email: user.email,
+          tel: '',
+          problem: this.state.problems[0],
+          textarea: ''
+        }
       })
     })
   },
 
   sendMessage() {
-    const {username, email, tel} = this.state
-    if (username && email) {
-      console.log(this.state)
+    const {username, email, tel, problem, textarea} = this.state.message
+    if (username && email && problem) {
+      console.log(this.state.message)
 
       this.setState({
-        username: '',
-        email: '',
-        tel: '',
         saved: true
       })
     } else {
@@ -100,29 +120,90 @@ const ContactPage = React.createClass({
   },
 
   resestMessage() {
+    const problem = this.state.message.problem
+
     this.setState({
-      username: '',
-      email: '',
-      tel: '',
+      message: {
+        username: '',
+        email: '',
+        tel: '',
+        problem,
+        textarea: ''
+      },
       saved: false
+    })
+  },
+
+  selectProblem(problem) {
+    const message = this.state.message
+
+    this.setState({
+      message: {
+        ...message,
+        problem
+      },
+      dropdown: false
+    })
+  },
+
+  openDropdown() {
+    this.setState({
+      dropdown: true
+    })
+  },
+  closeDropdown() {
+    this.setState({
+      dropdown: false
     })
   },
 
   handleChangeUsername() {
     const username = this.refs.username.getValue()
-    this.setState({username})
+    const message = this.state.message
+
+    this.setState({
+      message: {
+        ...message,
+        username
+      }
+    })
   },
   handleChangeEmail() {
     const email = this.refs.email.getValue()
-    this.setState({email})
+    const message = this.state.message
+
+    this.setState({
+      message: {
+        ...message,
+        email
+      }
+    })
   },
   handleChangeTel() {
     const tel = this.refs.tel.getValue()
-    this.setState({tel})
+    const message = this.state.message
+
+    this.setState({
+      message: {
+        ...message,
+        tel
+      }
+    })
+  },
+  handleChangeTextarea(event) {
+    const message = this.state.message
+
+    this.setState({
+      message: {
+        ...message,
+        textarea: event.target.value
+      }
+    })
   },
 
   render() {
-    let {user, head, username, email, tel, saved} = this.state
+    let {user, head, message, problems, saved, dropdown} = this.state
+    let {username, email, tel, problem, textarea} = this.state.message
 
     const floatingLabelText = (text) => {
       return (
@@ -143,21 +224,57 @@ const ContactPage = React.createClass({
       }
     }
 
+    const problemSelect = (
+      <span>{problem}
+        <FontIcon className="material-icons" style={{color: '#00B2B4', float: 'right', padding: '8px 8px 0px 0px', marginLeft: '-8px'}}>
+          keyboard_arrow_down
+        </FontIcon>
+      </span>
+    )
+
+    let button = []
+    for (let i = 0; i < problems.length; i++){
+      button.push(
+        <FlatButton
+          key={i}
+          label={problems[i]}
+          labelStyle={{fontWeight: 'bold', fontSize: '15px', color: '#00B2B4', fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
+          style={{width: '385px', textAlign: 'left', display: 'inline-block'}}
+          onTouchTap={() => this.selectProblem(problems[i])}
+        />
+      )
+      button.push(<br/>)
+    }
+
     return (
       <AboutContainer>
         <Wrapper>
           <Head className='title-font'>{head}</Head>
           <Subhead className='title-font'>What do you want to contact us about?</Subhead>
-          <SecondaryButton label='Website has problems' labelStyle={{textTransform:'none'}} />
-          <Article className='content-font'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas enim quae atque quo, consectetur? At dolor inventore officia alias sapiente dolores, eum amet esse quisquam eligendi, molestiae quaerat deleniti. Molestiae.</Article>
-          <textarea name="" id="" cols="60" rows="10"></textarea>
+          <Dropdown onMouseOver={this.openDropdown} onMouseLeave={this.closeDropdown}>
+            <SecondaryButton
+              label={problemSelect}
+              labelStyle={{textTransform:'none'}}
+              style={{width: '400px'}}
+              buttonStyle={{textAlign: 'left'}}
+            />
+            <DropdownContent dropdown={dropdown}>
+              {button}
+            </DropdownContent>
+          </Dropdown>
+          <Article className='content-font' style={{marginTop: '25px'}}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas enim quae atque quo, consectetur? At dolor inventore officia alias sapiente dolores, eum amet esse quisquam eligendi, molestiae quaerat deleniti. Molestiae.</Article>
+          <textarea
+            cols="60" rows="10"
+            ref='textarea'
+            value={textarea}
+            onChange={this.handleChangeTextarea}
+          ></textarea>
           <TextField
             ref='username'
             value={username}
-            defaultValue={username}
             onChange={this.handleChangeUsername}
             className='content-font'
-            hintText="Your name"
+            hintText={username ? '' : 'Your name'}
             hintStyle={textStyle}
             floatingLabelText={floatingLabelText('Contact by')}
             floatingLabelStyle={textStyle}
@@ -167,10 +284,9 @@ const ContactPage = React.createClass({
           <TextField
             ref='email'
             value={email}
-            defaultValue={email}
             onChange={this.handleChangeEmail}
             className='content-font'
-            hintText="Email"
+            hintText={email ? '' : 'Email'}
             hintStyle={textStyle}
             floatingLabelText={floatingLabelText('Contact email')}
             floatingLabelStyle={textStyle}
@@ -180,10 +296,9 @@ const ContactPage = React.createClass({
           <TextField
             ref='tel'
             value={tel}
-            defaultValue={tel}
             onChange={this.handleChangeTel}
             className='content-font'
-            hintText="Mobile Number"
+            hintText={tel ? '' : 'Mobile Number'}
             hintStyle={textStyle}
             floatingLabelText="Contact Phone"
             floatingLabelStyle={textStyle}

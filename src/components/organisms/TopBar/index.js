@@ -106,6 +106,7 @@ const Hamburger = styled.span`
 	top: 23px;
 	background: #8d8d8d;
 	box-shadow: 0 6px 0 #8d8d8d, 0 12px 0 #8d8d8d;
+	z-index: 10000;
 
 	-webkit-transition: .25s ease-in-out;
 	-moz-transition: .25s ease-in-out;

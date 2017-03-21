@@ -8,7 +8,7 @@ import slider from 'react-slick'
 import { StickyContainer, Sticky } from 'react-sticky';
 
 const Wrapper = styled.div`
-	
+
 `
 
 const Content = styled.div`
@@ -75,7 +75,7 @@ const PublisherPage = React.createClass({
 
 	updateDimensions(){
 		// this.setState({
-		// 	width: window.getWidth(), 
+		// 	width: window.getWidth(),
 		// 	height: window.getHeight()
 		// });
 	},
@@ -112,14 +112,14 @@ const PublisherPage = React.createClass({
 				}
 			})
 	},
-	
+
 	render(){
 		var {feed,popular} = this.state
 		return (
 		    <StickyContainer>
 					<BGImg src="/tmp/a-story/pic-min.jpg" style={{width:'100%',height:'510px'}} />
-				
-					<Sticky>
+
+					<Sticky style={{zIndex: '999'}}>
 						<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 					</Sticky>
 
@@ -132,7 +132,7 @@ const PublisherPage = React.createClass({
 							{popular.length!=0?<ThumpnailRow detail={popular} style={{margin:'20px 0 30px 0'}}/>:''}
 							{popular.length!=0?<ThumpnailRow detail={popular} size='small' style={{margin:'30px 0 30px 0'}}/>:''}
 						</Feed>
-					</Content>	
+					</Content>
 		      <Content >
 			      <Main>
 							<TextLine className='sans-font'>Lastest</TextLine>

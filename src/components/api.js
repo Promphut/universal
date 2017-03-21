@@ -8,7 +8,7 @@ let api =  {}
 api.err = (err) => {
 	if(err.response && err.response.body.error)
 		throw err.response.body.error
-	else 
+	else
 		throw err
 }
 
@@ -32,7 +32,7 @@ api.getUser = (uid, token) => {
 		.then(res => {
 			return res.body.user
 		}, api.err)
-	} 
+	}
 	else return api.userNotFoundPromise()
 }
 
