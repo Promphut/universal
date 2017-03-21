@@ -17,6 +17,7 @@ const active = {
 }
 
 const Page = ({value, isActive, onClick}) => {
+  //console.log('Page', value, isActive)
   return(
     <FlatButton style={!isActive?{...flatButtonStyle}:{...flatButtonStyle,...active}} labelStyle={!isActive?{fontSize:'20px'}:{fontSize:'20px',fontWeight:'bold'}}  label={value.toString()} primary={isActive} onClick={onClick}/>
   )

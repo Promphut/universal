@@ -17,10 +17,13 @@ import IconButton from 'material-ui/IconButton'
 import TextField from 'material-ui/TextField'
 import CircularProgress from 'material-ui/CircularProgress';
 import moment from 'moment'
+import api from 'components/api'
+import utils from 'components/utils'
 
 const Container = styled.div`
   width:100%;
 `
+
 const Section1  = styled.div`
   background-color:#F7F7F7;
   color:#8F8F8F;
@@ -29,6 +32,7 @@ const Section1  = styled.div`
   font-size:16px;
   border:1px solid #E2E2E2;
 `
+
 const TabHead = styled.div`
   padding:0 15px 0 15px;
   display:inline;
@@ -44,9 +48,11 @@ const Section2 = styled.div`
   padding:50px 15px 50px 15px;
   border-bottom:1px solid #E2E2E2;
 `
+
 const Col3 = styled.div`
   padding:0 5px 0 5px;
 `
+
 const Icon = styled.div`
   color:#222;
   font-size:32px;
@@ -55,6 +61,7 @@ const Icon = styled.div`
     cursor:pointer;
   }
 `
+
 const Primary = styled.div`
   background-color:#00B2B4;
   color:white;
@@ -63,6 +70,7 @@ const Primary = styled.div`
   font-size:16px;
   border:2px solid #00B2B4;
 `
+
 const Second = styled.div`
   background-color:white;
   color:#00B2B4;
@@ -71,10 +79,12 @@ const Second = styled.div`
   font-size:16px;
   border:2px solid #00B2B4;
 `
+
 const Cont = styled.div`
   width:100%;
 `
-const Name = styled.div`
+
+const TitleLink = styled(Link)`
   color:#222;
   font-size:15px;
   font-weight:bold;
@@ -91,6 +101,7 @@ const Name = styled.div`
   max-width:220px;
   margin:0 0 0 15px;
 `
+
 const styles = {
   label:{
     fontSize:'30px'
@@ -116,6 +127,7 @@ const styles = {
     color:'#8F8F8F'
   }
 }
+
 // const trending = {
 // 	name:'โมหจริตดินฮิปฮอปด็อกเตอร์โมหจ ริตแอดมิdsf fsdfsddsfdsfsdสชััน?',
 // 	vote:'18',
@@ -135,6 +147,7 @@ const IconEdit = styled(Link)`
     cursor:pointer;
   }
 `
+
 const Page = styled.div`
   display: flex;
 	flex-flow: row wrap;
@@ -150,150 +163,161 @@ const Onload =styled.div`
   background:white;
 `
 
-const TopArticle = ({style,detail})=>{
-  var {title,cover} = detail
+const StoryTitle = ({style, story})=>{
+  let {title, cover, url} = story
   return(
     <Cont style={{...style}}>
       <OverlayImg src={cover} style={{width:'87',height:'52',float:'left'}}/>
-      <Name className="sans-font">{title}</Name>
+      <TitleLink to={url} className="sans-font">{title}</TitleLink>
     </Cont>
   )
 }
 
+const STATUS = {
+  'DRAFTED': 0,
+  'PUBLISHED': 1
+}
+
 const PublisherStoryPage = React.createClass({
+  FEED_LIMIT: config.FEED_LIMIT,
+
 	getInitialState(){
 		return {
-      value:'all',
-      role:'admin',
-      currentPage:1,
-      article:[],
-      column:[],
+      selectColumn:'all',
+      selectStatus: STATUS.PUBLISHED,
+
+      stories: [],
+      storiesCount: 0,
+      selectStoryId:0,
+      
+      columns:[],
       columnArray:[],
-      page:0,
+
+      currentPage: 0,
+      totalPages: 0,
+
       sort:'latest',
-      filter:{publisher:config.PID,status:1},
+
       alert:false,
       alertConfirm:function(){},
       alertLoading:false,
       onLoad:false,
       snackbar:false,     
       snackbarMS:'',
-      articleStatus:'published',
-      editStory:false,
-      count:0,
-      articleSelectedId:0,
+      editStory:false
     }
 	},
 
-  getColumn(cb=function(){}){
-    var self = this
-    Request
-      .get(config.BACKURL+'/publishers/11/columns')
-      .set('Accept','application/json')
-      .end((err,res)=>{
-        //console.log(res.body)
-        if(err)throw err
-        else{
-          var a = res.body.columns.map((data,index)=>({value:data.id,text:data.name}))
-          a.unshift({value:'all',text:'All Stories'})
-          self.setState({
-            column:res.body.columns,
-            columnArray:a
-          })
-          cb()
-        }
-      })
-  },              
+  getColumns(){
+    return api.getColumns()
+    .then(cols => {
+      let a = cols.map((col,index) => ({value:col.id, text:col.name}))
+      a.unshift({value:'all', text:'All Stories'})
 
-  removeColumn(){
-    var self = this
-    Request
-      .delete(config.BACKURL+'/publishers/11/columns/'+this.state.value+'?token='+auth.getToken())
-      .set('x-access-token', auth.getToken())
-      .set('Accept','application/json')
-      .end((err,res)=>{
-        //console.log(res.body)
-        if(err)throw err
-        else{
-          self.setState({alert:false,alertDesc:'',snackbar:true,snackbarMS:'Delete Column Complete !'})
-          self.getColumn()
-        }
+      this.setState({
+        columns:cols,
+        columnArray:a
       })
+    })
   },
 
-  getStory(){
-    //console.log('getStory')
+  removeColumn(){
+    let cid = this.state.selectColumn
+
+    api.removeColumn(cid)
+    .then(res => {
+      this.setState({
+        alert:false,
+        alertDesc:'',
+        snackbar:true,
+        snackbarMS:'Delete Column Complete !',
+
+        // when col removed, select the default 'all' columns
+        selectColumn: 'all',
+        selectStatus: STATUS.PUBLISHED
+      },
+      () => {
+        this.getColumns()
+        this.getStories()
+      }
+      )
+    })
+  },
+
+  getCurrentFilter(){
+    return {
+      column: this.state.selectColumn==='all' ? null : parseInt(this.state.selectColumn),
+      status: this.state.selectStatus
+    }
+  },
+
+  getStories(){
     this.setState({onLoad:true})
-    var self = this
-    var {page,sort,filter,value} = this.state
-    //console.log(filter)
-    var fil = JSON.stringify(filter)
-    Request
-      .get(config.BACKURL+'/publishers/'+config.PID+'/feed?type=story&filter='+fil+'&sort='+sort+'&page='+page)
-      .set('Accept','application/json')
-      .end((err,res)=>{
-        if(err)throw err
-        else{
-          //console.log(res.body)
-          self.setState({
-            article:res.body.feed,
-            count:res.body.count,
-            onLoad:false
-          })
-          
-        }
+
+    let {currentPage, sort} = this.state
+    //console.log('filter', filter)
+
+    api.getFeed('story', this.getCurrentFilter(), sort, currentPage, this.FEED_LIMIT)
+    .then(result => {
+      //console.log('getFeed()', result)
+      this.setState({
+        stories: result.feed,
+        storiesCount: result.count,
+        onLoad: false,
+        totalPages: utils.getTotalPages(this.FEED_LIMIT, result.count[this.state.selectStatus])
       })
+    })
   },
 
   filterPublished(){
-    if(this.state.value != 'all'){
-      this.setState({filter:{publisher:config.PID,column:this.state.value,status:1},articleStatus:'published'},()=>{this.getStory()})
-    }else{
-      this.setState({filter:{publisher:config.PID,status:1},articleStatus:'published'},()=>{this.getStory()})
-    }
+    this.setState(
+      {
+        selectStatus:STATUS.PUBLISHED
+      },
+      () => {this.getStories()}
+    )
   },
 
-  filterDraft(){
-    if(this.state.value != 'all'){
-      this.setState({filter:{publisher:config.PID,column:this.state.value,status:0},articleStatus:'drafted'},()=>{this.getStory()})
-    }else{
-      this.setState({filter:{publisher:config.PID,status:0},articleStatus:'drafted'},()=>{this.getStory()})
-    }
+  filterDrafted(){
+    this.setState(
+      {
+        selectStatus:STATUS.DRAFTED
+      },
+      ()=>{this.getStories()}
+    )
   },
 
   recent(){
-    this.setState({sort:'latest'},()=>{this.getStory()})
+    this.setState(
+      {sort:'latest'},
+      ()=>{this.getStories()}
+    )
   },
 
   popular(){
-    this.setState({sort:'popular'},()=>{this.getStory()})
+    this.setState(
+      {sort:'popular'},
+      ()=>{this.getStories()}
+    )
   },
 
-  // handleChange(event, index, value){
-  //   if(typeof value === 'number'){
-  //     this.setState({value,filter:{publisher:config.PID,column:value}},()=>{this.getStory()})
-  //   }else if(value == 'all'){
-  //     this.setState({value,filter:{publisher:config.PID}},()=>{this.getStory()})
-  //   }else{
-  //     this.setState({value},()=>{this.getStory()})
-  //   }
-  // },
-
   changePage(e){
-    //console.log(e-1)
-    this.setState({page:e-1,currentPage:e},()=>{this.getStory()})
+    this.setState(
+      {currentPage:e-1},
+      ()=>{this.getStories()}
+    )
   },
 
   componentDidMount(){
-    this.getColumn()
-    this.getStory()
+    this.getColumns()
+    this.getStories()
   },
 
-  handleTouchTap(event){
-    event.preventDefault();
+  handleTouchTap(e){
+    e.preventDefault();
     this.setState({
       alert: true,
-      alertWhere: event.currentTarget,
+      alertWhere: e.currentTarget,
     });
   },
 
@@ -304,19 +328,16 @@ const PublisherStoryPage = React.createClass({
     });
   },
 
-  selectItem(e,value){
-    console.log(value)
-    if(value == 'all'){
-      this.setState({value:value,filter:{publisher:config.PID,status:1}})
-      this.getStory()
-    }else{
-      this.setState({value:value,filter:{publisher:config.PID,column:value,status:1}})
-      this.getStory()
-    }
+  changeColumn(e, selectColumn){
+    this.setState({
+      selectColumn:selectColumn
+    }, () => {
+      this.getStories()
+    })
   },
 
   goEditPage(){
-    browserHistory.push('/editor/columns/'+this.state.value+'/settings')
+    browserHistory.push('/editor/columns/'+this.state.selectColumn+'/settings')
   },
 
   alertDelete(e){
@@ -324,7 +345,8 @@ const PublisherStoryPage = React.createClass({
       alert:true,
       alertWhere:e.currentTarget,
       alertDesc:'Delete is permanent. Are you sure?',
-      alertConfirm:this.removeColumn})
+      alertConfirm:this.removeColumn
+    })
   },
 
   alertNew(e){
@@ -338,28 +360,30 @@ const PublisherStoryPage = React.createClass({
 
   newColumn(){
     this.setState({alertLoading:true})
-    var self = this
-    var column = {
-      column:{
-        name:document.getElementById('newColName').value,
-        shortDesc:''
-      }
-    } 
-    Request
-      .post(config.BACKURL+'/publishers/'+config.PID+'/columns?token='+auth.getToken())
-      .set('Accept','application/json')
-      .send(column)
-      .end((err,res)=>{
-        if(err)throw err
-        else{
-          //console.log(res.body)
-          self.getColumn(()=>{
-            //console.log(res.body)
-            self.setState({value:res.body.column.id,alertLoading:false,alert:false,snackbar:true,snackbarMS:'Create New Column Complete!'})
-            self.getStory()
-          }) 
-        }
+
+    let column = {
+      name:document.getElementById('newColName').value,
+      shortDesc:''
+    }
+    api.newColumn(column)
+    .then(col => {
+
+      this.getColumns()
+      .then(() => {
+        this.setState({
+          alertLoading:false,
+          alert:false,
+          snackbar:true,
+          snackbarMS:'Create New Column Complete!',
+
+          selectColumn:col.id,
+          selectStatus: STATUS.PUBLISHED
+        })
+
+        this.getStories()
       })
+
+    })
   },
 
   closeSnackbar(){
@@ -372,57 +396,47 @@ const PublisherStoryPage = React.createClass({
 
   editStory(e,data){
     //console.log(data)
-    this.setState({editStory:true,editStoryWhere:e.currentTarget,articleSelectedId:data})
+    this.setState({
+      editStory:true,
+      editStoryWhere:e.currentTarget, 
+      selectStoryId:data
+    })
   },
 
-  deleteArticle(){
-    var self = this
+  deleteStory(){
     this.setState({editStory:false})
-    Request
-      .delete(config.BACKURL+'/stories/'+this.state.articleSelectedId+'?token='+auth.getToken())
-      .end((err,res)=>{
-        if(err) throw err
-        else{
-          self.getStory()
-        }
-      })
+
+    api.deleteStory(this.state.selectStoryId)
+    .then(res => {
+      this.getStories()
+    })
   },
 
-  unpublishArticle(){
-    var self = this
+  unpublishStory(){
     this.setState({editStory:false})
-    Request
-      .patch(config.BACKURL+'/stories/'+this.state.articleSelectedId+'?token='+auth.getToken())
-      .send({story:{status:0}})
-      .end((err,res)=>{
-        if(err) throw err
-        else{
-          self.getStory()
-        }
-      })
+
+    api.setStoryStatus(this.state.selectStoryId, 0)
+    .then(res => {
+      this.getStories()
+    })
   },
 
-  publishArticle(){
-    var self = this
+  publishStory(){
     this.setState({editStory:false})
-    Request
-      .patch(config.BACKURL+'/stories/'+this.state.articleSelectedId+'?token='+auth.getToken())
-      .send({story:{status:1}})
-      .end((err,res)=>{
-        if(err) throw err
-        else{
-          self.getStory()
-        }
-      })
+
+    api.setStoryStatus(this.state.selectStoryId, 1)
+    .then(res => {
+      this.getStories()
+    })
   },
 
-  goEditArticle(){
-    browserHistory.push('/editor/stories/'+articleSelectedId+'/edit')
+  goEditStory(){
+    browserHistory.push('/editor/stories/'+this.state.selectStoryId+'/edit')
   },
 
   render(){
-    var { sort,count,editStory,editStoryWhere,articleStatus,snackbar,snackbarMS,role,currentPage,article,column,value,alert,alertDesc,alertWhere,alertLoading,alertChild,alertConfirm,columnArray,onLoad} = this.state
-    //console.log(this.state)
+    let { sort,totalPages,storiesCount,editStory,editStoryWhere,selectStatus,snackbar,snackbarMS,currentPage,stories,columns,selectColumn,alert,alertDesc,alertWhere,alertLoading,alertChild,alertConfirm,columnArray,onLoad} = this.state
+    //console.log('storiesCount',storiesCount)
     return (
       <Container>
         <Snackbar
@@ -439,12 +453,13 @@ const PublisherStoryPage = React.createClass({
           anchorEl={editStoryWhere}
           anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
           targetOrigin={{horizontal: 'left', vertical: 'top'}}
+          style={{border:'2px solid #00B2B4'}}
           onRequestClose={this.closeEditStory}
         >
-          <MenuItem onClick={this.goEditArticle} style={{border:'2px solid #00B2B4',color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>edit</FontIcon>}>Edit story</MenuItem>
-          <MenuItem onClick={this.deleteArticle} style={{border:'2px solid #00B2B4',color:'#fff',fontSize:'17px',backgroundColor:'#00B2B4'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#fff'}}>delete</FontIcon>}>Delete</MenuItem>
-          {articleStatus=='published'?<MenuItem onClick={this.unpublishArticle} style={{border:'2px solid #00B2B4',color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>drafts</FontIcon>}>Unpublish</MenuItem>
-          :<MenuItem onClick={this.publishArticle} style={{border:'2px solid #00B2B4',color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>assignment_turned_in</FontIcon>}>publish</MenuItem>}
+          <MenuItem onClick={this.goEditStory} style={{color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>edit</FontIcon>}>Edit Story</MenuItem>
+          <MenuItem onClick={this.deleteStory} style={{color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>delete</FontIcon>}>Delete</MenuItem>
+          {selectStatus===STATUS.PUBLISHED ? <MenuItem onClick={this.unpublishStory} style={{color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>drafts</FontIcon>}>Unpublish</MenuItem>
+          : <MenuItem onClick={this.publishStory} style={{color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>assignment_turned_in</FontIcon>}>Publish</MenuItem>}
         </Popover>
         <Alert 
           open={alert}
@@ -456,20 +471,20 @@ const PublisherStoryPage = React.createClass({
           confirm={alertConfirm}/>
         <div className='row' style={{padding:'30px 15px 20px 30px'}}>
           <DropdownWithIcon
-            onChange={this.selectItem} 
-            menuItem={!columnArray?null:columnArray} 
-            value={value}
+            onChange={this.changeColumn} 
+            menuItem={!columnArray ? null : columnArray} 
+            value={selectColumn}
             editMenu={
               [<MenuList onClick={this.goEditPage} key="edit">Edit</MenuList>,
                <MenuList onClick={this.alertDelete} key='delete'>Delete</MenuList>,
-               <MenuList onClick={this.alertNew} key='new'>+ new column</MenuList>]}
+               <MenuList onClick={this.alertNew} key='new'>+ New Column</MenuList>]}
             />
         </div>
         <div className='row'>
           <div className='col-6'>
             <Section1 className="sans-font">
-              <TabHead onClick={this.filterPublished} style={articleStatus=='published'?{fontWeight:'bold',color:'#222'}:{}}>{!count[1]?0:count[1]+' '} Published</TabHead>
-              <TabHead onClick={this.filterDraft} style={articleStatus=='drafted'?{fontWeight:'bold',color:'#222'}:{}}>{!count[0]?0:count[0]+' '} Drafted</TabHead>
+              <TabHead onClick={this.filterPublished} style={selectStatus===STATUS.PUBLISHED ? {fontWeight:'bold',color:'#222'} : {}}>{storiesCount[STATUS.PUBLISHED+''] || '0 '} Published</TabHead>
+              <TabHead onClick={this.filterDrafted} style={selectStatus===STATUS.DRAFTED ? {fontWeight:'bold',color:'#222'} : {}}>{storiesCount[STATUS.DRAFTED+''] || '0 '} Drafted</TabHead>
               {/*<TabHead>3 Scheduled</TabHead>*/}
             </Section1>
           </div>
@@ -484,7 +499,7 @@ const PublisherStoryPage = React.createClass({
         </div>
 
         <Section2 style={{padding:'40px 5px 40px 5px'}}>
-          {onLoad?<Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>:
+          {onLoad ? <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload> :
           <Table >
             <TableHeader 
               displaySelectAll={false}
@@ -494,33 +509,32 @@ const PublisherStoryPage = React.createClass({
                 <TableHeaderColumn style={{width:'10%',textAlign:'center'}}>Writer</TableHeaderColumn>
                 <TableHeaderColumn style={{width:'15%',textAlign:'center'}}>Column</TableHeaderColumn>
                 <TableHeaderColumn style={{width:'15%'}}>stats</TableHeaderColumn>
-                <TableHeaderColumn style={{width:'15%'}}>{articleStatus=='published'?'Published':'Drafted'}</TableHeaderColumn>
+                <TableHeaderColumn style={{width:'15%'}}>{selectStatus===STATUS.PUBLISHED ? 'Published' : 'Drafted'}</TableHeaderColumn>
                 <TableHeaderColumn style={{width:'5%'}}></TableHeaderColumn>
               </TableRow>
             </TableHeader>
             <TableBody 
               showRowHover={true}
               displayRowCheckbox={false}>
-              {article?article.map((data,index)=>(
+              {stories ? stories.map((story, index) => (
                 <TableRow key={index}>
-                  <TableRowColumn style={{width:'40%',padding:'10px 0 10px 0'}}><TopArticle detail={data} /></TableRowColumn>
-                  <TableRowColumn style={{width:'10%',paddingRight:0,paddingLeft:0,textAlign:'center'}}>{data.writer.display}</TableRowColumn>
-                  <TableRowColumn style={{width:'15%',paddingRight:0,paddingLeft:0,textAlign:'center'}}>{data.column.name}</TableRowColumn>
-                  <TableRowColumn style={{width:'15%'}}>{'vote : '+data.votes.total}<br/>{'comment : '+data.comments.count}</TableRowColumn>
-                  <TableRowColumn style={{width:'15%',wordWrap:'break-word',whiteSpace:'pre-wrap'}}>{articleStatus=='published'?moment(data.published).format('lll'):moment(data.created).format('lll')}</TableRowColumn>
-                  <TableHeaderColumn style={{width:'5%',paddingRight:0,paddingLeft:0,textAlign:'center',cursor:'pointer'}} ><FontIcon className='material-icons' onClick={(e)=>{this.editStory(e,data.id)}} style={{color:'#bfbfbf'}}>more_vert</FontIcon></TableHeaderColumn>
+                  <TableRowColumn style={{width:'40%',padding:'10px 0 10px 0'}}><StoryTitle story={story} /></TableRowColumn>
+                  <TableRowColumn style={{width:'10%',paddingRight:0,paddingLeft:0,textAlign:'center'}}>{story.writer && <Link to={story.writer.url}>{story.writer.display}</Link>}</TableRowColumn>
+                  <TableRowColumn style={{width:'15%',paddingRight:0,paddingLeft:0,textAlign:'center'}}>{story.column && <Link to={story.column.url}>{story.column.name}</Link>}</TableRowColumn>
+                  <TableRowColumn style={{width:'15%'}}>{story.views} Views<br/>{story.shares.total} Shares</TableRowColumn>                  <TableRowColumn style={{width:'15%',wordWrap:'break-word',whiteSpace:'pre-wrap'}}>{selectStatus===STATUS.PUBLISHED ? moment(story.published).format('lll') : moment(story.created).format('lll')}</TableRowColumn>
+                  <TableHeaderColumn style={{width:'5%',paddingRight:0,paddingLeft:0,textAlign:'center',cursor:'pointer'}} ><FontIcon className='material-icons' onClick={(e)=>{this.editStory(e,story.id)}} style={{color:'#bfbfbf'}}>more_vert</FontIcon></TableHeaderColumn>
                 </TableRow>
-              )):''}
+              )) : ''}
             </TableBody>
           </Table>}
         </Section2>
-        <Page >
+        {totalPages > 0 && <Page>
           <Pagination 
-            currentPage={currentPage} 
-            totalPages={8} 
-            onChange={(e)=>{this.changePage(e)}}
+            currentPage={currentPage+1} 
+            totalPages={totalPages} 
+            onChange={this.changePage}
           />
-        </Page>
+        </Page>}
       </Container>
 		  )
 	}

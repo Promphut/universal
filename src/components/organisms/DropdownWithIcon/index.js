@@ -115,13 +115,13 @@ const DropdownWithIcon = React.createClass({
             onClick={this.togglePopover}
             labelPosition="before"
             labelStyle={{fontSize:'22px'}}
-            style={{width:'330px',height:'60px',border:open||editState?'1px solid #e2e2e2':'none'}}>
-            <div >
-              <Text className='nunito-font' style={{...labelStyle}} >{menuItem?menuItem.map((data,index)=>{
+            style={{textAlign:'left', paddingLeft: '30px', width:'330px',height:'60px',border:open || editState ? '1px solid #e2e2e2' : 'none'}}>
+            <div>
+              <Text className='nunito-font' style={{...labelStyle}} >{menuItem ? menuItem.map((data, index) => {
                 if(data.value==value){
                   return data.text
                 }
-                }):''}</Text>
+                }) : ''}</Text>
               <FontIcon className='material-icons' style={{fontSize:'30px',color:'#8f8f8f',float:'right',top:'8px'}}>keyboard_arrow_down</FontIcon>
             </div>
             <Popover

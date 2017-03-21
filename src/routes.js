@@ -169,7 +169,7 @@ const routes = (
     <Route path="signup" component={()=>(<SignUpPage visible={true}/>)} />
     <Route path="logout" onEnter={logout} />
 
-    <Route path='editor' component={PublisherEditor} onEnter={getPublisherId}>
+    <Route path='editor' component={PublisherEditor}>
       <IndexRoute component={PublisherDashboardPage} onEnter={getPublisherId}/>
       <Route path='settings' component={PublisherSettingPage} onEnter={getPublisherId}/>
       <Route path='stories' component={PublisherStoryPage} onEnter={getPublisherId}/>

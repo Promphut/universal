@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from 'react-router'
 import { OverlayImg} from 'components'
 import FontIcon from 'material-ui/FontIcon'
 import styled from 'styled-components'
@@ -7,10 +8,12 @@ import {TrendingSideBarInner} from 'components'
 import auth from 'components/auth'
 import Request from 'superagent'
 import moment from 'moment'
+import api from 'components/api'
 
 const Container = styled.div`
   width:100%;
 `
+
 const Section1  = styled.div`
   background-color:#F7F7F7;
   color:#8F8F8F;
@@ -18,6 +21,7 @@ const Section1  = styled.div`
   padding:15px;
   font-size:16px;
 `
+
 const TabHead = styled.div`
   padding:0 25px 0 25px;
   display:inline;
@@ -27,19 +31,23 @@ const TabHead = styled.div`
     text-decoration:underline;
   }
 `
+
 const Section2 = styled.div`
   width:100%;
   padding:50px 15px 50px 15px;
   border-bottom:1px solid #E2E2E2;
 `
+
 const Col3 = styled.div`
   padding:0 5px 0 5px;
 `
+
 const Icon = styled.div`
   color:#8F8F8F;
   font-size:16px;
   overflow:hidden;
 `
+
 const Primary = styled.div`
   background-color:#00B2B4;
   color:white;
@@ -48,6 +56,7 @@ const Primary = styled.div`
   font-size:16px;
   border:2px solid #00B2B4;
 `
+
 const Second = styled.div`
   background-color:white;
   color:#00B2B4;
@@ -56,6 +65,7 @@ const Second = styled.div`
   font-size:16px;
   border:2px solid #00B2B4;
 `
+
 const Cont = styled.div`
   width:100%;
   @media (min-width:481px) {
@@ -70,7 +80,8 @@ const Cont = styled.div`
     }
   }
 `
-const Name = styled.div`
+
+const TitleLink = styled(Link)`
   color:#222;
   font-size:15px;
   font-weight:bold;
@@ -87,80 +98,17 @@ const Name = styled.div`
   max-width:230px;
   margin:0 0 0 15px;
 `
-const TopArticle = ({style,detail})=>{
-  var {title,cover} = detail
+
+const StoryTitle = ({style, story})=>{
+  let {title, cover, url} = story
+  //console.log('story', story)
   return(
     <Cont style={{...style}}>
-      <OverlayImg src={cover} style={{width:'87',height:'52',float:'left'}}/>
-      <Name className="sans-font">{title}</Name>
+      <OverlayImg src={cover} style={{width:'87px',height:'52px',float:'left'}}/>
+      <TitleLink to={url} className="sans-font">{title}</TitleLink>
     </Cont>
   )
 }
-const tableData = [
-  {
-    name: 'John Smith',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-  {
-    name: 'Randal White',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-  {
-    name: 'Stephanie Sanders',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-  {
-    name: 'Steve Brown',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-  {
-    name: 'Joyce Whitten',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-  {
-    name: 'Samuel Roberts',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-  {
-    name: 'Adam Moore',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-  {
-    name: 'Adam Moore',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-  {
-    name: 'Adam Moore',
-    view:115665,
-    share:4665,
-    no:16,
-    detail:trending
-  },
-];
 
 const styles = {
   thead:{
@@ -181,12 +129,6 @@ const styles = {
     paddingRight:'5px',
   }
 }
-const trending = {
-	title:'โมหจริตดินฮิปฮอปด็อกเตอร์โมหจ ริตแอดมิdsf fsdfsddsfdsfsdสชััน?',
-	votes:'18',
-	comment:11,
-	cover:'/tmp/story-list/1485309433041-Screen-Shot-2017-01-23-at-33221-PM-1.png'
-}
 
 const PublisherDashboardPage = React.createClass({
 	getInitialState(){
@@ -194,67 +136,57 @@ const PublisherDashboardPage = React.createClass({
       totalView:182032,
       totalShare:16555,
       totalStory:300,
-      article:[],
-      writer:[],
-      column:[]
+      stories:[],
+      writers:[],
+      columns:[]
     }
 	},
 
   componentDidMount(){
-    this.getArticle()
-    this.getWriter()
-    this.getColumn()
+    this.getStories()
+    this.getWriters()
+    this.getColumns()
   },
 
-  getArticle(){
-    var self = this
-    var fil = JSON.stringify({publisher:config.PID,status: 1})
-    Request
-      .get(config.BACKURL+'/publishers/'+config.PID+'/feed?type=story&filter='+fil)
-      .set('Accept','application/json')
-      .end((err,res)=>{
-        console.log('article',res.body)
-        if(err)throw err
-        else{
-          self.setState({
-            article:res.body.feed
-          })
-        }
+  getStories(){
+    let filter = {status: 1}
+    api.getFeed('story', filter)
+    .then(result => {
+      this.setState({
+        stories: result.feed
       })
+    })
+    .catch(err => {
+      //console.log('getFeed() error', err)
+    })
   },
-  getWriter(){
-    var self = this
-    Request
-      .get(config.BACKURL+'/publishers/'+config.PID+'/writers')
-      .set('Accept','application/json')
-      .end((err,res)=>{
-        console.log('Writer',res.body)
-        if(err)throw err
-        else{
-          self.setState({
-            writer:res.body.writers
-          })
-        }
+
+  getWriters(){
+    api.getWriters()
+    .then(writers => {
+      this.setState({
+        writers: writers
       })
+    })
+    .catch(err => {
+      //console.log('getWriters() error', err)
+    })
   },
-  getColumn(){
-    var self = this
-    Request
-      .get(config.BACKURL+'/publishers/'+config.PID+'/columns')
-      .set('Accept','application/json')
-      .end((err,res)=>{
-        console.log('Column',res.body)
-        if(err)throw err
-        else{
-          self.setState({
-            column:res.body.columns
-          })
-        }
+
+  getColumns(){
+    api.getColumns()
+    .then(cols => {
+      this.setState({
+        columns:cols
       })
+    })
+    .catch(err => {
+      //console.log('getColumns() error', err)
+    })
   },
 
   render(){
-    var {totalShare,totalStory,totalView,article,writer,column} = this.state
+    let {totalShare,totalStory,totalView,stories,writers,columns} = this.state
 		return (
       <Container>
         <Section1>
@@ -318,7 +250,7 @@ const PublisherDashboardPage = React.createClass({
                   displaySelectAll={false}
                   adjustForCheckbox={false}>
                   <TableRow>
-                    <TableHeaderColumn style={{...styles.thead}}>Top Witers</TableHeaderColumn>
+                    <TableHeaderColumn style={{...styles.thead}}>Top Writers</TableHeaderColumn>
                     <TableHeaderColumn style={{...styles.col2}}>Views</TableHeaderColumn>
                     <TableHeaderColumn style={{...styles.col2}}>Shares</TableHeaderColumn>
                     <TableHeaderColumn style={{...styles.col4}}>No.</TableHeaderColumn>
@@ -327,14 +259,14 @@ const PublisherDashboardPage = React.createClass({
                 <TableBody 
                   showRowHover={true}
                   displayRowCheckbox={false}>
-                  {writer?writer.map((data,index)=>(
+                  {writers ? writers.map((writer, index) => (
                     <TableRow key={index}>
-                      <TableRowColumn style={{...styles.col1}}>{data.display}</TableRowColumn>
-                      <TableRowColumn style={{...styles.col2}}>{data.id}</TableRowColumn>
-                      <TableRowColumn style={{...styles.col2}}>{data.id}</TableRowColumn>
-                      <TableRowColumn style={{...styles.col4}}>{data.id}</TableRowColumn>
+                      <TableRowColumn style={{...styles.col1}}><Link to={writer.url}>{writer.display}</Link></TableRowColumn>
+                      <TableRowColumn style={{...styles.col2}}>{writer.id}</TableRowColumn>
+                      <TableRowColumn style={{...styles.col2}}>{writer.id}</TableRowColumn>
+                      <TableRowColumn style={{...styles.col4}}>{writer.id}</TableRowColumn>
                     </TableRow>
-                  )):''}
+                  )) : ''}
                 </TableBody>
               </Table>
             </div>
@@ -353,14 +285,14 @@ const PublisherDashboardPage = React.createClass({
                 <TableBody 
                   showRowHover={true}
                   displayRowCheckbox={false}>
-                  {column?column.map((data,index)=>(
+                  {columns ? columns.map((col, index) => (
                     <TableRow key={index}>
-                      <TableRowColumn style={{...styles.col1}}>{data.name}</TableRowColumn>
-                      <TableRowColumn style={{...styles.col2}}>{data.id}</TableRowColumn>
-                      <TableRowColumn style={{...styles.col2}}>{data.id}</TableRowColumn>
-                      <TableRowColumn style={{...styles.col4}}>{data.id}</TableRowColumn>
+                      <TableRowColumn style={{...styles.col1}}><Link to={col.url}>{col.name}</Link></TableRowColumn>
+                      <TableRowColumn style={{...styles.col2}}>{col.id}</TableRowColumn>
+                      <TableRowColumn style={{...styles.col2}}>{col.id}</TableRowColumn>
+                      <TableRowColumn style={{...styles.col4}}>{col.id}</TableRowColumn>
                     </TableRow>
-                  )):''}
+                  )) : ''}
                 </TableBody>
               </Table>
             </div>
@@ -372,25 +304,25 @@ const PublisherDashboardPage = React.createClass({
               displaySelectAll={false}
               adjustForCheckbox={false}>
               <TableRow>
-                <TableHeaderColumn style={{...styles.thead,width:'40%'}}>Top Articles</TableHeaderColumn>
+                <TableHeaderColumn style={{...styles.thead,width:'40%'}}>Top Stories</TableHeaderColumn>
                 <TableHeaderColumn style={{width:'15%',paddingRight:0,paddingLeft:0,textAlign:'center'}}>Writer</TableHeaderColumn>
                 <TableHeaderColumn style={{width:'15%',paddingRight:0,paddingLeft:0,textAlign:'center'}}>Column</TableHeaderColumn>
-                <TableHeaderColumn style={{width:'15%'}}>stats</TableHeaderColumn>
+                <TableHeaderColumn style={{width:'15%'}}>Stats</TableHeaderColumn>
                 <TableHeaderColumn style={{width:'15%'}}>Published</TableHeaderColumn>
               </TableRow>
             </TableHeader>
             <TableBody 
               showRowHover={true}
               displayRowCheckbox={false}>
-              {article?article.map((data,index)=>(
+              {stories ? stories.map((story, index) => (
                 <TableRow key={index}>
-                  <TableRowColumn style={{width:'40%',padding:'10px 0 10px 0'}}><TopArticle detail={data} /></TableRowColumn>
-                  <TableRowColumn style={{width:'15%',paddingRight:0,paddingLeft:0,textAlign:'center'}}>{data.writer.display}</TableRowColumn>
-                  <TableRowColumn style={{width:'15%',paddingRight:0,paddingLeft:0,textAlign:'center'}}>{data.column.name}</TableRowColumn>
-                  <TableRowColumn style={{width:'15%'}}>{'vote : '+data.votes.total}<br/>{'comment : '+data.comments.count}</TableRowColumn>
-                  <TableRowColumn style={{width:'15%',wordWrap:'break-word',whiteSpace:'pre-wrap'}}>{moment(data.published).format('lll')}</TableRowColumn>
+                  <TableRowColumn style={{width:'40%',padding:'10px 0 10px 0'}}><StoryTitle story={story} /></TableRowColumn>
+                  <TableRowColumn style={{width:'15%',paddingRight:0,paddingLeft:0,textAlign:'center'}}><Link to={story.writer.url}>{story.writer ? story.writer.display : ''}</Link></TableRowColumn>
+                  <TableRowColumn style={{width:'15%',paddingRight:0,paddingLeft:0,textAlign:'center'}}><Link to={story.column.url}>{story.column ? story.column.name : ''}</Link></TableRowColumn>
+                  <TableRowColumn style={{width:'15%'}}>{'vote : '+story.votes.total}<br/>{'comment : '+story.comments.count}</TableRowColumn>
+                  <TableRowColumn style={{width:'15%',wordWrap:'break-word',whiteSpace:'pre-wrap'}}>{moment(story.published).format('lll')}</TableRowColumn>
                 </TableRow>
-              )):''}
+              )) : ''}
             </TableBody>
           </Table>
         </Section2>

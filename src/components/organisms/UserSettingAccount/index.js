@@ -104,7 +104,7 @@ const UserSettingProfile = React.createClass({
 
     api.getUser(null, auth.getToken())
     .then(user => {
-      console.log('user', user)
+      //console.log('user', user)
       this.setState({
         user: user
       })
