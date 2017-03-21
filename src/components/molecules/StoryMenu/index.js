@@ -16,15 +16,22 @@ const StoryMenu = ({style,className,child,path,linkPath}) => {
         <IconButton 
           onClick={()=>LinkTo('/stories/columns')}
           style={{padding:'0px'}}
-          iconStyle={{fontSize:'35px',color:window.location.pathname=='/stories/columns'?'#00B2B4':'#8f8f8f'}}>
-          <FontIcon className="material-icons" >apps</FontIcon>
+          iconStyle={{
+            fontSize:'35px',
+            color:window.location.pathname=='/stories/columns' ? '#00B2B4' : '#8f8f8f'
+          }}>
+          <FontIcon className="material-icons">apps</FontIcon>
         </IconButton>
         <FlatButton
           label="STORIES"
-          onClick={()=>LinkTo('/stories')}
+          onClick={()=>LinkTo('/stories/columns')}
           className='nunito-font'
           style={{marginTop:'5px'}}
-          labelStyle={{fontSize:'18px',color:window.location.pathname=='/stories'?'#00B2B4':'#8f8f8f',fontWeight:window.location.pathname=='/stories'?'bold':'normal'}}
+          labelStyle={{
+            fontSize:'18px',
+            color:window.location.pathname==='/stories/columns' ? '#00B2B4' : '#8f8f8f',
+            fontWeight:window.location.pathname==='/stories/columns' ? 'bold' : 'normal'
+          }}
         />
         {!path?'':<FlatButton
           label={next}

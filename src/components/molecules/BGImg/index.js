@@ -1,14 +1,15 @@
 import React, {PropTypes} from 'react'
+import {Link} from 'react-router'
 import styled, {css} from 'styled-components'
 import {GradientOverlay} from 'components'
 
-
-const Img = styled.div`
+const ImgLink = styled(Link)`
   display:block;
   background-position:center;
   background-size:cover;
   overflow:auto;
 `
+
 const Filter = styled(GradientOverlay)`
   position:relative;
   display:block;
@@ -19,14 +20,14 @@ const Filter = styled(GradientOverlay)`
   height:100%;
 `
 
-const BGImg = ({style,className,src,opacity,child,children}) => {
+const BGImg = ({style, className, src, url, opacity, child, children}) => {
 	return (
-			<Img style={{...style,backgroundImage:'url('+src+')'}} className={className}>
-        <Filter opacity={opacity} >
-          {child?child:''}
-          {children}
-        </Filter>
-      </Img>
+  	<ImgLink to={url} style={{...style, backgroundImage:'url('+src+')'}} className={className}>
+      <Filter opacity={opacity} >
+        {child?child:''}
+        {children}
+      </Filter>
+    </ImgLink>
 	)
 }
 

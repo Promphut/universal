@@ -3,12 +3,14 @@ import {Link} from 'react-router';
 import styled from 'styled-components'
 import {BGImg} from 'components'
 import {findDOMNode as dom} from 'react-dom'
-import Request from 'superagent'
+//import Request from 'superagent'
+import api from 'components/api'
 
 const Container = styled.div`
   width:324px;
   position:relative;
 `
+
 const Head = styled.div`
   color:#8F8F8F;
   font-size:20px;
@@ -20,6 +22,7 @@ const Head = styled.div`
   padding:2px;
   font-family:'Nunito'
 `
+
 const Divider =styled.div`
   height:1px;
   width:100%;
@@ -28,6 +31,7 @@ const Divider =styled.div`
   z-index:-5;
   position:relative;
 `
+
 const Column = styled.div`
   font-weight:bold;
   font-size:36px;
@@ -40,12 +44,14 @@ const Con = styled.div`
   width:100%;
   margin:40px 0 0 0;
 `
-const Name = styled.div`
+
+const Name = styled(Link)`
   color:#222;
   font-size:17px;
   width:190px;
   font-weight:bold;
 `
+
 const Img = styled.div`
   width:127px;
   height:75px;
@@ -53,17 +59,19 @@ const Img = styled.div`
   background-position:center;
   background-size:cover;
 `
+
 const Vote = styled.div`
   color:#8F8F8F;
   font-size:13px;
   margin-top:15px;
 `
-const TrendingSideBarInner = ({style,detail, index})=>{
-  var {title,comments,votes,cover} = detail
+
+const TrendingSideBarInner = ({style, detail, index}) => {
+  let {title,comments,votes,cover} = detail
   return(
     <Con style={{...style}}>
-      <BGImg src={cover} style={{width:'127px',height:'75px',float:'right'}}/>
-      <Name className="sans-font">{index+'.'+title}</Name>
+      <BGImg url={detail.url} src={cover} style={{width:'127px',height:'75px',float:'right'}}/>
+      <Name to={detail.url} className="sans-font">{index+'.'+title}</Name>
       <Vote className="sans-font">{votes.total} Votes {''+ comments.count} Comments</Vote>
     </Con>
   )
@@ -82,17 +90,11 @@ const TrendingSideBar = React.createClass({
 	},
 
   getPopular(){
-    var self =this
-    Request
-      .get(config.BACKURL+'/publishers/'+config.PID+'/feed?type=story&sort=latest,status=1')
-      .set('Accept','application/json')
-      .end((err,res)=>{
-        if(err)throw err
-        else{
-          console.log('TrendingSideBar', res.body)
-          self.setState({popular:res.body.feed})
-        }
-      })
+    // sort will be changed to 'trending' later when implemented
+    api.getFeed('story', {status:1}, 'latest')
+    .then(result => {
+      this.setState({popular:result.feed})
+    })
   },
 
   // Slider(){
@@ -125,14 +127,18 @@ const TrendingSideBar = React.createClass({
   // },
 
   render(){
-    var {popular} = this.state
-    var {style} = this.props
-    var tn = []
-    for(let i=0;i<6;i++){
-      tn.push(
-        <Link to="{popular[i].url}" key={i}><TrendingSideBarInner detail={popular[i]} index={i+1}/></Link>
-      )
+    let {popular} = this.state
+    console.log('popular', popular)
+    let {style} = this.props
+    let tn = []
+    if(popular.length > 0){
+      for(let i=0;i<6;i++){
+        tn.push(
+          <TrendingSideBarInner detail={popular[i]} index={i+1}/>
+        )
+      }
     }
+
     return(
       <Container style={{...style}} ref='contain'>
         <Divider/>

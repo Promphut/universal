@@ -42,6 +42,7 @@ const Container = styled.div`
     }
   } 
 `
+
 const Div = styled.div`
   color:#8F8F8F;
   font-size:13px;
@@ -49,7 +50,9 @@ const Div = styled.div`
     font-size:12px;
   } 
 `
-const Name = styled.div`
+
+const NameLink = styled(Link)`
+  display: block;
   color:#222;
   font-weight:bold;
   font-size:18px;
@@ -57,6 +60,7 @@ const Name = styled.div`
     font-size:15px;
   } 
 `
+
 const BoxText = styled.div`
   float:left;
   width:462px;
@@ -67,12 +71,14 @@ const BoxText = styled.div`
     margin-top:10px;
   } 
 `
+
 const DropDown = styled.div`
   float:right;
   &:hover{
     cursor:pointer;
   }
 `
+
 const DivDes = styled.div`
 
 `
@@ -84,11 +90,11 @@ const ArticleBox = React.createClass({
     }
   },
   
-  handleTouchTap(event){
-    event.preventDefault();
+  handleTouchTap(e){
+    e.preventDefault();
     this.setState({
       open: true,
-      anchorEl: event.currentTarget,
+      anchorEl: e.currentTarget,
     })
   },
 
@@ -99,11 +105,12 @@ const ArticleBox = React.createClass({
   },
 
   render(){
-    var {detail,style} = this.props
-    var {title,cover,writer,column,votes,comments,updated} = detail
-    return(
+    let {detail,style} = this.props
+    let {title,cover,writer,column,votes,comments,updated,url} = detail
+
+    return (
       <Container style={{...style}}>
-        <BGImg src={cover} className='imgWidth mob-hidden' />
+        <BGImg url={url} src={cover} className='imgWidth mob-hidden' />
         <BoxText className='sans-font'>
           <DivDes>
             <DropDown  onClick={this.handleTouchTap}><FontIcon className="material-icons" style={{color:'#8f8f8f'}}>keyboard_arrow_down</FontIcon>
@@ -112,20 +119,21 @@ const ArticleBox = React.createClass({
                 anchorEl={this.state.anchorEl}
                 anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
                 targetOrigin={{horizontal: 'left', vertical: 'top'}}
+                style={{border:'2px solid #00B2B4'}}
                 onRequestClose={this.handleRequestClose}
               >
-                <MenuItem style={{border:'2px solid #00B2B4',color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>share</FontIcon>}>Share</MenuItem>
-                <MenuItem style={{border:'2px solid #00B2B4',color:'#fff',fontSize:'17px',backgroundColor:'#00B2B4'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#fff'}}>link</FontIcon>}>Copy Link</MenuItem>
+                <MenuItem style={{color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>share</FontIcon>}>Share</MenuItem>
+                <MenuItem style={{color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>link</FontIcon>}>Copy Link</MenuItem>
               </Popover>
             </DropDown>
-            <Div>A story of <span style={{textDecoration:'underline'}}>{column.name}</span></Div>
+            <Div>A story of <span style={{textDecoration:'underline'}}><Link to={column.url}>{column.name}</Link></span></Div>
           </DivDes>
-          <BGImg src={cover} className='imgWidth des-hidden'/>
-          <Name style={{marginTop:'10px'}}>{title}</Name>
+          <BGImg url={url} src={cover} className='imgWidth des-hidden'/>
+          <NameLink to={url} style={{marginTop:'10px'}}>{title}</NameLink>
           <div className="row" style={{margin:'10px 0 10px 0'}}>
-            <Avatar src={writer.pic.medium}/>
+            <Link to={writer.url}><Avatar src={writer.pic.medium}/></Link>
             <div style={{margin:'5px 0 0 8px'}}>
-              <Name style={{fontSize:'14px'}}>{writer.display} </Name>
+              <NameLink to={writer.url} style={{fontSize:'14px'}}>{writer.display} </NameLink>
               <Div stlye={{fontSize:'12px'}}>{moment(updated).fromNow()} hrs ago</Div>
             </div>
           </div>

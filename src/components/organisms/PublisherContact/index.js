@@ -24,12 +24,14 @@ const Container = styled.form`
     text-transform:uppercase;
   }
 `
+
 const Flex = styled.div`
   display:flex;
   items-align:center;
   flex-flow: row wrap;
   margin:50px 0 0 50px;
 `
+
 const Title = styled.div`
   flex:2 150px;
   max-width:150px;
@@ -37,6 +39,7 @@ const Title = styled.div`
   font-size:17px;
   padding-top:15px;
 `
+
 const Edit = styled.div`
   flex:6 450px;
   max-width:450px;
@@ -49,6 +52,7 @@ const TextStatus = styled.div`
   float:left;
   margin:10px 0 0 15px;
 ` 
+
 const AddTag = styled.div`
   color:#8F8F8F;
   font-size:16px;
@@ -63,6 +67,7 @@ const SendBox = styled.div`
   margin:20px 0 0 0;
   padding:15px;
 `
+
 const PublisherContact = React.createClass({
   getInitialState(){
   
@@ -187,7 +192,8 @@ const PublisherContact = React.createClass({
   },
 
   render(){
-    var {error,textStatus,value,alert,alertConfirm,alertWhere,alertChild,alertDesc,snackbar,snackbarMS,cate} = this.state
+    let {error,textStatus,value,alert,alertConfirm,alertWhere,alertChild,alertDesc,snackbar,snackbarMS,cate} = this.state
+    
     return(
       <Container onSubmit={this.updateData}>
         <Snackbar

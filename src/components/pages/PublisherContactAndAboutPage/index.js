@@ -14,13 +14,13 @@ const PublisherContactAndAboutPage = React.createClass({
 		return {}
 	},
 
-  render(){
+  	render(){
 		return (
-      <Container>
-        <PublisherContact />
-        <PublisherAbout />
-      </Container>
-		  )
+	      <Container>
+	        <PublisherContact />
+	        <PublisherAbout />
+	      </Container>
+	  	)
 	}
 });
 

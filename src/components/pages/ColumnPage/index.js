@@ -101,7 +101,7 @@ const ColumnPage = React.createClass({
 	},
 
 	getColumnFeed(col){
-		let {id, name, shortDesc} = col
+		let {id, name, shortDesc, cover} = col
 
 		api.getFeed('story', {column: id, status: 1})
 		.then(result => {
@@ -124,10 +124,10 @@ const ColumnPage = React.createClass({
 
 		return (
 		    <Wrapper>
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
-					<BGImg src="/tmp/a-story/pic-min.jpg" style={{width:'100%',height:'510px'}} child={ChildCover}/>
+		      	<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
+				<BGImg src={column.cover} style={{width:'100%',height:'510px'}} child={ChildCover}/>
 
-		      <Content >
+		      	<Content>
 			      <Main>
 						<StoryMenu style={{padding:'15px 0 15px 0',margin:'0 0 50px 0'}} next='FUND'/>
 						<TextLine className='sans-font'>Latest</TextLine>
@@ -142,7 +142,7 @@ const ColumnPage = React.createClass({
 			      <Aside>
 						<TrendingSideBar stop={this.state.stopPos}/>
 					</Aside>
-		      </Content>
+		      	</Content>
 		   </Wrapper>
 		)
 	}

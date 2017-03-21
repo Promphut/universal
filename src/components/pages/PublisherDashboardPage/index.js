@@ -319,7 +319,7 @@ const PublisherDashboardPage = React.createClass({
                   <TableRowColumn style={{width:'40%',padding:'10px 0 10px 0'}}><StoryTitle story={story} /></TableRowColumn>
                   <TableRowColumn style={{width:'15%',paddingRight:0,paddingLeft:0,textAlign:'center'}}><Link to={story.writer.url}>{story.writer ? story.writer.display : ''}</Link></TableRowColumn>
                   <TableRowColumn style={{width:'15%',paddingRight:0,paddingLeft:0,textAlign:'center'}}><Link to={story.column.url}>{story.column ? story.column.name : ''}</Link></TableRowColumn>
-                  <TableRowColumn style={{width:'15%'}}>{'vote : '+story.votes.total}<br/>{'comment : '+story.comments.count}</TableRowColumn>
+                  <TableRowColumn style={{width:'15%'}}>{story.views} Views<br/>{story.shares.total} Shares</TableRowColumn>
                   <TableRowColumn style={{width:'15%',wordWrap:'break-word',whiteSpace:'pre-wrap'}}>{moment(story.published).format('lll')}</TableRowColumn>
                 </TableRow>
               )) : ''}
