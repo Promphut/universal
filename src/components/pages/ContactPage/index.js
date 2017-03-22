@@ -16,7 +16,10 @@ const Dropdown = styled.div`
 `
 
 const DropdownContent = styled.div`
-  display: ${props => props.dropdown ? 'block' : 'none'}
+  // visibility: ${props => props.dropdown ? 'visible' : 'hidden'};
+  // opacity: ${props => props.dropdown ? '1' : '0'};
+  // transition: ${props => props.dropdown ? '.2s' : '0s'};
+  display: ${props => props.dropdown ? 'block' : 'none'};
   position: absolute;
   margin: 5px;
   padding: 0px;
