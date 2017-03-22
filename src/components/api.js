@@ -29,7 +29,8 @@ api.getUser = (uid, token) => {
 
 	if(uid!=null){
 		return Request
-		.get(config.BACKURL+'/users/'+uid+'?'+(token?'token='+token+'&':''))
+		.get(config.BACKURL+'/users/'+uid)
+		.query({token: token})
 		.set('Accept','application/json')
 		.then(res => {
 			return res.body.user
@@ -94,7 +95,8 @@ api.getColumnFromSlug = (slug) => {
 
 api.getCookieAndToken = (token) => {
 	return Request
-    .get(config.BACKURL + '/publishers/'+config.PID+'/menu' + (token ? '?token='+token : ''))
+    .get(config.BACKURL + '/publishers/'+config.PID+'/menu')
+    .query({token: token})
     .set('Accept', 'application/json')
     .then(res => {
       return res.body
@@ -180,7 +182,8 @@ api.deleteStory = (aid) => {
 	if(!token) return api.userNotFoundPromise()
 
 	return Request
-	.delete(config.BACKURL+'/stories/'+aid+'?token='+token)
+	.delete(config.BACKURL+'/stories/'+aid)
+	.set('x-access-token', token)
 	.then(res => {
 		return res.body
 	}, api.err)
@@ -191,10 +194,75 @@ api.setStoryStatus = (aid, status) => {
 	if(!token) return api.userNotFoundPromise()
 
 	return Request
-	.patch(config.BACKURL+'/stories/'+aid+'?token='+token)
+	.patch(config.BACKURL+'/stories/'+aid)
+	.query({token: token})
 	.send({
 		story:{status: status}
 	})
+	.then(res => {
+		return res.body
+	}, api.err)
+}
+
+// token can be null in that case the public publisher object will be fetched.
+api.getPublisher = (token) => {
+	return Request
+	.get(config.BACKURL+'/publishers/'+config.PID)
+	.query({token: token})
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body.publisher
+	}, api.err)
+}
+
+api.updatePublisher = (publisher) => {
+	return Request
+	.patch(config.BACKURL+'/publishers/'+config.PID)
+	.set('x-access-token', auth.getToken())
+	.set('Accept','application/json')
+	.send({
+		publisher: publisher
+	})
+	.then(res => {
+		return res.body.publisher
+	}, api.err)
+}
+
+// need only contactCat.catName, others are optional.
+api.newContactCat = (contactCat) => {
+	return Request
+	.post(config.BACKURL+'/publishers/'+config.PID+'/contactcats')
+	.set('x-access-token', auth.getToken())
+	.set('Accept','application/json')
+	.send({
+		contactCat: contactCat
+	})
+	.then(res => {
+		return res.body.contactCat
+	}, api.err)
+}
+
+api.updateContactCat = (contactCat) => {
+	if(!contactCat || !contactCat._id) throw new Error('contactCat is required.')
+
+	return Request
+	.patch(config.BACKURL+'/publishers/'+config.PID+'/contactcats/'+contactCat._id)
+	.set('x-access-token', auth.getToken())
+	.set('Accept','application/json')
+	.send({
+		contactCat: contactCat
+	})
+	.then(res => {
+		return res.body.contactCat
+	}, api.err)
+}
+
+api.deleteContactCat = (conid) => {
+	if(!conid) throw new Error('conid is required.')
+
+	return Request
+	.delete(config.BACKURL+'/publishers/'+config.PID+'/contactcats/'+conid)
+	.set('x-access-token', auth.getToken())
 	.then(res => {
 		return res.body
 	}, api.err)

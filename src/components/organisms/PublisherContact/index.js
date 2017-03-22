@@ -7,6 +7,8 @@ import MenuItem from 'material-ui/MenuItem';
 import Request from 'superagent'
 import auth from 'components/auth'
 import Snackbar from 'material-ui/Snackbar';
+import api from 'components/api'
+import utils from 'components/utils'
 
 const Container = styled.form`
   width:100%;
@@ -69,105 +71,162 @@ const SendBox = styled.div`
 `
 
 const PublisherContact = React.createClass({
+  defaultContactCat: {
+    _id:'',
+    toEmail: '',
+    catName: '',
+    desc: ''
+  },
+
   getInitialState(){
-  
-    return{
+    let cats = this.props.contactCats || []
+
+    return {
       textStatus:'Unsave',
-      value:1,
       error:false,
       alert:false,
       snackbar:false,
       snackbarMS:'',
-      cate:[
-        {value:1,text:'General'}
-      ]
+
+      selectContactCat: cats[0] || this.defaultContactCat, // selected contactCat
+      contactCats:cats // array of contactCat
     }
   },
 
-  componentDidMount(){
-     this.getPublisherId()
-  },
-
-  getPublisherId(cb=function(){}){
-    var self = this
-    Request
-      .get(config.BACKURL+'/publishers/'+config.PID)
-      .set('Accept','application/json')
-      .end((err,res)=>{
-        if(err) throw err 
-        else{
-          //console.log(res.body)
-          self.setState({publisher:res.body})
-          self.setData()
-          cb()
-        }
+  resetData(){
+    let cat = this.getCatById(this.state.selectContactCat._id)
+    if(!_.isEmpty(cat)) 
+      this.setState({
+        selectContactCat: cat
       })
   },
 
-  setData(){
-    var {contactCat} = this.state.publisher.publisher
-    this.setState({value:typeof contact =="undefined"?1:contact.catName})
-    document.getElementById('toEmail').value = typeof contact=="undefined"?'':contact.toEmail
-    document.getElementById('desc').value = typeof contact== "undefined"?'':contact.desc
+  componentWillReceiveProps(nextProps){
+    let cats = nextProps.contactCats || []
+    let selectContactCat = nextProps.selectContactCat || cats[0] || this.defaultContactCat
+
+    this.setState({
+      selectContactCat: selectContactCat, 
+      contactCats: cats
+    })
   },
 
-  updateData(e){
-    e.preventDefault()
-    var self = this
-    var data = {
-      publisher : {
-        contactCat:{
-          catName:this.state.value,
-          toEmail:document.getElementById('toEmail').value,
-          desc:document.getElementById('desc').value
-        },
-      }
-    }
-    Request
-      .patch(config.BACKURL+'/publishers/'+config.PID+'?token='+auth.getToken())
-      .set('x-access-token', auth.getToken())
-      .set('Accept','application/json')
-      .send(data)
-      .end((err,res)=>{
-        if(err) self.setState({textStatus:res.body.error.message,error:true})
-        else{
-          self.setState({textStatus:'Saved successfully',error:false})
-        }
+  newContactCat(){
+    let contactCat = { catName: document.getElementById('newCate').value }
+    if(!contactCat.catName) return 
+
+    api.newContactCat(contactCat)
+    .then(_cat => {
+      let cats = this.state.contactCats.slice()
+      cats.push(_cat)
+
+      this.setState({
+        selectContactCat: _cat,
+        contactCats: cats,
+
+        alert:false,
+        alertDesc:'',
+        alertChild:'',
+        snackbar:true,
+        snackbarMS:'Create New Category Complete !'
       })
+    })
   },
 
-  handleChange(event, index, value){
-    this.setState({value})
+  updateContactCat(e){
+    if(e) e.preventDefault()
+
+    let update = this.state.selectContactCat
+    if(_.isEmpty(update)) return 
+
+    // the hard part is to update contactCat in the contactCats array as well.
+    let cats = this.state.contactCats.slice() 
+    let cat = _.findLast(cats, {_id: update._id})
+    _.assign(cat, update)
+
+    api.updateContactCat(update)
+    .then(_cat => {
+      this.setState({
+        selectContactCat: _cat,
+        contactCats: cats,
+
+        textStatus:'Saved successfully',
+        error:false
+      })
+    })
+    .catch(err => {
+      this.setState({
+        textStatus:err.message,
+        error:true
+      })
+    })
   },
 
-  createContact(e){
-    e.preventDefault()
-    //console.log(e)
-    
+  // convert contactCats to MenuItems
+  toMenuItems(){
+    let items = []
+    this.state.contactCats.map((cat, index) => {
+      items.push({text:cat.catName, value:cat._id})
+    })
+    //console.log('items', items)
+    return items
   },
 
-  selectItem(e,val){
-    this.setState({value:val})
+  changeSelectContactCat(e, idVal){
+    let cat = this.getCatById(idVal)
+    this.setState({
+      selectContactCat: cat
+    })
+  },
+
+  getCatById(_id){
+    return _.findLast(this.state.contactCats, {_id: _id}) || {}
+  },
+
+  catChanged(e){
+    const name = e.target.name
+    let cat = {...this.state.selectContactCat}
+    utils.set(cat, name, e.target.value)
+    this.setState({
+      selectContactCat: cat
+    })
   },
 
   handleRequestClose(){
-    this.setState({alert:false,alertDesc:''})
+    this.setState({
+      alert:false,
+      alertDesc:''
+    })
   },
 
   alertDelete(e){
-    this.setState({alert:true,alertWhere:e.currentTarget,alertDesc:'Delete is permanent. Are you sure?',alertConfirm:this.deleteCate})
+    this.setState({
+      alert:true,
+      alertWhere:e.currentTarget,
+      alertDesc:'Delete is permanent. Are you sure?',
+      alertConfirm:this.deleteCate
+    })
   },
 
   deleteCate(){
-    var self = this
-    Request
-      .delete(config.BACKURL+'/publishers/'+config.PID+'/contactcats/'+this.state.value)
-      .end((err,res)=>{
-        if(err)throw err
-        else{
-          self.setState({alert:false,alertDesc:'',snackbar:true,snackbarMS:'Delete Category Complete !'})
-        }
+    let conid = this.state.selectContactCat._id
+
+    api.deleteContactCat(conid)
+    .then(res => {
+      // remove delete on from contactCats and selectContactCat
+      let cats = this.state.contactCats
+      cats = _.reject(cats, {_id: conid})
+
+      this.setState({
+        contactCats: cats,
+        selectContactCat: cats[0] || this.defaultContactCat,
+
+        alert:false,
+        alertDesc:'',
+        snackbar:true,
+        snackbarMS:'Delete Category Complete !'
       })
+    })
   },
 
   alertNew(e){
@@ -175,27 +234,22 @@ const PublisherContact = React.createClass({
       alert:true,
       alertWhere:e.currentTarget,
       alertChild:<div className='row'><TextField hintText="Column Name" id='newCate' style={{width:'170px',margin:'10px 15px 0 15px'}}/></div>,
-      alertConfirm:this.newCate
+      alertConfirm:this.newContactCat //this.newCate
     })
   },
 
-  newCate(){
-    var val = 2
-    var cate = this.state.cate.push({value:val,text:document.getElementById('newCate').value})
-    this.setState({cate:cate,alert:false,alertDesc:'',alertChild:'',snackbar:true,snackbarMS:'Create New Category Complete !'})
-    this.setState({value:val})
-  },
-
-
   closeSnackbar(){
-    this.setState({snackbar:false,snackbarMS:''})
+    this.setState({
+      snackbar:false,
+      snackbarMS:''
+    })
   },
 
   render(){
-    let {error,textStatus,value,alert,alertConfirm,alertWhere,alertChild,alertDesc,snackbar,snackbarMS,cate} = this.state
-    
-    return(
-      <Container onSubmit={this.updateData}>
+    let {error,textStatus,alert,alertConfirm,alertWhere,alertChild,alertDesc,snackbar,snackbarMS, contactCats, selectContactCat} = this.state
+
+    return (
+      <Container onSubmit={this.updateContactCat}>
         <Snackbar
           open={snackbar}
           message={snackbarMS}
@@ -219,34 +273,40 @@ const PublisherContact = React.createClass({
               child={alertChild} 
               confirm={alertConfirm}/>
               <DropdownWithIcon
-                onChange={this.selectItem} 
-                menuItem={cate} 
-                value={value}
+                onChange={this.changeSelectContactCat} 
+                menuItem={ this.toMenuItems(contactCats) } 
+                value={ selectContactCat._id }
                 editMenu={
                   [<MenuList onClick={this.alertDelete} key='delete'>Delete</MenuList>,
                   <MenuList onClick={this.alertNew} key='new'>+ New Category</MenuList>]}
                 />
-            <SendBox>
+
+            { contactCats.length > 0 && <SendBox>
               <TextField
-                defaultValue="unknow@mail.com"
-                floatingLabelText="Sent to email"
+                floatingLabelText="Sent to Email"
                 floatingLabelFixed={true}
+                value={selectContactCat.toEmail || ''}
+                name='toEmail'
                 id='toEmail'
+                onChange={this.catChanged}
               /><br/><br/>
               <TextField
-                defaultValue="Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown "
                 multiLine={true}
                 fullWidth={true}
                 floatingLabelText="Description"
                 floatingLabelFixed={true}
+                value={selectContactCat.desc || ''}
+                name='desc'
                 id='desc'
+                onChange={this.catChanged}
                 rows={2}
                 rowsMax={10}
               />
-            </SendBox>
+            </SendBox> }
+
           </Edit>
         </Flex>
-        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error?'#D8000C':'#00B2B4'}}>{textStatus}</TextStatus></div>
+        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.resetData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error?'#D8000C':'#00B2B4'}}>{textStatus}</TextStatus></div>
       </Container>
     )
   },

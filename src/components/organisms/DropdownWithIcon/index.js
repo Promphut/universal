@@ -65,7 +65,8 @@ const DropdownWithIcon = React.createClass({
   componentWillReceiveProps(nextProps){
     if(nextProps.value!=this.props.value){
       this.setState({value:nextProps.value})
-    }else if(nextProps.menuItem!=this.props.menuItem){
+    }
+    if(nextProps.menuItem!=this.props.menuItem){
       this.setState({menuItem:nextProps.menuItem})
     }
   },
