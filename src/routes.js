@@ -128,6 +128,8 @@ const hasRoles = (roles) => {
       
       authorized = authorized || (_.filter(roles, compare).length > 0)
     })
+
+    //console.log('authorized', authorized)
     
     if(!authorized) return toError(nextState, replace, next)(new Error('Unauthorized access'))
 
@@ -169,6 +171,7 @@ const routes = (
       <Route path='columns' component={AllColumn}/>
       <Route path=':columnSlug' component={ColumnPage} onEnter={getColumnFromSlug}/>
     </Route>
+
     <Route path='publisher' component={PublisherPage} onEnter={hasRoles([])}/>
     <Route path="mood" component={MoodboardPage} />
     <Route path="about" component={AboutPage} />
@@ -179,11 +182,11 @@ const routes = (
     <Route path="signup" component={()=>(<SignUpPage visible={true}/>)} />
     <Route path="logout" onEnter={logout} />
 
-    <Route path='editor' component={PublisherEditor}>
-      <IndexRoute component={PublisherDashboardPage} onEnter={getPublisherId}/>
+    <Route path='editor' component={PublisherEditor} onEnter={hasRoles(['ADMIN', 'WRITER', 'EDITOR'])}>
+      <IndexRoute component={PublisherDashboardPage} />
       <Route path='settings' component={PublisherSettingPage} onEnter={getPublisherId}/>
-      <Route path='stories' component={PublisherStoryPage} onEnter={getPublisherId}/>
-      <Route path='contact' component={PublisherContactAndAboutPage} onEnter={getPublisherId}/>
+      <Route path='stories' component={PublisherStoryPage} />
+      <Route path='contact' component={PublisherContactAndAboutPage}/>
       <Route path='stories/new' component={NewStory}/>
       <Route path='columns/:cid' >
         <Route path='settings' component={ColumnSettingPage} onEnter={getColumnId}/>

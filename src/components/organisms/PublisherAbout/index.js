@@ -4,9 +4,17 @@ import {PrimaryButton,SecondaryButton,UploadPicture} from 'components'
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import Editor from 'react-md-editor';
 import auth from 'components/auth'
-import Request from 'superagent'
+import api from 'components/api'
+import $ from 'jquery';
+
+import "blueimp-file-upload/js/vendor/jquery.ui.widget.js";
+import "blueimp-file-upload/js/jquery.iframe-transport.js";
+import "blueimp-file-upload/js/jquery.fileupload.js";
+import "blueimp-file-upload/js/jquery.fileupload-image.js";
+
+import MediumEditor from 'medium-editor'
+require('medium-editor-insert-plugin')($);
 
 const Container = styled.form`
   width:100%;
@@ -23,76 +31,15 @@ const Container = styled.form`
     font-size:18px;
     text-transform:uppercase;
   }
-  .MDEditor_editor {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  overflow: hidden;
-  position: relative;
-}
-.MDEditor_toolbar {
-  margin-bottom: 4px;
-  margin-top: 4px;
-}
-.MDEditor_toolbarButton {
-  background: #eee;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  cursor: pointer;
-  display: inline-block;
-  margin-right: 4px;
-  padding: 10px 0;
-  text-align: center;
-  vertical-align: middle;
-  width: 40px;
-  transition: all 180ms;
-  -webkit-transition: all 180ms;
-}
-.MDEditor_toolbarButton:hover,
-.MDEditor_toolbarButton:focus {
-  background-color: white;
-  border-color: rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-  outline: none;
-  transition: none;
-  -webkit-transition: none;
-}
-.MDEditor_toolbarButton:active,
-.MDEditor_toolbarButton--pressed {
-  background-color: rgba(0, 0, 0, 0.15);
-  border-color: rgba(0, 0, 0, 0.1);
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1);
-}
-.MDEditor_toolbarButton:active:hover,
-.MDEditor_toolbarButton--pressed:hover {
-  background: rgba(0, 0, 0, 0.2);
-}
-.MDEditor_toolbarButton_icon {
-  display: inline-block;
-  height: 16px;
-  width: 16px;
-}
-.MDEditor_toolbarButton_icon > svg {
-  height: 16px;
-  width: 16px;
-}
-.MDEditor_toolbarButton_label {
-  display: none;
-}
-.MDEditor_toolbarButton_label-icon {
-  display: inline-block;
-  font-size: 16px;
-  font-weight: bold;
-  line-height: .9;
-  height: 16px;
-  text-transform: uppercase;
-}
 `
+
 const Flex = styled.div`
   display:flex;
   items-align:center;
   flex-flow: row wrap;
-  margin:50px 0 0 50px;
+  
 `
+
 const Title = styled.div`
   flex:2 150px;
   max-width:150px;
@@ -100,6 +47,7 @@ const Title = styled.div`
   font-size:17px;
   padding-top:15px;
 `
+
 const Edit = styled.div`
   flex:6 100%;
   max-width:100%;
@@ -112,6 +60,7 @@ const TextStatus = styled.div`
   float:left;
   margin:10px 0 0 15px;
 ` 
+
 const AddTag = styled.div`
   color:#8F8F8F;
   font-size:16px;
@@ -120,82 +69,124 @@ const AddTag = styled.div`
   display:inline;
 `
 
+const Paper = styled.div`
+  position:relative;
+  width:100%;
+  min-height:500px;
+  &:focus{
+    outline: none;
+  }
+`
 
 const PublisherAbout = React.createClass({
   getInitialState(){
-    return{
+    return {
       textStatus:'Unsave',
-      value:1,
-      code: "# Markdown",
       error:false
     }
   },
 
+  componentWillReceiveProps(nextProps){
+    this.editor.setContent(nextProps.aboutUs || '')
+  },
+
+  resetData(){
+    if(this.props.aboutUs) this.editor.setContent(this.props.aboutUs)
+  },
+
   componentDidMount(){
-    this.getPublisherId()
-  },
-
-  getPublisherId(){
-    var self = this
-    var user = auth.getUser()
-    Request
-      .get(config.BACKURL+'/publishers/'+config.PID)
-      .set('Accept','application/json')
-      .end((err,res)=>{
-        if(err) throw err 
-        else{
-          self.setState({publisher:res.body})
-          self.setData()
-        }
-      })
-  },
-
-  setData(){
-    var {aboutUs} = this.state.publisher.publisher
-    this.setState({code:!aboutUs?'# markdown !!!':aboutUs})
-  },
-
-  updateData(e){
-    e.preventDefault()
-    var data = {
-      publisher : {
-        aboutUs:this.state.code
+    this.editor = new MediumEditor('#paper', {
+      toolbar: {
+        buttons: [
+          {name: 'bold',contentDefault: '<span class="fa fa-bold" ></span>'},
+          {name: 'italic',contentDefault: '<span class="fa fa-italic" ></span>'},
+          {name: 'underline',contentDefault: '<span class="fa fa-underline" ></span>',},
+          {
+            name: 'h1',
+            action: 'append-h2',
+            aria: 'Header',
+            tagNames: ['h2'],
+            style:{ prop: 'font-size', value: '28px' },
+            contentDefault: '<span class="fa fa-header" style="font-size:24px"><span>',
+            classList: ['custom-class-h1'],
+            attrs: {'data-custom-attr': 'attr-value-h1'}
+          },
+          {
+            name: 'h2',
+            action: 'append-h3',
+            aria: 'Subheader',
+            tagNames: ['h3'],
+            contentDefault: '<span class="fa fa-header" style="font-size:14px"><span>',
+            classList: ['custom-class-h2'],
+            attrs: {'data-custom-attr': 'attr-value-h2'}
+          },
+          {name: 'quote',contentDefault: '<span class="fa fa-quote-left" ></span>'},   
+          {name: 'anchor',contentDefault: '<span class="fa fa-link" ></span>'},   
+          {name: 'justifyLeft',contentDefault: '<span class="fa fa-align-left" ></span>'},
+          {name: 'justifyCenter',contentDefault: '<span class="fa fa-align-center" ></span>'},
+          {name: 'justifyRight',contentDefault: '<span class="fa fa-align-right" ></span>'}
+        ]
+      },
+      targetBlank: true,
+      placeholder: {
+        text: 'Write a story ...'
       }
-    }
-    Request
-      .patch(config.BACKURL+'/publishers/'+config.PID+'?token='+auth.getToken())
-      .set('x-access-token', auth.getToken())
-      .set('Accept','application/json')
-      .send(data)
-      .end((err,res)=>{
-        if(err) self.setState({textStatus:res.body.error.message,error:true})
-        else{
-          this.setState({textStatus:'Saved successfully',error:false})
+    });
+
+    $('#paper').mediumInsert({
+        editor: this.editor,
+        addons: {
+            images: { }
         }
+    });
+
+    // initialize editor content
+    this.editor.setContent(this.state.aboutUs || '')
+  },
+
+  updateAboutUs(e){
+    if(e) e.preventDefault()
+
+    let {paper} = this.editor.serialize()
+
+    if(paper && paper.value){
+      api.updatePublisher({
+        aboutUs: paper.value
       })
-  },
-
-  handleChange(event, index, value){
-    this.setState({value})
-  },
-
-  updateCode(newCode){
-      this.setState({
-          code: newCode
-      });
+      .then(pub => {
+        this.setState({
+          textStatus:'Saved successfully',
+          error:false
+        })
+      })
+      .catch(err => {
+        this.setState({
+          textStatus:err.message,
+          error:true
+        })
+      })
+    }
   },
 
   render(){
-    var {error,textStatus,code,value} = this.state
+    let {error, textStatus, aboutUs} = this.state
+
     return(
-      <Container onSubmit={this.updateData}>
+      <Container onSubmit={this.updateAboutUs}>
         <div  className="head sans-font">About Us</div>
+        <div className='sans-font' style={{marginTop:-30, float:'right'}}>
+          <TextStatus style={{color:error?'#D8000C':'#00B2B4'}}>{textStatus}</TextStatus>
+          <SecondaryButton label='Reset' onClick={this.resetData} style={{float:'left',margin:'0 0 0 20px'}}/>
+          <PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 0 0 20px'}}/>
+        </div>
+        <br/>
         <Flex>
           <Edit>
-            <Editor value={code} onChange={this.updateCode} />
+            <Paper id='paper'>
+
+            </Paper>
           </Edit>
         </Flex>
-        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' type="submit" style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error?'#D8000C':'#00B2B4'}}>{textStatus}</TextStatus></div>
       </Container>
     )
   },
