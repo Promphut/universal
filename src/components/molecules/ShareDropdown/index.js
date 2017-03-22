@@ -1,64 +1,22 @@
 import React from 'react'
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon'
-import FlatButton from 'material-ui/FlatButton';
-import onClickOutside from 'react-onclickoutside'
+import FlatButton from 'material-ui/FlatButton'
+import {Dropdown} from 'components'
 
-const Dropdown = styled.div`
-  float: right;
-
-  &:hover{
-    cursor:pointer;
-  }
-`
-
-const DropdownContent = styled.div`
-  visibility: ${props => props.dropdown ? 'visible' : 'hidden'};
-  opacity: ${props => props.dropdown ? '1' : '0'};
-  transition: .2s;
-  // display: ${props => props.dropdown ? 'block' : 'none'};
-  position: absolute;
-  marginLeft: -5px;
-  padding: 0px;
-  border: 2px solid rgba(0,178,180,1);
-  background: white;
-  z-index: 1;
-`
-
-const ShareDropdown = onClickOutside(React.createClass({
-  getInitialState() {
+const ShareDropdown = React.createClass({
+  getInitialState () {
     return {
       open: false
     }
   },
 
-  handleTouchTap(){
-    if (!this.state.open) {
-      this.setState({
-        open: true
-      })
-    } else {
-      this.setState({
-        open: false
-      })
-    }
-  },
-
-  handleRequestClose(index) {
+  select(index) {
     if (index === 0) {
       console.log('Select Share')
     } else if (index === 1) {
       console.log('Select Copy Link')
     }
-    this.setState({
-      open: false
-    })
-  },
-
-  handleClickOutside() {
-    this.setState({
-      open: false
-    })
   },
 
   render() {
@@ -81,25 +39,24 @@ const ShareDropdown = onClickOutside(React.createClass({
           label={buttons[i]}
           labelStyle={{fontWeight: 'bold', fontSize: '15px', color: '#00B2B4', fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
           style={{width: '130px', textAlign: 'left', display: 'inline-block'}}
-          onTouchTap={() => this.handleRequestClose(i)}
+          onTouchTap={() => this.select(i)}
         />
       )
       button.push(<br/>)
     }
 
+    const buttonDropdown = (
+      <FontIcon className="material-icons" style={{color:'#8f8f8f'}}>
+        keyboard_arrow_down
+      </FontIcon>
+    )
+
     return(
-      <Dropdown>
-        <FontIcon
-          className="material-icons" style={{color:'#8f8f8f'}}
-           onClick={this.handleTouchTap}
-          >keyboard_arrow_down
-        </FontIcon>
-        <DropdownContent dropdown={this.state.open}>
-          {button}
-        </DropdownContent>
+      <Dropdown button={buttonDropdown} float='right'>
+        {button}
       </Dropdown>
     )
   }
-}))
+})
 
 export default ShareDropdown
