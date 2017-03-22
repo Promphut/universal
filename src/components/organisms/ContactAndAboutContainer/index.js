@@ -50,14 +50,14 @@ const rec = {
 	comment:'3'
 }
 
-const AboutContainer = React.createClass({
+const ContactAndAboutContainer = React.createClass({
   render(){
     return (
       <StickyContainer>
 				<BGImg src="/tmp/a-story/pic-min.jpg" style={{width:'100%',height:'510px'}} />
-        <Sticky style={{zIndex: '999'}}>
+				<Sticky style={{zIndex: '3'}}>
           <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
-        </Sticky>
+				</Sticky>
         <Content>
           <Main>
             {this.props.children}
@@ -86,4 +86,4 @@ const AboutContainer = React.createClass({
   }
 })
 
-export default AboutContainer;
+export default ContactAndAboutContainer;

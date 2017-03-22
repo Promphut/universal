@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {AboutContainer, PrimaryButton, SecondaryButton} from 'components'
+import {ContactAndAboutContainer, PrimaryButton, SecondaryButton} from 'components'
 import TextField from 'material-ui/TextField'
 import FontIcon from 'material-ui/FontIcon'
 import FlatButton from 'material-ui/FlatButton'
@@ -16,7 +16,10 @@ const Dropdown = styled.div`
 `
 
 const DropdownContent = styled.div`
-  display: ${props => props.dropdown ? 'block' : 'none'}
+  // visibility: ${props => props.dropdown ? 'visible' : 'hidden'};
+  // opacity: ${props => props.dropdown ? '1' : '0'};
+  // transition: ${props => props.dropdown ? '.2s' : '0s'};
+  display: ${props => props.dropdown ? 'block' : 'none'};
   position: absolute;
   margin: 5px;
   padding: 0px;
@@ -247,7 +250,7 @@ const ContactPage = React.createClass({
     }
 
     return (
-      <AboutContainer>
+      <ContactAndAboutContainer>
         <Wrapper>
           <Head className='title-font'>{head}</Head>
           <Subhead className='title-font'>What do you want to contact us about?</Subhead>
@@ -311,7 +314,7 @@ const ContactPage = React.createClass({
             <SuccessMessage saved={saved}>Saved successfully</SuccessMessage>
           </ButtonRow>
         </Wrapper>
-      </AboutContainer>
+      </ContactAndAboutContainer>
     )
   }
 })

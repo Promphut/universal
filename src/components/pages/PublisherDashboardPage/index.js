@@ -189,6 +189,7 @@ const PublisherDashboardPage = React.createClass({
     let {totalShare,totalStory,totalView,stories,writers,columns} = this.state
 		return (
       <Container>
+        {/* THESE BELOW IS NOT FOR #1 MVP VERSION 
         <Section1>
           <TabHead>Weekly</TabHead>
           <TabHead>Monthly</TabHead>
@@ -297,7 +298,7 @@ const PublisherDashboardPage = React.createClass({
               </Table>
             </div>
           </div>
-        </Section2>
+        </Section2>*/}
         <Section2 style={{padding:'40px 5px 40px 5px'}}>
           <Table >
             <TableHeader 

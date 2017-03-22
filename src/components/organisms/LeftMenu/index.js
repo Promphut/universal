@@ -15,6 +15,7 @@ const Container = styled.div`
   z-index:10;
   display:${props=> props.open?'block':'none'};
   animation: ${props=> props.open?displayNone:displayBlock} 0.5s forwards;
+  transform: translateZ(100px);
 `
 
 const Container2 = styled.div`
@@ -26,6 +27,7 @@ const Container2 = styled.div`
   z-index:10;
   background:rgba(0,0,0,0.8);
   animation: ${props=> props.open?fadeOut:fadeIn} 0.5s forwards;
+    transform: translateZ(100px);
 `
 
 const displayNone = keyframes`

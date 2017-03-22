@@ -63,6 +63,21 @@ const Wrapper = styled.div`
 		background: #e2e2e2 !important;
 		box-shadow: 0 6px 0 #e2e2e2, 0 12px 0 #e2e2e2 !important;
 	}
+
+
+ 	.avatar {
+		float: right;
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-khtml-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+		position: fixed !important;
+		background: rgba(255,255,255,.0) !important;
+		z-index:2;
+		cursor:pointer;
+	}
 `
 
 const DarkMenuItem = styled(MenuItem)`
@@ -93,6 +108,12 @@ const Container = styled.div`
 	> * {
 		flex: 1 0;
 	}
+`
+
+const Fixed = styled.div`
+	float: right;
+	position: fixed !important;
+	cursor: pointer;
 `
 
 const Hamburger = styled.span`
@@ -184,6 +205,19 @@ const TopBar = React.createClass({
 			user = this.props.user,
 			menu = this.props.menu
 
+		const avatarStyle = {
+			content: '',
+			display: 'block',
+			position: 'absolute',
+			height: '2px',
+			width: '20px',
+			left: '20px',
+			top: '23px',
+			background: '#8d8d8d',
+			boxShadow: '0 6px 0 #8d8d8d, 0 12px 0 #8d8d8d',
+			zIndex: '10000'
+		}
+
 		return (
 			<Wrapper className="menu-font" onMouseOver={this.props.onMouseOver} onMouseOut={this.props.onMouseOut} style={{...this.props.style}}>
 				<div className={this.props.scrolling || 'bar-on-top'}>
@@ -202,14 +236,16 @@ const TopBar = React.createClass({
 						<div style={{textAlign:'right'}}>
 							{status=='LOGGEDIN' && <HideOnTablet><PrimaryButton label="Story" iconName="add" style={{verticalAlign:'middle'}}/></HideOnTablet>}
 							{status=='UNLOGGEDIN' &&  <NotLogin id="not-login"><SecondaryButton label="Sign Up" onClick={this.signup} style={{verticalAlign:'middle'}}/><span>&nbsp; or </span><Link to="/signin" style={{fontWeight:'bold'}}>Sign In</Link></NotLogin>}
+							{status=='LOGGEDIN' &&
+									<ProfileAvatar src={user.pic.medium} size={30} onClick={() => this.openPop('right')}/>
+
+							}
+							{status=='LOGGEDIN' && <RightMenu open={alertRight} close={() => this.handleRequestClose('right')} user={user}/>}
 						</div>
 					</Container>
 
-					{status=='LOGGEDIN' &&
-						<ProfileAvatar src={user.pic.medium} size={30} onClick={() => this.openPop('right')}/>
-					}
-					{status=='LOGGEDIN' && <RightMenu open={alertRight} close={() => this.handleRequestClose('right')} user={user}/>}
-		        </div>
+
+	        </div>
 			</Wrapper>
 		)
 	}

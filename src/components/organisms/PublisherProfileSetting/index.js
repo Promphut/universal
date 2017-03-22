@@ -114,7 +114,8 @@ const PublisherProfileSetting = React.createClass({
   },
 
   render(){
-    var {uploadPhoto,textStatus,error} = this.state
+    let {uploadPhoto,textStatus,error} = this.state
+    
     return(
       <Container onSubmit={this.updateData}>
         <div  className="head sans-font">PROFILE</div>
@@ -141,7 +142,7 @@ const PublisherProfileSetting = React.createClass({
               fullWidth={true}
               floatingLabelText="80 characters"
               floatingLabelFixed={true}
-              rows={3}
+              rows={1}
               rowsMax={10}
               id='description'
             />
@@ -152,7 +153,7 @@ const PublisherProfileSetting = React.createClass({
             <div className="sans-font">Cover picture</div>
           </Title>
           <Edit>
-            <UploadPicture src={uploadPhoto} path='/publishers/11/cover' type='cover'/>
+            <UploadPicture src={uploadPhoto} path={'/publishers/'+config.PID+'/cover'} type='cover'/>
           </Edit>
         </Flex>
         <Flex>

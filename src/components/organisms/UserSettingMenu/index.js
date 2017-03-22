@@ -18,9 +18,35 @@ var styles = {
   }
 }
 
-const User = styled.div`
-  font-size:20px;
-  line-height:1.3;
+const User = styled(Link)`
+  padding-left: 20px;
+  &:hover { color: White; }
+`
+
+const Card = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 30px 30px 30px 30px;
+  font-size: 20px;
+
+  & > * {
+    vertical-align: top;
+    display: inline-block;
+    color: White;
+    margin: 0;
+  }
+`
+
+const Item = styled(ListItem)`
+  padding: 20px;
+  color: White;
+
+  & div div {
+    font-family: 'Nunito', 'Mitr', sans-serif;
+    font-size: 17px;
+    font-weight: bold;
+    padding-left: 10px;
+  }
 `
 
 const SelectableList = makeSelectable(List);
@@ -40,23 +66,29 @@ const UserSettingMenu = React.createClass({
     }
   },
 
-  changePath(e){
-    browserHistory.push(e)
+  changePath(path){
+    browserHistory.push(path)
   },  
 
   render(){
-    let {display, pic} = this.props.user
+    let {display, pic, url} = this.props.user
     if(!display || !pic) return (<div></div>)
 
-    return(
-      <SelectableList value={this.state.selectedIndex}>
-        <ListItem style={{...styles.listItem,padding:'30px 20px 30px 20px'}} primaryText={<User>{display}</User>} leftAvatar={<Avatar src={pic.medium} style={{marginTop:'12px'}} size={50}/>} />
-        <Divider />
-        <ListItem style={{...styles.listItem,padding:'35px 20px 35px 20px'}} onClick={()=>this.changePath('/me/stories')} value='/me/stories' primaryText="My Stories" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>description</FontIcon>} />
-        <Divider />
-        <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/me/settings')} value='/me/settings' primaryText="Profile" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>person</FontIcon>} />
-        <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/me/settings/account')} value='/me/settings/account' primaryText="Account" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>settings</FontIcon>} />
-      </SelectableList>
+    return (
+      <div>
+        <Card>
+          <Avatar src={pic.medium} style={{marginTop:'12px'}} size={50}/>
+          <User to={url}>{display}</User>
+        </Card>
+
+        <SelectableList value={this.state.selectedIndex} style={{padding:1}}>
+          <Divider />
+          <Item style={{...styles.listItem, padding:'35px 20px 35px 20px'}} onClick={()=>this.changePath('/me/stories')} value='/me/stories' primaryText="My Stories" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>description</FontIcon>} />
+          <Divider />
+          <Item style={{...styles.listItem}} onClick={()=>this.changePath('/me/settings')} value='/me/settings' primaryText="Profile" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>person</FontIcon>} />
+          <Item style={{...styles.listItem}} onClick={()=>this.changePath('/me/settings/account')} value='/me/settings/account' primaryText="Account" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>settings</FontIcon>} />
+        </SelectableList>
+      </div>
     )
   },
 })
