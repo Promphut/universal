@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {AboutContainer, PrimaryButton, SecondaryButton} from 'components'
+import {ContactAndAboutContainer, PrimaryButton, SecondaryButton} from 'components'
 import TextField from 'material-ui/TextField'
 import FontIcon from 'material-ui/FontIcon'
 import FlatButton from 'material-ui/FlatButton'
@@ -250,7 +250,7 @@ const ContactPage = React.createClass({
     }
 
     return (
-      <AboutContainer>
+      <ContactAndAboutContainer>
         <Wrapper>
           <Head className='title-font'>{head}</Head>
           <Subhead className='title-font'>What do you want to contact us about?</Subhead>
@@ -314,7 +314,7 @@ const ContactPage = React.createClass({
             <SuccessMessage saved={saved}>Saved successfully</SuccessMessage>
           </ButtonRow>
         </Wrapper>
-      </AboutContainer>
+      </ContactAndAboutContainer>
     )
   }
 })
