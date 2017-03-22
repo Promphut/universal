@@ -66,7 +66,8 @@ const TopBarWithNavigation = React.createClass({
 		let {status} = this.state
 
 		return (
-			<TopBar 
+			<TopBar
+				style={{...this.props.style}} 
 				onScroll={this.handleScroll} 
 				scrolling={this.state.scrolling} 
 				status={this.state.status} 

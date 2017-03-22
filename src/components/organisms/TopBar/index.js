@@ -78,8 +78,7 @@ const HideOnTablet = styled.div`
 `
 
 const Container = styled.div`
-	width: 100%;
-	position: fixed;
+	width: 100vw;
 	left: 0px;
 	background: #FFF;
 	display: flex;
@@ -116,9 +115,8 @@ const Hamburger = styled.span`
 `
 
 const ProfileAvatar = styled(Avatar)`
-	right: 15px;
-	top: 15px;
-	position: fixed;
+	right: 0px;
+	position: relative;
 	z-index:2;
 	cursor:pointer;
 `
@@ -187,7 +185,7 @@ const TopBar = React.createClass({
 			menu = this.props.menu
 
 		return (
-			<Wrapper className="menu-font" onMouseOver={this.props.onMouseOver} onMouseOut={this.props.onMouseOut}>
+			<Wrapper className="menu-font" onMouseOver={this.props.onMouseOver} onMouseOut={this.props.onMouseOut} style={{...this.props.style}}>
 				<div className={this.props.scrolling || 'bar-on-top'}>
 					<IconButton className="hamburger" onClick={() => this.openPop('left')}>
 						<Hamburger/>

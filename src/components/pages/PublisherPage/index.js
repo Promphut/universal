@@ -1,6 +1,6 @@
 import React from 'react'
 import { TopBarWithNavigation, OverlayImg,ArticleBox,ArticleBoxLarge,
-	ThumpnailRow,TopColumnSidebar,TopWriterSidebar,More,BGImg} from 'components'
+	ThumpnailRow,TopColumnSidebar,TopWriterSidebar,More,BGImg,Stick} from 'components'
 import styled from 'styled-components'
 import Request from 'superagent'
 import auth from 'components/auth'
@@ -119,9 +119,9 @@ const PublisherPage = React.createClass({
 		    <StickyContainer>
 					<BGImg src="/tmp/a-story/pic-min.jpg" style={{width:'100%',height:'510px'}} />
 
-					<Sticky style={{zIndex: '999'}}>
-						<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
-					</Sticky>
+					<Stick>
+						<TopBarWithNavigation title={'Title of AomMoney goes here..'}/>
+					</Stick>
 
 					<Content style={{paddingTop:'100px'}}>
 						<Feed>
