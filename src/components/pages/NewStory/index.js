@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link,browserHistory} from 'react-router'
 import styled from 'styled-components'
 import {PrimaryButton,SecondaryButton,UploadPicture,DropdownWithIcon,Alert,MenuList} from 'components'
 import TextField from 'material-ui/TextField';
@@ -14,6 +15,7 @@ import DropDownMenu from 'material-ui/DropDownMenu';
 import AutoComplete from 'material-ui/AutoComplete';
 import Chip from 'material-ui/Chip';
 import moment from 'moment'
+import CircularProgress from 'material-ui/CircularProgress';
 
 import $ from 'jquery';
 
@@ -113,6 +115,13 @@ const Label = styled.div`
   display:inline;
   font-weight:bold;
 `
+const Label2 = styled.div`
+  color:#222;
+  font-size:19px;
+  margin:20px auto 20px auto;
+  font-weight:bold;
+  width:50px;
+`
 const Delete = styled.div`
   color:#bfbfbf;
   font-size:14px;
@@ -129,17 +138,26 @@ const PublisherContact = React.createClass({
     return{
       story:'Write a story ...',
       chooseLayout:null,
-      layout:'',
+      layout:'news',
       open:false,
-      column:'',
+      column:'no',
+
       tag:[],
       addTag:[],
       pureTag:[],
       searchText:'',
+
       columnList:[],
       sid:null,
-      saveStatus:'',
-      prevState:''
+      saveStatus:null,
+      prevState:'',
+
+      alert:false,
+
+      title:'',
+
+      saveOnload:false,
+      publishStatus:''
     }
   },
 
@@ -147,9 +165,11 @@ const PublisherContact = React.createClass({
     //this.editor.setContent(this.state.story)
     this.getTag()
     this.getColumn()
-    setInterval(()=>{
-      this.autoSave()
-    },10000)
+
+  },
+
+  componentWillUnmount(){
+    clearInterval(this.interval);
   },
 
   chooseNews(){
@@ -201,11 +221,31 @@ const PublisherContact = React.createClass({
         editor: this.editor,
         addons: {
             images: {
+              captionPlaceholder: 'Type caption for image',
+              fileUploadOptions: {},
+              styles: { 
+                full: {
+                    label: this.state.layout=='article'?'<span class="fa fa-window-maximize"></span>':''
+                }
+            }
             }
         }
     });
+    this.editor.subscribe('editableInput', this.handleEditableInput);
+    this.interval = setInterval(()=>{
+      this.autoSave()
+    },5000)
     })
   },
+
+  handleEditableInput(e){
+    var allContents = this.editor.serialize()
+    var el =  allContents.paper.value
+    if(el!=this.state.prevState){
+      this.setState({saveStatus:'Unsave'})
+    }
+  },
+
   handleRequestClose(){
     this.setState({open:false})
   },
@@ -235,6 +275,7 @@ const PublisherContact = React.createClass({
       //console.log(res.body)
     })
   },
+
   getColumn(){
     var self = this
     Request
@@ -249,53 +290,52 @@ const PublisherContact = React.createClass({
     })
   },
 
-  selectedTag(sel,index){
-    //console.log('data',sel,'index',index)
-    var addedTag = this.state.addTag
-    var allTag = this.state.pureTag
-    addedTag.push(sel)
-    var tag = this.state.tag
-    var newTag = this.state.tag
-    tag.map((data,index)=>{
-      if(data.text==sel.text){
-        newTag.splice(index,1)
-      }
-    })
-    //tag.splice(sel.valueKey,1)
-    //console.log(addedTag)
-    this.setState({addTag:addedTag,searchText:'',tag:newTag})
-  },
-
   autoSave(){
     var self = this
-    var {prevState} = this.state
-    var allContents = this.editor.serialize(), 
-      el = allContents["element-0"].value;
+    var {prevState,sid,title,column} = this.state
+    var allContents = this.editor.serialize()
+    var el =  allContents.paper.value
+
+    var Story = {
+      story:{
+        title:title,
+        publisher:config.PID,
+        status:0,
+        html:el,
+      }
+    }
+    if(column!='no'){
+      Story.story.column = column
+    }
     if(this.state.sid){
-      Request
-        .patch(config.BACKURL+'/stories/'+this.state.sid+'?token='+auth.getToken())
-        .send({story:{title:'test',publisher:11}})
-        .end((err,res)=>{
-          if(err)throw err
-          else{
-            //console.log(res.body)
-            self.setState({
-              saveStatus:res.body.updated
-            })
-          }
-        })
+      if(prevState!=el&&el!='<p><br></p>'){
+        this.setState({saveStatus:'saving...'})
+        Request
+          .patch(config.BACKURL+'/stories/'+sid+'?token='+auth.getToken())
+          .send(Story)
+          .end((err,res)=>{
+            if(err)throw err
+            else{
+              //console.log(res.body)
+              self.setState({
+                saveStatus:"Saved "+ moment(res.body.story.updated).calendar()
+              })
+            }
+          })
+        self.setState({prevState:el})
+      }
     }else{
-      if(prevState!=el){
+      if(el!='<p><br></p>'||title!=''){
           Request
             .post(config.BACKURL+'/stories?token='+auth.getToken())
-            .send({story:{title:'test',publisher:11}})
+            .send(Story)
             .end((err,res)=>{
               if(err)throw err
               else{
-                console.log(res.body)
+                //console.log(res.body)
                 self.setState({
                   sid:res.body.story._id,
-                  saveStatus:res.body.updated
+                  saveStatus:"Saved "+ moment(res.body.story.updated).calendar()
                 })
               }
             })
@@ -304,12 +344,121 @@ const PublisherContact = React.createClass({
     }
   },
 
+  save(){
+    var self = this
+    var {prevState,sid,title,column} = this.state
+    var allContents = this.editor.serialize()
+    var el =  allContents.paper.value
+    var Story = {
+      story:{
+        title:title,
+        publisher:config.PID,
+        status:0,
+        html:el,
+      }
+    }
+    if(column!='no'){
+      Story.story.column = column
+    }
+    Request
+      .patch(config.BACKURL+'/stories/'+sid+'?token='+auth.getToken())
+      .send(Story)
+      .end((err,res)=>{
+        if(err)throw err
+        else{
+          console.log(res.body)
+          self.setState({
+            sid:res.body.story._id,
+            saveStatus:"Saved "+ moment(res.body.story.updated).calendar(),
+            open:false,
+          })
+        }
+      })
+    self.setState({prevState:el})
+  },
+
+  publishStory(){
+    var self = this
+    var {prevState,sid,column,title} = this.state
+    var allContents = this.editor.serialize()
+    var el =  allContents.paper.value
+    var Story = {
+      story:{
+        title:title,
+        publisher:config.PID,
+        status:1,
+        html:el,
+      }
+    }
+    if(column!='no'){
+      Story.story.column = column
+    }
+    Request
+      .patch(config.BACKURL+'/stories/'+sid+'?token='+auth.getToken())
+      .send(Story)
+      .end((err,res)=>{
+        if(err){
+          //console.log(res.body)
+          self.setState({publishStatus:res.body.error.message,open:false})
+        }
+        else{
+          browserHistory.push(res.body.story.url)
+        }
+      })
+  },
+
+  deleteStory(){
+    var {sid} = this.state
+    Request
+      .delete(config.BACKURL+'/stories/'+sid+'?token='+auth.getToken())
+      .end((err,res)=>{
+        if(err)throw err
+        else{
+          browserHistory.push('/me/stories')
+        }
+      })
+  },
+
+  selectedTag(sel,index){
+    var self = this
+    var {tag,addTag,pureTag,sid} = this.state
+    //console.log(sel)
+    Request
+    .post(config.BACKURL+'/stories/'+sid+'/tags/'+sel.id+'?token='+auth.getToken())
+    .end((err,res)=>{
+      if(err)throw err
+      else{
+          var addedTag = addTag
+          var allTag = pureTag
+          addedTag.push(sel)
+          var Tag = tag
+          var newTag = tag
+          Tag.map((data,index)=>{
+            if(data.text==sel.text){
+              newTag.splice(index,1)
+            }
+          })
+          self.setState({addTag:addedTag,searchText:'',tag:newTag})
+      }
+    })
+  },
+
   removeSelectedTag(data,index){
-    var tag = this.state.tag
-    tag.push(data)
-    var addedTag = this.state.addTag
-    addedTag.splice(index,1)
-    this.setState({tag,addTag:addedTag})
+    var {sid,tag,addTag} = this.state
+    var self = this
+    //console.log(data)
+    Request
+      .delete(config.BACKURL+'/stories/'+sid+'/tags/'+data.id+'?token='+auth.getToken())
+      .end((err,res)=>{
+        if(err)throw err
+        else{
+            var Tag = tag
+            Tag.push(data)
+            var addedTag = addTag
+            addedTag.splice(index,1)
+            self.setState({tag:Tag,addTag:addedTag})
+        }
+      })
   },
 
   handleUpdateInput(searchText){
@@ -318,8 +467,21 @@ const PublisherContact = React.createClass({
     });
   },
 
+  alertClose(){
+    this.setState({alert:false})
+  },
+
+  showAlert(e){
+    this.setState({alert:true,alertWhere:e.currentTarget,alertDesc:'Are you sure to delete this story ?',alertConfirm:this.deleteStory})
+  },
+
+  title(e){
+    this.setState({title:e.target.value})
+  },
+
   render(){
-    var {chooseLayout,layout,open,anchorEl,column,tag,addTag,searchText,columnList} = this.state
+    var {chooseLayout,layout,open,anchorEl,column,tag,addTag,searchText,columnList,sid,
+          alert,alertWhere,alertConfirm,alertDesc,saveStatus,title,publishStatus} = this.state
     const dataSourceConfig = {text: 'text',value: 'value',id:'id'};
     //console.log(tag)
     return(
@@ -329,9 +491,11 @@ const PublisherContact = React.createClass({
         <h1 className='nunito-font'>Choose Layout</h1>
         <div className='row' style={{marginTop:'60px'}}>
           <div className='col-6'>
+            <Label2 className="nunito-font" >News</Label2>
             <Layout style={{backgroundImage:'url(/pic/news.png)',boxShadow:layout=="news"?'0 0 10px #00B2B4':''}} onClick={this.chooseNews} />
           </div>
           <div className='col-6'>
+            <Label2 className="nunito-font" >Article</Label2>
             <Layout style={{backgroundImage:'url(/pic/article.png)',boxShadow:layout=="article"?'0 0 10px #00B2B4':''}} onClick={this.chooseArticle} />
           </div>
         </div>
@@ -344,7 +508,7 @@ const PublisherContact = React.createClass({
             labelPosition="before"
             overlayStyle={{borderRadius: '20px'}}
             rippleStyle={{borderRadius: '20px'}}
-            style={{borderRadius:'20px', height:'40px', lineHeight:'40px', background:'#00b2b4', boxShadow:'none',float:'right',margin:'50px 0 0 0'}}
+            style={{borderRadius:'20px', height:'40px', lineHeight:'40px', background:'#00b2b4', boxShadow:'none',float:'right',margin:'50px 0 0 0',visibility:layout==null?'hidden':'visible'}}
             buttonStyle={{borderRadius: '20px', background: '#00b2b4', border:'2px solid #00B2B4', padding:'0 2px'}}
             icon={<FontIcon className='material-icons'>keyboard_arrow_right</FontIcon>}
           />
@@ -352,8 +516,13 @@ const PublisherContact = React.createClass({
         
       </Container>
       :
-      layout=='news'?<Container onSubmit={this.updateData}>
-           
+      <Container onSubmit={this.updateData}>
+        <Alert 
+          open={alert}
+          anchorEl={alertWhere}
+          onRequestClose={this.alertClose}
+          description={alertDesc} 
+          confirm={alertConfirm}/>
         <RaisedButton
           onClick={this.popoverSave}
           label="save"
@@ -362,7 +531,7 @@ const PublisherContact = React.createClass({
           labelPosition="before"
           overlayStyle={{borderRadius: '20px'}}
           rippleStyle={{borderRadius: '20px'}}
-          style={{borderRadius:'20px', height:'40px', lineHeight:'40px', background:'#00b2b4', boxShadow:'none',float:'right'}}
+          style={{borderRadius:'20px', height:'40px', lineHeight:'40px', background:'#00b2b4', boxShadow:'none',float:'right',visibility:sid!=null?'visible':'hidden'}}
           buttonStyle={{borderRadius: '20px', background: '#00b2b4', border:'2px solid #00B2B4', padding:'0 2px'}}
           icon={<FontIcon className='material-icons'>keyboard_arrow_down</FontIcon>}
         >
@@ -381,20 +550,21 @@ const PublisherContact = React.createClass({
               onChange={this.chooseColumn}
               autoWidth={false}
               labelStyle={{top:'-11px'}}
-              iconStyle={{top:'-8px'}}
+              iconStyle={{top:'-8px',left:'300px'}}
               style={{margin:'15px 0 15px 15px',width:'340px',height:'34px',border:'1px solid #e2e2e2',float:'left'}}
               underlineStyle={{display:'none'}}
               menuStyle={{width:'320px'}}
               menuItemStyle={{width:'320px'}}
               selectedMenuItemStyle={{color:'#222',background:'#00b2b4'}}
-            >
+            > 
+              <MenuItem value='no' primaryText='No Column' />
               {columnList.length!=0?columnList.map((data,index)=>(
                 <MenuItem value={data._id} primaryText={data.name} key={index} />
               )):''}            
             </DropDownMenu>
           </div>
           <div className='row' style={{display:'block',overflow:'hidden'}}>
-            <Label className="nunito-font" style={{float:'left',marginTop:'22px'}}>Add up to 5 tags : </Label>
+            <Label className="nunito-font" style={{float:'left',marginTop:'26px'}}>Add up to 5 tags : </Label>
             <div className='row' style={{marginTop:'15px'}}>
               {addTag.length!=0?addTag.map((data,index)=>(
                 <Chip
@@ -422,65 +592,35 @@ const PublisherContact = React.createClass({
             <Label className="nunito-font" >Select cover picture : </Label>
             <div className='row' style={{overflow:'hidden',marginTop:'20px'}}>
               <div className='col-4'>
-                <UploadPicture path='/stories/:sid/cover' width='96px' height='137px' label='Portrait Cover' type='cover' style={{width:'96px',height:'137px',margin:'0 auto 0 auto'}}/>
+                <UploadPicture path={'/stories/'+sid+'/covermobile'} width='96px' height='137px' label='Portrait Cover' type='coverMobile' style={{width:'96px',height:'137px',margin:'0 auto 0 auto'}}/>
               </div>
               <div className='col-1'>
                 <div style={{marginTop:'58px'}}>Or</div>
               </div>
               <div className='col-6'>
-                <UploadPicture path='/stories/:sid/cover' width='194px' height='137px' label='Portrait Cover' type='cover' style={{width:'194px',height:'137px',margin:'0 auto 0 auto'}}/>
+                <UploadPicture path={'/stories/'+sid+'/cover'} width='194px' height='137px' label='Landscape Cover' type='cover' style={{width:'194px',height:'137px',margin:'0 auto 0 auto'}}/>
               </div>
             </div>
           </div>
-          <div className='row' style={{display:'block',overflow:'hidden',marginTop:'50px'}}>
-            <Delete style={{float:'left',margin:'10px'}}>Delete this story</Delete>
-            <PrimaryButton label="Publish" style={{float:'right'}}/>
-            <SecondaryButton label="Save" style={{float:'right',marginRight:'20px'}}/>
+          <div className='row' style={{overflow:'hidden',display:'block'}}> 
+            <TextStatus className='sans-font' style={{color:'#DC143C',float:'right',marginTop:'30px'}}>{publishStatus}</TextStatus>
+          </div>
+          <div className='row' style={{display:'block',overflow:'hidden',marginTop:'0px'}}>
+            <Delete style={{float:'left',margin:'10px'}} onClick={this.showAlert}>Delete this story</Delete>
+            <PrimaryButton label="Publish" style={{float:'right'}} onClick={this.publishStory}/>
+            <SecondaryButton label="Save" style={{float:'right',marginRight:'20px'}} onClick={this.save}/>
           </div>
         </Popover>
         </RaisedButton>
-        <TextStatus className='sans-font'>{"Saved at "+ moment(this.state.saveStatus).calendar()}</TextStatus> 
+        {sid!=null?<TextStatus className='sans-font'>{saveStatus}</TextStatus>:''}
 
-        <Title placeholder='Title' className='serif-font'></Title>
-
-        <Paper id='paper'>
-
-        </Paper>
-        
-      </Container>:
-      <Container onSubmit={this.updateData}>
-           
-        <RaisedButton
-          onClick={this.popoverSave}
-          label="save"
-          labelStyle={{fontWeight:'bold', fontSize:15, top:0, fontFamily:"'Nunito', 'Mitr'"}}
-          labelColor='#fff'
-          labelPosition="before"
-          overlayStyle={{borderRadius: '20px'}}
-          rippleStyle={{borderRadius: '20px'}}
-          style={{borderRadius:'20px', height:'40px', lineHeight:'40px', background:'#00b2b4', boxShadow:'none',float:'right'}}
-          buttonStyle={{borderRadius: '20px', background: '#00b2b4', border:'2px solid #00B2B4', padding:'0 2px'}}
-          icon={<FontIcon className='material-icons'>keyboard_arrow_down</FontIcon>}
-        >
-        <Popover
-          open={open}
-          anchorEl={anchorEl}
-          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-          targetOrigin={{horizontal: 'left', vertical: 'top'}}
-          onRequestClose={this.handleRequestClose}
-          style={{border:'3px solid #00b2b4',width:'482px',height:'501px',padding:'20px',marginTop:8,boxShadow:'none'}}
-        >
+        <Title placeholder='Title' className='serif-font' value={title} onChange={this.title}>
           
-        </Popover>
-        </RaisedButton>
-        <TextStatus className='sans-font'>Saved at 10.30 AM</TextStatus> 
-
-        <Title placeholder='Title' className='serif-font'></Title>
+        </Title>
 
         <Paper id='paper'>
 
         </Paper>
-        
       </Container>
     )
   },
