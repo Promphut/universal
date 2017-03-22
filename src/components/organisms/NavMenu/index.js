@@ -32,5 +32,5 @@ const NavMenu = () => {
     </Navbar>
   )
 }
-  
+
 export default NavMenu;

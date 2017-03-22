@@ -1,6 +1,6 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
 import {browserHistory} from 'react-router'
-import {TopBar} from 'components'
+import {TopBar, TopNavigation} from 'components'
 import auth from 'components/auth'
 import api from 'components/api'
 
@@ -51,24 +51,38 @@ const TopBarWithNavigation = React.createClass({
 		})
 	},
 
-	render () {
-		const {scrolling, status} = this.state
-		const {title} = this.props
+	handleScroll(e) {
+		let top = e.srcElement.body.scrollTop,
+			scrolling = this.state.scrolling
 
-	  return (
+		if(top > 60 && !scrolling)
+			this.setState({scrolling: true})
+
+		else if(top <= 60 && scrolling)
+			this.setState({scrolling: false})
+	},
+
+	render(){
+		let {status} = this.state
+
+		return (
 			<TopBar
-				scrolling={scrolling}
-				status={status}
-				title={title}
+				onScroll={this.handleScroll}
+				scrolling={this.state.scrolling}
+				status={this.state.status}
+				title={this.props.title}
+				onMouseOver={this.handleNavbarMouseOver}
+				onMouseOut={this.handleNavbarMouseOut}
 				user={this.user}
-				menu={this.menu}
-			/>
-	  )
+				menu={this.menu}>
+				<TopNavigation menu={this.menu} />
+			</TopBar>
+		)
 	}
 })
 
-// TopBarWithNavigation.propTypes = {
-// 	title: PropTypes.string
-// }
+TopBarWithNavigation.propTypes = {
+	title: PropTypes.string
+}
 
 export default TopBarWithNavigation;

@@ -94,7 +94,7 @@ const Nav = styled.nav`
 	width: 400px;
 	overflow-x: hidden;
 	overflow-y: auto;
-	padding: 40px;
+	// padding: 40px;
 	-webkit-overflow-scrolling: touch;
 	z-index:11;
   animation: ${props=> props.open?slideOut:slideIn} 0.6s forwards;
@@ -166,7 +166,7 @@ const RightMenu = React.createClass({
         <Nav open={open}>
           <div className="menu">
             <CloseBtn onTouchTap={close}><FontIcon className="material-icons">close</FontIcon></CloseBtn>
-            
+
             <Profile className="content-font">
               <Link to="/me/settings"><Avatar src={user.pic.medium}size={70}/></Link>
               <div><Link to="/me/settings"><h3>{user.display}</h3></Link>{user.shortDesc}</div>

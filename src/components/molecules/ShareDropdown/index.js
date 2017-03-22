@@ -34,15 +34,15 @@ const ShareDropdown = React.createClass({
     let button = []
     for (let i = 0; i < buttons.length; i++){
       button.push(
-        <FlatButton
-          key={i}
-          label={buttons[i]}
-          labelStyle={{fontWeight: 'bold', fontSize: '15px', color: '#00B2B4', fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
-          style={{width: '130px', textAlign: 'left', display: 'inline-block'}}
-          onTouchTap={() => this.select(i)}
-        />
+        <div key={i}>
+          <FlatButton
+            label={buttons[i]}
+            labelStyle={{fontWeight: 'bold', fontSize: '15px', color: '#00B2B4', fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
+            style={{width: '130px', textAlign: 'left', display: 'inline-block'}}
+            onTouchTap={() => this.select(i)}
+          /><br/>
+        </div>
       )
-      button.push(<br/>)
     }
 
     const buttonDropdown = (

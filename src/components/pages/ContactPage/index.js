@@ -1,11 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
-import {ContactAndAboutContainer, PrimaryButton, SecondaryButton} from 'components'
 import TextField from 'material-ui/TextField'
 import FontIcon from 'material-ui/FontIcon'
 import FlatButton from 'material-ui/FlatButton'
 import auth from 'components/auth'
 import api from 'components/api'
+import {ContactAndAboutContainer, PrimaryButton, SecondaryButton} from 'components'
 
 const Wrapper = styled.div`
 `
@@ -238,15 +238,15 @@ const ContactPage = React.createClass({
     let button = []
     for (let i = 0; i < problems.length; i++){
       button.push(
-        <FlatButton
-          key={i}
-          label={problems[i]}
-          labelStyle={{fontWeight: 'bold', fontSize: '15px', color: '#00B2B4', fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
-          style={{width: '385px', textAlign: 'left', display: 'inline-block'}}
-          onTouchTap={() => this.selectProblem(problems[i])}
-        />
+        <div key={i}>
+          <FlatButton
+            label={problems[i]}
+            labelStyle={{fontWeight: 'bold', fontSize: '15px', color: '#00B2B4', fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
+            style={{width: '385px', textAlign: 'left', display: 'inline-block'}}
+            onTouchTap={() => this.selectProblem(problems[i])}
+          /><br/>
+        </div>
       )
-      button.push(<br/>)
     }
 
     return (

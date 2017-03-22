@@ -134,7 +134,7 @@ const TrendingSideBar = React.createClass({
     if(popular.length > 0){
       for(let i=0;i<6;i++){
         tn.push(
-          <TrendingSideBarInner detail={popular[i]} index={i+1}/>
+          <TrendingSideBarInner key={i} detail={popular[i]} index={i+1}/>
         )
       }
     }
@@ -150,6 +150,6 @@ const TrendingSideBar = React.createClass({
     )
   },
 })
-  
-   
+
+
 export default TrendingSideBar;

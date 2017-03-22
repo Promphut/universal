@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import {Link} from 'react-router'
 import {StickyContainer, Sticky} from 'react-sticky';
-import {BGImg, TopBarWithNavigation, TrendingSideBar, RecommendArticle} from 'components'
+import {BGImg, TopBarWithNavigation, TrendingSideBar, RecommendArticle, Navbar} from 'components'
 
 const Content = styled.div`
 	display: flex;
@@ -53,11 +53,9 @@ const rec = {
 const ContactAndAboutContainer = React.createClass({
   render(){
     return (
-      <StickyContainer>
+      <div>
 				<BGImg src="/tmp/a-story/pic-min.jpg" style={{width:'100%',height:'510px'}} />
-				<Sticky style={{zIndex: '3'}}>
-          <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
-				</Sticky>
+        <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
         <Content>
           <Main>
             {this.props.children}
@@ -81,7 +79,7 @@ const ContactAndAboutContainer = React.createClass({
             </div>
           </RecommendContainer>
         </Content>
-     </StickyContainer>
+     </div>
     )
   }
 })
