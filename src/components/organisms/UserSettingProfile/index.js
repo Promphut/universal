@@ -126,6 +126,8 @@ const UserSettingProfile = React.createClass({
         error:false
       })
 
+      //console.log('USER', this.state.user)
+
       this.updateCookie()
     })
     .catch(err => {
@@ -174,12 +176,11 @@ const UserSettingProfile = React.createClass({
           </Title>
           <Edit>
             <TextField
-              defaultValue="Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown"
               multiLine={true}
               fullWidth={true}
               floatingLabelText="80 characters"
               floatingLabelFixed={true}
-              rows={2}
+              rows={1}
               rowsMax={4}
               name='shortDesc'
               value={user.shortDesc}

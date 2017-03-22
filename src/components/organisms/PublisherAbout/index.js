@@ -80,18 +80,26 @@ const Paper = styled.div`
 
 const PublisherAbout = React.createClass({
   getInitialState(){
+    this.aboutUs = this.props.aboutUs
+
     return {
       textStatus:'Unsave',
       error:false
     }
   },
 
+  setAboutUs(aboutUs){
+    this.aboutUs = aboutUs
+    this.editor.setContent(aboutUs)
+  },
+
   componentWillReceiveProps(nextProps){
-    this.editor.setContent(nextProps.aboutUs || '')
+    //this.editor.setContent(nextProps.aboutUs || '')
+    this.setAboutUs(nextProps.aboutUs || '')
   },
 
   resetData(){
-    if(this.props.aboutUs) this.editor.setContent(this.props.aboutUs)
+    if(this.props.aboutUs) this.editor.setContent(this.aboutUs) //this.editor.setContent(this.props.aboutUs)
   },
 
   componentDidMount(){
@@ -141,7 +149,8 @@ const PublisherAbout = React.createClass({
     });
 
     // initialize editor content
-    this.editor.setContent(this.state.aboutUs || '')
+    this.setAboutUs(this.aboutUs)
+    //this.editor.setContent(this.state.aboutUs || '')
   },
 
   updateAboutUs(e){
@@ -154,6 +163,8 @@ const PublisherAbout = React.createClass({
         aboutUs: paper.value
       })
       .then(pub => {
+        this.aboutUs = pub.aboutUs
+
         this.setState({
           textStatus:'Saved successfully',
           error:false

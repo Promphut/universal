@@ -3,7 +3,8 @@ import styled from 'styled-components'
 import { OverlayImg, PublisherProfileSetting,
    PublisherPublishingSetting,PublisherAnalyticSetting,PublisherThemeSetting } from 'components'
 import auth from 'components/auth'
-import Request from 'superagent'
+//import Request from 'superagent'
+
 const Container = styled.div`
   width:100%;
 `
@@ -19,7 +20,7 @@ const PublisherSettingPage = React.createClass({
   },
 
   render(){
-    var {publisher} = this.state
+    //var {publisher} = this.state
 		return (
       <Container>
         <PublisherProfileSetting />
@@ -27,7 +28,7 @@ const PublisherSettingPage = React.createClass({
         <PublisherAnalyticSetting />
         <PublisherThemeSetting />
       </Container>
-		  )
+	  )
 	}
 });
 
