@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 import styled from 'styled-components'
-import {BGImg} from 'components'
+import {BGImg, ShareDropdown} from 'components'
 import Avatar from 'material-ui/Avatar';
 import FontIcon from 'material-ui/FontIcon'
 import Popover from 'material-ui/Popover'
@@ -26,7 +26,7 @@ const Container = styled.div`
     .des-hidden{
       display:none;
     }
-  } 
+  }
   @media (max-width:480px) {
     width:297px;
     padding:10px 0 20px 0;
@@ -40,7 +40,7 @@ const Container = styled.div`
       width:297px;
       height:175px;
     }
-  } 
+  }
 `
 
 const Div = styled.div`
@@ -48,7 +48,7 @@ const Div = styled.div`
   font-size:13px;
   @media (max-width:480px) {
     font-size:12px;
-  } 
+  }
 `
 
 const NameLink = styled(Link)`
@@ -58,24 +58,17 @@ const NameLink = styled(Link)`
   font-size:18px;
   @media (max-width:480px) {
     font-size:15px;
-  } 
+  }
 `
 
 const BoxText = styled.div`
   float:left;
-  width:462px;
+  width:477px;
   padding-left:15px;
   @media (max-width:480px) {
     width:100%;
     padding-left:0px;
     margin-top:10px;
-  } 
-`
-
-const DropDown = styled.div`
-  float:right;
-  &:hover{
-    cursor:pointer;
   }
 `
 
@@ -84,26 +77,6 @@ const DivDes = styled.div`
 `
 
 const ArticleBox = React.createClass({
-  getInitialState(){
-    return{
-      open:false
-    }
-  },
-  
-  handleTouchTap(e){
-    e.preventDefault();
-    this.setState({
-      open: true,
-      anchorEl: e.currentTarget,
-    })
-  },
-
-  handleRequestClose(){
-    this.setState({
-      open: false,
-    });
-  },
-
   render(){
     let {detail,style} = this.props
     let {title,cover,writer,column,votes,comments,updated,url} = detail
@@ -113,19 +86,7 @@ const ArticleBox = React.createClass({
         <BGImg url={url} src={cover} className='imgWidth mob-hidden' />
         <BoxText className='sans-font'>
           <DivDes>
-            <DropDown  onClick={this.handleTouchTap}><FontIcon className="material-icons" style={{color:'#8f8f8f'}}>keyboard_arrow_down</FontIcon>
-              <Popover
-                open={this.state.open}
-                anchorEl={this.state.anchorEl}
-                anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-                targetOrigin={{horizontal: 'left', vertical: 'top'}}
-                style={{border:'2px solid #00B2B4'}}
-                onRequestClose={this.handleRequestClose}
-              >
-                <MenuItem style={{color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>share</FontIcon>}>Share</MenuItem>
-                <MenuItem style={{color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>link</FontIcon>}>Copy Link</MenuItem>
-              </Popover>
-            </DropDown>
+            <ShareDropdown />
             <Div>A story of <span style={{textDecoration:'underline'}}><Link to={column.url}>{column.name}</Link></span></Div>
           </DivDes>
           <BGImg url={url} src={cover} className='imgWidth des-hidden'/>
@@ -145,7 +106,7 @@ const ArticleBox = React.createClass({
 })
 
 
-    
+
 
 
 export default ArticleBox;
