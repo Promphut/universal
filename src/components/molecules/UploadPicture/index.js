@@ -139,7 +139,7 @@ const UploadPicture = React.createClass({
           err = true
         }
 
-        console.log('onloadend', res.body.sizes.medium)
+        //console.log('onloadend', res.body.sizes.medium)
 
     	  this.setState({
     		  //file: '',
@@ -160,7 +160,7 @@ const UploadPicture = React.createClass({
     //console.log('src', src)
     
     var description = <Des className='sans-font'>{msg}</Des>
-    
+
     return(
       <Container encType="multipart/form-data" style={{...style,width:width,height:height}}>
         {!statePreview?<Box width={width} height={height} className="menu-font" onClick={()=>(dom(this.refs.imageLoader).click())}>{label?label:"Upload Picture"}</Box>:''}

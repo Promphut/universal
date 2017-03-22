@@ -2,8 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 import {PrimaryButton,SecondaryButton,UploadPicture} from 'components'
 import TextField from 'material-ui/TextField';
-import Request from 'superagent'
+//import Request from 'superagent'
 import auth from 'components/auth'
+import api from 'components/api'
+import utils from 'components/utils'
 
 const Container = styled.form`
   width:100%;
@@ -20,12 +22,14 @@ const Container = styled.form`
     font-size:18px;
   }
 `
+
 const Flex = styled.div`
   display:flex;
   items-align:center;
   flex-flow: row wrap;
   margin:50px 0 0 50px;
 `
+
 const Title = styled.div`
   flex:2 150px;
   max-width:150px;
@@ -33,15 +37,18 @@ const Title = styled.div`
   font-size:17px;
   padding-top:15px;
 `
+
 const Edit = styled.div`
   flex:6 450px;
   max-width:450px;
 `
+
 const Social = styled.div`
   color:#8F8F8F;
   font-size:19px;
   overflow:hidden;
 `
+
 const TextStatus = styled.div`
   color:#00B2B4;
   font-size:15px;
@@ -49,75 +56,83 @@ const TextStatus = styled.div`
   float:left;
   margin:10px 0 0 15px;
 ` 
+
 const PublisherProfileSetting = React.createClass({
   getInitialState(){
-    return{
-      publisher:{},
+    //console.log('INIT', this.props.publisher)
+    return {
+      publisher: {
+        channels: {
+          fb:'',
+          twt:'',
+          ig:'',
+          ty:''
+        },
+        name:'',
+        shortDesc:'',
+        cover: {
+          medium: ''
+        }
+      },
+
       error:false,
       textStatus:'Unsave',
-      uploadPhoto:null
+      //uploadPhoto:null
     }
   },
 
-  componentDidMount(){
-     this.getPublisherId()
+  componentWillReceiveProps(nextProps){
+    this.publisher = _.cloneDeep(nextProps.publisher) // saved for reset
+
+    this.setState({
+      publisher: nextProps.publisher
+    })
   },
 
-  getPublisherId(){
-    var self = this
-    var user = auth.getUser()
-    Request
-      .get(config.BACKURL+'/publishers/'+config.PID)
-      .set('Accept','application/json')
-      .end((err,res)=>{
-        if(err) throw err 
-        else{
-          self.setState({publisher:res.body.publisher})
-          self.setData()
-        }
+  publisherChanged(e){
+    const name = e.target.name
+    let pub = _.cloneDeep(this.state.publisher)
+    utils.set(pub, name, e.target.value)
+    //console.log('publisherChanged', pub, name, e.target.value)
+    this.setState({
+      publisher: pub
+    })
+  },
+
+  updatePublisher(e){
+    if(e) e.preventDefault()
+
+    api.updatePublisher(this.state.publisher)
+    .then(pub => {
+      this.publisher = pub
+
+      this.setState({
+        textStatus:'Saved successfully',
+        error:false
       })
-  },
-
-  setData(){
-    var {name,shortDesc,channels} = this.state.publisher
-    document.getElementById('title').value = typeof name =="undefined" ?'':name 
-    document.getElementById('description').value = typeof shortDesc == "undefined" ?'':shortDesc
-    document.getElementById('sc-fb').value = typeof channels == "undefined" ?'':channels.fb
-    document.getElementById('sc-twt').value = typeof channels == "undefined" ?'':channels.twt
-    document.getElementById('sc-ig').value = typeof channels == "undefined" ?'':channels.ig
-    document.getElementById('sc-yt').value = typeof channels == "undefined" ?'':channels.yt
-  },
-
-  updateData(e){
-    e.preventDefault()
-    var data = {publisher : {
-      name:document.getElementById('title').value,
-      shortDesc:document.getElementById('description').value,
-      channels:{
-        fb:document.getElementById('sc-fb').value,
-        twt:document.getElementById('sc-twt').value,
-        ig:document.getElementById('sc-ig').value,
-        yt:document.getElementById('sc-yt').value
-      },
-    }}
-    Request
-      .patch(config.BACKURL+'/publishers/'+config.PID+'?token='+auth.getToken())
-      .set('x-access-token', auth.getToken())
-      .set('Accept','application/json')
-      .send(data)
-      .end((err,res)=>{
-        if(err)this.setState({textStatus:res.body.error.message,error:true})
-        else{
-          this.setState({textStatus:'Saved successfully',error:false})
-        }
+    })
+    .catch(err => {
+      this.setState({
+        textStatus:res.body.error.message,
+        error:true
       })
+    })
+  },
+
+  resetDate(e){
+    if(e) e.preventDefault()
+
+    this.setState({
+      publisher: this.publisher
+    })
   },
 
   render(){
-    let {uploadPhoto,textStatus,error} = this.state
-    
-    return(
-      <Container onSubmit={this.updateData}>
+    let {textStatus,error} = this.state
+    let pub = this.state.publisher 
+    //console.log('render', pub)
+    return (
+      <Container onSubmit={this.updatePublisher}>
         <div  className="head sans-font">PROFILE</div>
         <Flex>
           <Title>
@@ -125,8 +140,9 @@ const PublisherProfileSetting = React.createClass({
           </Title>
           <Edit>
             <TextField 
-              defaultValue="Aommoney" 
-              id='title'
+              value={pub.name}
+              name='name'
+              onChange={this.publisherChanged}
             />
 
           </Edit>
@@ -137,14 +153,15 @@ const PublisherProfileSetting = React.createClass({
           </Title>
           <Edit>
             <TextField
-              defaultValue="Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown"
+              value={pub.shortDesc}
               multiLine={true}
               fullWidth={true}
               floatingLabelText="80 characters"
               floatingLabelFixed={true}
               rows={1}
               rowsMax={10}
-              id='description'
+              name='shortDesc'
+              onChange={this.publisherChanged}
             />
           </Edit>
         </Flex>
@@ -153,7 +170,7 @@ const PublisherProfileSetting = React.createClass({
             <div className="sans-font">Cover picture</div>
           </Title>
           <Edit>
-            <UploadPicture src={uploadPhoto} path={'/publishers/'+config.PID+'/cover'} type='cover'/>
+            <UploadPicture src={pub.cover.medium} path={'/publishers/'+config.PID+'/cover'} type='cover'/>
           </Edit>
         </Flex>
         <Flex>
@@ -164,26 +181,26 @@ const PublisherProfileSetting = React.createClass({
             <Social className="sans-font">
               <i className="fa fa-facebook" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i> 
               <div style={{float:'left',margin:'15px 20px 0 0'}}>facebook.com/</div>
-              <TextField style={{float:'left',margin:'5px 0 0 0'}} id='sc-fb' />
+              <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.fb' value={pub.channels && pub.channels.fb} onChange={this.publisherChanged} />
             </Social>
             <Social className="sans-font">
               <i className="fa fa-twitter" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i> 
               <div style={{float:'left',margin:'15px 20px 0 0'}}>twitter.com/</div>
-              <TextField style={{float:'left',margin:'5px 0 0 0'}} id='sc-twt' />
+              <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.twt' value={pub.channels && pub.channels.twt} onChange={this.publisherChanged} />
             </Social>
             <Social className="sans-font">
               <i className="fa fa-instagram" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i> 
               <div style={{float:'left',margin:'15px 20px 0 0'}}>instagram.com/</div>
-              <TextField style={{float:'left',margin:'5px 0 0 0'}} id='sc-ig' />
+              <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.ig' value={pub.channels && pub.channels.ig} onChange={this.publisherChanged} />
             </Social>
             <Social className="sans-font">
               <i className="fa fa-youtube-play" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i> 
               <div style={{float:'left',margin:'15px 20px 0 0'}}>youtube.com/</div>
-              <TextField style={{float:'left',margin:'5px 0 0 0'}} id='sc-yt' />
+              <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.yt' value={pub.channels && pub.channels.yt} onChange={this.publisherChanged} />
             </Social>
           </Edit>
         </Flex>
-        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus  style={{color:error?'#D8000C':'#00B2B4'}}>{textStatus}</TextStatus></div>
+        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.resetDate} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus  style={{color:error?'#D8000C':'#00B2B4'}}>{textStatus}</TextStatus></div>
       </Container>
     )
   },

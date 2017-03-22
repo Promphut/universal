@@ -21,7 +21,7 @@ const Head = styled.h1`
     font-size:24px;
   }
 `
-const Article = styled.div`
+const Story = styled.div`
   font-size:20px;
   margin-top:40px;
   @media (max-width:480px){
@@ -68,8 +68,6 @@ var commentUserObj = {
   text:"Ruined the party last night as they rocked into Toronto and downed the Raptors on 'Drake night'.uined the party last night as they rocked into Toronto"
 }
 
-var a = [commentUserObj,commentUserObj,commentUserObj,commentUserObj,commentUserObj]
-
 const styles ={
   button:{
     width:'100%',
@@ -83,25 +81,25 @@ const styles ={
   }
 }
 
-const writerDetail = {
-    name:'Ochawin',
-    date:' 16 Nov 2016, 8:30pm',
-    column:'Money Ideas'
-}
-
-
-const ArticlePage = React.createClass({
+const StoryDetail = React.createClass({
   getInitialState(){
-    this.head = "MICROSOFT SURFACE STUDIO REVIEW: A BEAUTIFUL INVADER OF APPLE'S BASE";
-    this.article = `Ruined the party last night as they rocked into Toronto and downed the Raptors on 'Drake night'.uined the party last night as they rocked into Toronto and downed the Raptors on 'Drake night'. ruined the party last night as they rocked into Toronto and downed the Raptors on 'Drake night'.uined the party last night as they rocked into Toronto and downed the Raptors on 'Drake night'.\n \n
-Ruined the party last night as they rocked into Toronto and downed the Raptors on 'Drake night'.uined the party last night as they rocked into Toronto and downed the Raptors on 'Drake night'. ruined the party last night as they rocked into Toronto and downed the Raptors on 'Drake night'.uined the party last night as they rocked into Toronto and downed the Raptors on 'Drake night'.`
-    return{
+    this.story = this.props.story
+    //console.log('story', this.story)
 
+    return { }
+  },
+
+  componentWillReceiveProps(nextProps){
+    if(nextProps.story){
+      this.story = nextProps.story
+
+      //this.setState({refresh: Math.random()})
+      //console.log('componentWillReceiveProps', this.story)
     }
   },
 
   renderComment(data,index){
-    return(
+    return (
       <div key={index}>
         <CommentUser data={data}/>
         <Child>
@@ -111,11 +109,16 @@ Ruined the party last night as they rocked into Toronto and downed the Raptors o
   },
 
   render(){
-    return(
+    let s = this.story
+
+    return (
       <Wraper>
-        <Head className='title-font'>{this.head}</Head>
-        <WritedBy detail={writerDetail}/>
-        <Article className='content-font'>{this.article}</Article>
+        <Head className='title-font'>{s.title}</Head>
+        <WritedBy writer={s.writer} column={s.column} published={s.published} />
+
+        <Story className='content-font' dangerouslySetInnerHTML={{__html:s.html}}></Story>
+
+        {/* NEXT ITERATION
         <TagContainer>
           <TagBox text='MONEY IDEAS' style={{margin:'10px'}}/>
           <TagBox text='MONEY' style={{margin:'10px'}}/>
@@ -123,17 +126,20 @@ Ruined the party last night as they rocked into Toronto and downed the Raptors o
           <TagBox text='MONEY IDEAS' style={{margin:'10px'}}/>
           <TagBox text='MONEY IDEAS' style={{margin:'10px'}}/>
           <TagBox text='MONEY' style={{margin:'10px'}}/>
-        </TagContainer>
+        </TagContainer>*/}
+
         <Divider/>
         <div className='row center'>
           <div className='col-md-6 col-sm-12'>
-            <WritedBy detail={writerDetail} />
+            <WritedBy writer={s.writer} column={s.column} published={s.published} />
           </div>
           <div className='col-md-6 col-sm-12'>
-            <WritedBy detail={writerDetail} />
+            <WritedBy writer={s.writer} column={s.column} published={s.published} />
           </div>
         </div>
         <Divider/>
+
+        {/* NEXT ITERATION 
         <NoComment>5 Comments</NoComment>
         <CommentBox className="hidden-mob"/>
         <CommentUserContainer>
@@ -147,7 +153,7 @@ Ruined the party last night as they rocked into Toronto and downed the Raptors o
             buttonStyle={styles.btnStyle}
             backgroundColor="none"
           />
-        </CommentUserContainer>
+        </CommentUserContainer>*/}
 
         
       </Wraper>
@@ -155,4 +161,4 @@ Ruined the party last night as they rocked into Toronto and downed the Raptors o
   }
 })
 
-export default ArticlePage;
+export default StoryDetail;

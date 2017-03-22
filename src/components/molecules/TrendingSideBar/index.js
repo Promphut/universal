@@ -128,7 +128,7 @@ const TrendingSideBar = React.createClass({
 
   render(){
     let {popular} = this.state
-    console.log('popular', popular)
+    //console.log('popular', popular)
     let {style} = this.props
     let tn = []
     if(popular.length > 0){

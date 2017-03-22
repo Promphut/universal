@@ -93,14 +93,6 @@ const PublisherContact = React.createClass({
     }
   },
 
-  resetData(){
-    let cat = this.getCatById(this.state.selectContactCat._id)
-    if(!_.isEmpty(cat)) 
-      this.setState({
-        selectContactCat: cat
-      })
-  },
-
   componentWillReceiveProps(nextProps){
     let cats = nextProps.contactCats || []
     let selectContactCat = nextProps.selectContactCat || cats[0] || this.defaultContactCat
@@ -109,6 +101,14 @@ const PublisherContact = React.createClass({
       selectContactCat: selectContactCat, 
       contactCats: cats
     })
+  },
+
+  resetData(){
+    let cat = this.getCatById(this.state.selectContactCat._id)
+    if(!_.isEmpty(cat)) 
+      this.setState({
+        selectContactCat: cat
+      })
   },
 
   newContactCat(){

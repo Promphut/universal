@@ -29,10 +29,13 @@ const Div = styled.div`
     margin:5px 0 0 0;
   }
 `
-const Column = styled.span`
+
+const Column = styled(Link)`
   font-weight:bold;
 `
-const Name = styled.div`
+
+const NameLink = styled(Link)`
+  display: block;
   color:#222;
   font-weight:bold;
   text-align:center;
@@ -43,19 +46,17 @@ const Name = styled.div`
   }
 `
 
-
 const RecommendArticle = ({detail})=>{
-  var {column,name,writer,vote,comment} = detail
+  let {column,title,writer,votes,comments,url,cover} = detail
+
   return(
     <Container>
-      <OverlayImg src='/tmp/story-list/1485309433041-Screen-Shot-2017-01-23-at-33221-PM-1.png' className='imgWidth' />
-      <Div className='sans-font'>in <Column>{column}</Column></Div>
-      <Name className='serif-font'>{name}</Name>
-      <Div className='sans-font'>By <strong>{writer}</strong> - {vote} Votes {comment} Comments</Div>
+      <Link to={url}><OverlayImg src={cover} className='imgWidth' /></Link>
+      <Div className='sans-font'>in <Column to={column.url}>{column.name}</Column></Div>
+      <NameLink to={url} className='serif-font'>{title}</NameLink>
+      <Div className='sans-font'>By <Link to={writer.url}><strong>{writer.display}</strong></Link> - {votes ? votes.total : 0} Votes {comments ? comments.count : 0} Comments</Div>
     </Container>
   )
 }
-    
-
 
 export default RecommendArticle;

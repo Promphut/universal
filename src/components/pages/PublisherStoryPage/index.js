@@ -344,6 +344,7 @@ const PublisherStoryPage = React.createClass({
     this.setState({
       alert:true,
       alertWhere:e.currentTarget,
+      alertChild: '',
       alertDesc:'Delete is permanent. Are you sure?',
       alertConfirm:this.removeColumn
     })

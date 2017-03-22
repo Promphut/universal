@@ -11,6 +11,7 @@ const Container = styled.div`
 
   }
 `
+
 const Box = styled.div`
   flex:1;
 `
@@ -21,6 +22,7 @@ const ThumpnailRow = React.createClass({
       detail:this.props.detail
     }
   },
+
   componentWillReceiveProps(nextProps){
     if(nextProps.detail!=this.props.detail){
       this.setState({
@@ -28,53 +30,56 @@ const ThumpnailRow = React.createClass({
       })
     }
   },
+
   render(){
-  var {size,style} = this.props
-  var {detail} = this.state
-  var thumpnail = []
-  var No = size=='small'?5:4
-  var settings = {
-    centerMode: false,
-    slidesToShow: No,
-    speed: 300,
-    arrows: false,
-    draggable: false,
-    infinite: false,
-    initialSlide:0,
-    slickGoTo:0,
-    responsive: [
-      {
-        breakpoint: 480,
-        settings: {
-          initialSlide:1,
-          slickGoTo:1,
-          arrows: false,
-          centerMode: true,
-          draggable: true,
-          centerPadding: '10px',
-          slidesToShow: 2
+    var {size,style} = this.props
+    var {detail} = this.state
+    var thumpnail = []
+    var No = size=='small'?5:4
+    var settings = {
+      centerMode: false,
+      slidesToShow: No,
+      speed: 300,
+      arrows: false,
+      draggable: false,
+      infinite: false,
+      initialSlide:0,
+      slickGoTo:0,
+      responsive: [
+        {
+          breakpoint: 480,
+          settings: {
+            initialSlide:1,
+            slickGoTo:1,
+            arrows: false,
+            centerMode: true,
+            draggable: true,
+            centerPadding: '10px',
+            slidesToShow: 2
+          }
         }
+      ]
+    };
+
+    if(detail.length!=0){
+      for(let i=0;i<9;i++){
+        thumpnail.push(
+          size=='small'?<Box key={i}><ThumpnailSmall detail={detail[i]} /></Box>:<Box key={i}><Thumpnail detail={detail[i]}/></Box>
+        )
       }
-    ]
-  };
-  if(detail.length!=0){
-    for(let i=0;i<9;i++){
-      thumpnail.push(
-        size=='small'?<Box key={i}><ThumpnailSmall detail={detail[i]}  /></Box>:<Box key={i}><Thumpnail  detail={detail[i]}/></Box>
-      )
+    } else {
+      thumpnail=[]
+      console.log(detail)
     }
-  }else{
-    thumpnail=[]
-    console.log(detail)
+
+    return (
+      <Container style={{...style}}>
+        <Slider {...settings}>
+        {thumpnail}
+        </Slider>
+      </Container>
+    )
   }
-  return(
-    <Container style={{...style}}>
-      <Slider {...settings}>
-      {thumpnail}
-      </Slider>
-    </Container>
-  )
-}
 })
 
     

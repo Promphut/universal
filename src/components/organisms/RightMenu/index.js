@@ -9,6 +9,7 @@ import Avatar from 'material-ui/Avatar';
 import auth from 'components/auth'
 
 const Container = styled.div`
+  text-align: left;
   position:fixed;
   width:100%;
   height:100%;
@@ -160,8 +161,8 @@ const RightMenu = React.createClass({
     let {open, close} = this.props,
         user = this.props.user
 
-		return(
-      <Container open={open} >
+		return (
+      <Container open={open}>
         <Container2 onClick={close} />
         <Nav open={open}>
           <div className="menu">
