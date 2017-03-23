@@ -118,6 +118,7 @@ const ColumnPage = React.createClass({
 				stopPos:dom(this.refs.more).getBoundingClientRect().top
 			})
 		})
+
 	},
 
 	render(){
@@ -137,7 +138,10 @@ const ColumnPage = React.createClass({
 
 		      	<Content>
 			      <Main>
-						<StoryMenu style={{padding:'15px 0 15px 0',margin:'0 0 50px 0'}} next='FUND'/>
+						<StoryMenu
+							style={{padding:'15px 0 15px 0', margin:'0 0 50px 0'}}
+							next={column.name}
+						/>
 						<TextLine className='sans-font'>Latest</TextLine>
 
 						{feed.map((data,index) => (

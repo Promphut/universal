@@ -8,7 +8,7 @@ import api from 'components/api'
 
 const Container = styled.div`
   width:324px;
-  position:relative;
+  position:sticky;
 `
 
 const Head = styled.div`
@@ -21,6 +21,13 @@ const Head = styled.div`
   background:white;
   padding:2px;
   font-family:'Nunito'
+
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	cursor: default;
 `
 
 const Divider =styled.div`

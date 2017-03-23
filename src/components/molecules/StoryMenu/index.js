@@ -9,30 +9,78 @@ const LinkTo = (path)=>{
   browserHistory.push(path)
 }
 
-const StoryMenu = ({style,className,child,path,linkPath}) => {
-  //console.log(window.location.pathname)
+const StoryMenu = ({style, className, child, path, linkPath, page, next}) => {
+  if (!next) {
+    next = ' '
+  }
+  
+  const chevronRightStyle = {
+    fontSize: '24px',
+    margin: '12px 20px',
+    color: '#8f8f8f',
+  	cursor: 'default'
+  }
+
 	return (
 			<div className={className+' row'} style={{...style}}>
-        <IconButton 
-          onClick={()=>LinkTo('/stories/columns')}
-          style={{padding:'0px'}}
-          iconStyle={{
-            fontSize:'35px',
-            color:window.location.pathname=='/stories/columns' ? '#00B2B4' : '#8f8f8f'
-          }}>
-          <FontIcon className="material-icons">apps</FontIcon>
-        </IconButton>
         <FlatButton
+          icon={
+            <FontIcon className="material-icons"
+              style={{
+                fontSize: '24px',
+                margin: '0px',
+                color: (page == 'allcolumn') ? '#00B2B4' : '#8f8f8f',
+              }}>
+              apps
+            </FontIcon>
+          }
           label="STORIES"
-          onClick={()=>LinkTo('/stories/columns')}
+          onClick={() => LinkTo('/stories/columns')}
           className='nunito-font'
-          style={{marginTop:'5px'}}
-          labelStyle={{
-            fontSize:'18px',
-            color:window.location.pathname==='/stories/columns' ? '#00B2B4' : '#8f8f8f',
-            fontWeight:window.location.pathname==='/stories/columns' ? 'bold' : 'normal'
+          style={{
+            marginTop:'5px',
+            border: '1px solid #E2E2E2',
+            borderRadius: '0px',
+            width: '128px',
+            height: '41px'
           }}
+          labelStyle={{
+            fontSize: '18px',
+            paddingLeft: '12px', paddingRight: '6px',
+            color: (page == 'allcolumn') ? '#00B2B4' : '#8f8f8f',
+            fontWeight: (page == 'allcolumn') ? 'bold' : 'normal'
+          }}
+          hoverColor='#E2E2E2'
         />
+
+        {(page == 'allcolumn') ? '' :
+          <FontIcon className="material-icons"
+            style={chevronRightStyle}>
+            chevron_right
+          </FontIcon>
+        }
+
+        {(page == 'allcolumn') ? '' :
+          <FlatButton
+            label={next}
+            className='nunito-font'
+            style={{
+              marginTop:'5px',
+              border: '1px solid #E2E2E2',
+              borderRadius: '0px',
+              minWidth: 'auto',
+              height: '41px'
+            }}
+            labelStyle={{
+              fontSize: '18px',
+              paddingLeft: '14px', paddingRight: '14px',
+              color: '#00B2B4',
+              fontWeight: 'bold'
+            }}
+            hoverColor='#E2E2E2'
+          />
+        }
+
         {!path?'':<FlatButton
           label={next}
           className='nunito-font'
@@ -41,7 +89,7 @@ const StoryMenu = ({style,className,child,path,linkPath}) => {
           icon={<FontIcon className="material-icons" style={{fontSize:'35px',color:'#8f8f8f'}}>chevron_right</FontIcon>}
           labelStyle={{fontSize:'18px',color:'#00B2B4',fontWeight:'bold'}}
         />}
-        {child}
+
       </div>
 	)
 }

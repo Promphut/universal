@@ -67,6 +67,8 @@ const RedBox = styled.div`
 	background:red;
 	width:100px;
 	height:100px;
+	top:10px;
+	position:sticky;
 `
 
 const aa = [{text:'ada',value:1},{text:'adadsf',value:2}]
@@ -121,6 +123,10 @@ const MoodboardPage = React.createClass({
 					{/*<Stick  paddingBottom={1000} paddingTop={60}>
 						<RedBox />
 					</Stick>*/}
+					<div style={{width:'200px',height:'1000px'}}>
+							<RedBox style={{position:'sticky'}}/>
+					</div>
+
 					
 
 					Auto Complete : <AutoComplete dataSource={aa}/>
