@@ -159,6 +159,13 @@ const RightMenu = React.createClass({
 	},
 
 	render(){
+    const displayStyle = {
+      fontSize: '22px',
+      margin: '0px',
+      color: '#222',
+      fontWeight: 'bold'
+    }
+
     let {open, close} = this.props,
         user = this.props.user
 
@@ -173,7 +180,7 @@ const RightMenu = React.createClass({
               <Link to={user.url}><Avatar src={user.pic.medium}size={70}/></Link>
               <div style={{marginTop: '-15px'}}>
                 <Link to={user.url}>
-                  <h3 style={{fontSize: '22px', margin: '0px'}}>{user.display}</h3>
+                  <h3 style={displayStyle}>{user.display}</h3>
                 </Link>{user.intro}
               </div>
             </Profile>
