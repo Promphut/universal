@@ -11,6 +11,7 @@ const Content = styled.div`
 `
 
 const Main = styled.div`
+	margin-top: 50px;
 	flex: 8 730px;
 	max-width: 730px;
 	@media (max-width: 480px) {
