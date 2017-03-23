@@ -11,7 +11,7 @@ const Wrapper = styled.div`
 	}
 
 	.hide {
-		opacity: 0;
+		opacity: ${props => props.scroll};
 	}
 `
 
@@ -53,8 +53,9 @@ const Hamburger = styled.div`
 	content: '';
 	height: 2px;
 	width: 20px;
-	background: #8d8d8d;
-	box-shadow: 0 6px 0 #8d8d8d, 0 12px 0 #8d8d8d;
+	background: ${props => props.white ? 'white' : '#8d8d8d'};
+	box-shadow: ${props => props.white ?
+		'0 6px 0 white, 0 12px 0 white' : '0 6px 0 #8d8d8d, 0 12px 0 #8d8d8d'};
   marginBottom: 11px;
 `
 
@@ -99,7 +100,8 @@ const TopBar = React.createClass({
 	getInitialState(){
 		return {
 			alertLeft: false,
-			alertRight: false
+			alertRight: false,
+			scroll: 0
 		}
 	},
 
@@ -115,6 +117,9 @@ const TopBar = React.createClass({
 
 	handleScroll(e) {
 		this.props.onScroll(e)
+
+		let top = e.srcElement.body.scrollTop / 1000
+		this.setState({scroll: top})
 	},
 
 	openPop(side){
@@ -138,7 +143,7 @@ const TopBar = React.createClass({
 	},
 
 	render () {
-		let {alertLeft, alertRight} = this.state
+		let {alertLeft, alertRight, scroll} = this.state
 		let status = this.props.status || 'UNLOGGEDIN',
 			{scrolling, user, menu, transparent}  = this.props
 
@@ -166,33 +171,35 @@ const TopBar = React.createClass({
 		}
 
 	  return (
-	    <Wrapper>
+	    <Wrapper scroll={scroll}>
 				<Container className={'menu-font '
 					+ ((!scrolling && transparent) ? 'transparent' : '')}>
 					<Left>
 			      <HamburgerWrapper onClick={() => this.openPop('left')}>
-			        <Hamburger/>
+			        <Hamburger white={(!scrolling && transparent)}/>
 			      </HamburgerWrapper>
 			      <Link
 			        to="/"
 			        title={this.props.title}
 			        style={logoStyle}
-			      ><Logo fill={'#00B2B4'}/>
+			      ><Logo fill={(!scrolling && transparent) ? 'white' : '#00B2B4'}/>
 			      </Link>
 					</Left>
 
-					<Center className={(!scrolling && transparent) ? 'hide' : ''}>
+					<Center className={'hide'}>
    					{this.props.children}
 					</Center>
 
 					{status == 'LOGGEDIN' &&
 						<Right>
 				      <HideOnTablet>
-				        <PrimaryButton
-				          label="Story"
-				          iconName="add"
-				          style={buttonStyle}
-				        />
+								<Link to="/editor/stories/new">
+					        <PrimaryButton
+					          label="Story"
+					          iconName="add"
+					          style={buttonStyle}
+					        />
+								</Link>
 				      </HideOnTablet>
 
 							<Avatar

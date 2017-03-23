@@ -8,7 +8,21 @@ const Container = styled.div`
   margin:30px auto 0 auto;
   .imgWidth{
     width:590px;
-    height:314px;
+    height:290px;
+  }
+  @media (min-width: 768px) and (max-width: 991px) {
+    width: 350px;
+    .imgWidth{
+      width:350px;
+      height:180px;
+    }
+  }
+  @media (min-width: 992px) and (max-width: 1200px) {
+    width: 500px;
+    .imgWidth{
+      width:500px;
+      height:240px;
+    }
   }
   @media (max-width:480px){
     width:284px;

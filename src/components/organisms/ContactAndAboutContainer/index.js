@@ -12,6 +12,7 @@ const Content = styled.div`
 `
 
 const Main = styled.div`
+	margin-top: 50px;
 	flex: 8 730px;
 	max-width: 730px;
 	@media (max-width: 480px) {
@@ -25,6 +26,7 @@ const Aside = styled.div`
 	flex: 3 325px;
 	position:relative;
 	max-width: 325px;
+	margin-top: 50px;
 	margin-left:60px;
 	@media (max-width: 1160px) {
 		display:none;

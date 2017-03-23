@@ -108,7 +108,7 @@ const Nav = styled.nav`
 		margin: 70px 40px;
     padding: 0px;
 		list-style-type:none;
-		font-size: 20px;
+		font-size: 24px;
 	}
 
 	& ul li {
@@ -233,12 +233,12 @@ const LeftMenu = React.createClass({
       <Container open={open} >
         <Container2 onClick={close} />
         <Nav open={open}>
-          <div className="menu">
+          <div className="menu menu-font">
             <CloseBtn onTouchTap={close}><FontIcon className="material-icons">close</FontIcon></CloseBtn>
             {/* <SearchBtn onTouchTap={this.onSearch}><FontIcon className="material-icons">search</FontIcon></SearchBtn>*/}
             <ul>
-              <li><Link to="/" onClick={close} style={{fontSize: 24}}>Home</Link></li>
-              <li><Link to="/about" onClick={close} style={{fontSize: 24}}>About Us</Link></li>
+              <li><Link to="/" onClick={close}>Home</Link></li>
+              <li><Link to="/about" onClick={close} >About Us</Link></li>
 
               <Divider />
 
@@ -254,7 +254,7 @@ const LeftMenu = React.createClass({
 
               <Divider />
 
-              <li><Link to="/contact" onClick={close} style={{fontSize: 24}}>Contact</Link></li>
+              <li><Link to="/contact" onClick={close}>Contact</Link></li>
               {/*<Divider />
               <li><em style={{color:'#e2e2e2', fontSize:'18px'}}>Other Channels</em></li>
               <li><Link to="/">Infographic Thailand</Link></li>*/}

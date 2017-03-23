@@ -43,7 +43,7 @@ const Feed = styled.div`
 const Aside = styled.div`
 	flex: 1 350px;
 	max-width: 350px;
-
+	margin-left:60px;
 	@media (max-width: 1160px) {
 		display:none;
 	}

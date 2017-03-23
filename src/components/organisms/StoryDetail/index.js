@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon';
-import {WritedBy,TagBox,CommentBox,CommentUser,RecommendArticle} from 'components'
+import {WritedBy,TagBox,CommentBox,CommentUser,RecommendArticle,FromColumn} from 'components'
 import RaisedButton from 'material-ui/RaisedButton';
 
 const Wraper = styled.div`
@@ -102,8 +102,7 @@ const StoryDetail = React.createClass({
     return (
       <div key={index}>
         <CommentUser data={data}/>
-        <Child>
-        </Child>
+        <Child></Child>
       </div>
     )
   },
@@ -131,7 +130,7 @@ const StoryDetail = React.createClass({
         <Divider/>
         <div className='row center'>
           <div className='col-md-6 col-sm-12'>
-            <WritedBy writer={s.writer} column={s.column} published={s.published} />
+            <FromColumn  column={s.column} />
           </div>
           <div className='col-md-6 col-sm-12'>
             <WritedBy writer={s.writer} column={s.column} published={s.published} />

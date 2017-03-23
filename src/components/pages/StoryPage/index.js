@@ -9,16 +9,20 @@ import  { StickyContainer, Sticky }  from 'react-sticky'
 
 const Wrapper = styled.div`
 	.recommends{
-		font-size:19px;
-		color:#8F8F8F;
+		font-size:20px;
+		color:#222;
+		font-weight:bold;
 	}
 	 .hidden-des{
 	  	display:none;
 	  }
 	@media(max-width:480px){
-	 .hidden-des{
+	  .hidden-des{
 	  	display:block;
 	  }
+		.hidden-mob{
+			display:none;
+		}
     .center{
       justify-content: center;
     }
@@ -49,9 +53,6 @@ const Wrapper = styled.div`
     padding-left:20px;
     display:inline-block;
   }
-  .hidden-des{
-  	display:none;
-  }
 `
 
 const GradientOverlay = styled.div`
@@ -74,11 +75,11 @@ const Content = styled.div`
 `
 
 const Share = styled.div`
-	flex: 1 150px;
+	flex: 1 120px;
 	position:relative;
-	max-width: 150px;
-	margin:150px 10px 0 0;
-	@media (max-width: 1160px) {
+	max-width: 120px;
+	margin:150px 0 0 0;
+	@media (max-width: 1280px) {
 		display:none;
 	}
 `
@@ -94,18 +95,19 @@ const Main = styled.div`
 `
 
 const Aside = styled.div`
-	flex: 3 325px;
+	flex: 3 385px;
 	position:relative;
-	max-width: 325px;
-	margin:150px 10px 0 60px;
-	@media (max-width: 1160px) {
+	max-width: 385px;
+	padding:0 0 0 60px;
+	margin:150px 0 0 0;
+	@media (max-width: 1280px) {
 		display:none;
 	}
 `
 
 const RecommendContainer = styled.div`
-	flex:12 1160px;
-	max-width:1160px;
+	flex:12 1275px;
+	max-width:1275px;
 	margin-top:60px;
 	@media (max-width: 480px) {
 		flex:0 100%;
@@ -118,6 +120,21 @@ const Recommend = styled.div`
 	flex:1 540px;
 	max-width:540px;
 	margin:10px 20px 0 0;
+`
+const Cover = styled.div`
+	position:relative;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+background: rgba(0,0,0,0.75);
+background: -moz-linear-gradient(top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 27%);
+background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(0,0,0,0.75)), color-stop(0%, rgba(0,0,0,0.75)), color-stop(27%, rgba(0,0,0,0)));
+background: -webkit-linear-gradient(top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 27%);
+background: -o-linear-gradient(top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 27%);
+background: -ms-linear-gradient(top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 27%);
+background: linear-gradient(to bottom, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 27%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#000000', GradientType=0 );
 `
 
 // const rec = {
@@ -197,30 +214,35 @@ const StoryPage = React.createClass({
 		    <Wrapper >
 		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} article={this.story.title}/>
 
-		      <BGImg style={{width:'100%',height:'80vh'}} src={this.story.cover.large || this.story.cover.medium} className='hidden-mob'/>
-		      <BGImg style={{width:'100%',height:'80vh'}} src={this.story.coverMobile.large || this.story.coverMobile.medium} className='hidden-des'/>
+					
+		      <BGImg style={{width:'100%',height:'80vh'}} src={this.story.cover.large || this.story.cover.medium} className='hidden-mob'>
+						<Cover/>
+					</BGImg>
+		      <BGImg style={{width:'100%',height:'80vh'}} src={this.story.coverMobile.large || this.story.coverMobile.medium} className='hidden-des'>
+						<Cover/>
+					</BGImg>
 
 		      <Content>
-					<Share ref='share' style={{zIndex:'50'}}>
-						<Stick topOffset={60}>
-							<ShareSideBar/>
-						</Stick>
-					</Share>
+						<Share ref='share' style={{zIndex:'50'}}>
+							<Stick topOffset={60}>
+								<ShareSideBar/>
+							</Stick>
+						</Share>
 
-					<Main>
-						<StoryDetail story={this.story}/>
-			    </Main>
+						<Main>
+							<StoryDetail story={this.story}/>
+						</Main>
 
-			      	<Aside  id='trendingBar' ref='trendingBar'>
-						<Stick topOffset={60} style={{zIndex:'50'}}>
-							<TrendingSideBar />
-						</Stick>
-					</Aside>
+								<Aside  id='trendingBar' ref='trendingBar'>
+							<Stick topOffset={60} style={{zIndex:'50'}}>
+								<TrendingSideBar />
+							</Stick>
+						</Aside>
 		      </Content>
 
 				<Content>
 					<RecommendContainer ref='recommend'>
-						<div className='recommends sans-font'>Recommends</div>
+						<div className='recommends sans-font' style={{marginLeft:'23px'}}>Recommends</div>
 						<div className='row center'>
 							{list}
 						</div>

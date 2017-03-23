@@ -7,7 +7,7 @@ import {findDOMNode as dom} from 'react-dom'
 
 const Div = styled.div`
   width:70px;
-  margin:20px auto 10px auto
+  margin:20px 0 10px 0;
 `
 const No = styled.div`
   color:#222222;
