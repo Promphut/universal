@@ -26,10 +26,10 @@ const GradientOverlay = styled.div`
 	background: linear-gradient(135deg,  rgba(202,130,172,0.3) 0%,rgba(49,77,170,0.3) 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4dca82ac', endColorstr='#4d314daa',GradientType=1 );
 
-	bottom:0; 
-	top:0; left:0; 
-	right:0; 
-	position:absolute; 
+	bottom:0;
+	top:0; left:0;
+	right:0;
+	position:absolute;
 	z-index:0
 `
 
@@ -141,7 +141,7 @@ const StoryPage = React.createClass({
 		let list = []
 		for(let i=0; i<recommends.length; i+=2){
 			list.push(
-				<div className='col-lg-6 col-md-6 col-sm-12'> 
+				<div className='col-lg-6 col-md-6 col-sm-12'>
 					<RecommendArticle detail={recommends[i]}/>
 					{recommends[i+1] && <RecommendArticle detail={recommends[i+1]}/>}
 				</div>
@@ -150,7 +150,7 @@ const StoryPage = React.createClass({
 
 		return (
 		    <Wrapper >
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
+		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} article={this.story.title}/>
 
 		      <BGImg style={{width:'100%',height:'90vh'}} src={this.story.cover}/>
 
@@ -162,7 +162,7 @@ const StoryPage = React.createClass({
 					<Main>
 						<StoryDetail story={this.story}/>
 			      	</Main>
-			      
+
 			      <Aside  id='trendingBar' ref='trendingBar'><TrendingSideBar stop={stopPos} /></Aside>
 		      </Content>
 

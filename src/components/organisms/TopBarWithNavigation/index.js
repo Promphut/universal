@@ -15,12 +15,12 @@ const TopBarWithNavigation = React.createClass({
 	},
 
 	handleNavbarMouseOver(){
-		if(window.getScrollY() <= 60)
+		if (window.getScrollY() <= 60)
 			this.setState({scrolling: true})
 	},
 
 	handleNavbarMouseOut(){
-		if(window.getScrollY() <= 60)
+		if (window.getScrollY() <= 60)
 			this.setState({scrolling: false})
 	},
 
@@ -51,15 +51,27 @@ const TopBarWithNavigation = React.createClass({
 		})
 	},
 
+	handleScroll(e) {
+		let top = e.srcElement.body.scrollTop,
+			scrolling = this.state.scrolling
+
+		if (top > 60 && !scrolling)
+			this.setState({scrolling: true})
+
+		else if (top <= 60 && scrolling)
+			this.setState({scrolling: false})
+	},
+
 	render () {
 		const {scrolling, status} = this.state
-		let {title, titleText, notShowNav} = this.props
+		let {title, article, notShowNav} = this.props
+		let transparent = false
 
-		const transparent = true
-
+		// titleText = 'Article'
 		let children = ''
-		if (titleText) {
-			children = <h4>{titleText}</h4>
+		if (article) {
+			children = <h4 className="menu-font">{article}</h4>
+			transparent = true
 		} else if (!notShowNav) {
 			children = <TopNavigation menu={this.menu} />
 		}
@@ -67,7 +79,8 @@ const TopBarWithNavigation = React.createClass({
 	  return (
 			<Stick>
 				<TopBar
-					scrolling={scrolling}
+					onScroll={this.handleScroll}
+					scrolling={this.state.scrolling}
 					status={status}
 					title={title}
 					user={this.user}

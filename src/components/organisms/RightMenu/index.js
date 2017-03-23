@@ -174,10 +174,10 @@ const RightMenu = React.createClass({
             </Profile>
             <Divider/>
     				<ul>
-    					<li><Link to='/me/stories'>My Stories</Link></li>
-    					<li><Link to='/me/settings'>Edit Profile</Link></li>
+    					<li><Link to='/me/stories' onClick={close}>My Stories</Link></li>
+    					<li><Link to='/me/settings' onClick={close}>Edit Profile</Link></li>
     					<li><Divider/></li>
-    					<li><Link to='/me/settings/account'>Settings</Link></li>
+    					<li><Link to='/me/settings/account' onClick={close}>Settings</Link></li>
     					<li><Link to='/logout'>Log Out</Link></li>
     				</ul>
           </div>

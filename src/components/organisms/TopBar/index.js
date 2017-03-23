@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
 import styled from 'styled-components'
 import {Link, browserHistory} from 'react-router'
 import Avatar from 'material-ui/Avatar'
@@ -9,6 +9,10 @@ const Wrapper = styled.div`
 		background: none;
 		border: none;
 	}
+
+	.hide {
+		opacity: 0;
+	}
 `
 
 const Container = styled.div`
@@ -18,10 +22,17 @@ const Container = styled.div`
   height: 60px;
   border-bottom: 1px solid #e2e2e2;
 	width: 100vw;
+	transition: .1s;
 
 	display: flex;
 	flex-flow: row nowrap;
 	justify-content: space-between;
+
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 `
 
 const Left = styled.div`
@@ -47,6 +58,10 @@ const Hamburger = styled.div`
 `
 
 const Center = styled.div`
+	opacity: 1;
+	transparent .1s;
+	cursor: default;
+
 	@media (max-width: 960px) {
 		display: none;
 	}
@@ -68,7 +83,7 @@ const NotLogin = styled.div`
 	width: 180px;
 	display: inline-block;
 	font-size: 15px;
-	margin: 9px 5px;
+	margin: 9px 20px;
 
 	& * {
 		color: #8f8f8f;
@@ -85,6 +100,20 @@ const TopBar = React.createClass({
 			alertLeft: false,
 			alertRight: false
 		}
+	},
+
+	componentDidMount() {
+		if(this.props.onScroll)
+			window.addEventListener('scroll', this.handleScroll)
+	},
+
+	componentWillUnmount() {
+		if(this.props.onScroll)
+			window.removeEventListener('scroll', this.handleScroll)
+	},
+
+	handleScroll(e) {
+		this.props.onScroll(e)
 	},
 
 	openPop(side){
@@ -110,8 +139,7 @@ const TopBar = React.createClass({
 	render () {
 		let {alertLeft, alertRight} = this.state
 		let status = this.props.status || 'UNLOGGEDIN',
-			user = this.props.user,
-			menu = this.props.menu
+			{scrolling, user, menu, transparent}  = this.props
 
 	  const logoStyle = {
 	    display: 'inline-block',
@@ -138,7 +166,8 @@ const TopBar = React.createClass({
 
 	  return (
 	    <Wrapper>
-				<Container className={'menu-font ' + this.props.transparent && 'transparent'}>
+				<Container className={'menu-font '
+					+ ((!scrolling && transparent) ? 'transparent' : '')}>
 					<Left>
 			      <HamburgerWrapper onClick={() => this.openPop('left')}>
 			        <Hamburger/>
@@ -151,7 +180,7 @@ const TopBar = React.createClass({
 			      </Link>
 					</Left>
 
-					<Center>
+					<Center className={(!scrolling && transparent) ? 'hide' : ''}>
    					{this.props.children}
 					</Center>
 
@@ -205,5 +234,16 @@ const TopBar = React.createClass({
 	  )
 	}
 })
+
+TopBar.propTypes = {
+  onScroll: PropTypes.func,
+  scrolling: PropTypes.bool,
+  status: PropTypes.string,
+
+  title: PropTypes.string,
+
+  menu: PropTypes.object,
+  user: PropTypes.object
+}
 
 export default TopBar;

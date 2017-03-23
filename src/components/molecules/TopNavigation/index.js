@@ -76,7 +76,7 @@ const TopNavigation = ({menu}) => {
 			<ul>
 				<li><Link to="/">Home</Link></li>
 				<li>
-					<Link to="/">Stories &#9662;</Link>
+					<Link style={{cursor: 'pointer'}}>Stories &#9662;</Link>
 						<ul className="dropdown">
 							{items}
 							<li key={999}><Link to={'/stories/columns'}>All Columns</Link></li>

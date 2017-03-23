@@ -9,7 +9,7 @@ import Slider from 'react-slick'
 import Request from 'superagent'
 
 const Wrapper = styled.div`
-  background-color:#E5E5E5;
+  background-color: #F4F4F4;
   .imgWidth{
     width:255px;
     height:141px;
@@ -180,7 +180,12 @@ const AllColumn = React.createClass({
         	<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 					<Content >
             <Feed>
-              <div className='row' style={{width:'100%'}}><StoryMenu style={{padding:'15px 0 15px 0',marginTop:'20px',float:'left'}}/></div>
+              <div className='row' style={{width: '100%'}}>
+                <StoryMenu
+                  style={{padding: '15px 0 15px 0', marginTop: '20px', float: 'left'}}
+                  page="allcolumn"
+                />
+              </div>
               {/*<div style={{margin:'20px 0 20px 0'}}>
                 <Slider {...settings} >
                   {c}
