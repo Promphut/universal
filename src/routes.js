@@ -164,6 +164,7 @@ const routes = (
     </Route>
 
     <Route path='@:username' onEnter={getUserFromUsername} component={UserStory}/>
+    <Route path='@:username/stories/:storySlug/:sid' onEnter={getStoryFromSid} component={StoryPage}/>
 
     <Route path='error' component={ErrorPage}/>
     <Route path='404' component={NotFoundPage}/>

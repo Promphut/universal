@@ -1,5 +1,6 @@
 import React from 'react'
-import { PageTemplate, TopBarWithNavigation, StoryDetail, RecommendArticle, TrendingSideBar, ShareSideBar, BGImg} from 'components'
+import { PageTemplate, TopBarWithNavigation, StoryDetail, RecommendArticle, TrendingSideBar,
+	 Stick,ShareSideBar, BGImg} from 'components'
 import {Link} from 'react-router'
 import styled from 'styled-components'
 import {findDOMNode as dom} from 'react-dom'
@@ -17,6 +18,29 @@ const Wrapper = styled.div`
 		.recommends{
 			font-size:16px;
 		}
+  }
+	p {
+    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    font-size: 18px;
+  }
+  h2 {
+    font-size: 28px;
+    font-weight:bold;
+    color:#222;
+  }
+  h3 {
+    font-size: 20px;
+    font-weight:normal;
+    color:#bfbfbf;
+  }
+  blockquote {
+    font-size: 20px;
+    font-family: 'PT Serif', 'Mitr';
+    font-weight:normal;
+    color:#222;
+    border-left: 1px solid #E2E2E2;
+    padding-left:20px;
+    display:inline-block;
   }
 `
 
@@ -86,13 +110,13 @@ const Recommend = styled.div`
 	margin:10px 20px 0 0;
 `
 
-const rec = {
-	name:'Donald Trump’s First, Alarming Week',
-	column:'Money Ideas',
-	writer:'RYAN LIZZA',
-	vote:'18',
-	comment:'3'
-}
+// const rec = {
+// 	name:'Donald Trump’s First, Alarming Week',
+// 	column:'Money Ideas',
+// 	writer:'RYAN LIZZA',
+// 	vote:'18',
+// 	comment:'3'
+// }
 
 const StoryPage = React.createClass({
 	getInitialState(){
@@ -117,21 +141,37 @@ const StoryPage = React.createClass({
 
 
 	componentDidMount(){
-		this.getTrendingStories()
+		this.getRecommendStories()
 	},
 
-	getTrendingStories(){
-		let cid = this.story.column._id
+	getRecommendStories(){
+		if(this.story.column){
+			// Get recommend from column
+			let cid = this.story.column._id
 
-		api.getFeed('story', {status:1, column:cid}, 'latest', null, 0, 4)
-		.then(result => {
-			//console.log('feed', result.feed.length)
-			this.setState({
-				recommends: result.feed,
+			api.getFeed('story', {status:1, column:cid}, 'latest', null, 0, 4)
+			.then(result => {
+				//console.log('feed', result.feed.length)
+				this.setState({
+					recommends: result.feed,
 
-				stopPos: dom(this.refs.recommend).getBoundingClientRect().top + window.scrollY
+					stopPos: dom(this.refs.recommend).getBoundingClientRect().top + window.scrollY
+				})
 			})
-		})
+		} else {
+			// If no column presented, use writer instead
+			let uid = this.story.writer._id
+
+			api.getFeed('story', {status:1, writer:uid}, 'latest', null, 0, 4)
+			.then(result => {
+				//console.log('feed', result.feed.length)
+				this.setState({
+					recommends: result.feed,
+
+					stopPos: dom(this.refs.recommend).getBoundingClientRect().top + window.scrollY
+				})
+			})
+		}
 	},
 
 	render(){
@@ -164,6 +204,7 @@ const StoryPage = React.createClass({
 			      	</Main>
 
 			      <Aside  id='trendingBar' ref='trendingBar'><TrendingSideBar stop={stopPos} /></Aside>
+
 		      </Content>
 
 				<Content>

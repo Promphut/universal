@@ -9,17 +9,20 @@ const Container = styled.div`
 const Stick = React.createClass({
   getInitialState(){
     return{
-      stick:true
+      stick:false
     }
   },
 
   componentDidMount(){
+    
     var paddingTop = this.props.paddingTop || 0
     var paddingBottom = this.props.paddingBottom  || document.body.offsetHeight
     var self = this
     var item = dom(self.refs.stick)
     var oldPos = item.offsetTop
-
+    if(item.getBoundingClientRect()==0){
+      this.setState({stick:true})
+    }
     if(!this.props.paddingBottom){
       window.addEventListener("scroll", function(event) {
         var offset = item.getBoundingClientRect();

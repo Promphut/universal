@@ -141,11 +141,17 @@ api.signup = (data) => {
     }, api.err)
 }
 
-api.getFeed = (type, filter, sort, sortby, page, limit) => {
+/*
+	option: {
+		allowUnlisted: false (default) - get unlisted (no belong to the column) feed
+	}
+*/
+api.getFeed = (type, filter, sort, sortby, page, limit, option) => {
 	//console.log('filter', JSON.stringify(filter))
 	return Request
 	.get(config.BACKURL+'/publishers/'+config.PID+'/feed?type='+type)
 	.query({filter: filter && JSON.stringify(filter)})
+	.query({option: option && JSON.stringify(option)})
 	.query({sort: sort})
 	.query({sortby: sortby})
 	.query({page: page})
