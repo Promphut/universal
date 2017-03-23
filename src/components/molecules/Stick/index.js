@@ -9,7 +9,7 @@ const Container = styled.div`
 const Stick = React.createClass({
   getInitialState(){
     return{
-      stick:false
+      stick:true
     }
   },
 
@@ -19,26 +19,47 @@ const Stick = React.createClass({
     var self = this
     var item = dom(self.refs.stick)
     var oldPos = item.offsetTop
-    var {marginTop,marginBottom} = this.props
-    window.addEventListener("scroll", function(event) {
-      var offset = item.getBoundingClientRect();
-      var top = offset.top
-      var scrollY = this.scrollY 
-      if(top<15+paddingTop){
-        if(scrollY<oldPos){
-          item.style.top = (top-paddingTop)+'px'
-          self.setState({stick:false})
-        }else if(scrollY >= paddingBottom){
-          self.setState({stick:false})
-        }else{
-          item.style.top = (0+paddingTop)+'px'
-          self.setState({stick:true})
+
+    if(!this.props.paddingBottom){
+      window.addEventListener("scroll", function(event) {
+        var offset = item.getBoundingClientRect();
+        var top = offset.top
+        var scrollY = this.scrollY 
+        if(top<15+paddingTop){
+          if(scrollY<oldPos){
+            item.style.top = (top-paddingTop)+'px'
+            self.setState({stick:false})
+          }else{
+            item.style.top = (0+paddingTop)+'px'
+            self.setState({stick:true})
+          }
         }
-      }
-      if(scrollY==0){
-        item.style.top = 0+'px'
-      }
-    })
+        if(scrollY==0){
+          item.style.top = 0+'px'
+        }
+      })
+    }else{
+      window.addEventListener("scroll", function(event) {
+        var offset = item.getBoundingClientRect();
+        var top = offset.top
+        var scrollY = this.scrollY 
+        if(top<15+paddingTop){
+          if(scrollY<oldPos){
+            item.style.top = (top-paddingTop)+'px'
+            self.setState({stick:false})
+          }else if(scrollY >= paddingBottom){
+            self.setState({stick:false})
+          }else{
+            item.style.top = (0+paddingTop)+'px'
+            self.setState({stick:true})
+          }
+        }
+        if(scrollY==0){
+          item.style.top = 0+'px'
+        }
+      })
+    }
+    
   },
 
   render(){
