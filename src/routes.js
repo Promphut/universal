@@ -10,58 +10,9 @@ import {
     PublisherDashboardPage,ColumnEditor,ColumnSettingPage,PublisherStoryPage,UserSetting,
     PublisherSettingPage, ForgetPasswordPage, PublisherEditor, PublisherContactAndAboutPage,
     UserSettingProfile, UserSettingAccount, UserSettingStory, ColumnPage, PublisherPage,
-    UserStory, AllStory, AllColumn, NewStory, NotFoundPage, ErrorPage, AboutPage, ContactPage
+    UserStory, AllStory, AllColumn, NewStory, NotFoundPage, ErrorPage, AboutPage, ContactPage, StoryPage
   } from 'components'
 import api from 'components/api'
-
-const getUserId = (nextState, replace, cb)=>{
-  var user = auth.getUser()
-  if(user){
-    Request
-      .get(config.BACKURL+'/users/'+user._id)
-      .set('Accept','application/json')
-      .end((err,res)=>{
-        if(err){
-          throw err
-        }
-        else{
-          nextState.params.user = res.body
-          cb()
-        }
-      })
-  }else{
-    replace({
-      pathname:'/signin',
-      state: { nextPathname: nextState.location.pathname }
-    })
-    cb()
-  }
-}
-
-const getPublisherId =(nextState, replace, cb)=>{
-  var user = auth.getUser()
-  if(true){
-    Request
-      .get(config.BACKURL+'/publishers/11')
-      .set('Accept','application/json')
-      .end((err,res)=>{
-        if(err){
-          throw err
-        }
-        else{
-          nextState.params.publisher = res.body
-          nextState.params.user = user
-          cb()
-        }
-      })
-  }else{
-    replace({
-      pathname:'/',
-      state: { nextPathname: nextState.location.pathname }
-    })
-    cb()
-  }
-}
 
 const getColumnId = (nextState, replace, cb)=>{
   //console.log(nextState.params)
@@ -155,6 +106,15 @@ const getColumnFromSlug = (nextState, replace, next) => {
   .catch(toError(nextState, replace, next))
 }
 
+const getStoryFromSid = (nextState, replace, next) => {
+  api.getStoryFromSid(nextState.params.sid)
+  .then(story => {
+    nextState.params.story = story
+    next()
+  })
+  .catch(toError(nextState, replace, next))
+}
+
 const logout = (nextState, replace, next) => {
   auth.logout(() => {
     window.location = '/'
@@ -165,11 +125,12 @@ const routes = (
   <Route path="/" component={App} >
     {/*<IndexRoute component={HomePage2} onEnter={syncTokenAndCookie}/>*/}
     <IndexRoute component={HomePage2} />
-    <Route path='article' component={Page3}/>
+    {/*<Route path='article' component={Page3}/>*/}
     <Route path='stories'>
-      <IndexRoute component={AllStory}/>
+      {/*<IndexRoute component={AllStory}/>*/}
       <Route path='columns' component={AllColumn}/>
       <Route path=':columnSlug' component={ColumnPage} onEnter={getColumnFromSlug}/>
+      <Route path=':columnSlug/:storySlug/:sid' component={StoryPage} onEnter={getStoryFromSid}/>
     </Route>
 
     <Route path='publisher' component={PublisherPage} onEnter={hasRoles([])}/>
@@ -184,7 +145,7 @@ const routes = (
 
     <Route path='editor' component={PublisherEditor} onEnter={hasRoles(['ADMIN', 'WRITER', 'EDITOR'])}>
       <IndexRoute component={PublisherDashboardPage} />
-      <Route path='settings' component={PublisherSettingPage} onEnter={getPublisherId}/>
+      <Route path='settings' component={PublisherSettingPage}/>
       <Route path='stories' component={PublisherStoryPage} />
       <Route path='contact' component={PublisherContactAndAboutPage}/>
       <Route path='stories/new' component={NewStory}/>

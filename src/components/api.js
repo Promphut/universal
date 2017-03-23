@@ -18,6 +18,9 @@ api.userNotFoundPromise = () => {
 api.columnNotFoundPromise = () => {
 	return Promise.reject(new NotFoundError('Column is not found.'))
 }
+api.storyNotFoundPromise = () => {
+	return Promise.reject(new NotFoundError('Story is not found.'))
+}
 // uid and token are optional
 // if token is specified, it'll be used to make request as well.
 // uid will be auto-get if not supplied.
@@ -90,6 +93,21 @@ api.getColumnFromSlug = (slug) => {
 	})
 	.catch(err => {
 		return api.columnNotFoundPromise()
+	})
+}
+
+api.getStoryFromSid = (sid) => {
+	if(sid==null) return api.storyNotFoundPromise()
+
+	return Request
+	.get(config.BACKURL + '/stories/' + sid)
+	.set('Accept', 'application/json')
+	.then(res => {
+		//console.log('getStoryFromSid', res.body.story)
+		return res.body.story
+	})
+	.catch(err => {
+		return api.storyNotFoundPromise()
 	})
 }
 

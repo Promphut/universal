@@ -15,7 +15,7 @@ const PrimaryButton = (props) => {
 			type:props.type,
 			children:props.children,
 			labelStyle: {fontWeight:'bold', fontSize:18, fontFamily:"'Nunito', 'Mitr'", color: 'White'},
-			style: {borderRadius:'24px', height:'48px', lineHeight:'48px', ...props.style},
+			style: {borderRadius:'24px', height:'48px', lineHeight:'48px', boxShadow:'none', ...props.style},
 			backgroundColor: '#00B2B4'
 		}
 
@@ -46,7 +46,7 @@ const PrimaryButton = (props) => {
 			children:props.children,
 			type:props.type,
 			labelStyle: {fontWeight:'bold', fontSize:13, fontFamily:"'Nunito', 'Mitr'", color: 'White'},
-			style: {borderRadius:'17px', height:'35px', lineHeight:'35px', ...props.style},
+			style: {borderRadius:'17px', height:'35px', lineHeight:'35px', boxShadow:'none', ...props.style},
 			backgroundColor: '#00B2B4'
 		}
 
@@ -78,7 +78,7 @@ const PrimaryButton = (props) => {
 			children:props.children,
 			type:props.type,
 			labelStyle: {fontWeight:'bold', fontSize:15, fontFamily:"'Nunito', 'Mitr'", color: 'White'},
-			style: {borderRadius:'20px', height:'40px', lineHeight:'40px', ...props.style},
+			style: {borderRadius:'20px', height:'40px', lineHeight:'40px', boxShadow:'none', ...props.style},
 			backgroundColor: '#00B2B4'
 		}
 

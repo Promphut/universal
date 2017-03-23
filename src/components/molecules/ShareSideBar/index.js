@@ -10,7 +10,7 @@ const Container = styled.div`
 `
 const Div = styled.div`
   width:70px;
-  margin:10px auto 10px auto
+  margin:60px auto 10px auto
 `
 const No = styled.div`
   color:#222222;
@@ -42,14 +42,14 @@ const ShareSideBar = React.createClass({
     var self = this
     var item = dom(self.refs.contain)
     var startPos = item.getBoundingClientRect().top
-    var height = item.scrollHeight;
+    var height = item.scrollHeight + 100;
     var direction = 0
 		window.addEventListener("scroll", function(event) {
-			var top = this.scrollY
+			var top = this.scrollY + 100
       var stopPos = typeof self.state.stopPos=='undefined'?top+100:self.state.stopPos
       //console.log(height +' : '+startPos+' : '+top +' : '+stopPos)
       if(top>direction){
-        if(top>=startPos-60&&top<=stopPos-height){
+        if(top>=startPos&&top<=stopPos-height){
           item.style.top = top-startPos+'px';
         }
       }else{

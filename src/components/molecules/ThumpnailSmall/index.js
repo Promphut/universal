@@ -18,6 +18,7 @@ const Container = styled.div`
     }
   }
 `
+
 const Div = styled.div`
   color:#8F8F8F;
   font-size:13px;
@@ -25,10 +26,13 @@ const Div = styled.div`
     font-size:11px;
   }
 `
+
 const Column = styled.span`
   font-weight:bold;
 `
-const Name = styled.div`
+
+const NameLink = styled(Link)`
+  display: block;
   color:#222;
   font-weight:bold;
   font-size:17px;
@@ -44,6 +48,7 @@ const ThumpnailSmall = React.createClass({
       detail:this.props.detail
     }
   },
+
   componentWillReceiveProps(nextProps){
     if(nextProps.detail!=this.props.detail){
       this.setState({
@@ -51,14 +56,16 @@ const ThumpnailSmall = React.createClass({
       })
     }
   },
+
   render(){
     var {detail,style} = this.props
     var {detail} = this.state
-    var {title,updated,coverMobile} = detail
+    var {title,updated,coverMobile,url} = detail
+
     return(
       <Container style={{...style}}>
-        <OverlayImg src={coverMobile} className='imgWidth'/>
-        <Name className='sans-font'>{title}</Name>
+        <Link to={url}><OverlayImg src={coverMobile} className='imgWidth'/></Link>
+        <NameLink to={url} className='sans-font'>{title}</NameLink>
         <Div className='sans-font'>5 min read</Div>
       </Container>
     )
