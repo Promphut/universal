@@ -126,7 +126,7 @@ const ColumnPage = React.createClass({
 		//console.log('column', column)
 
 		let ChildCover =
-			<div style={{margin:'170px 0 0 20%',width:'700px'}}>
+			<div style={{margin:'120px 0 0 20%', width:'700px'}}>
 				<ColumnName className='serif-font'>{column.name}</ColumnName>
 				<ColumnDetail >{column.shortDesc}</ColumnDetail>
 			</div>
@@ -134,7 +134,7 @@ const ColumnPage = React.createClass({
 		return (
 		    <Wrapper>
 				<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
-				<BGImg src={column.cover.medium || column.cover.small} style={{width:'100%',height:'510px'}} child={ChildCover}/>
+				<BGImg src={column.cover.medium || column.cover.small} style={{width:'100%',height: (280+60)+'px'}} child={ChildCover}/>
 
 		      	<Content>
 			      <Main>

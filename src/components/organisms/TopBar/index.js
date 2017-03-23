@@ -11,7 +11,7 @@ const Wrapper = styled.div`
 	}
 
 	.hide {
-		opacity: 0;
+		opacity: ${props => props.scroll};
 	}
 `
 
@@ -100,7 +100,8 @@ const TopBar = React.createClass({
 	getInitialState(){
 		return {
 			alertLeft: false,
-			alertRight: false
+			alertRight: false,
+			scroll: 0
 		}
 	},
 
@@ -116,6 +117,9 @@ const TopBar = React.createClass({
 
 	handleScroll(e) {
 		this.props.onScroll(e)
+
+		let top = e.srcElement.body.scrollTop / 1000
+		this.setState({scroll: top})
 	},
 
 	openPop(side){
@@ -139,7 +143,7 @@ const TopBar = React.createClass({
 	},
 
 	render () {
-		let {alertLeft, alertRight} = this.state
+		let {alertLeft, alertRight, scroll} = this.state
 		let status = this.props.status || 'UNLOGGEDIN',
 			{scrolling, user, menu, transparent}  = this.props
 
@@ -167,7 +171,7 @@ const TopBar = React.createClass({
 		}
 
 	  return (
-	    <Wrapper>
+	    <Wrapper scroll={scroll}>
 				<Container className={'menu-font '
 					+ ((!scrolling && transparent) ? 'transparent' : '')}>
 					<Left>
@@ -182,18 +186,20 @@ const TopBar = React.createClass({
 			      </Link>
 					</Left>
 
-					<Center className={(!scrolling && transparent) ? 'hide' : ''}>
+					<Center className={'hide'}>
    					{this.props.children}
 					</Center>
 
 					{status == 'LOGGEDIN' &&
 						<Right>
 				      <HideOnTablet>
-				        <PrimaryButton
-				          label="Story"
-				          iconName="add"
-				          style={buttonStyle}
-				        />
+								<Link to="/editor/stories/new">
+					        <PrimaryButton
+					          label="Story"
+					          iconName="add"
+					          style={buttonStyle}
+					        />
+								</Link>
 				      </HideOnTablet>
 
 							<Avatar

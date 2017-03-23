@@ -26,6 +26,7 @@ const Aside = styled.div`
 	flex: 3 325px;
 	position:relative;
 	max-width: 325px;
+	margin-top: 50px;
 	margin-left:60px;
 	@media (max-width: 1160px) {
 		display:none;
