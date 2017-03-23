@@ -65,12 +65,11 @@ const loggedIn = (nextState, replace, next) => {
 const hasRoles = (roles) => {
   return (nextState, replace, next) => {
     let user = auth.getUser(), 
-        roles = auth.getRoles() || [],
         cid = nextState.params.cid || nextState.location.query.cid
 
     if(!user) return toSignin(nextState, replace, next)()
 
-    if(!auth.hasRoles(user._id, roles, cid))
+    if(!auth.hasRoles(roles, cid))
       return toError(nextState, replace, next)(new Error('Unauthorized access'))
 
     next()
@@ -111,7 +110,7 @@ const logout = (nextState, replace, next) => {
 }
 
 const routes = (
-  <Route path="/" component={App} >
+  <Route path="/" component={App}>
     {/*<IndexRoute component={HomePage2} onEnter={syncTokenAndCookie}/>*/}
     <IndexRoute component={HomePage2} />
     {/*<Route path='article' component={Page3}/>*/}
@@ -122,7 +121,7 @@ const routes = (
       <Route path=':columnSlug/:storySlug/:sid' component={StoryPage} onEnter={getStoryFromSid}/>
     </Route>
 
-    <Route path='publisher' component={PublisherPage} onEnter={hasRoles([])}/>
+    {/*<Route path='publisher' component={PublisherPage}/>*/}
     <Route path="mood" component={MoodboardPage} />
     <Route path="about" component={AboutPage} />
     <Route path="contact" component={ContactPage} />
@@ -132,19 +131,22 @@ const routes = (
     <Route path="signup" component={()=>(<SignUpPage visible={true}/>)} />
     <Route path="logout" onEnter={logout} />
 
-    <Route path='editor' component={PublisherEditor} onEnter={hasRoles(['ADMIN', 'WRITER', 'EDITOR'])}>
-      <IndexRoute component={PublisherDashboardPage} />
-      <Route path='settings' component={PublisherSettingPage}/>
-      <Route path='stories' component={PublisherStoryPage} />
-      <Route path='contact' component={PublisherContactAndAboutPage}/>
-      <Route path='stories/new' component={NewStory}/>
-      <Route path='stories/:sid/edit' component={EditStory}/>
-      <Route path='columns/:cid' >
+    <Route path='editor' component={PublisherEditor}>
+      <IndexRoute component={PublisherDashboardPage} onEnter={hasRoles(['ADMIN', 'EDITOR'])}/>
+      <Route path='settings' component={PublisherSettingPage} onEnter={hasRoles(['ADMIN'])}/>
+      <Route path='contact' component={PublisherContactAndAboutPage} onEnter={hasRoles(['ADMIN'])}/>
+
+      <Route path='stories' component={PublisherStoryPage} onEnter={hasRoles(['ADMIN', 'EDITOR'])}/>
+      <Route path='stories/new' component={NewStory}  onEnter={hasRoles(['ADMIN', 'WRITER', 'EDITOR'])}/>
+      <Route path='stories/:sid/edit' component={EditStory}  onEnter={hasRoles(['ADMIN', 'WRITER', 'EDITOR'])}/>
+      
+      <Route path='columns/:cid' onEnter={hasRoles(['ADMIN', 'EDITOR'])}>
         <Route path='settings' component={ColumnSettingPage} onEnter={getColumnId}/>
       </Route>
     </Route>
 
     <Route path='me/stories/:sid' component={StoryPage} onEnter={getStoryFromSid}/>
+    
     <Route path='me' component={UserSetting} onEnter={loggedIn}>
       <Route path='settings' component={UserSettingProfile}/>
       <Route path='settings/account' component={UserSettingAccount}/>

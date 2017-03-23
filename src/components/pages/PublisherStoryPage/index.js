@@ -257,7 +257,7 @@ const PublisherStoryPage = React.createClass({
     let {currentPage, sort} = this.state
     //console.log('filter', filter)
 
-    api.getFeed('story', this.getCurrentFilter(), sort, null, currentPage, this.FEED_LIMIT)
+    api.getFeed('story', this.getCurrentFilter(), sort, null, currentPage, this.FEED_LIMIT, {onlyAuthorized: true})
     .then(result => {
       //console.log('getFeed()', result)
       this.setState({

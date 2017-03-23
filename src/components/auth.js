@@ -65,9 +65,11 @@ auth = {
   // },
 
   // cid is optional but needed when checking for editor and writer.
-  hasRoles(uid, roles=[], cid){
-    let authorized = false
-    if(uid==null) return authorized
+  hasRoles(roles=[], cid){
+    let authorized = false,
+        cookieRoles = auth.getRoles() || [],
+        user = auth.getUser()
+    if(!user) return false
 
     roles.forEach(role => {
       role = _.capitalize(role)
@@ -77,7 +79,7 @@ auth = {
       else if(role==='EDITOR' && cid!=null) compare = {type:config.ROLES.EDITOR, user:uid, column:cid}
       else if(role==='WRITER' && cid!=null) compare = {type:config.ROLES.WRITER, user:uid, column:cid}
       
-      authorized = authorized || (_.filter(roles, compare).length > 0)
+      authorized = authorized || (_.filter(cookieRoles, compare).length > 0)
     })
 
     //console.log('authorized', authorized)

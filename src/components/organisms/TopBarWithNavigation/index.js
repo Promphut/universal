@@ -39,6 +39,7 @@ const TopBarWithNavigation = React.createClass({
 			this.menu = result.menu
 			this.user = result.user
 			this.roles = result.roles
+			//console.log('TopBarWithNavigation', this.menu, this.user, this.roles)
 
 			if(this.user && token)
 				this.setState({

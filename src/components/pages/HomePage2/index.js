@@ -16,7 +16,7 @@ const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
-	padding: 120px 0 0 0;
+	padding: 140px 0 0 0;
 `
 
 const Main = styled.div`

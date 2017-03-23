@@ -142,14 +142,26 @@ api.signup = (data) => {
 }
 
 /*
+	type: 'story'/'video'/'qa' - (mandatory)
+	filter: {...} - (optional)
+	sort: 'latest'/'popular'/'trending' - (optional) Sort mode
+	sortby: {...} - (optional) Sorted by which field
+	page: 0 (default)
+	limit: 15 (default)
 	option: {
 		allowUnlisted: false (default) - get unlisted (no belong to the column) feed
-	}
+		onlyAuthorized: false (default) - get only authorized feed for this user roles e.g. editor gets only his column's feed, editor gets everything, writer gets nothing. If this flag is set to true, token will be specified automatically.
+	} - (optional)
+
 */
 api.getFeed = (type, filter, sort, sortby, page, limit, option) => {
 	//console.log('filter', JSON.stringify(filter))
+	let token
+	if(option && option.onlyAuthorized) token = auth.getToken()
+
 	return Request
 	.get(config.BACKURL+'/publishers/'+config.PID+'/feed?type='+type)
+	.set('x-access-token', token)
 	.query({filter: filter && JSON.stringify(filter)})
 	.query({option: option && JSON.stringify(option)})
 	.query({sort: sort})
