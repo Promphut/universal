@@ -4,13 +4,10 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import {FbIcon} from 'components';
 import {findDOMNode as dom} from 'react-dom'
-const Container = styled.div`
-  width:100%;
-  position:relative;
-`
+
 const Div = styled.div`
   width:70px;
-  margin:60px auto 10px auto
+  margin:20px auto 10px auto
 `
 const No = styled.div`
   color:#222222;
@@ -35,50 +32,17 @@ const ShareSideBar = React.createClass({
     }
   },
   componentDidMount(){
-    this.Slider()
+    //this.Slider()
 	},
-
-  Slider(){
-    var self = this
-    var item = dom(self.refs.contain)
-    var startPos = item.getBoundingClientRect().top
-    var height = item.scrollHeight + 100;
-    var direction = 0
-		window.addEventListener("scroll", function(event) {
-			var top = this.scrollY + 100
-      var stopPos = typeof self.state.stopPos=='undefined'?top+100:self.state.stopPos
-      //console.log(height +' : '+startPos+' : '+top +' : '+stopPos)
-      if(top>direction){
-        if(top>=startPos&&top<=stopPos-height){
-          item.style.top = top-startPos+'px';
-        }
-      }else{
-        if(top>=startPos&&top<=stopPos-height){
-          item.style.top =  top-startPos+'px';
-        }
-      }
-      direction = top
-		});
-  },
-
-
-  componentWillReceiveProps(nextProps){
-    if(nextProps.stop != this.props.stop){
-      this.setState({stopPos:nextProps.stop})
-    }
-  },
-
 
   render(){
     return(
-      <Container ref='contain'>
-        <Div>
-          <No>217</No>
-          <div style={{color:'#8F8F8F',fontSize:'16px',fontWeight:'blod',textAlign:'center'}}>shares</div>
-          <CirButton><i className="fa fa-facebook fa-2x" aria-hidden="true" style={{color:'white'}}></i></CirButton>
-          <CirButton style={{backgroundColor:'#60AADE',paddingLeft:'18px'}}><i className="fa  fa-twitter fa-2x" aria-hidden="true" style={{color:'white'}}></i></CirButton>
-        </Div>
-      </Container>
+      <Div style={{...this.props.style}}>
+        <No>217</No>
+        <div style={{color:'#8F8F8F',fontSize:'16px',fontWeight:'blod',textAlign:'center'}}>shares</div>
+        <CirButton><i className="fa fa-facebook fa-2x" aria-hidden="true" style={{color:'white'}}></i></CirButton>
+        <CirButton style={{backgroundColor:'#60AADE',paddingLeft:'18px'}}><i className="fa  fa-twitter fa-2x" aria-hidden="true" style={{color:'white'}}></i></CirButton>
+      </Div>
   )
   },
 }) 

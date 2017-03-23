@@ -5,6 +5,7 @@ import {Link} from 'react-router'
 import styled from 'styled-components'
 import {findDOMNode as dom} from 'react-dom'
 import api from 'components/api'
+import  { StickyContainer, Sticky }  from 'react-sticky'
 
 const Wrapper = styled.div`
 	.recommends{
@@ -67,7 +68,7 @@ const Share = styled.div`
 	flex: 1 150px;
 	position:relative;
 	max-width: 150px;
-	margin-right:10px;
+	margin:150px 10px 0 0;
 	@media (max-width: 1160px) {
 		display:none;
 	}
@@ -87,7 +88,7 @@ const Aside = styled.div`
 	flex: 3 325px;
 	position:relative;
 	max-width: 325px;
-	margin-left:60px;
+	margin:150px 10px 0 60px;
 	@media (max-width: 1160px) {
 		display:none;
 	}
@@ -153,8 +154,10 @@ const StoryPage = React.createClass({
 			this.setState({
 				recommends: result.feed,
 
-				stopPos: dom(this.refs.recommend).getBoundingClientRect().top + window.scrollY
-			})
+				stopPos: dom(this.refs.recommend).getBoundingClientRect().top
+
+			},()=>{})
+			
 		})
 	},
 
@@ -163,11 +166,10 @@ const StoryPage = React.createClass({
 		//console.log('render', this.story)
 
 		let list = []
-		for(let i=0; i<recommends.length; i+=2){
+		for(let i=0; i<recommends.length; i++){
 			list.push(
 				<div className='col-lg-6 col-md-6 col-sm-12'> 
-					<RecommendArticle detail={recommends[i]}/>
-					{recommends[i+1] && <RecommendArticle detail={recommends[i+1]}/>}
+					<RecommendArticle detail={recommends[i]} />
 				</div>
 			)
 		}
@@ -179,16 +181,18 @@ const StoryPage = React.createClass({
 		      <BGImg style={{width:'100%',height:'90vh'}} src={this.story.cover}/>
 
 		      <Content>
-					<Share ref='share'>
-						<ShareSideBar stop={stopPos}/>
+					<Share ref='share' style={{zIndex:'50'}}>
+						<Stick topOffset={60} >
+							<ShareSideBar/>
+						</Stick>
 					</Share>
 
 					<Main>
 						<StoryDetail story={this.story}/>
-			      	</Main>
+			    </Main>
 			      
 			      <Aside  id='trendingBar' ref='trendingBar'>
-							<Stick>
+							<Stick topOffset={60} style={{zIndex:'50'}}>
 								<TrendingSideBar />
 							</Stick>
 						</Aside>
