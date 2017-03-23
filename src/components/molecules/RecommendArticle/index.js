@@ -4,10 +4,10 @@ import styled from 'styled-components'
 import {OverlayImg} from 'components'
 
 const Container = styled.div`
-  width:540px;
+  width:600px;
   margin:30px auto 0 auto;
   .imgWidth{
-    width:540px;
+    width:600px;
     height:314px;
   }
   @media (max-width:480px){
@@ -47,10 +47,10 @@ const NameLink = styled(Link)`
 `
 
 const RecommendArticle = ({detail})=>{
-  let {column,title,writer,votes,comments,url,cover} = detail
+  let {column,title,writer,votes,comments,url,cover,style,coverMobile} = detail
 
   return(
-    <Container>
+    <Container style={{...style}}>
       <Link to={url}><OverlayImg src={cover} className='imgWidth' /></Link>
       {column && <Div className='sans-font'>in <Column to={column.url}>{column.name}</Column></Div>}
       <NameLink to={url} className='serif-font'>{title}</NameLink>

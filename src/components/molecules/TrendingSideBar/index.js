@@ -8,7 +8,7 @@ import api from 'components/api'
 
 const Container = styled.div`
   width:324px;
-  position:relative;
+  position:sticky;
 `
 
 const Head = styled.div`
