@@ -564,7 +564,8 @@ const PublisherContact = React.createClass({
               )):''}
             </DropDownMenu>
           </div>
-          <div className='row' style={{display:'block',overflow:'hidden'}}>
+          {/*next interation*/}
+          {/*<div className='row' style={{display:'block',overflow:'hidden'}}>
             <Label className="nunito-font" style={{float:'left',marginTop:'26px'}}>Add up to 5 tags : </Label>
             <div className='row' style={{marginTop:'15px'}}>
               {addTag.length!=0?addTag.map((data,index)=>(
@@ -587,7 +588,7 @@ const PublisherContact = React.createClass({
                 dataSourceConfig={dataSourceConfig}
               />:''}
             </div>
-          </div>
+          </div>*/}
           <Divider/>
           <div>
             <Label className="nunito-font" >Select cover picture : </Label>

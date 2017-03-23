@@ -94,7 +94,9 @@ const TopColumnSidebar = React.createClass({
   },
 
   render(){
-    var Sort = []
+    var {column} = this.props
+    //console.log(column)
+    /*var Sort = []
     for(let i=0;i<6;i++){
       Sort.push(
         <Div className='serif-font' key={i}>
@@ -105,12 +107,20 @@ const TopColumnSidebar = React.createClass({
           </div>
         </Div>
       )
-    }
+    }*/
     return(
       <Container style={{...this.props.style}} ref='contain'>
         <Divider/>
         <Head>TOP COLUMNS</Head>
-          {Sort}
+          {column.length!=0?column.map((data,index)=>(
+            <Div className='serif-font' key={index}>
+              <Number className={'bg'+(1+index)}>{index+1}</Number>
+              <div style={{padding:'10px 30px 0 30px'}}>
+                <Name>{data.name}</Name>
+                {/*<Sty className='sans-font'>{data.shortDesc}</Sty>*/}
+              </div>
+            </Div>
+          )):''}
         <Divider/>
       </Container>
     )

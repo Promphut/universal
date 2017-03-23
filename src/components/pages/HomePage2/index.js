@@ -9,7 +9,10 @@ import api from 'components/api'
 import slider from 'react-slick'
 
 const Wrapper = styled.div`
-
+	@media (max-width:480px) {
+		max-width: 100%;
+		width:100%;
+  }
 `
 
 const Content = styled.div`
@@ -25,7 +28,6 @@ const Main = styled.div`
 	@media (max-width:480px) {
     flex: 0 100%;
 		max-width: 100%;
-		min-width: 100%;
 		padding:0 15px 0 15px;
   }
 `
@@ -35,7 +37,6 @@ const Feed = styled.div`
 	@media (max-width:480px) {
     flex: 0 100%;
 		max-width: 100%;
-		min-width: 100%;
 		padding:0 15px 0 15px;
   }
 `
@@ -70,6 +71,8 @@ const HomePage2 = React.createClass({
 	getInitialState(){
 		this.trendingStories = []
 		this.latestStories = []
+		this.writer = []
+		this.column = []
 
 		return {
 			refresh: 0
@@ -103,7 +106,26 @@ const HomePage2 = React.createClass({
 				refresh: Math.random()
 			})
 		})
+
+		api.getColumns().then((res)=>{
+			this.column = res
+			this.setState({
+				refresh: Math.random()
+			})
+		})
+
+
+		api.getWriters().then((res)=>{
+			this.writer = res
+			this.setState({
+				refresh: Math.random()
+			})
+		})
+
+
 	},
+
+
 
 	render(){
 		return (
@@ -124,17 +146,17 @@ const HomePage2 = React.createClass({
 
 		      <Content>
 			      <Main>
-						<TextLine className='sans-font'>Latest</TextLine>
-						{/*{article}*/}
-						{this.latestStories.map((story, index) => (
-							index%3==0 ? <ArticleBoxLarge detail={story} key={index}/> : <ArticleBox detail={story} key={index}/>
-						))}
-						<More style={{margin:'30px auto 30px auto'}}/>
+							<TextLine className='sans-font'>Latest</TextLine>
+							{/*{article}*/}
+							{this.latestStories.map((story, index) => (
+								index%3==0 ? <ArticleBoxLarge detail={story} key={index}/> : <ArticleBox detail={story} key={index}/>
+							))}
+							<More style={{margin:'30px auto 30px auto'}}/>
 			      </Main>
 			      <Aside>
-						<TopColumnSidebar />
-						<TopWriterSidebar />
-					</Aside>
+							<TopColumnSidebar column={this.column}/>
+							<TopWriterSidebar writer={this.writer}/>
+						</Aside>
 		      </Content>
 		   </Wrapper>
 		  )

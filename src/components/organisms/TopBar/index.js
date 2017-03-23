@@ -63,7 +63,6 @@ const Center = styled.div`
 	opacity: 1;
 	transparent .1s;
 	cursor: default;
-
 	@media (max-width: 960px) {
 		display: none;
 	}

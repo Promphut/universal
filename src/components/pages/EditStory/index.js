@@ -270,6 +270,22 @@ const PublisherContact = React.createClass({
           console.log(res.body)
           this.setState({story:res.body.story,title:res.body.story.title})
           this.editor.setContent(res.body.story.html)
+
+          // var sel = []
+          // if(res.body.story.tags.length!=0){
+          //   res.body.story.tags.map((data,index)=>{
+          //     sel[index] = {text:data.name,value:index,id:data._id}
+          //   })
+          //   console.log(sel)
+          //   var {tag} = this.state
+          //   var newTag = tag
+          //   tag.map((data,index)=>{
+          //     if(data.text==sel[index].text){
+          //       newTag.splice(index,1)
+          //     }
+          //   })
+          //   this.setState({addTag:addedTag,searchText:'',tag:newTag})
+          // }
         }
       })
   },
@@ -277,19 +293,19 @@ const PublisherContact = React.createClass({
   getTag(){
     var self = this
     Request
-    .get(config.BACKURL+'/publishers/'+config.PID+'/tags')
-    .end((err,res)=>{
-      if(err)throw err
-      else{
+      .get(config.BACKURL+'/publishers/'+config.PID+'/tags')
+      .end((err,res)=>{
+        if(err)throw err
+        else{
+          //console.log(res.body)
+          var tag = []
+          res.body.tags.map((data,index)=>{
+            tag[index] = {text:data.name,value:index,id:data._id}
+          })
+          self.setState({tag:tag,pureTag:res.body.tags})
+        }
         //console.log(res.body)
-        var tag = []
-        res.body.tags.map((data,index)=>{
-          tag[index] = {text:data.name,value:index,id:data._id}
-        })
-        self.setState({tag:tag,pureTag:res.body.tags})
-      }
-      //console.log(res.body)
-    })
+      })
   },
 
   getColumn(){
@@ -529,7 +545,8 @@ const PublisherContact = React.createClass({
               )):''}
             </DropDownMenu>
           </div>
-          <div className='row' style={{display:'block',overflow:'hidden'}}>
+          {/*next interation*/}
+          {/*<div className='row' style={{display:'block',overflow:'hidden'}}>
             <Label className="nunito-font" style={{float:'left',marginTop:'26px'}}>Add up to 5 tags : </Label>
             <div className='row' style={{marginTop:'15px'}}>
               {addTag.length!=0?addTag.map((data,index)=>(
@@ -552,7 +569,7 @@ const PublisherContact = React.createClass({
                 dataSourceConfig={dataSourceConfig}
               />:''}
             </div>
-          </div>
+          </div>*/}
           <Divider/>
           <div>
             <Label className="nunito-font" >Select cover picture : </Label>
