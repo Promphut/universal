@@ -104,16 +104,17 @@ const Nav = styled.nav`
 
 	& hr {
 		background-color: #c1c1c1 !important;
-		margin: 40px 0 40px 0 !important;
+    margin: 15px 0px !important;
 	}
 
 	& ul {
 		list-style-type:none;
-		font-size: 20px;
+		font-size: 24px;
+    margin: 0px;
 	}
 	& ul li a {
 		display: block;
-		margin: 20px 70px;
+    padding: 15px 10px;
 		color: #222;
 	}
 
@@ -130,7 +131,7 @@ const CloseBtn = styled(IconButton)`
 	& .material-icons {
 		width: 30px;
 		height: 30px;
-		color: #8f8f8f !important;
+		color: white !important;
 	}
 `
 
@@ -146,7 +147,7 @@ const Profile = styled.div`
 		width: 240px;
 		font-size: 15px;
 		color: #8f8f8f;
-		padding-left: 15px;
+		padding-left: 20px;
 	}
 `
 
@@ -158,6 +159,13 @@ const RightMenu = React.createClass({
 	},
 
 	render(){
+    const displayStyle = {
+      fontSize: '22px',
+      margin: '0px',
+      color: '#222',
+      fontWeight: 'bold'
+    }
+
     let {open, close} = this.props,
         user = this.props.user
 
@@ -165,18 +173,24 @@ const RightMenu = React.createClass({
       <Container open={open}>
         <Container2 onClick={close} />
         <Nav open={open}>
-          <div className="menu">
+          <div className="menu menu-font">
             <CloseBtn onTouchTap={close}><FontIcon className="material-icons">close</FontIcon></CloseBtn>
 
             <Profile className="content-font">
               <Link to={user.url}><Avatar src={user.pic.medium}size={70}/></Link>
-              <div><Link to={user.url}><h3>{user.display}</h3></Link>{user.shortDesc}</div>
+              <div style={{marginTop: '-15px'}}>
+                <Link to={user.url}>
+                  <h3 style={displayStyle}>{user.display}</h3>
+                </Link>{user.intro}
+              </div>
             </Profile>
-            <Divider/>
+            <Divider />
     				<ul>
     					<li><Link to='/me/stories' onClick={close}>My Stories</Link></li>
     					<li><Link to='/me/settings' onClick={close}>Edit Profile</Link></li>
-    					<li><Divider/></li>
+    				</ul>
+    				<Divider />
+    				<ul>
     					<li><Link to='/me/settings/account' onClick={close}>Settings</Link></li>
     					<li><Link to='/logout'>Log Out</Link></li>
     				</ul>

@@ -53,8 +53,9 @@ const Hamburger = styled.div`
 	content: '';
 	height: 2px;
 	width: 20px;
-	background: #8d8d8d;
-	box-shadow: 0 6px 0 #8d8d8d, 0 12px 0 #8d8d8d;
+	background: ${props => props.white ? 'white' : '#8d8d8d'};
+	box-shadow: ${props => props.white ?
+		'0 6px 0 white, 0 12px 0 white' : '0 6px 0 #8d8d8d, 0 12px 0 #8d8d8d'};
   marginBottom: 11px;
 `
 
@@ -171,13 +172,13 @@ const TopBar = React.createClass({
 					+ ((!scrolling && transparent) ? 'transparent' : '')}>
 					<Left>
 			      <HamburgerWrapper onClick={() => this.openPop('left')}>
-			        <Hamburger/>
+			        <Hamburger white={(!scrolling && transparent)}/>
 			      </HamburgerWrapper>
 			      <Link
 			        to="/"
 			        title={this.props.title}
 			        style={logoStyle}
-			      ><Logo fill={'#00B2B4'}/>
+			      ><Logo fill={(!scrolling && transparent) ? 'white' : '#00B2B4'}/>
 			      </Link>
 					</Left>
 
