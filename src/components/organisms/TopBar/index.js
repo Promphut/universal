@@ -13,7 +13,7 @@ const Container = styled.div`
   background-color: white;
   height: 60px;
   border-bottom: 1px solid #e2e2e2;
-	width: 100vw;
+	width: 100%;
 
 	display: flex;
 	flex-flow: row nowrap;

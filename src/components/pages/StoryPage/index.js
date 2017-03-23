@@ -9,8 +9,9 @@ import  { StickyContainer, Sticky }  from 'react-sticky'
 
 const Wrapper = styled.div`
 	.recommends{
-		font-size:19px;
-		color:#8F8F8F;
+		font-size:20px;
+		color:#222;
+		font-weight:bold;
 	}
 	@media(max-width:480px){
     .center{
@@ -65,11 +66,11 @@ const Content = styled.div`
 `
 
 const Share = styled.div`
-	flex: 1 150px;
+	flex: 1 110px;
 	position:relative;
-	max-width: 150px;
+	max-width: 110px;
 	margin:150px 10px 0 0;
-	@media (max-width: 1160px) {
+	@media (max-width: 1280px) {
 		display:none;
 	}
 `
@@ -89,14 +90,14 @@ const Aside = styled.div`
 	position:relative;
 	max-width: 325px;
 	margin:150px 10px 0 60px;
-	@media (max-width: 1160px) {
+	@media (max-width: 1280px) {
 		display:none;
 	}
 `
 
 const RecommendContainer = styled.div`
-	flex:12 1160px;
-	max-width:1160px;
+	flex:12 1275px;
+	max-width:1275px;
 	margin-top:60px;
 	@media (max-width: 480px) {
 		flex:0 100%;
@@ -189,29 +190,29 @@ const StoryPage = React.createClass({
 		    <Wrapper >
 		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 
-		      <BGImg style={{width:'100%',height:'90vh'}} src={this.story.cover}/>
+		      <BGImg style={{width:'100%',height:'80vh'}} src={this.story.cover}/>
 
 		      <Content>
-					<Share ref='share' style={{zIndex:'50'}}>
-						<Stick topOffset={60} >
-							<ShareSideBar/>
-						</Stick>
-					</Share>
+							<Share ref='share' style={{zIndex:'50'}}>
+								<Stick topOffset={60} >
+									<ShareSideBar/>
+								</Stick>
+							</Share>
 
-					<Main>
-						<StoryDetail story={this.story}/>
-			    </Main>
-			      
-			      <Aside  id='trendingBar' ref='trendingBar'>
-							<Stick topOffset={60} style={{zIndex:'50'}}>
-								<TrendingSideBar />
-							</Stick>
-						</Aside>
+							<Main>
+								<StoryDetail story={this.story}/>
+							</Main>
+							
+							<Aside  id='trendingBar' ref='trendingBar'>
+								<Stick topOffset={60} style={{zIndex:'50'}}>
+									<TrendingSideBar />
+								</Stick>
+							</Aside>
 		      </Content>
 
 				<Content>
 					<RecommendContainer ref='recommend'>
-						<div className='recommends sans-font'>Recommends</div>
+						<div className='recommends sans-font' style={{marginLeft:'23px'}}>Recommends</div>
 						<div className='row center'>
 							{list}
 						</div>

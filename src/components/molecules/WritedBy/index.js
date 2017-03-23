@@ -15,7 +15,7 @@ const Contain = styled.div`
   color:#8F8F8F;
   font-size:17px;
   float:left;
-  margin:10px;
+  margin:0 10px 10px 10px; 
   .imgWidth{
     width:49px;
     height:49px;
@@ -32,6 +32,8 @@ const Contain = styled.div`
 const Span1 = styled.span`
   color:#222;
   font-weight:bold;
+  font-size:19px;
+  margin:0 5px 0 5px;
 `
 
 const WritedBy = ({style, writer, /*column,*/ published}) => {
@@ -41,11 +43,11 @@ const WritedBy = ({style, writer, /*column,*/ published}) => {
     <Container style={{...style}}>
 
       <div>
-        <Link to={writer.url}><Avatar src={writer.pic && writer.pic.small} className='imgWidth' style={{float:'left',marginTop:'8px'}}/></Link>
+        <Link to={writer.url}><Avatar src={writer.pic && writer.pic.small} size={54} className='imgWidth' style={{float:'left',marginTop:'8px'}}/></Link>
       </div>
 
       <Contain className="content-font">
-        by <Span1><Link to={writer.url}>{writer.display}</Link></Span1>, {moment(published).format('lll')} <br/> 
+        by <Span1><Link to={writer.url} style={{color:'#222'}}>{writer.display}</Link></Span1>, {moment(published).format('lll')} <br/> 
         {/*writer of <Link to={column.url}><strong>{column.name}</strong></Link>*/}
         {writer.intro}
       </Contain>
