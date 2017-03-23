@@ -1,6 +1,6 @@
 import React from 'react'
 import styled,{keyframes} from 'styled-components'
-import {PrimaryButton, SecondaryButton,AutoComplete,EditMenu,BoxMenu,MenuList,DropdownWithIcon,LeftMenu} from 'components'
+import {PrimaryButton, TopBarWithNavigation, SecondaryButton,AutoComplete,EditMenu,BoxMenu,MenuList,DropdownWithIcon,LeftMenu,Stick} from 'components'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import Popover from 'material-ui/Popover'
@@ -67,7 +67,6 @@ const RedBox = styled.div`
 	background:red;
 	width:100px;
 	height:100px;
-
 `
 
 const aa = [{text:'ada',value:1},{text:'adadsf',value:2}]
@@ -75,7 +74,7 @@ const aa = [{text:'ada',value:1},{text:'adadsf',value:2}]
 const MoodboardPage = React.createClass({
 	getInitialState(){
 		return {
-			alert:true, 
+			alert:false, 
 		}
 	},
 
@@ -94,6 +93,9 @@ const MoodboardPage = React.createClass({
 		var {alert,alertDesc,alertWhere} = this.state
 		return (
 			<Wrapper>
+				<Stick>
+					<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
+				</Stick>
 				<LeftMenu open={alert} close={this.handleRequestClose}/>
 				<h1>Medium Buttons</h1>
 				<section>
@@ -116,7 +118,10 @@ const MoodboardPage = React.createClass({
 
 					Secondary without icon: <SecondaryButton label="Remove Story"/>
 
-					<RedBox />
+					{/*<Stick  paddingBottom={1000} paddingTop={60}>
+						<RedBox />
+					</Stick>*/}
+					
 
 					Auto Complete : <AutoComplete dataSource={aa}/>
 

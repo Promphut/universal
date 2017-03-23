@@ -72,7 +72,8 @@ const UploadPicture = React.createClass({
     return{
       statePreview:this.props.src==null?false:true,
       src:this.props.src,
-      file: '', 
+      preview: null, 
+      //file: '', 
 			msg: '',
       err:false
     }
@@ -98,6 +99,7 @@ const UploadPicture = React.createClass({
     var reader = new FileReader();
     var file = e.target.files[0]
 
+    if(!file) return
     // if(!this.isFiletypeValid(file)){
 		// 	this.setState({
 		// 		msg: 'File type invalid.',
@@ -110,14 +112,18 @@ const UploadPicture = React.createClass({
 		if(!this.isFilesizeValid(file)) {
 			this.setState({
 				msg: 'File size couldn\'t allowed exceed '+this.maxMB+' MB',
-				file: file,
+				//file: file,
         err:true
 			})
 			return
 		}
 
     reader.onload = (event)=>{
-        this.setState({statePreview:true,src:event.target.result})
+        this.setState({
+          statePreview:true,
+          //src:event.target.result
+          preview: event.target.result
+        })
     }
 
     reader.onloadend = (event) => {
@@ -125,14 +131,19 @@ const UploadPicture = React.createClass({
 	    .set('x-access-token', auth.getToken())
       .attach(this.props.type, file, file.name)
       .end((err, res) => {
+
     	  let msg = 'Upload complete!'
         var err = false
     	  if(err) {
           msg = 'Upload Error : '+res.body.status
           err = true
         }
+
+        console.log('onloadend', res.body.sizes.medium)
+
     	  this.setState({
-    		  file: '',
+    		  //file: '',
+          //src: res.body.sizes && res.body.sizes.medium+'?'+Math.random()*10000,
     		  msg: msg,
           err:err
     	  })
@@ -143,14 +154,17 @@ const UploadPicture = React.createClass({
   },
 
   render(){
-    var {msg,src,statePreview,err} = this.state
+    var {msg,src,statePreview,err,preview} = this.state
     var {label,style,type,width,height} = this.props
+
+    //console.log('src', src)
     
     var description = <Des className='sans-font'>{msg}</Des>
+    
     return(
       <Container encType="multipart/form-data" style={{...style,width:width,height:height}}>
         {!statePreview?<Box width={width} height={height} className="menu-font" onClick={()=>(dom(this.refs.imageLoader).click())}>{label?label:"Upload Picture"}</Box>:''}
-        <Preview width={width} height={height} ref='preview' style={{display:statePreview?'block':'none',backgroundImage:'url('+src+')'}}>
+        <Preview width={width} height={height} ref='preview' style={{display:statePreview?'block':'none',backgroundImage:'url('+(preview || src+'?'+Math.random()*10000)+')'}}>
           <Filter width={width} height={height} onClick={()=>(dom(this.refs.imageLoader).click())} >Change Picture</Filter>
         </Preview>
         {msg!=''?<Des className='sans-font' style={{color:err?'#D8000C':'#00B2B4'}}>{msg}</Des>:''}

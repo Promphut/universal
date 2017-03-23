@@ -168,8 +168,8 @@ const RightMenu = React.createClass({
             <CloseBtn onTouchTap={close}><FontIcon className="material-icons">close</FontIcon></CloseBtn>
 
             <Profile className="content-font">
-              <Link to="/me/settings"><Avatar src={user.pic.medium}size={70}/></Link>
-              <div><Link to="/me/settings"><h3>{user.display}</h3></Link>{user.shortDesc}</div>
+              <Link to={user.url}><Avatar src={user.pic.medium}size={70}/></Link>
+              <div><Link to={user.url}><h3>{user.display}</h3></Link>{user.shortDesc}</div>
             </Profile>
             <Divider/>
     				<ul>

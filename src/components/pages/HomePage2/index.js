@@ -1,6 +1,6 @@
 import React from 'react'
 import { PageTemplate, TopBarWithNavigation, OverlayImg, Thumpnail, 
-	ThumpnailSmall,ArticleBox,ArticleBoxLarge,ThumpnailRow,TopColumnSidebar,TopWriterSidebar,More} from 'components'
+	ThumpnailSmall,ArticleBox,ArticleBoxLarge,ThumpnailRow,TopColumnSidebar,TopWriterSidebar,More,Stick} from 'components'
 import styled from 'styled-components'
 import Request from 'superagent'
 import auth from 'components/auth'
@@ -120,8 +120,9 @@ const HomePage2 = React.createClass({
 		var {feed,popular} = this.state
 		return (
 		    <Wrapper>
-
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
+					<Stick>
+		      	<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
+					</Stick>
 		      {/*<TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={this.props.params.loggedIn} />*/}
 		      {/*<OverlayImg style={{width:'100%',height:'90vh'}} src="/tmp/a-story/pic-min.jpg"/>*/}
 

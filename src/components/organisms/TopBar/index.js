@@ -13,6 +13,7 @@ const Container = styled.div`
   background-color: white;
   height: 60px;
   border-bottom: 1px solid #e2e2e2;
+	width: 100vw;
 
 	display: flex;
 	flex-flow: row nowrap;
@@ -144,7 +145,7 @@ const TopBar = React.createClass({
 			display: 'inline-block',
 		  float: 'left',
 		  textAlign: 'center',
-			margin: '13px',
+			margin: '13px 20px 13px 13px',
 			cursor: 'pointer'
 		}
 
