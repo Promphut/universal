@@ -5,7 +5,13 @@ const config = {
 		DOMAIN: 		'localhost',
 		FRONTURL: 		'http://localhost:3000',
 		BACKURL: 		'http://localhost:4000',
-		FEED_LIMIT: 15
+		FEED_LIMIT: 15,
+		ROLES: {
+			MEMBER: 0, 
+			EDITOR: 1, 
+			WRITER: 2, 
+			ADMIN: 3
+		}
 	},
 	production : {
 		PID:'11',
@@ -13,7 +19,13 @@ const config = {
 		DOMAIN: 		'localhost',
 		FRONTURL: 		'http://localhost:3000',
 		BACKURL: 		'http://localhost:4000',
-		FEED_LIMIT: 15
+		FEED_LIMIT: 15,
+		ROLES: {
+			MEMBER: 0, 
+			EDITOR: 1, 
+			WRITER: 2, 
+			ADMIN: 3
+		}
 	}
 }
 

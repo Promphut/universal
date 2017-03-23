@@ -134,7 +134,7 @@ const ColumnPage = React.createClass({
 		return (
 		    <Wrapper>
 				<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
-				<BGImg src={column.cover.medium || column.cover.small} style={{width:'100%',height:'510px'}} child={ChildCover}/>
+				<BGImg src={column.cover.medium || column.cover.small} style={{width:'100%',height:'280px'}} child={ChildCover}/>
 
 		      	<Content>
 			      <Main>

@@ -77,7 +77,8 @@ const ContactAndAboutContainer = React.createClass({
 
 	    return (
 	      <div>
-			<BGImg src="/tmp/a-story/pic-min.jpg" style={{width:'100%',height:'510px'}} />
+			<BGImg src="/tmp/cover.jpg" style={{width:'100%',height:'510px'}} className="hidden-mob" />
+			
 	      	<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 	        <Content>
 	          <Main>
