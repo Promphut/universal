@@ -1,7 +1,7 @@
 import React from 'react'
 import { PageTemplate, TopBarWithNavigation, OverlayImg, Thumpnail,
 	ThumpnailSmall, ArticleBox, ArticleBoxLarge, ThumpnailRow, TopColumnSidebar,
-	TopWriterSidebar, More} from 'components'
+	TopWriterSidebar, More, BGImg} from 'components'
 import styled from 'styled-components'
 //import Request from 'superagent'
 import auth from 'components/auth'
@@ -44,7 +44,7 @@ const Feed = styled.div`
 const Aside = styled.div`
 	flex: 1 350px;
 	max-width: 350px;
-
+	margin-left:60px;
 	@media (max-width: 1160px) {
 		display:none;
 	}
@@ -80,7 +80,19 @@ const HomePage2 = React.createClass({
 	},
 
 	componentDidMount(){
+		this.getPublisher()
 		this.getFeed()
+	},
+
+	getPublisher(){
+		api.getPublisher()
+		.then(pub => {
+			this.publisher = pub
+
+			this.setState({
+				refresh: Math.random()
+			})
+		})
 	},
 
 	getFeed(){
@@ -128,9 +140,13 @@ const HomePage2 = React.createClass({
 
 
 	render(){
+		let pub = this.publisher
+		//console.log('PUB', pub)
 		return (
 		    <Wrapper>
-	      	<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
+		    	{pub && <BGImg src={pub.cover.medium} style={{width:'100%',height:'350px'}} className="hidden-mob" />}
+
+	      		<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 
 				{/* THIS IS FOR NEXT VERSION - TRENDING
 				<Content style={{paddingTop:'100px'}}>

@@ -7,7 +7,7 @@ import api from 'components/api'
 const TopBarWithNavigation = React.createClass({
 	getInitialState(){
 	    return {
-	    	//loggedIn: false,
+	    	loggedIn: false,
 	    	scrolling: false,
 
 	    	status: 'LOADING'
@@ -63,7 +63,7 @@ const TopBarWithNavigation = React.createClass({
 	},
 
 	render () {
-		const {scrolling, status} = this.state
+		const {scrolling/*, status*/} = this.state
 		let {title, article, notShowNav} = this.props
 		let transparent = false
 

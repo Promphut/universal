@@ -695,9 +695,6 @@ injectGlobal`
             flex: 0 0 100%;
     max-width: 100%;
   }
-
-
-
 `
 
 injectTapEventPlugin();

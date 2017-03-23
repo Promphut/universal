@@ -2,13 +2,6 @@ import Request from 'superagent'
 import cookies from './cookies'
 import _ from 'lodash'
 
-const ROLES = {
-  MEMBER: 0, 
-  EDITOR: 1, 
-  WRITER: 2, 
-  ADMIN: 3
-}
-
 let auth = {}
 auth = {
   setCookieAndToken(cookieAndToken){
@@ -16,7 +9,7 @@ auth = {
     if(cookieAndToken.token) cookies.set('token', cookieAndToken.token)
     if(cookieAndToken.user) cookies.setJSON('user', cookieAndToken.user)
     if(cookieAndToken.roles) cookies.setJSON('roles', cookieAndToken.roles)
-    if(cookieAndToken.menu) cookies.setJSON('menu', cookieAndToken.menu)
+    //if(cookieAndToken.menu) cookies.setJSON('menu', cookieAndToken.menu)
   },
 
   getToken() {
@@ -70,6 +63,26 @@ auth = {
 
   //   return _.filter(roles, {type:ROLES.EDITOR, user:user._id, column:cid}).length > 0 
   // },
+
+  // cid is optional but needed when checking for editor and writer.
+  hasRoles(uid, roles=[], cid){
+    let authorized = false
+    if(uid==null) return authorized
+
+    roles.forEach(role => {
+      role = _.capitalize(role)
+      let compare
+
+      if(role==='ADMIN') compare = {type:config.ROLES.ADMIN, user:uid, publisher:config.PID}
+      else if(role==='EDITOR' && cid!=null) compare = {type:config.ROLES.EDITOR, user:uid, column:cid}
+      else if(role==='WRITER' && cid!=null) compare = {type:config.ROLES.WRITER, user:uid, column:cid}
+      
+      authorized = authorized || (_.filter(roles, compare).length > 0)
+    })
+
+    //console.log('authorized', authorized)
+    return authorized
+  },
 
   logout(cb) {
     cookies.remove('token')

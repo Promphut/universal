@@ -64,26 +64,14 @@ const loggedIn = (nextState, replace, next) => {
 
 const hasRoles = (roles) => {
   return (nextState, replace, next) => {
-    let authorized = false,
-        user = auth.getUser(), 
-        roles = auth.getRoles() || []
+    let user = auth.getUser(), 
+        roles = auth.getRoles() || [],
+        cid = nextState.params.cid || nextState.location.query.cid
 
     if(!user) return toSignin(nextState, replace, next)()
 
-    roles.forEach(role => {
-      role = _.capitalize(role)
-      let compare
-
-      if(role==='ADMIN') compare = {type:ROLES.ADMIN, user:user._id, publisher:nextState.params.pid || nextState.location.query.pid}
-      else if(role==='EDITOR') compare = {type:ROLES.EDITOR, user:user._id, column:nextState.params.cid || nextState.location.query.cid}
-      else if(role==='WRITER') compare = {type:ROLES.WRITER, user:user._id, column:nextState.params.cid || nextState.location.query.cid}
-      
-      authorized = authorized || (_.filter(roles, compare).length > 0)
-    })
-
-    //console.log('authorized', authorized)
-    
-    if(!authorized) return toError(nextState, replace, next)(new Error('Unauthorized access'))
+    if(!auth.hasRoles(user._id, roles, cid))
+      return toError(nextState, replace, next)(new Error('Unauthorized access'))
 
     next()
   }

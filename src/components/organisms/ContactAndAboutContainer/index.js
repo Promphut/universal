@@ -26,6 +26,7 @@ const Aside = styled.div`
 	flex: 3 325px;
 	position:relative;
 	max-width: 325px;
+	margin-top: 50px;
 	margin-left:60px;
 	@media (max-width: 1160px) {
 		display:none;
@@ -78,7 +79,8 @@ const ContactAndAboutContainer = React.createClass({
 
 	    return (
 	      <div>
-			<BGImg src="/tmp/a-story/pic-min.jpg" style={{width:'100%',height:'510px'}} />
+			<BGImg src="/tmp/cover.jpg" style={{width:'100%',height:'510px'}} className="hidden-mob" />
+			
 	      	<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 	        <Content>
 	          <Main>
