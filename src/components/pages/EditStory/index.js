@@ -137,7 +137,7 @@ const PublisherContact = React.createClass({
   getInitialState(){
 
     return{
-      story:'Write a story ...',
+      story:{},
       chooseLayout:null,
       layout:'news',
       open:false,
@@ -149,7 +149,7 @@ const PublisherContact = React.createClass({
       searchText:'',
 
       columnList:[],
-      sid:null,
+      sid:this.props.params.sid,
       saveStatus:null,
       prevState:'',
 
@@ -164,24 +164,7 @@ const PublisherContact = React.createClass({
 
   componentDidMount(){
     //this.editor.setContent(this.state.story)
-    this.getTag()
-    this.getColumn()
-
-  },
-
-  componentWillUnmount(){
-    clearInterval(this.interval);
-  },
-
-  chooseNews(){
-    this.setState({layout:'news'})
-  },
-  chooseArticle(){
-    this.setState({layout:'article'})
-  },
-  selectedLayout(){
-    this.setState({chooseLayout:1},()=>{
-      this.editor = new MediumEditor('#paper',{
+    this.editor = new MediumEditor('#paper',{
       toolbar: {
         buttons: [
             {name: 'bold',contentDefault: '<span class="fa fa-bold" ></span>'},
@@ -236,6 +219,25 @@ const PublisherContact = React.createClass({
     this.interval = setInterval(()=>{
       this.autoSave()
     },5000)
+    this.getTag()
+    this.getColumn()
+    this.getStoryDetail()
+
+  },
+
+  componentWillUnmount(){
+    clearInterval(this.interval);
+  },
+
+  chooseNews(){
+    this.setState({layout:'news'})
+  },
+  chooseArticle(){
+    this.setState({layout:'article'})
+  },
+  selectedLayout(){
+    this.setState({chooseLayout:1},()=>{
+      
     })
   },
 
@@ -259,7 +261,18 @@ const PublisherContact = React.createClass({
     this.setState({column:val})
   },
 
-  
+  getStoryDetail(){
+    Request
+      .get(config.BACKURL+'/stories/'+this.props.params.sid)
+      .end((err,res)=>{
+        if(err)throw err
+        else{
+          console.log(res.body)
+          this.setState({story:res.body.story,title:res.body.story.title})
+          this.editor.setContent(res.body.story.html)
+        }
+      })
+  },
 
   getTag(){
     var self = this
@@ -465,7 +478,7 @@ const PublisherContact = React.createClass({
 
   render(){
     var {chooseLayout,layout,open,anchorEl,column,tag,addTag,searchText,columnList,sid,
-          alert,alertWhere,alertConfirm,alertDesc,saveStatus,title,publishStatus} = this.state
+          alert,alertWhere,alertConfirm,alertDesc,saveStatus,title,publishStatus,story} = this.state
     const dataSourceConfig = {text: 'text',value: 'value',id:'id'};
     //console.log(tag)
     return(
@@ -545,13 +558,13 @@ const PublisherContact = React.createClass({
             <Label className="nunito-font" >Select cover picture : </Label>
             <div className='row' style={{overflow:'hidden',marginTop:'20px'}}>
               <div className='col-4'>
-                <UploadPicture path={'/stories/'+sid+'/covermobile'} width='96px' height='137px' label='Portrait Cover' type='coverMobile' style={{width:'96px',height:'137px',margin:'0 auto 0 auto'}}/>
+                <UploadPicture path={'/stories/'+sid+'/covermobile'} src={story.coverMobile} width='96px' height='137px' label='Portrait Cover' type='coverMobile' style={{width:'96px',height:'137px',margin:'0 auto 0 auto'}}/>
               </div>
               <div className='col-1'>
                 <div style={{marginTop:'58px'}}>Or</div>
               </div>
               <div className='col-6'>
-                <UploadPicture path={'/stories/'+sid+'/cover'} width='194px' height='137px' label='Landscape Cover' type='cover' style={{width:'194px',height:'137px',margin:'0 auto 0 auto'}}/>
+                <UploadPicture path={'/stories/'+sid+'/cover'} src={story.cover} width='194px' height='137px' label='Landscape Cover' type='cover' style={{width:'194px',height:'137px',margin:'0 auto 0 auto'}}/>
               </div>
             </div>
           </div>
@@ -567,9 +580,7 @@ const PublisherContact = React.createClass({
         </RaisedButton>
         {sid!=null?<TextStatus className='sans-font'>{saveStatus}</TextStatus>:''}
 
-        <Title placeholder='Title' className='serif-font' value={title} onChange={this.title}>
-
-        </Title>
+        <Title placeholder='Title' className='serif-font' value={title} onChange={this.title}/>
 
         <Paper id='paper'>
 

@@ -7,7 +7,7 @@ import Popover from 'material-ui/Popover'
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import DropDownMenu from 'material-ui/DropDownMenu';
-import {Link} from 'react-router'
+import {Link,browserHistory} from 'react-router'
 import Request from 'superagent'
 import CircularProgress from 'material-ui/CircularProgress';
 import moment from 'moment'

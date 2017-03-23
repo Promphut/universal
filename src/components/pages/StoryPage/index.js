@@ -1,5 +1,6 @@
 import React from 'react'
-import { PageTemplate, TopBarWithNavigation, StoryDetail, RecommendArticle, TrendingSideBar, ShareSideBar, BGImg} from 'components'
+import { PageTemplate, TopBarWithNavigation, StoryDetail, RecommendArticle, TrendingSideBar,
+	 Stick,ShareSideBar, BGImg} from 'components'
 import {Link} from 'react-router'
 import styled from 'styled-components'
 import {findDOMNode as dom} from 'react-dom'
@@ -17,6 +18,29 @@ const Wrapper = styled.div`
 		.recommends{
 			font-size:16px;
 		}
+  }
+	p {
+    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    font-size: 18px;
+  }
+  h2 {
+    font-size: 28px;
+    font-weight:bold;
+    color:#222;
+  }
+  h3 {
+    font-size: 20px;
+    font-weight:normal;
+    color:#bfbfbf;
+  }
+  blockquote {
+    font-size: 20px;
+    font-family: 'PT Serif', 'Mitr';
+    font-weight:normal;
+    color:#222;
+    border-left: 1px solid #E2E2E2;
+    padding-left:20px;
+    display:inline-block;
   }
 `
 
@@ -163,7 +187,11 @@ const StoryPage = React.createClass({
 						<StoryDetail story={this.story}/>
 			      	</Main>
 			      
-			      <Aside  id='trendingBar' ref='trendingBar'><TrendingSideBar stop={stopPos} /></Aside>
+			      <Aside  id='trendingBar' ref='trendingBar'>
+							<Stick>
+								<TrendingSideBar />
+							</Stick>
+						</Aside>
 		      </Content>
 
 				<Content>
