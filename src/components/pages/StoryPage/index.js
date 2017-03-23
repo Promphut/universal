@@ -189,7 +189,6 @@ const StoryPage = React.createClass({
 			list.push(
 				<div className='col-lg-6 col-md-6 col-sm-12'>
 					<RecommendArticle detail={recommends[i]}/>
-					{recommends[i+1] && <RecommendArticle detail={recommends[i+1]}/>}
 				</div>
 			)
 		}
@@ -203,7 +202,7 @@ const StoryPage = React.createClass({
 
 		      <Content>
 					<Share ref='share' style={{zIndex:'50'}}>
-						<Stick topOffset={60} >
+						<Stick topOffset={60}>
 							<ShareSideBar/>
 						</Stick>
 					</Share>
@@ -212,11 +211,11 @@ const StoryPage = React.createClass({
 						<StoryDetail story={this.story}/>
 			    </Main>
 
-			      <Aside  id='trendingBar' ref='trendingBar'>
-							<Stick topOffset={60} style={{zIndex:'50'}}>
-								<TrendingSideBar />
-							</Stick>
-						</Aside>
+			      	<Aside  id='trendingBar' ref='trendingBar'>
+						<Stick topOffset={60} style={{zIndex:'50'}}>
+							<TrendingSideBar />
+						</Stick>
+					</Aside>
 		      </Content>
 
 				<Content>

@@ -46,7 +46,7 @@ const NameLink = styled(Link)`
   }
 `
 
-const RecommendArticle = ({style, detail})=>{
+const RecommendArticle = ({detail})=>{
   let {column,title,writer,votes,comments,url,cover,style,coverMobile} = detail
 
   return(
