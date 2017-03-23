@@ -4,6 +4,7 @@ import {PrimaryButton,SecondaryButton,UploadPicture} from 'components'
 import {List, ListItem, makeSelectable} from 'material-ui/List';
 import FontIcon from 'material-ui/FontIcon'
 import {Link,browserHistory} from 'react-router'
+import auth from 'components/auth'
 
 var styles = {
   list:{
@@ -22,7 +23,9 @@ const SelectableList = makeSelectable(List);
 
 const PublisherSettingMenu = React.createClass({
   getInitialState(){
-    return{
+    this.isAdmin = false
+
+    return {
       selectedIndex:this.props.pathname
     }
   },
@@ -35,8 +38,8 @@ const PublisherSettingMenu = React.createClass({
     }
   },
 
-  componentDidMount(){
-
+  componentWillMount(){
+    this.isAdmin = auth.hasRoles(["ADMIN"])
   },
 
   changePath(e){
@@ -48,8 +51,10 @@ const PublisherSettingMenu = React.createClass({
       <SelectableList value={this.state.selectedIndex} style={{padding:0, marginTop: '30px'}}>
         <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/editor/')} value='/editor/' className='nunito-font' primaryText="Dashboard" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>dashboard</FontIcon>} />
         <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/editor/stories')} value='/editor/stories' className='nunito-font' primaryText="Stories" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>description</FontIcon>} />
-        <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/editor/contact')} value='/editor/contact' className='nunito-font' primaryText="Contact & About" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>contacts</FontIcon>} />
-        <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/editor/settings')} value='/editor/settings' className='nunito-font' primaryText="Settings" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>settings</FontIcon>} />
+
+        {this.isAdmin && <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/editor/contact')} value='/editor/contact' className='nunito-font' primaryText="Contact & About" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>contacts</FontIcon>} />}
+        {this.isAdmin && <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/editor/settings')} value='/editor/settings' className='nunito-font' primaryText="Settings" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>settings</FontIcon>} />}
+
       </SelectableList>
     )
   },

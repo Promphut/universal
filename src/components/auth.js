@@ -68,17 +68,19 @@ auth = {
   hasRoles(roles=[], cid){
     let authorized = false,
         cookieRoles = auth.getRoles() || [],
-        user = auth.getUser()
+        user = auth.getUser(),
+        pid = parseInt(config.PID)
     if(!user) return false
 
     roles.forEach(role => {
-      role = _.capitalize(role)
+      role = _.toUpper(role)
       let compare
 
-      if(role==='ADMIN') compare = {type:config.ROLES.ADMIN, user:uid, publisher:config.PID}
-      else if(role==='EDITOR' && cid!=null) compare = {type:config.ROLES.EDITOR, user:uid, column:cid}
-      else if(role==='WRITER' && cid!=null) compare = {type:config.ROLES.WRITER, user:uid, column:cid}
+      if(role==='ADMIN') compare = {type:config.ROLES.ADMIN, user:user._id, publisher:pid}
+      else if(role==='EDITOR' && cid!=null) compare = {type:config.ROLES.EDITOR, user:user._id, column:cid}
+      else if(role==='WRITER' && cid!=null) compare = {type:config.ROLES.WRITER, user:user._id, column:cid}
       
+      console.log('role compare', role, compare, _.filter(cookieRoles, compare), cookieRoles)
       authorized = authorized || (_.filter(cookieRoles, compare).length > 0)
     })
 
