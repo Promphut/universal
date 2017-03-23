@@ -137,22 +137,25 @@ const routes = (
       <Route path='contact' component={PublisherContactAndAboutPage} onEnter={hasRoles(['ADMIN'])}/>
 
       <Route path='stories' component={PublisherStoryPage} onEnter={hasRoles(['ADMIN', 'EDITOR'])}/>
-      <Route path='stories/new' component={NewStory}  onEnter={hasRoles(['ADMIN', 'WRITER', 'EDITOR'])}/>
-      <Route path='stories/:sid/edit' component={EditStory}  onEnter={hasRoles(['ADMIN', 'WRITER', 'EDITOR'])}/>
+      {/*<Route path='stories/new' component={NewStory}  onEnter={hasRoles(['ADMIN', 'WRITER', 'EDITOR'])}/>
+      <Route path='stories/:sid/edit' component={EditStory}  onEnter={hasRoles(['ADMIN', 'WRITER', 'EDITOR'])}/>*/}
       
       <Route path='columns/:cid' onEnter={hasRoles(['ADMIN', 'EDITOR'])}>
         <Route path='settings' component={ColumnSettingPage} onEnter={getColumnId}/>
       </Route>
     </Route>
-
-    <Route path='me/stories/:sid' component={StoryPage} onEnter={getStoryFromSid}/>
     
     <Route path='me' component={UserSetting} onEnter={loggedIn}>
       <Route path='settings' component={UserSettingProfile}/>
       <Route path='settings/account' component={UserSettingAccount}/>
       <Route path='stories' component={UserSettingStory}/>
+
+      <Route path='stories/new' component={NewStory}  onEnter={hasRoles(['ADMIN', 'WRITER', 'EDITOR'])}/>
+      <Route path='stories/:sid/edit' component={EditStory}  onEnter={hasRoles(['ADMIN', 'WRITER', 'EDITOR'])}/>
       {/*<Route path='stories/drafts' component={UserSettingProfile}/>*/}
     </Route>
+
+    <Route path='me/stories/:sid' component={StoryPage} onEnter={getStoryFromSid}/>
 
     <Route path='@:username' onEnter={getUserFromUsername} component={UserStory}/>
     <Route path='@:username/stories/:storySlug/:sid' onEnter={getStoryFromSid} component={StoryPage}/>

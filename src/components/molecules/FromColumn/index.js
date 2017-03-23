@@ -46,8 +46,12 @@ const Cir = styled.div`
 
 const FromColumn = ({style, column}) => {
   //console.log('WritedBy',column)
-  if(!column) return (<div></div>)
-    
+  if(!column) {
+    return (
+      <Container></Container>
+    )
+  }
+
   return (
     <Container style={{...style}}>
       <div className='row'>

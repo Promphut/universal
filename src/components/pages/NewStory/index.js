@@ -133,7 +133,7 @@ const Delete = styled.div`
   }
 `
 
-const PublisherContact = React.createClass({
+const NewStory = React.createClass({
   getInitialState(){
 
     return{
@@ -630,4 +630,4 @@ const PublisherContact = React.createClass({
 
 
 
-export default PublisherContact
+export default NewStory
