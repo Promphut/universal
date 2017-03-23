@@ -127,14 +127,14 @@ const Cover = styled.div`
 	left:0;
 	width:100%;
 	height:100%;
-background: rgba(0,0,0,0.75);
-background: -moz-linear-gradient(top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 27%);
-background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(0,0,0,0.75)), color-stop(0%, rgba(0,0,0,0.75)), color-stop(27%, rgba(0,0,0,0)));
-background: -webkit-linear-gradient(top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 27%);
-background: -o-linear-gradient(top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 27%);
-background: -ms-linear-gradient(top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 27%);
-background: linear-gradient(to bottom, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 27%);
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#000000', GradientType=0 );
+background: rgba(34,34,34,0.64);
+background: -moz-linear-gradient(top, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0) 20%);
+background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(34,34,34,0.64)), color-stop(0%, rgba(0,0,0,0.64)), color-stop(20%, rgba(0,0,0,0)));
+background: -webkit-linear-gradient(top, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0) 20%);
+background: -o-linear-gradient(top, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0) 20%);
+background: -ms-linear-gradient(top, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0) 20%);
+background: linear-gradient(to bottom, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0) 20%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#222222', endColorstr='#000000', GradientType=0 );
 `
 
 // const rec = {
@@ -215,10 +215,10 @@ const StoryPage = React.createClass({
 		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} article={this.story.title}/>
 
 					
-		      <BGImg style={{width:'100%',height:'80vh'}} src={this.story.cover.large || this.story.cover.medium} className='hidden-mob'>
+		      <BGImg style={{width:'100%',height:'85vh'}} src={this.story.cover.large || this.story.cover.medium} className='hidden-mob'>
 						<Cover/>
 					</BGImg>
-		      <BGImg style={{width:'100%',height:'80vh'}} src={this.story.coverMobile.large || this.story.coverMobile.medium} className='hidden-des'>
+		      <BGImg style={{width:'100%',height:'85vh'}} src={this.story.coverMobile.large || this.story.coverMobile.medium} className='hidden-des'>
 						<Cover/>
 					</BGImg>
 

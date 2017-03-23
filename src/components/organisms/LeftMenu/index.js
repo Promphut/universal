@@ -16,6 +16,9 @@ const Container = styled.div`
   display:${props=> props.open?'block':'none'};
   animation: ${props=> props.open?displayNone:displayBlock} 0.5s forwards;
   transform: translateZ(100px);
+  @media (max-width:480px){
+    width: 100vw;
+  }
 `
 
 const Container2 = styled.div`
@@ -27,7 +30,10 @@ const Container2 = styled.div`
   z-index:10;
   background:rgba(0,0,0,0.8);
   animation: ${props=> props.open?fadeOut:fadeIn} 0.5s forwards;
-    transform: translateZ(100px);
+  transform: translateZ(100px);
+  @media (max-width:480px){
+    width: 100vw;
+  }
 `
 
 const displayNone = keyframes`
@@ -103,6 +109,10 @@ const Nav = styled.nav`
 	background: linear-gradient(135deg,  rgba(0,178,180,0.75) 0%,rgba(206,241,183,0.75) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\#bf00b2b4\, endColorstr=\#bfcef1b7\,GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 
+  @media (max-width:480px){
+    width: 80vw;
+  }
+
 	& ul {
 		// margin: 70px 60px 0 60px;
 		margin: 70px 40px;
@@ -157,7 +167,7 @@ const Nav = styled.nav`
 
 const CloseBtn = styled(IconButton)`
 	top: 20px;
-	left: 20px;
+	right: 20px;
 	position: absolute !important;
 
 	& .material-icons {

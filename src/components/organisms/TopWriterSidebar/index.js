@@ -82,6 +82,7 @@ const Sty = styled.div`
   font-size:16px;
 `
 //if height less than 900px remove last item
+const defaultPic = '/tmp/avatar.png'
 
 const TopWriterSidebar = React.createClass({
   getInitialState(){
@@ -101,23 +102,33 @@ const TopWriterSidebar = React.createClass({
   },
 
   render(){
-    var Sort = []
-    for(let i=0;i<6;i++){
+    //console.log(this.props.writer)
+    var {writer} = this.props
+    /*var Sort = []
+    for(let i=0;i<writer.length;i++){
       Sort.push(
         <Div className='serif-font' key={i}>
           <Avatar src='/tmp/avatar.png' size={50} />
           <div style={{padding:'0 30px 0 35px'}}>
-            <Name>TAXBugnoms</Name>
-            <Sty className='sans-font'>31 Stories</Sty>
+            <Name>{writer[i].display}</Name>
+            <Sty className='sans-font'>{writer[i].intro}</Sty>
           </div>
         </Div>
       )
-    }
+    }*/
     return(
       <Container style={{...this.props.style}} ref='contain'>
         <Divider/>
         <Head>TOP WRITERS</Head>
-          {Sort}
+          {writer.length!=0?writer.map((data,index)=>(
+            <Div className='serif-font' key={index}>
+              <Avatar src={data.pic && data.pic.medium} size={50} />
+              <div style={{padding:'0 30px 0 35px'}}>
+                <Name>{data.display}</Name>
+                <Sty className='sans-font'>{data.intro}</Sty>
+              </div>
+            </Div>
+          )):''}
         <Divider/>
       </Container>
     )

@@ -214,7 +214,7 @@ const PublisherThemeSetting = React.createClass({
             <div className="sans-font">Favicon</div>
           </Title>
           <Edit>
-            <UploadPicture src={uploadLogo} path='/publishers/11/cover' type='cover'/>
+            <UploadPicture src={uploadLogo} path='/publishers/11/cover' type='cover' width={'60px'} height={'60px'} labelStyle={{top:'10px'}}/>
           </Edit>
         </Flex>
         <Flex>
@@ -222,7 +222,7 @@ const PublisherThemeSetting = React.createClass({
             <div className="sans-font">Small Logo(.svg)</div>
           </Title>
           <Edit>
-            <UploadPicture src={uploadSLogo} path='/publishers/11/slogo' type='slogo'/>
+            <UploadPicture src={uploadSLogo} path='/publishers/11/slogo' type='slogo' width={'60px'} height={'60px'} labelStyle={{top:'10px'}}/>
           </Edit>
         </Flex>
         <Flex>
@@ -230,7 +230,7 @@ const PublisherThemeSetting = React.createClass({
             <div className="sans-font">Large Logo(.svg)</div>
           </Title>
           <Edit>
-            <UploadPicture src={uploadLogo} path='/publishers/11/logo' type='logo'/>
+            <UploadPicture src={uploadLogo} path='/publishers/11/logo' type='logo' width={'200px'} height={'70px'} labelStyle={{top:'25px'}}/>
           </Edit>
         </Flex>
         <Flex>

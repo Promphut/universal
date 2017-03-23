@@ -18,6 +18,12 @@ const Container = styled.div`
   z-index:10;
   display:${props=> props.open?'block':'none'};
   animation: ${props=> props.open?displayNone:displayBlock} 0.5s forwards;
+  @media (max-width:480px){
+    width: 100vw;
+    .mobile{
+      margin:20px;
+    }
+  }
 `
 
 const Container2 = styled.div`
@@ -29,7 +35,9 @@ const Container2 = styled.div`
   z-index:10;
   background:rgba(0,0,0,0.8);
   animation: ${props=> props.open?fadeOut:fadeIn} 0.5s forwards;
-  // filter:url(#blur);
+  @media (max-width:480px){
+    width: 100vw;
+  }
 `
 
 const displayNone = keyframes`
@@ -99,9 +107,10 @@ const Nav = styled.nav`
 	-webkit-overflow-scrolling: touch;
 	z-index:11;
   animation: ${props=> props.open?slideOut:slideIn} 0.6s forwards;
-
-  background: rgba(255, 255, 255, 0.75);
-
+  background: rgba(255, 255, 255, 0.85);
+  @media (max-width:480px){
+    width: 80vw;
+  }
 	& hr {
 		background-color: #c1c1c1 !important;
     margin: 15px 0px !important;
@@ -124,24 +133,29 @@ const Nav = styled.nav`
 `
 
 const CloseBtn = styled(IconButton)`
-	top: 20px;
-	left: 20px;
-	position: absolute !important;
+	top: 15px;
+	left: 15px;
+	position: relative !important;
 
 	& .material-icons {
 		width: 30px;
 		height: 30px;
-		color: white !important;
 	}
 `
 
 const Profile = styled.div`
-	padding: 80px 40px 0 40px !important;
+	padding: 80px 40px 0 40px;
 
 	& > * {
 		vertical-align: middle;
 		display: inline-block;
 	}
+  @media (max-width:480px){
+    & > * {
+      display: block;
+    }
+    padding: 30px 40px 0 40px;
+  }
 
 	& > div {
 		width: 240px;
@@ -149,6 +163,17 @@ const Profile = styled.div`
 		color: #8f8f8f;
 		padding-left: 20px;
 	}
+`
+const EditMode = styled.div`
+  background-color:#222;
+  color:#fff;
+  position:relative;
+  top:0;
+  left:0;
+  width:100%;
+  height:60px;
+  padding:12px;
+  font-size:20px;
 `
 
 const RightMenu = React.createClass({
@@ -174,10 +199,11 @@ const RightMenu = React.createClass({
         <Container2 onClick={close} />
         <Nav open={open}>
           <div className="menu menu-font">
-            <CloseBtn onTouchTap={close}><FontIcon className="material-icons">close</FontIcon></CloseBtn>
+            <Link to={'/editor'}><EditMode className="nunito-font"><FontIcon className="material-icons" style={{color:'#fff',margin:'0 25px 0 20px',top:'4px'}}>edit</FontIcon>Editor Mode</EditMode></Link>
+            <CloseBtn onTouchTap={close}><FontIcon className="material-icons" style={{color:'#222',fill:'#222'}}>close</FontIcon></CloseBtn>
 
             <Profile className="content-font">
-              <Link to={user.url}><Avatar src={user.pic.medium}size={70}/></Link>
+              <Link to={user.url}><Avatar src={user.pic.medium}size={70} className="mobile"/></Link>
               <div style={{marginTop: '-15px'}}>
                 <Link to={user.url}>
                   <h3 style={displayStyle}>{user.display}</h3>

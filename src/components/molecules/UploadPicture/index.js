@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import {Link} from 'react-router';
 import styled from 'styled-components'
 import {findDOMNode as dom} from 'react-dom'
@@ -6,15 +6,17 @@ import Request from 'superagent'
 import auth from 'components/auth'
 
 const Container = styled.form`
-  width:227px;
+  min-width:50px;
+  min-height:50px;
 `
 const Box = styled.div`
+  min-width:50px;
+  min-height:50px;
   position:relative;
   top:0px;
   left:0px;
   width:${props => props.width};
   height:${props => props.height};
-  padding-top:58px;
   border-radius:10px;
   border:1px dashed #C2C2C2;
   background-color:#F4F4F4;
@@ -56,12 +58,16 @@ const Filter = styled.div`
   background:rgba(0,0,0,0.5);
   text-align:center;
   font-size:14px;
-  padding-top:58px;
   color:#fff;
   &:hover{
     cursor:pointer;
     text-decoration:underline;
   }
+`
+const Label = styled.span`
+  position:relative;
+  font-size:14px;
+  color:#00B2B4;
 `
 
 const UploadPicture = React.createClass({
@@ -155,7 +161,7 @@ const UploadPicture = React.createClass({
 
   render(){
     var {msg,src,statePreview,err,preview} = this.state
-    var {label,style,type,width,height} = this.props
+    var {label,style,type,width,height,labelStyle} = this.props
 
     //console.log('src', src)
     
@@ -163,10 +169,9 @@ const UploadPicture = React.createClass({
 
     return(
       <Container encType="multipart/form-data" style={{...style,width:width,height:height}}>
-        {!statePreview?<Box width={width} height={height} className="menu-font" onClick={()=>(dom(this.refs.imageLoader).click())}>{label?label:"Upload Picture"}</Box>:''}
-        {/*<Preview width={width} height={height} ref='preview' style={{display:statePreview?'block':'none',backgroundImage:'url('+(preview || src+'?'+Math.random()*10000)+')'}}>*/}
-        <Preview width={width} height={height} ref='preview' style={{display:statePreview?'block':'none',backgroundImage:'url('+(preview || src)+')'}}>
-          <Filter width={width} height={height} onClick={()=>(dom(this.refs.imageLoader).click())} >Change Picture</Filter>
+        {!statePreview?<Box width={width} height={height} className="menu-font" onClick={()=>(dom(this.refs.imageLoader).click())}><Label style={{...labelStyle}}>{label?label:"Upload Picture"}</Label></Box>:''}
+        <Preview width={width} height={height} ref='preview' style={{display:statePreview?'block':'none',backgroundImage:'url('+(preview || src+'?'+Math.random()*10000)+')'}}>
+          <Filter width={width} height={height} onClick={()=>(dom(this.refs.imageLoader).click())} ><Label style={{...labelStyle,color:'#fff'}}>Change Picture</Label></Filter>
         </Preview>
         {msg!=''?<Des className='sans-font' style={{color:err?'#D8000C':'#00B2B4'}}>{msg}</Des>:''}
         <input type="file" ref="imageLoader" name="imageLoader" onChange={this.upload} style={{visibility:'hidden'}}/>
@@ -174,5 +179,15 @@ const UploadPicture = React.createClass({
     )
   }
 })
+UploadPicture.propTypes = {
+  style: PropTypes.object,
+  labelStyle: PropTypes.object,
+  width: PropTypes.string,
+  height: PropTypes.string,
+  label: PropTypes.string,
+  type: PropTypes.string,
+  src: PropTypes.string,
+  path: PropTypes.string
+}
     
 export default UploadPicture;
