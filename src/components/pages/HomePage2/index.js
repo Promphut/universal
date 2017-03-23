@@ -3,8 +3,9 @@ import { PageTemplate, TopBarWithNavigation, OverlayImg, Thumpnail,
 	ThumpnailSmall, ArticleBox, ArticleBoxLarge, ThumpnailRow, TopColumnSidebar,
 	TopWriterSidebar, More} from 'components'
 import styled from 'styled-components'
-import Request from 'superagent'
+//import Request from 'superagent'
 import auth from 'components/auth'
+import api from 'components/api'
 import slider from 'react-slick'
 
 const Wrapper = styled.div`
@@ -67,24 +68,12 @@ const Footer = styled.div`
 
 const HomePage2 = React.createClass({
 	getInitialState(){
+		this.trendingStories = []
+		this.latestStories = []
+
 		return {
-			feed:[],
-			popular:[]
+			refresh: 0
 		}
-	},
-
-	updateDimensions(){
-		// this.setState({
-		// 	width: window.getWidth(),
-		// 	height: window.getHeight()
-		// });
-	},
-
-	componentWillMount(){
-		//this.updateDimensions();
-
-		// when enter this page, update the token.
-     	//auth.updateCookie()
 	},
 
 	componentDidMount(){
@@ -92,62 +81,60 @@ const HomePage2 = React.createClass({
 	},
 
 	getFeed(){
-		var self = this
-		var filter = JSON.stringify({status:1})
-		//console.log(path)
-		Request
-		.get(config.BACKURL+'/publishers/'+config.PID+'/feed?type=story&filter='+filter+'&sort=latest')
-		.set('Accept','application/json')
-		.end((err,res)=>{
-			if(err) throw err
-			else{
-				//console.log(res.body)
-				self.setState({feed:res.body.feed})
-			}
-		})
-		Request
-		.get(config.BACKURL+'/publishers/'+config.PID+'/feed?type=story&filter='+filter+'&sort=popular')
-		.set('Accept','application/json')
-		.end((err,res)=>{
-			if(err) throw err
-			else{
-				self.setState({popular:res.body.feed})
-				//console.log(self.state.popular)
-			}
+		// 1. Fetching trendingStories
+		// THIS WILL BE CHANGED TO "TRENDING" SORT IN THE FUTURE ONCE SUPPORTED
+		api.getFeed('story', {status:1}, 'latest', null, 0, 15)
+		.then(result => {
+			//console.log('feed', result.feed.length)
+			this.trendingStories = result.feed
+
+			this.setState({
+				refresh: Math.random()
+			})
+		})	
+
+		// 2. Fetching latestStories
+		api.getFeed('story', {status:1}, 'latest', null, 0, 15)
+		.then(result => {
+			//console.log('feed', result.feed.length)
+			this.latestStories = result.feed
+
+			this.setState({
+				refresh: Math.random()
+			})
 		})
 	},
 
 	render(){
-		var {feed,popular} = this.state
 		return (
 		    <Wrapper>
 	      	<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
-		      {/*<TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={this.props.params.loggedIn} />*/}
-		      {/*<OverlayImg style={{width:'100%',height:'90vh'}} src="/tmp/a-story/pic-min.jpg"/>*/}
+		
+				{/* THIS IS FOR NEXT VERSION - TRENDING
+				<Content style={{paddingTop:'100px'}}>
+					<Feed>
+						<div className='row' style={{display:'block',overflow:'hidden'}}>
+							<Text className='sans-font' style={{float:'left'}}>Trending Now</Text>
+							<Text className='sans-font' style={{fontSize:'14px',float:'right',margin:'5px'}}>View more</Text>
+						</div>
+						{!_.isEmpty(this.trendingStories) && <ThumpnailRow detail={this.trendingStories} style={{margin:'20px 0 30px 0'}}/>}
+						{!_.isEmpty(this.trendingStories) && <ThumpnailRow detail={this.trendingStories} size='small' style={{margin:'30px 0 30px 0'}}/>}
+					</Feed>
+				</Content>*/}
 
-					<Content style={{paddingTop:'100px'}}>
-						<Feed>
-							<div className='row' style={{display:'block',overflow:'hidden'}}>
-								<Text className='sans-font' style={{float:'left'}}>Trending Now</Text>
-								<Text className='sans-font' style={{fontSize:'14px',float:'right',margin:'5px'}}>View more</Text>
-							</div>
-							{popular.length!=0?<ThumpnailRow detail={popular} style={{margin:'20px 0 30px 0'}}/>:''}
-							{popular.length!=0?<ThumpnailRow detail={popular} size='small' style={{margin:'30px 0 30px 0'}}/>:''}
-						</Feed>
-					</Content>
-		      <Content >
+		      <Content style={{marginTop: '60px'}}>
 			      <Main>
-							<TextLine className='sans-font'>Latest</TextLine>
-							{/*{article}*/}
-							{feed.map((data,index)=>(
-								index%3==0?<ArticleBoxLarge detail={data} key={index}/>:<ArticleBox detail={data} key={index}/>
-							))}
-							<More style={{margin:'30px auto 30px auto'}}/>
+						<TextLine className='sans-font'>Latest</TextLine>
+						{/*{article}*/}
+						{this.latestStories.map((story, index) => (
+							index%3==0 ? <ArticleBoxLarge detail={story} key={index}/> : <ArticleBox detail={story} key={index}/>
+						))}
+						<More style={{margin:'30px auto 30px auto'}}/>
 			      </Main>
 			      <Aside>
-							<TopColumnSidebar />
-							<TopWriterSidebar />
-						</Aside>
+						<TopColumnSidebar />
+						<TopWriterSidebar />
+					</Aside>
 		      </Content>
 		   </Wrapper>
 		  )

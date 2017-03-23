@@ -111,13 +111,13 @@ const Recommend = styled.div`
 	margin:10px 20px 0 0;
 `
 
-const rec = {
-	name:'Donald Trump’s First, Alarming Week',
-	column:'Money Ideas',
-	writer:'RYAN LIZZA',
-	vote:'18',
-	comment:'3'
-}
+// const rec = {
+// 	name:'Donald Trump’s First, Alarming Week',
+// 	column:'Money Ideas',
+// 	writer:'RYAN LIZZA',
+// 	vote:'18',
+// 	comment:'3'
+// }
 
 const StoryPage = React.createClass({
 	getInitialState(){
@@ -142,23 +142,34 @@ const StoryPage = React.createClass({
 
 
 	componentDidMount(){
-		this.getTrendingStories()
+		this.getRecommendStories()
 	},
 
-	getTrendingStories(){
-		let cid = this.story.column._id
+	getRecommendStories(){
+		if(this.story.column){
+			// Get recommend from column
+			let cid = this.story.column._id
 
-		api.getFeed('story', {status:1, column:cid}, 'latest', null, 0, 4)
-		.then(result => {
-			//console.log('feed', result.feed.length)
-			this.setState({
-				recommends: result.feed,
+			api.getFeed('story', {status:1, column:cid}, 'latest', null, 0, 4)
+			.then(result => {
+				//console.log('feed', result.feed.length)
+				this.setState({
+					recommends: result.feed,
+				})
+			})
+		} else {
+			// If no column presented, use writer instead 
+			let uid = this.story.writer._id
 
-				stopPos: dom(this.refs.recommend).getBoundingClientRect().top
+			api.getFeed('story', {status:1, writer:uid}, 'latest', null, 0, 4)
+			.then(result => {
+				//console.log('feed', result.feed.length)
+				this.setState({
+					recommends: result.feed,
+				})
+			})
+		}
 
-			},()=>{})
-			
-		})
 	},
 
 	render(){

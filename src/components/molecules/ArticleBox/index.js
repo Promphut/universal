@@ -80,14 +80,17 @@ const ArticleBox = React.createClass({
   render(){
     let {detail,style} = this.props
     let {title,cover,writer,column,votes,comments,updated,url} = detail
-
+    //console.log('URL', url)
     return (
       <Container style={{...style}}>
         <BGImg url={url} src={cover} className='imgWidth mob-hidden' />
         <BoxText className='sans-font'>
           <DivDes>
             <ShareDropdown />
-            <Div>A story of <span style={{textDecoration:'underline'}}><Link to={column.url}>{column.name}</Link></span></Div>
+            {column && <Div>
+              A story of <span style={{textDecoration:'underline'}}>
+              <Link to={column.url}>{column.name}</Link></span>
+            </Div>}
           </DivDes>
           <BGImg url={url} src={cover} className='imgWidth des-hidden'/>
           <NameLink to={url} style={{marginTop:'10px'}}>{title}</NameLink>
