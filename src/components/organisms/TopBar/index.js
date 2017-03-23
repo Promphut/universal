@@ -5,12 +5,16 @@ import Avatar from 'material-ui/Avatar'
 import {Logo, PrimaryButton, SecondaryButton, LeftMenu, RightMenu} from 'components'
 
 const Wrapper = styled.div`
+	.transparent {
+		background: none;
+		border: none;
+	}
 `
 
 const Container = styled.div`
 	margin: 0;
 	padding: 0;
-  background-color: white;
+  background: white;
   height: 60px;
   border-bottom: 1px solid #e2e2e2;
 	width: 100vw;
@@ -29,7 +33,6 @@ const HamburgerWrapper = styled.a`
   float: left;
   text-align: center;
   color: #8f8f8f;
-  background-color: white;
   padding: 22px 20px;
   cursor: pointer;
 `
@@ -135,7 +138,7 @@ const TopBar = React.createClass({
 
 	  return (
 	    <Wrapper>
-				<Container className="menu-font">
+				<Container className={'menu-font ' + this.props.transparent && 'transparent'}>
 					<Left>
 			      <HamburgerWrapper onClick={() => this.openPop('left')}>
 			        <Hamburger/>

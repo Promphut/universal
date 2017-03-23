@@ -53,7 +53,16 @@ const TopBarWithNavigation = React.createClass({
 
 	render () {
 		const {scrolling, status} = this.state
-		const {title} = this.props
+		let {title, titleText, notShowNav} = this.props
+
+		const transparent = true
+
+		let children = ''
+		if (titleText) {
+			children = <h4>{titleText}</h4>
+		} else if (!notShowNav) {
+			children = <TopNavigation menu={this.menu} />
+		}
 
 	  return (
 			<Stick>
@@ -63,8 +72,9 @@ const TopBarWithNavigation = React.createClass({
 					title={title}
 					user={this.user}
 					menu={this.menu}
+					transparent={transparent}
 				>
-					<TopNavigation menu={this.menu} />
+					{children}
 				</TopBar>
 			</Stick>
 	  )
