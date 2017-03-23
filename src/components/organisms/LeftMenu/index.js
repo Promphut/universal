@@ -237,8 +237,8 @@ const LeftMenu = React.createClass({
             <CloseBtn onTouchTap={close}><FontIcon className="material-icons">close</FontIcon></CloseBtn>
             {/* <SearchBtn onTouchTap={this.onSearch}><FontIcon className="material-icons">search</FontIcon></SearchBtn>*/}
             <ul>
-              <li><Link to="/" style={{fontSize: 24}}>Home</Link></li>
-              <li><Link to="/about" style={{fontSize: 24}}>About Us</Link></li>
+              <li><Link to="/" onClick={close} style={{fontSize: 24}}>Home</Link></li>
+              <li><Link to="/about" onClick={close} style={{fontSize: 24}}>About Us</Link></li>
 
               <Divider />
 
@@ -254,7 +254,7 @@ const LeftMenu = React.createClass({
 
               <Divider />
 
-              <li><Link to="/contact" style={{fontSize: 24}}>Contact</Link></li>
+              <li><Link to="/contact" onClick={close} style={{fontSize: 24}}>Contact</Link></li>
               {/*<Divider />
               <li><em style={{color:'#e2e2e2', fontSize:'18px'}}>Other Channels</em></li>
               <li><Link to="/">Infographic Thailand</Link></li>*/}

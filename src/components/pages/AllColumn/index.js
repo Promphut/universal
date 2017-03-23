@@ -6,10 +6,11 @@ import {Link} from 'react-router';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import Slider from 'react-slick'
-import Request from 'superagent'
+//import Request from 'superagent'
+import api from 'components/api'
 
 const Wrapper = styled.div`
-  background-color:#E5E5E5;
+  background-color: #F4F4F4;
   .imgWidth{
     width:255px;
     height:141px;
@@ -127,8 +128,8 @@ const AllColumn = React.createClass({
 	getInitialState(){
 		return {
 			stopPos:0,
-			column:[],
-			popular:[]
+			columns:[],
+			//popular:[]
 		}
 	},
 
@@ -137,20 +138,25 @@ const AllColumn = React.createClass({
 	},
 
 	getColumn(){
-		var filter = JSON.stringify({status:1})
-		Request
-			.get(config.BACKURL+'/publishers/'+config.PID+'/columns')
-			.set('Accept','application/json')
-			.end((err,res)=>{
-				if(err) throw err
-				else{
-					this.setState({column:res.body.columns})
-				}
-			})
+		// var filter = JSON.stringify({status:1})
+		// Request
+		// 	.get(config.BACKURL+'/publishers/'+config.PID+'/columns')
+		// 	.set('Accept','application/json')
+		// 	.end((err,res)=>{
+		// 		if(err) throw err
+		// 		else{
+		// 			this.setState({column:res.body.columns})
+		// 		}
+		// 	})
+
+    api.getColumns()
+    .then(cols => {
+      this.setState({columns:cols})
+    })
 	},
 
 	render(){
-    var settings = {
+    let settings = {
       centerMode: false,
       slidesToShow: 4,
       speed: 300,
@@ -174,13 +180,20 @@ const AllColumn = React.createClass({
         }
       ]
     };
-		var {column} = this.state
+
+		let {columns} = this.state
+    //console.log('column', column)
 		return (
 		    <Wrapper>
         	<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 					<Content >
             <Feed>
-              <div className='row' style={{width:'100%'}}><StoryMenu style={{padding:'15px 0 15px 0',marginTop:'20px',float:'left'}}/></div>
+              <div className='row' style={{width: '100%'}}>
+                <StoryMenu
+                  style={{padding: '15px 0 15px 0', marginTop: '20px', float: 'left'}}
+                  page="allcolumn"
+                />
+              </div>
               {/*<div style={{margin:'20px 0 20px 0'}}>
                 <Slider {...settings} >
                   {c}
@@ -192,24 +205,27 @@ const AllColumn = React.createClass({
                 </Slider>
               </div> */}
               <div className='row'>
-                {column?column.map((data,index)=>(
+                {columns && columns.map((data, index) => (
                   <div className='col-3' key={index} style={{margin:'20px 0 20px 0'}}>
                     <Link to={'/stories/' + data.slug} >
                     <Box>
-                      <BGImg src={data.cover} opacity={0.6} className='imgWidth' style={{margin:'0 auto 0 auto'}}>
+                      <BGImg src={data.cover.small || data.cover.medium} opacity={0.6} className='imgWidth' style={{margin:'0 auto 0 auto'}}>
                         <div style={{margin:'80px 0 0 15px'}}>
                           <ColumnName className='serif-font'>{data.name}</ColumnName>
+                          {/*
+                            FOR THE NEXT VERSION
                           <Column className='sans-font' >131 Stories</Column>
+                          */}
                         </div>
                       </BGImg>
                         <Desc className='sans-font' >
-                          {data.created}
+                          {data.shortDesc}
                         </Desc>
                       <Blur style={{top:'-120px'}}></Blur>
                     </Box>
                     </Link>
                   </div>
-                )):''}
+                ))}
               </div>
             </Feed>
           </Content>

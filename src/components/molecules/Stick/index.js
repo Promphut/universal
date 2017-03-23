@@ -8,7 +8,7 @@ const Container = styled.div`
   position: sticky;
   top:${props=> props.topOffset?props.topOffset:0}px;
   bottom:${props=> props.bottomOffset?props.bottomOffset:0}px;
-` 
+`
 const Stick = React.createClass({
   getInitialState(){
     return{
@@ -31,7 +31,7 @@ const Stick = React.createClass({
   //   //     window.addEventListener("scroll", function(event) {
   //   //         var offset = item.getBoundingClientRect();
   //   //         var top = offset.top
-  //   //         var scrollY = this.scrollY 
+  //   //         var scrollY = this.scrollY
   //   //         if(top<(15+paddingTop)){
   //   //           if(scrollY<oldPos){
   //   //             item.style.top = (top-paddingTop)+'px'
@@ -51,7 +51,7 @@ const Stick = React.createClass({
   //   //         console.log(paddingBottom)
   //   //         var offset = item.getBoundingClientRect();
   //   //         var top = offset.top
-  //   //         var scrollY = this.scrollY 
+  //   //         var scrollY = this.scrollY
   //   //         if(top<(15+paddingTop)){
   //   //           if(scrollY<oldPos){
   //   //             item.style.top = (top-paddingTop)+'px'

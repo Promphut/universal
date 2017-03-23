@@ -13,7 +13,13 @@ const Wrapper = styled.div`
 		color:#222;
 		font-weight:bold;
 	}
+	 .hidden-des{
+	  	display:none;
+	  }
 	@media(max-width:480px){
+	 .hidden-des{
+	  	display:block;
+	  }
     .center{
       justify-content: center;
     }
@@ -44,6 +50,9 @@ const Wrapper = styled.div`
     padding-left:20px;
     display:inline-block;
   }
+  .hidden-des{
+  	display:none;
+  }
 `
 
 const GradientOverlay = styled.div`
@@ -52,10 +61,10 @@ const GradientOverlay = styled.div`
 	background: linear-gradient(135deg,  rgba(202,130,172,0.3) 0%,rgba(49,77,170,0.3) 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4dca82ac', endColorstr='#4d314daa',GradientType=1 );
 
-	bottom:0; 
-	top:0; left:0; 
-	right:0; 
-	position:absolute; 
+	bottom:0;
+	top:0; left:0;
+	right:0;
+	position:absolute;
 	z-index:0
 `
 
@@ -141,7 +150,6 @@ const StoryPage = React.createClass({
 		}
 	},
 
-
 	componentDidMount(){
 		this.getRecommendStories()
 	},
@@ -159,7 +167,7 @@ const StoryPage = React.createClass({
 				})
 			})
 		} else {
-			// If no column presented, use writer instead 
+			// If no column presented, use writer instead
 			let uid = this.story.writer._id
 
 			api.getFeed('story', {status:1, writer:uid}, 'latest', null, 0, 4)
@@ -180,34 +188,35 @@ const StoryPage = React.createClass({
 		let list = []
 		for(let i=0; i<recommends.length; i++){
 			list.push(
-				<div className='col-lg-6 col-md-6 col-sm-12'> 
-					<RecommendArticle detail={recommends[i]} />
+				<div className='col-lg-6 col-md-6 col-sm-12'>
+					<RecommendArticle detail={recommends[i]}/>
 				</div>
 			)
 		}
 
 		return (
 		    <Wrapper >
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
+		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} article={this.story.title}/>
 
-		      <BGImg style={{width:'100%',height:'80vh'}} src={this.story.cover}/>
+		      <BGImg style={{width:'100%',height:'80vh'}} src={this.story.cover.large || this.story.cover.medium} className='hidden-mob'/>
+		      <BGImg style={{width:'100%',height:'80vh'}} src={this.story.coverMobile.large || this.story.coverMobile.medium} className='hidden-des'/>
 
 		      <Content>
-							<Share ref='share' style={{zIndex:'50'}}>
-								<Stick topOffset={60} >
-									<ShareSideBar/>
-								</Stick>
-							</Share>
+						<Share ref='share' style={{zIndex:'50'}}>
+							<Stick topOffset={60}>
+								<ShareSideBar/>
+							</Stick>
+						</Share>
 
-							<Main>
-								<StoryDetail story={this.story}/>
-							</Main>
-							
-							<Aside  id='trendingBar' ref='trendingBar'>
-								<Stick topOffset={60} style={{zIndex:'50'}}>
-									<TrendingSideBar />
-								</Stick>
-							</Aside>
+						<Main>
+							<StoryDetail story={this.story}/>
+						</Main>
+
+								<Aside  id='trendingBar' ref='trendingBar'>
+							<Stick topOffset={60} style={{zIndex:'50'}}>
+								<TrendingSideBar />
+							</Stick>
+						</Aside>
 		      </Content>
 
 				<Content>

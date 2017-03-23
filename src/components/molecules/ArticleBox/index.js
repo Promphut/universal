@@ -83,7 +83,7 @@ const ArticleBox = React.createClass({
     //console.log('URL', url)
     return (
       <Container style={{...style}}>
-        <BGImg url={url} src={cover} className='imgWidth mob-hidden' />
+        <BGImg url={url} src={cover.small || cover.medium} className='imgWidth mob-hidden' />
         <BoxText className='sans-font'>
           <DivDes>
             <ShareDropdown />
@@ -92,7 +92,7 @@ const ArticleBox = React.createClass({
               <Link to={column.url}>{column.name}</Link></span>
             </Div>}
           </DivDes>
-          <BGImg url={url} src={cover} className='imgWidth des-hidden'/>
+          <BGImg url={url} src={cover.medium || cover.small} className='imgWidth des-hidden'/>
           <NameLink to={url} style={{marginTop:'10px'}}>{title}</NameLink>
           <div className="row" style={{margin:'10px 0 10px 0'}}>
             <Link to={writer.url}><Avatar src={writer.pic.medium}/></Link>
