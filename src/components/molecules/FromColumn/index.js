@@ -44,8 +44,10 @@ const Cir = styled.div`
   margin-right:10px;
 `
 
-const FromColumn = ({style,column}) => {
-  console.log('WritedBy',column)
+const FromColumn = ({style, column}) => {
+  //console.log('WritedBy',column)
+  if(!column) return (<div></div>)
+    
   return (
     <Container style={{...style}}>
       <div className='row'>
