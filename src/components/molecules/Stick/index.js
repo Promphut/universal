@@ -9,7 +9,7 @@ const Container = styled.div`
 const Stick = React.createClass({
   getInitialState(){
     return{
-      stick:false
+      stick:true
     }
   },
 

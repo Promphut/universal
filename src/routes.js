@@ -10,7 +10,8 @@ import {
     PublisherDashboardPage,ColumnEditor,ColumnSettingPage,PublisherStoryPage,UserSetting,
     PublisherSettingPage, ForgetPasswordPage, PublisherEditor, PublisherContactAndAboutPage,
     UserSettingProfile, UserSettingAccount, UserSettingStory, ColumnPage, PublisherPage,
-    UserStory, AllStory, AllColumn, NewStory, NotFoundPage, ErrorPage, AboutPage, ContactPage, StoryPage
+    UserStory, AllStory, AllColumn, NewStory, NotFoundPage, ErrorPage, AboutPage, ContactPage, StoryPage,
+    EditStory
   } from 'components'
 import api from 'components/api'
 
@@ -149,6 +150,7 @@ const routes = (
       <Route path='stories' component={PublisherStoryPage} />
       <Route path='contact' component={PublisherContactAndAboutPage}/>
       <Route path='stories/new' component={NewStory}/>
+      <Route path='stories/:sid/edit' component={EditStory}/>
       <Route path='columns/:cid' >
         <Route path='settings' component={ColumnSettingPage} onEnter={getColumnId}/>
       </Route>
