@@ -104,7 +104,7 @@ const StoryTitle = ({style, story})=>{
   //console.log('story', story)
   return(
     <Cont style={{...style}}>
-      <OverlayImg src={cover} style={{width:'87px',height:'52px',float:'left'}}/>
+      <Link to={url}><OverlayImg src={cover.small || cover.medium} style={{width:'87px',height:'52px',float:'left'}}/></Link>
       <TitleLink to={url} className="sans-font">{title}</TitleLink>
     </Cont>
   )

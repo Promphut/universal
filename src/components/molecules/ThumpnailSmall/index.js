@@ -64,7 +64,7 @@ const ThumpnailSmall = React.createClass({
 
     return(
       <Container style={{...style}}>
-        <Link to={url}><OverlayImg src={coverMobile} className='imgWidth'/></Link>
+        <Link to={url}><OverlayImg src={coverMobile.small || coverMobile.medium} className='imgWidth'/></Link>
         <NameLink to={url} className='sans-font'>{title}</NameLink>
         <Div className='sans-font'>5 min read</Div>
       </Container>

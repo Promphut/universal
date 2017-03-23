@@ -51,7 +51,7 @@ const RecommendArticle = ({detail})=>{
 
   return(
     <Container>
-      <Link to={url}><OverlayImg src={cover} className='imgWidth' /></Link>
+      <Link to={url}><OverlayImg src={cover.medium || cover.small} className='imgWidth' /></Link>
       {column && <Div className='sans-font'>in <Column to={column.url}>{column.name}</Column></Div>}
       <NameLink to={url} className='serif-font'>{title}</NameLink>
       <Div className='sans-font'>By <Link to={writer.url}><strong>{writer.display}</strong></Link> - {votes ? votes.total : 0} Votes {comments ? comments.count : 0} Comments</Div>

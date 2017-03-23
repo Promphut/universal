@@ -84,7 +84,13 @@ const ColumnPage = React.createClass({
 	getInitialState(){
 		return {
 			stopPos: 0,
-			column: {},
+			column: {
+				cover: {
+					medium: ''
+				},
+				shortDesc: '',
+				name: ''
+			},
 			feed: []
 			//popular: []
 		}
@@ -107,7 +113,7 @@ const ColumnPage = React.createClass({
 		api.getFeed('story', {column: id, status: 1})
 		.then(result => {
 			this.setState({
-				column: {id, name, shortDesc},
+				column: {id, name, shortDesc, cover},
 				feed: result.feed,
 				stopPos:dom(this.refs.more).getBoundingClientRect().top
 			})
@@ -116,6 +122,7 @@ const ColumnPage = React.createClass({
 
 	render(){
 		let {column, feed} = this.state
+		//console.log('column', column)
 
 		let ChildCover =
 			<div style={{margin:'170px 0 0 20%',width:'700px'}}>
@@ -126,7 +133,7 @@ const ColumnPage = React.createClass({
 		return (
 		    <Wrapper>
 				<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
-				<BGImg src={column.cover} style={{width:'100%',height:'510px'}} child={ChildCover}/>
+				<BGImg src={column.cover.medium || column.cover.small} style={{width:'100%',height:'510px'}} child={ChildCover}/>
 
 		      	<Content>
 			      <Main>

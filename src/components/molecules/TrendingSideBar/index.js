@@ -70,7 +70,7 @@ const TrendingSideBarInner = ({style, detail, index}) => {
   let {title,comments,votes,cover} = detail
   return(
     <Con style={{...style}}>
-      <BGImg url={detail.url} src={cover} style={{width:'127px',height:'75px',float:'right'}}/>
+      <BGImg url={detail.url} src={cover.small || cover.medium} style={{width:'127px',height:'75px',float:'right'}}/>
       <Name to={detail.url} className="sans-font">{index+'.'+title}</Name>
       <Vote className="sans-font">{votes.total} Votes {''+ comments.count} Comments</Vote>
     </Con>

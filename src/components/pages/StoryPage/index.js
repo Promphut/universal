@@ -11,7 +11,13 @@ const Wrapper = styled.div`
 		font-size:19px;
 		color:#8F8F8F;
 	}
+	 .hidden-des{
+	  	display:none;
+	  }
 	@media(max-width:480px){
+	 .hidden-des{
+	  	display:block;
+	  }
     .center{
       justify-content: center;
     }
@@ -41,6 +47,9 @@ const Wrapper = styled.div`
     border-left: 1px solid #E2E2E2;
     padding-left:20px;
     display:inline-block;
+  }
+  .hidden-des{
+  	display:none;
   }
 `
 
@@ -139,7 +148,6 @@ const StoryPage = React.createClass({
 		}
 	},
 
-
 	componentDidMount(){
 		this.getRecommendStories()
 	},
@@ -192,7 +200,8 @@ const StoryPage = React.createClass({
 		    <Wrapper >
 		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 
-		      <BGImg style={{width:'100%',height:'90vh'}} src={this.story.cover}/>
+		      <BGImg style={{width:'100%',height:'80vh'}} src={this.story.cover.large || this.story.cover.medium} className='hidden-mob'/>
+		      <BGImg style={{width:'100%',height:'80vh'}} src={this.story.coverMobile.large || this.story.coverMobile.medium} className='hidden-des'/>
 
 		      <Content>
 					<Share ref='share'>

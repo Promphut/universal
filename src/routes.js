@@ -156,11 +156,12 @@ const routes = (
       </Route>
     </Route>
 
+    <Route path='me/stories/:sid' component={StoryPage} onEnter={getStoryFromSid}/>
     <Route path='me' component={UserSetting} onEnter={loggedIn}>
       <Route path='settings' component={UserSettingProfile}/>
       <Route path='settings/account' component={UserSettingAccount}/>
       <Route path='stories' component={UserSettingStory}/>
-      <Route path='stories/drafts' component={UserSettingProfile}/>
+      {/*<Route path='stories/drafts' component={UserSettingProfile}/>*/}
     </Route>
 
     <Route path='@:username' onEnter={getUserFromUsername} component={UserStory}/>
