@@ -16,7 +16,7 @@ const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
-	padding:50px 0 0 0;
+	padding: 120px 0 0 0;
 `
 
 const Main = styled.div`
@@ -91,7 +91,7 @@ const HomePage2 = React.createClass({
 			this.setState({
 				refresh: Math.random()
 			})
-		})	
+		})
 
 		// 2. Fetching latestStories
 		api.getFeed('story', {status:1}, 'latest', null, 0, 15)
@@ -109,7 +109,7 @@ const HomePage2 = React.createClass({
 		return (
 		    <Wrapper>
 	      	<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
-		
+
 				{/* THIS IS FOR NEXT VERSION - TRENDING
 				<Content style={{paddingTop:'100px'}}>
 					<Feed>
@@ -122,7 +122,7 @@ const HomePage2 = React.createClass({
 					</Feed>
 				</Content>*/}
 
-		      <Content style={{marginTop: '60px'}}>
+		      <Content>
 			      <Main>
 						<TextLine className='sans-font'>Latest</TextLine>
 						{/*{article}*/}
