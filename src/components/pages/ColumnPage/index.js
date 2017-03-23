@@ -1,5 +1,6 @@
 import React from 'react'
-import { TopBarWithNavigation,ArticleBox,ArticleBoxLarge,More,TrendingSideBar,BGImg,StoryMenu } from 'components'
+import {TopBarWithNavigation, ArticleBox, ArticleBoxLarge, More, TrendingSideBar,
+	BGImg, StoryMenu} from 'components'
 import {findDOMNode as dom} from 'react-dom'
 import styled from 'styled-components'
 import FlatButton from 'material-ui/FlatButton';
@@ -106,8 +107,8 @@ const ColumnPage = React.createClass({
 		api.getFeed('story', {column: id, status: 1})
 		.then(result => {
 			this.setState({
-				column: {id, name, shortDesc}, 
-				feed: result.feed, 
+				column: {id, name, shortDesc},
+				feed: result.feed,
 				stopPos:dom(this.refs.more).getBoundingClientRect().top
 			})
 		})
@@ -124,14 +125,14 @@ const ColumnPage = React.createClass({
 
 		return (
 		    <Wrapper>
-		      	<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
+				<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 				<BGImg src={column.cover} style={{width:'100%',height:'510px'}} child={ChildCover}/>
 
 		      	<Content>
 			      <Main>
 						<StoryMenu style={{padding:'15px 0 15px 0',margin:'0 0 50px 0'}} next='FUND'/>
 						<TextLine className='sans-font'>Latest</TextLine>
-						
+
 						{feed.map((data,index) => (
 							index%3===0 ? <ArticleBoxLarge detail={data} key={index}/> : <ArticleBox detail={data} key={index}/>
 						))}

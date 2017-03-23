@@ -1,6 +1,6 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
 import {browserHistory} from 'react-router'
-import {TopBar} from 'components'
+import {TopBar, TopNavigation, Stick} from 'components'
 import auth from 'components/auth'
 import api from 'components/api'
 
@@ -56,19 +56,23 @@ const TopBarWithNavigation = React.createClass({
 		const {title} = this.props
 
 	  return (
-			<TopBar
-				scrolling={scrolling}
-				status={status}
-				title={title}
-				user={this.user}
-				menu={this.menu}
-			/>
+			<Stick>
+				<TopBar
+					scrolling={scrolling}
+					status={status}
+					title={title}
+					user={this.user}
+					menu={this.menu}
+				>
+					<TopNavigation menu={this.menu} />
+				</TopBar>
+			</Stick>
 	  )
 	}
 })
 
-// TopBarWithNavigation.propTypes = {
-// 	title: PropTypes.string
-// }
+TopBarWithNavigation.propTypes = {
+	title: PropTypes.string
+}
 
 export default TopBarWithNavigation;

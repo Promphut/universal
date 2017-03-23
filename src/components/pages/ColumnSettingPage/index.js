@@ -50,14 +50,14 @@ const Desc = styled.div`
   color:#C2C2C2;
   font-size:14px;
   font-style:italic;
-` 
+`
 const TextStatus = styled.div`
   color:#00B2B4;
   font-size:15px;
   font-style:italic;
   float:left;
   margin:10px 0 0 15px;
-` 
+`
 const Admin = styled.div`
   color:#8F8F8F;
   font-size:18px;
@@ -107,7 +107,7 @@ const ColumnSettingPage = React.createClass({
   },
 	setData(){
     var {name,shortDesc,slug,cover} = this.state.column
-    document.getElementById('name').value = !name?'':name 
+    document.getElementById('name').value = !name?'':name
     document.getElementById('shortDesc').value = !shortDesc?'':shortDesc
     document.getElementById('slug').value = !slug?'':"/"+slug
 		this.setState({cover:cover})
@@ -131,7 +131,7 @@ const ColumnSettingPage = React.createClass({
       .get(config.BACKURL+'/publishers/11/columns/'+this.props.params.cid)
       .set('Accept','application/json')
       .end((err,res)=>{
-        if(err) throw err 
+        if(err) throw err
         else{
           //console.log(res.body)
           self.setState({column:res.body.column})
@@ -262,8 +262,8 @@ const ColumnSettingPage = React.createClass({
               <div className="sans-font">URL</div>
             </Title>
             <Edit>
-              <Social className="sans-font"> 
-                
+              <Social className="sans-font">
+
                 <TextField style={{float:'left',margin:'5px 0 0 0'}} id='slug' name='slug'/>
               </Social>
               <Desc className='sans-font'>Note that changing slug will affect the whole URL structure of this publisher, meaning that previously used URLs won't be able to be accessed anymore. Are you sure to edit?</Desc>

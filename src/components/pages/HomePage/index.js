@@ -1,5 +1,5 @@
 import React from 'react'
-import {TopBarWithNavigation,SignUpFb,SignUp,SignInFb,SignIn} from 'components'
+import {TopBarWithNavigation, SignUpFb, SignUp, SignInFb, SignIn} from 'components'
 import {Link} from 'react-router'
 import styled from 'styled-components'
 import {findDOMNode as dom} from 'react-dom'
@@ -8,7 +8,7 @@ const Wrapper = styled.div`
 	.fixedPos{
 		position:fixed;
 		top:70px;
-    
+
 	}
   background:rgba(0,0,0,0.5);
 `
@@ -46,7 +46,7 @@ const Aside = styled.div`
 	@media (max-width: 1160px) {
 		display:none;
 	}
-	
+
 `
 
 const Footer = styled.div`
@@ -63,7 +63,7 @@ const Homepage = React.createClass({
 
 	updateDimensions(){
 			this.setState({
-				width: window.getWidth(), 
+				width: window.getWidth(),
 				height: window.getHeight()
 			});
     },
@@ -75,7 +75,7 @@ const Homepage = React.createClass({
 	componentDidMount(){
 
 	},
-                                  
+
 	fixedTrending(e){
 
 	},
@@ -92,17 +92,17 @@ const Homepage = React.createClass({
 		var {stopPos} = this.state
 		return (
 		    <Wrapper >
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
+        	<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 
 		      <Content>
 						<Share ref='share'>
-							
+
 						</Share>
 
 						<Main>
-							
+
 			      </Main>
-			      
+
 			      <Aside  id='trendingBar' className='' ref='trendingBar'></Aside>
 		      </Content>
           <SignUpFb/>

@@ -1,5 +1,6 @@
 import React from 'react'
-import { TopBarWithNavigation,ArticleBox,ArticleBoxLarge,More,TrendingSideBar,BGImg,StoryMenu,ColumnThumpnailRow } from 'components'
+import {TopBarWithNavigation, ArticleBox, ArticleBoxLarge, More,
+	TrendingSideBar, BGImg, StoryMenu, ColumnThumpnailRow} from 'components'
 import {findDOMNode as dom} from 'react-dom'
 import styled from 'styled-components'
 import FlatButton from 'material-ui/FlatButton';
@@ -113,7 +114,7 @@ const AllStory = React.createClass({
 		var {feed} = this.state
 		return (
 		    <Wrapper>
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
+        	<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 					<Content >
             <Feed>
               <div className='row' style={{width:'100%'}}><StoryMenu style={{padding:'15px 0 15px 0',marginTop:'20px',float:'left'}}/></div>
@@ -131,7 +132,7 @@ const AllStory = React.createClass({
             </Feed>
           </Content>
 		      <Content >
-			      <Main>	
+			      <Main>
 							<TextLine className='sans-font'>Lastest</TextLine>
 							{/*{article}*/}
 							{feed.map((data,index)=>(

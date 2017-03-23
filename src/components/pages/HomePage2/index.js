@@ -1,13 +1,14 @@
 import React from 'react'
-import { PageTemplate, TopBarWithNavigation, OverlayImg, Thumpnail, 
-	ThumpnailSmall,ArticleBox,ArticleBoxLarge,ThumpnailRow,TopColumnSidebar,TopWriterSidebar,More,Stick} from 'components'
+import { PageTemplate, TopBarWithNavigation, OverlayImg, Thumpnail,
+	ThumpnailSmall, ArticleBox, ArticleBoxLarge, ThumpnailRow, TopColumnSidebar,
+	TopWriterSidebar, More} from 'components'
 import styled from 'styled-components'
 import Request from 'superagent'
 import auth from 'components/auth'
 import slider from 'react-slick'
 
 const Wrapper = styled.div`
-	
+
 `
 
 const Content = styled.div`
@@ -74,7 +75,7 @@ const HomePage2 = React.createClass({
 
 	updateDimensions(){
 		// this.setState({
-		// 	width: window.getWidth(), 
+		// 	width: window.getWidth(),
 		// 	height: window.getHeight()
 		// });
 	},
@@ -115,14 +116,12 @@ const HomePage2 = React.createClass({
 			}
 		})
 	},
-	
+
 	render(){
 		var {feed,popular} = this.state
 		return (
 		    <Wrapper>
-					<Stick>
-		      	<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
-					</Stick>
+	      	<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 		      {/*<TopBarWithNavigation title={'Title of AomMoney goes here..'} loggedIn={this.props.params.loggedIn} />*/}
 		      {/*<OverlayImg style={{width:'100%',height:'90vh'}} src="/tmp/a-story/pic-min.jpg"/>*/}
 
@@ -135,7 +134,7 @@ const HomePage2 = React.createClass({
 							{popular.length!=0?<ThumpnailRow detail={popular} style={{margin:'20px 0 30px 0'}}/>:''}
 							{popular.length!=0?<ThumpnailRow detail={popular} size='small' style={{margin:'30px 0 30px 0'}}/>:''}
 						</Feed>
-					</Content>	
+					</Content>
 		      <Content >
 			      <Main>
 							<TextLine className='sans-font'>Latest</TextLine>

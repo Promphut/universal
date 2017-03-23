@@ -1,7 +1,8 @@
 import React from 'react'
 import {Link,browserHistory} from 'react-router'
 import styled from 'styled-components'
-import {PrimaryButton,SecondaryButton,UploadPicture,DropdownWithIcon,Alert,MenuList} from 'components'
+import {PrimaryButton, SecondaryButton, UploadPicture, DropdownWithIcon,
+  Alert, MenuList} from 'components'
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -58,7 +59,7 @@ const Container = styled.form`
   h1{
     color:#00b2b4;
     font-size:42px;
-  }       
+  }
 `
 const Paper = styled.div`
   position:relative;
@@ -134,7 +135,7 @@ const Delete = styled.div`
 
 const PublisherContact = React.createClass({
   getInitialState(){
-  
+
     return{
       story:'Write a story ...',
       chooseLayout:null,
@@ -205,8 +206,8 @@ const PublisherContact = React.createClass({
                 classList: ['custom-class-h2'],
                 attrs: {'data-custom-attr': 'attr-value-h2'}
             },
-            {name: 'quote',contentDefault: '<span class="fa fa-quote-left" ></span>'},   
-            {name: 'anchor',contentDefault: '<span class="fa fa-link" ></span>'},   
+            {name: 'quote',contentDefault: '<span class="fa fa-quote-left" ></span>'},
+            {name: 'anchor',contentDefault: '<span class="fa fa-link" ></span>'},
             {name: 'justifyLeft',contentDefault: '<span class="fa fa-align-left" ></span>'},
             {name: 'justifyCenter',contentDefault: '<span class="fa fa-align-center" ></span>'},
             {name: 'justifyRight',contentDefault: '<span class="fa fa-align-right" ></span>'}
@@ -223,7 +224,7 @@ const PublisherContact = React.createClass({
             images: {
               captionPlaceholder: 'Type caption for image',
               fileUploadOptions: {},
-              styles: { 
+              styles: {
                 full: {
                     label: this.state.layout=='article'?'<span class="fa fa-window-maximize"></span>':''
                 }
@@ -499,7 +500,7 @@ const PublisherContact = React.createClass({
             <Layout style={{backgroundImage:'url(/pic/article.png)',boxShadow:layout=="article"?'0 0 10px #00B2B4':''}} onClick={this.chooseArticle} />
           </div>
         </div>
-        <dvi className='row' style={{display:'block',overflow:'hidden'}}> 
+        <dvi className='row' style={{display:'block',overflow:'hidden'}}>
           <RaisedButton
             label="next"
             labelStyle={{fontWeight:'bold', fontSize:15, top:0, fontFamily:"'Nunito', 'Mitr'"}}
@@ -513,15 +514,15 @@ const PublisherContact = React.createClass({
             icon={<FontIcon className='material-icons'>keyboard_arrow_right</FontIcon>}
           />
         </dvi>
-        
+
       </Container>
       :
       <Container onSubmit={this.updateData}>
-        <Alert 
+        <Alert
           open={alert}
           anchorEl={alertWhere}
           onRequestClose={this.alertClose}
-          description={alertDesc} 
+          description={alertDesc}
           confirm={alertConfirm}/>
         <RaisedButton
           onClick={this.popoverSave}
@@ -556,11 +557,11 @@ const PublisherContact = React.createClass({
               menuStyle={{width:'320px'}}
               menuItemStyle={{width:'320px'}}
               selectedMenuItemStyle={{color:'#222',background:'#00b2b4'}}
-            > 
+            >
               <MenuItem value='no' primaryText='No Column' />
               {columnList.length!=0?columnList.map((data,index)=>(
                 <MenuItem value={data._id} primaryText={data.name} key={index} />
-              )):''}            
+              )):''}
             </DropDownMenu>
           </div>
           <div className='row' style={{display:'block',overflow:'hidden'}}>
@@ -602,7 +603,7 @@ const PublisherContact = React.createClass({
               </div>
             </div>
           </div>
-          <div className='row' style={{overflow:'hidden',display:'block'}}> 
+          <div className='row' style={{overflow:'hidden',display:'block'}}>
             <TextStatus className='sans-font' style={{color:'#DC143C',float:'right',marginTop:'30px'}}>{publishStatus}</TextStatus>
           </div>
           <div className='row' style={{display:'block',overflow:'hidden',marginTop:'0px'}}>
@@ -615,7 +616,7 @@ const PublisherContact = React.createClass({
         {sid!=null?<TextStatus className='sans-font'>{saveStatus}</TextStatus>:''}
 
         <Title placeholder='Title' className='serif-font' value={title} onChange={this.title}>
-          
+
         </Title>
 
         <Paper id='paper'>

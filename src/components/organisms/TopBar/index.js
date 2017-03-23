@@ -49,22 +49,6 @@ const Center = styled.div`
 	}
 `
 
-const A = styled.a`
-	display: inline-block;
-  float: left;
-  text-align: center;
-  color: #8f8f8f;
-  background-color: white;
-  text-decoration: none;
-  padding: 19px 20px 18px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #ddd;
-    color: #222;
-  }
-`
-
 const Right = styled.div`
 	float: right
 `
@@ -165,10 +149,7 @@ const TopBar = React.createClass({
 					</Left>
 
 					<Center>
-			      <Link to="/"><A>Home</A></Link>
-			      <Link to="/stories"><A>Stories</A></Link>
-			      <Link to="/about"><A>About Us</A></Link>
-			      <Link to="/contact"><A>Contact</A></Link>
+   					{this.props.children}
 					</Center>
 
 					{status == 'LOGGEDIN' &&

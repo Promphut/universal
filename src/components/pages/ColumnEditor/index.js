@@ -1,6 +1,7 @@
 import React from 'react'
-import { TopBarWithNavigation, OverlayImg, PublisherProfileSetting,
-   PublisherPublishingSetting,PublisherAnalyticSetting,PublisherThemeSetting,PublisherSettingMenu } from 'components'
+import {TopBarWithNavigation, OverlayImg, PublisherProfileSetting,
+   PublisherPublishingSetting, PublisherAnalyticSetting, PublisherThemeSetting,
+   PublisherSettingMenu} from 'components'
 
 import styled from 'styled-components'
 
@@ -45,7 +46,7 @@ const ColumnEditor = React.createClass({
   render(){
 		return (
 		    <Wrapper>
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
+        	<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
           <Container>
             <Content>
               <Aside>

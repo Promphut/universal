@@ -1,5 +1,5 @@
 import React from 'react'
-import { TopBarWithNavigation,BGImg,StoryMenu,} from 'components'
+import {TopBarWithNavigation, BGImg, StoryMenu} from 'components'
 import {findDOMNode as dom} from 'react-dom'
 import styled from 'styled-components'
 import {Link} from 'react-router';
@@ -177,7 +177,7 @@ const AllColumn = React.createClass({
 		var {column} = this.state
 		return (
 		    <Wrapper>
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
+        	<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 					<Content >
             <Feed>
               <div className='row' style={{width:'100%'}}><StoryMenu style={{padding:'15px 0 15px 0',marginTop:'20px',float:'left'}}/></div>

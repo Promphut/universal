@@ -25,10 +25,10 @@ const GradientOverlay = styled.div`
 	background: linear-gradient(135deg,  rgba(202,130,172,0.3) 0%,rgba(49,77,170,0.3) 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4dca82ac', endColorstr='#4d314daa',GradientType=1 );
 
-	bottom:0; 
-	top:0; left:0; 
-	right:0; 
-	position:absolute; 
+	bottom:0;
+	top:0; left:0;
+	right:0;
+	position:absolute;
 	z-index:0
 `
 
@@ -105,7 +105,7 @@ const Page3 = React.createClass({
 
 	updateDimensions(){
 		this.setState({
-			width: window.getWidth(), 
+			width: window.getWidth(),
 			height: window.getHeight()
 		});
 	},
@@ -119,7 +119,7 @@ const Page3 = React.createClass({
 			stopPos:dom(this.refs.recommend).getBoundingClientRect().top
 		})
 	},
-                                  
+
 
 	render(){
 		var {stopPos} = this.state
@@ -137,14 +137,14 @@ const Page3 = React.createClass({
 						<Main>
 							<ArticlePage/>
 			      </Main>
-			      
+
 			      <Aside  id='trendingBar' ref='trendingBar'><TrendingSideBar stop={stopPos} detail={trendingArray} /></Aside>
 		      </Content>
 					<Content>
 						<RecommendContainer ref='recommend'>
 							<div className='recommends sans-font'>Recommends</div>
 							<div className='row center'>
-								<div className='col-lg-6 col-md-6 col-sm-12'> 
+								<div className='col-lg-6 col-md-6 col-sm-12'>
 									<Link to='#'><RecommendArticle detail={rec}/></Link>
 									<Link to='#'><RecommendArticle detail={rec}/></Link>
 								</div>
