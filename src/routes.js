@@ -95,9 +95,10 @@ const getColumnFromSlug = (nextState, replace, next) => {
 }
 
 const getStoryFromSid = (nextState, replace, next) => {
-  api.getStoryFromSid(nextState.params.sid)
-  .then(story => {
-    nextState.params.story = story
+  api.getStoryFromSid(nextState.params.sid, auth.getToken())
+  .then(result => {
+    nextState.params.story = result.story
+    nextState.params.canEditStory = result.canEditStory
     next()
   })
   .catch(toError(nextState, replace, next))

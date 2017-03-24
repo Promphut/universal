@@ -125,6 +125,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#222222', end
 const StoryPage = React.createClass({
 	getInitialState(){
 		this.story = this.props.params.story
+		//console.log('canEditStory', this.props.params.canEditStory)
 
 		return {
 			refresh: 0,
