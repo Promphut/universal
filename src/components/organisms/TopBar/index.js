@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import {Link, browserHistory} from 'react-router'
 import Avatar from 'material-ui/Avatar'
 import {Logo, PrimaryButton, SecondaryButton, LeftMenu, RightMenu} from 'components'
-
+import auth from 'components/auth'
 const Wrapper = styled.div`
 	.transparent {
 		background: none;
@@ -95,6 +95,17 @@ const NotLogin = styled.div`
 	}
 `
 
+const Edit = styled(Link)`
+	font-size:18px;
+	float:left;
+	text-decoration:underline;
+	padding:7px;
+	margin:10px 20px 0 0;
+	&:hover{
+		cursor:pointer;
+	}
+`
+
 const TopBar = React.createClass({
 	getInitialState(){
 		return {
@@ -104,14 +115,18 @@ const TopBar = React.createClass({
 		}
 	},
 
-	componentDidMount() {
-		if(this.props.onScroll)
-			window.addEventListener('scroll', this.handleScroll)
+	componentWillMount(){
+		this.role = auth.hasRoles(["ADMIN","EDITOR","WRITER"])
 	},
 
 	componentWillUnmount() {
-		if(this.props.onScroll)
-			window.removeEventListener('scroll', this.handleScroll)
+		if(this.props.onScroll) window.removeEventListener('scroll', this.handleScroll)
+
+	},
+
+	componentDidMount() {
+		if(this.props.onScroll)window.addEventListener('scroll', this.handleScroll)
+			//console.log(this.role)
 	},
 
 	handleScroll(e) {
@@ -144,7 +159,7 @@ const TopBar = React.createClass({
 	render () {
 		let {alertLeft, alertRight, scroll} = this.state
 		let status = this.props.status || 'UNLOGGEDIN',
-			{scrolling, user, menu, transparent}  = this.props
+			{scrolling, user, menu, transparent,editButton}  = this.props
 
 	  const logoStyle = {
 	    display: 'inline-block',
@@ -191,7 +206,9 @@ const TopBar = React.createClass({
 
 					{status == 'LOGGEDIN' &&
 						<Right>
-				      <HideOnTablet>
+							{ this.role && editButton && <Edit className='nunito-font' style={{color:(!scrolling && transparent) ? 'white' : '#8f8f8f'}} to={editButton}>Edit Story</Edit>}
+
+				      {this.role && <HideOnTablet>
 								<Link to="/me/stories/new">
 					        <PrimaryButton
 					          label="Story"
@@ -199,7 +216,7 @@ const TopBar = React.createClass({
 					          style={buttonStyle}
 					        />
 								</Link>
-				      </HideOnTablet>
+				      </HideOnTablet>}
 
 							<Avatar
 								src={user.pic.medium}
@@ -246,7 +263,7 @@ TopBar.propTypes = {
   onScroll: PropTypes.func,
   scrolling: PropTypes.bool,
   status: PropTypes.string,
-
+	editButton:PropTypes.string,
   title: PropTypes.string,
 
   menu: PropTypes.object,

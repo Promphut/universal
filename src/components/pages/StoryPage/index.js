@@ -177,12 +177,12 @@ const StoryPage = React.createClass({
 
 	render(){
 		let {stopPos, recommends} = this.state
-		//console.log('render', this.story)
+		console.log('render', this.story)
 
 		let list = []
 		for(let i=0; i<recommends.length; i++){
 			list.push(
-				<div className='col-lg-6 col-md-6 col-sm-12'>
+				<div className='col-lg-6 col-md-6 col-sm-12' key={i}>
 					<RecommendArticle detail={recommends[i]}/>
 				</div>
 			)
@@ -190,7 +190,7 @@ const StoryPage = React.createClass({
 
 		return (
 		    <Wrapper >
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} article={this.story.title}/>
+		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} article={this.story.title} editButton={'/me/stories/'+this.story.id+'/edit'} />
 
 					
 		      <BGImg style={{width:'100%',height:'85vh'}} src={this.story.cover.large || this.story.cover.medium} className='hidden-mob'>
@@ -203,7 +203,7 @@ const StoryPage = React.createClass({
 		      <Content>
 						<Share ref='share' style={{zIndex:'50'}}>
 							<Stick topOffset={60}>
-								<ShareSideBar/>
+								<ShareSideBar detail={this.story}/>
 							</Stick>
 						</Share>
 
