@@ -93,7 +93,7 @@ const ContactAndAboutContainer = React.createClass({
   		let list = []
 		for(let i=0; i<this.recommends.length; i++){
 			list.push(
-				<div className='col-lg-6 col-md-6 col-sm-12'>
+				<div key={i} className='col-lg-6 col-md-6 col-sm-12'>
 					<RecommendArticle detail={this.recommends[i]}/>
 				</div>
 			)
@@ -102,15 +102,15 @@ const ContactAndAboutContainer = React.createClass({
 	    return (
 	      <div>
 			{pub.cover && <BGImg src={pub.cover.medium} style={{width:'100%',height:'350px'}} className="hidden-mob" />}
-			
+
 	      	<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 	        <Content>
 	          <Main>
 	            {this.props.children}
 	          </Main>
-	          <Aside>
+	          {/*<Aside>
 	            <TrendingSideBar/>
-	          </Aside>
+	          </Aside>*/}
 	        </Content>
 	        <Content>
 	          <RecommendContainer ref='recommend'>
