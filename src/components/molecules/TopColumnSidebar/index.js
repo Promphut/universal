@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 import styled from 'styled-components'
 import {TrendingSideBarInner} from 'components'
 import {findDOMNode as dom} from 'react-dom'
-import Avatar from 'material-ui/Avatar'
+
 const Container = styled.div`
   width:324px;
   position:relative;
@@ -60,8 +60,10 @@ const Column = styled.div`
 `
 const Div = styled.div`
   width:100%;
-  padding:20px;
+  padding:12px 0px;
   display:flex;
+  cursor: pointer;
+  color: initial;
 `
 const Number = styled.div`
   width:60px;
@@ -71,6 +73,13 @@ const Number = styled.div`
   padding:9px;
   font-weight:bold;
   float:left;
+
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	cursor: default;
 `
 const Name = styled.div`
   color:#222;
@@ -82,9 +91,8 @@ const Sty = styled.div`
   font-size:16px;
 `
 //if height less than 900px remove last item
-const defaultPic = '/tmp/avatar.png'
 
-const TopWriterSidebar = React.createClass({
+const TopColumnSidebar = React.createClass({
   getInitialState(){
     return{
       stopPos:''
@@ -102,16 +110,16 @@ const TopWriterSidebar = React.createClass({
   },
 
   render(){
-    //console.log(this.props.writer)
-    var {writer} = this.props
+    var {column} = this.props
+    //console.log(column)
     /*var Sort = []
-    for(let i=0;i<writer.length;i++){
+    for(let i=0;i<6;i++){
       Sort.push(
         <Div className='serif-font' key={i}>
-          <Avatar src='/tmp/avatar.png' size={50} />
-          <div style={{padding:'0 30px 0 35px'}}>
-            <Name>{writer[i].display}</Name>
-            <Sty className='sans-font'>{writer[i].intro}</Sty>
+          <Number className={'bg'+(1+i)}>{i+1}</Number>
+          <div style={{padding:'10px 30px 0 30px'}}>
+            <Name>Money Ideas</Name>
+            <Sty className='sans-font'>31 Stories</Sty>
           </div>
         </Div>
       )
@@ -119,15 +127,17 @@ const TopWriterSidebar = React.createClass({
     return(
       <Container style={{...this.props.style}} ref='contain'>
         <Divider/>
-        <Head>TOP WRITERS</Head>
-          {writer.length!=0?writer.map((data,index)=>(
-            <Div className='serif-font' key={index}>
-              <Avatar src={data.pic && data.pic.medium} size={50} />
-              <div style={{padding:'0 30px 0 35px'}}>
-                <Name>{data.display}</Name>
-                <Sty className='sans-font'>{data.intro}</Sty>
-              </div>
-            </Div>
+        <Head>TOP COLUMNS</Head>
+          {column.length!=0?column.map((data,index)=>(
+            <Link to={data.url} key={index}>
+              <Div className='serif-font'>
+                <Number className={'bg'+(1+index)}>{index+1}</Number>
+                <div style={{padding:'14px 30px 0 30px'}}>
+                  <Name>{data.name}</Name>
+                  {/*<Sty className='sans-font'>{data.shortDesc}</Sty>*/}
+                </div>
+              </Div>
+            </Link>
           )):''}
         <Divider/>
       </Container>
@@ -136,4 +146,4 @@ const TopWriterSidebar = React.createClass({
 })
 
 
-export default TopWriterSidebar;
+export default TopColumnSidebar;

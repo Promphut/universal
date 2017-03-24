@@ -30,29 +30,6 @@ const Wrapper = styled.div`
 			font-size:16px;
 		}
   }
-	p {
-    font-family: 'PT Sans', 'cs_prajad', sans-serif;
-    font-size: 18px;
-  }
-  h2 {
-    font-size: 28px;
-    font-weight:bold;
-    color:#222;
-  }
-  h3 {
-    font-size: 20px;
-    font-weight:normal;
-    color:#bfbfbf;
-  }
-  blockquote {
-    font-size: 20px;
-    font-family: 'PT Serif', 'Mitr';
-    font-weight:normal;
-    color:#222;
-    border-left: 1px solid #E2E2E2;
-    padding-left:20px;
-    display:inline-block;
-  }
 `
 
 const GradientOverlay = styled.div`
@@ -87,6 +64,7 @@ const Share = styled.div`
 const Main = styled.div`
 	flex: 8 730px;
 	max-width: 730px;
+	marginTop: 40px;
 	@media (max-width: 480px) {
 		flex:0 100%;
 		max-width: 100%;
@@ -205,7 +183,7 @@ const StoryPage = React.createClass({
 		let list = []
 		for(let i=0; i<recommends.length; i++){
 			list.push(
-				<div className='col-lg-6 col-md-6 col-sm-12'>
+				<div className='col-lg-6 col-md-6 col-sm-12' key={i}>
 					<RecommendArticle detail={recommends[i]}/>
 				</div>
 			)
@@ -213,9 +191,9 @@ const StoryPage = React.createClass({
 
 		return (
 		    <Wrapper >
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} article={this.story.title}/>
+		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} article={this.story.title} editButton={'/me/stories/'+this.story.id+'/edit'} />
 
-					
+
 		      <BGImg style={{width:'100%',height:'85vh'}} src={this.story.cover.large || this.story.cover.medium} className='hidden-mob'>
 						<Cover/>
 					</BGImg>
@@ -226,7 +204,7 @@ const StoryPage = React.createClass({
 		      <Content>
 						<Share ref='share' style={{zIndex:'50'}}>
 							<Stick topOffset={60}>
-								<ShareSideBar/>
+								<ShareSideBar detail={this.story}/>
 							</Stick>
 						</Share>
 

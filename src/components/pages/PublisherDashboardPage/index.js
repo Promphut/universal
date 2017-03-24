@@ -162,7 +162,7 @@ const PublisherDashboardPage = React.createClass({
   },
 
   getWriters(){
-    api.getWriters()
+    api.getPublisherWriters()
     .then(writers => {
       this.setState({
         writers: writers

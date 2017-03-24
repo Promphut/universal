@@ -3,11 +3,13 @@ import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon'
 import FlatButton from 'material-ui/FlatButton'
 import {Dropdown} from 'components'
+import CopyToClipboard from 'react-copy-to-clipboard'
 
 const ShareDropdown = React.createClass({
   getInitialState () {
     return {
-      open: false
+      open: false,
+      copied: false
     }
   },
 
@@ -15,7 +17,7 @@ const ShareDropdown = React.createClass({
     if (index === 0) {
       console.log('Select Share')
     } else if (index === 1) {
-      console.log('Select Copy Link')
+      console.log('Copied')
     }
   },
 
@@ -32,18 +34,41 @@ const ShareDropdown = React.createClass({
     buttons.push(<span><FontIcon className="material-icons" style={buttonStyle}>link</FontIcon>Copy Link</span>)
 
     let button = []
-    for (let i = 0; i < buttons.length; i++){
-      button.push(
-        <div key={i}>
-          <FlatButton
-            label={buttons[i]}
-            labelStyle={{fontWeight: 'bold', fontSize: '15px', color: '#00B2B4', fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
-            style={{width: '130px', textAlign: 'left', display: 'inline-block'}}
-            onTouchTap={() => this.select(i)}
-          /><br/>
-        </div>
-      )
-    }
+    // for (let i = 0; i < buttons.length; i++){
+      // button.push(
+      //   <div key={i}>
+      //     <FlatButton
+      //       label={buttons[i]}
+      //       labelStyle={{fontWeight: 'bold', fontSize: '15px', color: '#00B2B4', fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
+      //       style={{width: '130px', textAlign: 'left', display: 'inline-block'}}
+      //       onTouchTap={() => this.select(i)}
+      //       data-clipboard-text
+      //     /><br/>
+      //   </div>
+      // )
+    // }
+
+    button.push(
+      <div key={0}>
+        <FlatButton
+          label={buttons[0]}
+          labelStyle={{fontWeight: 'bold', fontSize: '15px', color: '#00B2B4', fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
+          style={{width: '130px', textAlign: 'left', display: 'inline-block'}}
+          onTouchTap={() => this.select(0)}
+        /><br/>
+      </div>
+    )
+    button.push(
+      <div key={1}>
+        <CopyToClipboard text={window.location.href} onCopy={() => this.setState({copied: true})}>
+        <FlatButton
+          label={buttons[1]}
+          labelStyle={{fontWeight: 'bold', fontSize: '15px', color: '#00B2B4', fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
+          style={{width: '130px', textAlign: 'left', display: 'inline-block'}}
+          onTouchTap={() => this.select(1)}
+        /></CopyToClipboard><br/>
+      </div>
+    )
 
     const buttonDropdown = (
       <FontIcon className="material-icons" style={{color:'#8f8f8f'}}>

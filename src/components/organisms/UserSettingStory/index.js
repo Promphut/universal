@@ -1,5 +1,5 @@
 import React from 'react'
-import { OverlayImg, Pagination} from 'components'
+import { OverlayImg, Pagination,Alert} from 'components'
 import FontIcon from 'material-ui/FontIcon'
 import styled from 'styled-components'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
@@ -86,7 +86,6 @@ const TitleLink = styled(Link)`
   font-weight:bold;
   float:left;
   height:52px;
-  word-wrap: break-word;
   white-space: pre-wrap;      /* Webkit */    
   white-space: -moz-pre-wrap; /* Firefox */     
   white-space: -pre-wrap;     /* Opera <7 */    
@@ -166,7 +165,9 @@ const UserSettingStory = React.createClass({
       sort:'latest',
 
       onLoad:false,
-      editStory:false
+      editStory:false,
+
+      alert:false
     }
 	},
 
@@ -238,8 +239,38 @@ const UserSettingStory = React.createClass({
     )
   },
 
+  alertDeleteStory(e){
+    this.setState({
+      alert:true,
+      alertWhere:e.currentTarget,
+      alertChild: '',
+      alertDesc:'Are you sure to delete this story?',
+      alertConfirm:this.deleteStory
+    })
+  },
+
+  alertUnpublishStory(e){
+    this.setState({
+      alert:true,
+      alertWhere:e.currentTarget,
+      alertChild: '',
+      alertDesc:'Are you sure to unpublish this story?',
+      alertConfirm:this.unpublishStory
+    })
+  },
+
+  alertPublishStory(e){
+    this.setState({
+      alert:true,
+      alertWhere:e.currentTarget,
+      alertChild: '',
+      alertDesc:'Are you sure to publish this story?',
+      alertConfirm:this.publishStory
+    })
+  },
+
   deleteStory(){
-    this.setState({editStory:false})
+    this.setState({editStory:false,alert:false})
 
     api.deleteStory(this.state.selectStoryId)
     .then(res => {
@@ -248,7 +279,7 @@ const UserSettingStory = React.createClass({
   },
 
   unpublishStory(){
-    this.setState({editStory:false})
+    this.setState({editStory:false,alert:false})
 
     api.setStoryStatus(this.state.selectStoryId, 0)
     .then(res => {
@@ -257,7 +288,7 @@ const UserSettingStory = React.createClass({
   },
 
   publishStory(){
-    this.setState({editStory:false})
+    this.setState({editStory:false,alert:false})
 
     api.setStoryStatus(this.state.selectStoryId, 1)
     .then(res => {
@@ -269,11 +300,22 @@ const UserSettingStory = React.createClass({
     browserHistory.push('/me/stories/'+this.state.selectStoryId+'/edit')
   },
 
+  handleRequestClose(){
+    this.setState({alert:false})
+  },
+
   render(){
-    let {stories,selectStatus,onLoad,editStory,editStoryWhere,storiesCount,currentPage,totalPages} = this.state
+    let {alert,alertChild,alertConfirm,alertDesc,alertWhere,stories,selectStatus,onLoad,editStory,editStoryWhere,storiesCount,currentPage,totalPages} = this.state
 		
     return (
       <Container>
+        <Alert 
+          open={alert}
+          anchorEl={alertWhere}
+          onRequestClose={this.handleRequestClose}
+          description={alertDesc}
+          child={alertChild} 
+          confirm={alertConfirm}/>
         <div className='row' style={{padding:'30px 15px 20px 30px'}}>
           <MyStory className='nunito-font'>My Stories</MyStory>   
         </div>
@@ -296,9 +338,9 @@ const UserSettingStory = React.createClass({
           onRequestClose={this.closeEditStory}
         >
           <MenuItem onClick={this.goEditStory} style={{color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>edit</FontIcon>}>Edit Story</MenuItem>
-          <MenuItem onClick={this.deleteStory} style={{color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>delete</FontIcon>}>Delete</MenuItem>
-          {selectStatus===STATUS.PUBLISHED ? <MenuItem onClick={this.unpublishStory} style={{color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>drafts</FontIcon>}>Unpublish</MenuItem>
-          : <MenuItem onClick={this.publishStory} style={{color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>assignment_turned_in</FontIcon>}>Publish</MenuItem>}
+          <MenuItem onClick={this.alertDeleteStory} style={{color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>delete</FontIcon>}>Delete</MenuItem>
+          {selectStatus===STATUS.PUBLISHED ? <MenuItem onClick={this.alertUnpublishStory} style={{color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>drafts</FontIcon>}>Unpublish</MenuItem>
+          : <MenuItem onClick={this.alertPublishStory} style={{color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>assignment_turned_in</FontIcon>}>Publish</MenuItem>}
         </Popover>
 
         <Section2 style={{padding:'40px 5px 40px 5px'}}>

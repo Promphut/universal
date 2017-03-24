@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 import styled from 'styled-components'
 import {TrendingSideBarInner} from 'components'
 import {findDOMNode as dom} from 'react-dom'
-
+import Avatar from 'material-ui/Avatar'
 const Container = styled.div`
   width:324px;
   position:relative;
@@ -60,8 +60,9 @@ const Column = styled.div`
 `
 const Div = styled.div`
   width:100%;
-  padding:20px;
+  padding:12px 0px;
   display:flex;
+  cursor: pointer;
 `
 const Number = styled.div`
   width:60px;
@@ -79,11 +80,12 @@ const Name = styled.div`
 `
 const Sty = styled.div`
   color:#8F8F8F;
-  font-size:16px;
+  font-size:13px;
 `
 //if height less than 900px remove last item
+const defaultPic = '/tmp/avatar.png'
 
-const TopColumnSidebar = React.createClass({
+const TopWriterSidebar = React.createClass({
   getInitialState(){
     return{
       stopPos:''
@@ -101,16 +103,16 @@ const TopColumnSidebar = React.createClass({
   },
 
   render(){
-    var {column} = this.props
-    //console.log(column)
+    //console.log(this.props.writer)
+    var {writer} = this.props
     /*var Sort = []
-    for(let i=0;i<6;i++){
+    for(let i=0;i<writer.length;i++){
       Sort.push(
         <Div className='serif-font' key={i}>
-          <Number className={'bg'+(1+i)}>{i+1}</Number>
-          <div style={{padding:'10px 30px 0 30px'}}>
-            <Name>Money Ideas</Name>
-            <Sty className='sans-font'>31 Stories</Sty>
+          <Avatar src='/tmp/avatar.png' size={50} />
+          <div style={{padding:'0 30px 0 35px'}}>
+            <Name>{writer[i].display}</Name>
+            <Sty className='sans-font'>{writer[i].intro}</Sty>
           </div>
         </Div>
       )
@@ -118,15 +120,17 @@ const TopColumnSidebar = React.createClass({
     return(
       <Container style={{...this.props.style}} ref='contain'>
         <Divider/>
-        <Head>TOP COLUMNS</Head>
-          {column.length!=0?column.map((data,index)=>(
-            <Div className='serif-font' key={index}>
-              <Number className={'bg'+(1+index)}>{index+1}</Number>
-              <div style={{padding:'10px 30px 0 30px'}}>
-                <Name>{data.name}</Name>
-                {/*<Sty className='sans-font'>{data.shortDesc}</Sty>*/}
-              </div>
-            </Div>
+        <Head>TOP WRITERS</Head>
+          {writer.length!=0?writer.map((data,index)=>(
+            <Link to={data.url} key={index}>
+              <Div className='serif-font'>
+                <Avatar src={data.pic && data.pic.medium || defaultPic} size={55} />
+                <div style={{padding:'0 30px 0 35px'}}>
+                  <Name>{data.display}</Name>
+                  <Sty className='sans-font'>{data.intro}</Sty>
+                </div>
+              </Div>
+            </Link>
           )):''}
         <Divider/>
       </Container>
@@ -135,4 +139,4 @@ const TopColumnSidebar = React.createClass({
 })
 
 
-export default TopColumnSidebar;
+export default TopWriterSidebar;

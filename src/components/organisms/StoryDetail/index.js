@@ -24,6 +24,51 @@ const Head = styled.h1`
 const Story = styled.div`
   font-size:20px;
   margin-top:40px;
+  clear:both;
+	overflow:hidden;
+  p {
+    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    font-size: 18px;
+    white-space: pre-wrap;      /* Webkit */    
+    white-space: -moz-pre-wrap; /* Firefox */     
+    white-space: -pre-wrap;     /* Opera <7 */    
+    white-space: -o-pre-wrap;   /* Opera 7 */     
+    word-wrap: break-word;      /* IE */ 
+  }
+  h2 {
+    font-size: 28px;
+    font-weight:bold;
+    color:#222;
+    white-space: pre-wrap;      /* Webkit */    
+    white-space: -moz-pre-wrap; /* Firefox */     
+    white-space: -pre-wrap;     /* Opera <7 */    
+    white-space: -o-pre-wrap;   /* Opera 7 */     
+    word-wrap: break-word;      /* IE */ 
+  }
+  h3 {
+    font-size: 20px;
+    font-weight:normal;
+    color:#bfbfbf;
+    white-space: pre-wrap;      /* Webkit */    
+    white-space: -moz-pre-wrap; /* Firefox */     
+    white-space: -pre-wrap;     /* Opera <7 */    
+    white-space: -o-pre-wrap;   /* Opera 7 */     
+    word-wrap: break-word;      /* IE */ 
+  }
+  blockquote {
+    font-size: 20px;
+    font-family: 'PT Serif', 'Mitr';
+    font-weight:normal;
+    color:#222;
+    border-left: 1px solid #E2E2E2;
+    padding-left:20px;
+    display:inline-block;
+    white-space: pre-wrap;      /* Webkit */    
+    white-space: -moz-pre-wrap; /* Firefox */     
+    white-space: -pre-wrap;     /* Opera <7 */    
+    white-space: -o-pre-wrap;   /* Opera 7 */     
+    word-wrap: break-word;      /* IE */ 
+  }
   @media (max-width:480px){
     font-size:16px;
     margin-top:15px;
@@ -130,10 +175,10 @@ const StoryDetail = React.createClass({
         <Divider/>
         <div className='row center'>
           <div className='col-md-6 col-sm-12'>
-            <FromColumn  column={s.column} />
+            <WritedBy writer={s.writer} column={s.column} published={s.published} />
           </div>
           <div className='col-md-6 col-sm-12'>
-            <WritedBy writer={s.writer} column={s.column} published={s.published} />
+            {s.column && <FromColumn  column={s.column} />}
           </div>
         </div>
         <Divider/>

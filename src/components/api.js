@@ -243,7 +243,7 @@ api.newColumn = (col) => {
 	})
 }
 
-api.getWriters = () => {
+api.getPublisherWriters = () => {
 	return Request
 	.get(config.BACKURL+'/publishers/'+config.PID+'/writers')
 	.set('Accept','application/json')
@@ -444,7 +444,7 @@ api.removeWriter = (writerId, cid) => {
 	})
 }
 
-api.getWriters = (cid) => {
+api.getColumnWriters = (cid) => {
 	return Request
 	.get(config.BACKURL+'/publishers/'+config.PID+'/columns/'+cid+'/writers')
 	.set('Accept','application/json')
@@ -453,5 +453,25 @@ api.getWriters = (cid) => {
 	})
 }
 
+api.sendContactEmail = (contactCat, message) => {
+	return Request
+	.post(config.BACKURL+'/publishers/'+config.PID+'/contacts')
+	.set('Accept','application/json')
+	.send({
+		contactCat,
+		contact: message
+	})
+	.then(res => {
+		return res.body.contact
+	}, api.err)
+}
+
+api.shareFB = ()=>{
+    FB.ui({
+		method: 'share',
+		display: 'popup',
+		href: window.location.href,
+	}, function(response){});
+}
 
 module.exports = api

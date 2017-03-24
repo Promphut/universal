@@ -6,6 +6,10 @@ import styled from 'styled-components'
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import Request from 'superagent'
+import Infinite from 'react-infinite'
+import CircularProgress from 'material-ui/CircularProgress';
+import api from 'components/api'
+
 const Wrapper = styled.div`
 
 `
@@ -83,9 +87,14 @@ const Feed = styled.div`
 const AllStory = React.createClass({
 	getInitialState(){
 		return {
-			stopPos:0,
-			feed:[],
-			popular:[]
+			//stopPos:0,
+			//feed:[],
+			popular:[],			
+			latestStories:[],
+			refresh: 0,
+			page:0,
+			isInfiniteLoading: false,
+			loadOffset:300
 		}
 	},
 
@@ -93,20 +102,56 @@ const AllStory = React.createClass({
 		this.getFeed()
 	},
 
-	getFeed(){
-		var filter = JSON.stringify({status:1})
-		//console.log(path)
-		Request
-			.get(config.BACKURL+'/publishers/'+config.PID+'/feed?type=story&filter='+filter+'&sort=latest')
-			.set('Accept','application/json')
-			.end((err,res)=>{
-				if(err) throw err
-				else{
-					//console.log(res.body)
-					this.setState({feed:res.body.feed})
+	// getFeed(){
+	// 	var filter = JSON.stringify({status:1})
+	// 	//console.log(path)
+	// 	Request
+	// 		.get(config.BACKURL+'/publishers/'+config.PID+'/feed?type=story&filter='+filter+'&sort=latest')
+	// 		.set('Accept','application/json')
+	// 		.end((err,res)=>{
+	// 			if(err) throw err
+	// 			else{
+	// 				//console.log(res.body)
+	// 				this.setState({feed:res.body.feed})
+	// 			}
+	// 		})
+
+	// },
+
+	buildElements(page) {
+		api.getFeed('story', {status:1}, 'latest', null, page, 10)
+		.then(result => {
+			//console.log(result.count[1])
+			this.setState({
+				latestStories:this.state.latestStories.concat(result.feed)
+			},()=>{
+				if(this.state.latestStories.length==result.count[1]){
+					this.setState({
+						isInfiniteLoading: false,
+						loadOffset:'undefined'
+					})
+				}else{
+					this.setState({
+						isInfiniteLoading: false
+					})
 				}
 			})
+		})
+	},
 
+	handleInfiniteLoad() {
+		//console.log('onload')
+		this.setState({
+				isInfiniteLoading: true
+		});
+		this.buildElements(this.state.page)
+		this.setState({
+				page:this.state.page+1
+		});
+	},
+
+	elementInfiniteLoad() {
+			return <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>;
 	},
 
 	render(){
@@ -134,10 +179,18 @@ const AllStory = React.createClass({
 		      <Content >
 			      <Main>
 							<TextLine className='sans-font'>Lastest</TextLine>
-							{/*{article}*/}
-							{feed.map((data,index)=>(
-								index%3==0?<ArticleBoxLarge detail={data} key={index}/>:<ArticleBox detail={data} key={index}/>
-							))}
+							<Infinite
+									elementHeight={210}
+									infiniteLoadBeginEdgeOffset={this.state.loadOffset}
+									onInfiniteLoad={this.handleInfiniteLoad}
+									loadingSpinnerDelegate={this.elementInfiniteLoad()}
+									isInfiniteLoading={this.state.isInfiniteLoading}
+									useWindowAsScrollContainer={true}>
+									
+								{this.state.latestStories.length!=0?this.state.latestStories.map((story, index) => (
+									<ArticleBox detail={story} key={index}/>
+								)):''}
+							</Infinite>;
 							<More style={{margin:'30px auto 30px auto'}} />
 			      </Main>
 			      <Aside>

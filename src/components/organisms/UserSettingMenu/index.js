@@ -8,13 +8,15 @@ import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar'
 import auth from 'components/auth'
 
+
 var styles = {
   list:{
     color:'white'
   },
   listItem:{
     padding:'20px',
-    color:"white"
+    color:"white",
+    fontWeight:'bold'
   }
 }
 
@@ -83,10 +85,10 @@ const UserSettingMenu = React.createClass({
 
         <SelectableList value={this.state.selectedIndex} style={{padding:1}}>
           <Divider />
-          <Item style={{...styles.listItem, padding:'35px 20px 35px 20px'}} onClick={()=>this.changePath('/me/stories')} value='/me/stories' primaryText="My Stories" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>description</FontIcon>} />
+          <ListItem style={{...styles.listItem, padding:'35px 20px 35px 20px'}} onClick={()=>this.changePath('/me/stories')} value='/me/stories' primaryText="My Stories" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>description</FontIcon>} />
           <Divider />
-          <Item style={{...styles.listItem}} onClick={()=>this.changePath('/me/settings')} value='/me/settings' primaryText="Profile" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>person</FontIcon>} />
-          <Item style={{...styles.listItem}} onClick={()=>this.changePath('/me/settings/account')} value='/me/settings/account' primaryText="Account" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>settings</FontIcon>} />
+          <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/me/settings')} value='/me/settings' primaryText="Profile" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>person</FontIcon>} />
+          <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/me/settings/account')} value='/me/settings/account' primaryText="Account" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>settings</FontIcon>} />
         </SelectableList>
       </div>
     )

@@ -24,6 +24,8 @@ const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
+  width:1110px;
+  margin:0 auto 0 auto;
 `
 const Main = styled.div`
 	background: white;

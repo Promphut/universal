@@ -155,7 +155,7 @@ const ColumnSettingPage = React.createClass({
     let cid = this.props.params.cid
     if(cid==null) return
 
-    api.getWriters(cid)
+    api.getColumnWriters(cid)
     .then(writers => {
       writers = writers.map(writer => {
         return {text:writer.username, value:writer.id}

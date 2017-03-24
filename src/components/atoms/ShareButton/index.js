@@ -33,9 +33,10 @@ const label = (text, number) => {
   )
 }
 
-const ShareButton = ({className, number, color, style}) => {
+const ShareButton = ({className, number, color, style,onClick}) => {
   return (
     <FlatButton
+      onClick={onClick}
       label = {label('Share', number)}
       labelStyle = {styles.labelStyle}
       backgroundColor={'rgb(' + color + ')'}
