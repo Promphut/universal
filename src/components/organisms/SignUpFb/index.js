@@ -50,18 +50,7 @@ const SignUpFb = React.createClass({
   getInitailState(){
     return{}
   },
-  signupFB(e){
-    e.preventDefault()
-    Request
-      .get(config.BACKURL+'/auth/facebook')
-      .set('Accept','application/json')
-      .end((err,res)=>{
-        if(err) throw err
-        else{
-          browserHistory.push('/')
-        }
-      })
-  },  
+
   render(){
     return(
       <Box>
@@ -69,16 +58,17 @@ const SignUpFb = React.createClass({
         <Text>ไม่พลาดทุกเรื่องราวการเงินดีๆ สมัครสมาชิค</Text>
 
         <div style={styles.btnCon}>
-          <RaisedButton
-            label=" Sign Up"
-            labelPosition="after"
-            labelColor='white'
-            labelStyle={styles.labelBtn}
-            icon={<i className="fa fa-facebook" style={{color:'white',margin:'17px 10px 0 0'}} aria-hidden="true"></i>}
-            style={styles.button}
-            buttonStyle={styles.btn}
-            onClick={this.signupFB}
-          />
+          <a href={config.BACKURL+'/auth/facebook?publisher='+config.PID+'&nextpathname='+encodeURIComponent(this.props.nextPathname)}>
+            <RaisedButton
+              label=" Sign Up"
+              labelPosition="after"
+              labelColor='white'
+              labelStyle={styles.labelBtn}
+              icon={<i className="fa fa-facebook" style={{color:'white',margin:'17px 10px 0 0'}} aria-hidden="true"></i>}
+              style={styles.button}
+              buttonStyle={styles.btn}
+            />
+          </a>  
         </div>
 
         <Text style={{marginTop:'10px',fontFamily:'Nunito'}}>Or <LinkUnderLine to='#' onClick={this.props.emailSignUp}>Sign Up with an E-mail</LinkUnderLine></Text>

@@ -1,5 +1,7 @@
 const config = {
 	development : {
+		PROFILE:'/tmp/avatar.png',
+		TWT:'https://twitter.com/intent/tweet',
 		PID:'11',
 		MAINCOLOR:'#00B2B4',
 		DOMAIN: 		'localhost',
@@ -14,6 +16,8 @@ const config = {
 		}
 	},
 	production : {
+		PROFILE:'/tmp/avatar.png',
+		TWT:'https://twitter.com/intent/tweet',
 		PID:'11',
 		MAINCOLOR:'#00B2B4',
 		DOMAIN: 		'localhost',

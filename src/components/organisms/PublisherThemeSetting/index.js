@@ -8,7 +8,7 @@ import Menu from 'material-ui/Menu'
 import Popover from 'material-ui/Popover';
 import Request from 'superagent'
 import auth from 'components/auth'
-
+import RaisedButton from 'material-ui/RaisedButton'
 const Container = styled.form`
   width:100%;
   padding:80px;
@@ -278,14 +278,43 @@ const PublisherThemeSetting = React.createClass({
                 <Example style={{...styles.example1}}>
                   <strong className="serif-font" style={{fontSize:'17px'}}>Preview of the major color selection</strong><br/><br/>
                   Content should look like this, isn't it pretty on this background color?
+
+                   <RaisedButton
+                      label="button"
+                      labelStyle={{fontWeight:'bold', fontSize:15, top:-2, fontFamily:"'Nunito', 'Mitr'"}}
+                      labelColor='#fff'
+                      overlayStyle={{borderRadius: '20px'}}
+                      rippleStyle={{borderRadius: '20px'}}
+                      style={{borderRadius:'20px', height:'40px', lineHeight:'40px', background:primaryColor, boxShadow:'none',marginTop:'15px'}}
+                      buttonStyle={{borderRadius: '20px', background: primaryColor, border:'2px solid #fff', padding:'0 2px'}}
+                    />
                 </Example>
                 <Example style={{...styles.example2}}>
                   <strong className="serif-font" style={{fontSize:'17px'}}>Preview of the major color selection</strong><br/><br/>
                   Content should look like this, isn't it pretty on this background color?
+
+                    <RaisedButton
+                      label="button"
+                      labelStyle={{fontWeight:'bold', fontSize:15, top:-2, fontFamily:"'Nunito', 'Mitr'"}}
+                      labelColor={primaryColor}
+                      overlayStyle={{borderRadius: '20px'}}
+                      rippleStyle={{borderRadius: '20px'}}
+                      style={{borderRadius:'20px', height:'40px', lineHeight:'40px', background:'white', boxShadow:'none',marginTop:'15px'}}
+                      buttonStyle={{borderRadius: '20px', background:'white', border:('2px solid '+primaryColor), padding:'0 2px'}}
+                    />
                 </Example>
                 <Example style={{...styles.example3}}>
                   <strong className="serif-font" style={{fontSize:'17px'}}>Preview of the major color selection</strong><br/><br/>
                   Content should look like this, isn't it pretty on this background color?
+                    <RaisedButton
+                      label="button"
+                      labelStyle={{fontWeight:'bold', fontSize:15, top:-2, fontFamily:"'Nunito', 'Mitr'"}}
+                      labelColor='#fff'
+                      overlayStyle={{borderRadius: '20px'}}
+                      rippleStyle={{borderRadius: '20px'}}
+                      style={{borderRadius:'20px', height:'40px', lineHeight:'40px', background:primaryColor, boxShadow:'none',marginTop:'15px'}}
+                      buttonStyle={{borderRadius: '20px', background: primaryColor, border:'2px solid #fff', padding:'0 2px'}}
+                    />
                 </Example>
               </div>
               <div className='col-6' style={{padding:'0 5px 0 5px'}}>
@@ -293,10 +322,10 @@ const PublisherThemeSetting = React.createClass({
                   <strong className="serif-font" style={{fontSize:'17px',color:'white'}}>White Color</strong><br/>
                   <strong className="serif-font" style={{fontSize:'17px',color:'#222'}}>Black Color</strong>
                 </div>
-                <div className='backgroundClip' style={{...styles.example5,textAlign:'center',height:'82px',padding:'18px 0 0 0',backgroundClip:"text",textFillColor: "transparent",WebkitBackgroundClip:"text",WebkitTextFillColor: "transparent"}}>
+                {primaryColor && secondaryColor && <div className='backgroundClip' style={{...styles.example5,textAlign:'center',height:'82px',padding:'18px 0 0 0',backgroundClip:"text",textFillColor: "transparent",WebkitBackgroundClip:"text",WebkitTextFillColor: "transparent"}}>
                   <strong className="serif-font" style={{fontSize:'24px'}}>
                     Primary and <br/>Secondary Header</strong>
-                </div>
+                </div>}
               </div>
             </div>
           </Edit>

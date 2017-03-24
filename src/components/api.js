@@ -320,5 +320,12 @@ api.sendContactEmail = (contactCat, message) => {
 		return res.body.contact
 	}, api.err)
 }
+api.shareFB = ()=>{
+    FB.ui({
+		method: 'share',
+		display: 'popup',
+		href: window.location.href,
+	}, function(response){});
+}
 
 module.exports = api

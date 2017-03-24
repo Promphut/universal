@@ -82,7 +82,13 @@ const Onload = styled.div`
 	margin:50px 0 50px 0;
 `
 
-const UserDetail = ({style, user})=>{
+const A = styled.a`
+	flex:1;
+	textAlign:center;
+	color:#c2c2c2;
+`
+
+const UserDetail = ({style, user,shareFB})=>{
 	//console.log('user', user)
   return (
     <div className='row' style={{...style,margin:'50px 0 50px 0',display:'block',overflow:'hidden'}}>
@@ -93,10 +99,10 @@ const UserDetail = ({style, user})=>{
       </div>
       <div style={{float:'right',width:'250px',marginTop:'20px'}}>
         <div className='row' style={{overflow:'hidden'}}>
-          <i className="fa fa-facebook" aria-hidden="true" style={{flex:1,textAlign:'center',color:'#C2C2C2'}}></i>
-          <i className="fa fa-twitter" aria-hidden="true" style={{flex:1,textAlign:'center',color:'#C2C2C2'}}></i>
-          <i className="fa fa-youtube-play" aria-hidden="true" style={{flex:1,textAlign:'center',color:'#C2C2C2'}}></i>
-          <i className="fa fa-instagram" aria-hidden="true" style={{flex:1,textAlign:'center',color:'#C2C2C2'}}></i>
+          <A href='#' onClick={shareFB}><i className="fa fa-facebook" aria-hidden="true"></i></A>
+          <A href={config.TWT}><i className="fa fa-twitter" aria-hidden="true" ></i></A>
+          <A><i className="fa fa-youtube-play" aria-hidden="true" ></i></A>
+          <A><i className="fa fa-instagram" aria-hidden="true" ></i></A>
         </div>
         <UserDesc className='sans-font' style={{textAlign:'right',width:'250px'}}>{user.shortDesc}</UserDesc>
       </div>
@@ -195,7 +201,7 @@ const UserStory = React.createClass({
 		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 		      <Content >
 			      <Main style={{marginTop:'100px'}}>
-              			<UserDetail user={this.props.params.user}/>
+              <UserDetail user={this.props.params.user} shareFB={api.shareFB}/>
 						<TextLine className='sans-font'>
 							<strong style={{color:'#00B2B4',marginRight:'30px'}}>
 								<span style={{fontSize:'30px'}}>{feedCount}</span> stories
