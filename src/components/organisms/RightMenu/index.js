@@ -144,7 +144,7 @@ const CloseBtn = styled(IconButton)`
 `
 
 const Profile = styled.div`
-	padding: 80px 40px 0 40px;
+	padding: 40px 40px 0 40px;
 
 	& > * {
 		vertical-align: middle;

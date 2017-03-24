@@ -185,14 +185,14 @@ const TopBar = React.createClass({
 			      </Link>
 					</Left>
 
-					<Center className={'hide'}>
+					<Center className={transparent ? 'hide': ''}>
    					{this.props.children}
 					</Center>
 
 					{status == 'LOGGEDIN' &&
 						<Right>
 				      <HideOnTablet>
-								<Link to="/editor/stories/new">
+								<Link to="/me/stories/new">
 					        <PrimaryButton
 					          label="Story"
 					          iconName="add"
