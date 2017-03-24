@@ -8,6 +8,8 @@ import FontIcon from 'material-ui/FontIcon';
 import Avatar from 'material-ui/Avatar'
 import auth from 'components/auth'
 import api from 'components/api'
+import Infinite from 'react-infinite'
+import CircularProgress from 'material-ui/CircularProgress';
 
 const Wrapper = styled.div`
 	
@@ -74,6 +76,11 @@ const UserDesc = styled.div`
   font-size:16px;
   width:220px;
 `
+const Onload = styled.div`
+	width:100%;
+	height:70px;
+	margin:50px 0 50px 0;
+`
 
 const UserDetail = ({style, user})=>{
 	//console.log('user', user)
@@ -100,44 +107,82 @@ const UserDetail = ({style, user})=>{
 const UserStory = React.createClass({
 	getInitialState(){
 		return {
-			stopPos:0,
-			feed:[],
+			//feed:[],
 			feedCount: 0,
+			latestStories:[],
+			page:0,
+			isInfiniteLoading: false,
+			loadOffset:300
 			//popular:[]
 		}
 	},
 
 	componentDidMount(){
-		this.getFeed()
-		this.setState({
-			stopPos:dom(this.refs.more).getBoundingClientRect().top
+		//this.getFeed()
+	},
+
+	// getFeed(){
+	// 	let uid = auth.getUser()._id
+
+	// 	api.getFeed('story', {writer:uid, status:1}, 'latest')
+	// 	.then(result => {
+	// 		this.setState({
+	// 			feed: result.feed,
+	// 			feedCount: result.count['1']
+	// 		})
+	// 	})
+
+	// 	// var filter = JSON.stringify({writer:1,status:1})
+
+	// 	// //console.log(path)
+	// 	// Request
+	// 	// .get(config.BACKURL+'/publishers/'+config.PID+'/feed?type=story&filter='+filter+'&sort=latest')
+	// 	// .set('Accept','application/json')
+	// 	// .end((err,res)=>{
+	// 	// 	if(err) throw err
+	// 	// 	else{
+	// 	// 		//console.log(res.body)
+	// 	// 		this.setState({feed:res.body.feed})
+	// 	// 	}
+	// 	// })
+	// },
+
+	buildElements(page) {
+		let uid = auth.getUser()._id
+		api.getFeed('story', {writer:parseInt(uid),status:1}, 'latest', null, page, 10)
+		.then(result => {
+			//console.log(result.count[1])
+			this.setState({
+				latestStories:this.state.latestStories.concat(result.feed),
+				feedCount:result.count[1]
+			},()=>{
+				if(this.state.latestStories.length==result.count[1]){
+					this.setState({
+						isInfiniteLoading: false,
+						loadOffset:'undefined'
+					})
+				}else{
+					this.setState({
+						isInfiniteLoading: false
+					})
+				}
+			})
 		})
 	},
 
-	getFeed(){
-		let uid = auth.getUser()._id
+	handleInfiniteLoad() {
+		//console.log('onload')
+		this.setState({
+				isInfiniteLoading: true
+		});
+		this.buildElements(this.state.page)
+		this.setState({
+				page:this.state.page+1
+		});
+	},
 
-		api.getFeed('story', {writer:uid, status:1}, 'latest')
-		.then(result => {
-			this.setState({
-				feed: result.feed,
-				feedCount: result.count['1']
-			})
-		})
-
-		// var filter = JSON.stringify({writer:1,status:1})
-
-		// //console.log(path)
-		// Request
-		// .get(config.BACKURL+'/publishers/'+config.PID+'/feed?type=story&filter='+filter+'&sort=latest')
-		// .set('Accept','application/json')
-		// .end((err,res)=>{
-		// 	if(err) throw err
-		// 	else{
-		// 		//console.log(res.body)
-		// 		this.setState({feed:res.body.feed})
-		// 	}
-		// })
+	elementInfiniteLoad() {
+			return <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>;
 	},
 
 	render(){
@@ -157,9 +202,18 @@ const UserStory = React.createClass({
 							</strong> 
 							{/*<span style={{fontSize:'30px'}}>101</span> Upvotes*/}
 						</TextLine>
-						{feed.map((data, index) => (
-							index%3==0 ? <ArticleBoxLarge detail={data} key={index}/> : <ArticleBox detail={data} key={index}/>
-						))}
+						<Infinite
+									elementHeight={210}
+									infiniteLoadBeginEdgeOffset={this.state.loadOffset}
+									onInfiniteLoad={this.handleInfiniteLoad}
+									loadingSpinnerDelegate={this.elementInfiniteLoad()}
+									isInfiniteLoading={this.state.isInfiniteLoading}
+									useWindowAsScrollContainer={true}>
+									
+								{this.state.latestStories.length!=0?this.state.latestStories.map((story, index) => (
+									<ArticleBox detail={story} key={index}/>
+								)):''}
+						</Infinite>
 						<More style={{margin:'30px auto 30px auto'}} />
 						<div ref='more'></div>
 			      </Main>

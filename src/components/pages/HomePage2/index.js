@@ -7,6 +7,8 @@ import styled from 'styled-components'
 import auth from 'components/auth'
 import api from 'components/api'
 import slider from 'react-slick'
+import Infinite from 'react-infinite'
+import CircularProgress from 'material-ui/CircularProgress';
 
 const Wrapper = styled.div`
 	@media (max-width:480px) {
@@ -66,6 +68,14 @@ const Footer = styled.div`
 	background: lightgreen;
 	height:400px;
 `
+const Onload = styled.div`
+	width:100%;
+	height:70px;
+	margin:50px 0 50px 0;
+`
+// const Infinite2 = styled(Infinite)`
+// 	overflow-y:visible !important;
+// `
 
 const HomePage2 = React.createClass({
 	getInitialState(){
@@ -75,7 +85,11 @@ const HomePage2 = React.createClass({
 		this.column = []
 
 		return {
-			refresh: 0
+			latestStories:[],
+			refresh: 0,
+			page:0,
+			isInfiniteLoading: false,
+			loadOffset:300
 		}
 	},
 
@@ -109,15 +123,12 @@ const HomePage2 = React.createClass({
 		})
 
 		// 2. Fetching latestStories
-		api.getFeed('story', {status:1}, 'latest', null, 0, 15)
-		.then(result => {
-			//console.log('feed', result.feed.length)
-			this.latestStories = result.feed
-
-			this.setState({
-				refresh: Math.random()
-			})
-		})
+		// api.getFeed('story', {status:1}, 'latest', null, 0, 10)
+		// .then(result => {
+		// 	this.setState({
+		// 		latestStories:result.feed
+		// 	})
+		// })
 
 		api.getColumns().then((res)=>{
 			this.column = res
@@ -135,6 +146,42 @@ const HomePage2 = React.createClass({
 		})
 
 
+	},
+
+	buildElements(page) {
+		api.getFeed('story', {status:1}, 'latest', null, page, 10)
+		.then(result => {
+			//console.log(result.count[1])
+			this.setState({
+				latestStories:this.state.latestStories.concat(result.feed)
+			},()=>{
+				if(this.state.latestStories.length==result.count[1]){
+					this.setState({
+						isInfiniteLoading: false,
+						loadOffset:'undefined'
+					})
+				}else{
+					this.setState({
+						isInfiniteLoading: false
+					})
+				}
+			})
+		})
+	},
+
+	handleInfiniteLoad() {
+		//console.log('onload')
+		this.setState({
+				isInfiniteLoading: true
+		});
+		this.buildElements(this.state.page)
+		this.setState({
+				page:this.state.page+1
+		});
+	},
+
+	elementInfiniteLoad() {
+			return <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>;
 	},
 
 
@@ -163,10 +210,18 @@ const HomePage2 = React.createClass({
 		      <Content>
 			      <Main>
 							<TextLine className='sans-font'>Latest</TextLine>
-							{/*{article}*/}
-							{this.latestStories.map((story, index) => (
-								index%3==0 ? <ArticleBoxLarge detail={story} key={index}/> : <ArticleBox detail={story} key={index}/>
-							))}
+							<Infinite
+									elementHeight={210}
+									infiniteLoadBeginEdgeOffset={this.state.loadOffset}
+									onInfiniteLoad={this.handleInfiniteLoad}
+									loadingSpinnerDelegate={this.elementInfiniteLoad()}
+									isInfiniteLoading={this.state.isInfiniteLoading}
+									useWindowAsScrollContainer={true}>
+									
+								{this.state.latestStories.length!=0?this.state.latestStories.map((story, index) => (
+									<ArticleBox detail={story} key={index}/>
+								)):''}
+							</Infinite>
 							<More style={{margin:'30px auto 30px auto'}}/>
 			      </Main>
 			      <Aside>

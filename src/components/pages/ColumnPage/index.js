@@ -1,12 +1,13 @@
 import React from 'react'
 import {TopBarWithNavigation, ArticleBox, ArticleBoxLarge, More, TrendingSideBar,
-	BGImg, StoryMenu} from 'components'
+	BGImg, StoryMenu,Stick} from 'components'
 import {findDOMNode as dom} from 'react-dom'
 import styled from 'styled-components'
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import api from 'components/api'
-
+import Infinite from 'react-infinite'
+import CircularProgress from 'material-ui/CircularProgress';
 const Wrapper = styled.div`
 
 `
@@ -79,46 +80,98 @@ const Footer = styled.div`
 	background: lightgreen;
 	height:400px;
 `
-
+const Onload = styled.div`
+	width:100%;
+	height:70px;
+	margin:50px 0 50px 0;
+`
 const ColumnPage = React.createClass({
 	getInitialState(){
 		return {
-			stopPos: 0,
-			column: {
-				cover: {
-					medium: ''
-				},
-				shortDesc: '',
-				name: ''
-			},
-			feed: []
-			//popular: []
+			// column: {
+			// 	cover: {
+			// 		medium: ''
+			// 	},
+			// 	shortDesc: '',
+			// 	name: ''
+			// },
+			column:this.props.params.column,
+			feed: [],
+			latestStories:[],
+			page:0,
+			isInfiniteLoading: false,
+			loadOffset:300
 		}
 	},
 
 	componentDidMount() {
-		this.getColumnFeed(this.props.params.column)
-		// this.setState({
-		// 	stopPos:dom(this.refs.more).getBoundingClientRect().top
-		// })
+		//this.getColumnFeed(this.props.params.column)
 	},
 
 	componentWillReceiveProps(nextProps) {
-		this.getColumnFeed(nextProps.params.column)
+		if(nextProps.params.column!=this.props.params.column){
+			this.setState({
+				column:nextProps.params.column,
+			},()=>{
+				this.setState({
+					page:0,
+					latestStories:[],
+					loadOffset:300
+				},()=>{
+					this.handleInfiniteLoad()
+				})
+			})
+		}
 	},
 
-	getColumnFeed(col){
-		let {id, name, shortDesc, cover} = col
+	// getColumnFeed(col){
+	// 	let {id, name, shortDesc, cover} = col
 
-		api.getFeed('story', {column: id, status: 1})
+	// 	api.getFeed('story', {column: id, status: 1})
+	// 	.then(result => {
+	// 		this.setState({
+	// 			column: {id, name, shortDesc, cover},
+	// 			feed: result.feed,
+	// 		})
+	// 	})
+
+	// },
+
+	buildElements(page) {
+		var {id} = this.state.column
+		api.getFeed('story', {column: parseInt(id),status:1}, 'latest', null, page, 10,{allowUnlisted: true})
 		.then(result => {
+			//console.log(result)
 			this.setState({
-				column: {id, name, shortDesc, cover},
-				feed: result.feed,
-				stopPos:dom(this.refs.more).getBoundingClientRect().top
+				latestStories:this.state.latestStories.concat(result.feed)
+			},()=>{
+				if(this.state.latestStories.length==result.count[1]){
+					this.setState({
+						isInfiniteLoading: false,
+						loadOffset:'undefined'
+					})
+				}else{
+					this.setState({
+						isInfiniteLoading: false
+					})
+				}
 			})
 		})
+	},
 
+	handleInfiniteLoad() {
+		//console.log('onload')
+		this.setState({
+				isInfiniteLoading: true
+		});
+		this.buildElements(this.state.page)
+		this.setState({
+				page:this.state.page+1
+		});
+	},
+
+	elementInfiniteLoad() {
+			return <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>;
 	},
 
 	render(){
@@ -144,16 +197,27 @@ const ColumnPage = React.createClass({
 						/>
 						<TextLine className='sans-font'>Latest</TextLine>
 
-						{feed.map((data,index) => (
-							index%3===0 ? <ArticleBoxLarge detail={data} key={index}/> : <ArticleBox detail={data} key={index}/>
-						))}
+							<Infinite
+									elementHeight={210}
+									infiniteLoadBeginEdgeOffset={this.state.loadOffset}
+									onInfiniteLoad={this.handleInfiniteLoad}
+									loadingSpinnerDelegate={this.elementInfiniteLoad()}
+									isInfiniteLoading={this.state.isInfiniteLoading}
+									useWindowAsScrollContainer={true}>
+									
+								{this.state.latestStories.length!=0?this.state.latestStories.map((story, index) => (
+									<ArticleBox detail={story} key={index}/>
+								)):''}
+							</Infinite>
 
 						<More style={{margin:'30px auto 30px auto'}} />
 						<div ref='more'></div>
 			      </Main>
 			      <Aside>
-						<TrendingSideBar stop={this.state.stopPos}/>
-					</Aside>
+							<Stick topOffset={70}>
+								<TrendingSideBar/>
+							</Stick>
+						</Aside>
 		      	</Content>
 		   </Wrapper>
 		)
