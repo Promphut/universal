@@ -64,6 +64,7 @@ const Share = styled.div`
 const Main = styled.div`
 	flex: 8 730px;
 	max-width: 730px;
+	marginTop: 40px;
 	@media (max-width: 480px) {
 		flex:0 100%;
 		max-width: 100%;
@@ -192,7 +193,7 @@ const StoryPage = React.createClass({
 		    <Wrapper >
 		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} article={this.story.title}/>
 
-					
+
 		      <BGImg style={{width:'100%',height:'85vh'}} src={this.story.cover.large || this.story.cover.medium} className='hidden-mob'>
 						<Cover/>
 					</BGImg>

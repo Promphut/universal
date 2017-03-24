@@ -25,8 +25,8 @@ const Content = styled.div`
 `
 
 const Main = styled.div`
-	flex: 3 790px;
-	max-width: 790px;
+	flex: 3 731px;
+	max-width: 731px;
 	@media (max-width:480px) {
     flex: 0 100%;
 		max-width: 100%;
@@ -217,7 +217,7 @@ const HomePage2 = React.createClass({
 									loadingSpinnerDelegate={this.elementInfiniteLoad()}
 									isInfiniteLoading={this.state.isInfiniteLoading}
 									useWindowAsScrollContainer={true}>
-									
+
 								{this.state.latestStories.length!=0?this.state.latestStories.map((story, index) => (
 									<ArticleBox detail={story} key={index}/>
 								)):''}

@@ -92,7 +92,6 @@ const ContactPage = React.createClass({
   componentDidMount(){
     api.getPublisher(null)
     .then(pub => {
-      console.log(pub)
       pub.contactCats.forEach((val) => {
         this.state.problems.push(val.catName);
       })
@@ -111,9 +110,20 @@ const ContactPage = React.createClass({
           }
         })
       })
+      .catch(() => {
+        this.setState({
+          user: {},
+          head: 'Hi there!',
+          message: {
+            username: '',
+            email: '',
+            tel: '',
+            problem: this.state.problems[0],
+            textarea: ''
+          }
+        })
+      })
     })
-
-
   },
 
   sendMessage() {

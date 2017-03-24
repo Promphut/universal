@@ -60,8 +60,9 @@ const Column = styled.div`
 `
 const Div = styled.div`
   width:100%;
-  padding:20px;
+  padding:12px 0px;
   display:flex;
+  cursor: pointer;
 `
 const Number = styled.div`
   width:60px;
@@ -79,7 +80,7 @@ const Name = styled.div`
 `
 const Sty = styled.div`
   color:#8F8F8F;
-  font-size:16px;
+  font-size:13px;
 `
 //if height less than 900px remove last item
 const defaultPic = '/tmp/avatar.png'
@@ -121,13 +122,15 @@ const TopWriterSidebar = React.createClass({
         <Divider/>
         <Head>TOP WRITERS</Head>
           {writer.length!=0?writer.map((data,index)=>(
-            <Div className='serif-font' key={index}>
-              <Avatar src={data.pic && data.pic.medium} size={50} />
-              <div style={{padding:'0 30px 0 35px'}}>
-                <Name>{data.display}</Name>
-                <Sty className='sans-font'>{data.intro}</Sty>
-              </div>
-            </Div>
+            <Link to={data.url} key={index}>
+              <Div className='serif-font'>
+                <Avatar src={data.pic && data.pic.medium} size={55} />
+                <div style={{padding:'0 30px 0 35px'}}>
+                  <Name>{data.display}</Name>
+                  <Sty className='sans-font'>{data.intro}</Sty>
+                </div>
+              </Div>
+            </Link>
           )):''}
         <Divider/>
       </Container>

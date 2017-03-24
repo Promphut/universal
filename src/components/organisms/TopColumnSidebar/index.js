@@ -60,8 +60,10 @@ const Column = styled.div`
 `
 const Div = styled.div`
   width:100%;
-  padding:20px;
+  padding:12px 0px;
   display:flex;
+  cursor: pointer;
+  color: initial;
 `
 const Number = styled.div`
   width:60px;
@@ -71,6 +73,13 @@ const Number = styled.div`
   padding:9px;
   font-weight:bold;
   float:left;
+
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	cursor: default;
 `
 const Name = styled.div`
   color:#222;
@@ -120,13 +129,15 @@ const TopColumnSidebar = React.createClass({
         <Divider/>
         <Head>TOP COLUMNS</Head>
           {column.length!=0?column.map((data,index)=>(
-            <Div className='serif-font' key={index}>
-              <Number className={'bg'+(1+index)}>{index+1}</Number>
-              <div style={{padding:'10px 30px 0 30px'}}>
-                <Name>{data.name}</Name>
-                {/*<Sty className='sans-font'>{data.shortDesc}</Sty>*/}
-              </div>
-            </Div>
+            <Link to={data.url} key={index}>
+              <Div className='serif-font'>
+                <Number className={'bg'+(1+index)}>{index+1}</Number>
+                <div style={{padding:'14px 30px 0 30px'}}>
+                  <Name>{data.name}</Name>
+                  {/*<Sty className='sans-font'>{data.shortDesc}</Sty>*/}
+                </div>
+              </Div>
+            </Link>
           )):''}
         <Divider/>
       </Container>
