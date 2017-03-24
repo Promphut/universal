@@ -4,11 +4,13 @@ import {PrimaryButton,SecondaryButton,UploadPicture} from 'components'
 import TextField from 'material-ui/TextField';
 import Chip from 'material-ui/Chip';
 import auth from 'components/auth'
-import Request from 'superagent'
+//import Request from 'superagent'
 import AutoComplete from 'material-ui/AutoComplete';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton'
 import {findDOMNode as dom } from 'react-dom'
+import api from 'components/api'
+
 const Container = styled.form`
   width:100%;
   padding:80px;
@@ -24,12 +26,14 @@ const Container = styled.form`
     font-size:18px;
   }
 `
+
 const Flex = styled.div`
   display:flex;
   items-align:center;
   flex-flow: row wrap;
   margin:50px 0 0 50px;
 `
+
 const Title = styled.div`
   flex:2 150px;
   max-width:150px;
@@ -37,20 +41,24 @@ const Title = styled.div`
   font-size:17px;
   padding-top:15px;
 `
+
 const Edit = styled.div`
   flex:6 450px;
   max-width:450px;
 `
+
 const Social = styled.div`
   color:#8F8F8F;
   font-size:19px;
   overflow:hidden;
 `
+
 const Desc = styled.div`
   color:#C2C2C2;
   font-size:14px;
   font-style:italic;
 `
+
 const TextStatus = styled.div`
   color:#00B2B4;
   font-size:15px;
@@ -58,6 +66,7 @@ const TextStatus = styled.div`
   float:left;
   margin:10px 0 0 15px;
 `
+
 const Admin = styled.div`
   color:#8F8F8F;
   font-size:18px;
@@ -71,17 +80,18 @@ const Admin = styled.div`
     text-shadow: 0 0 1px #C2C2C2;
   }
 `
+
 const Divider = styled.div`
   width:100%;
   height:1px;
   background-color:#E2E2E2;
   margin:40px 0 40px 0;
 `
-const dataSource3 = [
+/*const dataSource3 = [
   {textKey: 'Some Text', valueKey: 'someFirstValue'},
   {textKey: 'Some Text', valueKey: 'someSecondValue'},
 ];
-
+*/
 
 const ColumnSettingPage = React.createClass({
   getInitialState(){
@@ -89,22 +99,36 @@ const ColumnSettingPage = React.createClass({
     return{
       column:{},
       user:{},
+      
+			cover:{
+        medium: ''
+      },
+      dialogText:'',
+			
+      writers:[],
+      writersAutoComplete: [],
+      writerToRemove: {},
+      writerSearchText: '',
+
+			editors:[],
+      editorsAutoComplete: [],
+      editorToRemove: {},
+      editorSearchText: '',
+			
+      switchTo:'',
+
       textStatus:'Unsave',
       error:false,
-      dialog:false,
-			cover:null,
-      dialogText:'',
-			writer:[],
-			editor:[],
-			switchTo:'',
-			info:{}
+      dialog:false
     }
   },
+
   componentDidMount(){
-    this.getWriter()
-		this.getEditor()
-    this.getColumnId()
+    this.getWriters()
+		this.getEditors()
+    this.getColumn()
   },
+
 	setData(){
     var {name,shortDesc,slug,cover} = this.state.column
     document.getElementById('name').value = !name?'':name
@@ -112,119 +136,221 @@ const ColumnSettingPage = React.createClass({
     document.getElementById('slug').value = !slug?'':"/"+slug
 		this.setState({cover:cover})
   },
-  getEditor(){
-    var self=this
-    Request
-      .get(config.BACKURL+'/publishers/11/columns/'+this.props.params.cid+'/editors')
-			.set('Accept','application/json')
-      .end((err,res)=>{
-        if(err) throw err //console.log(err)
-				else{
-					self.setState({editor:res.body.editors})
-				}
+
+  getEditors(){
+    let cid = this.props.params.cid
+    if(cid==null) return
+
+    api.getEditors(cid)
+    .then(editors => {
+      editors = editors.map(editor => {
+        return {text:editor.username, value:editor.id}
       })
+
+      this.setState({editors:editors})
+    })
   },
-  getColumnId(){
-    var self = this
-    var user = auth.getUser()
-    Request
-      .get(config.BACKURL+'/publishers/11/columns/'+this.props.params.cid)
-      .set('Accept','application/json')
-      .end((err,res)=>{
-        if(err) throw err
-        else{
-          //console.log(res.body)
-          self.setState({column:res.body.column})
-          self.setData()
-        }
+
+  getWriters(){
+    let cid = this.props.params.cid
+    if(cid==null) return
+
+    api.getWriters(cid)
+    .then(writers => {
+      writers = writers.map(writer => {
+        return {text:writer.username, value:writer.id}
       })
+
+      this.setState({writers:writers})
+    })
   },
-  getWriter(){
-    var self=this
-    Request
-      .get(config.BACKURL+'/publishers/11/columns/'+this.props.params.cid+'/writers')
-			.set('Accept','application/json')
-      .end((err,res)=>{
-        if(err) console.log(err)
-				else{
-					//console.log(res.body)
-					self.setState({writer:res.body.writers})
-				}
-      })
+
+  getColumn(){
+    let cid = this.props.params.cid
+    if(cid==null) return 
+
+    api.getColumn(cid)
+    .then(col => {
+      //console.log(res.body)
+      this.setState({column:col})
+      this.setData()
+    })
   },
+
 	deleteWriter(){
-    var {writer,info} = this.state
-    const chipToDelete = writer.map((data,index) => data.id).indexOf(info.id);
-    var self = this
-    writer.splice(chipToDelete, 1);
-    Request
-      .delete(config.BACKURL+'/publishers/11/columns/'+this.props.params.cid+'/writers/'+info.id+'?token='+auth.getToken())
-      .set('x-access-token', auth.getToken())
-      .set('Accept','application/json')
-      .end((err,res)=>{
-        if(err)throw err
-        else{
-          self.setState({dialog: false,info:{},writer});
-        }
-      })
+    let cid = this.props.params.cid
+    if(cid==null) return
+
+    let {writers, writerToRemove} = this.state
+    writers = _.reject( writers, {value: writerToRemove.value} )
+
+    api.removeWriter(writerToRemove.value, cid)
+    .then(result => {
+      this.setState({
+        dialog: false,
+        writerToRemove:{},
+        writers
+      });
+    })
   },
+
 	deleteEditor(){
-    var {editor,info} = this.state
-    const chipToDelete = editor.map((data,index) => data.id).indexOf(info.id);
-    var self = this
-    editor.splice(chipToDelete, 1);
-    Request
-      .delete(config.BACKURL+'/publishers/11/columns/'+this.props.params.cid+'/editors/'+info.id+'?token='+auth.getToken())
-      .set('x-access-token', auth.getToken())
-      .set('Accept','application/json')
-      .end((err,res)=>{
-        if(err)throw err
-        else{
-          self.setState({dialog: false,info:{},editor});
-        }
-      })
+    let cid = this.props.params.cid
+    if(cid==null) return
+
+    let {editors, editorToRemove} = this.state
+    editors = _.reject( editors, {value: editorToRemove.value} )
+
+    api.removeEditor(editorToRemove.value, cid)
+    .then(result => {
+      this.setState({
+        dialog: false,
+        editorToRemove:{},
+        editors
+      });
+    })
   },
+
   handleClose(e){
     this.setState({dialog: false});
   },
-	confirmDeleteEditor(d){
-		this.setState({dialog: true,dialogText:'Are you sure to delete '+ d.display +' ?',switchTo:'editor',info:d});
+
+	confirmDeleteEditor(editorToRemove){
+		this.setState({
+      dialog: true,
+      dialogText:'Are you sure to delete '+ editorToRemove.text +' ?',
+      switchTo:'editor',
+      editorToRemove
+    });
 	},
-	confirmDeleteWriter(d){
-		this.setState({dialog: true,dialogText:'Are you sure to delete '+ d.display +' ?',switchTo:'writer',info:d});
+
+	confirmDeleteWriter(writerToRemove){
+		this.setState({
+      dialog: true,
+      dialogText:'Are you sure to delete '+ writerToRemove.text +' ?',
+      switchTo:'writer',
+      writerToRemove
+    });
 	},
+
   updateColumn(e){
     e.preventDefault()
-    var data = {}
-    var self = this
-    var input = dom(this.refs.columnForm).getElementsByTagName("input")
+
+    let cid = this.props.params.cid
+    if(cid==null) return 
+
+    let data = {}
+    let input = dom(this.refs.columnForm).getElementsByTagName("input")
     input = [].slice.call(input)
     input.forEach((field,index)=>{
       data[field.name] = field.value
     })
     data['shortDesc'] = document.getElementById('shortDesc').value
-    var column = {
-      column:{
-        name:data.name,
-        shortDesc:data.shortDesc,
-        slug:data.slug,
-      }
-    }
-    Request
-      .patch(config.BACKURL+'/publishers/11/columns/'+this.props.params.cid+'?token='+auth.getToken())
-      .set('x-access-token', auth.getToken())
-      .set('Accept','application/json')
-      .send(column)
-      .end((err,res)=>{
-        if(err) this.setState({textStatus:res.body.error.message,error:true})
-        else{
-          this.setState({textStatus:'Saved successfully',error:false})
-        }
-      })
 
+    let column = {
+      name:data.name,
+      shortDesc:data.shortDesc,
+      slug:data.slug,
+    }
+    api.updateColumn(cid, column)
+    .then(col => {
+      this.setState({
+        textStatus:'Saved successfully',
+        error:false
+      })
+    })
+    .catch(err => {
+      this.setState({
+        textStatus:err.message,
+        error:true
+      })
+    })
   },
+
+  fetchEditorsAutoComplete(keyword){
+
+    this.setState({editorSearchText:keyword})
+
+    let inp = keyword.split('').length,
+        a = []
+    //this.setState({userToAdmin:[text,text+text]})
+    if(inp==3){
+      api.getUsers(keyword)
+      .then(users => {
+        users.map((user, index) => {
+          a[index] = {text:user.username, value:user.id}
+        })
+
+        this.setState({
+          editorsAutoComplete:a
+        })
+      })
+    }
+  },
+
+  fetchWritersAutoComplete(keyword){
+
+    this.setState({writerSearchText:keyword})
+
+    let inp = keyword.split('').length,
+        a = []
+    //this.setState({userToAdmin:[text,text+text]})
+    if(inp==3){
+      api.getUsers(keyword)
+      .then(users => {
+        users.map((user, index) => {
+          a[index] = {text:user.username, value:user.id}
+        })
+
+        this.setState({
+          writersAutoComplete:a
+        })
+      })
+    }
+  },
+
+  addEditor(item, index){
+    let cid = this.state.column._id
+    if(cid==null) return
+
+    if(typeof item==='object'){
+
+      api.addEditorToColumn(parseInt(item.value), cid)
+      .then(result => {
+        let editors = this.state.editors.slice()
+        editors.push(item)
+
+        this.setState({
+          editors: editors,
+          editorSearchText: ''
+        })
+      })
+      .catch(err => {})
+    }
+  },
+
+  addWriter(item, index){
+    let cid = this.state.column._id
+    if(cid==null) return
+
+    if(typeof item==='object'){
+
+      api.addWriterToColumn(parseInt(item.value), cid)
+      .then(result => {
+        let writers = this.state.writers.slice()
+        writers.push(item)
+
+        this.setState({
+          writers: writers,
+          writerSearchText: ''
+        })
+      })
+      .catch(err => {})
+    }
+  },
+
   render(){
-    var {dialog,error,textStatus,dialogText,cover,writer,editor,switchTo} = this.state
+    var {dialog,error,textStatus,dialogText,cover,writers,editors,switchTo, editorsAutoComplete, writersAutoComplete, writerSearchText,editorSearchText} = this.state
     const actions = [
       <FlatButton
         label="Cancel"
@@ -275,12 +401,12 @@ const ColumnSettingPage = React.createClass({
             </Title>
             <Edit>
               <TextField
-                defaultValue="Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown"
+                defaultValue=""
                 multiLine={true}
                 fullWidth={true}
                 floatingLabelText="140 characters"
                 floatingLabelFixed={true}
-                rows={3}
+                rows={1}
                 rowsMax={6}
                 id='shortDesc'
                 name='shortDesc'
@@ -292,10 +418,11 @@ const ColumnSettingPage = React.createClass({
               <div className="sans-font">Cover picture</div>
             </Title>
             <Edit>
-              <UploadPicture src={cover} path={'/publishers/11/columns/'+this.props.params.cid+'/cover'} type='cover'/>
+              <UploadPicture src={cover.medium} path={'/publishers/'+config.PID+'/columns/'+this.props.params.cid+'/cover'} height="90px" width="200px" labelStyle={{top:'40px'}} type='cover'/>
             </Edit>
           </Flex>
-          <Divider/>
+          {/*<Divider/>*/}
+          <br/><br/><br/>
           <div  className="head sans-font">TEAM</div>
           <Flex>
             <Title>
@@ -303,21 +430,23 @@ const ColumnSettingPage = React.createClass({
             </Title>
             <Edit>
               <div className='row' style={{marginTop:'15px'}}>
-                {writer.map((data,index)=>(
+                {writers.map((data, index) => (
                   <Chip
-                    key={index}
+                    key={data.value}
                     onRequestDelete={() => this.confirmDeleteWriter(data)}
                     style={{margin:'4px'}}
                   >
-                    {data.display}
+                    {data.text}
                   </Chip>
                 ))}
                 <AutoComplete
                   hintText="Add an writer..."
                   filter={AutoComplete.noFilter}
-                  dataSource={dataSource3}
-                  onUpdateInput={this.getSource}
-                  onNewRequest={this.addAdmin}
+                  dataSource={writersAutoComplete}
+                  onUpdateInput={this.fetchWritersAutoComplete}
+                  onNewRequest={this.addWriter}
+                  searchText={writerSearchText}
+                  style={{marginLeft:'10px', height:'32px'}}
                 />
               </div>
             </Edit>
@@ -328,26 +457,28 @@ const ColumnSettingPage = React.createClass({
             </Title>
             <Edit>
               <div className='row' style={{marginTop:'15px'}}>
-                {editor.map((data,index)=>(
+                {editors.map((data,index)=>(
                   <Chip
-                    key={index}
-                    onRequestDelete={() => this.confirmDeleteEditor(data)}
+                    key={data.value}
+                    onRequestDelete={() => this.confirmDeleteWriter(data)}
                     style={{margin:'4px'}}
                   >
-                    {data.display}
+                    {data.text}
                   </Chip>
                 ))}
                 <AutoComplete
                   hintText="Add an editor..."
                   filter={AutoComplete.noFilter}
-                  dataSource={dataSource3}
-                  onUpdateInput={this.getSource}
-                  onNewRequest={this.addAdmin}
+                  dataSource={editorsAutoComplete}
+                  onUpdateInput={this.fetchEditorsAutoComplete}
+                  onNewRequest={this.addEditor}
+                  searchText={editorSearchText}
+                  style={{marginLeft:'10px', height:'32px'}}
                 />
               </div>
             </Edit>
           </Flex>
-          <div className='sans-font' style={{margin:'80px',overflow:'hidden'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error?'#D8000C':'#00B2B4'}}>{textStatus}</TextStatus></div>
+          <div className='sans-font' style={{marginTop:'80px',overflow:'hidden'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error?'#D8000C':'#00B2B4'}}>{textStatus}</TextStatus></div>
         </Container>
     )
   },

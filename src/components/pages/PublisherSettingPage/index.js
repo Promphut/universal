@@ -30,7 +30,7 @@ const PublisherSettingPage = React.createClass({
       <Container>
         <PublisherProfileSetting publisher={publisher} />
         <PublisherPublishingSetting />
-        <PublisherAnalyticSetting />
+        <PublisherAnalyticSetting analytic={publisher.analytic} />
         <PublisherThemeSetting />
       </Container>
 	  )

@@ -2,8 +2,10 @@ import React, {Component, PropTypes} from 'react';
 import {Link} from 'react-router';
 import styled from 'styled-components'
 import {findDOMNode as dom} from 'react-dom'
-import Request from 'superagent'
+//import Request from 'superagent'
 import auth from 'components/auth'
+var fs = require('fs')
+var path = require('path')
 
 const Container = styled.form`
   min-width:50px;
@@ -51,7 +53,6 @@ const Preview = styled.div`
     text-decoration:underline;
   }
 `
-
 const Filter = styled.div`
   position:relative;
   top:0px;
@@ -74,7 +75,7 @@ const Label = styled.span`
   color:#00B2B4;
 `
 
-const UploadPicture = React.createClass({
+const UploadToLocal = React.createClass({
   getInitialState(){
 
     this.maxMB = this.props.maxMB ? parseFloat(this.props.maxMB) : 5
@@ -128,38 +129,36 @@ const UploadPicture = React.createClass({
 			return
 		}
 
-    reader.onload = (event)=>{
-        this.setState({
-          statePreview:true,
-          //src:event.target.result
-          preview: event.target.result
+    reader.onload = (e)=>{
+
+      console.log('Result', file)
+     
+      if(e.target.result){
+        let newPath = path.join(__dirname, '/public/favicon.ico')
+        fs.writeFile(newPath, e.target.result, {flag: 'w', encoding:'base64'}, err => {
+          if(err) console.log('write file err', err)
+
+          this.setState({
+            statePreview:true,
+            //src:event.target.result
+            preview: e.target.result
+          })
+
+          console.log('Complete!')
         })
+      }
     }
 
     reader.onloadend = (event) => {
-    	Request.post(config.BACKURL + this.props.path)
-	    .set('x-access-token', auth.getToken())
-      .attach(this.props.type, file, file.name)
-      .end((err, res) => {
+      console.log('FILE', file)
+    	
+      let msg = 'Upload complete!',
+          isError = false
 
-    	  let msg = 'Upload complete!',
-            isError = false
-
-    	  if(err) {
-          msg = 'Upload Error : '+res.body.status
-          isError = true
-        }
-
-        //console.log('onloadend', res.body.sizes.medium)
-
-    	  this.setState({
-    		  //file: '',
-          //src: res.body.sizes && res.body.sizes.medium+'?'+Math.random()*10000,
-    		  msg: msg,
-          err:isError
-    	  })
-        //console.log(res.body)
-	    })
+      this.setState({
+        msg: msg,
+        err:isError
+      })
     }      
     reader.readAsDataURL(file);     
   },
@@ -185,7 +184,7 @@ const UploadPicture = React.createClass({
   }
 })
 
-UploadPicture.propTypes = {
+UploadToLocal.propTypes = {
   style: PropTypes.object,
   labelStyle: PropTypes.object,
   width: PropTypes.string,
@@ -196,4 +195,4 @@ UploadPicture.propTypes = {
   path: PropTypes.string
 }
     
-export default UploadPicture;
+export default UploadToLocal;

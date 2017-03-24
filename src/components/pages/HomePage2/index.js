@@ -111,7 +111,6 @@ const HomePage2 = React.createClass({
 		// 2. Fetching latestStories
 		api.getFeed('story', {status:1}, 'latest', null, 0, 15)
 		.then(result => {
-			//console.log('feed', result.feed.length)
 			this.latestStories = result.feed
 
 			this.setState({
@@ -136,8 +135,6 @@ const HomePage2 = React.createClass({
 
 
 	},
-
-
 
 	render(){
 		let pub = this.publisher

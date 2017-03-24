@@ -42,6 +42,19 @@ api.getUser = (uid, token) => {
 	else return api.userNotFoundPromise()
 }
 
+// keyword is optional
+api.getUsers = (keyword) => {
+   return Request
+	.get(config.BACKURL+'/users')
+	.query({
+		keyword: keyword
+	})
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body.users
+	})
+}
+
 api.changePassword = (data) => {
 	let token = auth.getToken(),
 		uid = auth.getUser()._id
@@ -93,6 +106,28 @@ api.getColumnFromSlug = (slug) => {
 	})
 	.catch(err => {
 		return api.columnNotFoundPromise()
+	})
+}
+
+// token is optional
+api.getColumn = (cid, token) => {
+	return Request
+	.get(config.BACKURL+'/publishers/'+config.PID+'/columns/'+cid)
+	.set('Accept','application/json')
+	.set('x-access-token', token)
+	.then(res => {
+		return res.body.column
+	})
+}
+
+api.updateColumn = (cid, column) => {
+	return Request
+	.patch(config.BACKURL+'/publishers/'+config.PID+'/columns/'+cid)
+	.set('x-access-token', auth.getToken())
+	.set('Accept','application/json')
+	.send({column: column})
+	.then(res => {
+		return res.body.column
 	})
 }
 
@@ -307,5 +342,116 @@ api.deleteContactCat = (conid) => {
 		return res.body
 	}, api.err)
 }
+
+api.getAdmins = () => {
+	let token = auth.getToken()
+	if(!token) return api.userNotFoundPromise()
+
+	return Request
+	.get(config.BACKURL+'/publishers/'+config.PID+'/admins')
+	.set('x-access-token', token)
+	.then(res => {
+		return res.body.admins
+	})
+}
+
+api.removeAdmin = (adminId) => {
+	let token = auth.getToken()
+	if(!token) return api.userNotFoundPromise()
+
+	if(adminId==null) return Promise.reject(new Error('adminId is required.'))
+
+	return Request
+	.delete(config.BACKURL+'/publishers/'+config.PID+'/admins/'+ adminId)
+	.set('x-access-token', token)
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body
+	})
+}
+
+api.addAdmin = (uid) => {
+	let token = auth.getToken()
+	if(!token) return api.userNotFoundPromise()
+
+	if(uid==null) return Promise.reject(new Error('uid is required.'))
+
+	return Request
+	.post(config.BACKURL+'/publishers/'+config.PID+'/admins/'+ uid)
+	.set('x-access-token', token)
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body
+	})
+}
+
+api.addEditorToColumn = (uid, cid) => {
+	let token = auth.getToken()
+	if(!token) return api.userNotFoundPromise()
+
+	if(uid==null) return Promise.reject(new Error('uid is required.'))
+
+	return Request
+	.post(config.BACKURL+'/publishers/'+config.PID+'/columns/'+cid+'/editors/'+ uid)
+	.set('x-access-token', token)
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body
+	})
+}
+
+api.removeEditor = (editorId, cid) => {
+	return Request
+	.delete(config.BACKURL+'/publishers/'+config.PID+'/columns/'+cid+'/editors/'+editorId)
+	.set('x-access-token', auth.getToken())
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body
+	})
+}
+
+api.getEditors = (cid) => {
+	return Request
+	.get(config.BACKURL+'/publishers/'+config.PID+'/columns/'+cid+'/editors')
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body.editors
+	})
+}
+
+api.addWriterToColumn = (uid, cid) => {
+	let token = auth.getToken()
+	if(!token) return api.userNotFoundPromise()
+
+	if(uid==null) return Promise.reject(new Error('uid is required.'))
+
+	return Request
+	.post(config.BACKURL+'/publishers/'+config.PID+'/columns/'+cid+'/writers/'+ uid)
+	.set('x-access-token', token)
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body
+	})
+}
+
+api.removeWriter = (writerId, cid) => {
+	return Request
+	.delete(config.BACKURL+'/publishers/'+config.PID+'/columns/'+cid+'/writers/'+writerId)
+	.set('x-access-token', auth.getToken())
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body
+	})
+}
+
+api.getWriters = (cid) => {
+	return Request
+	.get(config.BACKURL+'/publishers/'+config.PID+'/columns/'+cid+'/writers')
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body.writers
+	})
+}
+
 
 module.exports = api

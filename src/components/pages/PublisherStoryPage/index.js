@@ -432,7 +432,7 @@ const PublisherStoryPage = React.createClass({
   },
 
   goEditStory(){
-    browserHistory.push('/editor/stories/'+this.state.selectStoryId+'/edit')
+    browserHistory.push('/me/stories/'+this.state.selectStoryId+'/edit')
   },
 
   render(){

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {PrimaryButton,SecondaryButton,UploadPicture} from 'components'
+import {PrimaryButton,SecondaryButton,UploadPicture,UploadToLocal} from 'components'
 import TextField from 'material-ui/TextField';
 import { ChromePicker } from 'react-color';
 import {findDOMNode as dom} from 'react-dom'
@@ -31,12 +31,14 @@ const Container = styled.form`
     -Webkit-text-fill-color: transparent;
   }
 `
+
 const Flex = styled.div`
   display:flex;
   items-align:center;
   flex-flow: row wrap;
   margin:50px 0 0 50px;
 `
+
 const Title = styled.div`
   flex:2 150px;
   max-width:150px;
@@ -44,11 +46,13 @@ const Title = styled.div`
   font-size:17px;
   padding-top:15px;
 `
+
 const Edit = styled.div`
   flex:6 450px;
   max-width:450px;
   padding-top:15px;
 `
+
 const TextStatus = styled.div`
   color:#00B2B4;
   font-size:15px;
@@ -56,11 +60,13 @@ const TextStatus = styled.div`
   float:left;
   margin:10px 0 0 15px;
 ` 
+
 const Color = styled.div`
   width:22px;
   height:22px;
   float:left;
 `
+
 const BoxColor = styled.div`
   display:inline;
   margin:10px 30px 0 0;
@@ -76,6 +82,7 @@ const Desc = styled.div`
   display:inline;
   margin:8px 0 0 0;
 ` 
+
 const Example = styled.div`
   width:100%;
   height:175px;
@@ -214,23 +221,24 @@ const PublisherThemeSetting = React.createClass({
             <div className="sans-font">Favicon</div>
           </Title>
           <Edit>
-            <UploadPicture src={uploadLogo} path='/publishers/11/cover' type='cover' width={'60px'} height={'60px'} labelStyle={{top:'10px'}}/>
+            <UploadToLocal src={uploadLogo} path={'/publishers/'+config.PID+'/cover'} type='cover' width={'60px'} height={'60px'} labelStyle={{top:'10px'}}/>
+            {/*<UploadPicture src={uploadLogo} path={'/publishers/'+config.PID+'/cover'} type='cover' width={'60px'} height={'60px'} labelStyle={{top:'10px'}}/>*/}
           </Edit>
         </Flex>
         <Flex>
           <Title>
-            <div className="sans-font">Small Logo(.svg)</div>
+            <div className="sans-font">Small Logo (.svg)</div>
           </Title>
           <Edit>
-            <UploadPicture src={uploadSLogo} path='/publishers/11/slogo' type='slogo' width={'60px'} height={'60px'} labelStyle={{top:'10px'}}/>
+            <UploadPicture src={uploadSLogo} path={'/publishers/'+config.PID+'/slogo'} type='slogo' width={'60px'} height={'60px'} labelStyle={{top:'10px'}}/>
           </Edit>
         </Flex>
         <Flex>
           <Title>
-            <div className="sans-font">Large Logo(.svg)</div>
+            <div className="sans-font">Large Logo (.svg)</div>
           </Title>
           <Edit>
-            <UploadPicture src={uploadLogo} path='/publishers/11/logo' type='logo' width={'200px'} height={'70px'} labelStyle={{top:'25px'}}/>
+            <UploadPicture src={uploadLogo} path={'/publishers/'+config.PID+'/logo'} type='logo' width={'200px'} height={'70px'} labelStyle={{top:'25px'}}/>
           </Edit>
         </Flex>
         <Flex>
