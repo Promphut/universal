@@ -9,6 +9,7 @@ const Container = styled.form`
   min-width:50px;
   min-height:50px;
 `
+
 const Box = styled.div`
   min-width:50px;
   min-height:50px;
@@ -28,6 +29,7 @@ const Box = styled.div`
     text-decoration:underline;
   }
 `
+
 const Des = styled.div`
   color:#C2C2C2;
   font-size:14px;
@@ -49,6 +51,7 @@ const Preview = styled.div`
     text-decoration:underline;
   }
 `
+
 const Filter = styled.div`
   position:relative;
   top:0px;
@@ -64,6 +67,7 @@ const Filter = styled.div`
     text-decoration:underline;
   }
 `
+
 const Label = styled.span`
   position:relative;
   font-size:14px;
@@ -138,11 +142,12 @@ const UploadPicture = React.createClass({
       .attach(this.props.type, file, file.name)
       .end((err, res) => {
 
-    	  let msg = 'Upload complete!'
-        var err = false
+    	  let msg = 'Upload complete!',
+            isError = false
+
     	  if(err) {
           msg = 'Upload Error : '+res.body.status
-          err = true
+          isError = true
         }
 
         //console.log('onloadend', res.body.sizes.medium)
@@ -151,7 +156,7 @@ const UploadPicture = React.createClass({
     		  //file: '',
           //src: res.body.sizes && res.body.sizes.medium+'?'+Math.random()*10000,
     		  msg: msg,
-          err:err
+          err:isError
     	  })
         //console.log(res.body)
 	    })
@@ -179,6 +184,7 @@ const UploadPicture = React.createClass({
     )
   }
 })
+
 UploadPicture.propTypes = {
   style: PropTypes.object,
   labelStyle: PropTypes.object,

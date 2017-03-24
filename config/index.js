@@ -13,6 +13,9 @@ const config = {
 			EDITOR: 1, 
 			WRITER: 2, 
 			ADMIN: 3
+		},
+		THEME:{ 
+
 		}
 	},
 	production : {

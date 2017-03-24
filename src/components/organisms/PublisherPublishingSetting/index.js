@@ -7,11 +7,13 @@ import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import AutoComplete from 'material-ui/AutoComplete';
 import Chip from 'material-ui/Chip';
-import Request from 'superagent'
+//import Request from 'superagent'
 import auth from 'components/auth'
+import api from 'components/api'
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton'
 import {findDOMNode as dom} from 'react-dom'
+import _ from 'lodash'
 
 const Container = styled.div`
   width:100%;
@@ -28,12 +30,14 @@ const Container = styled.div`
     font-size:18px;
   }
 `
+
 const Flex = styled.div`
   display:flex;
   items-align:center;
   flex-flow: row wrap;
   margin:50px 0 0 50px;
 `
+
 const Title = styled.div`
   flex:2 150px;
   max-width:150px;
@@ -41,16 +45,19 @@ const Title = styled.div`
   font-size:17px;
   padding-top:15px;
 `
+
 const Edit = styled.div`
   flex:6 480px;
   max-width:480px;
 `
+
 const AddTag = styled.div`
   color:#8F8F8F;
   font-size:16px;
   overflow:hidden;
   margin-top:20px;
 `
+
 const style = {
   display: 'inline-block',
   margin: '16px 40px 16px 0',
@@ -65,6 +72,7 @@ const Desc = styled.div`
   font-size:14px;
   font-style:italic;
 `
+
 const TextStatus = styled.div`
   color:#00B2B4;
   font-size:15px;
@@ -72,6 +80,7 @@ const TextStatus = styled.div`
   float:left;
   margin:10px 0 0 15px;
 `
+
 const Admin = styled.div`
   color:#8F8F8F;
   font-size:18px;
@@ -86,19 +95,20 @@ const Admin = styled.div`
   }
 `
 
-const dataSource3 = [
-  {textKey: 'Some Text', valueKey: 'someFirstValue'},
-  {textKey: 'Some Text', valueKey: 'someSecondValue'},
-];
+// const dataSource3 = [
+//   {textKey: 'Some Text', valueKey: 'someFirstValue'},
+//   {textKey: 'Some Text', valueKey: 'someSecondValue'},
+// ];
 
 const PublisherPublishingSetting = React.createClass({
   getInitialState(){
-    return{
-      admin: [],
-      textStatus:'Unsave',
-      error:false,
+    return {
+      admins: [],
+      adminToRemove: {},
+
+      adminSearchText: '',
+      
       dialog:false,
-      adminRemoveName:'',
       userToAdmin:[],
       selectedTag: undefined,
       autoState:false,
@@ -121,30 +131,41 @@ const PublisherPublishingSetting = React.createClass({
         'Purple',
         'Black',
         'White',
-      ]
+      ],
+
+      textStatus:'Unsave',
+      error:false
     }
   },
 
   deleteAdmin(){
-    var {admin,adminRemoveName} = this.state
-    const chipToDelete = admin.map((data,index) => data.id).indexOf(adminRemoveName.id);
-    var self = this
-    admin.splice(chipToDelete, 1);
-    Request
-      .delete(config.BACKURL+'/publishers/'+config.PID+'/admins/'+adminRemoveName.id+'?token='+auth.getToken())
-      .set('x-access-token', auth.getToken())
-      .set('Accept','application/json')
-      .end((err,res)=>{
-        if(err)throw err
-        else{
-          self.setState({dialog: false,adminRemoveName:{},admin: admin});
-        }
-      })
+    let {admins, adminToRemove} = this.state
+    //const chipToDelete = admins.map((data, index) => data.id).indexOf(adminRemoveName.id);
+    //admins.splice(chipToDelete, 1);
+    admins = _.reject( admins, {value: adminToRemove.value} )
+
+    api.removeAdmin(adminToRemove.value)
+    .then(result => {
+      this.setState({
+        dialog: false,
+        adminToRemove:{},
+        admins
+      });
+    })
+    .catch(err => {
+      // this.setState({
+      //   error: true,
+      //   textStatus: 'Cannot remove this admin.'
+      // })
+    })
   },
 
   handleOpen(admin){
     //console.log(admin)
-    this.setState({dialog: true,adminRemoveName:admin});
+    this.setState({
+      dialog: true, 
+      adminToRemove:admin
+    });
   },
 
   handleClose(e){
@@ -152,15 +173,14 @@ const PublisherPublishingSetting = React.createClass({
   },
 
   getAdmin(){
-    var self=this
-    Request
-      .get(config.BACKURL+'/publishers/'+config.PID+'/admins?token='+auth.getToken())
-      .end((err,res)=>{
-        if(err) throw err
-        else{
-          self.setState({admin:res.body.admins})
-        }
+    api.getAdmins()
+    .then(admins => {
+      admins = admins.map(admin => {
+        return {text:admin.username, value:admin.id}
       })
+
+      this.setState({ admins:admins })
+    })
   },
 
   componentDidMount(){
@@ -168,29 +188,53 @@ const PublisherPublishingSetting = React.createClass({
     document.addEventListener('click', this.handleClickOutside)
   },
 
-  addAdmin(){
+  addAdmin(item, index){
+    //console.log('addAdmin', item, index)
+    if(typeof item==='object'){
 
-  },
-  handleUpdateInput(text){
-    var self = this
-    var inp = text.split('').length
-    var a = []
-    //this.setState({userToAdmin:[text,text+text]})
-    if(inp==3){
-      Request
-        .get(config.BACKURL+'/users?keyword='+text)
-        .set('Accept','application/json')
-        .end((err,res)=>{
-          if(err) throw err
-          else{
-            res.body.users.map((data,index)=>{
-              a[index] = {text:data.username,value:data.id}
-            })
-            self.setState({userToAdmin:a,autoState:true},()=>{dom(this.refs.text).focus()})
-          }
+      api.addAdmin(parseInt(item.value))
+      .then(result => {
+        // set admins state 
+        let admins = this.state.admins.slice()
+        admins.push(item)
+
+        //console.log(dom(this.refs.text).searchText, dom(this.refs.text).value)
+        this.setState({
+          admins: admins,
+          adminSearchText: ''
         })
+      })
+      .catch(err => {
+        // this.setState({
+        //   error: true,
+        //   textStatus: 'Cannot add this admin.'
+        // })
+      })
+
     }
   },
+
+  handleUpdateInput(keyword){
+    this.setState({adminSearchText:keyword})
+
+    let inp = keyword.split('').length,
+        a = []
+    //this.setState({userToAdmin:[text,text+text]})
+    if(inp==3){
+      api.getUsers(keyword)
+      .then(users => {
+        users.map((user, index) => {
+          a[index] = {text:user.username, value:user.id}
+        })
+
+        this.setState({
+          userToAdmin:a,
+          autoState:true
+        }, ()=>{dom(this.refs.text).focus()})
+      })
+    }
+  },
+
   filterTags(event, searchText) {
     this.setState({
       tags: _.filter(this.state.initTags, tag => tag.toLowerCase().indexOf(searchText.toLowerCase()) !== -1)
@@ -198,29 +242,33 @@ const PublisherPublishingSetting = React.createClass({
       this.refs.searchText.focus()
     })
   },
+
   changeItem(event, menuItem, index) {
     this.setState({
       selectedTag: index
     })
   },
+
   handleClickOutside(evt) {
     const area = dom(this.refs.menu);
 
-    if (!area.contains(evt.target)) {
+    if (area && !area.contains(evt.target)) {
       this.setState({
         selectedTag: undefined
       })
     }
   },
+
   render(){
-    var {admin,textStatus,error,adminRemoveName,dialog,userToAdmin,searchText,selectedTag,autoState,tags} = this.state
-    var menu=[]
+    let {admins,textStatus,error,adminToRemove,dialog,userToAdmin,adminSearchText,selectedTag,autoState,tags} = this.state
+    let menu=[]
     for(let i=0;i<tags.length;i++){
       menu.push(
         // <MenuItem key={i} primaryText="Help &amp; feedback" />
         <MenuItem key={i} value={i} primaryText={tags[i]} />
       )
     }
+    //console.log('userToAdmin', userToAdmin, admins)
     const actions = [
       <FlatButton
         label="Cancel"
@@ -233,6 +281,7 @@ const PublisherPublishingSetting = React.createClass({
         onTouchTap={this.deleteAdmin}
       />,
     ];
+
     return(
       <Container>
         <Dialog
@@ -242,9 +291,11 @@ const PublisherPublishingSetting = React.createClass({
           open={dialog}
           onRequestClose={this.handleClose}
         >
-          <p style={{fontSize:'20px'}}>Are you sure to remove {adminRemoveName.display} ?</p>
+          <p style={{fontSize:'20px'}}>Are you sure to remove {adminToRemove.text} ?</p>
         </Dialog>
         <div  className="head sans-font">PUBLISHING</div>
+
+        {/* THIS IS FOR THE NEXT VERSION
         <Flex>
           <Title>
             <div className="sans-font">Allowed Tags</div>
@@ -282,22 +333,23 @@ const PublisherPublishingSetting = React.createClass({
             </div>
             <Desc className='sans-font'>Used by a writer to tag a story. Adding a relevant tag help discovering your publiser better on search website. </Desc>
           </Edit>
-        </Flex>
+        </Flex>*/}
+
         <Flex>
           <Title>
             <div className="sans-font">Admins</div>
           </Title>
           <Edit>
             <div className='row' style={{marginTop:'15px'}}>
-              {admin.map((data,index)=>(
+              {admins.map((admin,index)=>(
                 <Chip
-                  key={data.id}
-                  onRequestDelete={() => this.handleOpen(data)}
+                  key={admin.value}
+                  onRequestDelete={() => this.handleOpen(admin)}
                   style={{margin:'4px'}}
                 >
-                  {data.display}
+                  {admin.text}
                 </Chip>
-              ))}
+              ))}   
               <AutoComplete
                 key="editor1"
                 hintText="Add an admin..."
@@ -305,13 +357,16 @@ const PublisherPublishingSetting = React.createClass({
                 onUpdateInput={this.handleUpdateInput}
                 openOnFocus={true}
                 open={autoState}
+                searchText={adminSearchText}
                 menuCloseDelay={0}
+                onNewRequest={this.addAdmin}
                 ref='text'
+                style={{marginLeft:'10px', height:'32px'}}
               />
             </div>
           </Edit>
         </Flex>
-        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error?'#D8000C':'#00B2B4'}}>{this.state.textStatus}</TextStatus></div>
+        {/*<div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error?'#D8000C':'#00B2B4'}}>{this.state.textStatus}</TextStatus></div>*/}
       </Container>
     )
   },
