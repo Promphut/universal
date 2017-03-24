@@ -86,7 +86,6 @@ const TitleLink = styled(Link)`
   font-weight:bold;
   float:left;
   height:52px;
-  word-wrap: break-word;
   white-space: pre-wrap;      /* Webkit */    
   white-space: -moz-pre-wrap; /* Firefox */     
   white-space: -pre-wrap;     /* Opera <7 */    
@@ -266,7 +265,7 @@ const UserSettingStory = React.createClass({
   },
 
   goEditStory(){
-    browserHistory.push('/editor/stories/'+this.state.selectStoryId+'/edit')
+    browserHistory.push('/me/stories/'+this.state.selectStoryId+'/edit')
   },
 
   render(){

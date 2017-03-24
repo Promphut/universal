@@ -594,13 +594,13 @@ const NewStory = React.createClass({
             <Label className="nunito-font" >Select cover picture : </Label>
             <div className='row' style={{overflow:'hidden',marginTop:'20px'}}>
               <div className='col-4'>
-                <UploadPicture path={'/stories/'+sid+'/covermobile'} width='96px' height='137px' label='Portrait Cover' type='coverMobile' style={{width:'96px',height:'137px',margin:'0 auto 0 auto'}}/>
+                <UploadPicture path={'/stories/'+sid+'/covermobile'} width='96px' height='137px' label='Portrait Cover' type='coverMobile' style={{width:'96px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
               </div>
               <div className='col-1'>
                 <div style={{marginTop:'58px'}}>Or</div>
               </div>
               <div className='col-6'>
-                <UploadPicture path={'/stories/'+sid+'/cover'} width='194px' height='137px' label='Landscape Cover' type='cover' style={{width:'194px',height:'137px',margin:'0 auto 0 auto'}}/>
+                <UploadPicture path={'/stories/'+sid+'/cover'} width='194px' height='137px' label='Landscape Cover' type='cover' style={{width:'194px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
               </div>
             </div>
           </div>

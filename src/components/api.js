@@ -96,15 +96,19 @@ api.getColumnFromSlug = (slug) => {
 	})
 }
 
-api.getStoryFromSid = (sid) => {
+// this will return = { story: Object, canEditStory: Boolean (optional) }
+// token is optional, set if you want to get canEditStory flag
+api.getStoryFromSid = (sid, token) => {
 	if(sid==null) return api.storyNotFoundPromise()
 
 	return Request
 	.get(config.BACKURL + '/stories/' + sid)
+	.query({token: token})
 	.set('Accept', 'application/json')
 	.then(res => {
+		if(res.body.canEditStory==null) res.body.canEditStory = false
 		//console.log('getStoryFromSid', res.body.story)
-		return res.body.story
+		return res.body
 	})
 	.catch(err => {
 		return api.storyNotFoundPromise()
