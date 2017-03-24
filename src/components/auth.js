@@ -80,7 +80,7 @@ auth = {
       else if(role==='EDITOR' && cid!=null) compare = {type:config.ROLES.EDITOR, user:user._id, column:cid}
       else if(role==='WRITER' && cid!=null) compare = {type:config.ROLES.WRITER, user:user._id, column:cid}
       
-      console.log('role compare', role, compare, _.filter(cookieRoles, compare), cookieRoles)
+      //console.log('role compare', role, compare, _.filter(cookieRoles, compare), cookieRoles)
       authorized = authorized || (_.filter(cookieRoles, compare).length > 0)
     })
 
