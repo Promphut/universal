@@ -74,6 +74,7 @@ const Title = styled.textarea`
   font-size:36px;
   font-weight:bold;
   overflowY:hidden;
+  height:105px;
   color:#222;
   width:100%;
   outline: none;

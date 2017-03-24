@@ -5,6 +5,7 @@ import FontIcon from 'material-ui/FontIcon';
 import {FbIcon} from 'components';
 import {findDOMNode as dom} from 'react-dom'
 
+
 const Div = styled.div`
   width:70px;
   margin:20px 0 10px 0;
@@ -21,7 +22,9 @@ const CirButton = styled.div`
   background-color:#3A579A;
   padding:16px 0 0 21px;
   margin:15px auto 15px auto;
-  cursor: pointer;
+  &:hover{
+    cursor:pointer;
+  }
 `
 
 //if height less than 900px remove last item
@@ -36,13 +39,24 @@ const ShareSideBar = React.createClass({
     //this.Slider()
 	},
 
+  shareFB(){
+    FB.ui({
+      method: 'share',
+      display: 'popup',
+      href: window.location.href,
+    }, function(response){});
+  },
+
   render(){
+    var {detail,style} = this.props
+
+    //console.log(window.location)
     return(
-      <Div style={{...this.props.style}}>
-        <No>217</No>
+      <Div style={{style}}>
+        <No>{detail.shares.total}</No>
         <div style={{color:'#8F8F8F',fontSize:'16px',fontWeight:'blod',textAlign:'center'}}>shares</div>
-        <CirButton><i className="fa fa-facebook fa-2x" aria-hidden="true" style={{color:'white'}}></i></CirButton>
-        <CirButton style={{backgroundColor:'#60AADE',paddingLeft:'18px'}}><i className="fa  fa-twitter fa-2x" aria-hidden="true" style={{color:'white'}}></i></CirButton>
+        <CirButton onClick={this.shareFB}><i className="fa fa-facebook fa-2x" aria-hidden="true" style={{color:'white'}}></i></CirButton>
+        <a  href="https://twitter.com/intent/tweet"><CirButton style={{backgroundColor:'#60AADE',paddingLeft:'18px'}}><i className="fa  fa-twitter fa-2x" aria-hidden="true" style={{color:'white'}}></i></CirButton></a>
       </Div>
   )
   },

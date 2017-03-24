@@ -65,7 +65,7 @@ const TopBarWithNavigation = React.createClass({
 
 	render () {
 		const {scrolling, status} = this.state
-		let {title, article, notShowNav} = this.props
+		let {title, article, notShowNav,editButton} = this.props
 		let transparent = false
 
 		// titleText = 'Article'
@@ -87,6 +87,7 @@ const TopBarWithNavigation = React.createClass({
 					user={this.user}
 					menu={this.menu}
 					transparent={transparent}
+					editButton={editButton}
 				>
 					{children}
 				</TopBar>
