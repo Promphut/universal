@@ -20,7 +20,7 @@ const CirButton = styled.div`
   height:61px;
   border-radius:50%;
   background-color:#3A579A;
-  padding:16px 0 0 20px;
+  padding:16px 0 0 21px;
   margin:15px auto 15px auto;
   &:hover{
     cursor:pointer;
@@ -60,7 +60,7 @@ const ShareSideBar = React.createClass({
       </Div>
   )
   },
-}) 
+})
 
 
 

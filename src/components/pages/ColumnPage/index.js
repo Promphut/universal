@@ -204,7 +204,7 @@ const ColumnPage = React.createClass({
 									loadingSpinnerDelegate={this.elementInfiniteLoad()}
 									isInfiniteLoading={this.state.isInfiniteLoading}
 									useWindowAsScrollContainer={true}>
-									
+
 								{this.state.latestStories.length!=0?this.state.latestStories.map((story, index) => (
 									<ArticleBox detail={story} key={index}/>
 								)):''}
@@ -214,7 +214,7 @@ const ColumnPage = React.createClass({
 						<div ref='more'></div>
 			      </Main>
 			      <Aside>
-							<Stick topOffset={70}>
+							<Stick topOffset={70} style={{zIndex: '0'}}>
 								<TrendingSideBar/>
 							</Stick>
 						</Aside>

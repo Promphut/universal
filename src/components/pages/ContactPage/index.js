@@ -5,6 +5,7 @@ import FontIcon from 'material-ui/FontIcon'
 import FlatButton from 'material-ui/FlatButton'
 import auth from 'components/auth'
 import api from 'components/api'
+import RichTextEditor from 'react-rte'
 import {ContactAndAboutContainer, PrimaryButton, SecondaryButton} from 'components'
 
 const Wrapper = styled.div`
@@ -82,44 +83,83 @@ const ContactPage = React.createClass({
       message: {},
       problems: [],
       saved: false,
-      dropdown: false
+      dropdown: false,
+      error: {}
+      // ,textarea: RichTextEditor.createEmptyValue()
     }
   },
 
   componentDidMount(){
-    this.state.problems = ['problem 1', 'problem 2', 'problem 3', 'problem 4']
+    api.getPublisher(null)
+    .then(pub => {
+      pub.contactCats.forEach((val) => {
+        this.state.problems.push(val.catName);
+      })
 
-    api.getUser(null, auth.getToken())
-    .then(user => {
-      this.setState({
-        user,
-        head: 'Hello ' + user.display + '!',
-        message: {
-          username: user.display,
-          email: user.email,
-          tel: '',
-          problem: this.state.problems[0],
-          textarea: ''
-        }
+      api.getUser(null, auth.getToken())
+      .then(user => {
+        this.setState({
+          user,
+          head: 'Hello ' + user.display + '!',
+          message: {
+            username: user.display,
+            email: user.email,
+            tel: '',
+            problem: this.state.problems[0],
+            textarea: ''
+          }
+        })
+      })
+      .catch(() => {
+        this.setState({
+          user: {},
+          head: 'Hi there!',
+          message: {
+            username: '',
+            email: '',
+            tel: '',
+            problem: this.state.problems[0],
+            textarea: ''
+          }
+        })
       })
     })
   },
 
   sendMessage() {
     const {username, email, tel, problem, textarea} = this.state.message
-    if (username && email && problem) {
-      console.log(this.state.message)
-
-      this.setState({
-        saved: true
-      })
-    } else {
-      console.log('Please enter require value')
-
-      this.setState({
-        saved: false
-      })
+    const contactCat = problem
+    const contact = {
+      name: username,
+		  email,
+		  tel,
+		  detail: textarea
     }
+
+    // if (username && email && problem) {
+      api.sendContactEmail(contactCat, contact)
+      .then(contact => {
+        this.setState({
+          saved: true
+        })
+      })
+      .catch(err => {
+        this.setState({
+          saved: false,
+          error: {
+            username: err.errors.name ? err.errors.name.message : '',
+            email: err.errors.email ? err.errors.email.message : '',
+            textarea: err.errors.detail
+          }
+        })
+      })
+    // } else {
+    //   console.log('Please enter require value')
+    //
+    //   this.setState({
+    //     saved: false
+    //   })
+    // }
   },
 
   resestMessage() {
@@ -127,7 +167,7 @@ const ContactPage = React.createClass({
 
     this.setState({
       message: {
-        username: '',
+        username: ';',
         email: '',
         tel: '',
         problem,
@@ -163,22 +203,32 @@ const ContactPage = React.createClass({
   handleChangeUsername() {
     const username = this.refs.username.getValue()
     const message = this.state.message
+    const error = this.state.error
 
     this.setState({
       message: {
         ...message,
         username
+      },
+      error: {
+        ...error,
+        username: ''
       }
     })
   },
   handleChangeEmail() {
     const email = this.refs.email.getValue()
     const message = this.state.message
+    const error = this.state.error
 
     this.setState({
       message: {
         ...message,
         email
+      },
+      error: {
+        ...error,
+        email: ''
       }
     })
   },
@@ -195,17 +245,27 @@ const ContactPage = React.createClass({
   },
   handleChangeTextarea(event) {
     const message = this.state.message
+    const error = this.state.error
 
     this.setState({
       message: {
         ...message,
         textarea: event.target.value
+      },
+      error: {
+        ...error,
+        textarea: ''
       }
     })
   },
 
+  // onChange(value) {
+  //   console.log(value)
+  //   this.setState({textarea : value});
+  // },
+
   render() {
-    let {user, head, message, problems, saved, dropdown} = this.state
+    let {user, head, message, problems, saved, dropdown, error} = this.state
     let {username, email, tel, problem, textarea} = this.state.message
 
     const floatingLabelText = (text) => {
@@ -271,10 +331,15 @@ const ContactPage = React.createClass({
             ref='textarea'
             value={textarea}
             onChange={this.handleChangeTextarea}
+            style={{borderColor: error.textarea ? '#F44336' : '#A9A9A9'}}
           ></textarea>
+          {/*<RichTextEditor
+            value={this.state.textarea}
+            onChange={this.onChange}
+          />*/}
           <TextField
             ref='username'
-            value={username}
+            value={username ? username : ''}
             onChange={this.handleChangeUsername}
             className='content-font'
             hintText={username ? '' : 'Your name'}
@@ -283,10 +348,11 @@ const ContactPage = React.createClass({
             floatingLabelStyle={textStyle}
             floatingLabelFixed={true}
             inputStyle={textStyle}
+            errorText={error.username ? error.username : ''}
           /><br />
           <TextField
             ref='email'
-            value={email}
+            value={email ? email : ''}
             onChange={this.handleChangeEmail}
             className='content-font'
             hintText={email ? '' : 'Email'}
@@ -295,10 +361,11 @@ const ContactPage = React.createClass({
             floatingLabelStyle={textStyle}
             floatingLabelFixed={true}
             inputStyle={textStyle}
+            errorText={error.email ? error.email : ''}
           /><br />
           <TextField
             ref='tel'
-            value={tel}
+            value={tel ? tel : ''}
             onChange={this.handleChangeTel}
             className='content-font'
             hintText={tel ? '' : 'Mobile Number'}

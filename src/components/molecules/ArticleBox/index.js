@@ -64,7 +64,7 @@ const NameLink = styled(Link)`
 const BoxText = styled.div`
   float:left;
   width:477px;
-  padding-left:15px;
+  padding-left:38px;
   @media (max-width:480px) {
     width:100%;
     padding-left:0px;
@@ -93,10 +93,10 @@ const ArticleBox = React.createClass({
             </Div>}
           </DivDes>
           <BGImg url={url} src={cover.medium || cover.small} className='imgWidth des-hidden'/>
-          <NameLink to={url} style={{marginTop:'10px'}}>{title}</NameLink>
-          <div className="row" style={{margin:'10px 0 10px 0'}}>
+          <NameLink to={url} style={{marginTop:'6px'}}>{title}</NameLink>
+          <div className="row" style={{margin:'15px 0 4px 0'}}>
             <Link to={writer.url}><Avatar src={writer.pic.medium}/></Link>
-            <div style={{margin:'5px 0 0 8px'}}>
+            <div style={{margin:'5px 0 0 12px'}}>
               <NameLink to={writer.url} style={{fontSize:'14px'}}>{writer.display} </NameLink>
               <Div stlye={{fontSize:'12px'}}>{moment(updated).fromNow()} hrs ago</Div>
             </div>

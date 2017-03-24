@@ -308,4 +308,17 @@ api.deleteContactCat = (conid) => {
 	}, api.err)
 }
 
+api.sendContactEmail = (contactCat, message) => {
+	return Request
+	.post(config.BACKURL+'/publishers/'+config.PID+'/contacts')
+	.set('Accept','application/json')
+	.send({
+		contactCat,
+		contact: message
+	})
+	.then(res => {
+		return res.body.contact
+	}, api.err)
+}
+
 module.exports = api
