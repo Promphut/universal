@@ -11,6 +11,7 @@ const PrimaryButton = React.createClass({
 	var {props} = this
 	let opt, defaultStyle;
 
+
 	if(props.size==='large'){
 		opt = {
 			className: 'primary-btn primary-large-btn',
@@ -20,14 +21,14 @@ const PrimaryButton = React.createClass({
 			children:props.children,
 			labelStyle: {fontWeight:'bold', fontSize:18, fontFamily:"'Nunito', 'Mitr'", color: 'White'},
 			style: {borderRadius:'24px', height:'48px', lineHeight:'48px', boxShadow:'none', ...props.style},
-			backgroundColor: '#00B2B4'
+			backgroundColor: theme.primaryColor
 		}
 
 		if (props.buttonStyle === "Flat") {
-			opt['hoverColor'] = '#00B2B4'
+			opt['hoverColor'] = theme.primaryColor
 		} else {
 			opt['labelColor'] = 'White'
-			opt['buttonStyle'] = {borderRadius: '24px', backgroundColor: '#00B2B4', padding:'0 5px'}
+			opt['buttonStyle'] = {borderRadius: '24px', backgroundColor: theme.primaryColor, padding:'0 5px'}
 		}
 
 		defaultStyle = {
@@ -51,14 +52,14 @@ const PrimaryButton = React.createClass({
 			type:props.type,
 			labelStyle: {fontWeight:'bold', fontSize:13, fontFamily:"'Nunito', 'Mitr'", color: 'White'},
 			style: {borderRadius:'17px', height:'35px', lineHeight:'35px', boxShadow:'none', ...props.style},
-			backgroundColor: '#00B2B4'
+			backgroundColor: theme.primaryColor
 		}
 
 		if (props.buttonStyle === "Flat") {
-			opt['hoverColor'] = '#00B2B4'
+			opt['hoverColor'] = theme.primaryColor
 		} else {
 			opt['labelColor'] = 'White'
-			opt['buttonStyle'] = {borderRadius: '17px', backgroundColor: '#00B2B4', padding:'0'}
+			opt['buttonStyle'] = {borderRadius: '17px', backgroundColor: theme.primaryColor, padding:'0'}
 		}
 
 		defaultStyle = {
@@ -83,14 +84,14 @@ const PrimaryButton = React.createClass({
 			type:props.type,
 			labelStyle: {fontWeight:'bold', fontSize:15, fontFamily:"'Nunito', 'Mitr'", color: 'White'},
 			style: {borderRadius:'20px', height:'40px', lineHeight:'40px', boxShadow:'none', ...props.style},
-			backgroundColor: '#00B2B4'
+			backgroundColor: theme.primaryColor
 		}
 
 		if (props.buttonStyle === "Flat") {
-			opt['hoverColor'] = '#00B2B4'
+			opt['hoverColor'] = theme.primaryColor
 		} else {
 			opt['labelColor'] = 'White'
-			opt['buttonStyle'] = {borderRadius: '20px', backgroundColor: '#00B2B4', padding:'0 2px'}
+			opt['buttonStyle'] = {borderRadius: '20px', backgroundColor: theme.primaryColor, padding:'0 2px'}
 		}
 
 		defaultStyle = {

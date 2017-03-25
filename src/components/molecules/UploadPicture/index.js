@@ -91,7 +91,8 @@ const UploadPicture = React.createClass({
 
   componentWillReceiveProps(nextProps){
     this.setState({
-      src: nextProps.src
+      src: nextProps.src,
+      statePreview:true
     })
   },
 
@@ -168,7 +169,7 @@ const UploadPicture = React.createClass({
     var {msg,src,statePreview,err,preview} = this.state
     var {label,style,type,width,height,labelStyle} = this.props
 
-    //console.log('src', src)
+    console.log('src', src)
     
     var description = <Des className='sans-font'>{msg}</Des>
 

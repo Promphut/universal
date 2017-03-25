@@ -171,7 +171,9 @@ const PublisherThemeSetting = React.createClass({
     //document.getElementById('analytic').value = typeof analytic == "undefined" ?'': analytic.tagManagerId
     this.setState({
       primaryColor: !theme? '#00B2B4': theme.primaryColor,
-      secondaryColor: !theme? '#CEF1B7': theme.secondaryColor
+      secondaryColor: !theme? '#CEF1B7': theme.secondaryColor,
+      uploadSLogo:theme.slogo,
+      uploadLogo:theme.logo
     })
   },
 
@@ -215,6 +217,8 @@ const PublisherThemeSetting = React.createClass({
   },
 
   render(){
+    //console.log(this.context.setting.publisher.theme)
+    var {theme} = this.context.setting.publisher
     var {primaryColor,secondaryColor,anchorEl1,anchorEl2,open1,open2,textStatus,uploadSLogo,uploadLogo,error} = this.state
     var styles={
       example1:{
@@ -255,7 +259,7 @@ const PublisherThemeSetting = React.createClass({
             <div className="sans-font">Favicon</div>
           </Title>
           <Edit>
-            <UploadPicture src={uploadLogo} path={'/publishers/'+config.PID+'/cover'} type='cover' width={'60px'} height={'60px'} labelStyle={{top:'10px'}}/>
+            <UploadPicture src={uploadSLogo} path={'/publishers/'+config.PID+'/cover'} type='cover' width={'60px'} height={'60px'} labelStyle={{top:'10px'}}/>
           </Edit>
         </Flex>
         {/*<Flex>
@@ -372,12 +376,15 @@ const PublisherThemeSetting = React.createClass({
             </div>
           </Edit>
         </Flex>
-        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error?'#D8000C':'#00B2B4'}}>{textStatus}</TextStatus></div>
+        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error?'#D8000C':theme.primaryColor}}>{textStatus}</TextStatus></div>
+        
       </Container>
     )
   },
 })
 
-
+PublisherThemeSetting.contextTypes = {
+	setting: React.PropTypes.object
+};
 
 export default PublisherThemeSetting
