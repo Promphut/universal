@@ -258,14 +258,14 @@ const PublisherThemeSetting = React.createClass({
             <UploadPicture src={uploadLogo} path={'/publishers/'+config.PID+'/cover'} type='cover' width={'60px'} height={'60px'} labelStyle={{top:'10px'}}/>
           </Edit>
         </Flex>
-        <Flex>
+        {/*<Flex>
           <Title>
             <div className="sans-font">Small Logo (.svg)</div>
           </Title>
           <Edit>
             <UploadPicture src={uploadSLogo} path={'/publishers/'+config.PID+'/slogo'} type='slogo' width={'60px'} height={'60px'} labelStyle={{top:'10px'}}/>
           </Edit>
-        </Flex>
+        </Flex>*/}
         <Flex>
           <Title>
             <div className="sans-font">Large Logo (.svg)</div>

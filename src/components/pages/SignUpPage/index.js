@@ -1,5 +1,5 @@
 import React from 'react'
-import {SignUp,SignUpFb,Logo,BackButton,CloseButton} from 'components'
+import {SignUp,SignUpFb,LogoLink,BackButton,CloseButton} from 'components'
 import FlatButton from 'material-ui/FlatButton';
 import styled from 'styled-components'
 import {Link,browserHistory} from 'react-router'
@@ -92,8 +92,8 @@ const SignUpPage = React.createClass({
 		    <Wrapper style={{...styles}} page={statePage}>
           <Container>
             <div  style={{margin:'0 auto 15px auto',width:'146px'}}>
-              <Logo className='hidden-des' fill={statePage?'#E2E2E2':'#00b2b4'}/>
-              <Logo className='hidden-mob' fill='#E2E2E2'/>
+              <LogoLink className='hidden-des' fill={statePage?'#E2E2E2':''}/>
+              <LogoLink className='hidden-mob' fill='#E2E2E2'/>
             </div>
             <BoxButton>
               <Link to='#' onClick={this.checkBack} className='hidden-mob'>
@@ -111,7 +111,7 @@ const SignUpPage = React.createClass({
       return (
 		    <Modal style={{...styles}}>
           <Container>
-            <div  style={{margin:'0 auto 15px auto',width:'146px'}}><Logo fill='#E2E2E2'/></div>
+            <div  style={{margin:'0 auto 15px auto',width:'146px'}}><LogoLink fill='#E2E2E2'/></div>
             <BoxButton>
               <Link to='#' onClick={this.checkBack} ><BackButton style={{float:'left'}}/></Link>
               <CloseButton onClick={this.closeModal} style={{float:'right',paddingTop:'0px'}}/>

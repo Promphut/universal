@@ -2,8 +2,10 @@ import React, {PropTypes} from 'react'
 import styled from 'styled-components'
 import {Link, browserHistory} from 'react-router'
 import Avatar from 'material-ui/Avatar'
-import {Logo, PrimaryButton, SecondaryButton, LeftMenu, RightMenu} from 'components'
+import {LogoLink, PrimaryButton, SecondaryButton, LeftMenu, RightMenu} from 'components'
 import auth from 'components/auth'
+//import utils from 'components/utils'
+
 const Wrapper = styled.div`
 	.transparent {
 		background: none;
@@ -193,16 +195,12 @@ const TopBar = React.createClass({
 				<Container className={'menu-font '
 					+ ((!scrolling && transparent) ? 'transparent' : '')}>
 					<Left>
-			      <HamburgerWrapper onClick={() => this.openPop('left')}>
-			        <Hamburger white={(!scrolling && transparent)}/>
-			      </HamburgerWrapper>
-			      <Link
-			        to="/"
-			        title={this.props.title}
-			        style={logoStyle}
+				      <HamburgerWrapper onClick={() => this.openPop('left')}>
+				        <Hamburger white={(!scrolling && transparent)}/>
+				      </HamburgerWrapper>
 
-			      ><Logo fill={(!scrolling && transparent) ? 'white' : '#00B2B4'} id="logo"/>
-			      </Link>
+				      <LogoLink to="/" title={this.props.title} style={logoStyle} fill={!scrolling && transparent ? 'white' : ''} id="logo"/>
+
 					</Left>
 
 					<Center className={transparent ? 'hide': ''}>
@@ -268,7 +266,7 @@ TopBar.propTypes = {
   onScroll: PropTypes.func,
   scrolling: PropTypes.bool,
   status: PropTypes.string,
-	editButton:PropTypes.string,
+  editButton:PropTypes.string,
   title: PropTypes.string,
 
   menu: PropTypes.object,

@@ -96,6 +96,7 @@ const HomePage2 = React.createClass({
 	componentDidMount(){
 		this.getPublisher()
 		this.getFeed()
+		this.getSidebar()
 	},
 
 	getPublisher(){
@@ -110,17 +111,28 @@ const HomePage2 = React.createClass({
 	},
 
 	getFeed(){
-		// - Fetching trendingStories
 		// - Fetching latestStories
+		api.getFeed('story', {status:1}, 'latest', null, 0, 15)
+		.then(result => {
+			if(result) {
+				this.trendingStories = result.feed
+
+				this.setState({
+					refresh: Math.random()
+				})
+			}
+		})
+	},
+
+	getSidebar(){
+		// - Fetching top columns
 		// - Fetch top writers
 		Promise.all([
-			api.getFeed('story', {status:1}, 'latest', null, 0, 15),
 			api.getColumns(),
 			api.getPublisherWriters(),
 		])
-		.then(([result, columns, writers]) => {
+		.then(([columns, writers]) => {
 			//console.log('GET FEED', result, columns, writers)
-			if(result) this.trendingStories = result.feed
 			if(columns) this.column = columns
 			if(writers) this.writer = writers
 

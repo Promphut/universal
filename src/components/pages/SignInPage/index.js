@@ -1,5 +1,5 @@
 import React from 'react'
-import {SignIn,SignInFb,Logo,BackButton,CloseButton} from 'components'
+import {SignIn,SignInFb,LogoLink,BackButton,CloseButton} from 'components'
 import FlatButton from 'material-ui/FlatButton';
 import styled from 'styled-components'
 import {Link,browserHistory} from 'react-router'
@@ -94,7 +94,7 @@ const SignInPage = React.createClass({
       return(
         <Wrapper style={{...styles}}>
           <Container>
-            <div  style={{margin:'0 auto 30px auto',width:'146px'}}><Logo fill='#E2E2E2'/></div>
+            <div  style={{margin:'0 auto 30px auto',width:'146px'}}><LogoLink fill='#E2E2E2'/></div>
             <BoxButton>
               <Link to='#' onClick={this.checkBack} ><BackButton style={{float:'left'}}/></Link>
             </BoxButton>
@@ -106,7 +106,7 @@ const SignInPage = React.createClass({
       return(
         <Modal style={{...styles}}>
           <Container>
-            <div  style={{margin:'0 auto 30px auto',width:'146px'}}><Logo fill='#E2E2E2'/></div>
+            <div  style={{margin:'0 auto 30px auto',width:'146px'}}><LogoLink fill='#E2E2E2'/></div>
             <BoxButton>
               <Link to='#' onClick={this.checkBack} ><BackButton style={{float:'left'}}/></Link>
               <CloseButton style={{float:'right',paddingTop:'0px'}}/>

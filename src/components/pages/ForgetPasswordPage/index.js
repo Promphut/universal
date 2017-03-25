@@ -1,5 +1,5 @@
 import React from 'react'
-import {ForgetPassword,Logo,BackButton,CloseButton} from 'components'
+import {ForgetPassword,LogoLink,BackButton,CloseButton} from 'components'
 import FlatButton from 'material-ui/FlatButton';
 import styled from 'styled-components'
 import {Link,browserHistory} from 'react-router'
@@ -84,7 +84,10 @@ const ForgetPasswordPage = React.createClass({
     return(
       <Wrapper >
         <Container>
-          <div  style={{margin:'0 auto 30px auto',width:'146px'}}><Logo fill='#E2E2E2' className='hidden-mob'/><Logo fill='#00b2b4' className='hidden-des'/></div>
+          <div style={{margin:'0 auto 30px auto',width:'146px'}}>
+            <LogoLink fill='#E2E2E2' className='hidden-mob'/><LogoLink fill='' className='hidden-des'/>
+            {/*<Logo fill='#E2E2E2' className='hidden-mob'/><Logo fill='#00b2b4' className='hidden-des'/>*/}
+          </div>
           <BoxButton>
             <Link to='#' onClick={this.checkBack} className='hidden-mob'><BackButton style={{float:'left'}}/></Link>
             <Link to='#' onClick={this.checkBack} className='hidden-des'><BackButton style={{float:'left'}} labelStyle={{color:'#00b2b4'}}/></Link>

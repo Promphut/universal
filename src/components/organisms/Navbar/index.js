@@ -82,12 +82,7 @@ const Navbar = () => {
       <HamburgerWrapper>
         <Hamburger/>
       </HamburgerWrapper>
-      <Link
-        to="/"
-        title='Title of AomMoney goes here..'
-        style={logoStyle}
-      ><Logo fill={'#00B2B4'}/>
-      </Link>
+      <LogoLink to="/" style={logoStyle}/>
 
       <A>Home</A>
       <A>Stories</A>
