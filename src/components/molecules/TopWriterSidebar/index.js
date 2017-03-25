@@ -117,11 +117,11 @@ const TopWriterSidebar = React.createClass({
         </Div>
       )
     }*/
-    return(
+    return (
       <Container style={{...this.props.style}} ref='contain'>
         <Divider/>
         <Head>TOP WRITERS</Head>
-          {writer.length!=0?writer.map((data,index)=>(
+          {writer && writer.map((data, index) => (
             <Link to={data.url} key={index}>
               <Div className='serif-font'>
                 <Avatar src={data.pic && data.pic.medium || defaultPic} size={55} />
@@ -131,7 +131,7 @@ const TopWriterSidebar = React.createClass({
                 </div>
               </Div>
             </Link>
-          )):''}
+          ))}
         <Divider/>
       </Container>
     )

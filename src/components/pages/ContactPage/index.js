@@ -90,9 +90,9 @@ const ContactPage = React.createClass({
   },
 
   componentDidMount(){
-    api.getPublisher(null)
-    .then(pub => {
-      pub.contactCats.forEach((val) => {
+    api.getPublisherContactCats()
+    .then(contactCats => {
+      contactCats.forEach((val) => {
         this.state.problems.push(val.catName);
       })
 
