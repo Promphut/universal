@@ -5,20 +5,38 @@ import FlatButton from 'material-ui/FlatButton'
 import {Dropdown} from 'components'
 import CopyToClipboard from 'react-copy-to-clipboard'
 
+const Hover = styled.div`
+`
+
 const ShareDropdown = React.createClass({
   getInitialState () {
     return {
       open: false,
-      copied: false
+      copied: false,
+      hover: -1
     }
   },
 
-  select(index) {
-    if (index === 0) {
-      //console.log('Select Share')
-    } else if (index === 1) {
-      //console.log('Copied')
+  select(shareTo) {
+    if (shareTo === 'facebook') {
+      console.log('Facebook share')
+    } else if (shareTo === 'twitter') {
+      console.log('Twitter share')
+    } else {
+      console.log('Copied')
     }
+  },
+
+  onHover(selected) {
+    this.setState({
+      hover: selected
+    })
+  },
+
+  onNotHover() {
+    this.setState({
+      hover: -1
+    })
   },
 
   render() {
@@ -27,10 +45,12 @@ const ShareDropdown = React.createClass({
       fontSize: '18px',
       float: 'left',
       marginTop: '10px',
-      paddingLeft: '10px'
+      paddingLeft: '10px',
+      width: '28px'
     }
     let buttons = []
-    buttons.push(<span><FontIcon className="material-icons" style={buttonStyle}>share</FontIcon>Share</span>)
+    buttons.push(<span><i className="fa fa-facebook" aria-hidden="true" style={buttonStyle}></i>Share on Facebook</span>)
+    buttons.push(<span><i className="fa fa-twitter" aria-hidden="true" style={buttonStyle}></i>Share on Twitter</span>)
     buttons.push(<span><FontIcon className="material-icons" style={buttonStyle}>link</FontIcon>Copy Link</span>)
 
     // for (let i = 0; i < buttons.length; i++){
@@ -48,21 +68,33 @@ const ShareDropdown = React.createClass({
     // }
 
     const button = (
-      <div>
-        <FlatButton
-          label={buttons[0]}
-          labelStyle={{fontWeight: 'bold', fontSize: '15px', color: '#00B2B4', fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
-          style={{width: '130px', textAlign: 'left', display: 'inline-block'}}
-          onTouchTap={() => this.select(0)}
-        /><br/>
-        <CopyToClipboard text={window.location.href} onCopy={() => this.setState({copied: true})}>
+      <div onMouseLeave={this.onNotHover}>
+        <Hover onMouseEnter={() => this.onHover(0)}>
+          <FlatButton
+            label={buttons[0]}
+            labelStyle={{fontWeight: 'bold', fontSize: '15px', color: '#00B2B4', fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
+            style={{width: '180px', textAlign: 'left', display: 'inline-block'}}
+            onTouchTap={() => this.select('facebook')}
+          />
+        </Hover>
+        <Hover onMouseEnter={() => this.onHover(1)}>
           <FlatButton
             label={buttons[1]}
             labelStyle={{fontWeight: 'bold', fontSize: '15px', color: '#00B2B4', fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
-            style={{width: '130px', textAlign: 'left', display: 'inline-block'}}
-            onTouchTap={() => this.select(1)}
+            style={{width: '180px', textAlign: 'left', display: 'inline-block'}}
+            onTouchTap={() => this.select('twitter')}
           />
-        </CopyToClipboard>
+        </Hover>
+        <Hover onMouseEnter={() => this.onHover(2)}>
+          <CopyToClipboard text={this.props.url} onCopy={() => this.setState({copied: true})}>
+            <FlatButton
+              label={buttons[2]}
+              labelStyle={{fontWeight: 'bold', fontSize: '15px', color: '#00B2B4', fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
+              style={{width: '180px', textAlign: 'left', display: 'inline-block'}}
+              onTouchTap={() => this.select('copy')}
+            />
+          </CopyToClipboard>
+        </Hover>
       </div>
     )
 
@@ -73,7 +105,7 @@ const ShareDropdown = React.createClass({
     )
 
     return(
-      <Dropdown button={buttonDropdown} float='right' marginMobile='0px 0px 0px -100px'>
+      <Dropdown button={buttonDropdown} float='right' marginMobile='0px 0px 0px -160px'>
         {button}
       </Dropdown>
     )
