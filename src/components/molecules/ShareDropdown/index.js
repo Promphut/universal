@@ -33,7 +33,6 @@ const ShareDropdown = React.createClass({
     buttons.push(<span><FontIcon className="material-icons" style={buttonStyle}>share</FontIcon>Share</span>)
     buttons.push(<span><FontIcon className="material-icons" style={buttonStyle}>link</FontIcon>Copy Link</span>)
 
-    let button = []
     // for (let i = 0; i < buttons.length; i++){
       // button.push(
       //   <div key={i}>
@@ -48,25 +47,22 @@ const ShareDropdown = React.createClass({
       // )
     // }
 
-    button.push(
-      <div key={0}>
+    const button = (
+      <div>
         <FlatButton
           label={buttons[0]}
           labelStyle={{fontWeight: 'bold', fontSize: '15px', color: '#00B2B4', fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
           style={{width: '130px', textAlign: 'left', display: 'inline-block'}}
           onTouchTap={() => this.select(0)}
         /><br/>
-      </div>
-    )
-    button.push(
-      <div key={1}>
         <CopyToClipboard text={window.location.href} onCopy={() => this.setState({copied: true})}>
-        <FlatButton
-          label={buttons[1]}
-          labelStyle={{fontWeight: 'bold', fontSize: '15px', color: '#00B2B4', fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
-          style={{width: '130px', textAlign: 'left', display: 'inline-block'}}
-          onTouchTap={() => this.select(1)}
-        /></CopyToClipboard><br/>
+          <FlatButton
+            label={buttons[1]}
+            labelStyle={{fontWeight: 'bold', fontSize: '15px', color: '#00B2B4', fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
+            style={{width: '130px', textAlign: 'left', display: 'inline-block'}}
+            onTouchTap={() => this.select(1)}
+          />
+        </CopyToClipboard>
       </div>
     )
 
@@ -77,7 +73,7 @@ const ShareDropdown = React.createClass({
     )
 
     return(
-      <Dropdown button={buttonDropdown} float='right'>
+      <Dropdown button={buttonDropdown} float='right' marginMobile='0px 0px 0px -100px'>
         {button}
       </Dropdown>
     )

@@ -73,7 +73,6 @@ const BoxText = styled.div`
 `
 
 const DivDes = styled.div`
-
 `
 
 const ArticleBox = React.createClass({
