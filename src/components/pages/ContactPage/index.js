@@ -71,7 +71,20 @@ const SuccessMessage = styled.em`
   transition: 0.2s;
   opacity: ${props=> props.saved ? 1 : 0};
   @media (max-width: 480px) {
-    font-size: 10px;
+    display: none;
+  }
+`
+
+const SuccessMessageMobile = styled.em`
+  display: none;
+
+  @media (max-width: 480px) {
+    display: ${props=> props.saved ? 'block' : 'none'};
+    margin: 10px 0px 20px;
+    font-size: 14px;
+    color: rgba(0,178,180,1);
+    transition: 0.2s;
+    opacity: ${props=> props.saved ? 1 : 0};
   }
 `
 
@@ -167,10 +180,16 @@ const ContactPage = React.createClass({
 
     this.setState({
       message: {
-        username: ';',
+        username: '',
         email: '',
         tel: '',
         problem,
+        textarea: ''
+      },
+      error: {
+        username: '',
+        email: '',
+        tel: '',
         textarea: ''
       },
       saved: false
@@ -281,10 +300,30 @@ const ContactPage = React.createClass({
     }
 
     const textStyle = {
-      fontSize: '18px',
-      '@media screen and (maxWidth: 480px)': {
-        fontSize: '14px'
+      fontSize: '18px'
+    }
+
+    let dropdownProblem
+    let textArea
+    let fullWidth
+    if (window.matchMedia('(max-width: 480px)').matches) {
+      dropdownProblem = {
+        width: '90vw'
       }
+      textArea = {
+        borderColor: error.textarea ? '#F44336' : '#A9A9A9',
+        width: '100%'
+      }
+      fullWidth = true
+    } else {
+      dropdownProblem = {
+        width: '400px'
+      }
+      textArea = {
+        borderColor: error.textarea ? '#F44336' : '#A9A9A9',
+        width: '500px'
+      }
+      fullWidth = false
     }
 
     const problemSelect = (
@@ -318,7 +357,7 @@ const ContactPage = React.createClass({
             <SecondaryButton
               label={problemSelect}
               labelStyle={{textTransform:'none'}}
-              style={{width: '400px'}}
+              style={dropdownProblem}
               buttonStyle={{textAlign: 'left'}}
             />
             <DropdownContent dropdown={dropdown}>
@@ -327,12 +366,12 @@ const ContactPage = React.createClass({
           </Dropdown>
           <Article className='content-font' style={{marginTop: '25px'}}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas enim quae atque quo, consectetur? At dolor inventore officia alias sapiente dolores, eum amet esse quisquam eligendi, molestiae quaerat deleniti. Molestiae.</Article>
           <textarea
-            cols="60" rows="10"
+            rows="10"
             ref='textarea'
             value={textarea}
             onChange={this.handleChangeTextarea}
-            style={{borderColor: error.textarea ? '#F44336' : '#A9A9A9'}}
-          ></textarea>
+            style={textArea}
+          ></textarea><br/>
           {/*<RichTextEditor
             value={this.state.textarea}
             onChange={this.onChange}
@@ -349,6 +388,7 @@ const ContactPage = React.createClass({
             floatingLabelFixed={true}
             inputStyle={textStyle}
             errorText={error.username ? error.username : ''}
+            fullWidth={fullWidth}
           /><br />
           <TextField
             ref='email'
@@ -362,6 +402,7 @@ const ContactPage = React.createClass({
             floatingLabelFixed={true}
             inputStyle={textStyle}
             errorText={error.email ? error.email : ''}
+            fullWidth={fullWidth}
           /><br />
           <TextField
             ref='tel'
@@ -374,8 +415,10 @@ const ContactPage = React.createClass({
             floatingLabelStyle={textStyle}
             floatingLabelFixed={true}
             inputStyle={textStyle}
+            fullWidth={fullWidth}
           /><br />
           <ButtonRow>
+            <SuccessMessageMobile saved={saved}>Saved successfully</SuccessMessageMobile>
             <PrimaryButton label='Save' style={{float: 'left'}} buttonStyle='Flat' onClick={this.sendMessage} />
             <SecondaryButton label='Reset' style={{float: 'left', marginLeft: '25px'}} onClick={this.resestMessage}/>
             <SuccessMessage saved={saved}>Saved successfully</SuccessMessage>

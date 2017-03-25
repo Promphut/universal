@@ -4,18 +4,37 @@ import {Link} from 'react-router'
 import {BGImg, TopBarWithNavigation, TrendingSideBar, RecommendArticle, Navbar} from 'components'
 import api from 'components/api'
 
+const Wrapper = styled.div`
+	.recommends {
+		font-size: 20px;
+		color: #222;
+		font-weight: bold;
+	}
+	@media (max-width: 480px) {
+		.hidden-mob {
+			// display: none;
+		}
+    .center {
+      justify-content: center;
+    }
+		.recommends {
+			font-size: 16px;
+		}
+  }
+`
+
 const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
-	padding: 50px 0 50px 0;
 `
 
 const Main = styled.div`
-	margin-top: 50px;
+	margin-top: 80px;
 	flex: 8 730px;
 	max-width: 730px;
-	@media (max-width: 480px) {
+
+	@media (max-width: 768px) {
 		flex: 0 100%;
 		max-width: 100%;
 		padding: 0 15px 0 15px;
@@ -91,19 +110,19 @@ const ContactAndAboutContainer = React.createClass({
   		let pub = this.publisher
 
   		let list = []
-		for(let i=0; i<this.recommends.length; i++){
-			list.push(
-				<div key={i} className='col-lg-6 col-md-6 col-sm-12'>
-					<RecommendArticle detail={this.recommends[i]}/>
-				</div>
-			)
-		}
+			for(let i=0; i<this.recommends.length; i++){
+				list.push(
+					<div key={i} className='col-lg-6 col-md-6 col-sm-12'>
+						<RecommendArticle detail={this.recommends[i]}/>
+					</div>
+				)
+			}
 
 	    return (
-	      <div>
-			{pub.cover && <BGImg src={pub.cover.medium} style={{width:'100%',height:'350px'}} className="hidden-mob" />}
+	      <Wrapper>
+					{pub.cover && <BGImg src={pub.cover.medium} style={{width:'100%',height:'350px'}} className="hidden-mob" />}
 
-	      	<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
+					<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 	        <Content>
 	          <Main>
 	            {this.props.children}
@@ -112,15 +131,15 @@ const ContactAndAboutContainer = React.createClass({
 	            <TrendingSideBar/>
 	          </Aside>*/}
 	        </Content>
-	        <Content>
-	          <RecommendContainer ref='recommend'>
-	            <div className='recommends sans-font'>Recommends</div>
-	            <div className='row center'>
-	            	{list}
-	            </div>
-	          </RecommendContainer>
-	        </Content>
-	     </div>
+					<Content>
+						<RecommendContainer ref='recommend'>
+							<div className='recommends sans-font' style={{marginLeft:'23px'}}>Recommends</div>
+							<div className='row center'>
+								{list}
+							</div>
+						</RecommendContainer>
+					</Content>
+	     </Wrapper>
 	    )
   	}
 })
