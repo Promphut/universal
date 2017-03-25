@@ -174,6 +174,7 @@ injectGlobal`
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
+    overflow:hidden;
     -webkit-flex-wrap: wrap;
         -ms-flex-wrap: wrap;
             flex-wrap: wrap;

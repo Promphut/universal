@@ -3,13 +3,13 @@ import {Link} from 'react-router'
 import styled from 'styled-components'
 
 var Tag = styled(Link)`
-  color:#00B2B4;
+  color:${props=> props.theme.primaryColor};
   font-weight:bold;
   font-style: italic;
   font-size:19px;
   &:hover{
     cursor:pointer;
-    color:#00B2B4;
+    color:${props=> props.theme.primaryColor};
     opacity:0.5;
   }
   @media(max-width:480px){

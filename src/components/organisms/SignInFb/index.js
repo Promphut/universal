@@ -26,7 +26,7 @@ const Head = styled.div`
   text-align:center;
   font-size:42px;
   font-family:'Nunito'
-  color:#00B2B4;
+  color:${props=> props.theme.primaryColor};
 `
 const Text = styled.div`
   color:#8f8f8f;

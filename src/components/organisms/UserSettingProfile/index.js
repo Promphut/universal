@@ -22,6 +22,23 @@ const Container = styled.form`
     font-family:'Nunito';
     font-size:18px;
   }
+  .btn-row{
+    margin-top:50px;
+    overflow:hidden;
+  }
+  @media(max-width:480px){
+    max-width: 100%;
+    padding:30px;
+    .btn-row{
+      margin-top:5px;
+    }
+    &.marginTop{
+      margin-top:60px;
+    }
+    .marginMob{
+      margin-left:20px;
+    }
+  }
 `
 
 const Flex = styled.div`
@@ -29,6 +46,9 @@ const Flex = styled.div`
   items-align:center;
   flex-flow: row wrap;
   margin:50px 0 0 50px;
+  @media(max-width:480px){
+    margin:20px 0 0 40px;
+  }
 `
 
 const Title = styled.div`
@@ -42,6 +62,7 @@ const Title = styled.div`
 const Edit = styled.div`
   flex:6 450px;
   max-width:450px;
+  
 `
 
 const Social = styled.div`
@@ -51,7 +72,7 @@ const Social = styled.div`
 `
 
 const TextStatus = styled.div`
-  color:#00B2B4;
+  color:${props=> props.theme.primaryColor};
   font-size:15px;
   font-style:italic;
   float:left;
@@ -152,18 +173,24 @@ const UserSettingProfile = React.createClass({
     let {textStatus, error, user} = this.state
     //console.log('user.pic.medium', user.pic.medium)
     return(
-      <Container onSubmit={this.updateData} ref='userProfile'>
+      <Container onSubmit={this.updateData} ref='userProfile' className='marginTop'>
         <div  className="head sans-font">PROFILE</div>
         <Flex>
-          <Title>
+          <Title className='hidden-mob'>
             <div className="sans-font">Display name</div>
           </Title>
-          <Edit>
+          <Edit className='hidden-mob'>
             <TextField name='display' value={user.display} onChange={this.userChanged} ref={input => {this.display = input}}/>
+          </Edit>
+          <Edit className='hidden-des'>
+            <TextField name='display' value={user.display} onChange={this.userChanged} 
+            ref={input => {this.display = input}}
+            hintText='Display name'
+            floatingLabelText='Display'/>
           </Edit>
         </Flex>
         <Flex>
-          <Title>
+          <Title >
             <div className="sans-font">Profile picture</div>
           </Title>
           <Edit>
@@ -171,14 +198,28 @@ const UserSettingProfile = React.createClass({
           </Edit>
         </Flex>
         <Flex>
-          <Title>
+          <Title className='hidden-mob'>
             <div className="sans-font">Tell people about me</div>
           </Title>
-          <Edit>
+          <Edit className='hidden-mob'>
             <TextField
               multiLine={true}
               fullWidth={true}
               floatingLabelText="80 characters"
+              hintText='Your description max to 80 characters'
+              floatingLabelFixed={true}
+              rows={1}
+              rowsMax={4}
+              name='shortDesc'
+              value={user.shortDesc}
+              onChange={this.userChanged}/>
+          </Edit>
+          <Edit className='hidden-des'>
+            <TextField
+              multiLine={true}
+              fullWidth={true}
+              hintText='Your description max to 80 characters'
+              floatingLabelText="Description"
               floatingLabelFixed={true}
               rows={1}
               rowsMax={4}
@@ -188,42 +229,78 @@ const UserSettingProfile = React.createClass({
           </Edit>
         </Flex>
         <Flex>
-          <Title>
+          <Title className='hidden-mob'>
             <div className="sans-font">Current living city</div>
           </Title>
-          <Edit>
-            <TextField
-              defaultValue="Bangkok, Thailand" name='city' value={user.city} onChange={this.userChanged}/>
+          <Edit className='hidden-mob'>
+            <TextField defaultValue="Bangkok, Thailand" name='city' value={user.city} onChange={this.userChanged}/>
+          </Edit>
+          <Edit className='hidden-des'>
+            <TextField 
+            hintText='Current living city'
+            floatingLabelText='Living city'
+            name='city' value={user.city} onChange={this.userChanged}/>
           </Edit>
         </Flex>
         <Flex>
           <Title>
             <div className="sans-font">Social Channels</div>
           </Title>
-          <Edit>
-            <Social className="sans-font">
-              <i className="fa fa-facebook" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i>
-              <div style={{float:'left',margin:'15px 20px 0 0'}}>facebook.com/</div>
+          <Edit className='marginMob'>
+            <Social className="sans-font hidden-mob" >
+              <i className="fa fa-facebook hidden-mob" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i>
+              <div className='hidden-mob' style={{float:'left',margin:'15px 20px 0 0'}}>facebook.com/</div>
               <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.fb' value={user.channels && user.channels.fb} onChange={this.userChanged}/>
             </Social>
-            <Social className="sans-font">
-              <i className="fa fa-twitter" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i>
-              <div style={{float:'left',margin:'15px 20px 0 0'}}>twitter.com/</div>
+            <Social className="sans-font hidden-des" >
+              <TextField 
+              hintText='facebook.com/Your-path'
+              floatingLabelText="Facebook"
+              style={{float:'left',margin:'5px 0 0 0'}} name='channels.fb' value={user.channels && user.channels.fb} onChange={this.userChanged}/>
+            </Social>
+            <Social className="sans-font hidden-mob">
+              <i className="fa fa-twitter hidden-mob" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i>
+              <div className='hidden-mob' style={{float:'left',margin:'15px 20px 0 0'}}>twitter.com/</div>
               <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.twt' value={user.channels && user.channels.twt} onChange={this.userChanged}/>
             </Social>
-            <Social className="sans-font">
-              <i className="fa fa-instagram" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i>
-              <div style={{float:'left',margin:'15px 20px 0 0'}}>instagram.com/</div>
+            <Social className="sans-font hidden-des">
+              <TextField 
+              hintText='twitter.com/Your-path'
+              floatingLabelText="Twitter"
+              style={{float:'left',margin:'5px 0 0 0'}} name='channels.twt' value={user.channels && user.channels.twt} onChange={this.userChanged}/>
+            </Social>
+            <Social className="sans-font hidden-mob">
+              <i className="fa fa-instagram hidden-mob" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i>
+              <div className='hidden-mob' style={{float:'left',margin:'15px 20px 0 0'}}>instagram.com/</div>
               <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.ig' value={user.channels && user.channels.ig} onChange={this.userChanged}/>
             </Social>
-            <Social className="sans-font">
-              <i className="fa fa-youtube-play" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i>
-              <div style={{float:'left',margin:'15px 20px 0 0'}}>youtube.com/</div>
+            <Social className="sans-font hidden-des">
+              <TextField 
+              hintText='instagram.com/Your-path'
+              floatingLabelText="Instagram"
+              style={{float:'left',margin:'5px 0 0 0'}} name='channels.ig' value={user.channels && user.channels.ig} onChange={this.userChanged}/>
+            </Social>
+            <Social className="sans-font hidden-mob">
+              <i className="fa fa-youtube-play hidden-mob" style={{float:'left',margin:'20px 20px 0 0'}} aria-hidden="true"></i>
+              <div className='hidden-mob' style={{float:'left',margin:'15px 20px 0 0'}}>youtube.com/</div>
               <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.yt' value={user.channels && user.channels.yt} onChange={this.userChanged}/>
+            </Social>
+            <Social className="sans-font hidden-des">
+              <TextField 
+              hintText='youtube.com/Your-path'
+              floatingLabelText="Youtube"
+              style={{float:'left',margin:'5px 0 0 0'}} name='channels.yt' value={user.channels && user.channels.yt} onChange={this.userChanged}/>
             </Social>
           </Edit>
         </Flex>
-        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.fetechUser} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error?'#D8000C':'#00B2B4'}}>{textStatus}</TextStatus></div>
+        <div className='row hidden-des'>
+          <TextStatus style={{color:error?'#D8000C':'#00B2B4',margin:'30px 0 0 15px'}} className='hidden-des'>{textStatus}</TextStatus>
+        </div>
+        <div className='sans-font' style={{overflow:'hidden',marginTop:'30px'}}>
+          <PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/>
+          <SecondaryButton label='Reset' onClick={this.fetechUser} style={{float:'left',margin:'0 20px 0 0'}}/>
+          <TextStatus style={{color:error?'#D8000C':'#00B2B4'}} className='hidden-mob'>{textStatus}</TextStatus>
+        </div>
       </Container>
     )
   },

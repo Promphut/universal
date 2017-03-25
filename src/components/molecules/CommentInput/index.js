@@ -46,7 +46,7 @@ const Btn = styled.button`
   border-radius:20px;
   width:95px;
   height:40px;
-  background-color:#00B2B4;
+  background-color:${props=> props.theme.primaryColor};
   color:#fff;
   float:left;
   margin-left:20px;

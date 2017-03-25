@@ -1,6 +1,6 @@
 import React from 'react'
 import { PageTemplate, TopBarWithNavigation, StoryDetail, RecommendArticle, TrendingSideBar,
-	 Stick,ShareSideBar, BGImg} from 'components'
+	 Stick,ShareSideBar, BGImg,RecommendContainer} from 'components'
 import {Link} from 'react-router'
 import styled from 'styled-components'
 import {findDOMNode as dom} from 'react-dom'
@@ -8,11 +8,6 @@ import api from 'components/api'
 import  { StickyContainer, Sticky }  from 'react-sticky'
 
 const Wrapper = styled.div`
-	.recommends{
-		font-size:20px;
-		color:#222;
-		font-weight:bold;
-	}
 	 .hidden-des{
 	  	display:none;
 	  }
@@ -83,22 +78,6 @@ const Aside = styled.div`
 	}
 `
 
-const RecommendContainer = styled.div`
-	flex:12 1275px;
-	max-width:1275px;
-	margin-top:60px;
-	@media (max-width: 480px) {
-		flex:0 100%;
-		max-width: 100%;
-		padding:0 15px 0 15px;
-	}
-`
-
-const Recommend = styled.div`
-	flex:1 540px;
-	max-width:540px;
-	margin:10px 20px 0 0;
-`
 const Cover = styled.div`
 	position:relative;
 	top:0;
@@ -179,20 +158,9 @@ const StoryPage = React.createClass({
 	render(){
 		let {stopPos, recommends} = this.state
 		//console.log('render', this.story)
-
-		let list = []
-		for(let i=0; i<recommends.length; i++){
-			list.push(
-				<div className='col-lg-6 col-md-6 col-sm-12' key={i}>
-					<RecommendArticle detail={recommends[i]}/>
-				</div>
-			)
-		}
-
 		return (
 		    <Wrapper >
 		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} article={this.story.title} editButton={'/me/stories/'+this.story.id+'/edit'} />
-
 
 		      <BGImg style={{width:'100%',height:'85vh'}} src={this.story.cover.large || this.story.cover.medium} className='hidden-mob'>
 						<Cover/>
@@ -220,12 +188,7 @@ const StoryPage = React.createClass({
 		      </Content>
 
 				<Content>
-					<RecommendContainer ref='recommend'>
-						<div className='recommends sans-font' style={{marginLeft:'23px'}}>Recommends</div>
-						<div className='row center'>
-							{list}
-						</div>
-					</RecommendContainer>
+					<RecommendContainer recommend={recommends}/>
 				</Content>
 		   </Wrapper>
 		  )

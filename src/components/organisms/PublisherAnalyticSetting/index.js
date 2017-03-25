@@ -50,7 +50,7 @@ const Social = styled.div`
 `
 
 const TextStatus = styled.div`
-  color:#00B2B4;
+  color:${props=> props.theme.primaryColor};
   font-size:15px;
   font-style:italic;
   float:left;
@@ -186,7 +186,7 @@ const PublisherAnalyticSetting = React.createClass({
             <div className="sans-font">Google Tag<br/> Manager ID</div>
           </Title>
           <Edit>
-             <TextField name='tagManagerId' onChange={this.analyticChanged} value={analytic.tagManagerId} style={{marginTop:'20px'}}/>
+             <TextField name='tagManagerId' onChange={this.analyticChanged} value={analytic&&analytic.tagManagerId} style={{marginTop:'20px'}}/>
           </Edit>
         </Flex>
         <div className='sans-font row' style={{marginTop:'80px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.resetDate} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error?'#D8000C':'#00B2B4'}}>{textStatus}</TextStatus></div>

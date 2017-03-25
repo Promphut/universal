@@ -20,7 +20,7 @@ const DropdownContent = styled.div`
   position: absolute;
   margin: ${props => props.margin}
   padding: 0px;
-  border: 2px solid rgba(0,178,180,1);
+  border: 2px solid ${props=> props.theme.primaryColor};
   background: white;
   z-index: 1;
 

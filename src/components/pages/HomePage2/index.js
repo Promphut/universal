@@ -148,18 +148,20 @@ const HomePage2 = React.createClass({
 		api.getFeed('story', {status:1}, 'latest', null, page, 10)
 		.then(result => {
 			var s = this.state.latestStories.concat(result.feed)
-			if(s.length==result.count[1]){
-				this.setState({
-					latestStories:s,
-					isInfiniteLoading: false,
-					loadOffset:'undefined'
-				})
-			}else{
-				this.setState({
-					latestStories:s,
-					isInfiniteLoading: false
-				})
-			}
+			this.setState({
+				latestStories:s
+			},()=>{
+				if(s.length==result.count[1]){
+					this.setState({
+						loadOffset:'undefined',
+						isInfiniteLoading: false,
+					})
+				}else{
+					this.setState({
+						isInfiniteLoading: false
+					})
+				}
+			})
 		})
 	},
 
@@ -176,7 +178,7 @@ const HomePage2 = React.createClass({
 	},
 
 	render(){
-		//console.log('context', this.context.setting.publisher.theme)
+		//console.log('context', this.context.setting)
 
 		let pub = this.publisher
 		//console.log('PUB', pub)
@@ -202,7 +204,23 @@ const HomePage2 = React.createClass({
 			      <Main>
 							<TextLine className='sans-font'>Latest</TextLine>
 							<Infinite
+									className='hidden-mob'
+									containerHeight={2000}
 									elementHeight={210}
+									infiniteLoadBeginEdgeOffset={this.state.loadOffset}
+									onInfiniteLoad={this.handleInfiniteLoad}
+									loadingSpinnerDelegate={this.elementInfiniteLoad()}
+									isInfiniteLoading={this.state.isInfiniteLoading}
+									useWindowAsScrollContainer={true}>
+
+								{this.state.latestStories.length!=0?this.state.latestStories.map((story, index) => (
+									<ArticleBox detail={story} key={index}/>
+								)):''}
+							</Infinite>
+							<Infinite
+									className='hidden-des'
+									containerHeight={2800}
+									elementHeight={300}
 									infiniteLoadBeginEdgeOffset={this.state.loadOffset}
 									onInfiniteLoad={this.handleInfiniteLoad}
 									loadingSpinnerDelegate={this.elementInfiniteLoad()}

@@ -50,7 +50,7 @@ const Social = styled.div`
 `
 
 const TextStatus = styled.div`
-  color:#00B2B4;
+  color:${props=> props.theme.primaryColor};
   font-size:15px;
   font-style:italic;
   float:left;
@@ -170,7 +170,7 @@ const PublisherProfileSetting = React.createClass({
             <div className="sans-font">Cover picture</div>
           </Title>
           <Edit>
-            <UploadPicture src={pub.cover.medium} path={'/publishers/'+config.PID+'/cover'} type='cover' width='200px' height='90px' labelStyle={{top:'35px'}}/>
+            <UploadPicture src={pub.cover&&pub.cover.medium} path={'/publishers/'+config.PID+'/cover'} type='cover' width='200px' height='90px' labelStyle={{top:'35px'}}/>
           </Edit>
         </Flex>
         <Flex>

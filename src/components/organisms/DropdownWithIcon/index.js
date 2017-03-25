@@ -47,7 +47,7 @@ const List = styled(MenuItem)`
   height:60px;
   font-size:22px;
   &:hover{
-    background-color:#00B2B4;
+    background-color:${props=> props.theme.primaryColor};
   }
 `
 

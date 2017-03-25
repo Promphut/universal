@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import {Link} from 'react-router'
-import {BGImg, TopBarWithNavigation, TrendingSideBar, RecommendArticle, Navbar} from 'components'
+import {BGImg, TopBarWithNavigation, TrendingSideBar, RecommendArticle, Navbar,RecommendContainer} from 'components'
 import api from 'components/api'
 
 const Wrapper = styled.div`
@@ -49,17 +49,6 @@ const Aside = styled.div`
 	margin-left:60px;
 	@media (max-width: 1160px) {
 		display:none;
-	}
-`
-
-const RecommendContainer = styled.div`
-	flex:12 1275px;
-	max-width:1275px;
-	margin-top:60px;
-	@media (max-width: 480px) {
-		flex:0 100%;
-		max-width: 100%;
-		padding:0 15px 0 15px;
 	}
 `
 
@@ -132,12 +121,7 @@ const ContactAndAboutContainer = React.createClass({
 	          </Aside>*/}
 	        </Content>
 					<Content>
-						<RecommendContainer ref='recommend'>
-							<div className='recommends sans-font' style={{marginLeft:'23px'}}>Recommends</div>
-							<div className='row center'>
-								{list}
-							</div>
-						</RecommendContainer>
+						<RecommendContainer recommend={this.recommends}/>
 					</Content>
 	     </Wrapper>
 	    )

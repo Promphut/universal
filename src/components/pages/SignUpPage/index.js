@@ -8,13 +8,13 @@ const Wrapper = styled.div`
 	width:100%;
   height:100%;
   position:absolute;
-  background: rgba(0,178,180,1);
-  background: -moz-linear-gradient(-45deg, rgba(0,178,180,1) 0%, rgba(206,241,183,1) 100%);
-  background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(0,178,180,1)), color-stop(100%, rgba(206,241,183,1)));
-  background: -webkit-linear-gradient(-45deg, rgba(0,178,180,1) 0%, rgba(206,241,183,1) 100%);
-  background: -o-linear-gradient(-45deg, rgba(0,178,180,1) 0%, rgba(206,241,183,1) 100%);
-  background: -ms-linear-gradient(-45deg, rgba(0,178,180,1) 0%, rgba(206,241,183,1) 100%);
-  background: linear-gradient(135deg, rgba(0,178,180,1) 0%, rgba(206,241,183,1) 100%);
+  background: ${props=> props.theme.primaryColor};
+  background: -moz-linear-gradient(-45deg, ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%);
+  background: -webkit-gradient(left top, right bottom, color-stop(0%, ${props=> props.theme.primaryColor}), color-stop(100%, ${props=> props.theme.secondaryColor} ));
+  background: -webkit-linear-gradient(-45deg, ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%);
+  background: -o-linear-gradient(-45deg, ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%);
+  background: -ms-linear-gradient(-45deg, ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%);
+  background: linear-gradient(135deg, ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00b2b4', endColorstr='#cef1b7', GradientType=1 );
   @media (max-width:480px) {
     background:${props=>props.page?'':'white'};
@@ -91,7 +91,10 @@ const SignUpPage = React.createClass({
       return (
 		    <Wrapper style={{...styles}} page={statePage}>
           <Container>
-            <div  style={{margin:'0 auto 15px auto',width:'146px'}}><LogoLink className='hidden-des' fill={statePage?'#E2E2E2':''}/><LogoLink className='hidden-mob' fill='#E2E2E2'/></div>
+            <div  style={{margin:'0 auto 15px auto',width:'146px'}}>
+              <LogoLink className='hidden-des' fill={statePage?'#E2E2E2':''}/>
+              <LogoLink className='hidden-mob' fill='#E2E2E2'/>
+            </div>
             <BoxButton>
               <Link to='#' onClick={this.checkBack} className='hidden-mob'>
                 <BackButton style={{float:'left'}} />

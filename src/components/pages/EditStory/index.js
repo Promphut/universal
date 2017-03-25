@@ -57,7 +57,7 @@ const Container = styled.form`
     display:inline-block;
   }
   h1{
-    color:#00b2b4;
+    color:${props=> props.theme.primaryColor};
     font-size:42px;
   }
 `
@@ -95,7 +95,7 @@ const Divider = styled.div`
 const TextStatus = styled.div`
   font-size:15px;
   font-style:italic;
-  color:#00b2b4;
+  color:${props=> props.theme.primaryColor};
   display:inline;
   float:right;
   padding:12px 20px 12px 20px;

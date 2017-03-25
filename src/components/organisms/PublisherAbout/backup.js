@@ -106,7 +106,7 @@ const Edit = styled.div`
 `
 
 const TextStatus = styled.div`
-  color:#00B2B4;
+  color:${props=> props.theme.primaryColor};
   font-size:15px;
   font-style:italic;
   float:left;
