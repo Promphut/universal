@@ -52,17 +52,6 @@ const Aside = styled.div`
 	}
 `
 
-const RecommendContainer = styled.div`
-	flex:12 1275px;
-	max-width:1275px;
-	margin-top:60px;
-	@media (max-width: 480px) {
-		flex:0 100%;
-		max-width: 100%;
-		padding:0 15px 0 15px;
-	}
-`
-
 const ContactAndAboutContainer = React.createClass({
 	getInitialState(){
 		this.recommends = []
@@ -132,12 +121,7 @@ const ContactAndAboutContainer = React.createClass({
 	          </Aside>*/}
 	        </Content>
 					<Content>
-						<RecommendContainer ref='recommend'>
-							<div className='recommends sans-font' style={{marginLeft:'23px'}}>Recommends</div>
-							<div className='row center'>
-								{list}
-							</div>
-						</RecommendContainer>
+						<RecommendContainer recommend={this.recommends}/>
 					</Content>
 	     </Wrapper>
 	    )

@@ -25,13 +25,30 @@ const Container = styled.form`
     font-family:'Nunito';
     font-size:18px;
   }
+  .btn-row{
+    margin-top:50px;
+    overflow:hidden;
+  }
+  @media(max-width:480px){
+    max-width: 100%;
+    padding:30px;
+    .btn-row{
+      margin-top:5px;
+    }
+    &.marginTop{
+      margin-top:60px;
+    }
+  }
 `
 
 const Flex = styled.div`
   display:flex;
   items-align:center;
   flex-flow: row wrap;
-  margin:50px 0 0 50px;
+  margin:40px 0 0 50px;
+  @media(max-width:480px){
+    margin:20px 0 0 40px;
+  }
 `
 
 const Title = styled.div`
@@ -39,7 +56,7 @@ const Title = styled.div`
   max-width:150px;
   color:#C2C2C2;
   font-size:17px;
-  padding-top:15px;
+  padding-top:40px;
 `
 
 const Edit = styled.div`
@@ -241,22 +258,29 @@ const UserSettingProfile = React.createClass({
 
     return(
       <div>
-        <Container onSubmit={this.updateData}>
+        <Container onSubmit={this.updateData} className='marginTop'>
           <div  className="head sans-font">ACCOUNT</div>
           <Flex>
-            <Title>
+            <Title className='hidden-mob'>
               <div className="sans-font">Username</div>
             </Title>
             <Edit>
-              <TextField name='username' value={user.username} onChange={this.userChanged}/>
+              <TextField name='username' value={user.username} onChange={this.userChanged}
+               hintText='Change your Username'
+              floatingLabelText='Username'/>
             </Edit>
           </Flex>
           <Flex>
             <Title>
-              <div className="sans-font">Email</div>
+              <div className="sans-font" className='hidden-mob'>Email</div>
             </Title>
             <Edit>
-              <TextField name='email' value={user.email} onChange={this.userChanged}/>
+              <TextField 
+              name='email' value={user.email} 
+              onChange={this.userChanged}
+              hintText='Change your Email'
+              floatingLabelText='Email'
+              />
             </Edit>
           </Flex>
           {/*<Flex>
@@ -276,13 +300,20 @@ const UserSettingProfile = React.createClass({
               </Social>
             </Edit>
           </Flex>*/}
-          <div className='sans-font' style={{marginTop:'30px',overflow:'hidden'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.fetechUser} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error1?'#D8000C':'#00B2B4'}}>{textStatus1}</TextStatus></div>
+          <div className='row hidden-des'>
+            <TextStatus style={{color:error2?'#D8000C':'#00B2B4',margin:'30px 0 0 15px'}} className='hidden-des'>{textStatus1}</TextStatus>
+          </div>
+          <div className='sans-font btn-row' >
+            <PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/>
+            <SecondaryButton label='Reset' onClick={this.fetechUser} style={{float:'left',margin:'0 20px 0 0'}}/>
+            <TextStatus style={{color:error2?'#D8000C':'#00B2B4'}} className='hidden-mob'>{textStatus1}</TextStatus>
+          </div>
         </Container>
 
         <Container onSubmit={this.changePWD} autoComplete="off">
           <div  className="head sans-font">CHANGE PASSWORD</div>
           <Flex>
-            <Title>
+            <Title className='hidden-mob'>
               <div className="sans-font">Old Password</div>
             </Title>
             <Edit>
@@ -292,39 +323,50 @@ const UserSettingProfile = React.createClass({
                 name='oldPassword'
                 errorText={errText0}
                 autoComplete="off"
+                hintText='Your old password'
+                floatingLabelText='Old Password'
               />  
             </Edit>
           </Flex>
           <Flex>
-            <Title>
+            <Title className='hidden-mob'>
               <div className="sans-font">New Password</div>
             </Title>
             <Edit>
               <TextField
-                hintText="New Password"
                 type="password"
                 name='newPassword'
                 errorText={errText1}
                 autoComplete="off"
+                hintText='Your new password'
+                floatingLabelText='New Password'
               />
             </Edit>
           </Flex>
           <Flex>
-            <Title>
+            <Title className='hidden-mob'>
               <div className="sans-font">Retype Again</div>
             </Title>
             <Edit>
               <TextField
-                hintText="New Password Agian"
                 type="password"
                 name='newPassword2'
                 errorText={errText2}
                 autoComplete="off"
                 onBlur={this.checkPWD}
+                hintText='Your new password Again'
+                floatingLabelText='New Password'
               />
             </Edit>
           </Flex>
-          <div className='sans-font' style={{marginTop:'30px',overflow:'hidden'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error2?'#D8000C':'#00B2B4'}}>{textStatus2}</TextStatus></div>
+          <div className='row hidden-des'>
+            <TextStatus style={{color:error2?'#D8000C':'#00B2B4',margin:'30px 0 0 15px'}} className='hidden-des'>{textStatus2}</TextStatus>
+          </div>
+          <div className='sans-font btn-row'>
+            <PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/>
+            <SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/>
+            <TextStatus style={{color:error2?'#D8000C':'#00B2B4'}} className='hidden-mob'>{textStatus2}</TextStatus>
+          </div>
         </Container>
       </div>
     )

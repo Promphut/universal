@@ -11,14 +11,19 @@ import api from 'components/api'
 
 const Wrapper = styled.div`
   background-color: #F4F4F4;
+  height:100vh;
+  padding-bottom:300px;
   .imgWidth{
     width:255px;
     height:141px;
   }
   @media (max-width:480px) {
     .imgWidth{
-      width:135px;
-      height:193px;
+      width:255px;
+      height:141px;
+    }
+    .row{
+      display:block;
     }
   }
 `
@@ -85,8 +90,11 @@ const Box = styled.div`
   width:255px;
   background:white;
   height:257px;
-  margin:0 auto 0 auto;
+  margin:0px auto 15px auto;
   cursor: pointer;
+  @media (max-width:480px){
+
+  }
 `
 const Blur = styled.div`
 background: rgba(255,255,255,0);
@@ -170,9 +178,9 @@ const AllColumn = React.createClass({
                   page="allcolumn"
                 />
               </div>
-              <div className='row'>
+              <div className='row' style={{overflow:'hidden'}}>
                 {columns && columns.map((data, index) => (
-                  <div className='col-3' key={index} style={{margin:'20px 0 20px 0'}}>
+                  <div className='col-lg-3 col-md-4 col-sm-12' key={index} style={{margin:'20px 0 20px 0'}}>
                     <Link to={'/stories/' + data.slug} >
                     <Box>
                       <BGImg src={data.cover.small || data.cover.medium} opacity={0.6} className='imgWidth' style={{margin:'0 auto 0 auto'}}>

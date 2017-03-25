@@ -1,17 +1,16 @@
 import React from 'react'
 import { render } from 'react-dom'
-import {RenderApp} from 'components'
+import { AppContainer } from 'react-hot-loader'
+import routes from 'routes'
+import { Router, browserHistory, applyRouterMiddleware } from 'react-router'
+import { useScroll } from 'react-router-scroll'
 
 const root = document.getElementById('app')
 
-/*const renderApp = () => (
+const renderApp = () => (
   <AppContainer>
     <Router history={browserHistory} routes={routes} render={applyRouterMiddleware(useScroll())} />
   </AppContainer>
-)*/
-
-const renderApp = () => (
-  <RenderApp/>
 )
 
 render(renderApp(), root)
