@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import {Link} from 'react-router'
-import {Logo} from 'components'
+import {LogoLink} from 'components'
 
 const Wrapper = styled.div`
 	background: #F4F4F4;
@@ -73,9 +73,8 @@ const NotFoundPage = React.createClass({
 
     return (
 			<Wrapper style={this.props.style}>
-				<Link to="/">
-					<Logo fill={"#00B2B4"} />
-				</Link>
+				<LogoLink to="/"/>
+				
 				<Center className="col-sm-10 col-md-6">
 					<ErrorNumber smallSize={this.props.smallSize}>
 						{this.props.errorNumber}

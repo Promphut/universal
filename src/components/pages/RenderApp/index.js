@@ -34,7 +34,7 @@ var RenderApp = React.createClass({
 
 	render() {
 		let {publisher} = this.state.setting
-		console.log('setting publisher', publisher)
+		//console.log('setting publisher', publisher)
 
 		return (
 	 		<ThemeProvider theme={publisher.theme}>
