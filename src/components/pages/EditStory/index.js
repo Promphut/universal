@@ -268,7 +268,7 @@ const EditStory = React.createClass({
       .end((err,res)=>{
         if(err)throw err
         else{
-          console.log(res.body)
+          //console.log(res.body)
           this.setState({story:res.body.story,title:res.body.story.title})
           this.editor.setContent(res.body.story.html)
 
@@ -277,7 +277,7 @@ const EditStory = React.createClass({
           //   res.body.story.tags.map((data,index)=>{
           //     sel[index] = {text:data.name,value:index,id:data._id}
           //   })
-          //   console.log(sel)
+          //   //console.log(sel)
           //   var {tag} = this.state
           //   var newTag = tag
           //   tag.map((data,index)=>{
@@ -380,7 +380,7 @@ const EditStory = React.createClass({
       .end((err,res)=>{
         if(err)throw err
         else{
-          console.log(res.body)
+          //console.log(res.body)
           self.setState({
             sid:res.body.story._id,
             saveStatus:"Saved "+ moment(res.body.story.updated).calendar(),

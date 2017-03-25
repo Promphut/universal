@@ -108,9 +108,6 @@ const Nav = styled.nav`
 	z-index:11;
   animation: ${props=> props.open?slideOut:slideIn} 0.6s forwards;
   background: rgba(255, 255, 255, 0.85);
-  @media (max-width:480px){
-    width: 80vw;
-  }
 	& hr {
 		background-color: #c1c1c1 !important;
     margin: 15px 0px !important;
@@ -130,6 +127,12 @@ const Nav = styled.nav`
 	& ul li a:hover {
 		text-decoration: underline;
 	}
+  @media(max-width:480px){
+    width: 80vw;
+    & ul {
+      font-size: 20px;
+    }
+  }
 `
 
 const CloseBtn = styled(IconButton)`
@@ -145,24 +148,25 @@ const CloseBtn = styled(IconButton)`
 
 const Profile = styled.div`
 	padding: 40px 40px 0 40px;
-
 	& > * {
 		vertical-align: middle;
 		display: inline-block;
 	}
-  @media (max-width:480px){
-    & > * {
-      display: block;
-    }
-    padding: 30px 40px 0 40px;
-  }
-
 	& > div {
 		width: 240px;
 		font-size: 15px;
 		color: #8f8f8f;
 		padding-left: 20px;
 	}
+  @media (max-width:480px){
+    & > div {
+      font-size: 12px;
+    }
+    & > * {
+      display: block;
+    }
+    padding: 0px 40px 0 40px;
+  }
 `
 const EditMode = styled.div`
   background-color:#222;
@@ -174,6 +178,9 @@ const EditMode = styled.div`
   height:60px;
   padding:12px;
   font-size:20px;
+  @media(max-width:480px){
+    font-size: 18px;
+  }
 `
 
 const RightMenu = React.createClass({

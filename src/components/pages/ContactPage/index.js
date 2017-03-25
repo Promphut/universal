@@ -154,7 +154,7 @@ const ContactPage = React.createClass({
         })
       })
     // } else {
-    //   console.log('Please enter require value')
+    //   //console.log('Please enter require value')
     //
     //   this.setState({
     //     saved: false
@@ -260,7 +260,7 @@ const ContactPage = React.createClass({
   },
 
   // onChange(value) {
-  //   console.log(value)
+  //   //console.log(value)
   //   this.setState({textarea : value});
   // },
 

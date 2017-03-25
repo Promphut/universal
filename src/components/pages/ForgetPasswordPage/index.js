@@ -16,6 +16,9 @@ const Wrapper = styled.div`
   background: -ms-linear-gradient(-45deg, rgba(0,178,180,1) 0%, rgba(206,241,183,1) 100%);
   background: linear-gradient(135deg, rgba(0,178,180,1) 0%, rgba(206,241,183,1) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00b2b4', endColorstr='#cef1b7', GradientType=1 );
+  @media (max-width:480px){
+    background:white;
+  }
 `
 const Modal = styled.div`
   width:100%;
@@ -27,6 +30,9 @@ const Modal = styled.div`
 const Container = styled.div`
   margin:7% auto 0 auto;
   width:477px;
+  @media (max-width:480px){
+    width:100vw;
+  }
 `
 const BoxButton= styled.div`
   overflow:hidden;
@@ -78,9 +84,10 @@ const ForgetPasswordPage = React.createClass({
     return(
       <Wrapper >
         <Container>
-          <div  style={{margin:'0 auto 30px auto',width:'146px'}}><Logo fill='#E2E2E2'/></div>
+          <div  style={{margin:'0 auto 30px auto',width:'146px'}}><Logo fill='#E2E2E2' className='hidden-mob'/><Logo fill='#00b2b4' className='hidden-des'/></div>
           <BoxButton>
-            <Link to='#' onClick={this.checkBack} ><BackButton style={{float:'left'}}/></Link>
+            <Link to='#' onClick={this.checkBack} className='hidden-mob'><BackButton style={{float:'left'}}/></Link>
+            <Link to='#' onClick={this.checkBack} className='hidden-des'><BackButton style={{float:'left'}} labelStyle={{color:'#00b2b4'}}/></Link>
           </BoxButton>
           <ForgetPassword/>
         </Container>

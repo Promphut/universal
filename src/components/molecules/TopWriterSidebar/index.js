@@ -103,7 +103,7 @@ const TopWriterSidebar = React.createClass({
   },
 
   render(){
-    console.log(this.props.writer)
+    //console.log(this.props.writer)
     var {writer} = this.props
     /*var Sort = []
     for(let i=0;i<writer.length;i++){

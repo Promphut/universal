@@ -69,7 +69,7 @@ const ThumpnailRow = React.createClass({
       }
     } else {
       thumpnail=[]
-      console.log(detail)
+      //console.log(detail)
     }
 
     return (

@@ -102,7 +102,7 @@ const UserSettingProfile = React.createClass({
         if(err) self.setState({textStatus1:res.body.error.message,error1:true})
         else{
           self.setState({user:res.body.user})
-          console.log(res.body.user)
+          //console.log(res.body.user)
           self.setData()
         }
       })

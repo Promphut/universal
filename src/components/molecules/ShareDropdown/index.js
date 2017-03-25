@@ -15,9 +15,9 @@ const ShareDropdown = React.createClass({
 
   select(index) {
     if (index === 0) {
-      console.log('Select Share')
+      //console.log('Select Share')
     } else if (index === 1) {
-      console.log('Copied')
+      //console.log('Copied')
     }
   },
 

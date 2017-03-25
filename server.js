@@ -15,8 +15,8 @@ new WebpackDevServer(webpack(config), {
   contentBase: 'public'
 }).listen(port, ip, (err) => {
   if (err) {
-    return console.log(err)
+    return //console.log(err)
   }
 
-  console.log(`Listening at http://${ip}:${port}`)
+  //console.log(`Listening at http://${ip}:${port}`)
 })
