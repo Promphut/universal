@@ -23,7 +23,7 @@ const Box = styled.div`
   background-color:#F4F4F4;
   text-align:center;
   font-size:14px;
-  color:#00B2B4;
+  color:${props=> props.theme.primaryColor};
   &:hover{
     cursor:pointer;
     text-decoration:underline;
@@ -71,7 +71,7 @@ const Filter = styled.div`
 const Label = styled.span`
   position:relative;
   font-size:14px;
-  color:#00B2B4;
+  color:${props=> props.theme.primaryColor};
 `
 
 const UploadPicture = React.createClass({

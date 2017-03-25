@@ -22,7 +22,7 @@ const Head = styled.div`
   margin:50px auto 10px auto;
   text-align:center;
   font-size:42px;
-  color:#00B2B4;
+  color:${props=> props.theme.primaryColor};
   font-family:'Nunito'
 `
 const Text = styled.div`

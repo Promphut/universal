@@ -24,7 +24,7 @@ const DropdownContent = styled.div`
   position: absolute;
   margin: 5px;
   padding: 0px;
-  border: 2px solid rgba(0,178,180,1);
+  border: 2px solid ${props=> props.theme.primaryColor};
   background: white;
   z-index: 1;
 `
@@ -42,7 +42,7 @@ const Subhead = styled.h4`
   font-size: 24px;
   font-weight: bold;
   margin-top: 0px;
-  color: rgba(0,178,180,1);
+  color: ${props=> props.theme.primaryColor};
   @media (max-width: 480px) {
     font-size: 16px;
   }
@@ -67,7 +67,7 @@ const SuccessMessage = styled.em`
   margin-left: 25px;
   position: relative;
   top: 50%;
-  color: rgba(0,178,180,1);
+  color: ${props=> props.theme.primaryColor};
   transition: 0.2s;
   opacity: ${props=> props.saved ? 1 : 0};
   @media (max-width: 480px) {
@@ -82,7 +82,7 @@ const SuccessMessageMobile = styled.em`
     display: ${props=> props.saved ? 'block' : 'none'};
     margin: 10px 0px 20px;
     font-size: 14px;
-    color: rgba(0,178,180,1);
+    color: ${props=> props.theme.primaryColor};
     transition: 0.2s;
     opacity: ${props=> props.saved ? 1 : 0};
   }

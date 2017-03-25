@@ -104,9 +104,9 @@ const Nav = styled.nav`
 	z-index:11;
   animation: ${props=> props.open?slideOut:slideIn} 0.6s forwards;
 
-	background: -moz-linear-gradient(-45deg,  rgba(0,178,180,0.75) 0%, rgba(206,241,183,0.75) 100%); /* FF3.6-15 */
-	background: -webkit-linear-gradient(-45deg,  rgba(0,178,180,0.75) 0%,rgba(206,241,183,0.75) 100%); /* Chrome10-25,Safari5.1-6 */
-	background: linear-gradient(135deg,  rgba(0,178,180,0.75) 0%,rgba(206,241,183,0.75) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	background: -moz-linear-gradient(-45deg,  ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(-45deg,  ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(135deg,  ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\#bf00b2b4\, endColorstr=\#bfcef1b7\,GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 
 
@@ -256,6 +256,8 @@ const LeftMenu = React.createClass({
     let {open, close, menu} = this.props
     let cols = menu && menu.column ? menu.column : []
 
+    console.log('test',this.context)
+
     // Menu items from menu props
     let items = []
     for(let i=0; i<cols.length; i++)
@@ -311,5 +313,9 @@ LeftMenu.propTypes = {
   // open: PropTypes.func.isRequired,
   // close: PropTypes.func.isRequired
 }
+
+LeftMenu.contextTypes = {
+	setting: React.PropTypes.object
+};
 
 export default LeftMenu

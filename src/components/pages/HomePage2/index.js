@@ -231,8 +231,8 @@ const HomePage2 = React.createClass({
 	}
 });
 
-// HomePage2.contextTypes = {
-// 	setting: React.PropTypes.object
-// };
+HomePage2.contextTypes = {
+	setting: React.PropTypes.object
+};
 
 export default HomePage2;

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import {Link} from 'react-router'
-import {BGImg, TopBarWithNavigation, TrendingSideBar, RecommendArticle, Navbar} from 'components'
+import {BGImg, TopBarWithNavigation, TrendingSideBar, RecommendArticle, Navbar,RecommendContainer} from 'components'
 import api from 'components/api'
 
 const Wrapper = styled.div`

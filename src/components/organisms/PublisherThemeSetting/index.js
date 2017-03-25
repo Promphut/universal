@@ -32,7 +32,7 @@ const Container = styled.form`
     -Webkit-text-fill-color: transparent;
   }
   .bg1{
-    background-color:#00B2B4;
+    background-color:${props=> props.theme.primaryColor};
   }
   .bg2{
     background-color:#4FC2C3;
@@ -73,7 +73,7 @@ const Edit = styled.div`
 `
 
 const TextStatus = styled.div`
-  color:#00B2B4;
+  color:${props=> props.theme.primaryColor};
   font-size:15px;
   font-style:italic;
   float:left;
@@ -243,7 +243,7 @@ const PublisherThemeSetting = React.createClass({
     var shade = []
     for(var i=1;i<7;i++){
       shade.push(
-        <ShadeColor className={'bg'+i}></ShadeColor>     
+        <ShadeColor key={i} className={'bg'+i}></ShadeColor>     
       )
     }
 

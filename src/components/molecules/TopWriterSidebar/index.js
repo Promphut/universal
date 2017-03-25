@@ -8,7 +8,7 @@ const Container = styled.div`
   width:324px;
   position:relative;
   .bg1{
-    background-color:#00B2B4;
+    background-color:${props=> props.theme.primaryColor};
   }
   .bg2{
     background-color:#4FC2C3;
@@ -55,7 +55,7 @@ const Divider =styled.div`
 const Column = styled.div`
   font-weight:bold;
   font-size:36px;
-  color:#00B2B4;
+  color:${props=> props.theme.primaryColor};
   text-align:center;
 `
 const Div = styled.div`

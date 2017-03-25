@@ -74,7 +74,7 @@ const Icon = styled.div`
   }
 `
 const Primary = styled.div`
-  background-color:#00B2B4;
+  background-color:${props=> props.theme.primaryColor};
   color:white;
   text-align:center;
   padding:15px 5px 15px 5px;
@@ -83,7 +83,7 @@ const Primary = styled.div`
 `
 const Second = styled.div`
   background-color:white;
-  color:#00B2B4;
+  color:${props=> props.theme.primaryColor};
   text-align:center;
   padding:15px 5px 15px 5px;
   font-size:16px;
@@ -142,7 +142,7 @@ const styles = {
 // }
 
 const IconEdit = styled(Link)`
-  background-color:#00B2B4;
+  background-color:${props=> props.theme.primaryColor};
   color:white;
   border-radius:12px;
   padding:5px 8px 5px 8px;

@@ -4,7 +4,7 @@ import FontIcon from 'material-ui/FontIcon'
 import FlatButton from 'material-ui/FlatButton'
 import {Dropdown} from 'components'
 import CopyToClipboard from 'react-copy-to-clipboard'
-
+import api from 'components/api'
 const Hover = styled.div`
 `
 
@@ -19,7 +19,7 @@ const ShareDropdown = React.createClass({
 
   select(shareTo) {
     if (shareTo === 'facebook') {
-      console.log('Facebook share')
+      api.shareFB()
     } else if (shareTo === 'twitter') {
       console.log('Twitter share')
     } else {
@@ -78,15 +78,17 @@ const ShareDropdown = React.createClass({
           />
         </Hover>
         <Hover onMouseEnter={() => this.onHover(1)}>
+          <a href={config.TWT}>
           <FlatButton
             label={buttons[1]}
             labelStyle={{fontWeight: 'bold', fontSize: '15px', color: '#00B2B4', fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
             style={{width: '180px', textAlign: 'left', display: 'inline-block'}}
             onTouchTap={() => this.select('twitter')}
           />
+          </a>
         </Hover>
         <Hover onMouseEnter={() => this.onHover(2)}>
-          <CopyToClipboard text={this.props.url} onCopy={() => this.setState({copied: true})}>
+          <CopyToClipboard text={config.FRONTURL+this.props.url} onCopy={() => this.setState({copied: true})}>
             <FlatButton
               label={buttons[2]}
               labelStyle={{fontWeight: 'bold', fontSize: '15px', color: '#00B2B4', fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}

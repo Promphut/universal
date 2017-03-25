@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {ContactAndAboutContainer, ShareButton} from 'components'
+import {ContactAndAboutContainer, ShareButton, } from 'components'
 import api from 'components/api'
 const Wrapper = styled.div`
 `
@@ -8,7 +8,7 @@ const Wrapper = styled.div`
 const Head = styled.h1`
   font-size: 36px;
   font-Weight: bold;
-  color: rgba(0,178,180,1);
+  color: ${props=> props.theme.primaryColor};
   @media (max-width: 480px) {
     font-size: 24px;
   }

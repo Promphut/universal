@@ -49,17 +49,19 @@ const Icon = styled.div`
 `
 
 const Primary = styled.div`
-  background-color:#00B2B4;
+  background-color:${props=> props.theme.primaryColor};
   color:white;
   text-align:center;
   padding:15px 5px 15px 5px;
   font-size:16px;
   border:2px solid #00B2B4;
 `
-
+const Th = styled.span`
+  color:${props=> props.theme.primaryColor};
+`
 const Second = styled.div`
   background-color:white;
-  color:#00B2B4;
+  color:${props=> props.theme.primaryColor};
   text-align:center;
   padding:15px 5px 15px 5px;
   font-size:16px;
@@ -305,7 +307,7 @@ const PublisherDashboardPage = React.createClass({
               displaySelectAll={false}
               adjustForCheckbox={false}>
               <TableRow>
-                <TableHeaderColumn style={{...styles.thead,width:'40%'}}>Top Stories</TableHeaderColumn>
+                <TableHeaderColumn style={{...styles.thead,width:'40%'}}><Th>Top Stories</Th></TableHeaderColumn>
                 <TableHeaderColumn style={{width:'15%',paddingRight:0,paddingLeft:0,textAlign:'center'}}>Writer</TableHeaderColumn>
                 <TableHeaderColumn style={{width:'15%',paddingRight:0,paddingLeft:0,textAlign:'center'}}>Column</TableHeaderColumn>
                 <TableHeaderColumn style={{width:'15%'}}>Stats</TableHeaderColumn>

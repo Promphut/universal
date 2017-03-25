@@ -63,21 +63,21 @@ const Icon = styled.div`
 `
 
 const Primary = styled.div`
-  background-color:#00B2B4;
+  background-color:${props=> props.theme.primaryColor};
   color:white;
   text-align:center;
   padding:15px 5px 15px 5px;
   font-size:16px;
-  border:2px solid #00B2B4;
+  border:2px solid ${props=> props.theme.primaryColor};
 `
 
 const Second = styled.div`
   background-color:white;
-  color:#00B2B4;
+  color:${props=> props.theme.primaryColor};
   text-align:center;
   padding:15px 5px 15px 5px;
   font-size:16px;
-  border:2px solid #00B2B4;
+  border:2px solid ${props=> props.theme.primaryColor};
 `
 
 const Cont = styled.div`
@@ -136,7 +136,7 @@ const styles = {
 // }
 
 const IconEdit = styled(Link)`
-  background-color:#00B2B4;
+  background-color:${props=> props.theme.primaryColor};
   color:white;
   border-radius:12px;
   padding:5px 8px 5px 8px;
@@ -466,6 +466,8 @@ const PublisherStoryPage = React.createClass({
   },
 
   render(){
+    var {theme} = this.context.setting.publisher
+    //console.log('theme',theme)
     let { sort,totalPages,storiesCount,editStory,editStoryWhere,selectStatus,snackbar,snackbarMS,currentPage,stories,columns,selectColumn,alert,alertDesc,alertWhere,alertLoading,alertChild,alertConfirm,columnArray,onLoad} = this.state
     //console.log('storiesCount',storiesCount)
     return (
@@ -571,6 +573,8 @@ const PublisherStoryPage = React.createClass({
 		  )
 	}
 });
-
+PublisherStoryPage.contextTypes = {
+	setting: React.PropTypes.object
+};
 export default PublisherStoryPage;
 

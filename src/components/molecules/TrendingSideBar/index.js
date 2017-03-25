@@ -42,7 +42,7 @@ const Divider =styled.div`
 const Column = styled.div`
   font-weight:bold;
   font-size:36px;
-  color:#00B2B4;
+  color:${props=> props.theme.primaryColor};
   text-align:center;
 `
 
