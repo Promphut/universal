@@ -12,7 +12,7 @@ import Infinite from 'react-infinite'
 import CircularProgress from 'material-ui/CircularProgress';
 
 const Wrapper = styled.div`
-	
+
 `
 const Content = styled.div`
 	display: flex;
@@ -205,7 +205,7 @@ const UserStory = React.createClass({
 						<TextLine className='sans-font'>
 							<strong style={{color:'#00B2B4',marginRight:'30px'}}>
 								<span style={{fontSize:'30px'}}>{feedCount}</span> stories
-							</strong> 
+							</strong>
 							{/*<span style={{fontSize:'30px'}}>101</span> Upvotes*/}
 						</TextLine>
 						<Infinite
@@ -215,7 +215,7 @@ const UserStory = React.createClass({
 									loadingSpinnerDelegate={this.elementInfiniteLoad()}
 									isInfiniteLoading={this.state.isInfiniteLoading}
 									useWindowAsScrollContainer={true}>
-									
+
 								{this.state.latestStories.length!=0?this.state.latestStories.map((story, index) => (
 									<ArticleBox detail={story} key={index}/>
 								)):''}

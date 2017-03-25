@@ -368,7 +368,7 @@ const NewStory = React.createClass({
       .end((err,res)=>{
         if(err)throw err
         else{
-          console.log(res.body)
+          //console.log(res.body)
           self.setState({
             sid:res.body.story._id,
             saveStatus:"Saved "+ moment(res.body.story.updated).calendar(),

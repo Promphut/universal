@@ -109,9 +109,7 @@ const Nav = styled.nav`
 	background: linear-gradient(135deg,  rgba(0,178,180,0.75) 0%,rgba(206,241,183,0.75) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\#bf00b2b4\, endColorstr=\#bfcef1b7\,GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 
-  @media (max-width:480px){
-    width: 80vw;
-  }
+
 
 	& ul {
 		// margin: 70px 60px 0 60px;
@@ -163,6 +161,21 @@ const Nav = styled.nav`
     transform: rotate(180deg);
     transition-duration: 1s
   }
+
+  @media (max-width:480px){
+    width: 80vw;
+    & ul li .arrow {
+      font-size: 28px !important;
+      line-height: 40px;
+      vertical-align: middle;
+      margin-left: 70px !important;
+      color: #FFF !important;
+    }
+    & ul {
+      font-size: 20px;
+    }
+
+  }
 `
 
 const CloseBtn = styled(IconButton)`
@@ -187,6 +200,9 @@ const MiniMenu = styled.div`
   transition: height 0.5s;
   margin-left: 40px !important;
   font-size: 24px;
+  @media (max-width:480px){
+    font-size: 20px;
+  }
 `
 
 const SearchBtn = styled(IconButton)`
@@ -199,6 +215,12 @@ const SearchBtn = styled(IconButton)`
 		height: 30px;
 		color: #e2e2e2 !important;
 	}
+`
+const Story = styled(Link)`
+  font-size:40px;
+  @media (max-width:480px){
+    font-size:32px;
+  }
 `
 
 const LeftMenu = React.createClass({
@@ -237,7 +259,7 @@ const LeftMenu = React.createClass({
     // Menu items from menu props
     let items = []
     for(let i=0; i<cols.length; i++)
-      items.push(<li key={i}><Link to={'/stories/'+cols[i].slug}>{cols[i].name}</Link></li>)
+      items.push(<li className='itemList' key={i}><Link to={'/stories/'+cols[i].slug}>{cols[i].name}</Link></li>)
 
 		return (
       <Container open={open} >
@@ -252,9 +274,9 @@ const LeftMenu = React.createClass({
 
               <Divider />
 
-              <li><Link to="#" style={{fontSize: 40}} onClick={this.shrinkDrawer}>Stories
+              <li><Story to="#" onClick={this.shrinkDrawer}>Stories
                 <FontIcon className={'material-icons arrow ' + toggleArrow}>keyboard_arrow_down</FontIcon>
-              </Link></li>
+              </Story></li>
 
               <MiniMenu height={height+'px'}>
                 {items}

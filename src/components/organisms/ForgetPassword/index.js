@@ -9,18 +9,30 @@ const Box = styled.div`
   height:450px;
   background-color:#fff;
   padding:10px 0 10px 0;
+  @media (max-width:480px){
+    width:100vw;
+  }
+  .centerMob{
+    width:100px;
+  }
 `
 const Head = styled.div`
   margin:50px auto 10px auto;
   text-align:center;
   font-size:42px;
   color:#00B2B4;
-  font-family:'Nunito'
+  font-family:'Nunito';
+  @media (max-width:480px){
+    font-size:32px;
+  }
 `
 const Text = styled.div`
   color:#8f8f8f;
   font-size:18px;
   text-align:center;
+  @media (max-width:480px){
+    font-size:16px;
+  }
 `
 
 const InputBox = styled.div`
@@ -55,7 +67,7 @@ const ForgetPassword = ({text,style}) => {
           fullWidth={true}
           style={{marginTop:'15px'}}
         /><br />
-        <div style={styles.btnCon}><PrimaryButton label='Confirm' /></div>
+        <div style={styles.btnCon} className='centerMob'><PrimaryButton label='Confirm' /></div>
       </InputBox>
     </Box>
   )

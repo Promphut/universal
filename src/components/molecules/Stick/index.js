@@ -48,7 +48,7 @@ const Stick = React.createClass({
   //   // }else{
   //   //     window.addEventListener("scroll", function(event) {
   //   //         var paddingBottom = self.state.paddingBottom-oldPos
-  //   //         console.log(paddingBottom)
+  //   //         //console.log(paddingBottom)
   //   //         var offset = item.getBoundingClientRect();
   //   //         var top = offset.top
   //   //         var scrollY = this.scrollY

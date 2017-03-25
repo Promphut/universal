@@ -6,6 +6,8 @@ import {Link,browserHistory} from 'react-router'
 import Request from 'superagent'
 import TextField from 'material-ui/TextField';
 import {findDOMNode as dom}from 'react-dom';
+import api from 'components/api'
+import auth from 'components/auth'
 
 const Box = styled.div`
   width:477px;

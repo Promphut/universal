@@ -124,7 +124,7 @@ const NewStory = React.createClass({
             //console.log(res.body)
             this.setState({aid:res.body.id,article:res.body})
           }else{
-            console.log(err)
+            //console.log(err)
           }
         })
     }
@@ -178,7 +178,7 @@ const NewStory = React.createClass({
     this.setState({text:text,saveStatus:"Unsave"})
   },
   showText(){
-    console.log(this.state.text)
+    //console.log(this.state.text)
 
   },
   changeHead(h){
@@ -295,8 +295,8 @@ const NewStory = React.createClass({
   },
 
   // shouldComponentUpdate(nextProps, nextState){
-  //   console.log( nextState.title);
-  //   console.log( this.state.title);
+  //   //console.log( nextState.title);
+  //   //console.log( this.state.title);
 
   //   return false;  
     
@@ -304,7 +304,7 @@ const NewStory = React.createClass({
 
   writeArticle(e){
     //this.setState({text:e.target})
-    console.log(e)
+    //console.log(e)
   },
 
   render() {

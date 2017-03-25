@@ -323,7 +323,7 @@ const PublisherStoryPage = React.createClass({
   },
 
   selectItem(e,value){
-    console.log(value)
+    //console.log(value)
     if(value == 'all'){
       this.setState({value:value,filter:{publisher:config.PID,status:1}})
       this.getStory()

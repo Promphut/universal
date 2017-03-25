@@ -5,7 +5,7 @@ import _ from 'lodash'
 let auth = {}
 auth = {
   setCookieAndToken(cookieAndToken){
-   // console.log('setCookieAndToken', cookieAndToken)
+   // //console.log('setCookieAndToken', cookieAndToken)
     if(cookieAndToken.token) cookies.set('token', cookieAndToken.token)
     if(cookieAndToken.user) cookies.setJSON('user', cookieAndToken.user)
     if(cookieAndToken.roles) cookies.setJSON('roles', cookieAndToken.roles)

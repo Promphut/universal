@@ -23,6 +23,10 @@ const DropdownContent = styled.div`
   border: 2px solid rgba(0,178,180,1);
   background: white;
   z-index: 1;
+
+	@media (max-width: 991px) {
+    margin: ${props => props.marginMobile}
+  }
 `
 
 
@@ -67,6 +71,7 @@ const Dropdown = onClickOutside(React.createClass({
         <DropdownContent
           open={this.state.open}
           margin={this.props.margin}
+          marginMobile={this.props.marginMobile}
           onClick={this.handleSelect}
         >
           {this.props.children}

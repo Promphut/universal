@@ -23,12 +23,18 @@ const Article = styled.div`
   }
 `
 
+const HiddenMobile = styled.div`
+  @media (max-width: 480px){
+    display: none;
+  }
+`
+
 const AboutPage = React.createClass({
   getInitialState(){
     return {
       aboutUs: ''
     }
-  }, 
+  },
 
   componentDidMount(){
     api.getPublisherAboutUs()
@@ -45,8 +51,10 @@ const AboutPage = React.createClass({
         <Wrapper>
           <Head className='title-font'>About Us</Head>
           <Article className='content-font' dangerouslySetInnerHTML={{__html:this.state.aboutUs}}></Article>
-          <ShareButton className='fa fa-facebook' onClick={api.shareFB} number='112' color='58,88,155'/>
-          <a href={config.TWT}><ShareButton className='fa fa-twitter' number='118' color='96,170,222' style={{marginLeft: '15px'}}/></a>
+          <HiddenMobile>
+            <ShareButton className='fa fa-facebook' onClick={api.shareFB} number='112' color='58,88,155'/>
+            <a href={config.TWT}><ShareButton className='fa fa-twitter' number='118' color='96,170,222' style={{marginLeft: '15px'}}/></a>
+          </HiddenMobile>
         </Wrapper>
       </ContactAndAboutContainer>
     )

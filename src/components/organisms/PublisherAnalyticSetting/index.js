@@ -105,7 +105,7 @@ const PublisherAnalyticSetting = React.createClass({
     api.updatePublisher({analytic: this.state.analytic})
     .then(pub => {
       this.analytic = pub.analytic
-      console.log('updateAnalytic', this.analytic)
+      //console.log('updateAnalytic', this.analytic)
 
       this.setState({
         textStatus:'Saved successfully',

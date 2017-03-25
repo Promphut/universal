@@ -135,50 +135,28 @@ const HomePage2 = React.createClass({
 
 		api.getFeed('story', {status:1}, 'latest', null, page, 10)
 		.then(result => {
-			let latestStories = this.state.latestStories.concat(result.feed)
-
-			if(latestStories.length==result.count[1]){
+			var s = this.state.latestStories.concat(result.feed)
+			if(s.length==result.count[1]){
 				this.setState({
-					latestStories,
+					latestStories:s,
 					isInfiniteLoading: false,
-					loadOffset:'undefined',
-					page:page+1
+					loadOffset:'undefined'
 				})
-			} else {
+			}else{
 				this.setState({
-					latestStories,
-					isInfiniteLoading: false,
-					page:page+1
+					latestStories:s,
+					isInfiniteLoading: false
 				})
 			}
-
-			//console.log(result.count[1])
-			/*this.setState({
-				latestStories:this.state.latestStories.concat(result.feed)
-			},()=>{
-				if(this.state.latestStories.length==result.count[1]){
-					this.setState({
-						isInfiniteLoading: false,
-						loadOffset:'undefined',
-						page:page+1
-					})
-				} else {
-					this.setState({
-						isInfiniteLoading: false,
-						page:page+1
-					})
-				}
-			})*/
 		})
 	},
 
 	handleInfiniteLoad() {
-		//console.log('onload')
-		// this.setState({
-		// 		isInfiniteLoading: true,
-		// 		page:this.state.page+1
-		// });
 		this.buildElements(this.state.page)
+		this.setState({
+				isInfiniteLoading: true,
+				page:this.state.page+1
+		});	
 	},
 
 	elementInfiniteLoad() {
