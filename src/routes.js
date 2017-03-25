@@ -15,25 +15,6 @@ import {
   } from 'components'
 import api from 'components/api'
 
-const getColumnId = (nextState, replace, cb)=>{
-  //console.log(nextState.params)
-  var user = auth.getUser()
-  Request
-    .get(config.BACKURL+'/publishers/11/columns/'+nextState.params.cid)
-    .set('Accept','application/json')
-    .end((err,res)=>{
-      if(err){
-        throw err
-      }
-      else{
-        nextState.params.column = res.body
-        nextState.params.user = user
-        cb()
-      }
-    })
-}
-
-// =====================================
 
 const toSignin = (nextState, replace, next) => {
   return () => {
@@ -47,7 +28,7 @@ const toSignin = (nextState, replace, next) => {
 
 const toError = (nextState, replace, next) => {
   return (err) => {
-    console.log('err', err)
+    //console.log('err', err)
     replace({
       pathname: '/error',
       state: { error: err }
@@ -142,7 +123,7 @@ const routes = (
       <Route path='stories/:sid/edit' component={EditStory}  onEnter={hasRoles(['ADMIN', 'WRITER', 'EDITOR'])}/>*/}
       
       <Route path='columns/:cid' onEnter={hasRoles(['ADMIN', 'EDITOR'])}>
-        <Route path='settings' component={ColumnSettingPage} onEnter={getColumnId}/>
+        <Route path='settings' component={ColumnSettingPage}/>
       </Route>
     </Route>
     

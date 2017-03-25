@@ -317,7 +317,7 @@ const PublisherStoryPage = React.createClass({
   },
 
   testHover(e){
-    console.log(e)
+    //console.log(e)
   },
 
   render(){

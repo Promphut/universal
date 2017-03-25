@@ -24,13 +24,27 @@ const Article = styled.div`
 `
 
 const AboutPage = React.createClass({
+  getInitialState(){
+    return {
+      aboutUs: ''
+    }
+  }, 
+
+  componentDidMount(){
+    api.getPublisherAboutUs()
+    .then(aboutUs => {
+      this.setState({
+        aboutUs: aboutUs
+      })
+    })
+  },
 
   render() {
     return (
       <ContactAndAboutContainer>
         <Wrapper>
           <Head className='title-font'>About Us</Head>
-          <Article className='content-font'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas enim quae atque quo, consectetur? At dolor inventore officia alias sapiente dolores, eum amet esse quisquam eligendi, molestiae quaerat deleniti. Molestiae.</Article>
+          <Article className='content-font' dangerouslySetInnerHTML={{__html:this.state.aboutUs}}></Article>
           <ShareButton className='fa fa-facebook' onClick={api.shareFB} number='112' color='58,88,155'/>
           <a href={config.TWT}><ShareButton className='fa fa-twitter' number='118' color='96,170,222' style={{marginLeft: '15px'}}/></a>
         </Wrapper>
