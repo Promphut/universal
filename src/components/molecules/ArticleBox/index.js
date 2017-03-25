@@ -73,7 +73,6 @@ const BoxText = styled.div`
 `
 
 const DivDes = styled.div`
-
 `
 
 const ArticleBox = React.createClass({
@@ -86,7 +85,7 @@ const ArticleBox = React.createClass({
         <BGImg url={url} src={cover.small || cover.medium} className='imgWidth mob-hidden' />
         <BoxText className='sans-font'>
           <DivDes>
-            <ShareDropdown />
+            <ShareDropdown url={url} />
             {column && <Div>
               A story of <span style={{textDecoration:'underline'}}>
               <Link to={column.url}>{column.name}</Link></span>

@@ -29,6 +29,18 @@ const Main = styled.div`
 	}
 `
 
+const Head = styled.div`
+	margin: 120px 0 0 20%;
+	
+	@media (max-width: 768px) {
+		margin: 120px 5% 0 5%;
+  }
+
+	@media (max-width: 480px) {
+		margin: 80px 5% 0 5%;
+	}
+`
+
 const Feed = styled.div`
 	flex: 12 1120px;
 	max-width: 1120px;
@@ -179,10 +191,10 @@ const ColumnPage = React.createClass({
 		//console.log('column', column)
 
 		let ChildCover =
-			<div style={{margin:'120px 0 0 20%', width:'700px'}}>
+			<Head>
 				<ColumnName className='serif-font'>{column.name}</ColumnName>
 				<ColumnDetail >{column.shortDesc}</ColumnDetail>
-			</div>
+			</Head>
 
 		return (
 		    <Wrapper>

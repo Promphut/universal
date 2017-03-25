@@ -116,11 +116,11 @@ const StoryPage = React.createClass({
 	},
 
 	componentWillReceiveProps(nextProps){
+		//console.log('componentWillReceiveProps', nextProps)
 		if(nextProps.params.story){
 			this.story = nextProps.params.story
 
 			this.setState({refresh: Math.random()})
-			//console.log('componentWillReceiveProps', this.story)
 		}
 	},
 
