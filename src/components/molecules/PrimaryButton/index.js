@@ -4,7 +4,11 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 
-const PrimaryButton = (props) => {
+const PrimaryButton = React.createClass({
+	render(){
+	//console.log('sd sa fsa',this.context.setting)
+	var {theme} = this.context.setting.publisher
+	var {props} = this
 	let opt, defaultStyle;
 
 	if(props.size==='large'){
@@ -116,7 +120,12 @@ const PrimaryButton = (props) => {
 	}
 
 	return React.createElement(RaisedButton, opt, null)
-}
+	}
+})
+
+PrimaryButton.contextTypes = {
+	setting: React.PropTypes.object
+};
 
 
 export default PrimaryButton
