@@ -256,8 +256,6 @@ const LeftMenu = React.createClass({
     let {open, close, menu} = this.props
     let cols = menu && menu.column ? menu.column : []
 
-    console.log('test',this.context)
-
     // Menu items from menu props
     let items = []
     for(let i=0; i<cols.length; i++)
