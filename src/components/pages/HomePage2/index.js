@@ -110,75 +110,75 @@ const HomePage2 = React.createClass({
 	},
 
 	getFeed(){
-		// 1. Fetching trendingStories
-		// THIS WILL BE CHANGED TO "TRENDING" SORT IN THE FUTURE ONCE SUPPORTED
-		api.getFeed('story', {status:1}, 'latest', null, 0, 15)
-		.then(result => {
-			//console.log('feed', result.feed.length)
-			this.trendingStories = result.feed
+		// - Fetching trendingStories
+		// - Fetching latestStories
+		// - Fetch top writers
+		Promise.all([
+			api.getFeed('story', {status:1}, 'latest', null, 0, 15),
+			api.getColumns(),
+			api.getPublisherWriters(),
+		])
+		.then(([result, columns, writers]) => {
+			//console.log('GET FEED', result, columns, writers)
+			if(result) this.trendingStories = result.feed
+			if(columns) this.column = columns
+			if(writers) this.writer = writers
 
 			this.setState({
 				refresh: Math.random()
 			})
 		})
-
-		// 2. Fetching latestStories
-		// api.getFeed('story', {status:1}, 'latest', null, 0, 10)
-		// .then(result => {
-		// 	this.setState({
-		// 		latestStories:result.feed
-		// 	})
-		// })
-
-		api.getColumns().then((res)=>{
-			this.column = res
-			this.setState({
-				refresh: Math.random()
-			})
-		})
-
-
-		api.getPublisherWriters().then((res)=>{
-			//console.log('writer', res)
-			this.writer = res
-			this.setState({
-				refresh: Math.random()
-			})
-		})
-
-
 	},
 
-	buildElements(page) {
+	buildElements() {
+		let page = this.state.page
+
 		api.getFeed('story', {status:1}, 'latest', null, page, 10)
 		.then(result => {
+			let latestStories = this.state.latestStories.concat(result.feed)
+
+			if(latestStories.length==result.count[1]){
+				this.setState({
+					latestStories,
+					isInfiniteLoading: false,
+					loadOffset:'undefined',
+					page:page+1
+				})
+			} else {
+				this.setState({
+					latestStories,
+					isInfiniteLoading: false,
+					page:page+1
+				})
+			}
+
 			//console.log(result.count[1])
-			this.setState({
+			/*this.setState({
 				latestStories:this.state.latestStories.concat(result.feed)
 			},()=>{
 				if(this.state.latestStories.length==result.count[1]){
 					this.setState({
 						isInfiniteLoading: false,
-						loadOffset:'undefined'
+						loadOffset:'undefined',
+						page:page+1
 					})
-				}else{
+				} else {
 					this.setState({
-						isInfiniteLoading: false
+						isInfiniteLoading: false,
+						page:page+1
 					})
 				}
-			})
+			})*/
 		})
 	},
 
 	handleInfiniteLoad() {
 		//console.log('onload')
-		this.setState({
-				isInfiniteLoading: true
-		});
+		// this.setState({
+		// 		isInfiniteLoading: true,
+		// 		page:this.state.page+1
+		// });
 		this.buildElements(this.state.page)
-		this.setState({
-				page:this.state.page+1
-		});
 	},
 
 	elementInfiniteLoad() {
@@ -186,6 +186,8 @@ const HomePage2 = React.createClass({
 	},
 
 	render(){
+		//console.log('context', this.context.setting.publisher.theme)
+
 		let pub = this.publisher
 		//console.log('PUB', pub)
 		return (
@@ -232,5 +234,9 @@ const HomePage2 = React.createClass({
 		  )
 	}
 });
+
+HomePage2.contextTypes = {
+	setting: React.PropTypes.object
+};
 
 export default HomePage2;

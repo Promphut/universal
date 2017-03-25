@@ -9,6 +9,7 @@ import Popover from 'material-ui/Popover';
 import Request from 'superagent'
 import auth from 'components/auth'
 import RaisedButton from 'material-ui/RaisedButton'
+
 const Container = styled.form`
   width:100%;
   padding:80px;
@@ -115,6 +116,7 @@ const PublisherThemeSetting = React.createClass({
       anchorEl1: event.currentTarget,
     });
   },
+  
   handleTouchTap2(event){
     event.preventDefault();
     this.setState({
@@ -133,6 +135,7 @@ const PublisherThemeSetting = React.createClass({
   selectColor1(color){
     this.setState({ primaryColor: color.hex });
   },
+
   selectColor2(color){
     this.setState({ secondaryColor: color.hex });
   },
@@ -188,6 +191,7 @@ const PublisherThemeSetting = React.createClass({
         }
       })
   },
+
   render(){
     var {primaryColor,secondaryColor,anchorEl1,anchorEl2,open1,open2,textStatus,uploadSLogo,uploadLogo,error} = this.state
     var styles={
@@ -213,6 +217,7 @@ const PublisherThemeSetting = React.createClass({
         background:'linear-gradient(135deg, '+primaryColor+' 0%, '+secondaryColor+' 100%)',
       }
     }
+
     return(
       <Container onSubmit={this.updateData}>
         <div  className="head sans-font">Theme</div>

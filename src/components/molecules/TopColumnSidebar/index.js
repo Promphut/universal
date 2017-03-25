@@ -128,7 +128,7 @@ const TopColumnSidebar = React.createClass({
       <Container style={{...this.props.style}} ref='contain'>
         <Divider/>
         <Head>TOP COLUMNS</Head>
-          {column.length!=0?column.map((data,index)=>(
+          {column && column.map((data, index) => (
             <Link to={data.url} key={index}>
               <Div className='serif-font'>
                 <Number className={'bg'+(1+index)}>{index+1}</Number>
@@ -138,7 +138,7 @@ const TopColumnSidebar = React.createClass({
                 </div>
               </Div>
             </Link>
-          )):''}
+          ))}
         <Divider/>
       </Container>
     )

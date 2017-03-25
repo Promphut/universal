@@ -289,6 +289,30 @@ api.getPublisher = (token) => {
 		return res.body.publisher
 	}, api.err)
 }
+api.getPublisherContactCats = () => {
+	return Request
+	.get(config.BACKURL+'/publishers/'+config.PID+'/contactcats')
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body.publisher.contactCats || []
+	}, api.err)
+}
+api.getPublisherAboutUs = () => {
+	return Request
+	.get(config.BACKURL+'/publishers/'+config.PID+'/aboutus')
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body.publisher.aboutUs || ''
+	}, api.err)
+}
+api.getPublisherSetting = () => {
+	return Request
+	.get(config.BACKURL+'/publishers/'+config.PID+'/setting')
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body
+	}, api.err)
+}
 
 api.updatePublisher = (publisher) => {
 	return Request
