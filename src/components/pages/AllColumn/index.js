@@ -156,30 +156,6 @@ const AllColumn = React.createClass({
 	},
 
 	render(){
-    let settings = {
-      centerMode: false,
-      slidesToShow: 4,
-      speed: 300,
-      arrows: false,
-      draggable: false,
-      infinite: false,
-      initialSlide:0,
-      slickGoTo:0,
-      responsive: [
-        {
-          breakpoint: 480,
-          settings: {
-            initialSlide:1,
-            slickGoTo:1,
-            arrows: false,
-            centerMode: true,
-            draggable: true,
-            centerPadding: '10px',
-            slidesToShow: 2
-          }
-        }
-      ]
-    };
 
 		let {columns} = this.state
     //console.log('column', column)
@@ -194,16 +170,6 @@ const AllColumn = React.createClass({
                   page="allcolumn"
                 />
               </div>
-              {/*<div style={{margin:'20px 0 20px 0'}}>
-                <Slider {...settings} >
-                  {c}
-                </Slider>
-              </div>
-              <div style={{margin:'20px 0 20px 0'}}>
-                <Slider {...settings} >
-                  {c}
-                </Slider>
-              </div> */}
               <div className='row'>
                 {columns && columns.map((data, index) => (
                   <div className='col-3' key={index} style={{margin:'20px 0 20px 0'}}>

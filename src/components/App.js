@@ -19,7 +19,6 @@ injectGlobal`
   body {
     color:#222;
   }
-
   * {
     -webkit-box-sizing: border-box; 
     -moz-box-sizing: border-box; 
@@ -100,6 +99,9 @@ injectGlobal`
     .nunito-font{
       font-family: 'Nunito', 'Mitr';
     }
+    .hidden-des{
+      display:none;
+    }
   }
 
   /* FOR MOBILE */
@@ -125,6 +127,9 @@ injectGlobal`
     }
     .hidden-mob{
       display:none;
+    }
+    .hidden-des{
+      display:block !important;
     }
   }
 

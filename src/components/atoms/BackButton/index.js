@@ -12,14 +12,15 @@ var styles={
   }
 }
 
-const BackButton = ({style})=>{
+const BackButton = ({style,labelStyle,className})=>{
   return(
     <FlatButton
+      className={'bakBTN '+className}
       label='Back'
-      labelStyle={styles.labelBtn}
+      labelStyle={{...styles.labelBtn,...labelStyle}}
       labelPosition='after'
       style={{...styles.btn,...style}}
-      icon={<i className="fa fa-chevron-left" style={{color:'#E2E2E2'}} aria-hidden="true"></i>}
+      icon={<i className="fa fa-chevron-left" style={{color:'#E2E2E2',...labelStyle}} aria-hidden="true"></i>}
     />
   )
 }

@@ -47,7 +47,9 @@ const WritedBy = ({style, writer, /*column,*/ published}) => {
       </div>
 
       <Contain className="content-font">
-        by <Span1><Link to={writer.url} style={{color:'#222'}}>{writer.display}</Link></Span1>, {moment(published).format('lll')} <br/> 
+        by <Span1><Link to={writer.url} style={{color:'#222'}}>{writer.display}</Link></Span1>, 
+        {/*{moment(published).format('lll')} */}
+        <br/> 
         {/*writer of <Link to={column.url}><strong>{column.name}</strong></Link>*/}
         {writer.intro}
       </Contain>
