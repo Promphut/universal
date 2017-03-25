@@ -1,12 +1,11 @@
-import React from 'react'
-import { Router, browserHistory, applyRouterMiddleware } from 'react-router'
-import { useScroll } from 'react-router-scroll'
-import api from 'components/api'
-import { ThemeProvider } from 'styled-components';
-import { AppContainer } from 'react-hot-loader'
-import routes from 'routes'
+var React = require('react'),
+	{ Router, browserHistory, applyRouterMiddleware } = require('react-router'),
+	{ useScroll } = require('react-router-scroll'),
+	api = require('components/api'),
+	{ ThemeProvider } = require('styled-components')
 
-const RenderApp = React.createClass({
+
+var RenderApp = React.createClass({
 	getInitialState(){
 		return {
 			setting: {
@@ -18,7 +17,7 @@ const RenderApp = React.createClass({
 		}
 	},
 
-	componentWillMount(){
+	componentDidMount(){
 		// Get the setting from server ..
 		api.getPublisherSetting()
 		.then(setting => {
@@ -35,14 +34,12 @@ const RenderApp = React.createClass({
 
 	render() {
 		let {publisher} = this.state.setting
-		//console.log('setting publisher', publisher)
+		console.log('setting publisher', publisher)
 
 		return (
-			<ThemeProvider theme={publisher.theme}>
-				<AppContainer>
-					<Router history={browserHistory} routes={routes} render={applyRouterMiddleware(useScroll())} />
-				</AppContainer>
-			</ThemeProvider>
+	 		<ThemeProvider theme={publisher.theme}>
+ 				<Router history={browserHistory} routes={this.props.routes} render={applyRouterMiddleware(useScroll())} />
+ 			</ThemeProvider>
 		)
 	}
 })
@@ -51,4 +48,4 @@ RenderApp.childContextTypes = {
   setting: React.PropTypes.object
 };
 
-export default RenderApp;
+module.exports = RenderApp

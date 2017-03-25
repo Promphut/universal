@@ -80,6 +80,7 @@ const getStoryFromSid = (nextState, replace, next) => {
   .then(result => {
     nextState.params.story = result.story
     nextState.params.canEditStory = result.canEditStory
+    //console.log('getStoryFromSid', result)
     next()
   })
   .catch(toError(nextState, replace, next))
@@ -96,12 +97,9 @@ const routes = (
     {/*<IndexRoute component={HomePage2} onEnter={syncTokenAndCookie}/>*/}
     <IndexRoute component={HomePage2} />
     {/*<Route path='article' component={Page3}/>*/}
-    <Route path='stories'>
-      {/*<IndexRoute component={AllStory}/>*/}
-      <Route path='columns' component={AllColumn}/>
-      <Route path=':columnSlug' component={ColumnPage} onEnter={getColumnFromSlug}/>
-      <Route path=':columnSlug/:storySlug/:sid' component={StoryPage} onEnter={getStoryFromSid}/>
-    </Route>
+    <Route path='stories/columns' component={AllColumn}/>
+    <Route path='stories/:columnSlug' component={ColumnPage} onEnter={getColumnFromSlug}/>
+    <Route path='stories/:columnSlug/:storySlug/:sid' component={StoryPage} onEnter={getStoryFromSid}/>
 
     {/*<Route path='publisher' component={PublisherPage}/>*/}
     <Route path="mood" component={MoodboardPage} />

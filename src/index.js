@@ -1,24 +1,16 @@
 import React from 'react'
 import { render } from 'react-dom'
-import {RenderApp} from 'components'
+import { AppContainer } from 'react-hot-loader'
+var RenderApp = require('./components/pages/RenderApp/index.js')
+import routes from 'routes'
 
 const root = document.getElementById('app')
 
-/*const renderApp = () => (
-  <AppContainer>
-    <Router history={browserHistory} routes={routes} render={applyRouterMiddleware(useScroll())} />
-  </AppContainer>
-)*/
-
-const renderApp = () => (
-  <RenderApp/>
-)
-
-render(renderApp(), root)
+render(<AppContainer><RenderApp routes={routes}/></AppContainer>, root)
 
 if (module.hot) {
   module.hot.accept('routes', () => {
     require('routes')
-    render(renderApp(), root)
+    render(<AppContainer><RenderApp routes={routes}/></AppContainer>, root)
   })
 }
