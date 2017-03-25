@@ -14,6 +14,9 @@ const Box = styled.div`
   
   background-color:#fff;
   padding:10px 0 10px 0;
+  @media (max-width:480px) {
+    width:100vw;
+  } 
 `
 const Head = styled.div`
   margin:50px auto 10px auto;
@@ -32,6 +35,9 @@ const Text = styled.div`
 const InputBox = styled.form`
   width:308px;
   margin:0 auto 0 auto;
+  @media (max-width:480px) {
+    margin:50px auto 0 auto;
+  } 
 `
 var styles={
   button:{
@@ -119,8 +125,8 @@ const SignUp = React.createClass({
 
     return (
       <Box style={{...style}}>
-        <Head>Email Sign Up</Head>
-        <Text>ไม่พลาดทุกเรื่องราวการเงินดีๆ สมัครสมาชิค</Text>
+        <Head className='hidden-mob'>Email Sign Up</Head>
+        <Text className='hidden-mob'>ไม่พลาดทุกเรื่องราวการเงินดีๆ สมัครสมาชิค</Text>
         <InputBox onSubmit={this.signup} ref='signupForm'>
           <TextField
             autoFocus
@@ -151,7 +157,7 @@ const SignUp = React.createClass({
             errorText={errText2}
             onBlur={this.checkPWD}
           /><br />
-          <div style={styles.btnCon}><PrimaryButton label='Sign Up' type='submit' /></div>
+          <div style={{...styles.btnCon,width:'120px'}}><PrimaryButton label='Sign Up' type='submit' style={{width:'120px'}}/></div>
         </InputBox>
       </Box>
     )

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {PrimaryButton,SecondaryButton,UploadPicture} from 'components'
+import {PrimaryButton,SecondaryButton,UploadPicture,Logo} from 'components'
 import TextField from 'material-ui/TextField';
 import { ChromePicker } from 'react-color';
 import {findDOMNode as dom} from 'react-dom'
@@ -30,6 +30,24 @@ const Container = styled.form`
     text-fill-color: transparent;
     -Webkit-background-clip:text;
     -Webkit-text-fill-color: transparent;
+  }
+  .bg1{
+    background-color:#00B2B4;
+  }
+  .bg2{
+    background-color:#4FC2C3;
+  }
+  .bg3{
+    background-color:#85CDCE;
+  }
+  .bg4{
+    background-color:#9BD0D0;
+  }
+  .bg5{
+    background-color:#BAE7E9;
+  }
+  .bg6{
+    background-color:#DAF8F9;
   }
 `
 
@@ -90,6 +108,10 @@ const Example = styled.div`
   padding:15px;
   font-size:11px;
   margin-bottom:10px;
+`
+const ShadeColor = styled.div`
+  height:44px;
+  width:100%;
 `
 
 const PublisherThemeSetting = React.createClass({
@@ -218,6 +240,13 @@ const PublisherThemeSetting = React.createClass({
       }
     }
 
+    var shade = []
+    for(var i=1;i<7;i++){
+      shade.push(
+        <ShadeColor className={'bg'+i}></ShadeColor>     
+      )
+    }
+
     return(
       <Container onSubmit={this.updateData}>
         <div  className="head sans-font">Theme</div>
@@ -330,7 +359,8 @@ const PublisherThemeSetting = React.createClass({
                 </Example>
               </div>
               <div className='col-6' style={{padding:'0 5px 0 5px'}}>
-                <div style={{...styles.example4,textAlign:'center',height:'82px',padding:'18px 0 0 0'}}>
+                {shade}
+                <div style={{...styles.example4,textAlign:'center',height:'82px',padding:'18px 0 0 0',marginTop:'20px'}}>
                   <strong className="serif-font" style={{fontSize:'17px',color:'white'}}>White Color</strong><br/>
                   <strong className="serif-font" style={{fontSize:'17px',color:'#222'}}>Black Color</strong>
                 </div>

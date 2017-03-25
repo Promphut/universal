@@ -9,7 +9,11 @@ const Wrapper = styled.div`
 		background: none;
 		border: none;
 	}
-
+	@media (max-width:480px){
+		#logo{
+			display:none;
+		}
+	}
 	.hide {
 		opacity: ${props => props.scroll};
 	}
@@ -196,7 +200,8 @@ const TopBar = React.createClass({
 			        to="/"
 			        title={this.props.title}
 			        style={logoStyle}
-			      ><Logo fill={(!scrolling && transparent) ? 'white' : '#00B2B4'}/>
+
+			      ><Logo fill={(!scrolling && transparent) ? 'white' : '#00B2B4'} id="logo"/>
 			      </Link>
 					</Left>
 
