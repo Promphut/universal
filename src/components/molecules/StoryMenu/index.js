@@ -9,11 +9,19 @@ const LinkTo = (path)=>{
   browserHistory.push(path)
 }
 
+const Wrapper = styled.div`
+  ${props => props.style}
+
+  @media (max-width: 480px) {
+    display: none;
+  }
+`
+
 const StoryMenu = ({style, className, child, path, linkPath, page, next}) => {
   if (!next) {
     next = ' '
   }
-  
+
   const chevronRightStyle = {
     fontSize: '24px',
     margin: '12px 20px',
@@ -22,7 +30,7 @@ const StoryMenu = ({style, className, child, path, linkPath, page, next}) => {
   }
 
 	return (
-			<div className={className+' row'} style={{...style}}>
+			<Wrapper className={className+' row'} style={{...style}}>
         <FlatButton
           icon={
             <FontIcon className="material-icons"
@@ -90,7 +98,7 @@ const StoryMenu = ({style, className, child, path, linkPath, page, next}) => {
           labelStyle={{fontSize:'18px',color:'#00B2B4',fontWeight:'bold'}}
         />}
 
-      </div>
+      </Wrapper>
 	)
 }
 
