@@ -138,7 +138,8 @@ const HomePage2 = React.createClass({
 		})
 
 
-		api.getWriters().then((res)=>{
+		api.getPublisherWriters().then((res)=>{
+			//console.log('writer', res)
 			this.writer = res
 			this.setState({
 				refresh: Math.random()
@@ -183,8 +184,6 @@ const HomePage2 = React.createClass({
 	elementInfiniteLoad() {
 			return <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>;
 	},
-
-
 
 	render(){
 		let pub = this.publisher

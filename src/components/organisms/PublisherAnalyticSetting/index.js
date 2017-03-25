@@ -3,7 +3,9 @@ import styled from 'styled-components'
 import {PrimaryButton,SecondaryButton} from 'components'
 import TextField from 'material-ui/TextField';
 import auth from 'components/auth'
-import Request from 'superagent'
+import api from 'components/api'
+import utils from 'components/utils'
+//import Request from 'superagent'
 
 const Container = styled.form`
   width:100%;
@@ -20,12 +22,14 @@ const Container = styled.form`
     font-size:18px;
   }
 `
+
 const Flex = styled.div`
   display:flex;
   items-align:center;
   flex-flow: row wrap;
   margin:50px 0 0 50px;
 `
+
 const Title = styled.div`
   flex:2 150px;
   max-width:150px;
@@ -33,15 +37,18 @@ const Title = styled.div`
   font-size:17px;
   padding-top:15px;
 `
+
 const Edit = styled.div`
   flex:6 450px;
   max-width:450px;
 `
+
 const Social = styled.div`
   color:#8F8F8F;
   font-size:19px;
   overflow:hidden;
 `
+
 const TextStatus = styled.div`
   color:#00B2B4;
   font-size:15px;
@@ -49,6 +56,7 @@ const TextStatus = styled.div`
   float:left;
   margin:10px 0 0 15px;
 ` 
+
 const TextArea = styled.textarea`
   width:480px;
   height:193px;
@@ -62,79 +70,130 @@ const TextArea = styled.textarea`
 //   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');ga('create', 'UA-47600482-1', 'auto');ga('send', 'pageview');`
 const PublisherAnalyticSetting = React.createClass({
   getInitialState(){
-    return{
-      publisher:{},
+    return {
+      //publisher:{},
+      analytic: {
+        tagManagerId: ''
+      },
+
       textStatus:'Unsave',
       error:false
     }
   },
 
-  componentDidMount(){
-     this.getPublisherId()
+  componentWillReceiveProps(nextProps){
+    this.analytic = _.cloneDeep(nextProps.analytic) // saved for reset
+
+    this.setState({
+      analytic: nextProps.analytic
+    })
   },
 
-  getPublisherId(){
-    var self = this
-    var user = auth.getUser()
-    Request
-      .get(config.BACKURL+'/publishers/'+config.PID)
-      .set('Accept','application/json')
-      .end((err,res)=>{
-        if(err) throw err 
-        else{
-          self.setState({publisher:res.body.publisher})
-          self.setData()
-        }
+  analyticChanged(e){
+    const name = e.target.name
+    let analytic = _.cloneDeep(this.state.analytic)
+    utils.set(analytic, name, e.target.value)
+    //console.log('publisherChanged', pub, name, e.target.value)
+    this.setState({
+      analytic: analytic
+    })
+  },
+
+  updateAnalytic(e){
+    if(e) e.preventDefault()
+
+    api.updatePublisher({analytic: this.state.analytic})
+    .then(pub => {
+      this.analytic = pub.analytic
+      console.log('updateAnalytic', this.analytic)
+
+      this.setState({
+        textStatus:'Saved successfully',
+        error:false
       })
-  },
-
-  setData(){
-    var {analytic} = this.state.publisher
-    document.getElementById('tagManagerId').value = !analytic?'': analytic.tagManagerId
-    this.setState({})
-  },
-
-  updateData(e){
-    e.preventDefault()
-    var self = this
-    var data = {publisher : {
-      analytic:{
-        tagManagerId:document.getElementById('tagManagerId').value,
-      }
-    }}
-    Request
-      .patch(config.BACKURL+'/publishers/'+config.PID+'?token='+auth.getToken())
-      .set('x-access-token', auth.getToken())
-      .set('Accept','application/json')
-      .send(data)
-      .end((err,res)=>{
-        if(err) self.setState({textStatus:res.body.error.message,error:true})
-        else{
-          self.setState({textStatus:'Saved successfully',error:false})
-        }
+    })
+    .catch(err => {
+      this.setState({
+        textStatus:res.body.error.message,
+        error:true
       })
+    })
   },
+
+  resetDate(e){
+    if(e) e.preventDefault()
+
+    this.setState({
+      analytic: this.analytic
+    })
+  },
+
+  //componentDidMount(){
+     //this.getPublisherId()
+  //},
+
+  // getPublisherId(){
+  //   var self = this
+  //   var user = auth.getUser()
+  //   Request
+  //     .get(config.BACKURL+'/publishers/'+config.PID)
+  //     .set('Accept','application/json')
+  //     .end((err,res)=>{
+  //       if(err) throw err 
+  //       else{
+  //         self.setState({publisher:res.body.publisher})
+  //         self.setData()
+  //       }
+  //     })
+  // },
+
+  // setData(){
+  //   var {analytic} = this.state.publisher
+  //   document.getElementById('tagManagerId').value = !analytic?'': analytic.tagManagerId
+  //   this.setState({})
+  // },
+
+  // updateData(e){
+  //   e.preventDefault()
+  //   var self = this
+  //   var data = {publisher : {
+  //     analytic:{
+  //       tagManagerId:document.getElementById('tagManagerId').value,
+  //     }
+  //   }}
+  //   Request
+  //     .patch(config.BACKURL+'/publishers/'+config.PID+'?token='+auth.getToken())
+  //     .set('x-access-token', auth.getToken())
+  //     .set('Accept','application/json')
+  //     .send(data)
+  //     .end((err,res)=>{
+  //       if(err) self.setState({textStatus:res.body.error.message,error:true})
+  //       else{
+  //         self.setState({textStatus:'Saved successfully',error:false})
+  //       }
+  //     })
+  // },
 
 
   render(){
-    var {textStatus,error} =this.state
+    let {textStatus, error, analytic} = this.state
+
     return(
-      <Container onSubmit={this.updateData} >
+      <Container onSubmit={this.updateAnalytic} >
         <div  className="head sans-font">ANALYTIC</div>
         <Flex>
           <Title>
             <div className="sans-font">Google Tag<br/> Manager ID</div>
           </Title>
           <Edit>
-             <TextField id='tagManagerId' name='tagManagerId' style={{marginTop:'20px'}}/>
+             <TextField name='tagManagerId' onChange={this.analyticChanged} value={analytic.tagManagerId} style={{marginTop:'20px'}}/>
           </Edit>
         </Flex>
-        <div className='sans-font row' style={{marginTop:'80px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error?'#D8000C':'#00B2B4'}}>{textStatus}</TextStatus></div>
+        <div className='sans-font row' style={{marginTop:'80px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.resetDate} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error?'#D8000C':'#00B2B4'}}>{textStatus}</TextStatus></div>
       </Container>
     )
   },
 })
-
 
 
 export default PublisherAnalyticSetting

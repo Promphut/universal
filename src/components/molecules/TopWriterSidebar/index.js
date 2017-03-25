@@ -103,7 +103,7 @@ const TopWriterSidebar = React.createClass({
   },
 
   render(){
-    //console.log(this.props.writer)
+    console.log(this.props.writer)
     var {writer} = this.props
     /*var Sort = []
     for(let i=0;i<writer.length;i++){
@@ -124,7 +124,7 @@ const TopWriterSidebar = React.createClass({
           {writer.length!=0?writer.map((data,index)=>(
             <Link to={data.url} key={index}>
               <Div className='serif-font'>
-                <Avatar src={data.pic && data.pic.medium} size={55} />
+                <Avatar src={data.pic && data.pic.medium || defaultPic} size={55} />
                 <div style={{padding:'0 30px 0 35px'}}>
                   <Name>{data.display}</Name>
                   <Sty className='sans-font'>{data.intro}</Sty>

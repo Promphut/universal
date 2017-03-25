@@ -175,10 +175,10 @@ const StoryDetail = React.createClass({
         <Divider/>
         <div className='row center'>
           <div className='col-md-6 col-sm-12'>
-            <FromColumn  column={s.column} />
+            <WritedBy writer={s.writer} column={s.column} published={s.published} />
           </div>
           <div className='col-md-6 col-sm-12'>
-            <WritedBy writer={s.writer} column={s.column} published={s.published} />
+            {s.column && <FromColumn  column={s.column} />}
           </div>
         </div>
         <Divider/>

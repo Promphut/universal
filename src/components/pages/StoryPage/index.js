@@ -178,7 +178,7 @@ const StoryPage = React.createClass({
 
 	render(){
 		let {stopPos, recommends} = this.state
-		console.log('render', this.story)
+		//console.log('render', this.story)
 
 		let list = []
 		for(let i=0; i<recommends.length; i++){

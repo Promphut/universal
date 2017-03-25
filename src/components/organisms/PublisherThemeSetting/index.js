@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {PrimaryButton,SecondaryButton,UploadPicture} from 'components'
+import {PrimaryButton,SecondaryButton,UploadPicture,Logo} from 'components'
 import TextField from 'material-ui/TextField';
 import { ChromePicker } from 'react-color';
 import {findDOMNode as dom} from 'react-dom'
@@ -8,7 +8,7 @@ import Menu from 'material-ui/Menu'
 import Popover from 'material-ui/Popover';
 import Request from 'superagent'
 import auth from 'components/auth'
-
+import RaisedButton from 'material-ui/RaisedButton'
 const Container = styled.form`
   width:100%;
   padding:80px;
@@ -30,13 +30,33 @@ const Container = styled.form`
     -Webkit-background-clip:text;
     -Webkit-text-fill-color: transparent;
   }
+  .bg1{
+    background-color:#00B2B4;
+  }
+  .bg2{
+    background-color:#4FC2C3;
+  }
+  .bg3{
+    background-color:#85CDCE;
+  }
+  .bg4{
+    background-color:#9BD0D0;
+  }
+  .bg5{
+    background-color:#BAE7E9;
+  }
+  .bg6{
+    background-color:#DAF8F9;
+  }
 `
+
 const Flex = styled.div`
   display:flex;
   items-align:center;
   flex-flow: row wrap;
   margin:50px 0 0 50px;
 `
+
 const Title = styled.div`
   flex:2 150px;
   max-width:150px;
@@ -44,11 +64,13 @@ const Title = styled.div`
   font-size:17px;
   padding-top:15px;
 `
+
 const Edit = styled.div`
   flex:6 450px;
   max-width:450px;
   padding-top:15px;
 `
+
 const TextStatus = styled.div`
   color:#00B2B4;
   font-size:15px;
@@ -56,11 +78,13 @@ const TextStatus = styled.div`
   float:left;
   margin:10px 0 0 15px;
 ` 
+
 const Color = styled.div`
   width:22px;
   height:22px;
   float:left;
 `
+
 const BoxColor = styled.div`
   display:inline;
   margin:10px 30px 0 0;
@@ -76,12 +100,17 @@ const Desc = styled.div`
   display:inline;
   margin:8px 0 0 0;
 ` 
+
 const Example = styled.div`
   width:100%;
   height:175px;
   padding:15px;
   font-size:11px;
   margin-bottom:10px;
+`
+const ShadeColor = styled.div`
+  height:44px;
+  width:100%;
 `
 
 const PublisherThemeSetting = React.createClass({
@@ -206,6 +235,12 @@ const PublisherThemeSetting = React.createClass({
         background:'linear-gradient(135deg, '+primaryColor+' 0%, '+secondaryColor+' 100%)',
       }
     }
+    var shade = []
+    for(var i=1;i<7;i++){
+      shade.push(
+        <ShadeColor className={'bg'+i}></ShadeColor>     
+      )
+    }
     return(
       <Container onSubmit={this.updateData}>
         <div  className="head sans-font">Theme</div>
@@ -214,23 +249,23 @@ const PublisherThemeSetting = React.createClass({
             <div className="sans-font">Favicon</div>
           </Title>
           <Edit>
-            <UploadPicture src={uploadLogo} path='/publishers/11/cover' type='cover' width={'60px'} height={'60px'} labelStyle={{top:'10px'}}/>
+            <UploadPicture src={uploadLogo} path={'/publishers/'+config.PID+'/cover'} type='cover' width={'60px'} height={'60px'} labelStyle={{top:'10px'}}/>
           </Edit>
         </Flex>
         <Flex>
           <Title>
-            <div className="sans-font">Small Logo(.svg)</div>
+            <div className="sans-font">Small Logo (.svg)</div>
           </Title>
           <Edit>
-            <UploadPicture src={uploadSLogo} path='/publishers/11/slogo' type='slogo' width={'60px'} height={'60px'} labelStyle={{top:'10px'}}/>
+            <UploadPicture src={uploadSLogo} path={'/publishers/'+config.PID+'/slogo'} type='slogo' width={'60px'} height={'60px'} labelStyle={{top:'10px'}}/>
           </Edit>
         </Flex>
         <Flex>
           <Title>
-            <div className="sans-font">Large Logo(.svg)</div>
+            <div className="sans-font">Large Logo (.svg)</div>
           </Title>
           <Edit>
-            <UploadPicture src={uploadLogo} path='/publishers/11/logo' type='logo' width={'200px'} height={'70px'} labelStyle={{top:'25px'}}/>
+            <UploadPicture src={uploadLogo} path={'/publishers/'+config.PID+'/logo'} type='logo' width={'200px'} height={'70px'} labelStyle={{top:'25px'}}/>
           </Edit>
         </Flex>
         <Flex>
@@ -278,25 +313,55 @@ const PublisherThemeSetting = React.createClass({
                 <Example style={{...styles.example1}}>
                   <strong className="serif-font" style={{fontSize:'17px'}}>Preview of the major color selection</strong><br/><br/>
                   Content should look like this, isn't it pretty on this background color?
+
+                   <RaisedButton
+                      label="button"
+                      labelStyle={{fontWeight:'bold', fontSize:15, top:-2, fontFamily:"'Nunito', 'Mitr'"}}
+                      labelColor='#fff'
+                      overlayStyle={{borderRadius: '20px'}}
+                      rippleStyle={{borderRadius: '20px'}}
+                      style={{borderRadius:'20px', height:'40px', lineHeight:'40px', background:primaryColor, boxShadow:'none',marginTop:'15px'}}
+                      buttonStyle={{borderRadius: '20px', background: primaryColor, border:'2px solid #fff', padding:'0 2px'}}
+                    />
                 </Example>
                 <Example style={{...styles.example2}}>
                   <strong className="serif-font" style={{fontSize:'17px'}}>Preview of the major color selection</strong><br/><br/>
                   Content should look like this, isn't it pretty on this background color?
+
+                    <RaisedButton
+                      label="button"
+                      labelStyle={{fontWeight:'bold', fontSize:15, top:-2, fontFamily:"'Nunito', 'Mitr'"}}
+                      labelColor={primaryColor}
+                      overlayStyle={{borderRadius: '20px'}}
+                      rippleStyle={{borderRadius: '20px'}}
+                      style={{borderRadius:'20px', height:'40px', lineHeight:'40px', background:'white', boxShadow:'none',marginTop:'15px'}}
+                      buttonStyle={{borderRadius: '20px', background:'white', border:('2px solid '+primaryColor), padding:'0 2px'}}
+                    />
                 </Example>
                 <Example style={{...styles.example3}}>
                   <strong className="serif-font" style={{fontSize:'17px'}}>Preview of the major color selection</strong><br/><br/>
                   Content should look like this, isn't it pretty on this background color?
+                    <RaisedButton
+                      label="button"
+                      labelStyle={{fontWeight:'bold', fontSize:15, top:-2, fontFamily:"'Nunito', 'Mitr'"}}
+                      labelColor='#fff'
+                      overlayStyle={{borderRadius: '20px'}}
+                      rippleStyle={{borderRadius: '20px'}}
+                      style={{borderRadius:'20px', height:'40px', lineHeight:'40px', background:primaryColor, boxShadow:'none',marginTop:'15px'}}
+                      buttonStyle={{borderRadius: '20px', background: primaryColor, border:'2px solid #fff', padding:'0 2px'}}
+                    />
                 </Example>
               </div>
               <div className='col-6' style={{padding:'0 5px 0 5px'}}>
-                <div style={{...styles.example4,textAlign:'center',height:'82px',padding:'18px 0 0 0'}}>
+                {shade}
+                <div style={{...styles.example4,textAlign:'center',height:'82px',padding:'18px 0 0 0',marginTop:'20px'}}>
                   <strong className="serif-font" style={{fontSize:'17px',color:'white'}}>White Color</strong><br/>
                   <strong className="serif-font" style={{fontSize:'17px',color:'#222'}}>Black Color</strong>
                 </div>
-                <div className='backgroundClip' style={{...styles.example5,textAlign:'center',height:'82px',padding:'18px 0 0 0',backgroundClip:"text",textFillColor: "transparent",WebkitBackgroundClip:"text",WebkitTextFillColor: "transparent"}}>
+                {primaryColor && secondaryColor && <div className='backgroundClip' style={{...styles.example5,textAlign:'center',height:'82px',padding:'18px 0 0 0',backgroundClip:"text",textFillColor: "transparent",WebkitBackgroundClip:"text",WebkitTextFillColor: "transparent"}}>
                   <strong className="serif-font" style={{fontSize:'24px'}}>
                     Primary and <br/>Secondary Header</strong>
-                </div>
+                </div>}
               </div>
             </div>
           </Edit>
