@@ -91,7 +91,7 @@ const SignUpFb = React.createClass({
             />
           </a>  
         </div>
-        <div style={{width:'200px',margin:'0 auto 20px auto'}} className='hidden-des'>
+        <div style={{width:'200px',margin:'0 auto 20px auto'}}>
             <RaisedButton
               label=" Sign Up with Email"
               labelPosition="after"
@@ -103,7 +103,7 @@ const SignUpFb = React.createClass({
             />
         </div>
 
-        <Text className='hidden-mob' style={{marginTop:'10px',fontFamily:'Nunito'}}>Or <LinkUnderLine to='#' onClick={this.props.emailSignUp}>Sign Up with an E-mail</LinkUnderLine></Text>
+        <Text style={{marginTop:'10px',fontFamily:'Nunito'}}>Or <LinkUnderLine to='#' onClick={this.props.emailSignUp}>Sign Up with an E-mail</LinkUnderLine></Text>
       </Box>
     )
   }

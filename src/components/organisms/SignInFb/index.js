@@ -4,12 +4,20 @@ import Avatar from 'material-ui/Avatar'
 import RaisedButton from 'material-ui/RaisedButton';
 import {Link,browserHistory} from 'react-router'
 import Request from 'superagent'
+import TextField from 'material-ui/TextField';
+import {findDOMNode as dom}from 'react-dom';
 
 const Box = styled.div`
   width:477px;
   height:427px;
   background-color:#fff;
   padding:10px 0 10px 0;
+  @media (max-width:480px){
+    width:100vw;
+    background:none;
+    height:auto;
+    padding:50px 0 50px 0;
+  }
 `
 const Head = styled.div`
   margin:70px auto 10px auto;
@@ -22,7 +30,10 @@ const Text = styled.div`
   color:#8f8f8f;
   font-size:18px;
   text-align:center;
-  font-family:'Mitr'
+  font-family:'Mitr';
+  @media (max-width:480px){
+    color:white;
+  }
 `
 const LinkUnderLine = styled(Link)`
   text-decoration:underline;
@@ -37,7 +48,15 @@ const NewLink = styled(Link)`
   color:#C2C2C2;
   font-size:14px;
   font-family:'Nunito';
+  @media (max-width:480px){
+    color:white;
+  }
 `
+const InputBox = styled.form`
+  width:308px;
+  margin:0 auto 0 auto;
+`
+
 var styles={
   button:{
     background:'#3A579A',
@@ -51,7 +70,7 @@ var styles={
   },
   btnCon:{
     width:'307px',
-    margin:'60px auto 20px auto'
+    margin:'0px auto 20px auto'
   },
   labelBtn:{
     top:'8px',
@@ -61,14 +80,61 @@ var styles={
 const SignInFb = React.createClass({
   getInitialState(){
     return{
+      errText0:'',
+      errText1:'',
+    }
+  },
 
+  signin(e){
+    e.preventDefault()
+
+    let self = this,
+        data = {},
+        i = 0,
+        input = dom(this.refs.signinForm).getElementsByTagName("input")
+
+    input = [].slice.call(input)
+
+    input.forEach((field,index) => {
+      if(field.value!=''){
+        //console.log(field.name+':'+field.value)
+        data[field.name] = field.value
+        self.state['errText'+index] = ''
+        self.setState({})
+      } else {
+        self.state['errText'+index] = 'This field is required'
+        self.setState({})
+        i++
+      }
+    })
+
+    if(i==0){
+      api.signin(data)
+      .then(res => {
+        auth.setCookieAndToken(res)
+        
+        browserHistory.push(self.props.nextPathname)
+      }, err => {
+        if(err.errors)
+          self.setState({
+            errText0: err.errors.username && err.errors.username.message,
+            errText1: err.errors.password && err.errors.password.message
+          })
+        else
+          self.setState({
+            errText0: err.message,
+            errText1: err.message
+          })
+      })
     }
   },
 
   render(){
+    let {onClick, style} = this.props,
+    {errText0, errText1, errText2} = this.state
   return(
     <Box>
-      <Head>Sign In</Head>
+      <Head className='hidden-mob'>Sign In</Head>
       <div style={styles.btnCon}>
         <a href={config.BACKURL+'/auth/facebook?publisher='+config.PID+'&nextpathname='+encodeURIComponent(this.props.nextPathname)}>
           <RaisedButton
@@ -82,7 +148,41 @@ const SignInFb = React.createClass({
           />
         </a>
       </div>
-      <Text style={{marginTop:'20px',fontFamily:'Nunito'}}>Or <LinkUnderLine to="#" onClick={this.props.emailSignIn}>Sign In with an E-mail</LinkUnderLine></Text>
+      <Text style={{marginTop:'20px',fontFamily:'Nunito'}}>Or <LinkUnderLine to="#" className='hidden-mob' onClick={this.props.emailSignIn}>Sign In with an E-mail</LinkUnderLine></Text>
+      <InputBox onSubmit={this.signin} ref='signinForm' className='hidden-des'>
+        <TextField
+          autoFocus
+          hintText="Email"
+          floatingLabelText="Email"
+          type="email"
+          fullWidth={true}
+          name='username'
+          errorText={errText0}
+          floatingLabelStyle={{color:'white'}}
+          inputStyle={{color:'white'}}
+        /><br />
+        <TextField
+          hintText="Password Field"
+          floatingLabelText="Password"
+          type="password"
+          fullWidth={true}
+          name='password'
+          errorText={errText1}
+          floatingLabelStyle={{color:'white'}}
+          inputStyle={{color:'white'}}
+        /><br />
+        <div style={{width:120,margin:'20px auto 0 auto'}}>
+          <RaisedButton
+            label=" Sign In"
+            labelPosition="after"
+            type='submit'
+            labelColor='white'
+            labelStyle={{color:'#fff'}}
+            style={{borderRadius:'20px',boxShadow:'none',background:'none'}}
+            buttonStyle={{background:'none',border:'2px solid #fff',borderRadius:'20px',width:'120px'}}
+          />
+        </div>
+      </InputBox>
       <Div>
         <NewLink to="/forget" style={{float:'left'}}>Forget Password?</NewLink>
         <NewLink to="/signup" style={{float:'right'}}>Sign Up</NewLink>

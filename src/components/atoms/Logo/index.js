@@ -2,10 +2,11 @@ import React from 'react'
 
 const Logo = React.createClass({
 	render() {
+		var {className,id} = this.props
 		let fill = this.props.fill || '#222'
 
 		return (
-			<svg className="logo" xmlns="http://www.w3.org/2000/svg" width="146" height="17" fill={fill} viewBox="0 0 146 17">
+			<svg className={"logo "+ className} id={id} xmlns="http://www.w3.org/2000/svg" width="146" height="17" fill={fill} viewBox="0 0 146 17">
 				<title>AomMoney Logo</title>
 				<g id="Canvas" transform="translate(-3046 2388)">
 					<g id="aommoney logo[P&#39;win]-03" style={{'mixBlendMode': 'normal'}}>
