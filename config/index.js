@@ -24,7 +24,7 @@ const config = {
 		TWT:'https://twitter.com/intent/tweet',
 		PID:'11',
 		MAINCOLOR:'#00B2B4',
-		DOMAIN: 		'nextempire',
+		DOMAIN: 		'nextempire.co',
 		FRONTURL: 		'http://nextempire.co',
 		BACKURL: 		'http://api.nextempire.co',
 		FEED_LIMIT: 15,
