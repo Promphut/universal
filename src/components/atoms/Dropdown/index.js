@@ -64,7 +64,7 @@ const Dropdown = onClickOutside(React.createClass({
 
   render () {
     return (
-      <DropdownWrapper float={this.props.float}>
+      <DropdownWrapper float={this.props.float} style={{...this.props.style}} className={this.props.className}>
         <DropdownButton onClick={this.handleClick}>
           {this.props.button}
         </DropdownButton>

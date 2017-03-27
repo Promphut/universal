@@ -1,7 +1,7 @@
 import React from 'react'
 import { PageTemplate, TopBarWithNavigation, OverlayImg, Thumpnail,
 	ThumpnailSmall, ArticleBox, ArticleBoxLarge, ThumpnailRow, TopColumnSidebar,
-	TopWriterSidebar, More, BGImg} from 'components'
+	TopWriterSidebar, More, BGImg, StoryDropdown} from 'components'
 import styled from 'styled-components'
 //import Request from 'superagent'
 import auth from 'components/auth'
@@ -22,6 +22,10 @@ const Content = styled.div`
 	flex-flow: row wrap;
 	justify-content: center;
 	padding: 140px 0 0 0;
+
+	@media (max-width:480px) {
+		padding: 70px 0 0 0;
+  }
 `
 
 const Main = styled.div`
@@ -32,6 +36,13 @@ const Main = styled.div`
 		max-width: 100%;
 		padding:0 15px 0 15px;
   }
+
+	.hidden-des-flex {
+		display: none !important;
+		@media (max-width: 480px) {
+			display: flex !important;
+	  }
+	}
 `
 const Feed = styled.div`
 	flex: 12 1120px;
@@ -178,7 +189,7 @@ const HomePage2 = React.createClass({
 		this.setState({
 				isInfiniteLoading: true,
 				page:this.state.page+1
-		});	
+		});
 	},
 
 	elementInfiniteLoad() {
@@ -207,9 +218,9 @@ const HomePage2 = React.createClass({
 						{!_.isEmpty(this.trendingStories) && <ThumpnailRow detail={this.trendingStories} size='small' style={{margin:'30px 0 30px 0'}}/>}
 					</Feed>
 				</Content>*/}
-
 		      <Content>
 			      <Main>
+							<StoryDropdown className="hidden-des-flex" nowPage={'All'}/>
 							<TextLine className='sans-font'>Latest</TextLine>
 							<Infinite
 									containerHeight={!isMobile?(count*210)-100:(count*356)-100}
