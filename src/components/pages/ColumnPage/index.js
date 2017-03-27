@@ -112,12 +112,17 @@ const ColumnPage = React.createClass({
 			latestStories:[],
 			page:0,
 			isInfiniteLoading: false,
-			loadOffset:300
+			loadOffset:300,
+			feedCount:0,
+			isMobile:false
 		}
 	},
 
 	componentDidMount() {
 		//this.getColumnFeed(this.props.params.column)
+		this.setState({
+			isMobile:window.isMobile()
+		})
 	},
 
 	componentWillReceiveProps(nextProps) {
@@ -149,18 +154,20 @@ const ColumnPage = React.createClass({
 
 	// },
 
-	buildElements(page) {
-		var {id} = this.state.column
-		api.getFeed('story', {column: parseInt(id),status:1}, 'latest', null, page, 10,{allowUnlisted: true})
+	buildElements() {
+		let page = this.state.page
+
+		api.getFeed('story', {status:1}, 'latest', null, page, 10)
 		.then(result => {
-			//console.log(result)
+			var s = this.state.latestStories.concat(result.feed)
 			this.setState({
-				latestStories:this.state.latestStories.concat(result.feed)
+				feedCount:result.count[1],
+				latestStories:s,
 			},()=>{
-				if(this.state.latestStories.length==result.count[1]){
+				if(s.length==result.count[1]){
 					this.setState({
+						loadOffset:'undefined',
 						isInfiniteLoading: false,
-						loadOffset:'undefined'
 					})
 				}else{
 					this.setState({
@@ -172,14 +179,12 @@ const ColumnPage = React.createClass({
 	},
 
 	handleInfiniteLoad() {
-		//console.log('onload')
-		this.setState({
-				isInfiniteLoading: true
-		});
+		//console.log('Onload')
 		this.buildElements(this.state.page)
 		this.setState({
+				isInfiniteLoading: true,
 				page:this.state.page+1
-		});
+		});	
 	},
 
 	elementInfiniteLoad() {
@@ -189,7 +194,7 @@ const ColumnPage = React.createClass({
 	render(){
 		let {column, feed} = this.state
 		//console.log('column', column)
-
+		var {count,loadOffset,isInfiniteLoading,latestStories,isMobile} = this.state
 		let ChildCover =
 			<Head>
 				<ColumnName className='serif-font'>{column.name}</ColumnName>
@@ -210,14 +215,15 @@ const ColumnPage = React.createClass({
 						<TextLine className='sans-font'>Latest</TextLine>
 
 							<Infinite
-									elementHeight={210}
-									infiniteLoadBeginEdgeOffset={this.state.loadOffset}
+									containerHeight={!isMobile?(count*210)-100:(count*356)-100}
+									elementHeight={!isMobile?210:356}
+									infiniteLoadBeginEdgeOffset={loadOffset}
 									onInfiniteLoad={this.handleInfiniteLoad}
 									loadingSpinnerDelegate={this.elementInfiniteLoad()}
-									isInfiniteLoading={this.state.isInfiniteLoading}
+									isInfiniteLoading={isInfiniteLoading}
 									useWindowAsScrollContainer={true}>
 
-								{this.state.latestStories.length!=0?this.state.latestStories.map((story, index) => (
+								{latestStories.length!=0?latestStories.map((story, index) => (
 									<ArticleBox detail={story} key={index}/>
 								)):''}
 							</Infinite>

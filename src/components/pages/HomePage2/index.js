@@ -89,7 +89,9 @@ const HomePage2 = React.createClass({
 			refresh: 0,
 			page:0,
 			isInfiniteLoading: false,
-			loadOffset:300
+			loadOffset:300,
+			feedCount:0,
+			isMobile:false
 		}
 	},
 
@@ -97,6 +99,10 @@ const HomePage2 = React.createClass({
 		this.getPublisher()
 		this.getFeed()
 		this.getSidebar()
+		this.setState({
+			isMobile:window.isMobile()
+		})
+		//console.log(window.isMobile())
 	},
 
 	getPublisher(){
@@ -149,7 +155,8 @@ const HomePage2 = React.createClass({
 		.then(result => {
 			var s = this.state.latestStories.concat(result.feed)
 			this.setState({
-				latestStories:s
+				feedCount:result.count[1],
+				latestStories:s,
 			},()=>{
 				if(s.length==result.count[1]){
 					this.setState({
@@ -166,6 +173,7 @@ const HomePage2 = React.createClass({
 	},
 
 	handleInfiniteLoad() {
+		//console.log('Onload')
 		this.buildElements(this.state.page)
 		this.setState({
 				isInfiniteLoading: true,
@@ -179,7 +187,7 @@ const HomePage2 = React.createClass({
 
 	render(){
 		//console.log('context', this.context.setting)
-
+		var {count,loadOffset,isInfiniteLoading,latestStories,isMobile} = this.state
 		let pub = this.publisher
 		//console.log('PUB', pub)
 		return (
@@ -204,30 +212,15 @@ const HomePage2 = React.createClass({
 			      <Main>
 							<TextLine className='sans-font'>Latest</TextLine>
 							<Infinite
-									className='hidden-mob'
-									containerHeight={2000}
-									elementHeight={210}
-									infiniteLoadBeginEdgeOffset={this.state.loadOffset}
+									containerHeight={!isMobile?(count*210)-100:(count*356)-100}
+									elementHeight={!isMobile?210:356}
+									infiniteLoadBeginEdgeOffset={loadOffset}
 									onInfiniteLoad={this.handleInfiniteLoad}
 									loadingSpinnerDelegate={this.elementInfiniteLoad()}
-									isInfiniteLoading={this.state.isInfiniteLoading}
+									isInfiniteLoading={isInfiniteLoading}
 									useWindowAsScrollContainer={true}>
 
-								{this.state.latestStories.length!=0?this.state.latestStories.map((story, index) => (
-									<ArticleBox detail={story} key={index}/>
-								)):''}
-							</Infinite>
-							<Infinite
-									className='hidden-des'
-									containerHeight={2800}
-									elementHeight={300}
-									infiniteLoadBeginEdgeOffset={this.state.loadOffset}
-									onInfiniteLoad={this.handleInfiniteLoad}
-									loadingSpinnerDelegate={this.elementInfiniteLoad()}
-									isInfiniteLoading={this.state.isInfiniteLoading}
-									useWindowAsScrollContainer={true}>
-
-								{this.state.latestStories.length!=0?this.state.latestStories.map((story, index) => (
+								{latestStories.length!=0?latestStories.map((story, index) => (
 									<ArticleBox detail={story} key={index}/>
 								)):''}
 							</Infinite>

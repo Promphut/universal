@@ -194,7 +194,7 @@ const UserSettingProfile = React.createClass({
             <div className="sans-font">Profile picture</div>
           </Title>
           <Edit>
-            <UploadPicture src={user.pic.medium} path={'/users/'+user._id+'/photo'} type='photo' width='200px' height='90px' labelStyle={{top:'37px'}}/>
+            <UploadPicture src={user.pic.medium} path={'/users/'+user._id+'/photo'} type='photo' width='140px' height='140px' labelStyle={{top:'63px'}}/>
           </Edit>
         </Flex>
         <Flex>

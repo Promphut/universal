@@ -108,7 +108,7 @@ const Layout = styled.div`
   margin:0 auto 0 auto;
   &:hover{
     cursor:pointer;
-    box-shadow: 0 0 10px #00b2b4;
+    box-shadow: 0 0 10px ${props=> props.theme.primaryColor};
   }
 `
 const Label = styled.div`
@@ -485,23 +485,25 @@ const NewStory = React.createClass({
     var {chooseLayout,layout,open,anchorEl,column,tag,addTag,searchText,columnList,sid,
           alert,alertWhere,alertConfirm,alertDesc,saveStatus,title,publishStatus} = this.state
     const dataSourceConfig = {text: 'text',value: 'value',id:'id'};
+    var {theme} = this.context.setting.publisher
+    
     //console.log(tag)
     return(
 
       chooseLayout==null?
       <Container onSubmit={this.updateData}>
         <h1 className='nunito-font'>Choose Layout</h1>
-        <div className='row' style={{marginTop:'60px'}}>
+        <div className='row' style={{marginTop:'60px',padding:'10px'}}>
           <div className='col-6'>
             <Label2 className="nunito-font" >News</Label2>
-            <Layout style={{backgroundImage:'url(/pic/news.png)',boxShadow:layout=="news"?'0 0 10px #00B2B4':''}} onClick={this.chooseNews} />
+            <Layout style={{backgroundImage:'url(/pic/news.png)',boxShadow:layout=="news"?'0 0 10px '+theme.primaryColor:''}} onClick={this.chooseNews} />
           </div>
           <div className='col-6'>
             <Label2 className="nunito-font" >Article</Label2>
-            <Layout style={{backgroundImage:'url(/pic/article.png)',boxShadow:layout=="article"?'0 0 10px #00B2B4':''}} onClick={this.chooseArticle} />
+            <Layout style={{backgroundImage:'url(/pic/article.png)',boxShadow:layout=="article"?'0 0 10px '+theme.primaryColor:''}} onClick={this.chooseArticle} />
           </div>
         </div>
-        <dvi className='row' style={{display:'block',overflow:'hidden'}}>
+        <dvi className='row' style={{display:'block',overflow:'hidden',marginTop:'50px'}}>
           <RaisedButton
             label="next"
             labelStyle={{fontWeight:'bold', fontSize:15, top:0, fontFamily:"'Nunito', 'Mitr'"}}
@@ -510,8 +512,8 @@ const NewStory = React.createClass({
             labelPosition="before"
             overlayStyle={{borderRadius: '20px'}}
             rippleStyle={{borderRadius: '20px'}}
-            style={{borderRadius:'20px', height:'40px', lineHeight:'40px', background:'#00b2b4', boxShadow:'none',float:'right',margin:'50px 0 0 0',visibility:layout==null?'hidden':'visible'}}
-            buttonStyle={{borderRadius: '20px', background: '#00b2b4', border:'2px solid #00B2B4', padding:'0 2px'}}
+            style={{borderRadius:'20px', height:'40px', lineHeight:'40px', background:theme.primaryColor, boxShadow:'none',float:'right',visibility:layout==null?'hidden':'visible'}}
+            buttonStyle={{borderRadius: '20px', background: theme.primaryColor, border:'2px solid '+theme.primaryColor, padding:'0 2px'}}
             icon={<FontIcon className='material-icons'>keyboard_arrow_right</FontIcon>}
           />
         </dvi>
@@ -533,8 +535,8 @@ const NewStory = React.createClass({
           labelPosition="before"
           overlayStyle={{borderRadius: '20px'}}
           rippleStyle={{borderRadius: '20px'}}
-          style={{borderRadius:'20px', height:'40px', lineHeight:'40px', background:'#00b2b4', boxShadow:'none',float:'right',visibility:sid!=null?'visible':'hidden'}}
-          buttonStyle={{borderRadius: '20px', background: '#00b2b4', border:'2px solid #00B2B4', padding:'0 2px'}}
+          style={{borderRadius:'20px', height:'40px', lineHeight:'40px', background:theme.primaryColor, boxShadow:'none',float:'right',visibility:sid!=null?'visible':'hidden'}}
+          buttonStyle={{borderRadius: '20px', background: theme.primaryColor, border:'2px solid '+theme.primaryColor, padding:'0 2px'}}
           icon={<FontIcon className='material-icons'>keyboard_arrow_down</FontIcon>}
         >
         <Popover
@@ -543,7 +545,7 @@ const NewStory = React.createClass({
           anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
           targetOrigin={{horizontal: 'right', vertical: 'top'}}
           onRequestClose={this.handleRequestClose}
-          style={{border:'3px solid #00b2b4',width:'482px',padding:'30px',marginTop:8,boxShadow:'none',overflow:'hidden'}}
+          style={{border:'3px solid '+theme.primaryColor,width:'482px',padding:'30px',marginTop:8,boxShadow:'none',overflow:'hidden'}}
         >
           <div className='row' style={{display:'block',overflow:'hidden'}}>
             <Label className="nunito-font or" style={{float:'left',marginTop:'22px'}}>Column : </Label>
@@ -557,7 +559,7 @@ const NewStory = React.createClass({
               underlineStyle={{display:'none'}}
               menuStyle={{width:'320px'}}
               menuItemStyle={{width:'320px'}}
-              selectedMenuItemStyle={{color:'#222',background:'#00b2b4'}}
+              selectedMenuItemStyle={{color:'#222',background:theme.primaryColor}}
             >
               <MenuItem value='no' primaryText='No Column' />
               {columnList.length!=0?columnList.map((data,index)=>(
@@ -629,6 +631,9 @@ const NewStory = React.createClass({
   },
 })
 
+NewStory.contextTypes = {
+	setting: React.PropTypes.object
+};
 
 
 export default NewStory

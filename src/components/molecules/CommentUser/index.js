@@ -143,7 +143,7 @@ const CommentBox = React.createClass({
             labelColor="#fff"
             style={styles.button2}
             buttonStyle={styles.btnStyle2}
-            backgroundColor="#00B2B4"/>
+            backgroundColor={theme.primaryColor}/>
         </div>
     this.setState({a:true})
   },
@@ -152,6 +152,8 @@ const CommentBox = React.createClass({
     this.setState({a:true})
   },
   render(){
+    var {theme} = this.context.setting.publisher
+
     return(
       <Container>
         <div><Link to="#"><Avatar src='/tmp/avatar.png' size={49} style={{float:'left',marginRight:'15px',display:'block'}}/></Link></div>
@@ -177,6 +179,10 @@ const CommentBox = React.createClass({
     )
   }
 }) 
+
+CommentBox.contextTypes = {
+	setting: React.PropTypes.object
+};
 
 
 export default CommentBox;

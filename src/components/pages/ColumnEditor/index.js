@@ -15,7 +15,7 @@ const Wrapper = styled.div`
   background: -o-linear-gradient(-45deg, ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%);
   background: -ms-linear-gradient(-45deg, ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%);
   background: linear-gradient(135deg, ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00b2b4', endColorstr='#cef1b7', GradientType=1 );
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=${props=> props.theme.primaryColor}, endColorstr=${props=> props.theme.secondaryColor}, GradientType=1 );
 `
 
 const Container = styled.div`

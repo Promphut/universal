@@ -8,7 +8,7 @@ import Menu from 'material-ui/Menu'
 import CircularProgress from 'material-ui/CircularProgress';
 const Box = styled.div`
   width:224px;
-  border:1px solid #00B2B4;
+  border:1px solid ${props=>props.theme.primaryColor};
   padding:10px;
   background:white;
 `

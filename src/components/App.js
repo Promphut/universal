@@ -100,7 +100,7 @@ injectGlobal`
       font-family: 'Nunito', 'Mitr';
     }
     .hidden-des{
-      display:none !important;
+      display: none !important;
     }
   }
 

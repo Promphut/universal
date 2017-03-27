@@ -64,7 +64,7 @@ const Primary = styled.div`
   text-align:center;
   padding:15px 5px 15px 5px;
   font-size:16px;
-  border:2px solid #00B2B4;
+  border:2px solid ${props=> props.theme.primaryColor};
 `
 
 const Second = styled.div`
@@ -73,7 +73,7 @@ const Second = styled.div`
   text-align:center;
   padding:15px 5px 15px 5px;
   font-size:16px;
-  border:2px solid #00B2B4;
+  border:2px solid ${props=> props.theme.primaryColor};
 `
 
 const Cont = styled.div`
@@ -306,7 +306,8 @@ const UserSettingStory = React.createClass({
 
   render(){
     let {alert,alertChild,alertConfirm,alertDesc,alertWhere,stories,selectStatus,onLoad,editStory,editStoryWhere,storiesCount,currentPage,totalPages} = this.state
-		
+		var {theme} = this.context.setting.publisher
+    
     return (
       <Container>
         <Alert 
@@ -334,13 +335,13 @@ const UserSettingStory = React.createClass({
           anchorEl={editStoryWhere}
           anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
           targetOrigin={{horizontal: 'left', vertical: 'top'}}
-          style={{border:'2px solid #00B2B4'}}
+          style={{border:'2px solid '+theme.primaryColor}}
           onRequestClose={this.closeEditStory}
         >
-          <MenuItem onClick={this.goEditStory} style={{color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>edit</FontIcon>}>Edit Story</MenuItem>
-          <MenuItem onClick={this.alertDeleteStory} style={{color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>delete</FontIcon>}>Delete</MenuItem>
-          {selectStatus===STATUS.PUBLISHED ? <MenuItem onClick={this.alertUnpublishStory} style={{color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>drafts</FontIcon>}>Unpublish</MenuItem>
-          : <MenuItem onClick={this.alertPublishStory} style={{color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>assignment_turned_in</FontIcon>}>Publish</MenuItem>}
+          <MenuItem onClick={this.goEditStory} style={{color:theme.primaryColor,fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:theme.primaryColor}}>edit</FontIcon>}>Edit Story</MenuItem>
+          <MenuItem onClick={this.alertDeleteStory} style={{color:theme.primaryColor,fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:theme.primaryColor}}>delete</FontIcon>}>Delete</MenuItem>
+          {selectStatus===STATUS.PUBLISHED ? <MenuItem onClick={this.alertUnpublishStory} style={{color:theme.primaryColor,fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:theme.primaryColor}}>drafts</FontIcon>}>Unpublish</MenuItem>
+          : <MenuItem onClick={this.alertPublishStory} style={{color:theme.primaryColor,fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:theme.primaryColor}}>assignment_turned_in</FontIcon>}>Publish</MenuItem>}
         </Popover>
 
         <Section2 style={{padding:'40px 5px 40px 5px'}}>
@@ -385,6 +386,10 @@ const UserSettingStory = React.createClass({
 		  )
 	}
 });
+
+UserSettingStory.contextTypes = {
+	setting: React.PropTypes.object
+};
 
 export default UserSettingStory;
 

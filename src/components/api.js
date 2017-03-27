@@ -498,5 +498,16 @@ api.shareFB = ()=>{
 	}, function(response){});
 }
 
+api.uploadFile = (file, type, toUrl) => {
+	let token = auth.getToken()
+	if(!token) return api.userNotFoundPromise()
+
+	return Request.post(toUrl)
+	.set('x-access-token', token)
+	.attach(type, file, file.name)
+	.then(res => {
+		return res.body
+	}, api.err)
+}
 
 module.exports = api

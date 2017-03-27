@@ -10,33 +10,6 @@ import Popover from 'material-ui/Popover'
 import Menu from 'material-ui/Menu'
 
 
-const styles = {
-  label:{
-    fontSize:'30px'
-  },
-  underline:{
-    background:'none',
-    border:'none'
-  },
-  selected:{
-    backgroundColor:'#00B2B4',
-    color:'white',
-    fill:'white'
-  },
-  menuItem:{
-    fontSize:'22px',
-    padding:'8px 40px 8px 15px',
-  },
-  newColumn:{
-    color:'#00B2B4',
-    fontWeight:'bold'
-  },
-  showInactive:{
-    textDecoration:'underline',
-    color:'#8F8F8F'
-  }
-}
-
 const Text = styled.div`
   font-size:22px;
   color:#222;
@@ -109,6 +82,34 @@ const DropdownWithIcon = React.createClass({
   render(){
     var {style,className,children,labelStyle,editMenu,value,onChange} = this.props
     var {value,editState,editWhere,open,active,focus,anchorEl,menuItem} = this.state
+    var {theme} = this.context.setting.publisher
+    var pmc = theme.primaryColor
+    const styles = {
+      label:{
+        fontSize:'30px'
+      },
+      underline:{
+        background:'none',
+        border:'none'
+      },
+      selected:{
+        backgroundColor:pmc,
+        color:'white',
+        fill:'white'
+      },
+      menuItem:{
+        fontSize:'22px',
+        padding:'8px 40px 8px 15px',
+      },
+      newColumn:{
+        color:pmc,
+        fontWeight:'bold'
+      },
+      showInactive:{
+        textDecoration:'underline',
+        color:'#8F8F8F'
+      }
+    }
     return(
         <div className='row'>
           <FlatButton 
@@ -168,5 +169,9 @@ const DropdownWithIcon = React.createClass({
     )
   }
 })
+
+DropdownWithIcon.contextTypes = {
+	setting: React.PropTypes.object
+};
 
 export default DropdownWithIcon
