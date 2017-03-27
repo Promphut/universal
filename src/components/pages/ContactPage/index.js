@@ -105,6 +105,9 @@ const ContactPage = React.createClass({
   componentDidMount(){
     api.getPublisherContactCats()
     .then(contactCats => {
+      if (contactCats.length === 0) {
+        contactCats.push({catName: 'General'})
+      }
       contactCats.forEach((val) => {
         this.state.problems.push(val.catName);
       })
@@ -284,6 +287,8 @@ const ContactPage = React.createClass({
   // },
 
   render() {
+  	const {theme} = this.context.setting.publisher
+
     let {user, head, message, problems, saved, dropdown, error} = this.state
     let {username, email, tel, problem, textarea} = this.state.message
 
@@ -328,7 +333,7 @@ const ContactPage = React.createClass({
 
     const problemSelect = (
       <span>{problem}
-        <FontIcon className="material-icons" style={{color: '#00B2B4', float: 'right', padding: '8px 8px 0px 0px', marginLeft: '-8px'}}>
+        <FontIcon className="material-icons" style={{color: theme.primaryColor, float: 'right', padding: '8px 8px 0px 0px', marginLeft: '-8px'}}>
           keyboard_arrow_down
         </FontIcon>
       </span>
@@ -340,7 +345,7 @@ const ContactPage = React.createClass({
         <div key={i}>
           <FlatButton
             label={problems[i]}
-            labelStyle={{fontWeight: 'bold', fontSize: '15px', color: '#00B2B4', fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
+            labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
             style={{width: '385px', textAlign: 'left', display: 'inline-block'}}
             onTouchTap={() => this.selectProblem(problems[i])}
           /><br/>
@@ -428,5 +433,11 @@ const ContactPage = React.createClass({
     )
   }
 })
+
+
+ContactPage.contextTypes = {
+	setting: React.PropTypes.object
+};
+
 
 export default ContactPage;
