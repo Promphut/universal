@@ -2,7 +2,8 @@ import React, {Component, PropTypes} from 'react';
 import {Link} from 'react-router';
 import styled from 'styled-components'
 import {findDOMNode as dom} from 'react-dom'
-import Request from 'superagent'
+//import Request from 'superagent'
+import api from 'components/api'
 import auth from 'components/auth'
 
 const Container = styled.form`
@@ -78,8 +79,9 @@ const UploadPicture = React.createClass({
   getInitialState(){
 
     this.maxMB = this.props.maxMB ? parseFloat(this.props.maxMB) : 5
-		this.allowTypes = '|jpg|png|jpeg|gif|webp|svg|'
-    return{
+		this.allowTypes = this.props.allowTypes || '|jpg|png|jpeg|gif|svg+xml|'
+    
+    return {
       statePreview:this.props.src==null?false:true,
       src:this.props.src,
       preview: null, 
@@ -111,14 +113,14 @@ const UploadPicture = React.createClass({
     var file = e.target.files[0]
 
     if(!file) return
-    // if(!this.isFiletypeValid(file)){
-		// 	this.setState({
-		// 		msg: 'File type invalid.',
-		// 		file: file,
-    //     err:true
-		// 	})
-		// 	return
-		// }
+    if(!this.isFiletypeValid(file)){
+			this.setState({
+				msg: 'File type invalid.',
+				//file: file,
+        err:true
+			})
+			return
+		}
 		
 		if(!this.isFilesizeValid(file)) {
 			this.setState({
@@ -138,29 +140,19 @@ const UploadPicture = React.createClass({
     }
 
     reader.onloadend = (event) => {
-    	Request.post(config.BACKURL + this.props.path)
-	    .set('x-access-token', auth.getToken())
-      .attach(this.props.type, file, file.name)
-      .end((err, res) => {
-
-    	  let msg = 'Upload complete!',
-            isError = false
-
-    	  if(err) {
-          msg = 'Upload Error : '+res.body.status
-          isError = true
-        }
-
-        //console.log('onloadend', res.body.sizes.medium)
-
-    	  this.setState({
-    		  //file: '',
-          //src: res.body.sizes && res.body.sizes.medium+'?'+Math.random()*10000,
-    		  msg: msg,
-          err:isError
-    	  })
-        //console.log(res.body)
-	    })
+      api.uploadFile(file, this.props.type, config.BACKURL + this.props.path)
+    	.then(res => {
+        this.setState({
+          msg: 'Upload Completed!',
+          err: false
+        })
+      })
+      .catch(err => {
+        this.setState({
+          msg: err.message,
+          err: true
+        })
+      })
     }      
     reader.readAsDataURL(file);     
   },
