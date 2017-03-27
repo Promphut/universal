@@ -6,12 +6,12 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
 injectGlobal`
-  /* FOR DESKTOP AND TABLET 
+  /* FOR DESKTOP AND TABLET
   @media (min-width:481px) {
     @import url('https://fonts.googleapis.com/css?family=Mitr|Nunito|PT+Sans|PT+Serif&subset=thai');
   }
 
-  /* FOR MOBILE 
+  /* FOR MOBILE
   @media (max-width: 480px) {
     @import url('https://fonts.googleapis.com/css?family=Mitr|Nunito|Roboto|Roboto+Slab');
   }*/
@@ -20,10 +20,10 @@ injectGlobal`
     color:#222;
   }
   * {
-    -webkit-box-sizing: border-box; 
-    -moz-box-sizing: border-box; 
-    -o-box-sizing: border-box; 
-    box-sizing: border-box; 
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
   }
 
   h3{
@@ -41,7 +41,7 @@ injectGlobal`
     text-decoration: none;
   }
 
-  
+
   @font-face {
     font-family: 'cs_prajad';
     src: local('CS PraJad'),
@@ -100,7 +100,7 @@ injectGlobal`
       font-family: 'Nunito', 'Mitr';
     }
     .hidden-des{
-      display:none;
+      display:none !important;
     }
   }
 
@@ -126,14 +126,14 @@ injectGlobal`
        font-family: 'Roboto Slab', 'Mitr';
     }
     .hidden-mob{
-      display:none;
+      display:none !important;
     }
     .hidden-des{
       display:block !important;
     }
   }
 
-  
+
   .container {
     position: relative;
     margin-left: auto;

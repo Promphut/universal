@@ -78,7 +78,7 @@ const TopBarWithNavigation = React.createClass({
 		}
 
 	  return (
-			<Stick>
+			<Stick className={this.props.className}>
 				<TopBar
 					onScroll={this.handleScroll}
 					scrolling={this.state.scrolling}

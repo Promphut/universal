@@ -80,7 +80,12 @@ const Stick = React.createClass({
 
   render(){
     return(
-      <Container topOffset={this.props.topOffset} bottomOffset={this.props.bottomOffset} style={{...this.props.style}}>
+      <Container
+				topOffset={this.props.topOffset}
+				bottomOffset={this.props.bottomOffset}
+				style={{...this.props.style}}
+				className={this.props.className}	
+			>
         {this.props.children}
       </Container>
     )

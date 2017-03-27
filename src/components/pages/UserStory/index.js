@@ -18,7 +18,7 @@ const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
-	padding:50px 0 50px 0;
+	padding: 25px 0 50px 0;
 `
 
 const Main = styled.div`
@@ -64,18 +64,90 @@ const TextLine = styled.div`
 	padding-bottom:11px;
 `
 
+const User = styled.div`
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+	padding: 80px 0px 15px 0px;
+
+	@media (max-width: 480px) {
+		background: ${props=> props.theme.primaryColor};
+		padding-top: 60px;
+		padding: 60px 0px 0px 0px;
+	}
+`
+
+const UserAvatar = styled(Avatar)`
+	margin-right: 20px;
+	float: left;
+
+	@media (max-width: 480px) {
+		height: 80px !important;
+		width: 80px !important;
+		float: none;
+		border: 2px solid #FFF;
+		margin-right: 0px;
+	}
+`
+
+const UserData = styled.div`
+	float: left;
+
+	@media (max-width: 480px) {
+		float: none;
+	}
+`
+
 const UserName = styled.div`
   color:#000;
   font-size:26px;
   font-weight:bold;
+
+	@media (max-width: 480px) {
+		display: flex;
+		justify-content: center;
+	  color: #FFF;
+		margin: 10px 0px;
+		font-weight: normal;
+	}
 `
 
 const UserDesc = styled.div`
-  color:#8F8F8F;
-  margin:10px 0 0 0;
-  font-size:16px;
-  width:220px;
+  color: #8F8F8F;
+  margin: 10px 10px 0px;
+  font-size: 16px;
+  width: 220px;
+
+	@media (max-width: 480px) {
+		flex: 1;
+		justify-content: center;
+		width: auto;
+	  color: #C2C2C2;
+		textAlign: center;
+	}
 `
+
+const UserShare = styled.div`
+	float: right;
+	width: 225px;
+	margin-top: 10px;
+
+	@media (max-width: 480px) {
+		display: none;
+	}
+`
+
+const UserShareMobile = styled.div`
+	overflow:'hidden'
+	display: none;
+
+	@media (max-width: 480px) {
+		display: flex;
+		justify-content: center;
+		marginTop: 20px;
+	}
+`
+
 const Onload = styled.div`
 	width:100%;
 	height:70px;
@@ -83,30 +155,59 @@ const Onload = styled.div`
 `
 
 const A = styled.a`
-	flex:1;
-	textAlign:center;
-	color:#c2c2c2;
+	flex: 1;
+	textAlign: center;
+	color: #c2c2c2;
+	cursor: pointer;
 `
 
-const UserDetail = ({style, user,shareFB})=>{
+const LinkMobile = styled.a`
+	textAlign: center;
+	color: #C2C2C2;
+	cursor: pointer;
+	width: 50px;
+	font-size: 20px;
+`
+
+const UserDetail = ({style, user, shareFB}) => {
+	const backStyle = {
+		color: '#FFF',
+		fontSize: '40px',
+		position: 'absolute',
+		top: '10px',
+		left: '5px'
+	}
+
+	const rowStyle = {
+		...style,
+		margin: '50px 0 20px 0',
+		display: 'block',
+		overflow: 'hidden',
+		maxWidth: '730px',
+		flex: '8 730px'
+	}
 	//console.log('user', user)
   return (
-    <div className='row' style={{...style,margin:'50px 0 50px 0',display:'block',overflow:'hidden'}}>
-      <Avatar src={user.pic.medium} size={95} style={{marginRight:'20px',float:'left'}}/>
-      <div style={{marginTop:'10px',float:'left'}}>
-        <UserName className='serif-font'>{user.display}</UserName>
-        <UserDesc className='sans-font'>{user.intro}</UserDesc>
-      </div>
-      <div style={{float:'right',width:'250px',marginTop:'20px'}}>
-        <div className='row' style={{overflow:'hidden'}}>
-          <A href='#' onClick={shareFB}><i className="fa fa-facebook" aria-hidden="true"></i></A>
-          <A href={config.TWT}><i className="fa fa-twitter" aria-hidden="true" ></i></A>
-          <A><i className="fa fa-youtube-play" aria-hidden="true" ></i></A>
-          <A><i className="fa fa-instagram" aria-hidden="true" ></i></A>
-        </div>
-        <UserDesc className='sans-font' style={{textAlign:'right',width:'250px'}}>{user.shortDesc}</UserDesc>
-      </div>
-    </div>
+		<User>
+	    <div className='row' style={rowStyle}>
+				<FontIcon className="material-icons hidden-des" style={backStyle}>chevron_left</FontIcon>
+				<div style={{textAlign: 'center'}}>
+      		<UserAvatar src={user.pic.medium} size={95}/>
+				</div>
+				<UserData>
+	        <UserName className='serif-font'>{user.display}</UserName>
+      	  <UserDesc className='sans-font'>{user.intro}</UserDesc>
+	      </UserData>
+	      <UserShare>
+	        <div className='row' style={{overflow:'hidden'}}>
+	          <A href='#' onClick={shareFB}><i className="fa fa-facebook" aria-hidden="true"></i></A>
+	          <A href={config.TWT}><i className="fa fa-twitter" aria-hidden="true" ></i></A>
+	          <A><i className="fa fa-youtube-play" aria-hidden="true" ></i></A>
+	          <A><i className="fa fa-instagram" aria-hidden="true" ></i></A>
+	        </div>
+	      </UserShare>
+	    </div>
+		</User>
   )
 }
 
@@ -162,12 +263,12 @@ const UserStory = React.createClass({
 				latestStories:this.state.latestStories.concat(result.feed),
 				feedCount:result.count[1]
 			},()=>{
-				if(this.state.latestStories.length==result.count[1]){
+				if (this.state.latestStories.length==result.count[1]){
 					this.setState({
 						isInfiniteLoading: false,
 						loadOffset:'undefined'
 					})
-				}else{
+				} else {
 					this.setState({
 						isInfiniteLoading: false
 					})
@@ -192,18 +293,25 @@ const UserStory = React.createClass({
 	},
 
 	render(){
+    var {theme} = this.context.setting.publisher
 		//console.log('user', this.props)
 		//var article = []
 		let {feed, feedCount} = this.state
 
 		return (
 		    <Wrapper>
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
-		      <Content >
-			      <Main style={{marginTop:'100px'}}>
-              <UserDetail user={this.props.params.user} shareFB={api.shareFB}/>
+		      <TopBarWithNavigation className="hidden-mob" title={'Title of AomMoney goes here..'} />
+					<UserDetail user={this.props.params.user} shareFB={api.shareFB}/>
+					<UserShareMobile className='row'>
+	          <LinkMobile href='#' onClick={api.shareFB}><i className="fa fa-facebook" aria-hidden="true"></i></LinkMobile>
+	          <LinkMobile href={config.TWT}><i className="fa fa-twitter" aria-hidden="true" ></i></LinkMobile>
+	          <LinkMobile><i className="fa fa-youtube-play" aria-hidden="true" ></i></LinkMobile>
+	          <LinkMobile><i className="fa fa-instagram" aria-hidden="true" ></i></LinkMobile>
+		 			</UserShareMobile>
+		      <Content>
+			      <Main>
 						<TextLine className='sans-font'>
-							<strong style={{color:'#00B2B4',marginRight:'30px'}}>
+							<strong style={{color:theme.primaryColor,marginRight:'30px'}}>
 								<span style={{fontSize:'30px'}}>{feedCount}</span> stories
 							</strong>
 							{/*<span style={{fontSize:'30px'}}>101</span> Upvotes*/}
@@ -228,5 +336,10 @@ const UserStory = React.createClass({
 		  )
 	}
 });
+
+
+UserStory.contextTypes = {
+	setting: React.PropTypes.object
+};
 
 export default UserStory;
