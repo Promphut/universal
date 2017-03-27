@@ -126,7 +126,7 @@ const PublisherThemeSetting = React.createClass({
       anchorEl2:{},
       primaryColor:'',
       secondaryColor:'',
-      uploadSLogo:null,
+      uploadFavicon:null,
       uploadLogo:null
     }
   },
@@ -172,7 +172,7 @@ const PublisherThemeSetting = React.createClass({
     this.setState({
       primaryColor: !theme? '#00B2B4': theme.primaryColor,
       secondaryColor: !theme? '#CEF1B7': theme.secondaryColor,
-      uploadSLogo:theme.slogo,
+      uploadFavicon:theme.favicon,
       uploadLogo:theme.logo
     })
   },
@@ -219,7 +219,7 @@ const PublisherThemeSetting = React.createClass({
   render(){
     //console.log(this.context.setting.publisher.theme)
     var {theme} = this.context.setting.publisher
-    var {primaryColor,secondaryColor,anchorEl1,anchorEl2,open1,open2,textStatus,uploadSLogo,uploadLogo,error} = this.state
+    var {primaryColor,secondaryColor,anchorEl1,anchorEl2,open1,open2,textStatus,uploadFavicon,uploadLogo,error} = this.state
     var styles={
       example1:{
         color:'white',
@@ -256,10 +256,10 @@ const PublisherThemeSetting = React.createClass({
         <div  className="head sans-font">Theme</div>
         <Flex>
           <Title>
-            <div className="sans-font">Favicon</div>
+            <div className="sans-font">Favicon (.ico)</div>
           </Title>
           <Edit>
-            <UploadPicture src={uploadSLogo} path={'/publishers/'+config.PID+'/cover'} type='cover' width={'60px'} height={'60px'} labelStyle={{top:'10px'}}/>
+            <UploadPicture src={uploadFavicon} path={'/publishers/'+config.PID+'/favicon'} type='favicon' allowTypes='|x-icon|vnd.microsoft.icon|' width={'60px'} height={'60px'} labelStyle={{top:'10px'}}/>
           </Edit>
         </Flex>
         {/*<Flex>
