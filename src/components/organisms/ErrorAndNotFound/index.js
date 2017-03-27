@@ -72,11 +72,11 @@ const NotFoundPage = React.createClass({
 			color: '#FFF',
 			margin: '0px 10px 0px 5px'
 		}
-		
+
     return (
 			<Wrapper style={this.props.style}>
 				<LogoLink to="/"/>
-				
+
 				<Center className="col-sm-10 col-md-6">
 					<ErrorNumber smallSize={this.props.smallSize}>
 						{this.props.errorNumber}
@@ -108,7 +108,7 @@ const NotFoundPage = React.createClass({
   }
 })
 
-StoryMenu.contextTypes = {
+NotFoundPage.contextTypes = {
 	setting: React.PropTypes.object
 };
 
