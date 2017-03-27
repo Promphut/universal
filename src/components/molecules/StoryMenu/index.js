@@ -17,7 +17,10 @@ const Wrapper = styled.div`
   }
 `
 
-const StoryMenu = ({style, className, child, path, linkPath, page, next}) => {
+const StoryMenu = React.createClass({
+  render(){
+  var {style, className, child, path, linkPath, page, next} = this.props
+  var {theme} = this.context.setting.publisher
   if (!next) {
     next = ' '
   }
@@ -37,7 +40,7 @@ const StoryMenu = ({style, className, child, path, linkPath, page, next}) => {
               style={{
                 fontSize: '24px',
                 margin: '0px',
-                color: (page == 'allcolumn') ? '#00B2B4' : '#8f8f8f',
+                color: (page == 'allcolumn') ? theme.primaryColor : '#8f8f8f',
               }}>
               apps
             </FontIcon>
@@ -55,7 +58,7 @@ const StoryMenu = ({style, className, child, path, linkPath, page, next}) => {
           labelStyle={{
             fontSize: '18px',
             paddingLeft: '12px', paddingRight: '6px',
-            color: (page == 'allcolumn') ? '#00B2B4' : '#8f8f8f',
+            color: (page == 'allcolumn') ? theme.primaryColor : '#8f8f8f',
             fontWeight: (page == 'allcolumn') ? 'bold' : 'normal'
           }}
           hoverColor='#E2E2E2'
@@ -82,7 +85,7 @@ const StoryMenu = ({style, className, child, path, linkPath, page, next}) => {
             labelStyle={{
               fontSize: '18px',
               paddingLeft: '14px', paddingRight: '14px',
-              color: '#00B2B4',
+              color: theme.primaryColor,
               fontWeight: 'bold'
             }}
             hoverColor='#E2E2E2'
@@ -95,11 +98,15 @@ const StoryMenu = ({style, className, child, path, linkPath, page, next}) => {
           style={{marginTop:'5px'}}
           href={linkPath}
           icon={<FontIcon className="material-icons" style={{fontSize:'35px',color:'#8f8f8f'}}>chevron_right</FontIcon>}
-          labelStyle={{fontSize:'18px',color:'#00B2B4',fontWeight:'bold'}}
+          labelStyle={{fontSize:'18px',color:theme.primaryColor,fontWeight:'bold'}}
         />}
 
       </Wrapper>
 	)
-}
+  }
+})
+StoryMenu.contextTypes = {
+	setting: React.PropTypes.object
+};
 
 export default StoryMenu;

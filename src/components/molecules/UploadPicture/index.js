@@ -58,7 +58,7 @@ const Filter = styled.div`
   left:0px;
   width:${props => props.width};
   height:${props => props.height};
-  background:rgba(0,0,0,0.5);
+  background:rgba(0,0,0,0.3);
   text-align:center;
   font-size:14px;
   color:#fff;

@@ -170,7 +170,7 @@ const PublisherProfileSetting = React.createClass({
             <div className="sans-font">Cover picture</div>
           </Title>
           <Edit>
-            <UploadPicture src={pub.cover&&pub.cover.medium} path={'/publishers/'+config.PID+'/cover'} type='cover' width='200px' height='90px' labelStyle={{top:'35px'}}/>
+            <UploadPicture src={pub.cover&&pub.cover.medium} path={'/publishers/'+config.PID+'/cover'} type='cover' width='400px' height='160px' labelStyle={{top:'75px'}}/>
           </Edit>
         </Flex>
         <Flex>

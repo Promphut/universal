@@ -102,39 +102,6 @@ const TitleLink = styled(Link)`
   margin:0 0 0 15px;
 `
 
-const styles = {
-  label:{
-    fontSize:'30px'
-  },
-  underline:{
-    background:'none',
-    border:'none'
-  },
-  selected:{
-    backgroundColor:'#00B2B4',
-    color:'white',
-    fill:'white'
-  },
-  menuItem:{
-    padding:'15px 40px 15px 15px',
-  },
-  newColumn:{
-    color:'#00B2B4',
-    fontWeight:'bold'
-  },
-  showInactive:{
-    textDecoration:'underline',
-    color:'#8F8F8F'
-  }
-}
-
-// const trending = {
-// 	name:'โมหจริตดินฮิปฮอปด็อกเตอร์โมหจ ริตแอดมิdsf fsdfsddsfdsfsdสชััน?',
-// 	vote:'18',
-// 	comment:11,
-// 	photo:'/tmp/story-list/1485309433041-Screen-Shot-2017-01-23-at-33221-PM-1.png'
-// }
-
 const IconEdit = styled(Link)`
   background-color:${props=> props.theme.primaryColor};
   color:white;
@@ -466,10 +433,36 @@ const PublisherStoryPage = React.createClass({
   },
 
   render(){
-    var {theme} = this.context.setting.publisher
+    
     //console.log('theme',theme)
     let { sort,totalPages,storiesCount,editStory,editStoryWhere,selectStatus,snackbar,snackbarMS,currentPage,stories,columns,selectColumn,alert,alertDesc,alertWhere,alertLoading,alertChild,alertConfirm,columnArray,onLoad} = this.state
     //console.log('storiesCount',storiesCount)
+    var {theme} = this.context.setting.publisher
+    const styles = {
+      label:{
+        fontSize:'30px'
+      },
+      underline:{
+        background:'none',
+        border:'none'
+      },
+      selected:{
+        backgroundColor:theme.primaryColor,
+        color:'white',
+        fill:'white'
+      },
+      menuItem:{
+        padding:'15px 40px 15px 15px',
+      },
+      newColumn:{
+        color:theme.primaryColor,
+        fontWeight:'bold'
+      },
+      showInactive:{
+        textDecoration:'underline',
+        color:'#8F8F8F'
+      }
+    }
     return (
       <Container>
         <Snackbar
@@ -477,8 +470,8 @@ const PublisherStoryPage = React.createClass({
           message={snackbarMS}
           autoHideDuration={4000}
           onRequestClose={this.closeSnackbar}
-          style={{backgroundColor:'#00B2B4'}}
-          bodyStyle={{backgroundColor:'#00B2B4',textAlign:'center'}}
+          style={{backgroundColor:theme.primaryColor}}
+          bodyStyle={{backgroundColor:theme.primaryColor,textAlign:'center'}}
           className="nunito-font"
         />
         <Popover
@@ -486,13 +479,13 @@ const PublisherStoryPage = React.createClass({
           anchorEl={editStoryWhere}
           anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
           targetOrigin={{horizontal: 'left', vertical: 'top'}}
-          style={{border:'2px solid #00B2B4'}}
+          style={{border:'2px solid '+theme.primaryColor}}
           onRequestClose={this.closeEditStory}
         >
-          <MenuItem onClick={this.goEditStory} style={{color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>edit</FontIcon>}>Edit Story</MenuItem>
-          <MenuItem onClick={this.alertDeleteStory} style={{color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>delete</FontIcon>}>Delete</MenuItem>
-          {selectStatus===STATUS.PUBLISHED ? <MenuItem onClick={this.alertUnpublishStory} style={{color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>drafts</FontIcon>}>Unpublish</MenuItem>
-          : <MenuItem onClick={this.alertPublishStory} style={{color:'#00B2B4',fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:'#00B2B4'}}>assignment_turned_in</FontIcon>}>Publish</MenuItem>}
+          <MenuItem onClick={this.goEditStory} style={{color:theme.primaryColor,fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:theme.primaryColor}}>edit</FontIcon>}>Edit Story</MenuItem>
+          <MenuItem onClick={this.alertDeleteStory} style={{color:theme.primaryColor,fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:theme.primaryColor}}>delete</FontIcon>}>Delete</MenuItem>
+          {selectStatus===STATUS.PUBLISHED ? <MenuItem onClick={this.alertUnpublishStory} style={{color:theme.primaryColor,fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:theme.primaryColor}}>drafts</FontIcon>}>Unpublish</MenuItem>
+          : <MenuItem onClick={this.alertPublishStory} style={{color:theme.primaryColor,fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:theme.primaryColor}}>assignment_turned_in</FontIcon>}>Publish</MenuItem>}
         </Popover>
         <Alert 
           open={alert}

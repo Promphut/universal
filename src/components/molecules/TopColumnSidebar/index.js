@@ -8,22 +8,22 @@ const Container = styled.div`
   width:324px;
   position:relative;
   .bg1{
-    background-color:${props=> props.theme.primaryColor};
+    background-color:${props=> props.theme.primaryColor} ;
   }
   .bg2{
-    background-color:#4FC2C3;
+    background-color:${props=> props.theme.primaryColor} ;
   }
   .bg3{
-    background-color:#85CDCE;
+    background-color:${props=> props.theme.primaryColor} ;
   }
   .bg4{
-    background-color:#9BD0D0;
+    background-color:${props=> props.theme.primaryColor} ;
   }
   .bg5{
-    background-color:#BAE7E9;
+    background-color:${props=> props.theme.primaryColor} ;
   }
   .bg6{
-    background-color:#DAF8F9;
+    background-color:${props=> props.theme.primaryColor} ;
   }
 `
 const Head = styled.div`

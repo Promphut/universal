@@ -1,21 +1,10 @@
 import React, { PropTypes } from 'react'
 import { injectGlobal } from 'styled-components'
-
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
 injectGlobal`
-  /* FOR DESKTOP AND TABLET 
-  @media (min-width:481px) {
-    @import url('https://fonts.googleapis.com/css?family=Mitr|Nunito|PT+Sans|PT+Serif&subset=thai');
-  }
-
-  /* FOR MOBILE 
-  @media (max-width: 480px) {
-    @import url('https://fonts.googleapis.com/css?family=Mitr|Nunito|Roboto|Roboto+Slab');
-  }*/
-
   body {
     color:#222;
   }
@@ -705,19 +694,43 @@ injectGlobal`
 
 injectTapEventPlugin();
 
-const muiTheme = getMuiTheme({
-  appBar: {
-    height: 60,
-  },
-});
+const App = React.createClass({
+  render(){
+    var {theme} = this.context.setting.publisher
+    //console.log(theme)
+    var {children} = this.props
+    var muiTheme = getMuiTheme({
+      appBar: {
+        height: 60,
+      },
+      menuItem: {
+        hoverTextColor:'#fff',
+        selectedTextColor: "#fff",
+      },
+      textField: {
+        floatingLabelColor: theme.primaryColor,
+        focusColor: theme.primaryColor,
+      },
+      flatButton: {
+        buttonFilterColor: theme.primaryColor,
+        primaryTextColor: theme.primaryColor,
+        secondaryTextColor: theme.secondaryColor,
+      },
+      raisedButton: {
+        primaryColor: theme.primaryColor,
+        primaryTextColor: theme.primaryColor,
+        secondaryColor: theme.secondaryColor,
+        secondaryTextColor: theme.secondaryColor,
+      },
+    });
+    return (
+      <MuiThemeProvider muiTheme={muiTheme}>
+        {children}
+      </MuiThemeProvider>
+    )
+  }
+})
 
-const App = ({ children }) => {
-  return (
-    <MuiThemeProvider muiTheme={muiTheme}>
-      {children}
-    </MuiThemeProvider>
-  )
-}
 
 App.propTypes = {
   children: PropTypes.oneOfType([
@@ -725,5 +738,9 @@ App.propTypes = {
     PropTypes.node
   ])
 }
+
+App.contextTypes = {
+	setting: React.PropTypes.object
+};
 
 export default App

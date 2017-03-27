@@ -108,7 +108,7 @@ const Layout = styled.div`
   margin:0 auto 0 auto;
   &:hover{
     cursor:pointer;
-    box-shadow: 0 0 10px #00b2b4;
+    box-shadow: 0 0 10px ${props=> props.theme.primaryColor};
   }
 `
 const Label = styled.div`
@@ -497,6 +497,8 @@ const EditStory = React.createClass({
     var {chooseLayout,layout,open,anchorEl,column,tag,addTag,searchText,columnList,sid,
           alert,alertWhere,alertConfirm,alertDesc,saveStatus,title,publishStatus,story} = this.state
     const dataSourceConfig = {text: 'text',value: 'value',id:'id'};
+    var {theme} = this.context.setting.publisher
+
     //console.log(tag)
     return(
       <Container onSubmit={this.updateData}>
@@ -514,8 +516,8 @@ const EditStory = React.createClass({
           labelPosition="before"
           overlayStyle={{borderRadius: '20px'}}
           rippleStyle={{borderRadius: '20px'}}
-          style={{borderRadius:'20px', height:'40px', lineHeight:'40px', background:'#00b2b4', boxShadow:'none',float:'right',visibility:sid!=null?'visible':'hidden'}}
-          buttonStyle={{borderRadius: '20px', background: '#00b2b4', border:'2px solid #00B2B4', padding:'0 2px'}}
+          style={{borderRadius:'20px', height:'40px', lineHeight:'40px', background:theme.primaryColor, boxShadow:'none',float:'right',visibility:sid!=null?'visible':'hidden'}}
+          buttonStyle={{borderRadius: '20px', background: theme.primaryColor, border:'2px solid '+theme.primaryColor, padding:'0 2px'}}
           icon={<FontIcon className='material-icons'>keyboard_arrow_down</FontIcon>}
         >
         <Popover
@@ -524,7 +526,7 @@ const EditStory = React.createClass({
           anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
           targetOrigin={{horizontal: 'right', vertical: 'top'}}
           onRequestClose={this.handleRequestClose}
-          style={{border:'3px solid #00b2b4',width:'482px',padding:'30px',marginTop:8,boxShadow:'none',overflow:'hidden'}}
+          style={{border:'3px solid '+theme.primaryColor,width:'482px',padding:'30px',marginTop:8,boxShadow:'none',overflow:'hidden'}}
         >
           <div className='row' style={{display:'block',overflow:'hidden'}}>
             <Label className="nunito-font or" style={{float:'left',marginTop:'22px'}}>Column : </Label>
@@ -538,7 +540,7 @@ const EditStory = React.createClass({
               underlineStyle={{display:'none'}}
               menuStyle={{width:'320px'}}
               menuItemStyle={{width:'320px'}}
-              selectedMenuItemStyle={{color:'#222',background:'#00b2b4'}}
+              selectedMenuItemStyle={{color:'#222',background:theme.primaryColor}}
             >
               <MenuItem value='no' primaryText='No Column' />
               {columnList.length!=0?columnList.map((data,index)=>(
@@ -607,6 +609,11 @@ const EditStory = React.createClass({
     )
   },
 })
+
+EditStory.contextTypes = {
+	setting: React.PropTypes.object
+};
+
 
 
 

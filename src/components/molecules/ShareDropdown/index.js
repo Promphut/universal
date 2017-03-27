@@ -40,8 +40,9 @@ const ShareDropdown = React.createClass({
   },
 
   render() {
+    var {theme} = this.context.setting.publisher
     const buttonStyle = {
-      color: '#00B2B4',
+      color: theme.primaryColor,
       fontSize: '18px',
       float: 'left',
       marginTop: '10px',
@@ -58,7 +59,7 @@ const ShareDropdown = React.createClass({
       //   <div key={i}>
       //     <FlatButton
       //       label={buttons[i]}
-      //       labelStyle={{fontWeight: 'bold', fontSize: '15px', color: '#00B2B4', fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
+      //       labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
       //       style={{width: '130px', textAlign: 'left', display: 'inline-block'}}
       //       onTouchTap={() => this.select(i)}
       //       data-clipboard-text
@@ -72,7 +73,7 @@ const ShareDropdown = React.createClass({
         <Hover onMouseEnter={() => this.onHover(0)}>
           <FlatButton
             label={buttons[0]}
-            labelStyle={{fontWeight: 'bold', fontSize: '15px', color: '#00B2B4', fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
+            labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
             style={{width: '180px', textAlign: 'left', display: 'inline-block'}}
             onTouchTap={() => this.select('facebook')}
           />
@@ -81,7 +82,7 @@ const ShareDropdown = React.createClass({
           <a href={config.TWT}>
           <FlatButton
             label={buttons[1]}
-            labelStyle={{fontWeight: 'bold', fontSize: '15px', color: '#00B2B4', fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
+            labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
             style={{width: '180px', textAlign: 'left', display: 'inline-block'}}
             onTouchTap={() => this.select('twitter')}
           />
@@ -91,7 +92,7 @@ const ShareDropdown = React.createClass({
           <CopyToClipboard text={config.FRONTURL+this.props.url} onCopy={() => this.setState({copied: true})}>
             <FlatButton
               label={buttons[2]}
-              labelStyle={{fontWeight: 'bold', fontSize: '15px', color: '#00B2B4', fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
+              labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
               style={{width: '180px', textAlign: 'left', display: 'inline-block'}}
               onTouchTap={() => this.select('copy')}
             />
@@ -113,5 +114,9 @@ const ShareDropdown = React.createClass({
     )
   }
 })
+
+ShareDropdown.contextTypes = {
+	setting: React.PropTypes.object
+};
 
 export default ShareDropdown

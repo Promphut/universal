@@ -12,7 +12,7 @@ const Wrapper = styled.div`
 	padding: 17px;
 
 	a {
-		color: #00B2B4;
+		color: ${props=>props.theme.primaryColor};
 
 		&:hover {
 			color: #999;
@@ -35,7 +35,7 @@ const ErrorNumber = styled.div`
 	font-weight: bold;
 	font-family: 'Nunito', 'Mitr';
 
-  background: -webkit-linear-gradient(#00B2B4, #00B2B4 30%, #CEF1B7);
+  background: -webkit-linear-gradient(${props=>props.theme.primaryColor},${props=>props.theme.primaryColor} 30%, #CEF1B7);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 
@@ -57,6 +57,8 @@ const ErrorText = styled.div`
 
 const NotFoundPage = React.createClass({
   render() {
+		var {theme} = this.context.setting.publisher
+
 		const buttonStyle = {
 			marginTop: '45px',
 			borderRadius: '20px',
@@ -70,7 +72,7 @@ const NotFoundPage = React.createClass({
 			color: '#FFF',
 			margin: '0px 10px 0px 5px'
 		}
-
+		
     return (
 			<Wrapper style={this.props.style}>
 				<LogoLink to="/"/>
@@ -84,12 +86,12 @@ const NotFoundPage = React.createClass({
 					</ErrorText>
           <Link to="/">
   					<FlatButton
-  						backgroundColor="#00B2B4"
+  						backgroundColor={theme.primaryColor}
         			label="Go Home"
   						labelPosition="before"
   						labelStyle={buttonLabelStyle}
   						style={buttonStyle}
-  						hoverColor="#00B2B4"
+  						hoverColor={theme.primaryColor}
   						icon={
   	            <FontIcon
   								className="material-icons"
@@ -105,5 +107,10 @@ const NotFoundPage = React.createClass({
     )
   }
 })
+
+StoryMenu.contextTypes = {
+	setting: React.PropTypes.object
+};
+
 
 export default NotFoundPage;
