@@ -56,7 +56,7 @@ const Title = styled.div`
   max-width:150px;
   color:#C2C2C2;
   font-size:17px;
-  padding-top:40px;
+  padding-top:15px;
 `
 
 const Edit = styled.div`
@@ -112,7 +112,8 @@ const UserSettingProfile = React.createClass({
       textStatus2:'Unsave',
       errText0:null,
       errText1:null,
-      errText2:null
+      errText2:null,
+      isMobile:false
     }
   },
 
@@ -130,6 +131,7 @@ const UserSettingProfile = React.createClass({
 
   componentDidMount(){
     this.fetechUser()
+    this.setState({isMobile:window.isMobile()})
   },
 
 
@@ -254,7 +256,7 @@ const UserSettingProfile = React.createClass({
   },
 
   render(){
-    let {textStatus1,error1,textStatus2,error2,errText0,errText2,errText1,user} = this.state
+    let {textStatus1,error1,textStatus2,error2,errText0,errText2,errText1,user,isMobile} = this.state
     var {theme} = this.context.setting.publisher
 
     return(
@@ -268,7 +270,7 @@ const UserSettingProfile = React.createClass({
             <Edit>
               <TextField name='username' value={user.username} onChange={this.userChanged}
                hintText='Change your Username'
-              floatingLabelText='Username'/>
+              floatingLabelText={isMobile?'Username':''}/>
             </Edit>
           </Flex>
           <Flex>
@@ -280,7 +282,7 @@ const UserSettingProfile = React.createClass({
               name='email' value={user.email} 
               onChange={this.userChanged}
               hintText='Change your Email'
-              floatingLabelText='Email'
+              floatingLabelText={isMobile?'Email':''}
               />
             </Edit>
           </Flex>
@@ -325,7 +327,7 @@ const UserSettingProfile = React.createClass({
                 errorText={errText0}
                 autoComplete="off"
                 hintText='Your old password'
-                floatingLabelText='Old Password'
+                floatingLabelText={isMobile?'Old Password':''}
               />  
             </Edit>
           </Flex>
@@ -340,7 +342,7 @@ const UserSettingProfile = React.createClass({
                 errorText={errText1}
                 autoComplete="off"
                 hintText='Your new password'
-                floatingLabelText='New Password'
+                floatingLabelText={isMobile?'New Password':''}
               />
             </Edit>
           </Flex>
@@ -356,7 +358,7 @@ const UserSettingProfile = React.createClass({
                 autoComplete="off"
                 onBlur={this.checkPWD}
                 hintText='Your new password Again'
-                floatingLabelText='New Password'
+                floatingLabelText={isMobile?'New Password':''}
               />
             </Edit>
           </Flex>

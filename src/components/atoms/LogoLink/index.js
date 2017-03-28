@@ -36,17 +36,24 @@ const LogoLink = React.createClass({
 		.then(res => {
 			if(!res.text) return
 			let fill = this.props.fill
-			let {className,id} = this.props
+			let {className,id,style} = this.props
 			// do svg manipulation
 			let $ = cheerio.load(res.text, { xmlMode: true }),
 				$svg = $('svg')
 			if(!$svg) return
 			$svg.addClass(className)
 			//console.log(className,fill)
+			
 			$svg.attr('id', id)
-			$svg.attr('fill', fill)
+			//$svg.attr('fill', fill)
+			if(style.width) $svg.attr('width',style.width)
+			if(style.height) $svg.attr('height',style.height)
 			if(fill){
 				$svg.find('path').each(function(index,ele){
+					$(this).attr('fill',fill)
+					//console.log(this)
+				})
+				$svg.find('use').each(function(index,ele){
 					$(this).attr('fill',fill)
 					//console.log(this)
 				})

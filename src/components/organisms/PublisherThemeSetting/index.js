@@ -407,7 +407,7 @@ const PublisherThemeSetting = React.createClass({
             <div className='row sans-font' style={{border:'1px solid #e2e2e2',padding:'10px',margin:'20px 0 0 0'}}>
               <Topbar style={{backgroundColor:colorTheme=='light'?'white':primaryColor,marginBottom:'20px'}}>
                 <i className="material-icons" style={{margin:'9px',color:colorTheme=='light'?'#222':'white',float:'left'}}>menu</i>
-                <LogoLink src={theme.logo} style={{float:'left',height:'30px',margin:'10px'}} fill={colorTheme=='light'?primaryColor:'#ffffff'} to="/"  title='preview loo'/>
+                <LogoLink src={theme.logo} style={{float:'left',width:'100',margin:'12px'}} fill={colorTheme=='light'?primaryColor:'#ffffff'} to="/"  title='preview loo'/>
                 <div className='nunito-font' style={{fontWeight:'bold',color:colorTheme=='light'?'#222':'white',padding:'8px'}}>About</div>
                 <div className='nunito-font' style={{fontWeight:'bold',color:colorTheme=='light'?'#222':'white',padding:'8px'}}>Contact</div>
                 <RaisedButton
@@ -416,7 +416,7 @@ const PublisherThemeSetting = React.createClass({
                   labelColor='white'
                   overlayStyle={{borderRadius: '20px'}}
                   rippleStyle={{borderRadius: '20px'}}
-                  style={{borderRadius:'20px', height:'30px', background:accentColor, boxShadow:'none',margin:'4px 0 0 0',marginLeft:'20px'}}
+                  style={{borderRadius:'20px', height:'30px', background:accentColor, boxShadow:'none',margin:'4px 0 0 0',marginLeft:'70px'}}
                   buttonStyle={{borderRadius: '20px', background:accentColor, padding:'0 2px',float:'right'}}
                 />
               </Topbar>

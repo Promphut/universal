@@ -18,12 +18,12 @@ const Nav = styled.nav`
 		display: block;
 		padding: 19px 20px 18px;
     text-decoration: none;
-    color: #8f8f8f;
+    color: ${props => props.theme.barTone=='light'?'#222':'white'};
 	}
 
 	& ul li a:hover {
-		background: #e2e2e2;
-		color: #222;
+		background: ${props => props.theme.secondaryColor};
+		color: ${props => props.theme.barTone=='light'?'#222':'white'};
 	}
 
 	& ul li ul.dropdown {
@@ -45,7 +45,7 @@ const Nav = styled.nav`
 
 	& ul li ul.dropdown li a {
 		padding: 1em 2em;
-		color: #8f8f8f;
+		color: #222;
 	}
 
 	& ul li:hover ul.dropdown {

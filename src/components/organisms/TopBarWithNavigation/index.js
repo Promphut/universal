@@ -64,6 +64,7 @@ const TopBarWithNavigation = React.createClass({
 	},
 
 	render () {
+		var {theme} = this.context.setting.publisher
 		const {scrolling, status} = this.state
 		let {title, article, notShowNav,editButton} = this.props
 		let transparent = false
@@ -99,5 +100,10 @@ const TopBarWithNavigation = React.createClass({
 TopBarWithNavigation.propTypes = {
 	title: PropTypes.string
 }
+
+TopBarWithNavigation.contextTypes = {
+	setting: React.PropTypes.object
+};
+
 
 export default TopBarWithNavigation;

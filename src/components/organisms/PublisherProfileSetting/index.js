@@ -69,7 +69,7 @@ const PublisherProfileSetting = React.createClass({
           ty:''
         },
         name:'',
-        shortDesc:'',
+        tagline:'',
         cover: {
           medium: ''
         }
@@ -154,14 +154,14 @@ const PublisherProfileSetting = React.createClass({
           </Title>
           <Edit>
             <TextField
-              value={pub.shortDesc}
+              value={pub.tagline}
               multiLine={true}
               fullWidth={true}
               floatingLabelText="80 characters"
               floatingLabelFixed={true}
               rows={1}
               rowsMax={10}
-              name='shortDesc'
+              name='tagline'
               onChange={this.publisherChanged}
             />
           </Edit>
