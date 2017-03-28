@@ -127,7 +127,8 @@ const PublisherThemeSetting = React.createClass({
       primaryColor:'',
       secondaryColor:'',
       uploadFavicon:null,
-      uploadLogo:null
+      uploadLogo:null,
+      uploadSLogo:null
     }
   },
 
@@ -173,7 +174,8 @@ const PublisherThemeSetting = React.createClass({
       primaryColor: !theme? '#00B2B4': theme.primaryColor,
       secondaryColor: !theme? '#CEF1B7': theme.secondaryColor,
       uploadFavicon:theme.favicon,
-      uploadLogo:theme.logo
+      uploadLogo:theme.logo,
+      uploadSLogo:theme.slogo
     })
   },
 
@@ -209,9 +211,16 @@ const PublisherThemeSetting = React.createClass({
       .set('Accept','application/json')
       .send(data)
       .end((err,res)=>{
-        if(err) self.setState({textStatus:res.body.error.message,error:true})
+        if(err) 
+          self.setState({
+            textStatus:res.body.error.message,
+            error:true
+          })
         else{
-          self.setState({textStatus:'Saved successfully',error:false})
+          self.setState({
+            textStatus:'Saved successfully',
+            error:false
+          })
         }
       })
   },
@@ -219,7 +228,7 @@ const PublisherThemeSetting = React.createClass({
   render(){
     //console.log(this.context.setting.publisher.theme)
     var {theme} = this.context.setting.publisher
-    var {primaryColor,secondaryColor,anchorEl1,anchorEl2,open1,open2,textStatus,uploadFavicon,uploadLogo,error} = this.state
+    var {primaryColor,secondaryColor,anchorEl1,anchorEl2,open1,open2,textStatus,uploadFavicon,uploadLogo,uploadSLogo,error} = this.state
     var styles={
       example1:{
         color:'white',
@@ -262,20 +271,20 @@ const PublisherThemeSetting = React.createClass({
             <UploadPicture src={uploadFavicon} path={'/publishers/'+config.PID+'/favicon'} type='favicon' allowTypes='|x-icon|vnd.microsoft.icon|' width={'60px'} height={'60px'} labelStyle={{top:'10px'}}/>
           </Edit>
         </Flex>
-        {/*<Flex>
+        <Flex>
           <Title>
             <div className="sans-font">Small Logo (.svg)</div>
           </Title>
           <Edit>
-            <UploadPicture src={uploadSLogo} path={'/publishers/'+config.PID+'/slogo'} type='slogo' width={'60px'} height={'60px'} labelStyle={{top:'10px'}}/>
+            <UploadPicture src={uploadSLogo} path={'/publishers/'+config.PID+'/slogo'} type='slogo' allowTypes='|svg+xml|' width={'60px'} height={'60px'} labelStyle={{top:'10px'}}/>
           </Edit>
-        </Flex>*/}
+        </Flex>
         <Flex>
           <Title>
             <div className="sans-font">Large Logo (.svg)</div>
           </Title>
           <Edit>
-            <UploadPicture src={uploadLogo} path={'/publishers/'+config.PID+'/logo'} type='logo' width={'200px'} height={'70px'} labelStyle={{top:'25px'}}/>
+            <UploadPicture src={uploadLogo} path={'/publishers/'+config.PID+'/logo'} type='logo' allowTypes='|svg+xml|' width={'200px'} height={'70px'} labelStyle={{top:'25px'}}/>
           </Edit>
         </Flex>
         <Flex>

@@ -133,12 +133,13 @@ api.updateColumn = (cid, column) => {
 
 // this will return = { story: Object, canEditStory: Boolean (optional) }
 // token is optional, set if you want to get canEditStory flag
-api.getStoryFromSid = (sid, token) => {
+api.getStoryFromSid = (sid, token, countView) => {
 	if(sid==null) return api.storyNotFoundPromise()
 
 	return Request
 	.get(config.BACKURL + '/stories/' + sid)
 	.query({token: token})
+	.query({countview: countView})
 	.set('Accept', 'application/json')
 	.then(res => {
 		if(res.body.canEditStory==null) res.body.canEditStory = false

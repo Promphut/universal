@@ -460,7 +460,7 @@ const ColumnSettingPage = React.createClass({
                 {editors.map((data,index)=>(
                   <Chip
                     key={data.value}
-                    onRequestDelete={() => this.confirmDeleteWriter(data)}
+                    onRequestDelete={() => this.confirmDeleteEditor(data)}
                     style={{margin:'4px'}}
                   >
                     {data.text}

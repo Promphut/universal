@@ -75,15 +75,17 @@ const getColumnFromSlug = (nextState, replace, next) => {
   .catch(toError(nextState, replace, next))
 }
 
-const getStoryFromSid = (nextState, replace, next) => {
-  api.getStoryFromSid(nextState.params.sid, auth.getToken())
-  .then(result => {
-    nextState.params.story = result.story
-    nextState.params.canEditStory = result.canEditStory
-    //console.log('getStoryFromSid', result)
-    next()
-  })
-  .catch(toError(nextState, replace, next))
+const getStoryFromSid = (countView) => {
+  return (nextState, replace, next) => {
+    api.getStoryFromSid(nextState.params.sid, auth.getToken(), countView)
+    .then(result => {
+      nextState.params.story = result.story
+      nextState.params.canEditStory = result.canEditStory
+      //console.log('getStoryFromSid', result)
+      next()
+    })
+    .catch(toError(nextState, replace, next))
+  }
 }
 
 const logout = (nextState, replace, next) => {
@@ -99,7 +101,7 @@ const routes = (
     {/*<Route path='article' component={Page3}/>*/}
     <Route path='stories/columns' component={AllColumn}/>
     <Route path='stories/:columnSlug' component={ColumnPage} onEnter={getColumnFromSlug}/>
-    <Route path='stories/:columnSlug/:storySlug/:sid' component={StoryPage} onEnter={getStoryFromSid}/>
+    <Route path='stories/:columnSlug/:storySlug/:sid' component={StoryPage} onEnter={getStoryFromSid(true)}/>
 
     {/*<Route path='publisher' component={PublisherPage}/>*/}
     <Route path="mood" component={MoodboardPage} />
@@ -135,10 +137,10 @@ const routes = (
       {/*<Route path='stories/drafts' component={UserSettingProfile}/>*/}
     </Route>
 
-    <Route path='me/stories/:sid' component={StoryPage} onEnter={getStoryFromSid}/>
+    <Route path='me/stories/:sid' component={StoryPage} onEnter={getStoryFromSid(false)}/>
 
     <Route path='@:username' onEnter={getUserFromUsername} component={UserStory}/>
-    <Route path='@:username/stories/:storySlug/:sid' onEnter={getStoryFromSid} component={StoryPage}/>
+    <Route path='@:username/stories/:storySlug/:sid' onEnter={getStoryFromSid(true)} component={StoryPage}/>
 
     <Route path='error' component={ErrorPage}/>
     <Route path='404' component={NotFoundPage}/>
