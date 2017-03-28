@@ -108,6 +108,7 @@ const Nav = styled.nav`
 	z-index:11;
   animation: ${props=> props.open?slideOut:slideIn} 0.6s forwards;
   background: rgba(255, 255, 255, 0.85);
+
 	& hr {
 		background-color: #c1c1c1 !important;
     margin: 15px 0px !important;
@@ -117,6 +118,10 @@ const Nav = styled.nav`
 		list-style-type:none;
 		font-size: 24px;
     margin: 0px;
+
+    @media(max-width: 480px){
+      padding-left: 20px;
+    }
 	}
 	& ul li a {
 		display: block;
@@ -128,7 +133,7 @@ const Nav = styled.nav`
 		text-decoration: underline;
 	}
   @media(max-width:480px){
-    width: 80vw;
+    width: 100vw;
     & ul {
       font-size: 20px;
     }
@@ -144,6 +149,11 @@ const CloseBtn = styled(IconButton)`
 		width: 30px;
 		height: 30px;
 	}
+
+  @media(max-width: 480px){
+    float: right;
+    margin: 0px 30px !important;
+  }
 `
 
 const Profile = styled.div`
@@ -165,7 +175,7 @@ const Profile = styled.div`
     & > * {
       display: block;
     }
-    padding: 0px 40px 0 40px;
+    padding: 0px 20px 0 20px;
   }
 `
 const EditMode = styled.div`
@@ -178,6 +188,7 @@ const EditMode = styled.div`
   height:60px;
   padding:12px;
   font-size:20px;
+
   @media(max-width:480px){
     font-size: 18px;
   }
@@ -191,41 +202,75 @@ const RightMenu = React.createClass({
 	},
 
 	render(){
-    const displayStyle = {
-      fontSize: '22px',
-      margin: '0px',
-      color: '#222',
-      fontWeight: 'bold'
-    }
-
+    let isMobile = false
     let {open, close} = this.props,
         user = this.props.user
+
+    let displayStyle, AvatarSize
+    let hiddenMobile = {}
+    let AvatarStyle = {}
+    let linkStyle = {}
+
+    if (window.isMobile()) {
+      isMobile = true
+      hiddenMobile = {
+        display: 'none'
+      }
+      AvatarStyle = {
+        border: '1px solid #FFF',
+        marginTop: '50px'
+      }
+      AvatarSize = 55
+      displayStyle = {
+       fontSize: '22px',
+       margin: '0px',
+       color: '#222',
+       fontWeight: 'normal',
+       position: 'absolute',
+       top: '62px',
+       left: '110px'
+     }
+     linkStyle = {
+        display: 'inline-flex'
+     }
+    } else {
+      displayStyle = {
+        fontSize: '22px',
+        margin: '0px',
+        color: '#222',
+        fontWeight: 'bold'
+      }
+      AvatarSize = 70
+    }
 
 		return (
       <Container open={open}>
         <Container2 onClick={close} />
         <Nav open={open}>
           <div className="menu menu-font">
-            <Link to={'/editor'}><EditMode className="nunito-font"><FontIcon className="material-icons" style={{color:'#fff',margin:'0 25px 0 20px',top:'4px'}}>edit</FontIcon>Editor Mode</EditMode></Link>
+            <Link style={hiddenMobile} to={'/editor'}><EditMode className="nunito-font"><FontIcon className="material-icons" style={{color:'#fff',margin:'0 25px 0 20px',top:'4px'}}>edit</FontIcon>Editor Mode</EditMode></Link>
             <CloseBtn onTouchTap={close}><FontIcon className="material-icons" style={{color:'#222',fill:'#222'}}>close</FontIcon></CloseBtn>
 
             <Profile className="content-font">
-              <Link to={user.url}><Avatar src={user.pic.medium} size={70} className="mobile"/></Link>
+              <Link to={user.url}><Avatar style={AvatarStyle} src={user.pic.medium} size={AvatarSize} className="mobile"/></Link>
               <div style={{marginTop: '-15px'}}>
                 <Link to={user.url}>
                   <h3 style={displayStyle}>{user.display}</h3>
-                </Link>{user.intro}
+                </Link>
+                <div style={hiddenMobile}>
+                  {user.intro}
+                </div>
               </div>
             </Profile>
             <Divider />
     				<ul>
-    					<li><Link to='/me/stories' onClick={close}>My Stories</Link></li>
-    					<li><Link to='/me/settings' onClick={close}>Edit Profile</Link></li>
+    					<li><Link style={hiddenMobile} to='/me/stories' onClick={close}>My Stories</Link></li>
+    					<li><Link style={linkStyle} to='/me/settings' onClick={close}>{isMobile ? <FontIcon style={{paddingRight: '25px'}} className="material-icons">account_circle</FontIcon> : ''}Edit Profile</Link></li>
     				</ul>
-    				<Divider />
+    				<Divider style={hiddenMobile} />
     				<ul>
-    					<li><Link to='/me/settings/account' onClick={close}>Settings</Link></li>
-    					<li><Link to='/logout'>Log Out</Link></li>
+    					<li><Link style={linkStyle} to='/me/settings/account' onClick={close}>{isMobile ? <FontIcon style={{paddingRight: '25px'}} className="material-icons">settings</FontIcon> : ''}Settings</Link></li>
+    					<li><Link style={linkStyle} to='/logout'>{isMobile ? <FontIcon style={{paddingRight: '25px'}} className="material-icons">exit_to_app</FontIcon> : ''}Log Out</Link></li>
     				</ul>
           </div>
         </Nav>

@@ -163,7 +163,7 @@ const Nav = styled.nav`
   }
 
   @media (max-width:480px){
-    width: 80vw;
+    width: 100vw;
     & ul li .arrow {
       font-size: 28px !important;
       line-height: 40px;

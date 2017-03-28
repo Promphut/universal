@@ -311,7 +311,7 @@ const ContactPage = React.createClass({
     let dropdownProblem
     let textArea
     let fullWidth
-    if (window.matchMedia('(max-width: 480px)').matches) {
+    if (window.isMobile()) {
       dropdownProblem = {
         width: '90vw'
       }
