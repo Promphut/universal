@@ -163,7 +163,7 @@ const Nav = styled.nav`
   }
 
   @media (max-width:480px){
-    width: 80vw;
+    width: 100vw;
     & ul li .arrow {
       font-size: 28px !important;
       line-height: 40px;
@@ -224,14 +224,28 @@ const Story = styled(Link)`
 `
 
 const LeftMenu = React.createClass({
-	getInitialState() {
+  getInitialState() {
 		return {
-      open:this.props.open,
-      miniMenu:false,
+      open: this.props.open,
+      miniMenu: false,
       toggleArrow: 'toggleUp',
       height: 0
     }
 	},
+
+  componentWillReceiveProps() {
+    if (window.isMobile()) {
+      let menu = this.props.menu
+      let height = ((menu && menu.column ? menu.column : []).length + 1) * 55
+      this.state.height = (this.state.miniMenu) ? 0 : height
+
+      this.setState({
+        miniMenu: true,
+        toggleArrow: 'toggleDown',
+        height: height
+      })
+    }
+  },
 
 	shrinkDrawer(e){
 		e.preventDefault()
@@ -252,6 +266,8 @@ const LeftMenu = React.createClass({
 	},
 
 	render(){
+    let isMobile = false
+
     let {miniMenu, toggleArrow, height} = this.state
     let {open, close, menu} = this.props
     let cols = menu && menu.column ? menu.column : []
@@ -261,31 +277,47 @@ const LeftMenu = React.createClass({
     for(let i=0; i<cols.length; i++)
       items.push(<li className='itemList' key={i}><Link to={'/stories/'+cols[i].slug}>{cols[i].name}</Link></li>)
 
+    if (window.isMobile()) {
+      isMobile = true
+    }
+
 		return (
       <Container open={open} >
         <Container2 onClick={close} />
         <Nav open={open}>
           <div className="menu menu-font">
-            <CloseBtn onTouchTap={close}><FontIcon className="material-icons">close</FontIcon></CloseBtn>
+            <CloseBtn onClick={close}><FontIcon className="material-icons">close</FontIcon></CloseBtn>
             {/* <SearchBtn onTouchTap={this.onSearch}><FontIcon className="material-icons">search</FontIcon></SearchBtn>*/}
             <ul>
+              {isMobile &&
+                <div>
+                  <li><Story to="#" onClick={this.shrinkDrawer}>Stories
+                    <FontIcon className={'material-icons arrow ' + toggleArrow}>keyboard_arrow_down</FontIcon>
+                  </Story></li>
+                  <MiniMenu height={height+'px'}>
+                    {items}
+                    {/*The last one is 'all columns'*/}
+                    <li key={999}><Link to={'/stories/columns'}>All Columns</Link></li>
+                  </MiniMenu>
+                  <Divider />
+                </div>
+              }
               <li><Link to="/" onClick={close}>Home</Link></li>
               <li><Link to="/about" onClick={close} >About Us</Link></li>
-
-              <Divider />
-
-              <li><Story to="#" onClick={this.shrinkDrawer}>Stories
-                <FontIcon className={'material-icons arrow ' + toggleArrow}>keyboard_arrow_down</FontIcon>
-              </Story></li>
-
-              <MiniMenu height={height+'px'}>
-                {items}
-                {/*The last one is 'all columns'*/}
-                <li key={999}><Link to={'/stories/columns'}>All Columns</Link></li>
-              </MiniMenu>
-
-              <Divider />
-
+              {!isMobile &&
+                <div>
+                  <Divider />
+                  <li><Story to="#" onClick={this.shrinkDrawer}>Stories
+                    <FontIcon className={'material-icons arrow ' + toggleArrow}>keyboard_arrow_down</FontIcon>
+                  </Story></li>
+                  <MiniMenu height={height+'px'}>
+                    {items}
+                    {/*The last one is 'all columns'*/}
+                    <li key={999}><Link to={'/stories/columns'}>All Columns</Link></li>
+                  </MiniMenu>
+                  <Divider />
+                </div>
+              }
               <li><Link to="/contact" onClick={close}>Contact</Link></li>
               {/*<Divider />
               <li><em style={{color:'#e2e2e2', fontSize:'18px'}}>Other Channels</em></li>

@@ -117,7 +117,8 @@ const TopBar = React.createClass({
 		return {
 			alertLeft: false,
 			alertRight: false,
-			scroll: 0
+			scroll: 0,
+			lock: false
 		}
 	},
 

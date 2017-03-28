@@ -220,7 +220,6 @@ const HomePage2 = React.createClass({
 				</Content>*/}
 		      <Content>
 			      <Main>
-							<StoryDropdown className="hidden-des-flex" nowPage={'All'}/>
 							<TextLine className='sans-font'>Latest</TextLine>
 							<Infinite
 									containerHeight={!isMobile?(count*210)-100:(count*356)-100}
