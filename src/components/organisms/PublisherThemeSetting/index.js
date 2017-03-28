@@ -9,6 +9,7 @@ import Popover from 'material-ui/Popover';
 import Request from 'superagent'
 import auth from 'components/auth'
 import RaisedButton from 'material-ui/RaisedButton'
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 
 const Container = styled.form`
   width:100%;
@@ -99,6 +100,7 @@ const Desc = styled.div`
   font-size:14px;
   font-style:italic;
   display:inline;
+  width:350px;
   margin:8px 0 0 0;
 ` 
 
@@ -124,8 +126,12 @@ const PublisherThemeSetting = React.createClass({
       open2: false,
       anchorEl1:{},
       anchorEl2:{},
+      
+      colorTheme:'light',
       primaryColor:'',
       secondaryColor:'',
+      accentColor:'',
+
       uploadFavicon:null,
       uploadLogo:null
     }
@@ -216,10 +222,16 @@ const PublisherThemeSetting = React.createClass({
       })
   },
 
+  changeColorTheme(e,val){
+    this.setState({
+      colorTheme:val
+    })
+  },
+
   render(){
     //console.log(this.context.setting.publisher.theme)
     var {theme} = this.context.setting.publisher
-    var {primaryColor,secondaryColor,anchorEl1,anchorEl2,open1,open2,textStatus,uploadFavicon,uploadLogo,error} = this.state
+    var {primaryColor,secondaryColor,accentColor,colorTheme,anchorEl1,anchorEl2,open1,open2,textStatus,uploadFavicon,uploadLogo,error} = this.state
     var styles={
       example1:{
         color:'white',
@@ -241,7 +253,10 @@ const PublisherThemeSetting = React.createClass({
       example5:{
         background:primaryColor,
         background:'linear-gradient(135deg, '+primaryColor+' 0%, '+secondaryColor+' 100%)',
-      }
+      },
+      radioButton: {
+        marginBottom: 20,
+      },
     }
 
     var shade = []
@@ -280,7 +295,7 @@ const PublisherThemeSetting = React.createClass({
         </Flex>
         <Flex>
           <Title>
-            <div className="sans-font">Primary and Secondary Colors</div>
+            <div className="sans-font">Primary Color</div>
           </Title>
           <Edit>
             <div className='row'>
@@ -300,6 +315,16 @@ const PublisherThemeSetting = React.createClass({
                   />
                 </Popover>
               </BoxColor>
+              <Desc className="sans-font">Primary color should be a major color that looks good on both white and black background</Desc>
+            </div>
+          </Edit>
+        </Flex>
+        <Flex>
+          <Title>
+            <div className="sans-font">Secondary Color</div>
+          </Title>
+          <Edit>
+            <div className='row'>
               <BoxColor id='color2' onClick={this.handleTouchTap2}>
                 <Color style={{backgroundColor:secondaryColor}}/>
                 <i className="fa fa-angle-down" style={{margin:'4px'}} aria-hidden="true"></i>
@@ -316,24 +341,56 @@ const PublisherThemeSetting = React.createClass({
                   />
                 </Popover>
               </BoxColor>
-              <Desc className="sans-font">Primary color should be a major color that looks<br/> good on both white and black background</Desc>
+              <Desc className="sans-font">Secondary Color may use for related information and as a gradient color</Desc>
             </div>
+          </Edit>
+        </Flex>
+        <Flex>
+          <Title>
+            <div className="sans-font">Accent Color</div>
+          </Title>
+          <Edit>
+            <div className='row'>
+              <BoxColor id='color2' onClick={this.handleTouchTap2}>
+                <Color style={{backgroundColor:secondaryColor}}/>
+                <i className="fa fa-angle-down" style={{margin:'4px'}} aria-hidden="true"></i>
+                <Popover
+                  open={open2}
+                  anchorEl={anchorEl2}
+                  anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+                  targetOrigin={{horizontal: 'left', vertical: 'top'}}
+                  onRequestClose={this.handleRequestClose}
+                >
+                  <ChromePicker
+                    color={ secondaryColor }
+                    onChangeComplete={ this.selectColor2 }
+                  />
+                </Popover>
+              </BoxColor>
+              <Desc className="sans-font">Accent Color should be used for action button and interactive elements, such as text fields, progress bar and links</Desc>
+            </div>
+          </Edit>
+        </Flex>
+        <Flex>
+          <Title>
+            <div className="sans-font">Primary Color</div>
+          </Title>
+          <Edit style={{maxWidth:'490px'}}>
+            <RadioButtonGroup name="Color Theme" valueSelected={colorTheme} onChange={this.changeColorTheme}>
+              <RadioButton
+                value="light"
+                label={<Color style={{backgroundColor:'white',width:'200px',height:'40px',border:'2px solid #ededed'}}/>}
+                style={styles.radioButton}
+              />
+              <RadioButton
+                value="dark"
+                label={<Color style={{backgroundColor:primaryColor,width:'200px',height:'40px',border:'2px solid #ededed'}}/>}
+                style={styles.radioButton}
+              />
+            </RadioButtonGroup>
+            
             <div className='row sans-font' style={{border:'1px solid #e2e2e2',padding:'10px',margin:'20px 0 0 0'}}>
               <div className='col-6 ' style={{padding:'0 5px 0 5px'}}>
-                <Example style={{...styles.example1}}>
-                  <strong className="serif-font" style={{fontSize:'17px'}}>Preview of the major color selection</strong><br/><br/>
-                  Content should look like this, isn't it pretty on this background color?
-
-                   <RaisedButton
-                      label="button"
-                      labelStyle={{fontWeight:'bold', fontSize:15, top:-2, fontFamily:"'Nunito', 'Mitr'"}}
-                      labelColor='#fff'
-                      overlayStyle={{borderRadius: '20px'}}
-                      rippleStyle={{borderRadius: '20px'}}
-                      style={{borderRadius:'20px', height:'40px', lineHeight:'40px', background:primaryColor, boxShadow:'none',marginTop:'15px'}}
-                      buttonStyle={{borderRadius: '20px', background: primaryColor, border:'2px solid #fff', padding:'0 2px'}}
-                    />
-                </Example>
                 <Example style={{...styles.example2}}>
                   <strong className="serif-font" style={{fontSize:'17px'}}>Preview of the major color selection</strong><br/><br/>
                   Content should look like this, isn't it pretty on this background color?
@@ -348,30 +405,9 @@ const PublisherThemeSetting = React.createClass({
                       buttonStyle={{borderRadius: '20px', background:'white', border:('2px solid '+primaryColor), padding:'0 2px'}}
                     />
                 </Example>
-                <Example style={{...styles.example3}}>
-                  <strong className="serif-font" style={{fontSize:'17px'}}>Preview of the major color selection</strong><br/><br/>
-                  Content should look like this, isn't it pretty on this background color?
-                    <RaisedButton
-                      label="button"
-                      labelStyle={{fontWeight:'bold', fontSize:15, top:-2, fontFamily:"'Nunito', 'Mitr'"}}
-                      labelColor='#fff'
-                      overlayStyle={{borderRadius: '20px'}}
-                      rippleStyle={{borderRadius: '20px'}}
-                      style={{borderRadius:'20px', height:'40px', lineHeight:'40px', background:primaryColor, boxShadow:'none',marginTop:'15px'}}
-                      buttonStyle={{borderRadius: '20px', background: primaryColor, border:'2px solid #fff', padding:'0 2px'}}
-                    />
-                </Example>
               </div>
               <div className='col-6' style={{padding:'0 5px 0 5px'}}>
-                {shade}
-                <div style={{...styles.example4,textAlign:'center',height:'82px',padding:'18px 0 0 0',marginTop:'20px'}}>
-                  <strong className="serif-font" style={{fontSize:'17px',color:'white'}}>White Color</strong><br/>
-                  <strong className="serif-font" style={{fontSize:'17px',color:'#222'}}>Black Color</strong>
-                </div>
-                {primaryColor && secondaryColor && <div className='backgroundClip' style={{...styles.example5,textAlign:'center',height:'82px',padding:'18px 0 0 0',backgroundClip:"text",textFillColor: "transparent",WebkitBackgroundClip:"text",WebkitTextFillColor: "transparent"}}>
-                  <strong className="serif-font" style={{fontSize:'24px'}}>
-                    Primary and <br/>Secondary Header</strong>
-                </div>}
+                <div style={{...styles.example4,textAlign:'center',height:'82px',padding:'18px 0 0 0',marginTop:'20px'}}></div>
               </div>
             </div>
           </Edit>
