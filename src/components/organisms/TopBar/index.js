@@ -163,6 +163,7 @@ const TopBar = React.createClass({
 	},
 
 	render () {
+		var {theme} = this.context.setting.publisher
 		let {alertLeft, alertRight, scroll} = this.state
 		let status = this.props.status || 'UNLOGGEDIN',
 			{scrolling, user, menu, transparent,editButton}  = this.props
@@ -199,7 +200,7 @@ const TopBar = React.createClass({
 				        <Hamburger white={(!scrolling && transparent)}/>
 				      </HamburgerWrapper>
 
-				      <LogoLink to="/" title={this.props.title} style={logoStyle} fill={!scrolling && transparent ? 'white' : ''} id="logo"/>
+				      <LogoLink to="/" src={theme.logo} title={this.props.title} style={logoStyle} fill={!scrolling && transparent ? 'white' : ''} id="logo"/>
 
 					</Left>
 
@@ -272,5 +273,10 @@ TopBar.propTypes = {
   menu: PropTypes.object,
   user: PropTypes.object
 }
+
+TopBar.contextTypes = {
+	setting: React.PropTypes.object
+};
+
 
 export default TopBar;

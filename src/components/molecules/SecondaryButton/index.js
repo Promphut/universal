@@ -15,7 +15,7 @@ render(){
 		opt = {
 			className: 'secondary-btn secondary-large-btn',
 			label: props.label,
-			labelColor: theme.primaryColor,
+			labelColor: theme.accentColor,
 			onClick:props.onClick,
 			type:props.type,
 			labelPosition:props.labelPosition,
@@ -23,12 +23,12 @@ render(){
 			overlayStyle:{borderRadius: '24px'},
 			labelStyle: {fontWeight:'bold', fontSize:18, top:-2, fontFamily:"Nunito Mitr", ...props.labelStyle},
 			style: {borderRadius:'24px', height:'48px', lineHeight:'48px', background:'none', boxShadow:'none', ...props.style},
-	    buttonStyle: {borderRadius: '24px', background: 'none', border:'2px solid '+theme.primaryColor, padding:'0 5px', ...props.buttonStyle}
+	    buttonStyle: {borderRadius: '24px', background: 'none', border:'2px solid '+theme.accentColor, padding:'0 5px', ...props.buttonStyle}
 		}
 
 		defaultStyle = {
 			icon: {
-				color: theme.primaryColor,
+				color: theme.accentColor,
 				margin:'-8px 0px 0 15px',
 				fontSize: '18px',
 				width: 18
@@ -42,7 +42,7 @@ render(){
 		opt = {
 			className: 'secondary-btn secondary-small-btn',
 			label: props.label,
-			labelColor: theme.primaryColor,
+			labelColor: theme.accentColor,
 			labelPosition:props.labelPosition,
 			onClick:props.onClick,
 			type:props.type,
@@ -50,12 +50,12 @@ render(){
 			overlayStyle:{borderRadius:'17px'},
 			labelStyle: {fontWeight:'bold', fontSize:15, top:-2, fontFamily:"'Nunito', 'Mitr'", ...props.labelStyle},
 			style: {borderRadius:'17px', height:'35px', lineHeight:'35px', background:'none', boxShadow:'none', ...props.style},
-	    buttonStyle: {borderRadius: '17px', background: 'none', border:'2px solid '+theme.primaryColor, padding:'0', ...props.buttonStyle}
+	    buttonStyle: {borderRadius: '17px', background: 'none', border:'2px solid '+theme.accentColor, padding:'0', ...props.buttonStyle}
 		}
 
 		defaultStyle = {
 			icon: {
-				color: theme.primaryColor,
+				color: theme.accentColor,
 				margin:'-4px 0px 0 14px',
 				fontSize: '13px',
 				width: 13
@@ -70,7 +70,7 @@ render(){
 		opt = {
 			className: 'secondary-btn',
 			label: props.label,
-			labelColor: theme.primaryColor,
+			labelColor: theme.accentColor,
 			onClick:props.onClick,
 			labelPosition:props.labelPosition,
 			type:props.type,
@@ -78,12 +78,12 @@ render(){
 			rippleStyle:{borderRadius: '20px'},
 			labelStyle: {fontWeight:'bold', fontSize:15, top:-2, fontFamily:"'Nunito', 'Mitr'", ...props.labelStyle},
 			style: {borderRadius:'20px', height:'40px', lineHeight:'40px', background:'none', boxShadow:'none', ...props.style},
-	    buttonStyle: {borderRadius: '20px', background: 'none', border:'2px solid '+theme.primaryColor, padding:'0 2px', ...props.buttonStyle}
+	    buttonStyle: {borderRadius: '20px', background: 'none', border:'2px solid '+theme.accentColor, padding:'0 2px', ...props.buttonStyle}
 		}
 
 		defaultStyle = {
 			icon: {
-				color: theme.primaryColor,
+				color: theme.accentColor,
 				margin:'-6px 0px 0 15px',
 				fontSize: '15px',
 				width: 15

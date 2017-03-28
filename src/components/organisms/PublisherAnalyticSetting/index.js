@@ -177,6 +177,7 @@ const PublisherAnalyticSetting = React.createClass({
 
   render(){
     let {textStatus, error, analytic} = this.state
+    var {theme} = this.context.setting.publisher
 
     return(
       <Container onSubmit={this.updateAnalytic} >
@@ -189,11 +190,18 @@ const PublisherAnalyticSetting = React.createClass({
              <TextField name='tagManagerId' onChange={this.analyticChanged} value={analytic&&analytic.tagManagerId} style={{marginTop:'20px'}}/>
           </Edit>
         </Flex>
-        <div className='sans-font row' style={{marginTop:'80px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.resetDate} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error?'#D8000C':'#00B2B4'}}>{textStatus}</TextStatus></div>
+        <div className='sans-font row' style={{marginTop:'80px'}}>
+          <PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/>
+          <SecondaryButton label='Reset' onClick={this.resetDate} style={{float:'left',margin:'0 20px 0 0'}}/>
+          <TextStatus style={{color:error?'#D8000C':theme.accentColor}}>{textStatus}</TextStatus></div>
       </Container>
     )
   },
 })
+
+PublisherAnalyticSetting.contextTypes = {
+	setting: React.PropTypes.object
+};
 
 
 export default PublisherAnalyticSetting

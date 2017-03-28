@@ -24,7 +24,7 @@ const Box = styled.div`
   background-color:#F4F4F4;
   text-align:center;
   font-size:14px;
-  color:${props=> props.theme.primaryColor};
+  color:${props=> props.theme.accentColor};
   &:hover{
     cursor:pointer;
     text-decoration:underline;
@@ -72,7 +72,7 @@ const Filter = styled.div`
 const Label = styled.span`
   position:relative;
   font-size:14px;
-  color:${props=> props.theme.primaryColor};
+  color:${props=> props.theme.accentColor};
 `
 
 const UploadPicture = React.createClass({
@@ -160,8 +160,9 @@ const UploadPicture = React.createClass({
   render(){
     var {msg,src,statePreview,err,preview} = this.state
     var {label,style,type,width,height,labelStyle} = this.props
-
-    console.log('src', src)
+    var {theme} = this.context.setting.publisher
+    
+    //console.log('src', src)
     
     var description = <Des className='sans-font'>{msg}</Des>
 
@@ -171,7 +172,7 @@ const UploadPicture = React.createClass({
         <Preview width={width} height={height} ref='preview' style={{display:statePreview?'block':'none',backgroundImage:'url('+(preview || src+'?'+Math.random()*10000)+')'}}>
           <Filter width={width} height={height} onClick={()=>(dom(this.refs.imageLoader).click())} ><Label style={{...labelStyle,color:'#fff'}}>Change Picture</Label></Filter>
         </Preview>
-        {msg!=''?<Des className='sans-font' style={{color:err?'#D8000C':'#00B2B4'}}>{msg}</Des>:''}
+        {msg!=''?<Des className='sans-font' style={{color:err?'#D8000C':theme.accentColor}}>{msg}</Des>:''}
         <input type="file" ref="imageLoader" name="imageLoader" onChange={this.upload} style={{visibility:'hidden'}}/>
       </Container>
     )
@@ -188,5 +189,7 @@ UploadPicture.propTypes = {
   src: PropTypes.string,
   path: PropTypes.string
 }
-    
+UploadPicture.contextTypes = {
+	setting: React.PropTypes.object
+};
 export default UploadPicture;

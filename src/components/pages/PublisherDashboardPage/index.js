@@ -54,7 +54,7 @@ const Primary = styled.div`
   text-align:center;
   padding:15px 5px 15px 5px;
   font-size:16px;
-  border:2px solid #00B2B4;
+  border:2px solid ${props=> props.theme.primaryColor};
 `
 const Th = styled.span`
   color:${props=> props.theme.primaryColor};
@@ -65,7 +65,7 @@ const Second = styled.div`
   text-align:center;
   padding:15px 5px 15px 5px;
   font-size:16px;
-  border:2px solid #00B2B4;
+  border:2px solid ${props=> props.theme.primaryColor};
 `
 
 const Cont = styled.div`
@@ -112,25 +112,6 @@ const StoryTitle = ({style, story})=>{
   )
 }
 
-const styles = {
-  thead:{
-    color:'#00B2B4',
-    fontSize:'20px',
-    width:'40%'
-  },
-  col1:{
-    width:'40%',
-    fontWeight:'bold'
-  },
-  col2:{
-    width:'25%'
-  },
-  col4:{
-    width:'10%',
-    paddingLeft:'5px',
-    paddingRight:'5px',
-  }
-}
 
 const PublisherDashboardPage = React.createClass({
 	getInitialState(){
@@ -189,6 +170,26 @@ const PublisherDashboardPage = React.createClass({
 
   render(){
     let {totalShare,totalStory,totalView,stories,writers,columns} = this.state
+    var {theme} = this.context.setting.publisher
+    const styles = {
+      thead:{
+        color:theme.primaryColor,
+        fontSize:'20px',
+        width:'40%'
+      },
+      col1:{
+        width:'40%',
+        fontWeight:'bold'
+      },
+      col2:{
+        width:'25%'
+      },
+      col4:{
+        width:'10%',
+        paddingLeft:'5px',
+        paddingRight:'5px',
+      }
+    }
 		return (
       <Container>
         {/* THESE BELOW IS NOT FOR #1 MVP VERSION 
@@ -333,6 +334,10 @@ const PublisherDashboardPage = React.createClass({
 		  )
 	}
 });
+
+PublisherDashboardPage.contextTypes = {
+	setting: React.PropTypes.object
+};
 
 export default PublisherDashboardPage;
 

@@ -255,6 +255,7 @@ const UserSettingProfile = React.createClass({
 
   render(){
     let {textStatus1,error1,textStatus2,error2,errText0,errText2,errText1,user} = this.state
+    var {theme} = this.context.setting.publisher
 
     return(
       <div>
@@ -301,12 +302,12 @@ const UserSettingProfile = React.createClass({
             </Edit>
           </Flex>*/}
           <div className='row hidden-des'>
-            <TextStatus style={{color:error2?'#D8000C':'#00B2B4',margin:'30px 0 0 15px'}} className='hidden-des'>{textStatus1}</TextStatus>
+            <TextStatus style={{color:error2?'#D8000C':theme.accentColor,margin:'30px 0 0 15px'}} className='hidden-des'>{textStatus1}</TextStatus>
           </div>
           <div className='sans-font btn-row' >
             <PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/>
             <SecondaryButton label='Reset' onClick={this.fetechUser} style={{float:'left',margin:'0 20px 0 0'}}/>
-            <TextStatus style={{color:error2?'#D8000C':'#00B2B4'}} className='hidden-mob'>{textStatus1}</TextStatus>
+            <TextStatus style={{color:error2?'#D8000C':theme.accentColor}} className='hidden-mob'>{textStatus1}</TextStatus>
           </div>
         </Container>
 
@@ -360,18 +361,22 @@ const UserSettingProfile = React.createClass({
             </Edit>
           </Flex>
           <div className='row hidden-des'>
-            <TextStatus style={{color:error2?'#D8000C':'#00B2B4',margin:'30px 0 0 15px'}} className='hidden-des'>{textStatus2}</TextStatus>
+            <TextStatus style={{color:error2?'#D8000C':theme.accentColor,margin:'30px 0 0 15px'}} className='hidden-des'>{textStatus2}</TextStatus>
           </div>
           <div className='sans-font btn-row'>
             <PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/>
             <SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/>
-            <TextStatus style={{color:error2?'#D8000C':'#00B2B4'}} className='hidden-mob'>{textStatus2}</TextStatus>
+            <TextStatus style={{color:error2?'#D8000C':theme.accentColor}} className='hidden-mob'>{textStatus2}</TextStatus>
           </div>
         </Container>
       </div>
     )
   },
 })
+
+UserSettingProfile.contextTypes = {
+	setting: React.PropTypes.object
+};
 
 
 

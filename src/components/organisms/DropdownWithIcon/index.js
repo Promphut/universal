@@ -93,7 +93,7 @@ const DropdownWithIcon = React.createClass({
         border:'none'
       },
       selected:{
-        backgroundColor:pmc,
+        backgroundColor:theme.accentColor,
         color:'white',
         fill:'white'
       },

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {PrimaryButton,SecondaryButton,UploadPicture,Logo} from 'components'
+import {PrimaryButton,SecondaryButton,UploadPicture,LogoLink} from 'components'
 import TextField from 'material-ui/TextField';
 import { ChromePicker } from 'react-color';
 import {findDOMNode as dom} from 'react-dom'
@@ -10,7 +10,6 @@ import Request from 'superagent'
 import auth from 'components/auth'
 import RaisedButton from 'material-ui/RaisedButton'
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
-
 const Container = styled.form`
   width:100%;
   padding:80px;
@@ -116,6 +115,13 @@ const ShadeColor = styled.div`
   width:100%;
 `
 
+const Topbar = styled.div`
+  display:flex;
+  width:100%;
+  height:40px;
+  border:1px solid #c4c4c4;
+`
+
 const PublisherThemeSetting = React.createClass({
   getInitialState(){
     return{
@@ -124,8 +130,7 @@ const PublisherThemeSetting = React.createClass({
       textStatus:'Unsave',
       open1: false,
       open2: false,
-      anchorEl1:{},
-      anchorEl2:{},
+      open2: false,
       
       colorTheme:'light',
       primaryColor:'',
@@ -153,10 +158,19 @@ const PublisherThemeSetting = React.createClass({
     });
   },
 
+  handleTouchTap3(event){
+    event.preventDefault();
+    this.setState({
+      open3: true,
+      anchorEl3: event.currentTarget,
+    });
+  },
+
   handleRequestClose(){
     this.setState({
       open1: false,
       open2: false,
+      open3: false,
     });
   },
 
@@ -167,6 +181,9 @@ const PublisherThemeSetting = React.createClass({
   selectColor2(color){
     this.setState({ secondaryColor: color.hex });
   },
+  selectColor3(color){
+    this.setState({ accentColor: color.hex });
+  },
 
   componentDidMount(){
     this.getPublisherId()
@@ -176,8 +193,10 @@ const PublisherThemeSetting = React.createClass({
     var {theme} = this.state.publisher
     //document.getElementById('analytic').value = typeof analytic == "undefined" ?'': analytic.tagManagerId
     this.setState({
-      primaryColor: !theme? '#00B2B4': theme.primaryColor,
-      secondaryColor: !theme? '#CEF1B7': theme.secondaryColor,
+      primaryColor: !theme.primaryColor? '#00B2B4': theme.primaryColor,
+      secondaryColor: !theme.secondaryColor? '#CEF1B7': theme.secondaryColor,
+      accentColor:!theme.accentColor? '#00B2B4': theme.accentColor,
+      colorTheme: !theme.barTone? '#00B2B4': theme.barTone,
       uploadFavicon:theme.favicon,
       uploadLogo:theme.logo
     })
@@ -206,7 +225,10 @@ const PublisherThemeSetting = React.createClass({
       publisher : {
         theme: {
           primaryColor:this.state.primaryColor,
-          secondaryColor:this.state.secondaryColor
+          secondaryColor:this.state.secondaryColor,
+          accentColor:this.state.accentColor,
+          barBgColor: this.state.primaryColor,
+ 			    barTone: this.state.colorTheme
         }
     }}
     Request
@@ -231,28 +253,21 @@ const PublisherThemeSetting = React.createClass({
   render(){
     //console.log(this.context.setting.publisher.theme)
     var {theme} = this.context.setting.publisher
-    var {primaryColor,secondaryColor,accentColor,colorTheme,anchorEl1,anchorEl2,open1,open2,textStatus,uploadFavicon,uploadLogo,error} = this.state
+    var {primaryColor,secondaryColor,accentColor,colorTheme,anchorEl1,anchorEl2,anchorEl3,open1,open2,open3,textStatus,uploadFavicon,uploadLogo,error} = this.state
     var styles={
-      example1:{
-        color:'white',
-        backgroundColor:primaryColor
-      },
       example2:{
-        color:primaryColor,
-        backgroundColor:'white',
-        border:'1px solid '+primaryColor
-      },
-      example3:{
         color:'#222',
-        backgroundColor:primaryColor
+        backgroundColor:'white',
+        border:'1px solid #ededed'
       },
       example4:{
+        color:'white',
         background:primaryColor,
         background:'linear-gradient(135deg, '+primaryColor+' 0%, '+secondaryColor+' 100%)',
       },
       example5:{
+        color:'white',
         background:primaryColor,
-        background:'linear-gradient(135deg, '+primaryColor+' 0%, '+secondaryColor+' 100%)',
       },
       radioButton: {
         marginBottom: 20,
@@ -290,7 +305,7 @@ const PublisherThemeSetting = React.createClass({
             <div className="sans-font">Large Logo (.svg)</div>
           </Title>
           <Edit>
-            <UploadPicture src={uploadLogo} path={'/publishers/'+config.PID+'/logo'} type='logo' width={'200px'} height={'70px'} labelStyle={{top:'25px'}}/>
+            <UploadPicture src={uploadLogo} path={'/publishers/'+config.PID+'/logo'} type='logo' width={'300px'} height={'70px'} labelStyle={{top:'25px'}}/>
           </Edit>
         </Flex>
         <Flex>
@@ -351,19 +366,19 @@ const PublisherThemeSetting = React.createClass({
           </Title>
           <Edit>
             <div className='row'>
-              <BoxColor id='color2' onClick={this.handleTouchTap2}>
-                <Color style={{backgroundColor:secondaryColor}}/>
+              <BoxColor id='color2' onClick={this.handleTouchTap3}>
+                <Color style={{backgroundColor:accentColor}}/>
                 <i className="fa fa-angle-down" style={{margin:'4px'}} aria-hidden="true"></i>
                 <Popover
-                  open={open2}
-                  anchorEl={anchorEl2}
+                  open={open3}
+                  anchorEl={anchorEl3}
                   anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
                   targetOrigin={{horizontal: 'left', vertical: 'top'}}
                   onRequestClose={this.handleRequestClose}
                 >
                   <ChromePicker
-                    color={ secondaryColor }
-                    onChangeComplete={ this.selectColor2 }
+                    color={ accentColor }
+                    onChangeComplete={ this.selectColor3 }
                   />
                 </Popover>
               </BoxColor>
@@ -373,46 +388,81 @@ const PublisherThemeSetting = React.createClass({
         </Flex>
         <Flex>
           <Title>
-            <div className="sans-font">Primary Color</div>
+            <div className="sans-font">Theme Top bar</div>
           </Title>
           <Edit style={{maxWidth:'490px'}}>
             <RadioButtonGroup name="Color Theme" valueSelected={colorTheme} onChange={this.changeColorTheme}>
               <RadioButton
                 value="light"
-                label={<Color style={{backgroundColor:'white',width:'200px',height:'40px',border:'2px solid #ededed'}}/>}
+                label={<Color style={{backgroundColor:'white',width:'200px',height:'40px',border:'2px solid #ededed',textAlign:'center',paddingTop:'6px'}}>Light Theme</Color>}
                 style={styles.radioButton}
               />
               <RadioButton
                 value="dark"
-                label={<Color style={{backgroundColor:primaryColor,width:'200px',height:'40px',border:'2px solid #ededed'}}/>}
+                label={<Color style={{backgroundColor:primaryColor,width:'200px',height:'40px',border:'2px solid #ededed',color:'white',textAlign:'center',paddingTop:'6px'}}>Dark Theme</Color>}
                 style={styles.radioButton}
               />
             </RadioButtonGroup>
-            
+             
             <div className='row sans-font' style={{border:'1px solid #e2e2e2',padding:'10px',margin:'20px 0 0 0'}}>
+              <Topbar style={{backgroundColor:colorTheme=='light'?'white':primaryColor,marginBottom:'20px'}}>
+                <i className="material-icons" style={{margin:'9px',color:colorTheme=='light'?'#222':'white',float:'left'}}>menu</i>
+                <LogoLink src={theme.logo} style={{float:'left',height:'30px',margin:'10px'}} fill={colorTheme=='light'?primaryColor:'#ffffff'} to="/"  title='preview loo'/>
+                <div className='nunito-font' style={{fontWeight:'bold',color:colorTheme=='light'?'#222':'white',padding:'8px'}}>About</div>
+                <div className='nunito-font' style={{fontWeight:'bold',color:colorTheme=='light'?'#222':'white',padding:'8px'}}>Contact</div>
+                <RaisedButton
+                  label="button"
+                  labelStyle={{fontWeight:'bold', fontSize:10, top:3, fontFamily:"'Nunito', 'Mitr'"}}
+                  labelColor='white'
+                  overlayStyle={{borderRadius: '20px'}}
+                  rippleStyle={{borderRadius: '20px'}}
+                  style={{borderRadius:'20px', height:'30px', background:accentColor, boxShadow:'none',margin:'4px 0 0 0',marginLeft:'20px'}}
+                  buttonStyle={{borderRadius: '20px', background:accentColor, padding:'0 2px',float:'right'}}
+                />
+              </Topbar>
               <div className='col-6 ' style={{padding:'0 5px 0 5px'}}>
                 <Example style={{...styles.example2}}>
                   <strong className="serif-font" style={{fontSize:'17px'}}>Preview of the major color selection</strong><br/><br/>
                   Content should look like this, isn't it pretty on this background color?
-
+                  <div className='row'>
                     <RaisedButton
                       label="button"
-                      labelStyle={{fontWeight:'bold', fontSize:15, top:-2, fontFamily:"'Nunito', 'Mitr'"}}
-                      labelColor={primaryColor}
+                      labelStyle={{fontWeight:'bold', fontSize:12, top:-2, fontFamily:"'Nunito', 'Mitr'"}}
+                      labelColor='white'
                       overlayStyle={{borderRadius: '20px'}}
                       rippleStyle={{borderRadius: '20px'}}
-                      style={{borderRadius:'20px', height:'40px', lineHeight:'40px', background:'white', boxShadow:'none',marginTop:'15px'}}
-                      buttonStyle={{borderRadius: '20px', background:'white', border:('2px solid '+primaryColor), padding:'0 2px'}}
+                      style={{display:'inline',borderRadius:'20px', height:'35px', lineHeight:'40px', background:accentColor, boxShadow:'none',margin:'15px 10px 0 0'}}
+                      buttonStyle={{borderRadius: '20px',  background:accentColor, padding:'0 2px'}}
                     />
+                    <RaisedButton
+                      label="button"
+                      labelStyle={{fontWeight:'bold', fontSize:12, top:-4, fontFamily:"'Nunito', 'Mitr'"}}
+                      labelColor={accentColor}
+                      overlayStyle={{borderRadius: '20px'}}
+                      rippleStyle={{borderRadius: '20px'}}
+                      style={{display:'inline',borderRadius:'20px', height:'35px', lineHeight:'40px', background:'white', boxShadow:'none',marginTop:'15px'}}
+                      buttonStyle={{borderRadius: '20px', background:'white', border:('2px solid '+accentColor), padding:'0 2px'}}
+                    />
+                  </div>
                 </Example>
               </div>
               <div className='col-6' style={{padding:'0 5px 0 5px'}}>
-                <div style={{...styles.example4,textAlign:'center',height:'82px',padding:'18px 0 0 0',marginTop:'20px'}}></div>
+                <Example style={{...styles.example2,padding:'15px',fontSize:'11px',height:'auto'}} className='sans-font'>
+                  <div style={{marginBottom:'15px',color:'#222'}}>Primary Text</div>
+                  <div style={{marginBottom:'15px',color:'#8f8f8f'}}>Seondary Text</div>
+                  <div style={{color:'#e2e2e2'}}>Disable/Hint Text</div>
+                </Example>
+                <div style={{...styles.example5,textAlign:'center',height:'50px',padding:'18px 0 0 0'}}>Primary Color</div>
+                <div style={{...styles.example4,textAlign:'center',height:'50px',padding:'18px 0 0 0'}}>Gradient</div>
               </div>
             </div>
           </Edit>
         </Flex>
-        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error?'#D8000C':theme.primaryColor}}>{textStatus}</TextStatus></div>
+        <div className='sans-font' style={{marginTop:'30px'}}>
+          <PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/>
+          <SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/>
+          <TextStatus style={{color:error?'#D8000C':theme.accentColor}}>{textStatus}</TextStatus>
+        </div>
         
       </Container>
     )
