@@ -260,8 +260,9 @@ const UserStory = React.createClass({
 
 	buildElements() {
 		let page = this.state.page
+		let uid = auth.getUser()._id
 
-		api.getFeed('story', {status:1}, 'latest', null, page, 10)
+		api.getFeed('story', {writer:uid, status:1}, 'latest', null, page, 10)
 		.then(result => {
 			var s = this.state.latestStories.concat(result.feed)
 			this.setState({
