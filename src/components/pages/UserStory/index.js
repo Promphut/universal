@@ -171,11 +171,6 @@ const LinkMobile = styled.a`
 `
 
 const UserDetail = ({style, user, shareFB}) => {
-	checkBack(e){
-    e.preventDefault()
-    browserHistory.goBack()
-  },
-
 	const backStyle = {
 		color: '#FFF',
 		fontSize: '40px',
@@ -196,9 +191,7 @@ const UserDetail = ({style, user, shareFB}) => {
   return (
 		<User>
 	    <div className='row' style={rowStyle}>
-				<Link to='#' onClick={this.checkBack}>
-					<FontIcon className="material-icons hidden-des" style={backStyle}>chevron_left</FontIcon>
-				</Link>
+				<FontIcon className="material-icons hidden-des" style={backStyle}>chevron_left</FontIcon>
 				<div style={{textAlign: 'center'}}>
       		<UserAvatar src={user.pic.medium} size={95}/>
 				</div>
