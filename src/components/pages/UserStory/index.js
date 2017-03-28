@@ -1,7 +1,7 @@
 import React from 'react'
 import { TopBarWithNavigation,ArticleBox,ArticleBoxLarge,More,TrendingSideBar,BGImg,StoryMenu } from 'components'
 import {findDOMNode as dom} from 'react-dom'
-import {Link, browserHistory} from 'react-router'
+import {Link, browserHistory, History} from 'react-router'
 import styled from 'styled-components'
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
@@ -170,7 +170,7 @@ const LinkMobile = styled.a`
 	font-size: 20px;
 `
 
-const UserDetail = ({style, user, shareFB}) => {
+const UserDetail = ({style, user, shareFB, checkBack}) => {
 	const backStyle = {
 		color: '#FFF',
 		fontSize: '40px',
@@ -191,7 +191,9 @@ const UserDetail = ({style, user, shareFB}) => {
   return (
 		<User>
 	    <div className='row' style={rowStyle}>
-				<FontIcon className="material-icons hidden-des" style={backStyle}>chevron_left</FontIcon>
+				<Link to='#' onClick={checkBack}>
+					<FontIcon className="material-icons hidden-des" style={backStyle}>chevron_left</FontIcon>
+				</Link>
 				<div style={{textAlign: 'center'}}>
       		<UserAvatar src={user.pic.medium} size={95}/>
 				</div>
@@ -293,6 +295,11 @@ const UserStory = React.createClass({
 			return <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>;
 	},
 
+  checkBack(e){
+    e.preventDefault()
+		browserHistory.goBack()
+  },
+
 	render(){
     var {theme} = this.context.setting.publisher
 		//console.log('user', this.props)
@@ -303,7 +310,7 @@ const UserStory = React.createClass({
 		return (
 		    <Wrapper>
 		      <TopBarWithNavigation className="hidden-mob" title={'Title of AomMoney goes here..'} />
-					<UserDetail user={this.props.params.user} shareFB={api.shareFB}/>
+					<UserDetail user={this.props.params.user} shareFB={api.shareFB} checkBack={this.checkBack}/>
 					<UserShareMobile className='row'>
 	          <LinkMobile href='#' onClick={api.shareFB}><i className="fa fa-facebook" aria-hidden="true"></i></LinkMobile>
 	          <LinkMobile href={config.TWT}><i className="fa fa-twitter" aria-hidden="true" ></i></LinkMobile>

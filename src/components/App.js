@@ -711,13 +711,42 @@ const muiTheme = getMuiTheme({
   },
 });
 
-const App = ({ children }) => {
-  return (
-    <MuiThemeProvider muiTheme={muiTheme}>
-      {children}
-    </MuiThemeProvider>
-  )
-}
+const App = React.createClass({
+  render(){
+    var {theme} = this.context.setting.publisher
+    //console.log(theme)
+    var {children} = this.props
+    var muiTheme = getMuiTheme({
+      appBar: {
+        height: 60,
+      },
+      menuItem: {
+        hoverTextColor:'#fff',
+        selectedTextColor: "#fff",
+      },
+      textField: {
+        floatingLabelColor: theme.primaryColor,
+        focusColor: theme.primaryColor,
+      },
+      flatButton: {
+        buttonFilterColor: theme.primaryColor,
+        primaryTextColor: theme.primaryColor,
+        secondaryTextColor: theme.secondaryColor,
+      },
+      raisedButton: {
+        primaryColor: theme.primaryColor,
+        primaryTextColor: theme.primaryColor,
+        secondaryColor: theme.secondaryColor,
+        secondaryTextColor: theme.secondaryColor,
+      },
+    });
+    return (
+      <MuiThemeProvider muiTheme={muiTheme}>
+        {children}
+      </MuiThemeProvider>
+    )
+  }
+})
 
 App.propTypes = {
   children: PropTypes.oneOfType([
@@ -725,5 +754,9 @@ App.propTypes = {
     PropTypes.node
   ])
 }
+
+App.contextTypes = {
+    setting: React.PropTypes.object
+};
 
 export default App
