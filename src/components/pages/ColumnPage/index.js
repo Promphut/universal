@@ -80,7 +80,7 @@ const ColumnName = styled.div`
   font-weight:bold;
 
 	@media (max-width:480px) {
-  	font-size: 14px;
+  	font-size: 16px;
   }
 `
 
@@ -91,7 +91,7 @@ const ColumnDetail = styled.div`
 	margin-top:15px;
 
 	@media (max-width:480px) {
-  	font-size: 10px;
+  	font-size: 12px;
 		margin-top: 8px;
   }
 `
@@ -201,7 +201,7 @@ const ColumnPage = React.createClass({
 	},
 
 	render(){
-    const BGImgSize = (window.isMobile() ? 84 : 280) + 60
+    const BGImgSize = (window.isMobile() ? 100 : 280) + 60
 		let {column, feed} = this.state
 		//console.log('column', column)
 		var {count,loadOffset,isInfiniteLoading,latestStories,isMobile} = this.state
