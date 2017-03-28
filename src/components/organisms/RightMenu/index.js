@@ -210,7 +210,7 @@ const RightMenu = React.createClass({
             <CloseBtn onTouchTap={close}><FontIcon className="material-icons" style={{color:'#222',fill:'#222'}}>close</FontIcon></CloseBtn>
 
             <Profile className="content-font">
-              <Link to={user.url}><Avatar src={user.pic.medium}size={70} className="mobile"/></Link>
+              <Link to={user.url}><Avatar src={user.pic.medium} size={70} className="mobile"/></Link>
               <div style={{marginTop: '-15px'}}>
                 <Link to={user.url}>
                   <h3 style={displayStyle}>{user.display}</h3>
