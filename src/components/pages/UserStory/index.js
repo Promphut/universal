@@ -1,6 +1,7 @@
 import React from 'react'
 import { TopBarWithNavigation,ArticleBox,ArticleBoxLarge,More,TrendingSideBar,BGImg,StoryMenu } from 'components'
 import {findDOMNode as dom} from 'react-dom'
+import {Link, browserHistory} from 'react-router'
 import styled from 'styled-components'
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
@@ -170,6 +171,11 @@ const LinkMobile = styled.a`
 `
 
 const UserDetail = ({style, user, shareFB}) => {
+	checkBack(e){
+    e.preventDefault()
+    browserHistory.goBack()
+  },
+
 	const backStyle = {
 		color: '#FFF',
 		fontSize: '40px',
@@ -190,7 +196,9 @@ const UserDetail = ({style, user, shareFB}) => {
   return (
 		<User>
 	    <div className='row' style={rowStyle}>
-				<FontIcon className="material-icons hidden-des" style={backStyle}>chevron_left</FontIcon>
+				<Link to='#' onClick={this.checkBack}>
+					<FontIcon className="material-icons hidden-des" style={backStyle}>chevron_left</FontIcon>
+				</Link>
 				<div style={{textAlign: 'center'}}>
       		<UserAvatar src={user.pic.medium} size={95}/>
 				</div>
