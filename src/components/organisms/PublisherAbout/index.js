@@ -181,12 +181,13 @@ const PublisherAbout = React.createClass({
 
   render(){
     let {error, textStatus, aboutUs} = this.state
-
+    var {theme} = this.context.setting.publisher
+    
     return(
       <Container onSubmit={this.updateAboutUs}>
         <div  className="head sans-font">About Us</div>
         <div className='sans-font' style={{marginTop:-30, float:'right'}}>
-          <TextStatus style={{color:error?'#D8000C':'#00B2B4'}}>{textStatus}</TextStatus>
+          <TextStatus style={{color:error?'#D8000C':theme.accentColor}}>{textStatus}</TextStatus>
           <SecondaryButton label='Reset' onClick={this.resetData} style={{float:'left',margin:'0 0 0 20px'}}/>
           <PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 0 0 20px'}}/>
         </div>
@@ -202,7 +203,9 @@ const PublisherAbout = React.createClass({
     )
   },
 })
-
+PublisherAbout.contextTypes = {
+	setting: React.PropTypes.object
+};
 
 
 export default PublisherAbout

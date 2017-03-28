@@ -95,7 +95,7 @@ const Divider = styled.div`
 const TextStatus = styled.div`
   font-size:15px;
   font-style:italic;
-  color:${props=> props.theme.primaryColor};
+  color:${props=> props.theme.accentColor};
   display:inline;
   float:right;
   padding:12px 20px 12px 20px;
@@ -513,7 +513,7 @@ const NewStory = React.createClass({
             overlayStyle={{borderRadius: '20px'}}
             rippleStyle={{borderRadius: '20px'}}
             style={{borderRadius:'20px', height:'40px', lineHeight:'40px', background:theme.primaryColor, boxShadow:'none',float:'right',visibility:layout==null?'hidden':'visible'}}
-            buttonStyle={{borderRadius: '20px', background: theme.primaryColor, border:'2px solid '+theme.primaryColor, padding:'0 2px'}}
+            buttonStyle={{borderRadius: '20px', background: theme.accentColor, border:'2px solid '+theme.accentColor, padding:'0 2px'}}
             icon={<FontIcon className='material-icons'>keyboard_arrow_right</FontIcon>}
           />
         </dvi>
@@ -535,8 +535,8 @@ const NewStory = React.createClass({
           labelPosition="before"
           overlayStyle={{borderRadius: '20px'}}
           rippleStyle={{borderRadius: '20px'}}
-          style={{borderRadius:'20px', height:'40px', lineHeight:'40px', background:theme.primaryColor, boxShadow:'none',float:'right',visibility:sid!=null?'visible':'hidden'}}
-          buttonStyle={{borderRadius: '20px', background: theme.primaryColor, border:'2px solid '+theme.primaryColor, padding:'0 2px'}}
+          style={{borderRadius:'20px', height:'40px', lineHeight:'40px', background:theme.accentColor, boxShadow:'none',float:'right',visibility:sid!=null?'visible':'hidden'}}
+          buttonStyle={{borderRadius: '20px', background: theme.accentColor, border:'2px solid '+theme.accentColor, padding:'0 2px'}}
           icon={<FontIcon className='material-icons'>keyboard_arrow_down</FontIcon>}
         >
         <Popover
@@ -545,7 +545,7 @@ const NewStory = React.createClass({
           anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
           targetOrigin={{horizontal: 'right', vertical: 'top'}}
           onRequestClose={this.handleRequestClose}
-          style={{border:'3px solid '+theme.primaryColor,width:'482px',padding:'30px',marginTop:8,boxShadow:'none',overflow:'hidden'}}
+          style={{border:'3px solid '+theme.accentColor,width:'482px',padding:'30px',marginTop:8,boxShadow:'none',overflow:'hidden'}}
         >
           <div className='row' style={{display:'block',overflow:'hidden'}}>
             <Label className="nunito-font or" style={{float:'left',marginTop:'22px'}}>Column : </Label>
@@ -559,7 +559,7 @@ const NewStory = React.createClass({
               underlineStyle={{display:'none'}}
               menuStyle={{width:'320px'}}
               menuItemStyle={{width:'320px'}}
-              selectedMenuItemStyle={{color:'#222',background:theme.primaryColor}}
+              selectedMenuItemStyle={{color:'#222',background:theme.accentColor}}
             >
               <MenuItem value='no' primaryText='No Column' />
               {columnList.length!=0?columnList.map((data,index)=>(

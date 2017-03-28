@@ -23,8 +23,10 @@ const HoverButton = React.createClass({
   },
 
   render() {
+    var {theme} = this.context.setting.publisher
+    
     const buttonStyleBase = {
-      color: '#00B2B4',
+      color: theme.accentColor,
       fontSize: '18px',
       float: 'left',
       marginTop: '10px',
@@ -36,7 +38,7 @@ const HoverButton = React.createClass({
     const labelStyleBase = {
       fontWeight: 'bold',
       fontSize: '15px',
-      color: '#00B2B4',
+      color: theme.accentColor,
       fontFamily:"'Nunito', 'Mitr'",
       textTransform:'none'
     }
@@ -87,11 +89,15 @@ const HoverButton = React.createClass({
           label={label}
           labelStyle={labelStyle}
           style={style}
-          hoverColor='#00B2B4'
+          hoverColor='theme.accentColor'
         />
       </div>
     )
   }
 })
+
+HoverButton.contextTypes = {
+	setting: React.PropTypes.object
+};
 
 export default HoverButton

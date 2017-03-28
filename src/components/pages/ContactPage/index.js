@@ -361,9 +361,10 @@ const ContactPage = React.createClass({
           <Dropdown onMouseOver={this.openDropdown} onMouseLeave={this.closeDropdown}>
             <SecondaryButton
               label={problemSelect}
-              labelStyle={{textTransform:'none'}}
-              style={dropdownProblem}
-              buttonStyle={{textAlign: 'left'}}
+              labelColor={theme.primaryColor}
+              labelStyle={{textTransform:'none',color:theme.primaryColor}}
+              style={{...dropdownProblem,color:theme.primaryColor}}
+              buttonStyle={{textAlign: 'left',border:'2px solid '+theme.primaryColor,color:theme.primaryColor}}
             />
             <DropdownContent dropdown={dropdown}>
               {button}

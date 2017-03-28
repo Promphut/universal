@@ -86,12 +86,12 @@ const NotFoundPage = React.createClass({
 					</ErrorText>
           <Link to="/">
   					<FlatButton
-  						backgroundColor={theme.primaryColor}
+  						backgroundColor={theme.accentColor}
         			label="Go Home"
   						labelPosition="before"
   						labelStyle={buttonLabelStyle}
   						style={buttonStyle}
-  						hoverColor={theme.primaryColor}
+  						hoverColor={theme.accentColor}
   						icon={
   	            <FontIcon
   								className="material-icons"

@@ -247,6 +247,7 @@ const PublisherContact = React.createClass({
 
   render(){
     let {error,textStatus,alert,alertConfirm,alertWhere,alertChild,alertDesc,snackbar,snackbarMS, contactCats, selectContactCat} = this.state
+    var {theme} = this.context.setting.publisher
 
     return (
       <Container onSubmit={this.updateContactCat}>
@@ -255,8 +256,8 @@ const PublisherContact = React.createClass({
           message={snackbarMS}
           autoHideDuration={4000}
           onRequestClose={this.closeSnackbar}
-          style={{backgroundColor:'#00B2B4'}}
-          bodyStyle={{backgroundColor:'#00B2B4',textAlign:'center'}}
+          style={{backgroundColor:theme.accentColor}}
+          bodyStyle={{backgroundColor:theme.accentColor,textAlign:'center'}}
           className="nunito-font"
         />
         <div  className="head sans-font">Contact</div>
@@ -306,12 +307,18 @@ const PublisherContact = React.createClass({
 
           </Edit>
         </Flex>
-        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.resetData} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error?'#D8000C':'#00B2B4'}}>{textStatus}</TextStatus></div>
+        <div className='sans-font' style={{marginTop:'30px'}}>
+          <PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/>
+          <SecondaryButton label='Reset' onClick={this.resetData} style={{float:'left',margin:'0 20px 0 0'}}/>
+          <TextStatus style={{color:error?'#D8000C':theme.accentColor}}>{textStatus}</TextStatus></div>
       </Container>
     )
   },
 })
 
+PublisherContact.contextTypes = {
+	setting: React.PropTypes.object
+};
 
 
 export default PublisherContact

@@ -350,6 +350,7 @@ const ColumnSettingPage = React.createClass({
   },
 
   render(){
+    var {theme} = this.context.setting.publisher
     var {dialog,error,textStatus,dialogText,cover,writers,editors,switchTo, editorsAutoComplete, writersAutoComplete, writerSearchText,editorSearchText} = this.state
     const actions = [
       <FlatButton
@@ -478,12 +479,17 @@ const ColumnSettingPage = React.createClass({
               </div>
             </Edit>
           </Flex>
-          <div className='sans-font' style={{marginTop:'80px',overflow:'hidden'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error?'#D8000C':'#00B2B4'}}>{textStatus}</TextStatus></div>
+          <div className='sans-font' style={{marginTop:'80px',overflow:'hidden'}}>
+            <PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/>
+            <SecondaryButton label='Reset' style={{float:'left',margin:'0 20px 0 0'}}/>
+          <TextStatus style={{color:error?'#D8000C':theme.accentColor}}>{textStatus}</TextStatus></div>
         </Container>
     )
   },
 })
-
+ColumnSettingPage.contextTypes = {
+	setting: React.PropTypes.object
+};
 
 
 export default ColumnSettingPage
