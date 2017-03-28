@@ -286,7 +286,7 @@ const LeftMenu = React.createClass({
         <Container2 onClick={close} />
         <Nav open={open}>
           <div className="menu menu-font">
-            <CloseBtn onTouchTap={close}><FontIcon className="material-icons">close</FontIcon></CloseBtn>
+            <CloseBtn onClick={close}><FontIcon className="material-icons">close</FontIcon></CloseBtn>
             {/* <SearchBtn onTouchTap={this.onSearch}><FontIcon className="material-icons">search</FontIcon></SearchBtn>*/}
             <ul>
               {isMobile &&

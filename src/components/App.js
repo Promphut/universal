@@ -725,19 +725,19 @@ const App = React.createClass({
         selectedTextColor: "#fff",
       },
       textField: {
-        floatingLabelColor: theme.primaryColor,
-        focusColor: theme.primaryColor,
+        floatingLabelColor: theme.accentColor,
+        focusColor: theme.accentColor,
       },
       flatButton: {
-        buttonFilterColor: theme.primaryColor,
-        primaryTextColor: theme.primaryColor,
-        secondaryTextColor: theme.secondaryColor,
+        // buttonFilterColor: theme.accentColor,
+        // primaryTextColor: theme.accentColor,
+        // secondaryTextColor: theme.secondaryColor,
       },
       raisedButton: {
-        primaryColor: theme.primaryColor,
-        primaryTextColor: theme.primaryColor,
-        secondaryColor: theme.secondaryColor,
-        secondaryTextColor: theme.secondaryColor,
+        // primaryColor: theme.accentColor,
+        // primaryTextColor: theme.accentColor,
+        // secondaryColor: theme.secondaryColor,
+        // secondaryTextColor: theme.secondaryColor,
       },
     });
     return (

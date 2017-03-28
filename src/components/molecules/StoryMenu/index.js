@@ -40,7 +40,7 @@ const StoryMenu = React.createClass({
               style={{
                 fontSize: '24px',
                 margin: '0px',
-                color: (page == 'allcolumn') ? theme.primaryColor : '#8f8f8f',
+                color: (page == 'allcolumn') ? theme.accentColor : '#8f8f8f',
               }}>
               apps
             </FontIcon>
@@ -58,7 +58,7 @@ const StoryMenu = React.createClass({
           labelStyle={{
             fontSize: '18px',
             paddingLeft: '12px', paddingRight: '6px',
-            color: (page == 'allcolumn') ? theme.primaryColor : '#8f8f8f',
+            color: (page == 'allcolumn') ? theme.accentColor : '#8f8f8f',
             fontWeight: (page == 'allcolumn') ? 'bold' : 'normal'
           }}
           hoverColor='#E2E2E2'
@@ -85,7 +85,7 @@ const StoryMenu = React.createClass({
             labelStyle={{
               fontSize: '18px',
               paddingLeft: '14px', paddingRight: '14px',
-              color: theme.primaryColor,
+              color: theme.accentColor,
               fontWeight: 'bold'
             }}
             hoverColor='#E2E2E2'
@@ -98,7 +98,7 @@ const StoryMenu = React.createClass({
           style={{marginTop:'5px'}}
           href={linkPath}
           icon={<FontIcon className="material-icons" style={{fontSize:'35px',color:'#8f8f8f'}}>chevron_right</FontIcon>}
-          labelStyle={{fontSize:'18px',color:theme.primaryColor,fontWeight:'bold'}}
+          labelStyle={{fontSize:'18px',color:theme.accentColor,fontWeight:'bold'}}
         />}
 
       </Wrapper>

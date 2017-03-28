@@ -5,7 +5,7 @@ import Avatar from 'material-ui/Avatar'
 import {LogoLink, PrimaryButton, SecondaryButton, LeftMenu, RightMenu} from 'components'
 import auth from 'components/auth'
 //import utils from 'components/utils'
-
+import FontIcon from 'material-ui/FontIcon'
 const Wrapper = styled.div`
 	.transparent {
 		background: none;
@@ -24,9 +24,10 @@ const Wrapper = styled.div`
 const Container = styled.div`
 	margin: 0;
 	padding: 0;
-  background: white;
+  background: ${props => props.theme.barTone=='light'?'white':props.theme.primaryColor};
+	color: ${props => props.theme.barTone=='light'?'#222':'white'};
   height: 60px;
-  border-bottom: 1px solid #e2e2e2;
+  border-bottom: ${props => props.theme.barTone=='light'?'1px solid #e2e2e2':'none'};
 	width: 100%;
 	transition: .1s;
 	position: absolute;
@@ -43,26 +44,21 @@ const Container = styled.div`
 `
 
 const Left = styled.div`
-	float: left
+	float: left;
 `
 
 const HamburgerWrapper = styled.a`
 	display: inline-block;
   float: left;
   text-align: center;
-  color: #8f8f8f;
-  padding: 22px 20px;
+  color: ${props => props.theme.barTone=='light'?'#222':'white'};
+  padding: 13px 22px;
   cursor: pointer;
 `
 
-const Hamburger = styled.div`
-	content: '';
-	height: 2px;
-	width: 20px;
-	background: ${props => props.white ? 'white' : '#8d8d8d'};
-	box-shadow: ${props => props.white ?
-		'0 6px 0 white, 0 12px 0 white' : '0 6px 0 #8d8d8d, 0 12px 0 #8d8d8d'};
-  marginBottom: 11px;
+const Hamburger = styled.i`
+	color: ${props => props.theme.barTone=='light'?'#222':'white'};
+	padding-top:5px;
 `
 
 const Center = styled.div`
@@ -93,7 +89,7 @@ const NotLogin = styled.div`
 	margin: 9px 20px;
 
 	& * {
-		color: #8f8f8f;
+		color: ${props => props.theme.barTone=='light'?'#222':'white'};
 	}
 
 	& a:hover {
@@ -117,7 +113,8 @@ const TopBar = React.createClass({
 		return {
 			alertLeft: false,
 			alertRight: false,
-			scroll: 0
+			scroll: 0,
+			lock: false
 		}
 	},
 
@@ -163,6 +160,7 @@ const TopBar = React.createClass({
 	},
 
 	render () {
+		var {theme} = this.context.setting.publisher
 		let {alertLeft, alertRight, scroll} = this.state
 		let status = this.props.status || 'UNLOGGEDIN',
 			{scrolling, user, menu, transparent,editButton}  = this.props
@@ -196,10 +194,10 @@ const TopBar = React.createClass({
 					+ ((!scrolling && transparent) ? 'transparent' : '')}>
 					<Left>
 				      <HamburgerWrapper onClick={() => this.openPop('left')}>
-				        <Hamburger white={(!scrolling && transparent)}/>
+				        <Hamburger className="material-icons" white={(!scrolling && transparent)} style={!scrolling && transparent?{color:'white'}:{}}>menu</Hamburger>
 				      </HamburgerWrapper>
 
-				      <LogoLink to="/" title={this.props.title} style={logoStyle} fill={!scrolling && transparent ? 'white' : ''} id="logo"/>
+				      <LogoLink to="/" src={theme.logo} title={this.props.title} style={logoStyle} fill={theme.borTone=='light'?theme.primaryColor:'#ffffff'} id="logo"/>
 
 					</Left>
 
@@ -209,7 +207,7 @@ const TopBar = React.createClass({
 
 					{status == 'LOGGEDIN' &&
 						<Right>
-							{ this.role && editButton && <Edit className='nunito-font' style={{color:(!scrolling && transparent) ? 'white' : '#8f8f8f'}} to={editButton}>Edit Story</Edit>}
+							{ this.role && editButton && <Edit className='nunito-font' style={{color:(!scrolling && transparent) ? 'white' : '#222'}} to={editButton}>Edit Story</Edit>}
 
 				      {this.role && <HideOnTablet>
 								<Link to="/me/stories/new">
@@ -272,5 +270,10 @@ TopBar.propTypes = {
   menu: PropTypes.object,
   user: PropTypes.object
 }
+
+TopBar.contextTypes = {
+	setting: React.PropTypes.object
+};
+
 
 export default TopBar;

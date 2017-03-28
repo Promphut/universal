@@ -120,7 +120,7 @@ const Nav = styled.nav`
     margin: 0px;
 
     @media(max-width: 480px){
-      padding-left: 20px;
+      padding: 0px 40px;
     }
 	}
 	& ul li a {
@@ -206,7 +206,7 @@ const RightMenu = React.createClass({
     let {open, close} = this.props,
         user = this.props.user
 
-    let displayStyle, AvatarSize
+    let displayStyle, AvatarSize, introStyle
     let hiddenMobile = {}
     let AvatarStyle = {}
     let linkStyle = {}
@@ -218,17 +218,23 @@ const RightMenu = React.createClass({
       }
       AvatarStyle = {
         border: '1px solid #FFF',
-        marginTop: '50px'
+        marginTop: '70px'
       }
       AvatarSize = 55
       displayStyle = {
-       fontSize: '22px',
+       fontSize: '18px',
        margin: '0px',
        color: '#222',
-       fontWeight: 'normal',
+       fontWeight: 'bold',
        position: 'absolute',
-       top: '62px',
-       left: '110px'
+       top: '70px',
+       left: '115px'
+     }
+     introStyle = {
+       position: 'absolute',
+       top: '95px',
+       left: '115px',
+       maxWidth: '225px'
      }
      linkStyle = {
         display: 'inline-flex'
@@ -240,6 +246,7 @@ const RightMenu = React.createClass({
         color: '#222',
         fontWeight: 'bold'
       }
+      introStyle = {}
       AvatarSize = 70
     }
 
@@ -249,7 +256,7 @@ const RightMenu = React.createClass({
         <Nav open={open}>
           <div className="menu menu-font">
             <Link style={hiddenMobile} to={'/editor'}><EditMode className="nunito-font"><FontIcon className="material-icons" style={{color:'#fff',margin:'0 25px 0 20px',top:'4px'}}>edit</FontIcon>Editor Mode</EditMode></Link>
-            <CloseBtn onTouchTap={close}><FontIcon className="material-icons" style={{color:'#222',fill:'#222'}}>close</FontIcon></CloseBtn>
+            <CloseBtn onClick={close}><FontIcon className="material-icons" style={{color:'#222',fill:'#222'}}>close</FontIcon></CloseBtn>
 
             <Profile className="content-font">
               <Link to={user.url}><Avatar style={AvatarStyle} src={user.pic.medium} size={AvatarSize} className="mobile"/></Link>
@@ -257,13 +264,13 @@ const RightMenu = React.createClass({
                 <Link to={user.url}>
                   <h3 style={displayStyle}>{user.display}</h3>
                 </Link>
-                <div style={hiddenMobile}>
+                <div style={introStyle}>
                   {user.intro}
                 </div>
               </div>
             </Profile>
-            <Divider />
     				<ul>
+              <Divider />
     					<li><Link style={hiddenMobile} to='/me/stories' onClick={close}>My Stories</Link></li>
     					<li><Link style={linkStyle} to='/me/settings' onClick={close}>{isMobile ? <FontIcon style={{paddingRight: '25px'}} className="material-icons">account_circle</FontIcon> : ''}Edit Profile</Link></li>
     				</ul>

@@ -31,13 +31,13 @@ const Main = styled.div`
 
 const Head = styled.div`
 	margin: 120px 0 0 20%;
-	
+
 	@media (max-width: 768px) {
 		margin: 120px 5% 0 5%;
   }
 
 	@media (max-width: 480px) {
-		margin: 80px 5% 0 5%;
+		margin: 72px 5% 0 5%;
 	}
 `
 
@@ -78,6 +78,10 @@ const ColumnName = styled.div`
   color:#fff;
   font-size:48px;
   font-weight:bold;
+
+	@media (max-width:480px) {
+  	font-size: 16px;
+  }
 `
 
 const ColumnDetail = styled.div`
@@ -85,6 +89,11 @@ const ColumnDetail = styled.div`
   font-size:16px;
 	font-family:'Mitr';
 	margin-top:15px;
+
+	@media (max-width:480px) {
+  	font-size: 12px;
+		margin-top: 8px;
+  }
 `
 
 const Footer = styled.div`
@@ -184,7 +193,7 @@ const ColumnPage = React.createClass({
 		this.setState({
 				isInfiniteLoading: true,
 				page:this.state.page+1
-		});	
+		});
 	},
 
 	elementInfiniteLoad() {
@@ -192,6 +201,7 @@ const ColumnPage = React.createClass({
 	},
 
 	render(){
+    const BGImgSize = (window.isMobile() ? 100 : 280) + 60
 		let {column, feed} = this.state
 		//console.log('column', column)
 		var {count,loadOffset,isInfiniteLoading,latestStories,isMobile} = this.state
@@ -204,7 +214,7 @@ const ColumnPage = React.createClass({
 		return (
 		    <Wrapper>
 				<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
-				<BGImg src={column.cover.medium || column.cover.small} style={{width:'100%',height: (280+60)+'px'}} child={ChildCover}/>
+				<BGImg src={column.cover.medium || column.cover.small} style={{width:'100%',height: BGImgSize + 'px'}} child={ChildCover}/>
 
 		      	<Content>
 			      <Main>

@@ -69,7 +69,7 @@ const PublisherProfileSetting = React.createClass({
           ty:''
         },
         name:'',
-        shortDesc:'',
+        tagline:'',
         cover: {
           medium: ''
         }
@@ -129,7 +129,8 @@ const PublisherProfileSetting = React.createClass({
 
   render(){
     let {textStatus,error} = this.state
-    let pub = this.state.publisher 
+    let pub = this.state.publisher
+    var {theme} = this.context.setting.publisher 
     //console.log('render', pub)
     return (
       <Container onSubmit={this.updatePublisher}>
@@ -153,14 +154,14 @@ const PublisherProfileSetting = React.createClass({
           </Title>
           <Edit>
             <TextField
-              value={pub.shortDesc}
+              value={pub.tagline}
               multiLine={true}
               fullWidth={true}
               floatingLabelText="80 characters"
               floatingLabelFixed={true}
               rows={1}
               rowsMax={10}
-              name='shortDesc'
+              name='tagline'
               onChange={this.publisherChanged}
             />
           </Edit>
@@ -200,11 +201,19 @@ const PublisherProfileSetting = React.createClass({
             </Social>
           </Edit>
         </Flex>
-        <div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' onClick={this.resetDate} style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus  style={{color:error?'#D8000C':'#00B2B4'}}>{textStatus}</TextStatus></div>
+        <div className='sans-font' style={{marginTop:'30px'}}>
+          <PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/>
+          <SecondaryButton label='Reset' onClick={this.resetDate} style={{float:'left',margin:'0 20px 0 0'}}/>
+          <TextStatus  style={{color:error?'#D8000C':theme.accentColor}}>{textStatus}</TextStatus>
+        </div>
       </Container>
     )
   },
 })
+
+PublisherProfileSetting.contextTypes = {
+	setting: React.PropTypes.object
+};
 
 
 

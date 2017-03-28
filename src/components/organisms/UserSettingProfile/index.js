@@ -170,6 +170,7 @@ const UserSettingProfile = React.createClass({
   },
 
   render(){
+    var {theme} = this.context.setting.publisher
     let {textStatus, error, user} = this.state
     //console.log('user.pic.medium', user.pic.medium)
     return(
@@ -294,17 +295,21 @@ const UserSettingProfile = React.createClass({
           </Edit>
         </Flex>
         <div className='row hidden-des'>
-          <TextStatus style={{color:error?'#D8000C':'#00B2B4',margin:'30px 0 0 15px'}} className='hidden-des'>{textStatus}</TextStatus>
+          <TextStatus style={{color:error?'#D8000C':theme.accentColor,margin:'30px 0 0 15px'}} className='hidden-des'>{textStatus}</TextStatus>
         </div>
         <div className='sans-font' style={{overflow:'hidden',marginTop:'30px'}}>
           <PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/>
           <SecondaryButton label='Reset' onClick={this.fetechUser} style={{float:'left',margin:'0 20px 0 0'}}/>
-          <TextStatus style={{color:error?'#D8000C':'#00B2B4'}} className='hidden-mob'>{textStatus}</TextStatus>
+          <TextStatus style={{color:error?'#D8000C':theme.accentColor}} className='hidden-mob'>{textStatus}</TextStatus>
         </div>
       </Container>
     )
   },
 })
+
+UserSettingProfile.contextTypes = {
+	setting: React.PropTypes.object
+};
 
 
 

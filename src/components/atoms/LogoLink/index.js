@@ -5,46 +5,60 @@ import cheerio from 'cheerio'
 
 const LogoLink = React.createClass({
 	getInitialState(){
-		this.svg = ''
-
+		//this.svg = ''
 		return {
-			src: ''
+			svg:''
 		}
 	},
 
 	componentWillReceiveProps(nextProps){
-		if(this.props.fill !== nextProps.fill) {
+		if(this.props!== nextProps) {
 			//console.log('componentWillReceiveProps')
-			this.setState({src:''}) // will reget the svg and render fill
+			//this.setState({src:''}) // will reget the svg and render fill
+			this.getSvg(nextProps.src)
+			.then(svg => {
+				this.setState({svg: svg})
+				//console.log(svg)
+			})
 		}
 	},
 
-	//componentWillMount(){
-		//let src 
-		// if(isMobile()) src = this.props.src.mobile
-		// else src = this.props.src.desktop
-	//},
+	componentDidMount(){
+		this.getSvg(this.props.src)
+		.then(svg => {
+			this.setState({svg: svg})
+			//console.log("test")
+		})
+	},
 
 	getSvg(src){
 		return Request.get(src)
 		.then(res => {
-			this.svg = res.text
-			if(!this.svg) return
-
+			if(!res.text) return
 			let fill = this.props.fill
-			let {className,id} = this.props
-
+			let {className,id,style} = this.props
 			// do svg manipulation
-			let $ = cheerio.load(this.svg, { xmlMode: true }),
+			let $ = cheerio.load(res.text, { xmlMode: true }),
 				$svg = $('svg')
 			if(!$svg) return
 			$svg.addClass(className)
+			//console.log(className,fill)
+			
 			$svg.attr('id', id)
-			//$svg.attr('fill', '#ff0000')
-			if(fill) $svg.find('path').attr('fill', fill)
-
-			this.svg = $svg.toString()
-			return src
+			//$svg.attr('fill', fill)
+			if(style.width) $svg.attr('width',style.width)
+			if(style.height) $svg.attr('height',style.height)
+			if(fill){
+				$svg.find('path').each(function(index,ele){
+					$(this).attr('fill',fill)
+					//console.log(this)
+				})
+				$svg.find('use').each(function(index,ele){
+					$(this).attr('fill',fill)
+					//console.log(this)
+				})
+			}
+			return $svg.toString()
 			//console.log('SVG', res.text)
 		})
 	},
@@ -52,17 +66,7 @@ const LogoLink = React.createClass({
 	render() {
 		let {style, title, to} = this.props
 
-		let pub = this.context.setting ? this.context.setting.publisher : {}
-		let pubLogo = pub.theme ? pub.theme.logo : '' 
-
-		if(!this.state.src && pubLogo) {
-			this.getSvg(pubLogo)
-			.then(src => {
-				this.setState({src: src})
-			})
-		}
-
-		return (<Link to={to} title={title} style={{...style}} dangerouslySetInnerHTML={{__html:this.svg}}></Link>)
+		return (<Link to={to} title={title} style={{...style}} dangerouslySetInnerHTML={{__html:this.state.svg}}></Link>)
 	}
 });
 
