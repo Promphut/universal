@@ -249,7 +249,7 @@ const RightMenu = React.createClass({
         <Nav open={open}>
           <div className="menu menu-font">
             <Link style={hiddenMobile} to={'/editor'}><EditMode className="nunito-font"><FontIcon className="material-icons" style={{color:'#fff',margin:'0 25px 0 20px',top:'4px'}}>edit</FontIcon>Editor Mode</EditMode></Link>
-            <CloseBtn onTouchTap={close}><FontIcon className="material-icons" style={{color:'#222',fill:'#222'}}>close</FontIcon></CloseBtn>
+            <CloseBtn onClick={close}><FontIcon className="material-icons" style={{color:'#222',fill:'#222'}}>close</FontIcon></CloseBtn>
 
             <Profile className="content-font">
               <Link to={user.url}><Avatar style={AvatarStyle} src={user.pic.medium} size={AvatarSize} className="mobile"/></Link>
