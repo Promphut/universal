@@ -263,33 +263,46 @@ const EditStory = React.createClass({
   },
 
   getStoryDetail(){
-    Request
-      .get(config.BACKURL+'/stories/'+this.props.params.sid)
-      .end((err,res)=>{
-        if(err)throw err
-        else{
-          //console.log(res.body)
-          this.setState({story:res.body.story,title:res.body.story.title})
-          this.editor.setContent(res.body.story.html)
-
-          // var sel = []
-          // if(res.body.story.tags.length!=0){
-          //   res.body.story.tags.map((data,index)=>{
-          //     sel[index] = {text:data.name,value:index,id:data._id}
-          //   })
-          //   //console.log(sel)
-          //   var {tag} = this.state
-          //   var newTag = tag
-          //   tag.map((data,index)=>{
-          //     if(data.text==sel[index].text){
-          //       newTag.splice(index,1)
-          //     }
-          //   })
-          //   this.setState({addTag:addedTag,searchText:'',tag:newTag})
-          // }
-        }
+    let story = this.props.params.story
+    //console.log('getStoryDetail', story)
+    if(story){
+      this.setState({
+        story:story, 
+        title:story.title
       })
+  
+      this.editor.setContent(story.html)
+    }
   },
+
+  // getStoryDetail(){
+  //   Request
+  //     .get(config.BACKURL+'/stories/'+this.props.params.sid)
+  //     .end((err,res)=>{
+  //       if(err)throw err
+  //       else{
+  //         //console.log(res.body)
+  //         this.setState({story:res.body.story,title:res.body.story.title})
+  //         this.editor.setContent(res.body.story.html)
+
+  //         // var sel = []
+  //         // if(res.body.story.tags.length!=0){
+  //         //   res.body.story.tags.map((data,index)=>{
+  //         //     sel[index] = {text:data.name,value:index,id:data._id}
+  //         //   })
+  //         //   //console.log(sel)
+  //         //   var {tag} = this.state
+  //         //   var newTag = tag
+  //         //   tag.map((data,index)=>{
+  //         //     if(data.text==sel[index].text){
+  //         //       newTag.splice(index,1)
+  //         //     }
+  //         //   })
+  //         //   this.setState({addTag:addedTag,searchText:'',tag:newTag})
+  //         // }
+  //       }
+  //     })
+  // },
 
   getTag(){
     var self = this
@@ -332,7 +345,7 @@ const EditStory = React.createClass({
     var Story = {
       story:{
         title:title,
-        publisher:config.PID,
+        publisher:parseInt(config.PID),
         status:0,
         html:el,
       }
@@ -366,7 +379,7 @@ const EditStory = React.createClass({
     var Story = {
       story:{
         title:title,
-        publisher:config.PID,
+        publisher:parseInt(config.PID),
         status:0,
         html:el,
       }
@@ -399,7 +412,7 @@ const EditStory = React.createClass({
     var Story = {
       story:{
         title:title,
-        publisher:config.PID,
+        publisher:parseInt(config.PID),
         status:1,
         html:el,
       }

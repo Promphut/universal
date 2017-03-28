@@ -74,13 +74,13 @@ const UserSettingMenu = React.createClass({
 
   render(){
     let {display, pic, url} = this.props.user
-    if(!display || !pic) return (<div></div>)
+    //if(!display || !pic) return (<div></div>)
 
     return (
       <div>
         <Card>
-          <Avatar src={pic.medium} style={{marginTop:'12px'}} size={50}/>
-          <User to={url}>{display}</User>
+          {pic && <Avatar src={pic.medium} style={{marginTop:'12px'}} size={50}/>}
+          {display && <User to={url}>{display}</User>}
         </Card>
 
         <SelectableList value={this.state.selectedIndex} style={{padding:1}}>

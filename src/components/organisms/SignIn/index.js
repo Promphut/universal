@@ -97,6 +97,7 @@ const SignIn = React.createClass({
     if(i==0){
       api.signin(data)
       .then(res => {
+        //console.log('SIGN IN', res)
         auth.setCookieAndToken(res)
         
         browserHistory.push(self.props.nextPathname)

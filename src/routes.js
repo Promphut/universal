@@ -43,14 +43,17 @@ const loggedIn = (nextState, replace, next) => {
   toSignin(nextState, replace, next)()
 }
 
-const hasRoles = (roles) => {
+// bypassCidCheck : true/false (default = true) is the flag to bypass cid check for editor and writer.
+// if this flag is set to false, it will check role type, user, and cid.
+// if this is true, it will optimistically ignore cid, just check only role type and user.
+const hasRoles = (roles, bypassCidCheck) => {
   return (nextState, replace, next) => {
     let user = auth.getUser(), 
         cid = nextState.params.cid || nextState.location.query.cid
-
+    //console.log('hasRoles', user, cid, roles, bypassCidCheck, auth.hasRoles(roles, cid, bypassCidCheck))
     if(!user) return toSignin(nextState, replace, next)()
 
-    if(!auth.hasRoles(roles, cid))
+    if(!auth.hasRoles(roles, cid, bypassCidCheck))
       return toError(nextState, replace, next)(new Error('Unauthorized access'))
 
     next()
@@ -75,7 +78,7 @@ const getColumnFromSlug = (nextState, replace, next) => {
   .catch(toError(nextState, replace, next))
 }
 
-const getStoryFromSid = (countView) => {
+const getStoryFromSid = (countView = false) => {
   return (nextState, replace, next) => {
     api.getStoryFromSid(nextState.params.sid, auth.getToken(), countView)
     .then(result => {
@@ -86,6 +89,19 @@ const getStoryFromSid = (countView) => {
     })
     .catch(toError(nextState, replace, next))
   }
+}
+
+const canEditStory = (nextState, replace, next) => {
+  api.getStoryFromSid(nextState.params.sid, auth.getToken(), false)
+  .then(result => {
+    if(!result.canEditStory) return toError(nextState, replace, next)
+
+    nextState.params.story = result.story
+    nextState.params.canEditStory = result.canEditStory
+    //console.log('getStoryFromSid', result)
+    next()
+  })
+  .catch(toError(nextState, replace, next))
 }
 
 const logout = (nextState, replace, next) => {
@@ -122,7 +138,7 @@ const routes = (
       {/*<Route path='stories/new' component={NewStory}  onEnter={hasRoles(['ADMIN', 'WRITER', 'EDITOR'])}/>
       <Route path='stories/:sid/edit' component={EditStory}  onEnter={hasRoles(['ADMIN', 'WRITER', 'EDITOR'])}/>*/}
       
-      <Route path='columns/:cid' onEnter={hasRoles(['ADMIN', 'EDITOR'])}>
+      <Route path='columns/:cid' onEnter={hasRoles(['ADMIN', 'EDITOR'], false)}>
         <Route path='settings' component={ColumnSettingPage}/>
       </Route>
     </Route>
@@ -133,7 +149,7 @@ const routes = (
       <Route path='stories' component={UserSettingStory}/>
 
       <Route path='stories/new' component={NewStory}  onEnter={hasRoles(['ADMIN', 'WRITER', 'EDITOR'])}/>
-      <Route path='stories/:sid/edit' component={EditStory}  onEnter={hasRoles(['ADMIN', 'WRITER', 'EDITOR'])}/>
+      <Route path='stories/:sid/edit' component={EditStory} onEnter={canEditStory}/>
       {/*<Route path='stories/drafts' component={UserSettingProfile}/>*/}
     </Route>
 

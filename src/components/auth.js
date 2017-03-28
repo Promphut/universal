@@ -65,23 +65,31 @@ auth = {
   // },
 
   // cid is optional but needed when checking for editor and writer.
-  hasRoles(roles=[], cid){
+  hasRoles(roles=[], cid, bypassCidCheck = true){
     let authorized = false,
         cookieRoles = auth.getRoles() || [],
         user = auth.getUser(),
         pid = parseInt(config.PID)
     if(!user) return false
-
+    //console.log('getRoles', auth.getRoles())
     roles.forEach(role => {
       role = _.toUpper(role)
       let compare
-
+      //console.log('CID', cid, cid!=null)
       if(role==='ADMIN') compare = {type:config.ROLES.ADMIN, user:user._id, publisher:pid}
-      else if(role==='EDITOR' && cid!=null) compare = {type:config.ROLES.EDITOR, user:user._id, column:cid}
-      else if(role==='WRITER' && cid!=null) compare = {type:config.ROLES.WRITER, user:user._id, column:cid}
+      
+      // Pessimistic check
+      else if(role==='EDITOR' && !bypassCidCheck && cid!=null) compare = {type:config.ROLES.EDITOR, user:user._id, column:cid} 
+      // Optimistic, You just an editor is authorized, no need to check for the column that belongs to him.
+      else if(role==='EDITOR') compare = {type:config.ROLES.EDITOR, user:user._id} 
+      
+      // Pessimistic check
+      else if(role==='WRITER' && !bypassCidCheck && cid!=null) compare = {type:config.ROLES.WRITER, user:user._id, column:cid}
+      // Optimistic check
+      else if(role==='WRITER') compare = {type:config.ROLES.WRITER, user:user._id}
       
       //console.log('role compare', role, compare, _.filter(cookieRoles, compare), cookieRoles)
-      authorized = authorized || (_.filter(cookieRoles, compare).length > 0)
+      if(compare) authorized = authorized || (_.filter(cookieRoles, compare).length > 0)
     })
 
     //console.log('authorized', authorized)

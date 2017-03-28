@@ -301,7 +301,7 @@ const NewStory = React.createClass({
     var Story = {
       story:{
         title:title,
-        publisher:config.PID,
+        publisher:parseInt(config.PID),
         status:0,
         html:el,
       }
@@ -354,7 +354,7 @@ const NewStory = React.createClass({
     var Story = {
       story:{
         title:title,
-        publisher:config.PID,
+        publisher:parseInt(config.PID),
         status:0,
         html:el,
       }
@@ -387,7 +387,7 @@ const NewStory = React.createClass({
     var Story = {
       story:{
         title:title,
-        publisher:config.PID,
+        publisher:parseInt(config.PID),
         status:1,
         html:el,
       }

@@ -46,8 +46,8 @@ const LogoLink = React.createClass({
 			
 			$svg.attr('id', id)
 			//$svg.attr('fill', fill)
-			if(style.width) $svg.attr('width',style.width)
-			if(style.height) $svg.attr('height',style.height)
+			if(style && style.width) $svg.attr('width',style.width)
+			if(style && style.height) $svg.attr('height',style.height)
 			if(fill){
 				$svg.find('path').each(function(index,ele){
 					$(this).attr('fill',fill)

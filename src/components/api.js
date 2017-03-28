@@ -73,7 +73,7 @@ api.updateUser = (user) => {
 	let token = auth.getToken()
 	if(!token) return api.userNotFoundPromise()
 
-	//console.log('update', user)
+	console.log('update', user)
 
 	return Request
 	.patch(config.BACKURL+'/users/'+user._id)
