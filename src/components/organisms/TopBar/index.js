@@ -117,7 +117,8 @@ const TopBar = React.createClass({
 		return {
 			alertLeft: false,
 			alertRight: false,
-			scroll: 0
+			scroll: 0,
+			lock: false
 		}
 	},
 
@@ -135,6 +136,18 @@ const TopBar = React.createClass({
 			//console.log(this.role)
 	},
 
+	// componentDidUpdate(prevProps, prevState) {
+	// 	if ((this.state.alertLeft != prevState.alertLeft) ||
+	// 			(this.state.alertRight != prevState.alertRight)) {
+	// 		console.log('change')
+	// 		setTimeout(function(){ alert("Hello"); }, 3000);
+	//
+	// 		this.setState({
+	// 			lock: true
+	// 		})
+	// 	}
+	// },
+
 	handleScroll(e) {
 		this.props.onScroll(e)
 
@@ -150,7 +163,8 @@ const TopBar = React.createClass({
 		}
 	},
 
-	handleRequestClose(side){
+	handleRequestClose(e, side){
+		e.preventDefault()
 		if (side === 'left') {
 			this.setState({alertLeft: false})
 		} else if (side === 'right') {
@@ -200,7 +214,6 @@ const TopBar = React.createClass({
 				      </HamburgerWrapper>
 
 				      <LogoLink to="/" title={this.props.title} style={logoStyle} fill={!scrolling && transparent ? 'white' : ''} id="logo"/>
-
 					</Left>
 
 					<Center className={transparent ? 'hide': ''}>
@@ -248,13 +261,13 @@ const TopBar = React.createClass({
 				<LeftMenu
 					menu={menu}
 					open={alertLeft}
-					close={() => this.handleRequestClose('left')}
+					close={(e) => this.handleRequestClose(e, 'left')}
 				/>
 				{status=='LOGGEDIN' &&
 					<RightMenu
 						open={alertRight}
 						user={user}
-						close={() => this.handleRequestClose('right')}
+						close={(e) => this.handleRequestClose(e, 'right')}
 					/>
 				}
 	    </Wrapper>
