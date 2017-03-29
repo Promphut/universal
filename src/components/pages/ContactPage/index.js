@@ -27,6 +27,7 @@ const DropdownContent = styled.div`
   border: 2px solid ${props=> props.theme.primaryColor};
   background: white;
   z-index: 1;
+  max-width: 90%;
 `
 
 const Head = styled.h1`

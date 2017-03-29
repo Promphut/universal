@@ -18,7 +18,7 @@ const Wrapper = styled.div`
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00b2b4', endColorstr='#cef1b7', GradientType=1 );
   @media (max-width:480px) {
     background:${props=>props.page?'':'white'};
-  } 
+  }
 `
 const Modal = styled.div`
   width:100%;
@@ -31,8 +31,9 @@ const Container = styled.div`
   margin:7% auto 0 auto;
   width:477px;
   @media (max-width:480px) {
-    width:100vw;
-  } 
+    width: 100vw;
+		height: 100vh;
+  }
 `
 const BoxButton= styled.div`
   overflow:hidden;
