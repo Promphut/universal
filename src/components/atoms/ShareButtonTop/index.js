@@ -8,7 +8,7 @@ const styles = {
       float:'left',
       margin: '11px 0px',
       borderRadius: '20px',
-      border: (barTone == 'light' && scrolling) ? '2px solid #222' : '2px solid #FFF',
+      border: (barTone == 'light' && scrolling) ? '1px solid #222' : '1px solid #FFF',
       height: '34px',
       lineHeight: '28px',
       minWidth: '72px'
