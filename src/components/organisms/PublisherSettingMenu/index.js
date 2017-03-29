@@ -31,11 +31,15 @@ const PublisherSettingMenu = React.createClass({
   },
   
   componentWillReceiveProps(nextProps){
-    if(nextProps!=this.props){
+    if(nextProps.pathname!=this.props.pathname){
       this.setState({
         selectedIndex: nextProps.pathname,
       });
     }
+  },
+
+  componentDidMount(){
+    this.setState({selectedIndex: this.props.pathname})
   },
 
   componentWillMount(){
@@ -49,7 +53,7 @@ const PublisherSettingMenu = React.createClass({
   render(){
     return (
       <SelectableList value={this.state.selectedIndex} style={{padding:0, marginTop: '30px'}}>
-        <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/editor/')} value='/editor/' className='nunito-font' primaryText="Dashboard" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>dashboard</FontIcon>} />
+        <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/editor/')} value='/editor' className='nunito-font' primaryText="Dashboard" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>dashboard</FontIcon>} />
         <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/editor/stories')} value='/editor/stories' className='nunito-font' primaryText="Stories" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>description</FontIcon>} />
 
         {this.isAdmin && <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/editor/contact')} value='/editor/contact' className='nunito-font' primaryText="Contact & About" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>contacts</FontIcon>} />}
