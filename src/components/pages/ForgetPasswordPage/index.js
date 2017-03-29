@@ -31,7 +31,8 @@ const Container = styled.div`
   margin:7% auto 0 auto;
   width:477px;
   @media (max-width:480px){
-    width:100vw;
+    width: 100vw;
+		height: 100vh;
   }
 `
 const BoxButton= styled.div`

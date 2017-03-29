@@ -46,8 +46,9 @@ const Flex = styled.div`
   items-align:center;
   flex-flow: row wrap;
   margin:40px 0 0 50px;
+
   @media(max-width:480px){
-    margin:20px 0 0 40px;
+    margin:20px 0 0 0 !important;
   }
 `
 
@@ -76,7 +77,7 @@ const TextStatus = styled.div`
   font-style:italic;
   float:left;
   margin:10px 0 0 15px;
-` 
+`
 
 const styles = {
   button: {
@@ -184,7 +185,7 @@ const UserSettingProfile = React.createClass({
       if(err) this.setState({textStatus2:'Connect with Facebook fail',
           error2:true
         })
-      else 
+      else
         this.setState({
           textStatus2:'Connect with Facebook successfully',
           error2:false,
@@ -278,8 +279,8 @@ const UserSettingProfile = React.createClass({
               <div className="sans-font" className='hidden-mob'>Email</div>
             </Title>
             <Edit>
-              <TextField 
-              name='email' value={user.email} 
+              <TextField
+              name='email' value={user.email}
               onChange={this.userChanged}
               hintText='Change your Email'
               floatingLabelText={isMobile?'Email':''}
@@ -328,7 +329,7 @@ const UserSettingProfile = React.createClass({
                 autoComplete="off"
                 hintText='Your old password'
                 floatingLabelText={isMobile?'Old Password':''}
-              />  
+              />
             </Edit>
           </Flex>
           <Flex>
