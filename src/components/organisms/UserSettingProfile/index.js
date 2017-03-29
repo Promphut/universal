@@ -47,7 +47,7 @@ const Flex = styled.div`
   flex-flow: row wrap;
   margin:50px 0 0 50px;
   @media(max-width:480px){
-    margin:20px 0 0 40px;
+    margin:20px 0 0 0;
   }
 `
 
@@ -62,7 +62,7 @@ const Title = styled.div`
 const Edit = styled.div`
   flex:6 450px;
   max-width:450px;
-  
+
 `
 
 const Social = styled.div`
@@ -197,7 +197,7 @@ const UserSettingProfile = React.createClass({
             <TextField name='display' value={user.display} onChange={this.userChanged} ref={input => {this.display = input}}/>
           </Edit>
           <Edit className='hidden-des'>
-            <TextField name='display' value={user.display} onChange={this.userChanged} 
+            <TextField name='display' value={user.display} onChange={this.userChanged}
             ref={input => {this.display = input}}
             hintText='Display name'
             floatingLabelText='Display'/>
@@ -252,7 +252,7 @@ const UserSettingProfile = React.createClass({
             <TextField defaultValue="Bangkok, Thailand" name='city' value={user.city} onChange={this.userChanged}/>
           </Edit>
           <Edit className='hidden-des'>
-            <TextField 
+            <TextField
             hintText='Current living city'
             floatingLabelText='Living city'
             name='city' value={user.city} onChange={this.userChanged}/>
@@ -269,7 +269,7 @@ const UserSettingProfile = React.createClass({
               <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.fb' value={user.channels && user.channels.fb} onChange={this.userChanged}/>
             </Social>
             <Social className="sans-font hidden-des" >
-              <TextField 
+              <TextField
               hintText='facebook.com/Your-path'
               floatingLabelText="Facebook"
               style={{float:'left',margin:'5px 0 0 0'}} name='channels.fb' value={user.channels && user.channels.fb} onChange={this.userChanged}/>
@@ -280,7 +280,7 @@ const UserSettingProfile = React.createClass({
               <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.twt' value={user.channels && user.channels.twt} onChange={this.userChanged}/>
             </Social>
             <Social className="sans-font hidden-des">
-              <TextField 
+              <TextField
               hintText='twitter.com/Your-path'
               floatingLabelText="Twitter"
               style={{float:'left',margin:'5px 0 0 0'}} name='channels.twt' value={user.channels && user.channels.twt} onChange={this.userChanged}/>
@@ -291,7 +291,7 @@ const UserSettingProfile = React.createClass({
               <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.ig' value={user.channels && user.channels.ig} onChange={this.userChanged}/>
             </Social>
             <Social className="sans-font hidden-des">
-              <TextField 
+              <TextField
               hintText='instagram.com/Your-path'
               floatingLabelText="Instagram"
               style={{float:'left',margin:'5px 0 0 0'}} name='channels.ig' value={user.channels && user.channels.ig} onChange={this.userChanged}/>
@@ -302,7 +302,7 @@ const UserSettingProfile = React.createClass({
               <TextField style={{float:'left',margin:'5px 0 0 0'}} name='channels.yt' value={user.channels && user.channels.yt} onChange={this.userChanged}/>
             </Social>
             <Social className="sans-font hidden-des">
-              <TextField 
+              <TextField
               hintText='youtube.com/Your-path'
               floatingLabelText="Youtube"
               style={{float:'left',margin:'5px 0 0 0'}} name='channels.yt' value={user.channels && user.channels.yt} onChange={this.userChanged}/>

@@ -72,7 +72,7 @@ const UserSetting = React.createClass({
 
   render(){
   const isMobile = window.isMobile()
-
+  
 		return (
 		    <Wrapper>
           {isMobile ? <TopBarWithBack/> :
