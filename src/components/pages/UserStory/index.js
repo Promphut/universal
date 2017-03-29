@@ -260,27 +260,31 @@ const UserStory = React.createClass({
 
 	buildElements() {
 		let page = this.state.page
-		let uid = auth.getUser()._id
+		let uid = this.props.params.user ? this.props.params.user._id : null
 
-		api.getFeed('story', {writer:uid, status:1}, 'latest', null, page, 10)
-		.then(result => {
-			var s = this.state.latestStories.concat(result.feed)
-			this.setState({
-				feedCount:result.count[1],
-				latestStories:s,
-			},()=>{
-				if(s.length==result.count[1]){
+		if(page!=null && uid!=null){
+			api.getFeed('story', {writer:uid, status:1}, 'latest', null, page, 10)
+			.then(result => {
+				//console.log('api.getFeed', result)
+				var s = this.state.latestStories.concat(result.feed)
+				if(s.length==result.count['1']){
 					this.setState({
+						feedCount:result.count['1'] || 0,
+						latestStories:s,
+
 						loadOffset:'undefined',
-						isInfiniteLoading: false,
+						isInfiniteLoading: false
 					})
 				} else {
 					this.setState({
+						feedCount:result.count['1'] || 0,
+						latestStories:s,
+
 						isInfiniteLoading: false
 					})
 				}
 			})
-		})
+		}
 	},
 
 	handleInfiniteLoad() {
