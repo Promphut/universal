@@ -66,6 +66,7 @@ const Div = styled.div`
   color: initial;
 `
 const Number = styled.div`
+  color: #FFF;
   width:60px;
   height:60px;
   font-size:32px;

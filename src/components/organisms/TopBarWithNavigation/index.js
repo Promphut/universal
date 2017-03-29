@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react'
 import {browserHistory} from 'react-router'
-import {TopBar, TopNavigation, Stick} from 'components'
+import {TopBar, TopNavigation, TopBarWithShare, Stick} from 'components'
 import auth from 'components/auth'
 import api from 'components/api'
 
@@ -66,32 +66,49 @@ const TopBarWithNavigation = React.createClass({
 	render () {
 		var {theme} = this.context.setting.publisher
 		const {scrolling, status} = this.state
-		let {title, article, notShowNav,editButton} = this.props
+		let {title, article, notShowNav, editButton} = this.props
 		let transparent = false
+		let articleMobile = false
 
 		// titleText = 'Article'
 		let children = ''
 		if (article) {
 			children = <h4 className="menu-font">{article}</h4>
 			transparent = true
+
+			if (window.isMobile()) {
+				articleMobile = true
+			}
 		} else if (!notShowNav) {
 			children = <TopNavigation menu={this.menu} />
 		}
 
 	  return (
 			<Stick className={this.props.className}>
-				<TopBar
-					onScroll={this.handleScroll}
-					scrolling={this.state.scrolling}
-					status={status}
-					title={title}
-					user={this.user}
-					menu={this.menu}
-					transparent={transparent}
-					editButton={editButton}
-				>
-					{children}
-				</TopBar>
+				{articleMobile ?
+					<TopBarWithShare
+						onScroll={this.handleScroll}
+						scrolling={this.state.scrolling}
+						status={status}
+						title={title}
+						user={this.user}
+						menu={this.menu}
+						transparent={transparent}
+						editButton={editButton}
+					> {children}
+					</TopBarWithShare> :
+					<TopBar
+						onScroll={this.handleScroll}
+						scrolling={this.state.scrolling}
+						status={status}
+						title={title}
+						user={this.user}
+						menu={this.menu}
+						transparent={transparent}
+						editButton={editButton}
+					> {children}
+					</TopBar>
+				}
 			</Stick>
 	  )
 	}

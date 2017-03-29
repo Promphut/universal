@@ -2,7 +2,9 @@ import React, {PropTypes} from 'react'
 import styled from 'styled-components'
 import {Link, browserHistory} from 'react-router'
 import Avatar from 'material-ui/Avatar'
-import {LogoLink, PrimaryButton, SecondaryButton, LeftMenu, RightMenu} from 'components'
+import {LogoLink, PrimaryButton, SecondaryButton, LeftMenu,
+	ShareButtonTop, ShareDropdownTop} from 'components'
+import api from 'components/api'
 import auth from 'components/auth'
 //import utils from 'components/utils'
 import FontIcon from 'material-ui/FontIcon'
@@ -114,7 +116,7 @@ const Edit = styled(Link)`
 	}
 `
 
-const TopBar = React.createClass({
+const TopBarWithShare = React.createClass({
 	getInitialState(){
 		return {
 			alertLeft: false,
@@ -169,14 +171,13 @@ const TopBar = React.createClass({
 		var {theme} = this.context.setting.publisher
 		let {alertLeft, alertRight, scroll} = this.state
 		let status = this.props.status || 'UNLOGGEDIN',
-			{scrolling, user, menu, transparent,editButton}  = this.props
+			{scrolling, user, menu, transparent, editButton}  = this.props
 
 	  const logoStyleBase = {
 	    display: 'inline-block',
 	    float: 'left',
 	    marginTop: '3px',
-	    padding: '17px 5px',
-			width:"200px"
+	    padding: '17px 5px'
 	  }
 		const logoStyle = window.isMobile() ? {
 			...logoStyleBase,
@@ -191,24 +192,12 @@ const TopBar = React.createClass({
 			display: 'none'
 		}
 
-		const buttonStyle = {
-	    display: 'inline-block',
-	    float: 'left',
-			boxShadow: 'none',
-			verticalAlign: 'middle',
-	    marginTop: '9px'
+		const moreStyle = {
+			color: (theme.barTone == 'light' && (scrolling && transparent)) ? '#222' : '#FFF',
+			padding: '16px 13px'
 		}
 
-		const avatarStyle = {
-			display: 'inline-block',
-		  float: 'left',
-		  textAlign: 'center',
-			margin: '13px 20px 13px 13px',
-			cursor: 'pointer'
-		}
-		//console.log(theme, theme.barTone, theme.primaryColor)
 	  return (
-
 	    <Wrapper scroll={scroll}>
 				<Container className={'menu-font '
 					+ ((!scrolling && transparent) ? 'transparent' : '')}>
@@ -217,57 +206,16 @@ const TopBar = React.createClass({
 				        <Hamburger className="material-icons" white={(!scrolling && transparent)} style={!scrolling && transparent?{color:'white'}:{}}>menu</Hamburger>
 				      </HamburgerWrapper>
 
-					<LogoLink to="/" src={theme.logo} title={this.props.title} style={logoStyle} fill={theme.barTone=='light'?theme.primaryColor:"#ffffff"} />
-				      	<LogoLink to="/" src={theme.slogo} title={this.props.title} style={logoStyleMobile} fill={theme.barTone=='light'?theme.primaryColor:'#ffffff'} />
+				      <LogoLink to="/" src={theme.logo} title={this.props.title} style={logoStyle} fill={theme.barTone=='light'?theme.primaryColor:'#ffffff'} />
+				      <LogoLink to="/" src={theme.slogo} title={this.props.title} style={logoStyleMobile} fill={theme.barTone=='light'?theme.primaryColor:'#ffffff'} />
 					</Left>
 
-					<Center className={transparent ? 'hide': ''}>
-   					{this.props.children}
-					</Center>
-
-					{status == 'LOGGEDIN' &&
-						<Right>
-							{this.role && editButton &&
-								<Edit
-									className='nunito-font'
-									style={{color:(!scrolling && transparent) ? 'white' : '#222'}}
-									to={editButton}>
-									Edit Story
-								</Edit>
-							}
-
-				      {this.role && <HideOnTablet>
-								<Link to="/me/stories/new">
-					        <PrimaryButton
-					          label="Story"
-					          iconName="add"
-					          style={buttonStyle}
-					        />
-								</Link>
-				      </HideOnTablet>}
-
-							<Avatar
-								src={user.pic.medium}
-								size={30} style={avatarStyle}
-								onClick={() => this.openPop('right')}
-							/>
-						</Right>
-					}
-					{status == 'UNLOGGEDIN' &&
-						<Right>
-							<NotLogin>
-								<SecondaryButton
-									label="Sign Up"
-									onClick={this.signup}
-									style={{verticalAlign: 'middle'}}
-								/>
-								<span>&nbsp; or </span>
-								<Link to="/signin" style={{fontWeight:'bold'}}>
-									Sign In
-								</Link>
-							</NotLogin>
-						</Right>
-					}
+					<Right>
+						<ShareButtonTop onClick={api.shareFB} number='112' barTone={theme.barTone} scrolling={scrolling}/>
+						<ShareDropdownTop>
+							<FontIcon style={moreStyle} className="material-icons" >more_vert</FontIcon>
+						</ShareDropdownTop>
+					</Right>
 				</Container>
 
 				<LeftMenu
@@ -275,19 +223,12 @@ const TopBar = React.createClass({
 					open={alertLeft}
 					close={() => this.handleRequestClose('left')}
 				/>
-				{status=='LOGGEDIN' &&
-					<RightMenu
-						open={alertRight}
-						user={user}
-						close={() => this.handleRequestClose('right')}
-					/>
-				}
 	    </Wrapper>
 	  )
 	}
 })
 
-TopBar.propTypes = {
+TopBarWithShare.propTypes = {
   onScroll: PropTypes.func,
   scrolling: PropTypes.bool,
   status: PropTypes.string,
@@ -298,9 +239,9 @@ TopBar.propTypes = {
   user: PropTypes.object
 }
 
-TopBar.contextTypes = {
+TopBarWithShare.contextTypes = {
 	setting: React.PropTypes.object
 };
 
 
-export default TopBar;
+export default TopBarWithShare;

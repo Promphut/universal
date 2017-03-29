@@ -15,7 +15,7 @@ const Contain = styled.div`
   color:#8F8F8F;
   font-size:17px;
   float:left;
-  margin:0 10px 10px 10px; 
+  margin:0 10px 10px 10px;
   .imgWidth{
     width:49px;
     height:49px;
@@ -38,7 +38,7 @@ const Span1 = styled.span`
 
 const WritedBy = ({style, writer, /*column,*/ published}) => {
   //let {name,date,column,url} = detail
-  //console.log('WritedBy', writer, published)
+  console.log('WritedBy', writer, published)
   return (
     <Container style={{...style}}>
 
@@ -47,9 +47,9 @@ const WritedBy = ({style, writer, /*column,*/ published}) => {
       </div>
 
       <Contain className="content-font">
-        by <Span1><Link to={writer.url} style={{color:'#222'}}>{writer.display}</Link></Span1>, 
+        by <Span1><Link to={writer.url} style={{color:'#222'}}>{writer.display}</Link></Span1>,
         {/*{moment(published).format('lll')} */}
-        <br/> 
+        <br/>
         {/*writer of <Link to={column.url}><strong>{column.name}</strong></Link>*/}
         {writer.intro}
       </Contain>

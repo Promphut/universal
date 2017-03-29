@@ -97,10 +97,10 @@ const ArticleBox = React.createClass({
             <Link to={writer.url}><Avatar src={writer.pic.medium}/></Link>
             <div style={{margin:'5px 0 0 12px'}}>
               <NameLink to={writer.url} style={{fontSize:'14px'}}>{writer.display} </NameLink>
-              <Div stlye={{fontSize:'12px'}}>{moment(updated).fromNow()} hrs ago</Div>
+              <Div stlye={{fontSize:'12px'}}>{moment(updated).fromNow()}</Div>
             </div>
           </div>
-          <Div style={{margin:'10px 0 0 0'}}>{votes.total} Votes  <span style={{marginLeft:'15px'}}>{comments.count} Comments</span> <span style={{float:'right'}}>Read 5 min</span></Div>
+          <Div style={{margin:'10px 0 0 0'}}>{votes.total} Votes  <span style={{marginLeft:'15px'}}>{comments.count} Comments</span> {/*<span style={{float:'right'}}>Read 5 min</span>*/}</Div>
         </BoxText>
       </Container>
     )
