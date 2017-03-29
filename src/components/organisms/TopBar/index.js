@@ -169,7 +169,8 @@ const TopBar = React.createClass({
 	    display: 'inline-block',
 	    float: 'left',
 	    marginTop: '3px',
-	    padding: '17px 5px'
+	    padding: '17px 5px',
+			width:"200px"
 	  }
 
 		const buttonStyle = {
@@ -189,6 +190,7 @@ const TopBar = React.createClass({
 		}
 		//console.log(theme, theme.barTone, theme.primaryColor)
 	  return (
+
 	    <Wrapper scroll={scroll}>
 				<Container className={'menu-font '
 					+ ((!scrolling && transparent) ? 'transparent' : '')}>

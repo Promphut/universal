@@ -2,6 +2,13 @@ import React from 'react'
 import Request from 'superagent'
 import {Link} from 'react-router'
 import cheerio from 'cheerio'
+import styled from 'styled-components'
+
+const Link2 = styled(Link)`
+	svg path{
+		fill:${props=>props.fill} !important;
+	}
+` 
 
 const LogoLink = React.createClass({
 	getInitialState(){
@@ -12,7 +19,7 @@ const LogoLink = React.createClass({
 	},
 
 	componentWillReceiveProps(nextProps){
-		if(this.props!== nextProps) {
+		if(this.props.src != nextProps.src||this.props.fill != nextProps.fill) {
 			//console.log('componentWillReceiveProps')
 			//this.props = nextProps
 			//console.log('nextProps', nextProps)
@@ -20,7 +27,7 @@ const LogoLink = React.createClass({
 			this.getSvg(nextProps.src)
 			.then(svg => {
 				this.setState({svg: svg})
-				//console.log(svg)
+				//console.log(this.props.fill)
 			})
 		}
 	},
@@ -49,15 +56,16 @@ const LogoLink = React.createClass({
 			
 			if(id) $svg.attr('id', id)
 			//$svg.attr('fill', fill)
+
 			if(style && style.width) $svg.attr('width',style.width)
 			if(style && style.height) $svg.attr('height',style.height)
 			if(fill){
 				$svg.find('path').each(function(index,ele){
-					$(this).attr('fill',fill)
+					$(this).removeAttr('fill')
 					//console.log(this)
 				})
 				$svg.find('use').each(function(index,ele){
-					$(this).attr('fill',fill)
+					$(this).removeAttr('fill')
 					//console.log(this)
 				})
 			}
@@ -67,9 +75,11 @@ const LogoLink = React.createClass({
 	},
 
 	render() {
-		let {style, title, to} = this.props
+		let {style, title, to, fill} = this.props
 
-		return (<Link to={to} title={title} style={{...style}} dangerouslySetInnerHTML={{__html:this.state.svg}}></Link>)
+		return (<Link2 to={to} title={title} fill={fill} style={{...style}} dangerouslySetInnerHTML={{__html:this.state.svg}}>
+
+		</Link2>)
 	}
 });
 
