@@ -9,6 +9,10 @@ const Container = styled.div`
   display:flex;
   width:100%;
   padding:8px;
+  @media (max-width:480px){
+    width:280px;
+    padding:0px;
+  }
 `
 
 const Contain = styled.div`
@@ -21,7 +25,6 @@ const Contain = styled.div`
     height:49px;
   }
   @media (max-width:480px){
-    width:280px;
     font-size:14px;
     .imgWidth{
       width:36px;

@@ -27,16 +27,16 @@ const Recommend = styled.div`
 `
 const RecommendContainer = ({style,className,recommend})=>{
   return(
-    <Recommend style={{...style}} className={className} >
+    recommend.length!=0?<Recommend style={{...style}} className={className} >
       <div className='recommends sans-font' >Recommends</div>
       <div className='row center'>
-        {recommend.length!=0?recommend.map((data,index)=>(
+        {recommend.map((data,index)=>(
           <div className='col-lg-6 col-md-6 col-sm-12 mobile' key={index}>
             <RecommendArticle detail={data}/>
           </div>
-        )):''}
+        ))}
       </div>
-    </Recommend>
+    </Recommend>:''
   )
 }
 
