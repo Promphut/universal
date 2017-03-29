@@ -1,6 +1,6 @@
 import React from 'react'
 //import {browserHistory} from 'react-router'
-import { TopBarWithNavigation, UserSettingMenu } from 'components'
+import { TopBarWithNavigation, TopBarWithBack, UserSettingMenu } from 'components'
 import styled from 'styled-components'
 import auth from 'components/auth'
 
@@ -71,9 +71,14 @@ const UserSetting = React.createClass({
   },
 
   render(){
+  const isMobile = window.isMobile()
+
 		return (
 		    <Wrapper>
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
+          {isMobile ? <TopBarWithBack/> :
+            <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
+          }
+
           <Container>
             <Content>
               <Aside>
