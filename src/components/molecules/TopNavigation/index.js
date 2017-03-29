@@ -18,12 +18,12 @@ const Nav = styled.nav`
 		display: block;
 		padding: 19px 20px 18px;
     text-decoration: none;
-    color: ${props => props.theme.barTone=='light'?'#222':'white'};
+    color: ${props => props.theme.barTone=='light'?'#222':'#FFF'};
 	}
 
 	& ul li a:hover {
 		background: ${props => props.theme.secondaryColor};
-		color: ${props => props.theme.barTone=='light'?'#222':'white'};
+		color: ${props => props.theme.barTone=='light'?'#222':'#FFF'};
 	}
 
 	& ul li ul.dropdown {
@@ -46,6 +46,10 @@ const Nav = styled.nav`
 	& ul li ul.dropdown li a {
 		padding: 1em 2em;
 		color: #222;
+	}
+
+	& ul li ul.dropdown li a:hover {
+		color: ${props => props.theme.barTone=='light'?'#222':'#FFF'};
 	}
 
 	& ul li:hover ul.dropdown {
