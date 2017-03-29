@@ -142,7 +142,7 @@ const PublisherContact = React.createClass({
     // the hard part is to update contactCat in the contactCats array as well.
     let cats = this.state.contactCats.slice() 
     let cat = _.findLast(cats, {_id: update._id})
-    _.assign(cat, update)
+    _.merge(cat, update)
 
     api.updateContactCat(update)
     .then(_cat => {
