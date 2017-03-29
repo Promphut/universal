@@ -206,7 +206,7 @@ const TopBar = React.createClass({
 			margin: '13px 20px 13px 13px',
 			cursor: 'pointer'
 		}
-		//console.log(theme)
+		//console.log(theme, theme.barTone, theme.primaryColor)
 	  return (
 
 	    <Wrapper scroll={scroll}>
@@ -217,8 +217,8 @@ const TopBar = React.createClass({
 				        <Hamburger className="material-icons" white={(!scrolling && transparent)} style={!scrolling && transparent?{color:'white'}:{}}>menu</Hamburger>
 				      </HamburgerWrapper>
 
-							{theme.barTone&&theme.primaryColor&&<LogoLink to="/" src={theme.logo} title={this.props.title} style={logoStyle} fill={theme.barTone=='light'?theme.primaryColor:"#ffffff"} />}
-				      {theme.barTone&&theme.primaryColor&&<LogoLink to="/" src={theme.slogo} title={this.props.title} style={logoStyleMobile} fill={theme.barTone=='light'?theme.primaryColor:'#ffffff'} />}
+					<LogoLink to="/" src={theme.logo} title={this.props.title} style={logoStyle} fill={theme.barTone=='light'?theme.primaryColor:"#ffffff"} />
+				      	<LogoLink to="/" src={theme.slogo} title={this.props.title} style={logoStyleMobile} fill={theme.barTone=='light'?theme.primaryColor:'#ffffff'} />
 					</Left>
 
 					<Center className={transparent ? 'hide': ''}>
