@@ -15,10 +15,13 @@ const Nav = styled.nav`
 	}
 
 	& ul li a {
+		position: relative;
+		top:-1px;
 		display: block;
-		padding: 19px 20px 18px;
+		padding: 18px 20px 20px 20px;
     text-decoration: none;
     color: ${props => props.theme.barTone=='light'?'#222':'#FFF'};
+		height:60px;
 	}
 
 	& ul li a:hover {
@@ -33,7 +36,7 @@ const Nav = styled.nav`
     position: absolute;
     z-index: 3;
     left: 0;
-    top: 59px;
+    top: 60px;
 	}
 
 	& ul li ul.dropdown li {
@@ -80,7 +83,7 @@ const TopNavigation = ({menu}) => {
 			<ul>
 				<li><Link to="/">Home</Link></li>
 				<li>
-					<Link style={{cursor: 'pointer'}}>Stories &#9662;</Link>
+					<Link style={{cursor: 'pointer'}} style={{top:'0px'}}>Stories &#9662;</Link>
 						<ul className="dropdown">
 							{items}
 							<li key={999}><Link to={'/stories/columns'}>All Columns</Link></li>
