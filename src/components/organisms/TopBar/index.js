@@ -175,8 +175,7 @@ const TopBar = React.createClass({
 	    display: 'inline-block',
 	    float: 'left',
 	    marginTop: '3px',
-	    padding: '17px 5px',
-			width:"200px"
+	    padding: '17px 5px'
 	  }
 		const logoStyle = window.isMobile() ? {
 			...logoStyleBase,
@@ -213,12 +212,12 @@ const TopBar = React.createClass({
 				<Container className={'menu-font '
 					+ ((!scrolling && transparent) ? 'transparent' : '')}>
 					<Left>
-				      <HamburgerWrapper onClick={() => this.openPop('left')}>
-				        <Hamburger className="material-icons" white={(!scrolling && transparent)} style={!scrolling && transparent?{color:'white'}:{}}>menu</Hamburger>
-				      </HamburgerWrapper>
+			      <HamburgerWrapper onClick={() => this.openPop('left')}>
+			        <Hamburger className="material-icons" white={(!scrolling && transparent)} style={!scrolling && transparent?{color:'white'}:{}}>menu</Hamburger>
+			      </HamburgerWrapper>
 
-					<LogoLink to="/" src={theme.logo} title={this.props.title} style={logoStyle} fill={theme.barTone=='light'?theme.primaryColor:"#ffffff"} />
-				      	<LogoLink to="/" src={theme.slogo} title={this.props.title} style={logoStyleMobile} fill={theme.barTone=='light'?theme.primaryColor:'#ffffff'} />
+						<LogoLink to="/" src={theme.logo} title={this.props.title} style={logoStyle} fill={theme.barTone=='light'?theme.primaryColor:"#ffffff"} />
+	      		<LogoLink to="/" src={theme.slogo} title={this.props.title} style={logoStyleMobile} fill={theme.barTone=='light'?theme.primaryColor:'#ffffff'} />
 					</Left>
 
 					<Center className={transparent ? 'hide': ''}>
