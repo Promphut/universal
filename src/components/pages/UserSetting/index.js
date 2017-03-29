@@ -1,5 +1,5 @@
 import React from 'react'
-//import {browserHistory} from 'react-router'
+// import {browserHistory} from 'react-router'
 import { TopBarWithNavigation, TopBarWithBack, UserSettingMenu } from 'components'
 import styled from 'styled-components'
 import auth from 'components/auth'
@@ -71,11 +71,18 @@ const UserSetting = React.createClass({
   },
 
   render(){
-  const isMobile = window.isMobile()
-  
+    const isMobile = window.isMobile()
+
+    let title = ''
+    if (this.props.location.pathname == '/me/settings') {
+      title = 'Setting'
+    } else if (this.props.location.pathname == 'me/settings/account') {
+      title = 'Edit Profile'
+    }
+
 		return (
 		    <Wrapper>
-          {isMobile ? <TopBarWithBack/> :
+          {isMobile ? <TopBarWithBack title={title}/> :
             <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
           }
 

@@ -61,7 +61,7 @@ const TopBarWithBack = React.createClass({
 					</Left>
 
 					<Center>
-						<Title>Setting</Title>
+						<Title>{this.props.title}</Title>
 					</Center>
         </Container>
 			</Stick>
