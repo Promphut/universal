@@ -169,7 +169,8 @@ const TopBar = React.createClass({
 	    display: 'inline-block',
 	    float: 'left',
 	    marginTop: '3px',
-	    padding: '17px 5px'
+	    padding: '17px 5px',
+			width:"200px"
 	  }
 
 		const buttonStyle = {
@@ -187,8 +188,9 @@ const TopBar = React.createClass({
 			margin: '13px 20px 13px 13px',
 			cursor: 'pointer'
 		}
-
+		//console.log(theme)
 	  return (
+
 	    <Wrapper scroll={scroll}>
 				<Container className={'menu-font '
 					+ ((!scrolling && transparent) ? 'transparent' : '')}>
@@ -197,7 +199,7 @@ const TopBar = React.createClass({
 				        <Hamburger className="material-icons" white={(!scrolling && transparent)} style={!scrolling && transparent?{color:'white'}:{}}>menu</Hamburger>
 				      </HamburgerWrapper>
 
-				      <LogoLink to="/" src={theme.logo} title={this.props.title} style={logoStyle} fill={theme.borTone=='light'?theme.primaryColor:'#ffffff'} id="logo"/>
+				      {theme.barTone&&theme.primaryColor&&<LogoLink to="/" id='aaa' src={theme.logo} title={this.props.title} style={logoStyle} fill={theme.barTone=='light'?theme.primaryColor:"#ffffff"}/>}
 
 					</Left>
 
