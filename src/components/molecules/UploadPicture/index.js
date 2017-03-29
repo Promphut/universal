@@ -83,7 +83,6 @@ const UploadPicture = React.createClass({
     
     return {
       statePreview:this.props.src==null?false:true,
-      src:this.props.src,
       preview: null, 
       //file: '', 
 			msg: '',
@@ -92,10 +91,11 @@ const UploadPicture = React.createClass({
   },
 
   componentWillReceiveProps(nextProps){
-    this.setState({
-      src: nextProps.src,
-      statePreview:true
-    })
+    if(nextProps.src!=this.props.src&&nextProps.src!=null){
+      this.setState({
+        statePreview:true
+      })
+    }
   },
 
   isFiletypeValid(file){
@@ -158,8 +158,8 @@ const UploadPicture = React.createClass({
   },
 
   render(){
-    var {msg,src,statePreview,err,preview} = this.state
-    var {label,style,type,width,height,labelStyle} = this.props
+    var {msg,statePreview,err,preview} = this.state
+    var {label,style,type,width,height,labelStyle,src} = this.props
     var {theme} = this.context.setting.publisher
     
     //console.log('src', src)
@@ -169,7 +169,6 @@ const UploadPicture = React.createClass({
     return(
       <Container encType="multipart/form-data" style={{...style,width:width,height:height}}>
         {!statePreview?<Box width={width} height={height} className="menu-font" onClick={()=>(dom(this.refs.imageLoader).click())}><Label style={{...labelStyle}}>{label?label:"Upload Picture"}</Label></Box>:''}
-        {/*<Preview width={width} height={height} ref='preview' style={{display:statePreview?'block':'none',backgroundImage:'url('+(preview || src+'?'+Math.random()*10000)+')'}}>*/}
         <Preview width={width} height={height} ref='preview' style={{display:statePreview?'block':'none',backgroundImage:'url('+(preview || src)+')'}}>
           <Filter width={width} height={height} onClick={()=>(dom(this.refs.imageLoader).click())} ><Label style={{...labelStyle,color:'#fff'}}>Change Picture</Label></Filter>
         </Preview>
