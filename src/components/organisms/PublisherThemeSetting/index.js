@@ -291,7 +291,7 @@ const PublisherThemeSetting = React.createClass({
         <ShadeColor key={i} className={'bg'+i}></ShadeColor>     
       )
     }
-
+    //console.log('colorTheme', colorTheme, primaryColor)
     return(
       <Container onSubmit={this.updateData}>
         <div  className="head sans-font">Theme</div>

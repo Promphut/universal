@@ -48,7 +48,7 @@ const ShareDropdownTop = React.createClass({
           onTouchTap={() => this.select('twitter')}
         />
         </a>
-        <CopyToClipboard text={config.FRONTURL+this.props.url} onCopy={() => this.setState({copied: true})}>
+        <CopyToClipboard text={window.location.href} onCopy={() => this.setState({copied: true})}>
           <FlatButton
             label={buttons[1]}
             labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
