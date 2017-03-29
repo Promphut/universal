@@ -255,7 +255,7 @@ const RightMenu = React.createClass({
         <Container2 onClick={close} />
         <Nav open={open}>
           <div className="menu menu-font">
-            <Link style={hiddenMobile} to={'/editor'}><EditMode className="nunito-font"><FontIcon className="material-icons" style={{color:'#fff',margin:'0 25px 0 20px',top:'4px'}}>edit</FontIcon>Editor Mode</EditMode></Link>
+            {auth.hasRoles(['ADMIN','EDITOR'])&&<Link style={hiddenMobile} to={'/editor'}><EditMode className="nunito-font"><FontIcon className="material-icons" style={{color:'#fff',margin:'0 25px 0 20px',top:'4px'}}>edit</FontIcon>Editor Mode</EditMode></Link>}
             <CloseBtn onClick={close}><FontIcon className="material-icons" style={{color:'#222',fill:'#222'}}>close</FontIcon></CloseBtn>
 
             <Profile className="content-font">

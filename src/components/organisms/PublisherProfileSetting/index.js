@@ -77,6 +77,7 @@ const PublisherProfileSetting = React.createClass({
 
       error:false,
       textStatus:'Unsave',
+      errText:''
       //uploadPhoto:null
     }
   },
@@ -91,6 +92,19 @@ const PublisherProfileSetting = React.createClass({
 
   publisherChanged(e){
     const name = e.target.name
+    if(name=='tagline'){
+      var val = e.target.value.split('')
+      if(val.length>=80){
+        this.setState({
+          errText:'Maximun characters'
+        })
+        return
+      }else{
+        this.setState({
+          errText:''
+        })
+      }
+    }
     let pub = _.cloneDeep(this.state.publisher)
     utils.set(pub, name, e.target.value)
     //console.log('publisherChanged', pub, name, e.target.value)
@@ -128,7 +142,7 @@ const PublisherProfileSetting = React.createClass({
   },
 
   render(){
-    let {textStatus,error} = this.state
+    let {textStatus,error,errText} = this.state
     let pub = this.state.publisher
     var {theme} = this.context.setting.publisher 
     //console.log('render', pub)
@@ -163,6 +177,7 @@ const PublisherProfileSetting = React.createClass({
               rowsMax={10}
               name='tagline'
               onChange={this.publisherChanged}
+              errorText={errText}
             />
           </Edit>
         </Flex>

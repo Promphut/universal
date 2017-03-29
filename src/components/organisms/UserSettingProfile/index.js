@@ -84,7 +84,7 @@ const UserSettingProfile = React.createClass({
     return {
       error:false,
       textStatus:'Unsave',
-
+      errText:'',
       user: {
         display: '',
         shortDesc: '',
@@ -161,6 +161,19 @@ const UserSettingProfile = React.createClass({
 
   userChanged(e){
     const name = e.target.name
+    if(name=='shortDesc'){
+      var val = e.target.value.split('')
+      if(val.length>=80){
+        this.setState({
+          errText:'Maximun characters'
+        })
+        return
+      }else{
+        this.setState({
+          errText:''
+        })
+      }
+    }
     let user = {...this.state.user}
     utils.set(user, name, e.target.value)
 
@@ -171,7 +184,7 @@ const UserSettingProfile = React.createClass({
 
   render(){
     var {theme} = this.context.setting.publisher
-    let {textStatus, error, user} = this.state
+    let {textStatus, error, user,errText} = this.state
     //console.log('user.pic.medium', user.pic.medium)
     return(
       <Container onSubmit={this.updateData} ref='userProfile' className='marginTop'>
@@ -212,6 +225,7 @@ const UserSettingProfile = React.createClass({
               rows={1}
               rowsMax={4}
               name='shortDesc'
+              errorText={errText}
               value={user.shortDesc}
               onChange={this.userChanged}/>
           </Edit>
@@ -225,6 +239,7 @@ const UserSettingProfile = React.createClass({
               rows={1}
               rowsMax={4}
               name='shortDesc'
+              errorText={errText}
               value={user.shortDesc}
               onChange={this.userChanged}/>
           </Edit>

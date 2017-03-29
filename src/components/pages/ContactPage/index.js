@@ -398,6 +398,7 @@ const ContactPage = React.createClass({
           /><br />
           <TextField
             ref='email'
+            type="email"
             value={email ? email : ''}
             onChange={this.handleChangeEmail}
             className='content-font'
@@ -412,6 +413,7 @@ const ContactPage = React.createClass({
           /><br />
           <TextField
             ref='tel'
+            type='number'
             value={tel ? tel : ''}
             onChange={this.handleChangeTel}
             className='content-font'
