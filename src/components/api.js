@@ -202,14 +202,15 @@ api.getFeed = (type, filter, sort, sortby, page, limit, option) => {
 	return Request
 	.get(config.BACKURL+'/publishers/'+config.PID+'/feed?type='+type)
 	.set('x-access-token', token)
-	.query({filter: filter && JSON.stringify(filter)})
-	.query({option: option && JSON.stringify(option)})
+	.query({filter: filter ? JSON.stringify(filter) : null})
+	.query({option: option ? JSON.stringify(option) : null})
 	.query({sort: sort})
 	.query({sortby: sortby})
 	.query({page: page})
 	.query({limit: limit})
 	.set('Accept','application/json')
 	.then(res => {
+		//console.log('getFeed', res.body)
 		return res.body
 	}, api.err)
 }
