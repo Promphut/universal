@@ -25,7 +25,7 @@ const LogoLink = React.createClass({
 			this.getSvg(nextProps.src)
 			.then(svg => {
 				this.setState({svg: svg})
-				console.log(this.props.fill)
+				//console.log(this.props.fill)
 			})
 		}
 	},
@@ -58,11 +58,11 @@ const LogoLink = React.createClass({
 			if(style && style.height) $svg.attr('height',style.height)
 			if(fill){
 				$svg.find('path').each(function(index,ele){
-					$(this).removeAttr('fill','')
+					$(this).removeAttr('fill')
 					//console.log(this)
 				})
 				$svg.find('use').each(function(index,ele){
-					$(this).removeAttr('fill','')
+					$(this).removeAttr('fill')
 					//console.log(this)
 				})
 			}
@@ -74,7 +74,7 @@ const LogoLink = React.createClass({
 	render() {
 		let {style, title, to, fill} = this.props
 
-		return (<Link2 id='test' to={to} title={title} fill={fill} style={{...style}} dangerouslySetInnerHTML={{__html:this.state.svg}}>
+		return (<Link2 to={to} title={title} fill={fill} style={{...style}} dangerouslySetInnerHTML={{__html:this.state.svg}}>
 
 		</Link2>)
 	}
