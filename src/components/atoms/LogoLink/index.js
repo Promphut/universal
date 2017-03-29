@@ -14,6 +14,8 @@ const LogoLink = React.createClass({
 	componentWillReceiveProps(nextProps){
 		if(this.props!== nextProps) {
 			//console.log('componentWillReceiveProps')
+			//this.props = nextProps
+			//console.log('nextProps', nextProps)
 			//this.setState({src:''}) // will reget the svg and render fill
 			this.getSvg(nextProps.src)
 			.then(svg => {
@@ -36,6 +38,7 @@ const LogoLink = React.createClass({
 		.then(res => {
 			if(!res.text) return
 			let fill = this.props.fill
+			//console.log('fill', fill)
 			let {className,id,style} = this.props
 			// do svg manipulation
 			let $ = cheerio.load(res.text, { xmlMode: true }),
@@ -44,7 +47,7 @@ const LogoLink = React.createClass({
 			$svg.addClass(className)
 			//console.log(className,fill)
 			
-			$svg.attr('id', id)
+			if(id) $svg.attr('id', id)
 			//$svg.attr('fill', fill)
 			if(style && style.width) $svg.attr('width',style.width)
 			if(style && style.height) $svg.attr('height',style.height)
