@@ -29,8 +29,9 @@ const Container = styled.div`
   margin:7% auto 0 auto;
   width:477px;
   @media (max-width:480px) {
-    width:100vw;
-  } 
+    width: 100vw;
+		height: 100vh;
+  }
 `
 const BoxButton= styled.div`
   overflow:hidden;
@@ -79,7 +80,7 @@ const SignInPage = React.createClass({
 
 	render(){
     //console.log('PROP', this.props, this.props.params, this.props.location, this.location, browserHistory.getCurrentLocation())
-    
+
     let state = browserHistory.getCurrentLocation().state,
         nextPathname = '/'
     if(state && state.nextPathname) nextPathname = state.nextPathname
