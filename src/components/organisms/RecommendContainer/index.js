@@ -36,7 +36,7 @@ const RecommendContainer = ({style,className,recommend})=>{
           </div>
         ))}
       </div>
-    </Recommend>:''
+    </Recommend>:<div></div>
   )
 }
 
