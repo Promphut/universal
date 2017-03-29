@@ -56,10 +56,12 @@ const TopBarWithNavigation = React.createClass({
 		let top = e.srcElement.body.scrollTop,
 			scrolling = this.state.scrolling
 
-		if (top > 60 && !scrolling)
+		const breakScroll = window.isMobile() ? 150 : 60
+
+		if (top > breakScroll && !scrolling)
 			this.setState({scrolling: true})
 
-		else if (top <= 60 && scrolling)
+		else if (top <= breakScroll && scrolling)
 			this.setState({scrolling: false})
 	},
 

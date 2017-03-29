@@ -14,8 +14,8 @@ const Wrapper = styled.div`
 		border: none;
 	}
 
-	.hide {
-		opacity: ${props => props.scroll};
+	.fade {
+		opacity: ${props => props.topOpacity};
 	}
 `
 
@@ -30,7 +30,9 @@ const Container = styled.div`
 	transition: .1s;
 	position: absolute;
 
-	display: flex;
+	opacity: ${props => props.topOpacity};
+
+	display: ${props => props.topOpacity >= 0 ? 'flex' : 'none'};
 	flex-flow: row nowrap;
 	justify-content: space-between;
 
@@ -122,6 +124,7 @@ const TopBarWithShare = React.createClass({
 			alertLeft: false,
 			alertRight: false,
 			scroll: 0,
+			topOpacity: 1,
 			lock: false
 		}
 	},
@@ -143,8 +146,18 @@ const TopBarWithShare = React.createClass({
 	handleScroll(e) {
 		this.props.onScroll(e)
 
-		let top = e.srcElement.body.scrollTop / 1000
-		this.setState({scroll: top})
+		const speed = 120
+
+		const prevTop = this.state.scroll
+		const nowTop = e.srcElement.body.scrollTop
+		const diff = nowTop - prevTop
+
+		let topOpacity = this.state.topOpacity - (diff / speed)
+		if (topOpacity > 1.5) topOpacity = 1.5
+		if (topOpacity < -1) topOpacity = -1
+
+		this.setState({topOpacity: topOpacity})
+		this.setState({scroll: nowTop})
 	},
 
 	openPop(side){
@@ -169,7 +182,7 @@ const TopBarWithShare = React.createClass({
 
 	render () {
 		var {theme} = this.context.setting.publisher
-		let {alertLeft, alertRight, scroll} = this.state
+		let {alertLeft, alertRight, topOpacity} = this.state
 		let status = this.props.status || 'UNLOGGEDIN',
 			{scrolling, user, menu, transparent, editButton}  = this.props
 
@@ -198,10 +211,9 @@ const TopBarWithShare = React.createClass({
 		}
 
 	  return (
-	    <Wrapper scroll={scroll}>
-				<Container className={'menu-font '
-					+ ((!scrolling && transparent) ? 'transparent' : '')}>
-					<Left>
+	    <Wrapper topOpacity={topOpacity}>
+				<Container className={'menu-font ' + ((!scrolling && transparent) ? 'transparent' : '')} topOpacity={topOpacity}>
+					<Left className="fade">
 			      <HamburgerWrapper onClick={() => this.openPop('left')}>
 			        <Hamburger className="material-icons" white={(!scrolling && transparent)} style={!scrolling && transparent?{color:'white'}:{}}>menu</Hamburger>
 			      </HamburgerWrapper>
@@ -210,7 +222,7 @@ const TopBarWithShare = React.createClass({
 			      <LogoLink to="/" src={theme.slogo} title={this.props.title} style={logoStyleMobile} fill={theme.barTone=='light'?theme.primaryColor:'#ffffff'} />
 					</Left>
 
-					<Right>
+					<Right className="fade">
 						<ShareButtonTop onClick={api.shareFB} number='112' barTone={theme.barTone} scrolling={scrolling}/>
 						<ShareDropdownTop>
 							<FontIcon style={moreStyle} className="material-icons" >more_vert</FontIcon>

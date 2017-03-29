@@ -216,8 +216,8 @@ const TopBar = React.createClass({
 			        <Hamburger className="material-icons" white={(!scrolling && transparent)} style={!scrolling && transparent?{color:'white'}:{}}>menu</Hamburger>
 			      </HamburgerWrapper>
 
-						<LogoLink to="/" src={theme.logo} title={this.props.title} style={logoStyle} fill={theme.barTone=='light'?theme.primaryColor:"#ffffff"} />
-	      		<LogoLink to="/" src={theme.slogo} title={this.props.title} style={logoStyleMobile} fill={theme.barTone=='light'?theme.primaryColor:'#ffffff'} />
+						<LogoLink to="/" src={theme.logo} title={this.props.title} style={logoStyle} fill={theme.barTone=='light'?theme.primaryColor:"#FFF"} />
+	      		<LogoLink to="/" src={theme.slogo} title={this.props.title} style={logoStyleMobile} fill={theme.barTone=='light'?theme.primaryColor:'#FFF'} />
 					</Left>
 
 					<Center className={transparent ? 'hide': ''}>
@@ -229,7 +229,7 @@ const TopBar = React.createClass({
 							{this.role && editButton &&
 								<Edit
 									className='nunito-font'
-									style={{color:(!scrolling && transparent) ? 'white' : '#222'}}
+									style={{color:((!scrolling && transparent) || (theme.barTone!='light')) ? '#FFF' : '#222'}}
 									to={editButton}>
 									Edit Story
 								</Edit>

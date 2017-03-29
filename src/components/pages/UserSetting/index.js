@@ -75,9 +75,9 @@ const UserSetting = React.createClass({
 
     let title = ''
     if (this.props.location.pathname == '/me/settings') {
-      title = 'Setting'
-    } else if (this.props.location.pathname == 'me/settings/account') {
       title = 'Edit Profile'
+    } else if (this.props.location.pathname == '/me/settings/account') {
+      title = 'Setting'
     }
 
 		return (
