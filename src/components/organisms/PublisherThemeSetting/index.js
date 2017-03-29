@@ -213,6 +213,7 @@ const PublisherThemeSetting = React.createClass({
       .end((err,res)=>{
         if(err) throw err 
         else{
+          //console.log('publisher', res.body.publisher)
           self.setState({publisher:res.body.publisher})
           self.setData()
         }
@@ -234,7 +235,7 @@ const PublisherThemeSetting = React.createClass({
         }
     }}
     Request
-      .patch(config.BACKURL+'/publishers/'+config.PID+'?token='+auth.getToken())
+      .patch(config.BACKURL+'/publishers/'+config.PID)
       .set('x-access-token', auth.getToken())
       .set('Accept','application/json')
       .send(data)
