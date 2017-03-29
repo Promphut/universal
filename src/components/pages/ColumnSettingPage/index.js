@@ -119,7 +119,9 @@ const ColumnSettingPage = React.createClass({
 
       textStatus:'Unsave',
       error:false,
-      dialog:false
+      dialog:false,
+      errText:'',
+      descText:''
     }
   },
 
@@ -349,9 +351,24 @@ const ColumnSettingPage = React.createClass({
     }
   },
 
+  editDesc(e){
+    var val = e.target.value.split('')
+    if(val.length>=140){
+      this.setState({
+        errText:'Maximun characters'
+      })
+      return
+    }else{
+      this.setState({
+        descText:e.target.value,
+        errText:''
+      })
+    }
+  },
+
   render(){
     var {theme} = this.context.setting.publisher
-    var {dialog,error,textStatus,dialogText,cover,writers,editors,switchTo, editorsAutoComplete, writersAutoComplete, writerSearchText,editorSearchText} = this.state
+    var {descText,errText,dialog,error,textStatus,dialogText,cover,writers,editors,switchTo, editorsAutoComplete, writersAutoComplete, writerSearchText,editorSearchText} = this.state
     const actions = [
       <FlatButton
         label="Cancel"
@@ -390,7 +407,6 @@ const ColumnSettingPage = React.createClass({
             </Title>
             <Edit>
               <Social className="sans-font">
-
                 <TextField style={{float:'left',margin:'5px 0 0 0'}} id='slug' name='slug'/>
               </Social>
               <Desc className='sans-font'>Note that changing slug will affect the whole URL structure of this publisher, meaning that previously used URLs won't be able to be accessed anymore. Are you sure to edit?</Desc>
@@ -402,13 +418,15 @@ const ColumnSettingPage = React.createClass({
             </Title>
             <Edit>
               <TextField
-                defaultValue=""
                 multiLine={true}
                 fullWidth={true}
                 floatingLabelText="140 characters"
                 floatingLabelFixed={true}
-                rows={1}
+                rows={3}
                 rowsMax={6}
+                value={descText}
+                onChange={this.editDesc}
+                errorText={errText}
                 id='shortDesc'
                 name='shortDesc'
               />

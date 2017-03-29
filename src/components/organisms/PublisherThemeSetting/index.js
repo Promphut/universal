@@ -250,6 +250,7 @@ const PublisherThemeSetting = React.createClass({
             textStatus:'Saved successfully',
             error:false
           })
+          window.location.reload();
         }
       })
   },
