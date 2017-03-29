@@ -24,7 +24,7 @@ const TopBarWithNavigation = React.createClass({
 			this.setState({scrolling: false})
 	},
 
-	componentWillMount(){
+	componentDidMount(){
 		// Get from cookie, else get from query
 		let token = browserHistory.getCurrentLocation().query.token || auth.getToken()
 

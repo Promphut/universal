@@ -38,7 +38,7 @@ const Span1 = styled.span`
 
 const WritedBy = ({style, writer, /*column,*/ published}) => {
   //let {name,date,column,url} = detail
-  console.log('WritedBy', writer, published)
+  //console.log('WritedBy', writer, published)
   return (
     <Container style={{...style}}>
 

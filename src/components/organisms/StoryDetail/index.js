@@ -160,7 +160,7 @@ const StoryDetail = React.createClass({
         <Head className='title-font'>{s.title}</Head>
         <WritedBy writer={s.writer} column={s.column} published={s.published} />
 
-        <Story className='content-font' dangerouslySetInnerHTML={{__html:s.html}}></Story>
+        <Story className='content-font' dangerouslySetInnerHTML={{__html:s.phtml}}></Story>
 
         {/* NEXT ITERATION
         <TagContainer>

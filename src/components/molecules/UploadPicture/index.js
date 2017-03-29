@@ -91,7 +91,7 @@ const UploadPicture = React.createClass({
   },
 
   componentWillReceiveProps(nextProps){
-    if(nextProps.src!=this.props.src&&nextProps.src!=null){
+    if(nextProps.src!=this.props.src && nextProps.src!=null){
       this.setState({
         statePreview:true
       })

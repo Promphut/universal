@@ -245,6 +245,14 @@ api.newColumn = (col) => {
 	})
 }
 
+api.getTags = () => {
+	return Request
+	.get(config.BACKURL+'/publishers/'+config.PID+'/tags')
+	.then(res => {
+		return res.body.tags
+	}, api.err)
+}
+
 api.getPublisherWriters = () => {
 	return Request
 	.get(config.BACKURL+'/publishers/'+config.PID+'/writers')
@@ -254,24 +262,60 @@ api.getPublisherWriters = () => {
 	}, api.err)
 }
 
-api.deleteStory = (aid) => {
+api.deleteStory = (sid) => {
 	let token = auth.getToken()
 	if(!token) return api.userNotFoundPromise()
 
 	return Request
-	.delete(config.BACKURL+'/stories/'+aid)
+	.delete(config.BACKURL+'/stories/'+sid)
 	.set('x-access-token', token)
 	.then(res => {
 		return res.body
 	}, api.err)
 }
 
-api.setStoryStatus = (aid, status) => {
+api.updateStory = (sid, story) => {
+	return Request
+	.patch(config.BACKURL+'/stories/'+sid)
+	.set('x-access-token', auth.getToken())
+	.send({story: story})
+	.then(res => {
+		return res.body.story
+	}, api.err)
+}
+api.createStory = (story) => {
+	return Request
+	.post(config.BACKURL+'/stories')
+	.set('x-access-token', auth.getToken())
+	.send({story: story})
+	.then(res => {
+		return res.body.story
+	}, api.err)
+}
+// api.unpublishStory = (sid) => {
+// 	return Request
+// 	.patch(config.BACKURL+'/stories/'+this.state.sid)
+// 	.set('x-access-token', auth.getToken())
+// 	.send({story: {status: 0}})
+// 	.then({
+// 		return res.body.story
+// 	}, api.err) 
+// }
+// api.publishStory = (sid, story) => {
+// 	return Request
+// 	.patch(config.BACKURL+'/stories/'+sid+'?token='+auth.getToken())
+// 	.send({story: story})
+// 	.then(res => {
+// 		return res.body.story
+// 	}, api.err)
+// }
+
+api.setStoryStatus = (sid, status) => {
 	let token = auth.getToken()
 	if(!token) return api.userNotFoundPromise()
 
 	return Request
-	.patch(config.BACKURL+'/stories/'+aid)
+	.patch(config.BACKURL+'/stories/'+sid)
 	.query({token: token})
 	.send({
 		story:{status: status}

@@ -17,6 +17,7 @@ import AutoComplete from 'material-ui/AutoComplete';
 import Chip from 'material-ui/Chip';
 import moment from 'moment'
 import CircularProgress from 'material-ui/CircularProgress';
+import api from 'components/api'
 
 import $ from 'jquery';
 
@@ -135,9 +136,15 @@ const Delete = styled.div`
 `
 
 const EditStory = React.createClass({
+  SAVE_STATUS: {
+    'INITIAL': 0,
+    'DIRTIED': 1,
+    'UNDIRTIED': 2
+  },
+
   getInitialState(){
 
-    return{
+    return {
       story:{},
       chooseLayout:null,
       layout:'news',
@@ -152,20 +159,21 @@ const EditStory = React.createClass({
       columnList:[],
       sid:this.props.params.sid,
       saveStatus:null,
-      prevState:'',
 
       alert:false,
 
       title:'',
 
       saveOnload:false,
-      publishStatus:''
+      publishStatus:'',
+
+      status: this.SAVE_STATUS.INITIAL
     }
   },
 
   componentDidMount(){
     //this.editor.setContent(this.state.story)
-    this.editor = new MediumEditor('#paper',{
+    this.editor = new MediumEditor('#paper', {
       toolbar: {
         buttons: [
             {name: 'bold',contentDefault: '<span class="fa fa-bold" ></span>'},
@@ -196,32 +204,34 @@ const EditStory = React.createClass({
             {name: 'justifyCenter',contentDefault: '<span class="fa fa-align-center" ></span>'},
             {name: 'justifyRight',contentDefault: '<span class="fa fa-align-right" ></span>'}
         ]
-    },
-    targetBlank: true,
-    placeholder: {
-      text: 'Write a story ...'
-    }
+      },
+      targetBlank: true,
+      placeholder: {
+        text: 'Write a story ...'
+      }
     });
+
     $('#paper').mediumInsert({
         editor: this.editor,
         addons: {
-            images: {
-              captionPlaceholder: 'Type caption for image',
-              fileUploadOptions: {},
-              styles: {
-                full: {
-                    label: this.state.layout=='article'?'<span class="fa fa-window-maximize"></span>':''
-                }
+          images: {
+            captionPlaceholder: 'Type caption for image',
+            fileUploadOptions: {},
+            styles: {
+              full: {
+                  label: this.state.layout=='article'?'<span class="fa fa-window-maximize"></span>':''
+              }
             }
-            }
+          }
         }
     });
+
     this.editor.subscribe('editableInput', this.handleEditableInput);
-    this.interval = setInterval(()=>{
-      this.autoSave()
-    },5000)
-    this.getTag()
-    this.getColumn()
+
+    this.interval = setInterval(this.autoSave, 3000)
+
+    this.getTags()
+    this.getColumns()
     this.getStoryDetail()
 
   },
@@ -233,21 +243,26 @@ const EditStory = React.createClass({
   chooseNews(){
     this.setState({layout:'news'})
   },
+
   chooseArticle(){
     this.setState({layout:'article'})
   },
+
   selectedLayout(){
-    this.setState({chooseLayout:1},()=>{
-      
-    })
+    this.setState({chooseLayout:1},()=>{})
   },
 
-  handleEditableInput(e){
-    var allContents = this.editor.serialize()
-    var el =  allContents.paper.value
-    if(el!=this.state.prevState){
-      this.setState({saveStatus:'Unsave'})
-    }
+  handleEditableInput(e, editable){
+    if(this.state.status === this.SAVE_STATUS.INITIAL) 
+      this.setState({
+        status: this.SAVE_STATUS.UNDIRTIED,
+        saveStatus:''
+      })
+    else 
+      this.setState({
+        status: this.SAVE_STATUS.DIRTIED,
+        saveStatus:'Unsave'
+      })
   },
 
   handleRequestClose(){
@@ -255,7 +270,10 @@ const EditStory = React.createClass({
   },
 
   popoverSave(e){
-    this.setState({open:true,anchorEl:e.currentTarget})
+    this.setState({
+      open:true,
+      anchorEl:e.currentTarget
+    })
   },
 
   chooseColumn(e,ind,val){
@@ -268,186 +286,116 @@ const EditStory = React.createClass({
     if(story){
       this.setState({
         story:story, 
-        title:story.title
+        title:story.title,
+
+        column: story.column ? story.column._id : 'no'
       })
   
-      this.editor.setContent(story.html)
+      this.editor.setContent(story.html || '')
     }
   },
 
-  // getStoryDetail(){
-  //   Request
-  //     .get(config.BACKURL+'/stories/'+this.props.params.sid)
-  //     .end((err,res)=>{
-  //       if(err)throw err
-  //       else{
-  //         //console.log(res.body)
-  //         this.setState({story:res.body.story,title:res.body.story.title})
-  //         this.editor.setContent(res.body.story.html)
-
-  //         // var sel = []
-  //         // if(res.body.story.tags.length!=0){
-  //         //   res.body.story.tags.map((data,index)=>{
-  //         //     sel[index] = {text:data.name,value:index,id:data._id}
-  //         //   })
-  //         //   //console.log(sel)
-  //         //   var {tag} = this.state
-  //         //   var newTag = tag
-  //         //   tag.map((data,index)=>{
-  //         //     if(data.text==sel[index].text){
-  //         //       newTag.splice(index,1)
-  //         //     }
-  //         //   })
-  //         //   this.setState({addTag:addedTag,searchText:'',tag:newTag})
-  //         // }
-  //       }
-  //     })
-  // },
-
-  getTag(){
-    var self = this
-    Request
-      .get(config.BACKURL+'/publishers/'+config.PID+'/tags')
-      .end((err,res)=>{
-        if(err)throw err
-        else{
-          //console.log(res.body)
-          var tag = []
-          res.body.tags.map((data,index)=>{
-            tag[index] = {text:data.name,value:index,id:data._id}
-          })
-          self.setState({tag:tag,pureTag:res.body.tags})
-        }
-        //console.log(res.body)
+  getTags(){
+    api.getTags()
+    .then(tags => {
+      let result = []
+      tags.map((tag, i) => {
+        result[i] = { text:tag.name, value:i, id:tag._id }
       })
+
+      this.setState({
+        tag:result,
+        pureTag:tags
+      })
+    })
   },
 
-  getColumn(){
-    var self = this
-    Request
-    .get(config.BACKURL+'/publishers/'+config.PID+'/columns')
-    .end((err,res)=>{
-      if(err)throw err
-      else{
-        //console.log(res.body)
-        self.setState({columnList:res.body.columns})
-      }
-      //console.log(res.body)
+  getColumns(){
+    api.getColumns()
+    .then(cols => {
+      this.setState({columnList: cols})
     })
   },
 
   autoSave(){
-    var self = this
-    var {prevState,sid,title,column} = this.state
-    var allContents = this.editor.serialize()
-    var el =  allContents.paper.value
+    let {sid,title,column} = this.state
+    let allContents = this.editor.serialize()
+    let el =  allContents.paper.value
 
-    var Story = {
-      story:{
-        title:title,
-        publisher:parseInt(config.PID),
-        status:0,
-        html:el,
-      }
-    }
-    if(column!='no'){
-      Story.story.column = column
-    }
-    if(prevState!=el&&el!='<p><br></p>'){
-      this.setState({saveStatus:'saving...'})
-      Request
-        .patch(config.BACKURL+'/stories/'+sid+'?token='+auth.getToken())
-        .send(Story)
-        .end((err,res)=>{
-          if(err)throw err
-          else{
-            //console.log(res.body)
-            self.setState({
-              saveStatus:"Saved "+ moment(res.body.story.updated).calendar()
-            })
-          }
-        })
-      self.setState({prevState:el})
-    }
-  },
-
-  save(){
-    var self = this
-    var {prevState,sid,title,column} = this.state
-    var allContents = this.editor.serialize()
-    var el =  allContents.paper.value
-    var Story = {
-      story:{
-        title:title,
-        publisher:parseInt(config.PID),
-        status:0,
-        html:el,
-      }
-    }
-    if(column!='no'){
-      Story.story.column = column
-    }
-    Request
-      .patch(config.BACKURL+'/stories/'+sid+'?token='+auth.getToken())
-      .send(Story)
-      .end((err,res)=>{
-        if(err)throw err
-        else{
-          //console.log(res.body)
-          self.setState({
-            sid:res.body.story._id,
-            saveStatus:"Saved "+ moment(res.body.story.updated).calendar(),
-            open:false,
-          })
-        }
+    if(this.state.status === this.SAVE_STATUS.DIRTIED){
+      this.setState({
+        saveStatus:'Saving...'
       })
-    self.setState({prevState:el})
+
+      let s = {
+        title:title,
+        publisher:parseInt(config.PID),
+        html:el
+      }
+      if(column!='no') s.column = column
+
+      api.updateStory(sid, s)
+      .then(story => {
+        this.setState({
+          status: this.SAVE_STATUS.UNDIRTIED,
+          saveStatus:"Saved "+ moment(story.updated).calendar()
+        })
+      })
+    }
   },
 
   publishStory(){
-    var self = this
-    var {prevState,sid,column,title} = this.state
-    var allContents = this.editor.serialize()
-    var el =  allContents.paper.value
-    var Story = {
-      story:{
-        title:title,
-        publisher:parseInt(config.PID),
-        status:1,
-        html:el,
-      }
+    let {sid,column,title} = this.state
+    let allContents = this.editor.serialize()
+    
+    let s = {
+      title:title,
+      publisher:parseInt(config.PID),
+      status:1,
+      html:allContents.paper.value,
     }
-    if(column!='no'){
-      Story.story.column = column
-    }
-    Request
-      .patch(config.BACKURL+'/stories/'+sid+'?token='+auth.getToken())
-      .send(Story)
-      .end((err,res)=>{
-        if(err){
-          //console.log(res.body)
-          self.setState({publishStatus:res.body.error.message,open:false})
-        }
-        else{
-          browserHistory.push(res.body.story.url)
+    if(column!='no') s.column = column
+
+    api.updateStory(sid, s)
+    .then(story => {
+      browserHistory.push(story.url)
+    })
+    .catch(err => {
+      this.setState({
+        publishStatus: err.message,
+        open:false
+      })
+    })
+  },
+
+  unpublishStory(e){
+    api.updateStory(this.state.sid, {status:0})
+    .then(story => {
+      this.setState({
+        sid: story._id,
+        saveStatus: "Story has been unpublished.",
+        open:false,
+        story: {
+          status: 0
         }
       })
+    })
+    .catch(err => {
+      this.setState({
+        publishStatus: err.message,
+        open:false
+      })
+    })
   },
 
   deleteStory(){
-    var {sid} = this.state
-    Request
-      .delete(config.BACKURL+'/stories/'+sid+'?token='+auth.getToken())
-      .end((err,res)=>{
-        if(err)throw err
-        else{
-          browserHistory.push('/me/stories')
-        }
-      })
+    api.deleteStory(this.state.sid)
+    .then(() => {
+      browserHistory.push('/me/stories')
+    })
   },
 
   selectedTag(sel,index){
-    var self = this
     var {tag,addTag,pureTag,sid} = this.state
     //console.log(sel)
     Request
@@ -455,37 +403,43 @@ const EditStory = React.createClass({
     .end((err,res)=>{
       if(err)throw err
       else{
-          var addedTag = addTag
-          var allTag = pureTag
-          addedTag.push(sel)
-          var Tag = tag
-          var newTag = tag
-          Tag.map((data,index)=>{
-            if(data.text==sel.text){
-              newTag.splice(index,1)
-            }
-          })
-          self.setState({addTag:addedTag,searchText:'',tag:newTag})
+        var addedTag = addTag
+        var allTag = pureTag
+        addedTag.push(sel)
+        var Tag = tag
+        var newTag = tag
+        Tag.map((data,index)=>{
+          if(data.text==sel.text){
+            newTag.splice(index,1)
+          }
+        })
+        this.setState({
+          addTag:addedTag,
+          searchText:'',
+          tag:newTag
+        })
       }
     })
   },
 
   removeSelectedTag(data,index){
     var {sid,tag,addTag} = this.state
-    var self = this
     //console.log(data)
     Request
-      .delete(config.BACKURL+'/stories/'+sid+'/tags/'+data.id+'?token='+auth.getToken())
-      .end((err,res)=>{
-        if(err)throw err
-        else{
-            var Tag = tag
-            Tag.push(data)
-            var addedTag = addTag
-            addedTag.splice(index,1)
-            self.setState({tag:Tag,addTag:addedTag})
-        }
-      })
+    .delete(config.BACKURL+'/stories/'+sid+'/tags/'+data.id+'?token='+auth.getToken())
+    .end((err,res)=>{
+      if(err)throw err
+      else{
+          var Tag = tag
+          Tag.push(data)
+          var addedTag = addTag
+          addedTag.splice(index,1)
+          this.setState({
+            tag:Tag,
+            addTag:addedTag
+          })
+      }
+    })
   },
 
   handleUpdateInput(searchText){
@@ -499,7 +453,12 @@ const EditStory = React.createClass({
   },
 
   showAlert(e){
-    this.setState({alert:true,alertWhere:e.currentTarget,alertDesc:'Are you sure to delete this story ?',alertConfirm:this.deleteStory})
+    this.setState({
+      alert:true,
+      alertWhere:e.currentTarget,
+      alertDesc:'Are you sure to delete this story ?',
+      alertConfirm:this.deleteStory
+    })
   },
 
   title(e){
@@ -507,13 +466,15 @@ const EditStory = React.createClass({
   },
 
   render(){
-    var {chooseLayout,layout,open,anchorEl,column,tag,addTag,searchText,columnList,sid,
+    let {chooseLayout,layout,open,anchorEl,column,tag,addTag,searchText,columnList,sid,
           alert,alertWhere,alertConfirm,alertDesc,saveStatus,title,publishStatus,story} = this.state
-    const dataSourceConfig = {text: 'text',value: 'value',id:'id'};
-    var {theme} = this.context.setting.publisher
+    const dataSourceConfig = {text: 'text', value: 'value', id:'id'};
+    let {theme} = this.context.setting.publisher
+
+    //console.log('COL', column)
 
     //console.log(tag)
-    return(
+    return (
       <Container onSubmit={this.updateData}>
         <Alert
           open={alert}
@@ -523,7 +484,7 @@ const EditStory = React.createClass({
           confirm={alertConfirm}/>
         <RaisedButton
           onClick={this.popoverSave}
-          label="save"
+          label="Publish"
           labelStyle={{fontWeight:'bold', fontSize:15, top:0, fontFamily:"'Nunito', 'Mitr'"}}
           labelColor='#fff'
           labelPosition="before"
@@ -556,9 +517,9 @@ const EditStory = React.createClass({
               selectedMenuItemStyle={{color:'#222',background:theme.accentColor}}
             >
               <MenuItem value='no' primaryText='No Column' />
-              {columnList.length!=0?columnList.map((data,index)=>(
+              {columnList.length!=0 && columnList.map((data,index)=>(
                 <MenuItem value={data._id} primaryText={data.name} key={index} />
-              )):''}
+              ))}
             </DropDownMenu>
           </div>
           {/*next interation*/}
@@ -605,13 +566,14 @@ const EditStory = React.createClass({
             <TextStatus className='sans-font' style={{color:'#DC143C',float:'right',marginTop:'30px'}}>{publishStatus}</TextStatus>
           </div>
           <div className='row' style={{display:'block',overflow:'hidden',marginTop:'0px'}}>
-            <Delete style={{float:'left',margin:'10px'}} onClick={this.showAlert}>Delete this story</Delete>
-            <PrimaryButton label="Publish" style={{float:'right'}} onClick={this.publishStory}/>
-            <SecondaryButton label="Save" style={{float:'right',marginRight:'20px'}} onClick={this.save}/>
+            <Delete style={{float:'left',margin:'10px'}} onClick={this.showAlert}>Delete</Delete>
+            <PrimaryButton label={story.status===1 ? moment(story.published).format('ddd, [at] h:mm a') : 'Publish'} style={{float:'right'}} onClick={this.publishStory} iconName="done"/>
+            {/*<SecondaryButton label="Save" style={{float:'right',marginRight:'20px'}} onClick={this.save}/>*/}
+            {story.status===1 && <SecondaryButton label="Unpublish" style={{float:'right',marginRight:'20px'}} onClick={this.unpublishStory}/>}
           </div>
         </Popover>
         </RaisedButton>
-        {sid!=null?<TextStatus className='sans-font'>{saveStatus}</TextStatus>:''}
+        {sid!=null && <TextStatus className='sans-font'>{saveStatus}</TextStatus>}
 
         <Title placeholder='Title' className='serif-font' value={title} onChange={this.title}/>
 
@@ -620,14 +582,11 @@ const EditStory = React.createClass({
         </Paper>
       </Container>
     )
-  },
+  }
 })
 
 EditStory.contextTypes = {
 	setting: React.PropTypes.object
 };
-
-
-
 
 export default EditStory
