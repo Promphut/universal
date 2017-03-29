@@ -25,9 +25,12 @@ const Container = styled.div`
     }
   }
   @media (max-width:480px){
-    width:284px;
+    position:relative;
+    width:100%;
+    top:0;
+    left:0;
     .imgWidth{
-      width:284px;
+      width:100%;
       height:164px;
     }
   }

@@ -72,7 +72,11 @@ const User = styled.div`
 	padding: 80px 0px 15px 0px;
 
 	@media (max-width: 480px) {
-		background: ${props=> props.theme.primaryColor};
+		background: -moz-linear-gradient(-45deg,  ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%); /* FF3.6-15 */
+		background: -webkit-linear-gradient(-45deg,  ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%); /* Chrome10-25,Safari5.1-6 */
+		background: linear-gradient(135deg,  ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\#bf00b2b4\, endColorstr=\#bfcef1b7\,GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+
 		padding-top: 60px;
 		padding: 60px 0px 0px 0px;
 	}
