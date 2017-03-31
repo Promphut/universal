@@ -92,7 +92,7 @@ const ArticleBox = React.createClass({
             </Div>}
           </DivDes>
           <BGImg url={url} src={cover.medium || cover.small} className='imgWidth des-hidden'/>
-          <NameLink to={url} style={{marginTop:'12px'}}>{title}</NameLink>
+          <NameLink to={url} className='serif-font' style={{marginTop:'12px'}}>{title}</NameLink>
           <div className="row" style={{margin:'15px 0 4px 0'}}>
             <Link to={writer.url}><Avatar src={writer.pic.medium}/></Link>
             <div style={{margin:'5px 0 0 12px'}}>
