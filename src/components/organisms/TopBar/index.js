@@ -161,6 +161,17 @@ const TopBar = React.createClass({
 		}
 	},
 
+	close(e,to,side){
+		e.preventDefault()
+		//console.log(e,to,side)
+		if (side === 'left') {
+			this.setState({alertLeft: false})
+		} else if (side === 'right') {
+			this.setState({alertRight: false})
+		}
+		if(window.location.pathname != to) browserHistory.push(to)
+	},
+
 	signup(){
 		browserHistory.push('/signup')
 	},
@@ -273,6 +284,7 @@ const TopBar = React.createClass({
 					menu={menu}
 					open={alertLeft}
 					close={() => this.handleRequestClose('left')}
+					closeAndLink={(e,to) => this.close(e,to,'left')}
 				/>
 				{status=='LOGGEDIN' &&
 					<RightMenu

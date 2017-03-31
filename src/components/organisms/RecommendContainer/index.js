@@ -27,7 +27,7 @@ const Recommend = styled.div`
 `
 const RecommendContainer = ({style,className,recommend})=>{
   return(
-    recommend.length!=0?<Recommend style={{...style}} className={className} >
+    recommend.length<=1?<Recommend style={{...style}} className={className} >
       <div className='recommends sans-font' >Recommends</div>
       <div className='row center'>
         {recommend.map((data,index)=>(

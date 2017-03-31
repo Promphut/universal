@@ -37,7 +37,7 @@ const Text = styled.div`
   margin-bottom:70px;
   @media (max-width:480px) {
     color:#fff;
-    margin-bottom:20px;
+    margin-bottom:50px;
   } 
 `
 const LinkUnderLine = styled(Link)`
@@ -51,14 +51,14 @@ var styles={
     background:'#3A579A',
     borderRadius:'24px',
     height:'43px',
-    width:'167px'
+    width:'200px'
   },
   btn:{
     background:'#3A579A',
     borderRadius:'24px',
   },
   btnCon:{
-    width:'167px',
+    width:'200px',
     margin:'0px auto 20px auto'
   },
   labelBtn:{
@@ -91,7 +91,7 @@ const SignUpFb = React.createClass({
             />
           </a>  
         </div>
-        <div style={{width:'200px',margin:'0 auto 20px auto'}} className='hidden-des'>
+        <div style={{width:'200px',margin:'30px auto 20px auto'}} className='hidden-des'>
             <RaisedButton
               label=" Sign Up with Email"
               labelPosition="after"

@@ -18,6 +18,7 @@ const Wrapper = styled.div`
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00b2b4', endColorstr='#cef1b7', GradientType=1 );
   @media (max-width:480px) {
     background:${props=>props.page?'':'white'};
+    height: 100vh;
   }
 `
 const Modal = styled.div`
