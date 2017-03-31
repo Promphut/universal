@@ -33,7 +33,11 @@ const Container = styled.form`
   width:100%;
   padding:60px;
   border-bottom:1px solid #E2E2E2;
-
+  .medium-editor-insert-plugin ul > li {
+    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    font-size: 18px;
+    margin:10px 0 10px 0;
+  }
   .medium-editor-insert-plugin p {
     font-family: 'PT Sans', 'cs_prajad', sans-serif;
     font-size: 18px;
@@ -200,6 +204,7 @@ const EditStory = React.createClass({
             },
             {name: 'quote',contentDefault: '<span class="fa fa-quote-left" ></span>'},
             {name: 'anchor',contentDefault: '<span class="fa fa-link" ></span>'},
+            {name: 'unorderedlist',contentDefault: '<span class="fa fa-list-ul" ></span>'},
             {name: 'justifyLeft',contentDefault: '<span class="fa fa-align-left" ></span>'},
             {name: 'justifyCenter',contentDefault: '<span class="fa fa-align-center" ></span>'},
             {name: 'justifyRight',contentDefault: '<span class="fa fa-align-right" ></span>'}
@@ -462,7 +467,11 @@ const EditStory = React.createClass({
   },
 
   title(e){
-    this.setState({title:e.target.value})
+    if(this.state.status===this.SAVE_STATUS.UNDIRTIED){
+      this.setState({title:e.target.value,status:this.SAVE_STATUS.DIRTIED,saveStatus:'Unsave'})
+    }else{
+      this.setState({title:e.target.value,saveStatus:'Unsave'})
+    }
   },
 
   render(){

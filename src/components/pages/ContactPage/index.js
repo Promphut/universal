@@ -414,8 +414,8 @@ const ContactPage = React.createClass({
           /><br />
           <TextField
             ref='tel'
-            type='number'
             value={tel ? tel : ''}
+            onKeydown={()=>{console.log(e)}}
             onChange={this.handleChangeTel}
             className='content-font'
             hintText={tel ? '' : 'Mobile Number'}

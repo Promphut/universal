@@ -26,6 +26,11 @@ const Story = styled.div`
   margin-top:40px;
   clear:both;
 	overflow:hidden;
+  ul > li {
+    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    font-size: 18px;
+    margin:10px 0 10px 0;
+  }
   p {
     font-family: 'PT Sans', 'cs_prajad', sans-serif;
     font-size: 18px;
@@ -161,7 +166,7 @@ const StoryDetail = React.createClass({
 
     return (
       <Wraper>
-        <Head className='title-font'>{s.title}</Head>
+        <Head className='title-font'>{s.ptitle}</Head>
         <WritedBy writer={s.writer} column={s.column} published={s.published} />
 
         <Story className='content-font' dangerouslySetInnerHTML={{__html:s.phtml}}></Story>

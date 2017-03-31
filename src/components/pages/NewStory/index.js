@@ -38,7 +38,12 @@ const Container = styled.form`
     font-family: 'PT Sans', 'cs_prajad', sans-serif;
     font-size: 18px;
   }
-  .medium-editor-insert-plugin h2 {
+  .medium-editor-insert-plugin ul > li {
+    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    font-size: 18px;
+    margin:10px 0 10px 0;
+  }
+  .medium-editor-insert-plugin h2{
     font-size: 28px;
     font-weight:bold;
     color:#222;
@@ -194,8 +199,8 @@ const NewStory = React.createClass({
       this.editor = new MediumEditor('#paper',{
         toolbar: {
           buttons: [
-              {name: 'bold',contentDefault: '<span class="fa fa-bold" ></span>'},
-              {name: 'italic',contentDefault: '<span class="fa fa-italic" ></span>'},
+              {name: 'bold',contentDefault: '<span class="fa fa-bold" ></span>',tagNames: ['strong']},
+              {name: 'italic',contentDefault: '<span class="fa fa-italic" ></span>',tagNames: ['em']},
               {name: 'underline',contentDefault: '<span class="fa fa-underline" ></span>',},
               {
                   name: 'h1',
@@ -204,7 +209,6 @@ const NewStory = React.createClass({
                   tagNames: ['h2'],
                   style:{ prop: 'font-size', value: '28px' },
                   contentDefault: '<span class="fa fa-header" style="font-size:24px"><span>',
-                  classList: ['custom-class-h1'],
                   attrs: {'data-custom-attr': 'attr-value-h1'}
               },
               {
@@ -213,11 +217,11 @@ const NewStory = React.createClass({
                   aria: 'Subheader',
                   tagNames: ['h3'],
                   contentDefault: '<span class="fa fa-header" style="font-size:14px"><span>',
-                  classList: ['custom-class-h2'],
                   attrs: {'data-custom-attr': 'attr-value-h2'}
               },
               {name: 'quote',contentDefault: '<span class="fa fa-quote-left" ></span>'},
               {name: 'anchor',contentDefault: '<span class="fa fa-link" ></span>'},
+              {name: 'unorderedlist',contentDefault: '<span class="fa fa-list-ul" ></span>'},
               {name: 'justifyLeft',contentDefault: '<span class="fa fa-align-left" ></span>'},
               {name: 'justifyCenter',contentDefault: '<span class="fa fa-align-center" ></span>'},
               {name: 'justifyRight',contentDefault: '<span class="fa fa-align-right" ></span>'}
@@ -361,7 +365,7 @@ const NewStory = React.createClass({
 
     } else {
       //if(el!='<p><br></p>'||title!=''){
-      if(this.state.status === this.SAVE_STATUS.INITIAL || title!=''){
+      if(this.state.status === this.SAVE_STATUS.INITIAL){
         api.createStory(s)
         .then(story => {
           this.setState({
@@ -545,7 +549,11 @@ const NewStory = React.createClass({
   },
 
   title(e){
-    this.setState({title:e.target.value})
+    if(this.state.status===this.SAVE_STATUS.UNDIRTIED){
+      this.setState({title:e.target.value,status:this.SAVE_STATUS.DIRTIED,saveStatus:'Unsave'})
+    }else{
+      this.setState({title:e.target.value,saveStatus:'Unsave'})
+    }
   },
 
   render(){

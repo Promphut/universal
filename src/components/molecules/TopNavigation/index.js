@@ -8,6 +8,11 @@ const Nav = styled.nav`
 		list-style: none;
 	}
 
+	.active{
+		background:${props => props.theme.secondaryColor};
+		color:#ffffff;
+	}
+
 	& ul li {
 		display: inline-block;
     position: relative;
@@ -73,24 +78,24 @@ const TopNavigation = ({menu}) => {
   for (let i=0; i < cols.length; i++) {
     items.push(
 			<li key={i}>
-				<Link to={'/stories/'+cols[i].slug}>{cols[i].name}</Link>
+				<Link to={'/stories/'+cols[i].slug} activeClassName='active' >{cols[i].name}</Link>
 			</li>
 		)
 	}
-
+	//console.log(window.location.pathname.split("/")[1]=='stories')
 	return (
 		<Nav>
 			<ul>
-				<li><Link to="/">Home</Link></li>
+				<li><Link to="/" activeClassName='active' onlyActiveOnIndex={true}>Home</Link></li>
 				<li>
-					<Link style={{cursor: 'pointer'}} style={{top:'0px'}}>Stories &#9662;</Link>
+					<Link style={{cursor: 'pointer'}} style={{top:'0px'}} className={window.location.pathname.split("/")[1]=='stories'?'active':''} activeClassName='active'>Stories &#9662;</Link>
 						<ul className="dropdown">
 							{items}
-							<li key={999}><Link to={'/stories/columns'}>All Columns</Link></li>
+							<li key={999}><Link to={'/stories/columns'} activeClassName='active' >All Columns</Link></li>
 						</ul>
 				</li>
-				<li><Link to="/about">About Us</Link></li>
-				<li><Link to="/contact">Contact</Link></li>
+				<li><Link to="/about" activeClassName='active'>About Us</Link></li>
+				<li><Link to="/contact" activeClassName='active'>Contact</Link></li>
 			</ul>
 		</Nav>
 	)
