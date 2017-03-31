@@ -26,7 +26,7 @@ const Nav = styled.nav`
 		padding: 18px 20px 20px 20px;
     text-decoration: none;
     color: ${props => props.theme.barTone=='light'?'#222':'#FFF'};
-		height:61px;
+		height:60px;
 	}
 
 	& ul li a:hover {
