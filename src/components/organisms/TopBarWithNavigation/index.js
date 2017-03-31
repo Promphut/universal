@@ -9,7 +9,6 @@ const TopBarWithNavigation = React.createClass({
 	    return {
 	    	//loggedIn: false,
 	    	scrolling: false,
-
 	    	status: 'LOADING'
 	    }
 	},
@@ -56,18 +55,16 @@ const TopBarWithNavigation = React.createClass({
 		let top = e.srcElement.body.scrollTop,
 			scrolling = this.state.scrolling
 
-		const breakScroll = window.isMobile() ? 150 : 60
-
-		if (top > breakScroll && !scrolling)
+		if (top > 60 && !scrolling)
 			this.setState({scrolling: true})
 
-		else if (top <= breakScroll && scrolling)
+		else if (top <= 60 && scrolling)
 			this.setState({scrolling: false})
 	},
 
 	render () {
 		var {theme} = this.context.setting.publisher
-		const {scrolling, status} = this.state
+		const {scrolling, scroll, status} = this.state
 		let {title, article, notShowNav, editButton} = this.props
 		let transparent = false
 		let articleMobile = false
@@ -86,11 +83,11 @@ const TopBarWithNavigation = React.createClass({
 		}
 
 	  return (
-			<Stick className={this.props.className}>
+			<Stick className={this.props.className} fixed={!scrolling}>
 				{articleMobile ?
 					<TopBarWithShare
 						onScroll={this.handleScroll}
-						scrolling={this.state.scrolling}
+						scrolling={scrolling}
 						status={status}
 						title={title}
 						user={this.user}
@@ -101,7 +98,7 @@ const TopBarWithNavigation = React.createClass({
 					</TopBarWithShare> :
 					<TopBar
 						onScroll={this.handleScroll}
-						scrolling={this.state.scrolling}
+						scrolling={scrolling}
 						status={status}
 						title={title}
 						user={this.user}
