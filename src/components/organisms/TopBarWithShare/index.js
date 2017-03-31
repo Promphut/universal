@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react'
-import styled from 'styled-components'
+import styled, {keyframes}  from 'styled-components'
 import {Link, browserHistory} from 'react-router'
 import Avatar from 'material-ui/Avatar'
 import {LogoLink, PrimaryButton, SecondaryButton, LeftMenu,
@@ -15,7 +15,7 @@ const Wrapper = styled.div`
 	}
 
 	.fade {
-		opacity: ${props => props.topOpacity};
+		// opacity: ${props => props.topOpacity};
 	}
 `
 
@@ -30,9 +30,10 @@ const Container = styled.div`
 	transition: .1s;
 	position: absolute;
 
-	opacity: ${props => props.topOpacity};
-
-	display: ${props => props.topOpacity >= 0 ? 'flex' : 'none'};
+	// opacity: ${props => props.topOpacity};
+  animation: ${props=> props.open ? slideIn : slideOut} 1s forwards;
+	display: flex;
+	// display: ${props => props.topOpacity >= 0 ? 'flex' : 'none'};
 	flex-flow: row nowrap;
 	justify-content: space-between;
 
@@ -41,6 +42,24 @@ const Container = styled.div`
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+`
+
+const slideOut = keyframes`
+	from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0%);
+  }
+`
+
+const slideIn = keyframes`
+	from {
+    transform: translateY(0%);
+  }
+  to {
+    transform: translateY(-100%);
+  }
 `
 
 const Left = styled.div`
@@ -125,6 +144,7 @@ const TopBarWithShare = React.createClass({
 			alertRight: false,
 			scroll: 0,
 			topOpacity: 1,
+			open: false,
 			lock: false
 		}
 	},
@@ -146,15 +166,23 @@ const TopBarWithShare = React.createClass({
 	handleScroll(e) {
 		this.props.onScroll(e)
 
-		const speed = 120
-
 		const prevTop = this.state.scroll
 		const nowTop = e.srcElement.body.scrollTop
 		const diff = nowTop - prevTop
 
+		if (nowTop < 120) this.setState({open: false})
+		else if (diff > 0) this.setState({open: true})
+		else this.setState({open: false})
+
+		const speed = 120
+		//
+		// const prevTop = this.state.scroll
+		// const nowTop = e.srcElement.body.scrollTop
+		// const diff = nowTop - prevTop
+		//
 		let topOpacity = this.state.topOpacity - (diff / speed)
-		if (topOpacity > 1.5) topOpacity = 1.5
-		if (topOpacity < -1) topOpacity = -1
+		// if (topOpacity > 1.5) topOpacity = 1.5
+		// if (topOpacity < -1) topOpacity = -1
 
 		this.setState({topOpacity: topOpacity})
 		this.setState({scroll: nowTop})
@@ -182,7 +210,7 @@ const TopBarWithShare = React.createClass({
 
 	render () {
 		var {theme} = this.context.setting.publisher
-		let {alertLeft, alertRight, topOpacity} = this.state
+		let {alertLeft, alertRight, topOpacity, open} = this.state
 		let status = this.props.status || 'UNLOGGEDIN',
 			{scrolling, user, menu, transparent, editButton}  = this.props
 
@@ -212,7 +240,7 @@ const TopBarWithShare = React.createClass({
 
 	  return (
 	    <Wrapper topOpacity={topOpacity}>
-				<Container className={'menu-font ' + ((!scrolling && transparent) ? 'transparent' : '')} topOpacity={topOpacity}>
+				<Container className={'menu-font ' + ((!scrolling && transparent) ? 'transparent' : '')} topOpacity={topOpacity} open={open}>
 					<Left className="fade">
 			      <HamburgerWrapper onClick={() => this.openPop('left')}>
 			        <Hamburger className="material-icons" white={(!scrolling && transparent)} style={!scrolling && transparent?{color:'white'}:{}}>menu</Hamburger>
