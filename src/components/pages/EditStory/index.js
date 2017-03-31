@@ -466,12 +466,18 @@ const EditStory = React.createClass({
     })
   },
 
-  title(e){
-    if(this.state.status===this.SAVE_STATUS.UNDIRTIED){
-      this.setState({title:e.target.value,status:this.SAVE_STATUS.DIRTIED,saveStatus:'Unsave'})
-    }else{
-      this.setState({title:e.target.value,saveStatus:'Unsave'})
-    }
+  titleChanged(e){
+    if(this.state.status===this.SAVE_STATUS.DIRTIED)
+      this.setState({
+        title:e.target.value,
+        saveStatus:'Unsave'
+      })
+    else
+      this.setState({
+        title:e.target.value,
+        status:this.SAVE_STATUS.DIRTIED,
+        saveStatus:'Unsave'
+      })
   },
 
   render(){
@@ -584,7 +590,7 @@ const EditStory = React.createClass({
         </RaisedButton>
         {sid!=null && <TextStatus className='sans-font'>{saveStatus}</TextStatus>}
 
-        <Title placeholder='Title' className='serif-font' value={title} onChange={this.title}/>
+        <Title placeholder='Title' className='serif-font' value={title} onChange={this.titleChanged}/>
 
         <Paper id='paper'>
 

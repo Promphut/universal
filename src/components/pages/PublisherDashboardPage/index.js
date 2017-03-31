@@ -102,12 +102,12 @@ const TitleLink = styled(Link)`
 `
 
 const StoryTitle = ({style, story})=>{
-  let {title, cover, url} = story
+  let {ptitle, cover, url} = story
   //console.log('story', story)
   return(
     <Cont style={{...style}}>
       <Link to={url}><OverlayImg src={cover.small || cover.medium} style={{width:'87px',height:'52px',float:'left'}}/></Link>
-      <TitleLink to={url} className="sans-font">{title}</TitleLink>
+      <TitleLink to={url} className="sans-font">{ptitle}</TitleLink>
     </Cont>
   )
 }

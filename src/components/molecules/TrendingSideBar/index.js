@@ -74,11 +74,11 @@ const Vote = styled.div`
 `
 
 const TrendingSideBarInner = ({style, detail, index}) => {
-  let {title,comments,votes,cover} = detail
+  let {ptitle,comments,votes,cover} = detail
   return(
     <Con style={{...style}}>
       <BGImg url={detail.url} src={cover.small || cover.medium} style={{width:'127px',height:'75px',float:'right'}}/>
-      <Name to={detail.url} className="sans-font">{index+'.'+title}</Name>
+      <Name to={detail.url} className="sans-font">{index+'.'+ptitle}</Name>
       <Vote className="sans-font">{votes.total} Votes {''+ comments.count} Comments</Vote>
     </Con>
   )

@@ -79,7 +79,7 @@ const DivDes = styled.div`
 const ArticleBoxLarge = React.createClass({
   render(){
     let {detail,style} = this.props
-    let {title,cover,writer,column,votes,comments,updated,url} = detail
+    let {ptitle,cover,writer,column,votes,comments,updated,url} = detail
     //console.log('URL', url)
     return (
       <Container style={{...style}}>
@@ -93,7 +93,7 @@ const ArticleBoxLarge = React.createClass({
             </Div>}
           </DivDes>
           <BGImg url={url} src={cover.medium || cover.small} className='imgWidth des-hidden'/>
-          <NameLink to={url} style={{marginTop:'15px'}}>{title}</NameLink>
+          <NameLink to={url} style={{marginTop:'15px'}}>{ptitle}</NameLink>
           <div className="row" style={{margin:'10px 0 10px 0'}}>
             <Link to={writer.url}><Avatar src={writer.pic.medium}/></Link>
             <div style={{margin:'5px 0 0 8px'}}>

@@ -130,13 +130,13 @@ const Onload =styled.div`
   background:white;
 `
 
-const StoryTitle = ({style, story})=>{
-  let {title, cover, url} = story
+const StoryTitle = ({style, story, selectStatus})=>{
+  let {title, ptitle, cover, url} = story
   //console.log('story', story)
   return(
     <Cont style={{...style}}>
       <Link to={url}><OverlayImg src={cover.small || cover.medium} style={{width:'87',height:'52',float:'left'}}/></Link>
-      <TitleLink to={url} className="sans-font">{title}</TitleLink>
+      <TitleLink to={url} className="sans-font">{selectStatus===STATUS.DRAFTED ? title : ptitle}</TitleLink>
     </Cont>
   )
 }
@@ -364,7 +364,7 @@ const UserSettingStory = React.createClass({
               displayRowCheckbox={false}>
               {stories ? stories.map((story, index) => (
                 <TableRow key={index}>
-                  <TableRowColumn style={{width:'40%',padding:'10px 0 10px 0'}}><StoryTitle story={story} /></TableRowColumn>
+                  <TableRowColumn style={{width:'40%',padding:'10px 0 10px 0'}}><StoryTitle story={story} selectStatus={selectStatus} /></TableRowColumn>
                   <TableRowColumn style={{width:'10%',paddingRight:0,paddingLeft:0,textAlign:'center'}}>{story.writer && <Link to={story.writer.url}>{story.writer.display}</Link>}</TableRowColumn>
                   <TableRowColumn style={{width:'15%',paddingRight:0,paddingLeft:0,textAlign:'center'}}>{story.column && <Link to={story.column.url}>{story.column.name}</Link>}</TableRowColumn>
                   <TableRowColumn style={{width:'15%'}}>{story.views || 0} Views<br/>{story.shares ? story.shares.total : 0} Shares</TableRowColumn>
