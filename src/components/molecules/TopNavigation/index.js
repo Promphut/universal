@@ -46,13 +46,14 @@ const Nav = styled.nav`
 
 	& ul li ul.dropdown li {
 		position: relative;
+		top:2px;
 		display: inline-block;
 		line-height: 20px;
 		width: 100%;
 	}
 
 	& ul li ul.dropdown li a {
-		padding: 1em 2em;
+		padding: 1.3em 2em;
 		color: #222;
 	}
 
@@ -61,7 +62,7 @@ const Nav = styled.nav`
 	}
 
 	& ul li:hover ul.dropdown {
-		paddingLeft: 0px;
+		padding-left: 0px;
 		display: block;
 	}
 
