@@ -112,11 +112,10 @@ const logout = (nextState, replace, next) => {
 
 const routes = (
   <Route path="/" component={App}>
-    {/*<IndexRoute component={HomePage2} onEnter={syncTokenAndCookie}/>*/}
     <IndexRoute component={HomePage2} />
-    {/*<Route path='article' component={Page3}/>*/}
     <Route path='stories/columns' component={AllColumn}/>
     <Route path='stories/:columnSlug' component={ColumnPage} onEnter={getColumnFromSlug}/>
+    {/* STORY 1 */ }
     <Route path='stories/:columnSlug/:storySlug/:sid' component={StoryPage} onEnter={getStoryFromSid(true)}/>
 
     {/*<Route path='publisher' component={PublisherPage}/>*/}
@@ -134,10 +133,7 @@ const routes = (
       <Route path='settings' component={PublisherSettingPage} onEnter={hasRoles(['ADMIN'])}/>
       <Route path='contact' component={PublisherContactAndAboutPage} onEnter={hasRoles(['ADMIN'])}/>
 
-      <Route path='stories' component={PublisherStoryPage} onEnter={hasRoles(['ADMIN', 'EDITOR'])}/>
-      {/*<Route path='stories/new' component={NewStory}  onEnter={hasRoles(['ADMIN', 'WRITER', 'EDITOR'])}/>
-      <Route path='stories/:sid/edit' component={EditStory}  onEnter={hasRoles(['ADMIN', 'WRITER', 'EDITOR'])}/>*/}
-      
+      <Route path='stories' component={PublisherStoryPage} onEnter={hasRoles(['ADMIN', 'EDITOR'])}/>      
       <Route path='columns/:cid' onEnter={hasRoles(['ADMIN', 'EDITOR'], false)}>
         <Route path='settings' component={ColumnSettingPage}/>
       </Route>
@@ -149,13 +145,17 @@ const routes = (
       <Route path='stories' component={UserSettingStory}/>
 
       <Route path='stories/new' component={NewStory}  onEnter={hasRoles(['ADMIN', 'WRITER', 'EDITOR'])}/>
+      {/* STORY 4 */ }
       <Route path='stories/:sid/edit' component={EditStory} onEnter={canEditStory}/>
-      {/*<Route path='stories/drafts' component={UserSettingProfile}/>*/}
     </Route>
 
     <Route path='me/stories/:sid' component={StoryPage} onEnter={getStoryFromSid(false)}/>
 
+    {/* STORY 3 */ }
+    <Route path='u/:uid/stories/:storySlug/:sid' onEnter={getStoryFromSid(true)} component={StoryPage}/>
+
     <Route path='@:username' onEnter={getUserFromUsername} component={UserStory}/>
+    {/* STORY 2 */ }
     <Route path='@:username/stories/:storySlug/:sid' onEnter={getStoryFromSid(true)} component={StoryPage}/>
 
     <Route path='error' component={ErrorPage}/>

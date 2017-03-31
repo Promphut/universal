@@ -78,7 +78,7 @@ const DivDes = styled.div`
 const ArticleBox = React.createClass({
   render(){
     let {detail,style} = this.props
-    let {ptitle,cover,writer,column,votes,comments,updated,url} = detail
+    let {ptitle,cover,writer,column,votes,comments,updated,url,readTime} = detail
     //console.log('URL', url)
     return (
       <Container style={{...style}}>
@@ -100,7 +100,7 @@ const ArticleBox = React.createClass({
               <Div stlye={{fontSize:'12px'}}>{moment(updated).fromNow()}</Div>
             </div>
           </div>
-          <Div style={{margin:'10px 0 0 0'}}>{votes.total} Votes  <span style={{marginLeft:'15px'}}>{comments.count} Comments</span> {/*<span style={{float:'right'}}>Read 5 min</span>*/}</Div>
+          <Div style={{margin:'10px 0 0 0'}}>{votes.total} Votes  <span style={{marginLeft:'15px'}}>{comments.count} Comments</span> {readTime && <span style={{float:'right'}}>Read {readTime} min</span>}</Div>
         </BoxText>
       </Container>
     )
