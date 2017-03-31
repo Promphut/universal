@@ -70,7 +70,7 @@ render(){
 		opt = {
 			className: 'secondary-btn',
 			label: props.label,
-			labelColor: theme.accentColor,
+			labelColor: props.labelColor||theme.accentColor,
 			onClick:props.onClick,
 			labelPosition:props.labelPosition,
 			type:props.type,

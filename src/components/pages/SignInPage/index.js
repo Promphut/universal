@@ -17,6 +17,9 @@ const Wrapper = styled.div`
   background: linear-gradient(135deg, ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00b2b4', endColorstr='#cef1b7', GradientType=1 );
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00b2b4', endColorstr='#cef1b7', GradientType=1 );
+  @media (max-width:480px) {
+		height: 100vh;
+  }
 `
 const Modal = styled.div`
   width:100%;

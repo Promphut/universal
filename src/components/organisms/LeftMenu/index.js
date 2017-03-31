@@ -281,7 +281,7 @@ const LeftMenu = React.createClass({
     // Menu items from menu props
     let items = []
     for (let i = 0; i < cols.length; i++) {
-      items.push(<li key={i}><Link onClick={() => this.closeAndLink('/stories/'+cols[i].slug, close)}>{cols[i].name}</Link></li>)
+      items.push(<li key={i}><Link to='#' onClick={(e) => this.props.closeAndLink(e,'/stories/'+cols[i].slug)}>{cols[i].name}</Link></li>)
     }
 
     if (window.isMobile()) {

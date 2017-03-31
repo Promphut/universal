@@ -134,6 +134,7 @@ const SignInFb = React.createClass({
   render(){
     let {onClick, style} = this.props,
     {errText0, errText1, errText2} = this.state
+    var {theme} = this.context.setting.publisher
   return(
     <Box>
       <Head className='hidden-mob'>Sign In</Head>
@@ -153,14 +154,12 @@ const SignInFb = React.createClass({
       <Text style={{marginTop:'20px',fontFamily:'Nunito'}}>Or <LinkUnderLine to="#" className='hidden-mob' onClick={this.props.emailSignIn}>Sign In with an E-mail</LinkUnderLine></Text>
       <InputBox onSubmit={this.signin} ref='signinForm' className='hidden-des'>
         <TextField
-          autoFocus
           hintText="Email"
           floatingLabelText="Email"
           type="email"
           fullWidth={true}
           name='username'
           errorText={errText0}
-          floatingLabelStyle={{color:'white'}}
           inputStyle={{color:'white'}}
         /><br />
         <TextField
@@ -170,18 +169,17 @@ const SignInFb = React.createClass({
           fullWidth={true}
           name='password'
           errorText={errText1}
-          floatingLabelStyle={{color:'white'}}
           inputStyle={{color:'white'}}
         /><br />
-        <div style={{width:120,margin:'20px auto 0 auto'}}>
+        <div style={{width:307,margin:'57px auto 0 auto'}}>
           <RaisedButton
             label=" Sign In"
             labelPosition="after"
             type='submit'
-            labelColor='white'
-            labelStyle={{color:'#fff'}}
+            labelColor={theme.accentColor}
+            labelStyle={{color:theme.accentColor}}
             style={{borderRadius:'20px',boxShadow:'none',background:'none'}}
-            buttonStyle={{background:'none',border:'2px solid #fff',borderRadius:'20px',width:'120px'}}
+            buttonStyle={{background:'none',border:'2px solid '+theme.accentColor,borderRadius:'20px',width:'307px'}}
           />
         </div>
       </InputBox>
@@ -198,5 +196,8 @@ SignInFb.propTypes = {
   nextPathname: PropTypes.string.isRequired
 }
 
+SignInFb.contextTypes = {
+	setting: React.PropTypes.object
+};
 
 export default SignInFb

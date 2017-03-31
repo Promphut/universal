@@ -38,7 +38,11 @@ const Title = styled.div`
 const TopBarWithBack = React.createClass({
 	checkBack(e){
 		e.preventDefault()
-		browserHistory.goBack()
+		if(window.history.length<=2){
+			browserHistory.push('/')
+		}else{
+			browserHistory.goBack()
+		}
 	},
 
 	render () {
