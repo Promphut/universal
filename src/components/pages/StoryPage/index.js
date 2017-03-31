@@ -162,12 +162,12 @@ const StoryPage = React.createClass({
 		    <Wrapper >
 		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} article={this.story.title} editButton={'/me/stories/'+this.story.id+'/edit'} />
 
-		      <BGImg style={{width:'100%',height:'85vh'}} src={this.story.cover.large || this.story.cover.medium} className='hidden-mob'>
+		      {this.story.cover.medium!=config.BACKURL+'/imgs/article_cover_landscape.png'&&<BGImg style={{width:'100%',height:'85vh'}} src={this.story.cover.large || this.story.cover.medium} className='hidden-mob'>
 						<Cover/>
-					</BGImg>
-		      <BGImg style={{width:'100%',height:'85vh'}} src={this.story.coverMobile.large || this.story.coverMobile.medium} className='hidden-des'>
+					</BGImg>}
+		      {this.story.coverMobile.medium!=config.BACKURL+'/imgs/article_cover_portrait.png'&&<BGImg style={{width:'100%',height:'85vh'}} src={this.story.coverMobile.large || this.story.coverMobile.medium} className='hidden-des'>
 						<Cover/>
-					</BGImg>
+					</BGImg>}
 
 		      <Content>
 						<Share ref='share' style={{zIndex:'50'}}>

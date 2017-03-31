@@ -21,7 +21,7 @@ const Nav = styled.nav`
 
 	& ul li a {
 		position: relative;
-		top:-2px;
+		top:-1px;
 		display: block;
 		padding: 18px 20px 20px 20px;
     text-decoration: none;
