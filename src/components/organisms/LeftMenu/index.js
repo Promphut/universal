@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react'
 import styled,{keyframes} from 'styled-components'
-import {Link} from 'react-router';
+import {browserHistory, Link} from 'react-router';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import Divider from 'material-ui/Divider'
@@ -265,6 +265,12 @@ const LeftMenu = React.createClass({
     this.state.height = (this.state.miniMenu) ? 0 : height
 	},
 
+  closeAndLink(to, close) {
+    // close()
+    console.log(to)
+    browserHistory.push(to)
+  },
+
 	render(){
     let isMobile = false
 
@@ -274,8 +280,9 @@ const LeftMenu = React.createClass({
 
     // Menu items from menu props
     let items = []
-    for(let i=0; i<cols.length; i++)
-      items.push(<li className='itemList' key={i}><Link to={'/stories/'+cols[i].slug}>{cols[i].name}</Link></li>)
+    for (let i = 0; i < cols.length; i++) {
+      items.push(<li key={i}><Link onClick={() => this.closeAndLink('/stories/'+cols[i].slug, close)}>{cols[i].name}</Link></li>)
+    }
 
     if (window.isMobile()) {
       isMobile = true
@@ -297,7 +304,7 @@ const LeftMenu = React.createClass({
                   <MiniMenu height={height+'px'}>
                     {items}
                     {/*The last one is 'all columns'*/}
-                    <li key={999}><Link to={'/stories/columns'}>All Columns</Link></li>
+                    <li key={999}><Link to={'/stories/columns'} onClick={close}>All Columns</Link></li>
                   </MiniMenu>
                   <Divider />
                 </div>
@@ -313,7 +320,7 @@ const LeftMenu = React.createClass({
                   <MiniMenu height={height+'px'}>
                     {items}
                     {/*The last one is 'all columns'*/}
-                    <li key={999}><Link to={'/stories/columns'}>All Columns</Link></li>
+                    <li key={999}><Link to={'/stories/columns'} onClick={close}>All Columns</Link></li>
                   </MiniMenu>
                   <Divider />
                 </div>

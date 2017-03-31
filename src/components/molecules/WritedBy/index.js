@@ -19,7 +19,7 @@ const Contain = styled.div`
   color:#8F8F8F;
   font-size:17px;
   float:left;
-  margin:0 10px 10px 10px;
+  margin:3px 10px 10px 14px;
   .imgWidth{
     width:49px;
     height:49px;
@@ -55,7 +55,8 @@ const WritedBy = ({style, writer, /*column,*/ published}) => {
         {/*{moment(published).format('lll')} */}
         <br/>
         {/*writer of <Link to={column.url}><strong>{column.name}</strong></Link>*/}
-        {writer.intro}
+        {/*{writer.intro}*/}
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit.
       </Contain>
 
     </Container>

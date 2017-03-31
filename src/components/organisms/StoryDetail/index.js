@@ -29,31 +29,31 @@ const Story = styled.div`
   p {
     font-family: 'PT Sans', 'cs_prajad', sans-serif;
     font-size: 18px;
-    white-space: pre-wrap;      /* Webkit */    
-    white-space: -moz-pre-wrap; /* Firefox */     
-    white-space: -pre-wrap;     /* Opera <7 */    
-    white-space: -o-pre-wrap;   /* Opera 7 */     
-    word-wrap: break-word;      /* IE */ 
+    white-space: pre-wrap;      /* Webkit */
+    white-space: -moz-pre-wrap; /* Firefox */
+    white-space: -pre-wrap;     /* Opera <7 */
+    white-space: -o-pre-wrap;   /* Opera 7 */
+    word-wrap: break-word;      /* IE */
   }
   h2 {
     font-size: 28px;
     font-weight:bold;
     color:#222;
-    white-space: pre-wrap;      /* Webkit */    
-    white-space: -moz-pre-wrap; /* Firefox */     
-    white-space: -pre-wrap;     /* Opera <7 */    
-    white-space: -o-pre-wrap;   /* Opera 7 */     
-    word-wrap: break-word;      /* IE */ 
+    white-space: pre-wrap;      /* Webkit */
+    white-space: -moz-pre-wrap; /* Firefox */
+    white-space: -pre-wrap;     /* Opera <7 */
+    white-space: -o-pre-wrap;   /* Opera 7 */
+    word-wrap: break-word;      /* IE */
   }
   h3 {
     font-size: 20px;
     font-weight:normal;
     color:#bfbfbf;
-    white-space: pre-wrap;      /* Webkit */    
-    white-space: -moz-pre-wrap; /* Firefox */     
-    white-space: -pre-wrap;     /* Opera <7 */    
-    white-space: -o-pre-wrap;   /* Opera 7 */     
-    word-wrap: break-word;      /* IE */ 
+    white-space: pre-wrap;      /* Webkit */
+    white-space: -moz-pre-wrap; /* Firefox */
+    white-space: -pre-wrap;     /* Opera <7 */
+    white-space: -o-pre-wrap;   /* Opera 7 */
+    word-wrap: break-word;      /* IE */
   }
   blockquote {
     font-size: 20px;
@@ -63,11 +63,11 @@ const Story = styled.div`
     border-left: 1px solid #E2E2E2;
     padding-left:20px;
     display:inline-block;
-    white-space: pre-wrap;      /* Webkit */    
-    white-space: -moz-pre-wrap; /* Firefox */     
-    white-space: -pre-wrap;     /* Opera <7 */    
-    white-space: -o-pre-wrap;   /* Opera 7 */     
-    word-wrap: break-word;      /* IE */ 
+    white-space: pre-wrap;      /* Webkit */
+    white-space: -moz-pre-wrap; /* Firefox */
+    white-space: -pre-wrap;     /* Opera <7 */
+    white-space: -o-pre-wrap;   /* Opera 7 */
+    word-wrap: break-word;      /* IE */
   }
   @media (max-width:480px){
     font-size:16px;
@@ -154,6 +154,10 @@ const StoryDetail = React.createClass({
 
   render(){
     let s = this.story
+    const isMobile = window.isMobile()
+    const columnStyle = window.isMobile() ? {
+      marginTop: '22px'
+    } : {}
 
     return (
       <Wraper>
@@ -177,19 +181,19 @@ const StoryDetail = React.createClass({
           <div className='col-md-6 col-sm-12'>
             <WritedBy writer={s.writer} column={s.column} published={s.published} />
           </div>
-          <div className='col-md-6 col-sm-12'>
+          <div className='col-md-6 col-sm-12'  style={columnStyle}>
             {s.column && <FromColumn  column={s.column} />}
           </div>
         </div>
         <Divider/>
 
-        {/* NEXT ITERATION 
+        {/* NEXT ITERATION
         <NoComment>5 Comments</NoComment>
         <CommentBox className="hidden-mob"/>
         <CommentUserContainer>
           {a.map(this.renderComment)}
-          <RaisedButton 
-            label="Show more comments" 
+          <RaisedButton
+            label="Show more comments"
             target="_blank"
             labelColor="#8F8F8F"
             labelStyle={{fontSize:'15px',top:'11'}}
@@ -199,7 +203,7 @@ const StoryDetail = React.createClass({
           />
         </CommentUserContainer>*/}
 
-        
+
       </Wraper>
     )
   }
