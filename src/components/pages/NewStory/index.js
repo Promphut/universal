@@ -151,6 +151,7 @@ const NewStory = React.createClass({
       layout:'news',
       open:false,
       column:'no',
+      contentType:'no',
 
       tag:[],
       addTag:[],
@@ -158,6 +159,7 @@ const NewStory = React.createClass({
       searchText:'',
 
       columnList:[],
+      contentTypeList:[],
       sid:null,
       saveStatus:null,
 
@@ -175,6 +177,7 @@ const NewStory = React.createClass({
   componentDidMount(){
     this.getTags()
     this.getColumns()
+    this.getContentType()
   },
 
   componentWillUnmount(){
@@ -251,12 +254,12 @@ const NewStory = React.createClass({
   },
 
   handleEditableInput(e, editable){
-    if(this.state.status === this.SAVE_STATUS.INITIAL) 
+    if(this.state.status === this.SAVE_STATUS.INITIAL)
       this.setState({
         status: this.SAVE_STATUS.UNDIRTIED,
         saveStatus:''
       })
-    else 
+    else
       this.setState({
         status: this.SAVE_STATUS.DIRTIED,
         saveStatus:'Unsave'
@@ -286,6 +289,10 @@ const NewStory = React.createClass({
     this.setState({column:val})
   },
 
+  chooseContentType(e,ind,val){
+    this.setState({contentType:val})
+  },
+
   getTags(){
     api.getTags()
     .then(tags => {
@@ -306,6 +313,21 @@ const NewStory = React.createClass({
     .then(cols => {
       this.setState({columnList: cols})
     })
+  },
+
+  getContentType() {
+    let contentType = []
+    contentType[0] = {
+      name: 'Type 0'
+    }
+    contentType[1] = {
+      name: 'Type 1'
+    }
+    contentType[2] = {
+      name: 'Type 2'
+    }
+
+    this.setState({contentTypeList: contentType})
   },
 
   autoSave(){
@@ -426,9 +448,11 @@ const NewStory = React.createClass({
   // },
 
   publishStory(){
-    let {sid,column,title} = this.state
+    let {sid,column,contentType,title} = this.state
     let allContents = this.editor.serialize()
-    
+
+    console.log('contentType is ', contentType)
+
     let s = {
       title:title,
       publisher:parseInt(config.PID),
@@ -549,11 +573,13 @@ const NewStory = React.createClass({
   },
 
   render(){
-    let {chooseLayout,layout,open,anchorEl,column,tag,addTag,searchText,columnList,sid,
-          alert,alertWhere,alertConfirm,alertDesc,saveStatus,title,publishStatus, story} = this.state
+    let {chooseLayout,layout,open,anchorEl,column,contentType,tag,addTag,searchText,
+      columnList,contentTypeList,sid,alert,alertWhere,alertConfirm,alertDesc,saveStatus,
+      title,publishStatus, story} = this.state
     const dataSourceConfig = {text: 'text',value: 'value',id:'id'};
     let {theme} = this.context.setting.publisher
-    
+
+
     //console.log(tag)
     return (
       chooseLayout==null?
@@ -614,7 +640,7 @@ const NewStory = React.createClass({
           style={{border:'3px solid '+theme.accentColor,width:'482px',padding:'30px',marginTop:8,boxShadow:'none',overflow:'hidden'}}
         >
           <div className='row' style={{display:'block',overflow:'hidden'}}>
-            <Label className="nunito-font or" style={{float:'left',marginTop:'22px'}}>Column : </Label>
+            <Label className="nunito-font or" style={{float:'left',marginTop:'22px',minWidth:'60px'}}>Column : </Label>
             <DropDownMenu
               value={column}
               onChange={this.chooseColumn}
@@ -629,6 +655,24 @@ const NewStory = React.createClass({
             >
               <MenuItem value='no' primaryText='No Column' />
               {columnList.length!=0 && columnList.map((data,index)=>(
+                <MenuItem value={data._id} primaryText={data.name} key={index} />
+              ))}
+            </DropDownMenu>
+            <Label className="nunito-font or" style={{float:'left',marginTop:'22px',minWidth:'60px'}}>Type : </Label>
+            <DropDownMenu
+              value={contentType}
+              onChange={this.chooseContentType}
+              autoWidth={false}
+              labelStyle={{top:'-11px'}}
+              iconStyle={{top:'-8px',left:'300px'}}
+              style={{margin:'15px 0 15px 15px',width:'340px',height:'34px',border:'1px solid #e2e2e2',float:'left'}}
+              underlineStyle={{display:'none'}}
+              menuStyle={{width:'320px'}}
+              menuItemStyle={{width:'320px'}}
+              selectedMenuItemStyle={{color:'#222',background:theme.accentColor}}
+            >
+              <MenuItem value='no' primaryText='No Type' />
+              {contentTypeList.length!=0 && contentTypeList.map((data,index)=>(
                 <MenuItem value={data._id} primaryText={data.name} key={index} />
               ))}
             </DropDownMenu>
