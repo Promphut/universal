@@ -228,7 +228,7 @@ const TopBar = React.createClass({
 			      </HamburgerWrapper>
 
 						<LogoLink to="/" src={theme.logo} title={this.props.title} style={logoStyle} fill={theme.barTone=='light'?'':"#FFF"} />
-	      		<LogoLink to="/" src={theme.slogo} title={this.props.title} style={logoStyleMobile} fill={theme.barTone=='light'?theme.primaryColor:'#FFF'} />
+	      		<LogoLink to="/" src={theme.slogo} title={this.props.title} style={logoStyleMobile} fill={theme.barTone=='light'?'':'#FFF'} />
 					</Left>
 
 					<Center className={transparent ? 'hide': ''}>

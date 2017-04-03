@@ -159,9 +159,13 @@ const StoryPage = React.createClass({
 
 	render(){
 		let {stopPos, recommends} = this.state
-		
-		const hasCover = (this.story.cover.medium == config.BACKURL+'/imgs/article_cover_landscape.png'
-		|| this.story.coverMobile.medium == config.BACKURL+'/imgs/article_cover_portrait.png') ? false : true
+
+		let hasCover = false
+		if (window.isMobile() && this.story.coverMobile.medium != config.BACKURL+'/imgs/article_cover_portrait.png') {
+			hasCover = true
+		} else if (this.story.cover.medium != config.BACKURL+'/imgs/article_cover_landscape.png') {
+			hasCover = true
+		}
 		//console.log('render', this.story)
 		return (
 		    <Wrapper>
