@@ -141,7 +141,7 @@ const TopBar = React.createClass({
 	handleScroll(e) {
 		this.props.onScroll(e)
 
-		let top = e.srcElement.body.scrollTop / 1000
+		let top = e.srcElement.body.scrollTop / 500
 		this.setState({scroll: top})
 	},
 
@@ -180,7 +180,7 @@ const TopBar = React.createClass({
 		var {theme} = this.context.setting.publisher
 		let {alertLeft, alertRight, scroll} = this.state
 		let status = this.props.status || 'UNLOGGEDIN',
-			{scrolling, user, menu, transparent,editButton}  = this.props
+			{scrolling, user, menu, transparent, editButton, hasCover}  = this.props
 
 	  const logoStyleBase = {
 	    display: 'inline-block',
@@ -221,13 +221,13 @@ const TopBar = React.createClass({
 
 	    <Wrapper scroll={scroll}>
 				<Container className={'menu-font '
-					+ ((!scrolling && transparent) ? 'transparent' : '')}>
+					+ ((!scrolling && transparent && hasCover) ? 'transparent' : '')}>
 					<Left>
 			      <HamburgerWrapper onClick={() => this.openPop('left')}>
-			        <Hamburger className="material-icons" white={(!scrolling && transparent)} style={!scrolling && transparent?{color:'white'}:{}}>menu</Hamburger>
+			        <Hamburger className="material-icons" style={!scrolling && transparent && hasCover ? {color:'white'} : {}}>menu</Hamburger>
 			      </HamburgerWrapper>
 
-						<LogoLink to="/" src={theme.logo} title={this.props.title} style={logoStyle} fill={theme.barTone=='light'?theme.primaryColor:"#FFF"} />
+						<LogoLink to="/" src={theme.logo} title={this.props.title} style={logoStyle} fill={theme.barTone=='light'?'':"#FFF"} />
 	      		<LogoLink to="/" src={theme.slogo} title={this.props.title} style={logoStyleMobile} fill={theme.barTone=='light'?theme.primaryColor:'#FFF'} />
 					</Left>
 
@@ -240,7 +240,7 @@ const TopBar = React.createClass({
 							{this.role && editButton &&
 								<Edit
 									className='nunito-font'
-									style={{color:((!scrolling && transparent) || (theme.barTone!='light')) ? '#FFF' : '#222'}}
+									style={{color:((!scrolling && transparent && hasCover) || (theme.barTone!='light')) ? '#FFF' : '#222'}}
 									to={editButton}>
 									Edit Story
 								</Edit>
