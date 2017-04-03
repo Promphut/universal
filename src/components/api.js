@@ -97,6 +97,18 @@ api.getUserFromUsername = (username) => {
 	})
 }
 
+api.getUserFromUserId = (uid) => {
+	return Request
+	.get(config.BACKURL+'/users/' + uid)
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body.user
+	})
+	.catch(err => {
+		return api.userNotFoundPromise()
+	})
+}
+
 api.getColumnFromSlug = (slug) => {
 	return Request
 	.get(config.BACKURL + '/slugs/publishers/' + config.PID + '/' + encodeURIComponent(slug))

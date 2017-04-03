@@ -163,7 +163,7 @@ const StoryDetail = React.createClass({
     const columnStyle = window.isMobile() ? {
       marginTop: '22px'
     } : {}
-
+    //console.log(s.ptitle)
     return (
       <Wraper>
         <Head className='title-font'>{s.ptitle}</Head>
