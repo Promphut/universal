@@ -70,6 +70,17 @@ const LogoLink = React.createClass({
 					$(this).attr('xlink:href', '#'+id+$(this).attr('xlink:href').replace('#', ''))
 					//console.log(this)
 				})
+			}else{
+				$svg.find('path').each(function(index,ele){
+					//$(this).attr('fill', fill)
+					$(this).attr('id', id+$(this).attr('id'))
+					//console.log(this)
+				})
+				$svg.find('use').each(function(index,ele){
+					//$(this).attr('fill', fill)
+					$(this).attr('xlink:href', '#'+id+$(this).attr('xlink:href').replace('#', ''))
+					//console.log(this)
+				})
 			}
 
 			return $svg.toString()
