@@ -44,6 +44,8 @@ const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
+
+	padding-top: ${props => props.paddingTop}
 `
 
 const Share = styled.div`
@@ -157,10 +159,17 @@ const StoryPage = React.createClass({
 
 	render(){
 		let {stopPos, recommends} = this.state
+
+		let hasCover = false
+		if (window.isMobile() && this.story.coverMobile.medium != config.BACKURL+'/imgs/article_cover_portrait.png') {
+			hasCover = true
+		} else if (this.story.cover.medium != config.BACKURL+'/imgs/article_cover_landscape.png') {
+			hasCover = true
+		}
 		//console.log('render', this.story)
 		return (
-		    <Wrapper >
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} article={this.story.title} editButton={'/me/stories/'+this.story.id+'/edit'} />
+		    <Wrapper>
+		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} article={this.story.title} editButton={'/me/stories/'+this.story.id+'/edit'} hasCover={hasCover} />
 
 		      {this.story.cover.medium!=config.BACKURL+'/imgs/article_cover_landscape.png'&&<BGImg style={{width:'100%',height:'85vh'}} src={this.story.cover.large || this.story.cover.medium} className='hidden-mob'>
 						<Cover/>
@@ -169,7 +178,7 @@ const StoryPage = React.createClass({
 						<Cover/>
 					</BGImg>}
 
-		      <Content>
+		      <Content paddingTop={hasCover ? '0px' : '60px'}>
 						<Share ref='share' style={{zIndex:'50'}}>
 							<Stick topOffset={60}>
 								<ShareSideBar detail={this.story}/>

@@ -204,6 +204,17 @@ const TopBarWithShare = React.createClass({
 		}
 	},
 
+	close(e,to,side){
+		e.preventDefault()
+		//console.log(e,to,side)
+		if (side === 'left') {
+			this.setState({alertLeft: false})
+		} else if (side === 'right') {
+			this.setState({alertRight: false})
+		}
+		if(window.location.pathname != to) browserHistory.push(to)
+	},
+
 	signup(){
 		browserHistory.push('/signup')
 	},
@@ -212,7 +223,7 @@ const TopBarWithShare = React.createClass({
 		var {theme} = this.context.setting.publisher
 		let {alertLeft, alertRight, topOpacity, open} = this.state
 		let status = this.props.status || 'UNLOGGEDIN',
-			{scrolling, user, menu, transparent, editButton}  = this.props
+			{scrolling, user, menu, transparent, editButton, hasCover}  = this.props
 
 	  const logoStyleBase = {
 	    display: 'inline-block',
@@ -234,24 +245,24 @@ const TopBarWithShare = React.createClass({
 		}
 
 		const moreStyle = {
-			color: (theme.barTone == 'light' && (scrolling && transparent)) ? '#222' : '#FFF',
+			color: (theme.barTone == 'light' && ((scrolling && transparent) || !hasCover)) ? '#222' : '#FFF',
 			padding: '16px 13px'
 		}
 
 	  return (
 	    <Wrapper topOpacity={topOpacity}>
-				<Container className={'menu-font ' + ((!scrolling && transparent) ? 'transparent' : '')} topOpacity={topOpacity} open={open}>
+				<Container className={'menu-font ' + ((!scrolling && transparent && hasCover) ? 'transparent' : '')} topOpacity={topOpacity} open={open}>
 					<Left className="fade">
 			      <HamburgerWrapper onClick={() => this.openPop('left')}>
-			        <Hamburger className="material-icons" white={(!scrolling && transparent)} style={!scrolling && transparent?{color:'white'}:{}}>menu</Hamburger>
+			        <Hamburger className="material-icons" style={!scrolling && transparent && hasCover ? {color:'#FFF'} : {}}>menu</Hamburger>
 			      </HamburgerWrapper>
 
-			      <LogoLink to="/" src={theme.logo} title={this.props.title} style={logoStyle} fill={theme.barTone=='light'?theme.primaryColor:'#ffffff'} />
-			      <LogoLink to="/" src={theme.slogo} title={this.props.title} style={logoStyleMobile} fill={theme.barTone=='light'?theme.primaryColor:'#ffffff'} />
+			      <LogoLink to="/" src={theme.logo} title={this.props.title} style={logoStyle} fill={theme.barTone=='light'?'':'#FFF'} />
+			      <LogoLink to="/" src={theme.slogo} title={this.props.title} style={logoStyleMobile} fill={theme.barTone=='light'?'':'#FFF'} />
 					</Left>
 
 					<Right className="fade">
-						<ShareButtonTop onClick={api.shareFB} number='112' barTone={theme.barTone} scrolling={scrolling}/>
+						<ShareButtonTop onClick={api.shareFB} number='112' barTone={theme.barTone} scrolling={scrolling} hasCover={hasCover}/>
 						<ShareDropdownTop>
 							<FontIcon style={moreStyle} className="material-icons" >more_vert</FontIcon>
 						</ShareDropdownTop>
@@ -262,6 +273,7 @@ const TopBarWithShare = React.createClass({
 					menu={menu}
 					open={alertLeft}
 					close={() => this.handleRequestClose('left')}
+					closeAndLink={(e,to) => this.close(e,to,'left')}
 				/>
 	    </Wrapper>
 	  )

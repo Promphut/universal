@@ -65,7 +65,7 @@ const TopBarWithNavigation = React.createClass({
 	render () {
 		var {theme} = this.context.setting.publisher
 		const {scrolling, scroll, status} = this.state
-		let {title, article, notShowNav, editButton} = this.props
+		let {title, article, notShowNav, editButton, hasCover} = this.props
 		let transparent = false
 		let articleMobile = false
 
@@ -83,7 +83,7 @@ const TopBarWithNavigation = React.createClass({
 		}
 
 	  return (
-			<Stick className={this.props.className} fixed={!scrolling}>
+			<Stick className={this.props.className} fixed={(articleMobile && hasCover) ? !scrolling : ''}>
 				{articleMobile ?
 					<TopBarWithShare
 						onScroll={this.handleScroll}
@@ -94,6 +94,7 @@ const TopBarWithNavigation = React.createClass({
 						menu={this.menu}
 						transparent={transparent}
 						editButton={editButton}
+						hasCover={hasCover}
 					> {children}
 					</TopBarWithShare> :
 					<TopBar
@@ -105,6 +106,7 @@ const TopBarWithNavigation = React.createClass({
 						menu={this.menu}
 						transparent={transparent}
 						editButton={editButton}
+						hasCover={hasCover}
 					> {children}
 					</TopBar>
 				}
