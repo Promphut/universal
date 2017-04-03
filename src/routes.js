@@ -70,7 +70,7 @@ const getUserFromUsername = (nextState, replace, next) => {
 }
 
 const getUserFromUserId = (nextState, replace, next) => {
-  api.getUserFromUsername(nextState.params.username)
+  api.getUserFromUserId(nextState.params.uid)
   .then(user => {
     nextState.params.user = user
     next()
