@@ -205,6 +205,7 @@ const RightMenu = React.createClass({
     let isMobile = false
     let {open, close} = this.props,
         user = this.props.user
+        //console.log(user)
 
     let displayStyle, AvatarSize, introStyle
     let hiddenMobile = {}
