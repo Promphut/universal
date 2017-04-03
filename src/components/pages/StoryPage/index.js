@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import {findDOMNode as dom} from 'react-dom'
 import api from 'components/api'
 import  { StickyContainer, Sticky }  from 'react-sticky'
+import {Helmet} from "react-helmet";
 
 const Wrapper = styled.div`
 	 .hidden-des{
@@ -168,38 +169,45 @@ const StoryPage = React.createClass({
 		}
 		//console.log('render', this.story)
 		return (
-		    <Wrapper>
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} article={this.story.title} editButton={'/me/stories/'+this.story.id+'/edit'} hasCover={hasCover} />
+				<div>
+					<Helmet>
+						<title>{this.story.title}</title>
+						<meta name="description" content={this.story.title} />
+					</Helmet>
 
-		      {this.story.cover.medium!=config.BACKURL+'/imgs/article_cover_landscape.png'&&<BGImg style={{width:'100%',height:'85vh'}} src={this.story.cover.large || this.story.cover.medium} className='hidden-mob'>
-						<Cover/>
-					</BGImg>}
-		      {this.story.coverMobile.medium!=config.BACKURL+'/imgs/article_cover_portrait.png'&&<BGImg style={{width:'100%',height:'85vh'}} src={this.story.coverMobile.large || this.story.coverMobile.medium} className='hidden-des'>
-						<Cover/>
-					</BGImg>}
+					<Wrapper>
+							<TopBarWithNavigation title={'Title of AomMoney goes here..'} article={this.story.title} editButton={'/me/stories/'+this.story.id+'/edit'} hasCover={hasCover} />
 
-		      <Content paddingTop={hasCover ? '0px' : '60px'}>
-						<Share ref='share' style={{zIndex:'50'}}>
-							<Stick topOffset={60}>
-								<ShareSideBar detail={this.story}/>
-							</Stick>
-						</Share>
+							{this.story.cover.medium!=config.BACKURL+'/imgs/article_cover_landscape.png'&&<BGImg style={{width:'100%',height:'85vh'}} src={this.story.cover.large || this.story.cover.medium} className='hidden-mob'>
+								<Cover/>
+							</BGImg>}
+							{this.story.coverMobile.medium!=config.BACKURL+'/imgs/article_cover_portrait.png'&&<BGImg style={{width:'100%',height:'85vh'}} src={this.story.coverMobile.large || this.story.coverMobile.medium} className='hidden-des'>
+								<Cover/>
+							</BGImg>}
 
-						<Main>
-							<StoryDetail story={this.story}/>
-						</Main>
+							<Content paddingTop={hasCover ? '0px' : '60px'}>
+								<Share ref='share' style={{zIndex:'50'}}>
+									<Stick topOffset={60}>
+										<ShareSideBar detail={this.story}/>
+									</Stick>
+								</Share>
 
-								<Aside  id='trendingBar' ref='trendingBar'>
-							<Stick topOffset={60} style={{zIndex:'50'}}>
-								<TrendingSideBar />
-							</Stick>
-						</Aside>
-		      </Content>
+								<Main>
+									<StoryDetail story={this.story}/>
+								</Main>
 
-				<Content>
-					<RecommendContainer recommend={recommends}/>
-				</Content>
-		   </Wrapper>
+										<Aside  id='trendingBar' ref='trendingBar'>
+									<Stick topOffset={60} style={{zIndex:'50'}}>
+										<TrendingSideBar />
+									</Stick>
+								</Aside>
+							</Content>
+
+							<Content>
+								<RecommendContainer recommend={recommends}/>
+							</Content>
+					</Wrapper>
+				</div>		
 		  )
 	}
 });

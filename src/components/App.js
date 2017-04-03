@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import { injectGlobal } from 'styled-components'
-
+import {Helmet} from "react-helmet";
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -741,9 +741,16 @@ const App = React.createClass({
       },
     });
     return (
-      <MuiThemeProvider muiTheme={muiTheme}>
-        {children}
-      </MuiThemeProvider>
+      <div>
+        <Helmet>
+          <title>Test Helmet</title>
+          <meta name="description" content="Helmet application" />
+          <link rel="shortcut icon" type="image/ico" href={config.BACKURL+'/publishers/11/favicon'} />
+        </Helmet>
+        <MuiThemeProvider muiTheme={muiTheme}>
+          {children}
+        </MuiThemeProvider>
+      </div>
     )
   }
 })

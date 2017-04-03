@@ -338,18 +338,6 @@ const NewStory = React.createClass({
     let {prevState,sid,title,column} = this.state
     let allContents = this.editor.serialize()
     let el =  allContents.paper.value
-
-    // var Story = {
-    //   story:{
-    //     title:title,
-    //     publisher:parseInt(config.PID),
-    //     //status:0,
-    //     html:el,
-    //   }
-    // }
-    // if(column!='no'){
-    //   Story.story.column = column
-    // }
     let s = {
       title:title,
       publisher:parseInt(config.PID),
@@ -369,27 +357,14 @@ const NewStory = React.createClass({
           })
         })
 
-        // Request
-        //   .patch(config.BACKURL+'/stories/'+sid+'?token='+auth.getToken())
-        //   .send(Story)
-        //   .end((err,res)=>{
-        //     if(err)throw err
-        //     else{
-        //       //console.log(res.body)
-        //       this.setState({
-        //         saveStatus:"Saved "+ moment(res.body.story.updated).calendar()
-        //       })
-        //     }
-        //   })
-
-        //this.setState({prevState:el})
       }
 
     } else {
       //if(el!='<p><br></p>'||title!=''){
-      if(this.state.status === this.SAVE_STATUS.INITIAL){
+      if(this.state.status === this.SAVE_STATUS.DIRTIED){
         api.createStory(s)
         .then(story => {
+          //console.log(story)
           this.setState({
             status: this.SAVE_STATUS.UNDIRTIED,
             sid:story._id,
@@ -397,59 +372,10 @@ const NewStory = React.createClass({
             saveStatus:"Saved "+ moment(story.updated).calendar()
           })
         })
-
-          // Request
-          //   .post(config.BACKURL+'/stories?token='+auth.getToken())
-          //   .send(Story)
-          //   .end((err,res)=>{
-          //     if(err)throw err
-          //     else{
-          //       //console.log(res.body)
-          //       this.setState({
-          //         sid:res.body.story._id,
-          //         saveStatus:"Saved "+ moment(res.body.story.updated).calendar()
-          //       })
-          //     }
-          //   })
-
-        //this.setState({prevState:el})
       }
 
     }
   },
-
-  // save(){
-  //   var self = this
-  //   var {prevState,sid,title,column} = this.state
-  //   var allContents = this.editor.serialize()
-  //   var el =  allContents.paper.value
-  //   var Story = {
-  //     story:{
-  //       title:title,
-  //       publisher:parseInt(config.PID),
-  //       //status:0,
-  //       html:el,
-  //     }
-  //   }
-  //   if(column!='no'){
-  //     Story.story.column = column
-  //   }
-  //   Request
-  //     .patch(config.BACKURL+'/stories/'+sid+'?token='+auth.getToken())
-  //     .send(Story)
-  //     .end((err,res)=>{
-  //       if(err)throw err
-  //       else{
-  //         //console.log(res.body)
-  //         self.setState({
-  //           sid:res.body.story._id,
-  //           saveStatus:"Saved "+ moment(res.body.story.updated).calendar(),
-  //           open:false,
-  //         })
-  //       }
-  //     })
-  //   self.setState({prevState:el})
-  // },
 
   publishStory(){
     let {sid,column,contentType,title} = this.state
