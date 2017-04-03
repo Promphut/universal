@@ -1,6 +1,7 @@
 import React from 'react'
 import { TopBarWithNavigation, OverlayImg, PublisherProfileSetting,
-   PublisherPublishingSetting,PublisherAnalyticSetting,PublisherThemeSetting,PublisherSettingMenu } from 'components'
+   PublisherPublishingSetting, PublisherAnalyticSetting, PublisherThemeSetting,
+   PublisherSettingMenu, Footer } from 'components'
 
 import styled from 'styled-components'
 
@@ -44,8 +45,8 @@ const PublisherEditor = React.createClass({
 		return {}
 	},
 
-  componentDidMount(){ 
-    
+  componentDidMount(){
+
   },
 
   render(){
@@ -62,6 +63,7 @@ const PublisherEditor = React.createClass({
               </Main>
             </Content>
           </Container>
+  				<Footer/>
 		   </Wrapper>
 		  )
 	}

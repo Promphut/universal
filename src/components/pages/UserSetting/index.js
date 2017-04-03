@@ -1,6 +1,6 @@
 import React from 'react'
 // import {browserHistory} from 'react-router'
-import { TopBarWithNavigation, TopBarWithBack, UserSettingMenu } from 'components'
+import { TopBarWithNavigation, TopBarWithBack, UserSettingMenu, Footer} from 'components'
 import styled from 'styled-components'
 import auth from 'components/auth'
 
@@ -96,6 +96,7 @@ const UserSetting = React.createClass({
               </Main>
             </Content>
           </Container>
+  				<Footer/>
 		   </Wrapper>
 		  )
 	}

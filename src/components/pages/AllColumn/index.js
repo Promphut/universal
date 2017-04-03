@@ -1,5 +1,5 @@
 import React from 'react'
-import {TopBarWithNavigation, BGImg, StoryMenu} from 'components'
+import {TopBarWithNavigation, BGImg, StoryMenu, Footer} from 'components'
 import {findDOMNode as dom} from 'react-dom'
 import styled from 'styled-components'
 import {Link} from 'react-router';
@@ -203,6 +203,7 @@ const AllColumn = React.createClass({
               </div>
             </Feed>
           </Content>
+  				<Footer/>
 		   </Wrapper>
 		  )
 	}

@@ -311,7 +311,7 @@ TopBar.propTypes = {
 
 TopBar.contextTypes = {
 	setting: React.PropTypes.object
-};
+}
 
 
 export default TopBar;

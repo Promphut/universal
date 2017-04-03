@@ -1,7 +1,7 @@
 import React from 'react'
 import { PageTemplate, TopBarWithNavigation, OverlayImg, Thumpnail,
 	ThumpnailSmall, ArticleBox, ArticleBoxLarge, ThumpnailRow, TopColumnSidebar,
-	TopWriterSidebar, More, BGImg, StoryDropdown} from 'components'
+	TopWriterSidebar, More, BGImg, StoryDropdown, Footer} from 'components'
 import styled from 'styled-components'
 //import Request from 'superagent'
 import auth from 'components/auth'
@@ -74,11 +74,6 @@ const TextLine = styled.div`
 	padding-bottom:11px;
 `
 
-const Footer = styled.div`
-	text-align:center;
-	background: lightgreen;
-	height:400px;
-`
 const Onload = styled.div`
 	width:100%;
 	height:70px;
@@ -241,6 +236,7 @@ const HomePage2 = React.createClass({
 							<TopWriterSidebar writer={this.writer}/>
 						</Aside>
 		      </Content>
+					<Footer/>
 		   </Wrapper>
 		  )
 	}

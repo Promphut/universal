@@ -1,6 +1,6 @@
 import React from 'react'
 import {TopBarWithNavigation, ArticleBox, ArticleBoxLarge, More, TrendingSideBar,
-	BGImg, StoryMenu,Stick} from 'components'
+	BGImg, StoryMenu, Stick, Footer} from 'components'
 import {findDOMNode as dom} from 'react-dom'
 import styled from 'styled-components'
 import FlatButton from 'material-ui/FlatButton';
@@ -96,11 +96,6 @@ const ColumnDetail = styled.div`
   }
 `
 
-const Footer = styled.div`
-	text-align:center;
-	background: lightgreen;
-	height:400px;
-`
 const Onload = styled.div`
 	width:100%;
 	height:70px;
@@ -246,7 +241,8 @@ const ColumnPage = React.createClass({
 								<TrendingSideBar/>
 							</Stick>
 						</Aside>
-		      	</Content>
+	      	</Content>
+					<Footer/>
 		   </Wrapper>
 		)
 	}

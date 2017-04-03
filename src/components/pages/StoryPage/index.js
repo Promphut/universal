@@ -1,6 +1,6 @@
 import React from 'react'
 import { PageTemplate, TopBarWithNavigation, StoryDetail, RecommendArticle, TrendingSideBar,
-	 Stick,ShareSideBar, BGImg,RecommendContainer} from 'components'
+	 Stick,ShareSideBar, BGImg,RecommendContainer, Footer} from 'components'
 import {Link} from 'react-router'
 import styled from 'styled-components'
 import {findDOMNode as dom} from 'react-dom'
@@ -199,6 +199,7 @@ const StoryPage = React.createClass({
 				<Content>
 					<RecommendContainer recommend={recommends}/>
 				</Content>
+				<Footer/>
 		   </Wrapper>
 		  )
 	}

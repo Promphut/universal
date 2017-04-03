@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {PrimaryButton,SecondaryButton,UploadPicture} from 'components'
+import {PrimaryButton, SecondaryButton, UploadPicture, Footer} from 'components'
 import TextField from 'material-ui/TextField';
 import Chip from 'material-ui/Chip';
 import auth from 'components/auth'
@@ -99,12 +99,12 @@ const ColumnSettingPage = React.createClass({
     return{
       column:{},
       user:{},
-      
+
 			cover:{
         medium: ''
       },
       dialogText:'',
-			
+
       writers:[],
       writersAutoComplete: [],
       writerToRemove: {},
@@ -114,7 +114,7 @@ const ColumnSettingPage = React.createClass({
       editorsAutoComplete: [],
       editorToRemove: {},
       editorSearchText: '',
-			
+
       switchTo:'',
 
       textStatus:'Unsave',
@@ -169,7 +169,7 @@ const ColumnSettingPage = React.createClass({
 
   getColumn(){
     let cid = this.props.params.cid
-    if(cid==null) return 
+    if(cid==null) return
 
     api.getColumn(cid)
     .then(col => {
@@ -239,7 +239,7 @@ const ColumnSettingPage = React.createClass({
     e.preventDefault()
 
     let cid = this.props.params.cid
-    if(cid==null) return 
+    if(cid==null) return
 
     let data = {}
     let input = dom(this.refs.columnForm).getElementsByTagName("input")
@@ -501,7 +501,8 @@ const ColumnSettingPage = React.createClass({
             <PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/>
             <SecondaryButton label='Reset' style={{float:'left',margin:'0 20px 0 0'}}/>
           <TextStatus style={{color:error?'#D8000C':theme.accentColor}}>{textStatus}</TextStatus></div>
-        </Container>
+        <Footer/>
+      </Container>
     )
   },
 })
