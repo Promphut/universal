@@ -20,7 +20,6 @@ FRONTEND PATHS:
 
 	USER:
 		NO USERNAME:
-			Public Profile  				/u/:uid
 			Public Profile					/u/:uid
 			Public stories					/u/:uid/stories
 			Public story page 				/u/:uid/stories/:story-slug/:sid

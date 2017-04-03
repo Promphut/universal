@@ -69,6 +69,16 @@ const getUserFromUsername = (nextState, replace, next) => {
   .catch(toError(nextState, replace, next))
 }
 
+const getUserFromUserId = (nextState, replace, next) => {
+  api.getUserFromUsername(nextState.params.username)
+  .then(user => {
+    nextState.params.user = user
+    next()
+  })
+  .catch(toError(nextState, replace, next))
+}
+
+
 const getColumnFromSlug = (nextState, replace, next) => {
   api.getColumnFromSlug(nextState.params.columnSlug)
   .then(col => {
@@ -149,8 +159,10 @@ const routes = (
       <Route path='stories/:sid/edit' component={EditStory} onEnter={canEditStory}/>
     </Route>
 
+
     <Route path='me/stories/:sid' component={StoryPage} onEnter={getStoryFromSid(false)}/>
 
+    <Route path='u/:uid' onEnter={getUserFromUserId} component={UserStory}/>
     {/* STORY 3 */ }
     <Route path='u/:uid/stories/:storySlug/:sid' onEnter={getStoryFromSid(true)} component={StoryPage}/>
 
