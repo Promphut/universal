@@ -705,6 +705,12 @@ injectGlobal`
 
 injectTapEventPlugin();
 
+const tagManager = function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id=%27+i+dl;f.parentNode.insertBefore(j,f)';
+};
+
 const muiTheme = getMuiTheme({
   appBar: {
     height: 60,
@@ -746,6 +752,7 @@ const App = React.createClass({
           <title>Test Helmet</title>
           <meta name="description" content="Helmet application" />
           <link rel="shortcut icon" type="image/ico" href={config.BACKURL+'/publishers/11/favicon'} />
+          {/*<script>{tagManager(window,document,'script','dataLayer','GTM-MCM6KWJ')}</script>*/}
         </Helmet>
         <MuiThemeProvider muiTheme={muiTheme}>
           {children}

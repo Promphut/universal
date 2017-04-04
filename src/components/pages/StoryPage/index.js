@@ -105,6 +105,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#222222', end
 // 	comment:'3'
 // }
 
+
+
 const StoryPage = React.createClass({
 	getInitialState(){
 		this.story = this.props.params.story
@@ -157,6 +159,7 @@ const StoryPage = React.createClass({
 		}
 
 	},
+
 
 	render(){
 		let {stopPos, recommends} = this.state
