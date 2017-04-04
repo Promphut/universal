@@ -68,6 +68,10 @@ const Main = styled.div`
 		max-width: 100%;
 		padding:0 15px 0 15px;
 	}
+
+	@media (min-width: 481px) {
+		min-height: 768px;
+	}
 `
 
 const Aside = styled.div`

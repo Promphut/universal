@@ -26,6 +26,10 @@ const Content = styled.div`
 	@media (max-width:480px) {
 		padding: 70px 0 0 0;
   }
+
+	@media (min-width: 481px) {
+		min-height: 480px;
+	}
 `
 
 const Main = styled.div`
