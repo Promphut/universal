@@ -27,6 +27,7 @@ const Nav = styled.nav`
     text-decoration: none;
     color: ${props => props.theme.barTone=='light'?'#222':'#FFF'};
 		height:60px;
+		cursor: pointer;
 	}
 
 	& ul li a:hover {

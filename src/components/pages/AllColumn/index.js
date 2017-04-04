@@ -32,6 +32,10 @@ const Content = styled.div`
 	flex-flow: row wrap;
 	justify-content: center;
 	padding:50px 0 0 0;
+
+	@media (min-width: 481px) {
+		min-height: 768px;
+	}
 `
 
 const Main = styled.div`

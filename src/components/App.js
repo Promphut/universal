@@ -719,8 +719,8 @@ const muiTheme = getMuiTheme({
 
 const App = React.createClass({
   render(){
-    var {theme} = this.context.setting.publisher
-    //console.log(theme)
+    var {name, desc, theme} = this.context.setting.publisher
+    // console.log(this.context.setting)
     var {children} = this.props
     var muiTheme = getMuiTheme({
       appBar: {
@@ -749,10 +749,14 @@ const App = React.createClass({
     return (
       <div>
         <Helmet>
-          <title>Test Helmet</title>
-          <meta name="description" content="Helmet application" />
+          <title>{name}</title>
+          <meta name="title" content={name} />
+          <meta name="description" content={desc} />
           <link rel="shortcut icon" type="image/ico" href={config.BACKURL+'/publishers/11/favicon'} />
           {/*<script>{tagManager(window,document,'script','dataLayer','GTM-MCM6KWJ')}</script>*/}
+          <meta property="og:sitename" content={name} />
+          <meta property="og:title" content={name} />
+          <meta property="og:description" content={desc} />
         </Helmet>
         <MuiThemeProvider muiTheme={muiTheme}>
           {children}
