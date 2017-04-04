@@ -75,7 +75,7 @@ const Aside = styled.div`
 	position:relative;
 	max-width: 385px;
 	padding:0 0 0 60px;
-	margin:150px 0 0 0;
+	margin:60px 0 0 0;
 	@media (max-width: 1280px) {
 		display:none;
 	}
@@ -172,7 +172,12 @@ const StoryPage = React.createClass({
 			<div>
 				<Helmet>
 					<title>{this.story.title}</title>
-					<meta name="description" content={this.story.title} />
+					<meta name="title" content={this.story.title} />
+					<meta name="description" content="Description" />
+					<link rel="shortcut icon" type="image/ico" href={config.BACKURL+'/publishers/11/favicon'} />
+					<meta property="og:sitename" content={this.story.title} />
+					<meta property="og:title" content={this.story.title} />
+					<meta property="og:description" content="Description" />
 				</Helmet>
 
 				<Wrapper>
@@ -187,7 +192,7 @@ const StoryPage = React.createClass({
 
 					<Content paddingTop={hasCover ? '0px' : '60px'}>
 						<Share ref='share' style={{zIndex:'50'}}>
-							<Stick topOffset={60}>
+							<Stick topOffset={100}>
 								<ShareSideBar detail={this.story}/>
 							</Stick>
 						</Share>
@@ -197,7 +202,7 @@ const StoryPage = React.createClass({
 						</Main>
 
 						<Aside  id='trendingBar' ref='trendingBar'>
-							<Stick topOffset={60} style={{zIndex:'50'}}>
+							<Stick topOffset={80} style={{zIndex:'50'}} marginBottom={60}>
 								<TrendingSideBar />
 							</Stick>
 						</Aside>
