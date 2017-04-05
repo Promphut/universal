@@ -45,7 +45,7 @@ const ThumpnailSmall = ({detail,style})=>{
     var {name,updated,cover} = detail
     return(
       <Container style={{...style}}>
-        <BGImg src={cover} className='imgWidth'/>
+        <BGImg src={cover} className='imgWidth' alt={name}/>
         <Name className='sans-font'>{name}</Name>
         <Div className='sans-font'>1145 Stories</Div>
       </Container>
@@ -121,7 +121,7 @@ const ColumnThumpnailRow= React.createClass({
         }
       }
     ]
-  };
+  }
   for(let i=0;i<column.length;i++){
     thumpnail.push(
       <Box key={i}><ThumpnailSmall detail={column[i]}  /></Box>

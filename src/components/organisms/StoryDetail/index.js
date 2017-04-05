@@ -167,9 +167,9 @@ const StoryDetail = React.createClass({
     return (
       <Wraper>
         <Head className='title-font'>{s.ptitle}</Head>
+        <Story ref="detail" className='content-font' dangerouslySetInnerHTML={{__html:s.phtml}}></Story>
         <WritedBy writer={s.writer} column={s.column} published={s.published} />
 
-        <Story className='content-font' dangerouslySetInnerHTML={{__html:s.phtml}}></Story>
 
         {/* NEXT ITERATION
         <TagContainer>

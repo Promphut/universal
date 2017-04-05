@@ -90,11 +90,11 @@ const TitleLink = styled(Link)`
   float:left;
   height:52px;
   word-wrap: break-word;
-  white-space: pre-wrap;      /* Webkit */    
-  white-space: -moz-pre-wrap; /* Firefox */     
-  white-space: -pre-wrap;     /* Opera <7 */    
-  white-space: -o-pre-wrap;   /* Opera 7 */     
-  word-wrap: break-word;      /* IE */ 
+  white-space: pre-wrap;      /* Webkit */
+  white-space: -moz-pre-wrap; /* Firefox */
+  white-space: -pre-wrap;     /* Opera <7 */
+  white-space: -o-pre-wrap;   /* Opera 7 */
+  word-wrap: break-word;      /* IE */
   padding-right:5px;
   overflow: hidden;
   max-width:230px;
@@ -106,7 +106,8 @@ const StoryTitle = ({style, story})=>{
   //console.log('story', story)
   return(
     <Cont style={{...style}}>
-      <Link to={url}><OverlayImg src={cover.small || cover.medium} style={{width:'87px',height:'52px',float:'left'}}/></Link>
+      <Link to={url}><OverlayImg src={cover.small || cover.medium}
+        style={{width:'87px',height:'52px',float:'left'}} alt={ptitle}/></Link>
       <TitleLink to={url} className="sans-font">{ptitle}</TitleLink>
     </Cont>
   )
@@ -192,7 +193,7 @@ const PublisherDashboardPage = React.createClass({
     }
 		return (
       <Container>
-        {/* THESE BELOW IS NOT FOR #1 MVP VERSION 
+        {/* THESE BELOW IS NOT FOR #1 MVP VERSION
         <Section1>
           <TabHead>Weekly</TabHead>
           <TabHead>Monthly</TabHead>
@@ -250,7 +251,7 @@ const PublisherDashboardPage = React.createClass({
           <div className='row'>
             <div className="col-6" style={{padding:'10px'}}>
               <Table >
-                <TableHeader 
+                <TableHeader
                   displaySelectAll={false}
                   adjustForCheckbox={false}>
                   <TableRow>
@@ -260,7 +261,7 @@ const PublisherDashboardPage = React.createClass({
                     <TableHeaderColumn style={{...styles.col4}}>No.</TableHeaderColumn>
                   </TableRow>
                 </TableHeader>
-                <TableBody 
+                <TableBody
                   showRowHover={true}
                   displayRowCheckbox={false}>
                   {writers ? writers.map((writer, index) => (
@@ -276,7 +277,7 @@ const PublisherDashboardPage = React.createClass({
             </div>
             <div className="col-6" style={{padding:'10px'}}>
               <Table >
-                <TableHeader 
+                <TableHeader
                   displaySelectAll={false}
                   adjustForCheckbox={false}>
                   <TableRow>
@@ -286,7 +287,7 @@ const PublisherDashboardPage = React.createClass({
                     <TableHeaderColumn style={{...styles.col4}}>No.</TableHeaderColumn>
                   </TableRow>
                 </TableHeader>
-                <TableBody 
+                <TableBody
                   showRowHover={true}
                   displayRowCheckbox={false}>
                   {columns ? columns.map((col, index) => (
@@ -304,7 +305,7 @@ const PublisherDashboardPage = React.createClass({
         </Section2>*/}
         <Section2 style={{padding:'40px 5px 40px 5px'}}>
           <Table >
-            <TableHeader 
+            <TableHeader
               displaySelectAll={false}
               adjustForCheckbox={false}>
               <TableRow>
@@ -315,7 +316,7 @@ const PublisherDashboardPage = React.createClass({
                 <TableHeaderColumn style={{width:'15%'}}>Published</TableHeaderColumn>
               </TableRow>
             </TableHeader>
-            <TableBody 
+            <TableBody
               showRowHover={true}
               displayRowCheckbox={false}>
               {stories ? stories.map((story, index) => (
@@ -340,4 +341,3 @@ PublisherDashboardPage.contextTypes = {
 };
 
 export default PublisherDashboardPage;
-

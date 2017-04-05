@@ -115,12 +115,15 @@ const StoryPage = React.createClass({
 	getInitialState(){
 		this.story = this.props.params.story
 		//console.log('canEditStory', this.props.params.canEditStory)
+	  let image = document.createElement('img')
+		console.log(this.story.phtml)
 
 		return {
 			refresh: 0,
 
 			stopPos:'',
-			recommends: [] 	// trending stories
+			recommends: [], 	// trending stories
+			description: ''
 		}
 	},
 
@@ -135,6 +138,27 @@ const StoryPage = React.createClass({
 
 	componentDidMount(){
 		this.getRecommendStories()
+
+		this.findDescription()
+	},
+
+	findDescription(maxLength = 140){
+		if (document.getElementsByTagName('p')) {
+			const story = document.getElementsByTagName('p')
+			let description = ''
+
+			for (let i = 0; i < story.length; i++) {
+		    let item = story[i].innerHTML
+				description += item + ' '
+
+				if (description.length > maxLength) {
+					description = description.substring(0, maxLength) + '...'
+					break
+				}
+			}
+
+			this.setState({description})
+		}
 	},
 
 	getRecommendStories(){
@@ -166,7 +190,7 @@ const StoryPage = React.createClass({
 
 
 	render(){
-		let {stopPos, recommends} = this.state
+		let {stopPos, recommends, description} = this.state
 
 		let hasCover = false
 		if (window.isMobile() && this.story.coverMobile.medium != config.BACKURL+'/imgs/article_cover_portrait.png') {
@@ -174,26 +198,31 @@ const StoryPage = React.createClass({
 		} else if (this.story.cover.medium != config.BACKURL+'/imgs/article_cover_landscape.png') {
 			hasCover = true
 		}
+
 		//console.log('render', this.story)
 		return (
 			<div>
 				<Helmet>
 					<title>{this.story.title}</title>
 					<meta name="title" content={this.story.title} />
-					<meta name="description" content="Description" />
+					<meta name="description" content={description}/>
 					<link rel="shortcut icon" type="image/ico" href={config.BACKURL+'/publishers/11/favicon'} />
 					<meta property="og:sitename" content={this.story.title} />
 					<meta property="og:title" content={this.story.title} />
-					<meta property="og:description" content="Description" />
+					<meta property="og:description" content={description} />
 				</Helmet>
 
 				<Wrapper>
 					<TopBarWithNavigation title={'Title of AomMoney goes here..'} article={this.story.title} editButton={'/me/stories/'+this.story.id+'/edit'} hasCover={hasCover} />
 
-					{this.story.cover.medium!=config.BACKURL+'/imgs/article_cover_landscape.png'&&<BGImg style={{width:'100%',height:'85vh'}} src={this.story.cover.large || this.story.cover.medium} className='hidden-mob'>
+					{this.story.cover.medium!=config.BACKURL+'/imgs/article_cover_landscape.png' &&
+					<BGImg style={{width:'100%',height:'85vh'}} src={this.story.cover.large ||
+							this.story.cover.medium} className='hidden-mob' alt={this.story.title}>
 						<Cover/>
 					</BGImg>}
-					{this.story.coverMobile.medium!=config.BACKURL+'/imgs/article_cover_portrait.png'&&<BGImg style={{width:'100%',height:'85vh'}} src={this.story.coverMobile.large || this.story.coverMobile.medium} className='hidden-des'>
+					{this.story.coverMobile.medium!=config.BACKURL+'/imgs/article_cover_portrait.png' &&
+					<BGImg style={{width:'100%',height:'85vh'}} src={this.story.coverMobile.large ||
+							this.story.coverMobile.medium} className='hidden-des' alt={this.story.title}>
 						<Cover/>
 					</BGImg>}
 
@@ -205,7 +234,7 @@ const StoryPage = React.createClass({
 						</Share>
 
 						<Main>
-							<StoryDetail story={this.story}/>
+							<StoryDetail story={this.story} />
 						</Main>
 
 						<Aside  id='trendingBar' ref='trendingBar'>

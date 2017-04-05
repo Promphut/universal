@@ -18,9 +18,10 @@ const Filter = styled(GradientOverlay)`
   height:100%;
 `
 
-const OverlayImg = ({style,className,src,opacity,child}) => {
+const OverlayImg = ({style,className,src,alt,opacity,child}) => {
 	return (
-			<Img style={{...style,backgroundImage:'url('+src+')'}} className={className}>
+			<Img style={{...style,backgroundImage:'url('+src+')'}}
+        className={className} alt={alt}>
         <Filter opacity={opacity} >
           {child}
         </Filter>

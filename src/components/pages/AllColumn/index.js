@@ -187,7 +187,8 @@ const AllColumn = React.createClass({
                   <div className='col-lg-3 col-md-4 col-sm-12' key={index} style={{margin:'20px 0 20px 0'}}>
                     <Link to={'/stories/' + data.slug} >
                     <Box>
-                      <BGImg src={data.cover.small || data.cover.medium} opacity={0.6} className='imgWidth' style={{margin:'0 auto 0 auto'}}>
+                      <BGImg src={data.cover.small || data.cover.medium} opacity={0.6}
+                        className='imgWidth' style={{margin:'0 auto 0 auto'}} alt={data.name}>
                         <div style={{margin:'80px 0 0 15px'}}>
                           <ColumnName className='serif-font'>{data.name}</ColumnName>
                           {/*
