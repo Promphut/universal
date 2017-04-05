@@ -706,10 +706,19 @@ injectGlobal`
 injectTapEventPlugin();
 
 const tagManager = function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id=%27+i+dl;f.parentNode.insertBefore(j,f)';
-};
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id=%27+i+dl;f.parentNode.insertBefore(j,f)';
+  };
+  
+
+const facebookUI = function(d, s, id){
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) {return;}
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  };
 
 const muiTheme = getMuiTheme({
   appBar: {
@@ -720,7 +729,7 @@ const muiTheme = getMuiTheme({
 const App = React.createClass({
   render(){
     var {name, desc, theme} = this.context.setting.publisher
-    // console.log(this.context.setting)
+    console.log(this.context.setting)
     var {children} = this.props
     var muiTheme = getMuiTheme({
       appBar: {
@@ -753,11 +762,25 @@ const App = React.createClass({
           <meta name="title" content={name} />
           <meta name="description" content={desc} />
           <link rel="shortcut icon" type="image/ico" href={config.BACKURL+'/publishers/11/favicon'} />
-          {/*<script>{tagManager(window,document,'script','dataLayer','GTM-MCM6KWJ')}</script>*/}
           <meta property="og:sitename" content={name} />
           <meta property="og:title" content={name} />
           <meta property="og:description" content={desc} />
+          <script>{ tagManager(window,document,'script','dataLayer','GTM-MCM6KWJ') }</script>
         </Helmet>
+        
+        <script>{window.fbAsyncInit =   function() {
+          FB.init({
+            appId      : '443088079071757',
+            xfbml      : true,
+            version    : 'v2.8'
+          });
+          FB.AppEvents.logPageView();
+        }   }</script>
+        <script>{ facebookUI(document, 'script', 'facebook-jssdk') }</script>
+
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MCM6KWJ"
+        height="0" width="0" style={{display:"none",visibility:"hidden"}}></iframe></noscript>
+
         <MuiThemeProvider muiTheme={muiTheme}>
           {children}
         </MuiThemeProvider>
