@@ -199,10 +199,11 @@ const HomePage2 = React.createClass({
 		//console.log('context', this.context.setting)
 		var {count,loadOffset,isInfiniteLoading,latestStories,isMobile} = this.state
 		let pub = this.publisher
-		//console.log('PUB', pub)
+		// console.log('PUB', pub)
 		return (
 		    <Wrapper>
-		    	{pub && <BGImg src={pub.cover.medium} style={{width:'100%',height:'350px'}} className="hidden-mob" />}
+		    	{pub && <BGImg src={pub.cover.medium} style={{width:'100%',height:'350px'}}
+					className="hidden-mob" alt={pub.name} />}
 
 	      		<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 

@@ -86,11 +86,11 @@ const TitleLink = styled(Link)`
   font-weight:bold;
   float:left;
   height:52px;
-  white-space: pre-wrap;      /* Webkit */    
-  white-space: -moz-pre-wrap; /* Firefox */     
-  white-space: -pre-wrap;     /* Opera <7 */    
-  white-space: -o-pre-wrap;   /* Opera 7 */     
-  word-wrap: break-word;      /* IE */ 
+  white-space: pre-wrap;      /* Webkit */
+  white-space: -moz-pre-wrap; /* Firefox */
+  white-space: -pre-wrap;     /* Opera <7 */
+  white-space: -o-pre-wrap;   /* Opera 7 */
+  word-wrap: break-word;      /* IE */
   padding-right:5px;
   overflow: hidden;
   max-width:220px;
@@ -135,7 +135,8 @@ const StoryTitle = ({style, story, selectStatus})=>{
   //console.log('story', story)
   return(
     <Cont style={{...style}}>
-      <Link to={url}><OverlayImg src={cover.small || cover.medium} style={{width:'87',height:'52',float:'left'}}/></Link>
+      <Link to={url}><OverlayImg src={cover.small || cover.medium}
+        style={{width:'87',height:'52',float:'left'}} alt={ptitle}/></Link>
       <TitleLink to={url} className="sans-font">{selectStatus===STATUS.DRAFTED ? title : ptitle}</TitleLink>
     </Cont>
   )
@@ -154,7 +155,7 @@ const UserSettingStory = React.createClass({
 
 		return {
       selectStatus: STATUS.PUBLISHED,
-      
+
       stories:[],
       storiesCount:0,
       selectStoryId:0,
@@ -215,7 +216,7 @@ const UserSettingStory = React.createClass({
     this.setState(
       {
         selectStatus: STATUS.PUBLISHED
-      }, 
+      },
       ()=>{this.getStories()}
     )
   },
@@ -307,18 +308,18 @@ const UserSettingStory = React.createClass({
   render(){
     let {alert,alertChild,alertConfirm,alertDesc,alertWhere,stories,selectStatus,onLoad,editStory,editStoryWhere,storiesCount,currentPage,totalPages} = this.state
 		var {theme} = this.context.setting.publisher
-    
+
     return (
       <Container>
-        <Alert 
+        <Alert
           open={alert}
           anchorEl={alertWhere}
           onRequestClose={this.handleRequestClose}
           description={alertDesc}
-          child={alertChild} 
+          child={alertChild}
           confirm={alertConfirm}/>
         <div className='row' style={{padding:'30px 15px 20px 30px'}}>
-          <MyStory className='nunito-font'>My Stories</MyStory>   
+          <MyStory className='nunito-font'>My Stories</MyStory>
         </div>
         <div className='row'>
           <div className='col-12'>
@@ -347,7 +348,7 @@ const UserSettingStory = React.createClass({
         <Section2 style={{padding:'40px 5px 40px 5px'}}>
           {onLoad ? <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>:
           <Table >
-            <TableHeader 
+            <TableHeader
               displaySelectAll={false}
               adjustForCheckbox={false}>
               <TableRow>
@@ -359,7 +360,7 @@ const UserSettingStory = React.createClass({
                 <TableHeaderColumn style={{width:'5%'}}></TableHeaderColumn>
               </TableRow>
             </TableHeader>
-            <TableBody 
+            <TableBody
               showRowHover={true}
               displayRowCheckbox={false}>
               {stories ? stories.map((story, index) => (
@@ -376,9 +377,9 @@ const UserSettingStory = React.createClass({
           </Table>}
         </Section2>
         {totalPages > 0 && <Page>
-          <Pagination 
-            currentPage={currentPage+1} 
-            totalPages={totalPages} 
+          <Pagination
+            currentPage={currentPage+1}
+            totalPages={totalPages}
             onChange={this.changePage}
           />
         </Page>}
@@ -392,4 +393,3 @@ UserSettingStory.contextTypes = {
 };
 
 export default UserSettingStory;
-

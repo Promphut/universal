@@ -115,6 +115,8 @@ const StoryPage = React.createClass({
 	getInitialState(){
 		this.story = this.props.params.story
 		//console.log('canEditStory', this.props.params.canEditStory)
+	  let image = document.createElement('img')
+		console.log(this.story.phtml)
 
 		return {
 			refresh: 0,
@@ -213,10 +215,14 @@ const StoryPage = React.createClass({
 				<Wrapper>
 					<TopBarWithNavigation title={'Title of AomMoney goes here..'} article={this.story.title} editButton={'/me/stories/'+this.story.id+'/edit'} hasCover={hasCover} />
 
-					{this.story.cover.medium!=config.BACKURL+'/imgs/article_cover_landscape.png'&&<BGImg style={{width:'100%',height:'85vh'}} src={this.story.cover.large || this.story.cover.medium} className='hidden-mob'>
+					{this.story.cover.medium!=config.BACKURL+'/imgs/article_cover_landscape.png' &&
+					<BGImg style={{width:'100%',height:'85vh'}} src={this.story.cover.large ||
+							this.story.cover.medium} className='hidden-mob' alt={this.story.title}>
 						<Cover/>
 					</BGImg>}
-					{this.story.coverMobile.medium!=config.BACKURL+'/imgs/article_cover_portrait.png'&&<BGImg style={{width:'100%',height:'85vh'}} src={this.story.coverMobile.large || this.story.coverMobile.medium} className='hidden-des'>
+					{this.story.coverMobile.medium!=config.BACKURL+'/imgs/article_cover_portrait.png' &&
+					<BGImg style={{width:'100%',height:'85vh'}} src={this.story.coverMobile.large ||
+							this.story.coverMobile.medium} className='hidden-des' alt={this.story.title}>
 						<Cover/>
 					</BGImg>}
 

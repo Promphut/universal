@@ -258,12 +258,12 @@ const EditStory = React.createClass({
   },
 
   handleEditableInput(e, editable){
-    if(this.state.status === this.SAVE_STATUS.INITIAL) 
+    if(this.state.status === this.SAVE_STATUS.INITIAL)
       this.setState({
         status: this.SAVE_STATUS.UNDIRTIED,
         saveStatus:''
       })
-    else 
+    else
       this.setState({
         status: this.SAVE_STATUS.DIRTIED,
         saveStatus:'Unsave'
@@ -290,12 +290,12 @@ const EditStory = React.createClass({
     //console.log('getStoryDetail', story)
     if(story){
       this.setState({
-        story:story, 
+        story:story,
         title:story.title,
 
         column: story.column ? story.column._id : 'no'
       })
-  
+
       this.editor.setContent(story.html || '')
     }
   },
@@ -352,7 +352,7 @@ const EditStory = React.createClass({
   publishStory(){
     let {sid,column,title} = this.state
     let allContents = this.editor.serialize()
-    
+
     let s = {
       title:title,
       publisher:parseInt(config.PID),
