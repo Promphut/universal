@@ -6,7 +6,16 @@ const ip = process.env.IP || '0.0.0.0'
 const port = process.env.PORT || 3000
 const DEBUG = process.env.NODE_ENV !== 'production'
 
+const SitemapPlugin = require('sitemap-webpack-plugin');
 const configfile = require('./config')
+
+var paths = [
+  {path:'/',priority: '0.7',changeFreq: 'daily'},
+  {path:'/about',priority: '0.3'},
+  {path:'/contact'},
+  {path:'/signup'}
+];
+
 
 const config = {
   devtool: DEBUG ? 'eval' : false,
@@ -41,6 +50,9 @@ const config = {
       'config': JSON.stringify(configfile),
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
     }),
+    new SitemapPlugin(configfile.FRONTURL, paths,{
+      lastMod: true,
+    })
   ],
   module: {
     loaders: [
