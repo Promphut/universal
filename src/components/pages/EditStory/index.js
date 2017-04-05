@@ -3,6 +3,7 @@ import {Link,browserHistory} from 'react-router'
 import styled from 'styled-components'
 import {PrimaryButton, SecondaryButton, UploadPicture, DropdownWithIcon,
   Alert, MenuList} from 'components'
+import {findDOMNode as dom} from 'react-dom'
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -226,6 +227,20 @@ const EditStory = React.createClass({
               full: {
                   label: this.state.layout=='article'?'<span class="fa fa-window-maximize"></span>':''
               }
+            },
+            actions: 	{
+              // alt: {
+              //   label: 'alt',
+              //   clicked: function ($el) {
+              //     console.log('el', $el)
+              //     console.log('$', $)
+              //     console.log('keydown', $.Event('keydown'))
+              //     var $event = $.Event('keydown');
+              //     console.log('which', $event)
+              //     // $event.which = 8;
+              //     // $(document).trigger($event);
+              //   }
+              // }
             }
           }
         }
@@ -324,10 +339,19 @@ const EditStory = React.createClass({
 
   autoSave(){
     let {sid,title,column} = this.state
-    let allContents = this.editor.serialize()
-    let el =  allContents.paper.value
 
     if(this.state.status === this.SAVE_STATUS.DIRTIED){
+      const images = [].slice.call(dom(this.refs.paper).getElementsByTagName('img'))
+
+      if (images) {
+        images.map((value, index) => {
+          value.setAttribute("alt", title)
+        })
+      }
+
+      let allContents = this.editor.serialize()
+      let el =  allContents.paper.value
+
       this.setState({
         saveStatus:'Saving...'
       })
@@ -592,7 +616,7 @@ const EditStory = React.createClass({
 
         <Title placeholder='Title' className='serif-font' value={title} onChange={this.titleChanged}/>
 
-        <Paper id='paper'>
+        <Paper ref='paper' id='paper'>
 
         </Paper>
       </Container>

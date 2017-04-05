@@ -3,6 +3,7 @@ import {Link,browserHistory} from 'react-router'
 import styled from 'styled-components'
 import {PrimaryButton, SecondaryButton, UploadPicture, DropdownWithIcon,
   Alert, MenuList} from 'components'
+import {findDOMNode as dom} from 'react-dom'
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -336,17 +337,25 @@ const NewStory = React.createClass({
 
   autoSave(){
     let {prevState,sid,title,column} = this.state
-    let allContents = this.editor.serialize()
-    let el =  allContents.paper.value
-    let s = {
-      title:title,
-      publisher:parseInt(config.PID),
-      html:el
-    }
-    if(column!='no') s.column = column
-
     if(this.state.sid){
       if(this.state.status === this.SAVE_STATUS.DIRTIED){
+        const images = [].slice.call(dom(this.refs.paper).getElementsByTagName('img'))
+
+        if (images) {
+          images.map((value, index) => {
+            value.setAttribute("alt", title)
+          })
+        }
+
+        let allContents = this.editor.serialize()
+        let el =  allContents.paper.value
+        let s = {
+          title:title,
+          publisher:parseInt(config.PID),
+          html:el
+        }
+        if(column!='no') s.column = column
+
         this.setState({saveStatus:'saving...'})
 
         api.updateStory(sid, s)
@@ -356,12 +365,28 @@ const NewStory = React.createClass({
             saveStatus:"Saved "+ moment(story.updated).calendar()
           })
         })
-
       }
 
     } else {
       //if(el!='<p><br></p>'||title!=''){
       if(this.state.status === this.SAVE_STATUS.DIRTIED){
+        const images = [].slice.call(dom(this.refs.paper).getElementsByTagName('img'))
+
+        if (images) {
+          images.map((value, index) => {
+            value.setAttribute("alt", title)
+          })
+        }
+
+        let allContents = this.editor.serialize()
+        let el =  allContents.paper.value
+        let s = {
+          title:title,
+          publisher:parseInt(config.PID),
+          html:el
+        }
+        if(column!='no') s.column = column
+
         api.createStory(s)
         .then(story => {
           //console.log(story)
@@ -673,9 +698,7 @@ const NewStory = React.createClass({
 
         </Title>
 
-        <Paper id='paper'>
-
-        </Paper>
+        <Paper ref='paper'  id='paper' />
       </Container>
     )
   },
