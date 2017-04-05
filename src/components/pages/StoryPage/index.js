@@ -116,7 +116,6 @@ const StoryPage = React.createClass({
 		this.story = this.props.params.story
 		//console.log('canEditStory', this.props.params.canEditStory)
 	  let image = document.createElement('img')
-		console.log(this.story.phtml)
 
 		return {
 			refresh: 0,
