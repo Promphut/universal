@@ -49,6 +49,25 @@
     window.isMobile = () => {
       return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
     }
+
+    window.getFbUrl = (fbid) => {
+      return 'http://facebook.com/'+fbid
+    }
+    window.getTwtUrl = (username) => {
+      return 'http://twitter.com/'+username
+    }
+    window.getIgUrl = (username) => {
+      return 'http://instagram.com/'+username
+    }
+    window.getYtUrl = (username) => {
+      // channel
+      if(username.startsWith('UC') && username.length===24) 
+        return 'http://youtube.com/channel/'+username 
+      
+      // user
+      return 'http://youtube.com/user/'+username
+    }
+
   </script>
   <script>
     window.fbAsyncInit = function() {

@@ -28,7 +28,7 @@ const toSignin = (nextState, replace, next) => {
 
 const toError = (nextState, replace, next) => {
   return (err) => {
-    //console.log('err', err)
+    console.error('err', err)
     replace({
       pathname: '/error',
       state: { error: err }

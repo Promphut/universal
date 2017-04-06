@@ -21,15 +21,15 @@ FRONTEND PATHS:
 	USER:
 		NO USERNAME:
 			Public Profile					/u/:uid
-			Public stories					/u/:uid/stories
+			-Public stories					/u/:uid/stories
 			Public story page 				/u/:uid/stories/:story-slug/:sid
-			Public upvotes					/u/:uid/upvotes
+			-Public upvotes					/u/:uid/upvotes
 
 		WITH USERNAME
 			Public Profile					/@:username 
-			Public stories					/@:username/stories
+			-Public stories					/@:username/stories
 			Public story page 				/@:username/stories/:story-slug/:sid
-			Public upvotes					/@:username/upvotes
+			-Public upvotes					/@:username/upvotes
 
 	TAG:
 		Tag page 						/tags/:tag-slug

@@ -160,7 +160,7 @@ const Onload = styled.div`
 `
 
 const A = styled.a`
-	flex: 1;
+	margin: 0 20px;
 	textAlign: center;
 	color: #c2c2c2;
 	cursor: pointer;
@@ -174,7 +174,7 @@ const LinkMobile = styled.a`
 	font-size: 20px;
 `
 
-const UserDetail = ({style, user, shareFB, checkBack}) => {
+const UserDetail = ({style, user, checkBack}) => {
 	const backStyle = {
 		color: '#FFF',
 		fontSize: '40px',
@@ -192,30 +192,32 @@ const UserDetail = ({style, user, shareFB, checkBack}) => {
 		flex: '8 730px'
 	}
 	//console.log('user', user)
-  return (
+  	return (
 		<User>
 	    <div className='row' style={rowStyle}>
-				<Link to='#' onClick={checkBack}>
-					<FontIcon className="material-icons hidden-des" style={backStyle}>chevron_left</FontIcon>
-				</Link>
-				<div style={{textAlign: 'center'}}>
-      		<UserAvatar src={user.pic.medium} size={95}/>
-				</div>
-				<UserData>
-	        <UserName className='serif-font'>{user.display}</UserName>
-      	  <UserDesc className='sans-font'>{user.intro}</UserDesc>
-	      </UserData>
-	      <UserShare>
-	        <div className='row' style={{overflow:'hidden'}}>
-	          <A href='#' onClick={shareFB}><i className="fa fa-facebook" aria-hidden="true"></i></A>
-	          <A href={config.TWT}><i className="fa fa-twitter" aria-hidden="true" ></i></A>
-	          <A><i className="fa fa-youtube-play" aria-hidden="true" ></i></A>
-	          <A><i className="fa fa-instagram" aria-hidden="true" ></i></A>
-	        </div>
-	      </UserShare>
+			<Link to='#' onClick={checkBack}>
+				<FontIcon className="material-icons hidden-des" style={backStyle}>chevron_left</FontIcon>
+			</Link>
+			<div style={{textAlign: 'center'}}>
+      			<UserAvatar src={user.pic.medium} size={95}/>
+			</div>
+			<UserData>
+	        	<UserName className='serif-font'>{user.display}</UserName>
+	      	  	<UserDesc className='sans-font'>{user.intro}</UserDesc>
+	      	</UserData>
+		    
+		    {user.channels && <UserShare>
+		        {/*<div className='row' style={{overflow:'hidden', textAlign: 'right'}}>*/}
+		        <div style={{textAlign:'right'}}>
+		          {user.channels.fb && <A href={getFbUrl(user.channels.fb)} target="_blank"><i className="fa fa-facebook" aria-hidden="true"></i></A>}
+		          {user.channels.twt && <A href={getTwtUrl(user.channels.twt)} target="_blank"><i className="fa fa-twitter" aria-hidden="true" ></i></A>}
+		          {user.channels.yt && <A href={getYtUrl(user.channels.yt)} target="_blank"><i className="fa fa-youtube-play" aria-hidden="true" ></i></A>}
+		          {user.channels.ig && <A href={getIgUrl(user.channels.ig)} target="_blank"><i className="fa fa-instagram" aria-hidden="true" ></i></A>}
+		        </div>
+		    </UserShare>}
 	    </div>
 		</User>
-  )
+  	)
 }
 
 const UserStory = React.createClass({
@@ -235,32 +237,6 @@ const UserStory = React.createClass({
 	componentDidMount(){
 		//this.getFeed()
 	},
-
-	// getFeed(){
-	// 	let uid = auth.getUser()._id
-
-	// 	api.getFeed('story', {writer:uid, status:1}, 'latest')
-	// 	.then(result => {
-	// 		this.setState({
-	// 			feed: result.feed,
-	// 			feedCount: result.count['1']
-	// 		})
-	// 	})
-
-	// 	// var filter = JSON.stringify({writer:1,status:1})
-
-	// 	// //console.log(path)
-	// 	// Request
-	// 	// .get(config.BACKURL+'/publishers/'+config.PID+'/feed?type=story&filter='+filter+'&sort=latest')
-	// 	// .set('Accept','application/json')
-	// 	// .end((err,res)=>{
-	// 	// 	if(err) throw err
-	// 	// 	else{
-	// 	// 		//console.log(res.body)
-	// 	// 		this.setState({feed:res.body.feed})
-	// 	// 	}
-	// 	// })
-	// },
 
 	buildElements() {
 		let page = this.state.page
@@ -304,28 +280,31 @@ const UserStory = React.createClass({
 			return <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>;
 	},
 
-  checkBack(e){
-    e.preventDefault()
+	checkBack(e){
+		e.preventDefault()
 		browserHistory.goBack()
-  },
+	},
 
 	render(){
-    var {theme} = this.context.setting.publisher
+    	let {theme} = this.context.setting.publisher
 		//console.log('user', this.props)
 		//var article = []
 		let {feed, feedCount} = this.state
-		var {count,loadOffset,isInfiniteLoading,latestStories,isMobile} = this.state
+		let {count,loadOffset,isInfiniteLoading,latestStories,isMobile} = this.state
+		let user = this.props.params.user
+		//console.log('user', user)
 
 		return (
 		    <Wrapper>
 		      <TopBarWithNavigation className="hidden-mob" title={'Title of AomMoney goes here..'} />
-					<UserDetail user={this.props.params.user} shareFB={api.shareFB} checkBack={this.checkBack}/>
-					<UserShareMobile className='row'>
-	          <LinkMobile href='#' onClick={api.shareFB}><i className="fa fa-facebook" aria-hidden="true"></i></LinkMobile>
-	          <LinkMobile href={config.TWT}><i className="fa fa-twitter" aria-hidden="true" ></i></LinkMobile>
-	          <LinkMobile><i className="fa fa-youtube-play" aria-hidden="true" ></i></LinkMobile>
-	          <LinkMobile><i className="fa fa-instagram" aria-hidden="true" ></i></LinkMobile>
-		 			</UserShareMobile>
+				<UserDetail user={user} checkBack={this.checkBack}/>
+				
+				{user.channels && <UserShareMobile className='row'>
+		          {user.channels.fb && <LinkMobile href={getFbUrl(user.channels.fb)} target="_blank"><i className="fa fa-facebook" aria-hidden="true"></i></LinkMobile>}
+		          {user.channels.twt && <LinkMobile href={getTwtUrl(user.channels.twt)} target="_blank"><i className="fa fa-twitter" aria-hidden="true" ></i></LinkMobile>}
+		          {user.channels.yt && <LinkMobile href={getYtUrl(user.channels.yt)} target="_blank"><i className="fa fa-youtube-play" aria-hidden="true" ></i></LinkMobile>}
+		          {user.channels.ig && <LinkMobile href={getIgUrl(user.channels.ig)} target="_blank"><i className="fa fa-instagram" aria-hidden="true" ></i></LinkMobile>}
+	 			</UserShareMobile>}
 		      <Content>
 			      <Main>
 						<TextLine className='sans-font'>
@@ -334,25 +313,25 @@ const UserStory = React.createClass({
 							</strong>
 							{/*<span style={{fontSize:'30px'}}>101</span> Upvotes*/}
 						</TextLine>
-							<Infinite
-									containerHeight={!isMobile?(count*210)-100:(count*356)-100}
-									elementHeight={!isMobile?210:356}
-									infiniteLoadBeginEdgeOffset={loadOffset}
-									onInfiniteLoad={this.handleInfiniteLoad}
-									loadingSpinnerDelegate={this.elementInfiniteLoad()}
-									isInfiniteLoading={isInfiniteLoading}
-									useWindowAsScrollContainer={true}>
+						<Infinite
+								containerHeight={!isMobile?(count*210)-100:(count*356)-100}
+								elementHeight={!isMobile?210:356}
+								infiniteLoadBeginEdgeOffset={loadOffset}
+								onInfiniteLoad={this.handleInfiniteLoad}
+								loadingSpinnerDelegate={this.elementInfiniteLoad()}
+								isInfiniteLoading={isInfiniteLoading}
+								useWindowAsScrollContainer={true}>
 
-								{latestStories.length!=0?latestStories.map((story, index) => (
-									<ArticleBox detail={story} key={index}/>
-								)):''}
-							</Infinite>
+							{latestStories.length!=0?latestStories.map((story, index) => (
+								<ArticleBox detail={story} key={index}/>
+							)):''}
+						</Infinite>
 						<More style={{margin:'30px auto 30px auto'}} />
 						<div ref='more'></div>
 			      </Main>
 		      </Content>
 		   </Wrapper>
-		  )
+		)
 	}
 });
 
