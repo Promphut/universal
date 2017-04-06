@@ -45,7 +45,7 @@ const Item = styled(Link)`
 `
 
 const Share = styled.div`
-	flex: 1;
+	flex: 2;
 	text-align: center;
 
 	@media (max-width: 480px) {
@@ -129,7 +129,7 @@ const Footer = React.createClass({
           <Item to="/about">About</Item>
           <VerticalLine/>
           <Item to="/contact">Contact</Item>
-          {isMobile || <VerticalLine/>}
+          {isMobile || channels && <VerticalLine/>}
 
           {channels && <Share>
             {channels.fb && <a href={getFbUrl(channels.fb)} target="_blank" style={{display: 'inline-block'}}><i className="fa fa-facebook fa-2x" aria-hidden="true" style={iconStyle}></i></a>}
