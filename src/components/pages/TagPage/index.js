@@ -1,6 +1,6 @@
 import React from 'react'
 import {TopBarWithNavigation, ArticleBox, ArticleBoxLarge, More, TrendingSideBar,
-	BGImg, StoryMenu, Stick, Footer} from 'components'
+	BGImg, StoryMenu, Stick, Footer,TagSideBar} from 'components'
 import {findDOMNode as dom} from 'react-dom'
 import styled from 'styled-components'
 import FlatButton from 'material-ui/FlatButton';
@@ -17,10 +17,6 @@ const Content = styled.div`
 	flex-flow: row wrap;
 	justify-content: center;
 	padding:50px 0 50px 0;
-
-	@media (min-width: 481px) {
-		min-height: 480px;
-	}
 `
 
 const Main = styled.div`
@@ -87,6 +83,11 @@ const ColumnName = styled.div`
   	font-size: 16px;
   }
 `
+const TagName = styled.h1`
+  font-size:32px;
+  font-weight:bold;
+  color:${props=>props.theme.primaryColor};
+`
 
 const ColumnDetail = styled.div`
 	color:#fff;
@@ -105,7 +106,7 @@ const Onload = styled.div`
 	height:70px;
 	margin:50px 0 50px 0;
 `
-const ColumnPage = React.createClass({
+const TagPage = React.createClass({
 	getInitialState(){
 		return {
 			// column: {
@@ -115,7 +116,7 @@ const ColumnPage = React.createClass({
 			// 	shortDesc: '',
 			// 	name: ''
 			// },
-			column:this.props.params.column,
+			//column:this.props.params.column,
 			feed: [],
 			latestStories:[],
 			page:0,
@@ -133,21 +134,21 @@ const ColumnPage = React.createClass({
 		})
 	},
 
-	componentWillReceiveProps(nextProps) {
-		if(nextProps.params.column!=this.props.params.column){
-			this.setState({
-				column:nextProps.params.column,
-			},()=>{
-				this.setState({
-					page:0,
-					latestStories:[],
-					loadOffset:300
-				},()=>{
-					this.handleInfiniteLoad()
-				})
-			})
-		}
-	},
+	// componentWillReceiveProps(nextProps) {
+	// 	if(nextProps.params.column!=this.props.params.column){
+	// 		this.setState({
+	// 			column:nextProps.params.column,
+	// 		},()=>{
+	// 			this.setState({
+	// 				page:0,
+	// 				latestStories:[],
+	// 				loadOffset:300
+	// 			},()=>{
+	// 				this.handleInfiniteLoad()
+	// 			})
+	// 		})
+	// 	}
+	// },
 
 	// getColumnFeed(col){
 	// 	let {id, name, shortDesc, cover} = col
@@ -204,45 +205,38 @@ const ColumnPage = React.createClass({
 		let {column, feed} = this.state
 		//console.log('column', column)
 		var {count,loadOffset,isInfiniteLoading,latestStories,isMobile} = this.state
-		let ChildCover =
-			<Head>
-				<ColumnName className='serif-font'>{column.name}</ColumnName>
-				<ColumnDetail >{column.shortDesc}</ColumnDetail>
-			</Head>
+
 
 		return (
 		    <Wrapper>
 				<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
-				<BGImg src={column.cover.medium || column.cover.small}
-					style={{width:'100%',height: BGImgSize + 'px'}} alt={column.name}
-					child={ChildCover}/>
 
 		      	<Content>
-			      <Main>
-						<StoryMenu
-							style={{padding:'15px 0 15px 0', margin:'0 0 50px 0'}}
-							next={column.name}
-						/>
-						<TextLine className='sans-font'>Latest</TextLine>
+              <Main>
+                <TextLine className='sans-font' style={{border:'none',marginTop:'60px'}}>tag</TextLine>
+                <TagName className='nunito-font' style={{margin:'10px 0 50px 0'}}>{'Tag'}</TagName>
 
-							<Infinite
-									containerHeight={!isMobile?(count*210)-100:(count*356)-100}
-									elementHeight={!isMobile?210:356}
-									infiniteLoadBeginEdgeOffset={loadOffset}
-									onInfiniteLoad={this.handleInfiniteLoad}
-									loadingSpinnerDelegate={this.elementInfiniteLoad()}
-									isInfiniteLoading={isInfiniteLoading}
-									useWindowAsScrollContainer={true}>
+                <TextLine className='sans-font'>Latest</TextLine>
 
-								{latestStories.length!=0?latestStories.map((story, index) => (
-									<ArticleBox detail={story} key={index}/>
-								)):''}
-							</Infinite>
+                  <Infinite
+                      containerHeight={!isMobile?(count*210)-100:(count*356)-100}
+                      elementHeight={!isMobile?210:356}
+                      infiniteLoadBeginEdgeOffset={loadOffset}
+                      onInfiniteLoad={this.handleInfiniteLoad}
+                      loadingSpinnerDelegate={this.elementInfiniteLoad()}
+                      isInfiniteLoading={isInfiniteLoading}
+                      useWindowAsScrollContainer={true}>
 
-						<More style={{margin:'30px auto 30px auto'}} />
-						<div ref='more'></div>
-			      </Main>
+                    {latestStories.length!=0?latestStories.map((story, index) => (
+                      <ArticleBox detail={story} key={index}/>
+                    )):''}
+                  </Infinite>
+
+                <More style={{margin:'30px auto 30px auto'}} />
+                <div ref='more'></div>
+              </Main>
 			      <Aside>
+              <TagSideBar style={{marginTop:'4 0px'}}/>
 							<Stick topOffset={70} style={{zIndex: '0'}}>
 								<TrendingSideBar/>
 							</Stick>
@@ -254,4 +248,4 @@ const ColumnPage = React.createClass({
 	}
 });
 
-export default ColumnPage;
+export default TagPage;

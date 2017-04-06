@@ -11,7 +11,7 @@ import {
     PublisherSettingPage, ForgetPasswordPage, PublisherEditor, PublisherContactAndAboutPage,
     UserSettingProfile, UserSettingAccount, UserSettingStory, ColumnPage, PublisherPage,
     UserStory, AllStory, AllColumn, NewStory, NotFoundPage, ErrorPage, AboutPage, ContactPage, StoryPage,
-    EditStory
+    EditStory,TagPage
   } from 'components'
 import api from 'components/api'
 
@@ -132,6 +132,8 @@ const routes = (
     <Route path="mood" component={MoodboardPage} />
     <Route path="about" component={AboutPage} />
     <Route path="contact" component={ContactPage} />
+
+    <Route path="tag/:tag" component={TagPage} />
 
     <Route path="forget" component={ForgetPasswordPage} />
     <Route path="signin" component={()=>(<SignInPage visible={true}/>)} />

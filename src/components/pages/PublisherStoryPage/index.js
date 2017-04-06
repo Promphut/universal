@@ -91,11 +91,11 @@ const TitleLink = styled(Link)`
   float:left;
   height:52px;
   word-wrap: break-word;
-  white-space: pre-wrap;      /* Webkit */    
-  white-space: -moz-pre-wrap; /* Firefox */     
-  white-space: -pre-wrap;     /* Opera <7 */    
-  white-space: -o-pre-wrap;   /* Opera 7 */     
-  word-wrap: break-word;      /* IE */ 
+  white-space: pre-wrap;      /* Webkit */
+  white-space: -moz-pre-wrap; /* Firefox */
+  white-space: -pre-wrap;     /* Opera <7 */
+  white-space: -o-pre-wrap;   /* Opera 7 */
+  word-wrap: break-word;      /* IE */
   padding-right:5px;
   overflow: hidden;
   max-width:220px;
@@ -134,7 +134,8 @@ const StoryTitle = ({style, story, selectStatus})=>{
   let {title, ptitle, cover, url} = story
   return(
     <Cont style={{...style}}>
-      <Link to={url}><OverlayImg src={cover.small || cover.medium} style={{width:'87',height:'52',float:'left'}}/></Link>
+      <Link to={url}><OverlayImg src={cover.small || cover.medium}
+        style={{width:'87',height:'52',float:'left'}} alt={ptitle} /></Link>
       <TitleLink to={url} className="sans-font">{selectStatus===STATUS.DRAFTED ? title : ptitle}</TitleLink>
     </Cont>
   )
@@ -156,7 +157,7 @@ const PublisherStoryPage = React.createClass({
       stories: [],
       storiesCount: 0,
       selectStoryId:0,
-      
+
       columns:[],
       columnArray:[],
 
@@ -169,7 +170,7 @@ const PublisherStoryPage = React.createClass({
       alertConfirm:function(){},
       alertLoading:false,
       onLoad:false,
-      snackbar:false,     
+      snackbar:false,
       snackbarMS:'',
       editStory:false
     }
@@ -366,7 +367,7 @@ const PublisherStoryPage = React.createClass({
     //console.log(data)
     this.setState({
       editStory:true,
-      editStoryWhere:e.currentTarget, 
+      editStoryWhere:e.currentTarget,
       selectStoryId:data
     })
   },
@@ -433,7 +434,7 @@ const PublisherStoryPage = React.createClass({
   },
 
   render(){
-    
+
     //console.log('theme',theme)
     let { sort,totalPages,storiesCount,editStory,editStoryWhere,selectStatus,snackbar,snackbarMS,currentPage,stories,columns,selectColumn,alert,alertDesc,alertWhere,alertLoading,alertChild,alertConfirm,columnArray,onLoad} = this.state
     //console.log('storiesCount',storiesCount)
@@ -487,18 +488,18 @@ const PublisherStoryPage = React.createClass({
           {selectStatus===STATUS.PUBLISHED ? <MenuItem onClick={this.alertUnpublishStory} style={{color:theme.primaryColor,fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:theme.primaryColor}}>drafts</FontIcon>}>Unpublish</MenuItem>
           : <MenuItem onClick={this.alertPublishStory} style={{color:theme.primaryColor,fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:theme.primaryColor}}>assignment_turned_in</FontIcon>}>Publish</MenuItem>}
         </Popover>
-        <Alert 
+        <Alert
           open={alert}
           anchorEl={alertWhere}
           onRequestClose={this.handleRequestClose}
           description={alertDesc}
-          child={alertChild} 
+          child={alertChild}
           loading={alertLoading}
           confirm={alertConfirm}/>
         <div className='row' style={{padding:'30px 15px 20px 30px'}}>
           <DropdownWithIcon
-            onChange={this.changeColumn} 
-            menuItem={!columnArray ? null : columnArray} 
+            onChange={this.changeColumn}
+            menuItem={!columnArray ? null : columnArray}
             value={selectColumn}
             editMenu={
               [<MenuList onClick={this.goEditPage} key="edit">Edit</MenuList>,
@@ -527,7 +528,7 @@ const PublisherStoryPage = React.createClass({
         <Section2 style={{padding:'40px 5px 40px 5px'}}>
           {onLoad ? <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload> :
           <Table >
-            <TableHeader 
+            <TableHeader
               displaySelectAll={false}
               adjustForCheckbox={false}>
               <TableRow>
@@ -539,7 +540,7 @@ const PublisherStoryPage = React.createClass({
                 <TableHeaderColumn style={{width:'5%'}}></TableHeaderColumn>
               </TableRow>
             </TableHeader>
-            <TableBody 
+            <TableBody
               showRowHover={true}
               displayRowCheckbox={false}>
               {stories ? stories.map((story, index) => (
@@ -556,9 +557,9 @@ const PublisherStoryPage = React.createClass({
           </Table>}
         </Section2>
         {totalPages > 0 && <Page>
-          <Pagination 
-            currentPage={currentPage+1} 
-            totalPages={totalPages} 
+          <Pagination
+            currentPage={currentPage+1}
+            totalPages={totalPages}
             onChange={this.changePage}
           />
         </Page>}
@@ -570,4 +571,3 @@ PublisherStoryPage.contextTypes = {
 	setting: React.PropTypes.object
 };
 export default PublisherStoryPage;
-

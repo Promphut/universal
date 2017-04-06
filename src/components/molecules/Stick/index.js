@@ -6,8 +6,9 @@ const Container = styled.div`
   z-index:100;
   position: -webkit-sticky;
   position: sticky;
-  top:${props=> props.topOffset?props.topOffset:0}px;
-  bottom:${props=> props.bottomOffset?props.bottomOffset:0}px;
+  top: ${props=> props.topOffset?props.topOffset:0}px;
+  bottom: ${props=> props.bottomOffset?props.bottomOffset:0}px;
+	margin-bottom: ${props => props.marginBottom ? props.marginBottom : 0}px;
 `
 const Stick = React.createClass({
   getInitialState(){
@@ -85,6 +86,7 @@ const Stick = React.createClass({
 				bottomOffset={this.props.bottomOffset}
 				style={{...this.props.style}}
 				className={this.props.className}
+				marginBottom={this.props.marginBottom}
 			>
         {this.props.children}
       </Container>

@@ -64,14 +64,15 @@ const Thumpnail = React.createClass({
 
     return (
       <Container style={{...style}}>
-        <Link to={url}><OverlayImg src={coverMobile.small || coverMobile.medium} className='imgWidth' /></Link>
+        <Link to={url}><OverlayImg src={coverMobile.small || coverMobile.medium}
+          className='imgWidth' alt={title}/></Link>
         <NameLink to={url} className='sans-font'>{title}</NameLink>
         <Div className='sans-font'>5 min read</Div>
       </Container>
     )
   }
 })
-    
+
 
 
 export default Thumpnail;

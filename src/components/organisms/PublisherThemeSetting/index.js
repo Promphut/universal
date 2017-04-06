@@ -78,7 +78,7 @@ const TextStatus = styled.div`
   font-style:italic;
   float:left;
   margin:10px 0 0 15px;
-` 
+`
 
 const Color = styled.div`
   width:22px;
@@ -101,7 +101,7 @@ const Desc = styled.div`
   display:inline;
   width:350px;
   margin:8px 0 0 0;
-` 
+`
 
 const Example = styled.div`
   width:100%;
@@ -131,7 +131,7 @@ const PublisherThemeSetting = React.createClass({
       open1: false,
       open2: false,
       open2: false,
-      
+
       colorTheme:'light',
       primaryColor:'',
       secondaryColor:'',
@@ -150,7 +150,7 @@ const PublisherThemeSetting = React.createClass({
       anchorEl1: event.currentTarget,
     });
   },
-  
+
   handleTouchTap2(event){
     event.preventDefault();
     this.setState({
@@ -211,7 +211,7 @@ const PublisherThemeSetting = React.createClass({
       .get(config.BACKURL+'/publishers/'+config.PID)
       .set('Accept','application/json')
       .end((err,res)=>{
-        if(err) throw err 
+        if(err) throw err
         else{
           //console.log('publisher', res.body.publisher)
           self.setState({publisher:res.body.publisher})
@@ -223,7 +223,7 @@ const PublisherThemeSetting = React.createClass({
   updateData(e){
     e.preventDefault()
     var self = this
-    var data = 
+    var data =
     {
       publisher : {
         theme: {
@@ -240,7 +240,7 @@ const PublisherThemeSetting = React.createClass({
       .set('Accept','application/json')
       .send(data)
       .end((err,res)=>{
-        if(err) 
+        if(err)
           self.setState({
             textStatus:res.body.error.message,
             error:true
@@ -288,7 +288,7 @@ const PublisherThemeSetting = React.createClass({
     var shade = []
     for(var i=1;i<7;i++){
       shade.push(
-        <ShadeColor key={i} className={'bg'+i}></ShadeColor>     
+        <ShadeColor key={i} className={'bg'+i}></ShadeColor>
       )
     }
     //console.log('colorTheme', colorTheme, primaryColor)
@@ -414,11 +414,11 @@ const PublisherThemeSetting = React.createClass({
                 style={styles.radioButton}
               />
             </RadioButtonGroup>
-             
+
             <div className='row sans-font' style={{border:'1px solid #e2e2e2',padding:'10px',margin:'20px 0 0 0'}}>
               <Topbar style={{backgroundColor:colorTheme=='light'?'white':primaryColor,marginBottom:'20px'}}>
                 <i className="material-icons" style={{margin:'9px',color:colorTheme=='light'?'#222':'white',float:'left'}}>menu</i>
-                {theme.primaryColor&&<LogoLink id='priview'  src={theme.logo} style={{float:'left',width:'100',margin:'12px'}} fill={colorTheme=='light'?primaryColor:'#ffffff'} to="/"  title='preview loo'/>}
+                {theme.primaryColor&&<LogoLink id='priview'  src={theme.logo} style={{float:'left',width:'100',margin:'12px'}} fill={colorTheme=='light'?primaryColor:'#ffffff'} title='logo'/>}
                 <div className='nunito-font' style={{fontWeight:'bold',color:colorTheme=='light'?'#222':'white',padding:'8px'}}>About</div>
                 <div className='nunito-font' style={{fontWeight:'bold',color:colorTheme=='light'?'#222':'white',padding:'8px'}}>Contact</div>
                 <RaisedButton
@@ -474,7 +474,7 @@ const PublisherThemeSetting = React.createClass({
           <SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/>
           <TextStatus style={{color:error?'#D8000C':theme.accentColor}}>{textStatus}</TextStatus>
         </div>
-        
+
       </Container>
     )
   },

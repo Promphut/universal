@@ -5,15 +5,14 @@ import FontIcon from 'material-ui/FontIcon';
 
 const Tag = styled.div`
   float:left;
-  border:1px solid #8F8F8F;
+  border:1px solid #e2e2e2;
   color:#8F8F8F;
   text-align:center;
   padding:10px 15px 10px 15px;
   font-size:16px;
 
   &:hover{
-    box-shadow: 0px 0px 1px #888888;
-    text-shadow:0 0 1px #8F8F8F;
+    color:${props=>props.theme.accentColor}
     cursor:pointer;
   }
   @media (max-width:480px){
@@ -22,10 +21,10 @@ const Tag = styled.div`
   }
 `
 
-const TagBox = ({text,style}) => {
+const TagBox = ({children,style}) => {
   var stl = style 
   return(
-    <Tag style={{...stl}}>{text}</Tag>
+    <Tag style={{...stl}}>{children}</Tag>
   )
 }
 
