@@ -12,7 +12,7 @@ const styles = {
   },
 
   listItem:{
-    padding:'20px 20px 20px 20px',
+    padding:'16px 20px 16px 20px',
     color:"white",
     fontFamily: "'Nunito', 'Mitr', sans-serif",
     fontWeight: 'bold'

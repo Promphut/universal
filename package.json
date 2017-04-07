@@ -89,6 +89,7 @@
     "react-rte": "^0.11.0",
     "react-slick": "^0.14.6",
     "react-sticky": "^5.0.5",
+    "react-swipeable-views": "^0.11.2",
     "react-tap-event-plugin": "^2.0.1",
     "react-ultimate-pagination": "^1.0.0",
     "styled-components": "^1.2.1",
