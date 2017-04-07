@@ -729,7 +729,7 @@ const muiTheme = getMuiTheme({
 const App = React.createClass({
   render(){
     var {name, desc, theme} = this.context.setting.publisher
-    console.log(this.context.setting)
+    //console.log(this.context.setting)
     var {children} = this.props
     var muiTheme = getMuiTheme({
       appBar: {
