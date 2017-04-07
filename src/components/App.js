@@ -710,7 +710,7 @@ const tagManager = function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id=%27+i+dl;f.parentNode.insertBefore(j,f)';
   };
-  
+
 
 const facebookUI = function(d, s, id){
     var js, fjs = d.getElementsByTagName(s)[0];
@@ -736,8 +736,8 @@ const App = React.createClass({
         height: 60,
       },
       menuItem: {
-        hoverTextColor:'#fff',
-        selectedTextColor: "#fff",
+        hoverTextColor:'#FFF',
+        selectedTextColor: "#FFF",
       },
       textField: {
         floatingLabelColor: theme.accentColor,
@@ -754,6 +754,9 @@ const App = React.createClass({
         // secondaryColor: theme.secondaryColor,
         // secondaryTextColor: theme.secondaryColor,
       },
+      tabs: {
+        selectedTextColor: "#FFF"
+      }
     });
     return (
       <div>
@@ -767,7 +770,7 @@ const App = React.createClass({
           <meta property="og:description" content={desc} />
           <script>{ tagManager(window,document,'script','dataLayer','GTM-MCM6KWJ') }</script>
         </Helmet>
-        
+
         <script>{window.fbAsyncInit =   function() {
           FB.init({
             appId      : '443088079071757',

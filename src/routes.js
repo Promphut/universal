@@ -11,7 +11,7 @@ import {
     PublisherSettingPage, ForgetPasswordPage, PublisherEditor, PublisherContactAndAboutPage,
     UserSettingProfile, UserSettingAccount, UserSettingStory, ColumnPage, PublisherPage,
     UserStory, AllStory, AllColumn, NewStory, NotFoundPage, ErrorPage, AboutPage, ContactPage, StoryPage,
-    EditStory,TagPage
+    EditStory,TagPage, PublisherInsightStories,PublisherInsightColumns, PublisherInsightWriters
   } from 'components'
 import api from 'components/api'
 
@@ -48,7 +48,7 @@ const loggedIn = (nextState, replace, next) => {
 // if this is true, it will optimistically ignore cid, just check only role type and user.
 const hasRoles = (roles, bypassCidCheck) => {
   return (nextState, replace, next) => {
-    let user = auth.getUser(), 
+    let user = auth.getUser(),
         cid = nextState.params.cid || nextState.location.query.cid
     //console.log('hasRoles', user, cid, roles, bypassCidCheck, auth.hasRoles(roles, cid, bypassCidCheck))
     if(!user) return toSignin(nextState, replace, next)()
@@ -145,12 +145,16 @@ const routes = (
       <Route path='settings' component={PublisherSettingPage} onEnter={hasRoles(['ADMIN'])}/>
       <Route path='contact' component={PublisherContactAndAboutPage} onEnter={hasRoles(['ADMIN'])}/>
 
-      <Route path='stories' component={PublisherStoryPage} onEnter={hasRoles(['ADMIN', 'EDITOR'])}/>      
+      <Route path='manage' component={PublisherStoryPage} onEnter={hasRoles(['ADMIN', 'EDITOR'])}/>
       <Route path='columns/:cid' onEnter={hasRoles(['ADMIN', 'EDITOR'], false)}>
         <Route path='settings' component={ColumnSettingPage}/>
       </Route>
+
+      <Route path='stories' component={PublisherInsightStories} onEnter={hasRoles(['ADMIN', 'EDITOR'])}/>
+      <Route path='columns' component={PublisherInsightColumns} onEnter={hasRoles(['ADMIN', 'EDITOR'])}/>
+      <Route path='writers' component={PublisherInsightWriters} onEnter={hasRoles(['ADMIN', 'EDITOR'])}/>
     </Route>
-    
+
     <Route path='me' component={UserSetting} onEnter={loggedIn}>
       <Route path='settings' component={UserSettingProfile}/>
       <Route path='settings/account' component={UserSettingAccount}/>

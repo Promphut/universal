@@ -23,7 +23,7 @@
 
   <script type="text/javascript">
     var doc = document.documentElement;
-    
+
     window.getWidth = () => {
       return window.innerWidth || doc.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
     }
@@ -40,7 +40,7 @@
       return (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0)
     }
     window.isMobile = () => {
-      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
     }
 
     window.getFbUrl = (fbid) => {
@@ -54,9 +54,9 @@
     }
     window.getYtUrl = (username) => {
       // channel
-      if(username.startsWith('UC') && username.length===24) 
-        return 'http://youtube.com/channel/'+username 
-      
+      if(username.startsWith('UC') && username.length===24)
+        return 'http://youtube.com/channel/'+username
+
       // user
       return 'http://youtube.com/user/'+username
     }
@@ -96,11 +96,48 @@
 
     return t;
   }(document, "script", "twitter-wjs"));</script>
+  <script type="text/javascript">
+    var _sf_async_config = { uid: 65098, domain: 'nextempire.co', useCanonical: true };
+    (function() {
+    function loadChartbeat() {
+    window._sf_endpt = (new Date()).getTime();
+    var e = document.createElement('script');
+    e.setAttribute('language', 'javascript');
+    e.setAttribute('type', 'text/javascript');
+    e.setAttribute('src','//static.chartbeat.com/js/chartbeat.js');
+    document.body.appendChild(e);
+    };
+    var oldonload = window.onload;
+    window.onload = (typeof window.onload != 'function') ?
+    loadChartbeat : function() { oldonload(); loadChartbeat(); };
+    })();
+  </script>
 </head>
-<body>  
-  
+<body>
+
   <main id="app"></main>
   <!-- JS file will be automatically added here by html-webpack-plugin -->
 
+  <!-- Quantcast Tag -->
+  <script type="text/javascript">
+    var _qevents = _qevents || [];
+    (function() {
+    var elem = document.createElement('script');
+    elem.src = (document.location.protocol == "https:" ? "https://secure" : "http://edge") + ".quantserve.com/quant.js";
+    elem.async = true;
+    elem.type = "text/javascript";
+    var scpt = document.getElementsByTagName('script')[0];
+    scpt.parentNode.insertBefore(elem, scpt);
+    })();
+    _qevents.push({
+    qacct:"p-uSc6wXBs-FJmv"
+    });
+  </script>
+  <noscript>
+    <div style="display:none;">
+    <img src="//pixel.quantserve.com/pixel/p-uSc6wXBs-FJmv.gif" border="0" height="1" width="1" alt="Quantcast"/>
+    </div>
+  </noscript>
+  <!-- End Quantcast tag -->
 </body>
 </html>
