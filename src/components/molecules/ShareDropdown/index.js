@@ -20,10 +20,6 @@ const ShareDropdown = React.createClass({
   select(shareTo) {
     if (shareTo === 'facebook') {
       api.shareFB()
-    } else if (shareTo === 'twitter') {
-      console.log('Twitter share')
-    } else {
-      console.log('Copied')
     }
   },
 
@@ -84,7 +80,6 @@ const ShareDropdown = React.createClass({
             label={buttons[1]}
             labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
             style={{width: '180px', textAlign: 'left', display: 'inline-block'}}
-            onTouchTap={() => this.select('twitter')}
           />
           </a>
         </Hover>
@@ -94,7 +89,6 @@ const ShareDropdown = React.createClass({
               label={buttons[2]}
               labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
               style={{width: '180px', textAlign: 'left', display: 'inline-block'}}
-              onTouchTap={() => this.select('copy')}
             />
           </CopyToClipboard>
         </Hover>

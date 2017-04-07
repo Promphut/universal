@@ -1,9 +1,7 @@
 const config = {
 	development : {
-		PROFILE:'/tmp/avatar.png',
 		TWT:'https://twitter.com/intent/tweet',
 		PID:'11',
-		MAINCOLOR:'#00B2B4',
 		DOMAIN: 		'localhost',
 		FRONTURL: 		'http://localhost:3000',
 		BACKURL: 		'http://localhost:4000',
@@ -13,17 +11,12 @@ const config = {
 			EDITOR: 1, 
 			WRITER: 2, 
 			ADMIN: 3
-		},
-		THEME:{ 
-
 		}
 	},
 
 	production : {
-		PROFILE:'/tmp/avatar.png',
 		TWT:'https://twitter.com/intent/tweet',
 		PID:'11',
-		MAINCOLOR:'#00B2B4',
 		DOMAIN: 		'nextempire.co',
 		FRONTURL: 		'http://nextempire.co',
 		BACKURL: 		'http://api.nextempire.co',
@@ -33,9 +26,6 @@ const config = {
 			EDITOR: 1, 
 			WRITER: 2, 
 			ADMIN: 3
-		},
-		THEME:{ 
-
 		}
 	}
 }

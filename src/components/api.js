@@ -553,7 +553,9 @@ api.shareFB = ()=>{
 		method: 'share',
 		display: 'popup',
 		href: window.location.href,
-	}, function(response){});
+	}, function(response){
+		console.log('RESPONSE', response)
+	});
 }
 
 api.uploadFile = (file, type, toUrl) => {

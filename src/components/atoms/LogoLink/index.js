@@ -52,6 +52,7 @@ const LogoLink = React.createClass({
 			$svg.addClass(className)
 			//console.log(className,fill)
 			
+			//console.log('id', id)
 			if(!id) id = Math.round(Math.random()*10000)
 			$svg.attr('id', id)
 			//$svg.attr('fill', fill)
@@ -62,23 +63,27 @@ const LogoLink = React.createClass({
 			if(fill){
 				$svg.find('path').each(function(index,ele){
 					$(this).attr('fill', fill)
-					$(this).attr('id', id+$(this).attr('id'))
+					let oldId = $(this).attr('id')
+					if(oldId) $(this).attr('id', id+oldId)
 					//console.log(this)
 				})
 				$svg.find('use').each(function(index,ele){
 					$(this).attr('fill', fill)
-					$(this).attr('xlink:href', '#'+id+$(this).attr('xlink:href').replace('#', ''))
+					let oldId = $(this).attr('xlink:href').replace('#', '')
+					if(oldId) $(this).attr('xlink:href', '#'+id+oldId)
 					//console.log(this)
 				})
 			}else{
 				$svg.find('path').each(function(index,ele){
 					//$(this).attr('fill', fill)
-					$(this).attr('id', id+$(this).attr('id'))
+					let oldId = $(this).attr('id')
+					if(oldId) $(this).attr('id', id+oldId)
 					//console.log(this)
 				})
 				$svg.find('use').each(function(index,ele){
 					//$(this).attr('fill', fill)
-					$(this).attr('xlink:href', '#'+id+$(this).attr('xlink:href').replace('#', ''))
+					let oldId = $(this).attr('xlink:href').replace('#', '')
+					if(oldId) $(this).attr('xlink:href', '#'+id+oldId)
 					//console.log(this)
 				})
 			}
