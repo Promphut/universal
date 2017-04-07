@@ -58,6 +58,12 @@ const Hamburger = styled.i`
 	padding-top:5px;
 `
 
+const LogoWrapper = styled.div`
+	display: flex;
+	float: left;
+	height: 60px;
+`
+
 const Logo = styled.img`
 	height: 60px;
 	width: 60px;
@@ -185,8 +191,8 @@ const TopBar = React.createClass({
 	  const logoStyleBase = {
 	    display: 'inline-block',
 	    float: 'left',
-	    marginTop: '3px',
-	    padding: '17px 5px'
+	    margin: 'auto'
+	    // padding: '17px 5px'
 	  }
 		const logoStyle = window.isMobile() ? {
 			...logoStyleBase,
@@ -226,9 +232,10 @@ const TopBar = React.createClass({
 			      <HamburgerWrapper onClick={() => this.openPop('left')}>
 			        <Hamburger className="material-icons" style={!scrolling && transparent && hasCover ? {color:'white'} : {}}>menu</Hamburger>
 			      </HamburgerWrapper>
-
-						<LogoLink to="/" src={theme.logo} title={this.props.title} style={logoStyle} fill={theme.barTone=='light'?'':"#FFF"} />
-	      		<LogoLink to="/" src={theme.slogo} title={this.props.title} style={logoStyleMobile} fill={theme.barTone=='light'?'':'#FFF'} />
+						<LogoWrapper>
+							<LogoLink to="/" src={theme.logo} title={this.props.title} style={logoStyle} fill={theme.barTone=='light'?'':"#FFF"} />
+	      			<LogoLink to="/" src={theme.slogo} title={this.props.title} style={logoStyleMobile} fill={theme.barTone=='light'?'':'#FFF'} />
+						</LogoWrapper>
 					</Left>
 
 					<Center className={transparent ? 'hide': ''}>
