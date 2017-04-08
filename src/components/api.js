@@ -549,6 +549,7 @@ api.sendContactEmail = (contactCat, message) => {
 }
 
 api.shareFB = ()=>{
+	console.log('href', window.location.href)
     FB.ui({
 		method: 'share',
 		display: 'popup',

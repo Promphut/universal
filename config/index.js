@@ -11,6 +11,12 @@ const config = {
 			EDITOR: 1, 
 			WRITER: 2, 
 			ADMIN: 3
+		},
+		ANALYTIC: {
+			FBAPPID: '407326816302135',
+			TAGMGRID: 'GTM-MCM6KWJ',
+			CHARTBEATUID: 65098,
+			QUANTCASTACC: 'p-uSc6wXBs-FJmv'
 		}
 	},
 
@@ -26,6 +32,12 @@ const config = {
 			EDITOR: 1, 
 			WRITER: 2, 
 			ADMIN: 3
+		},
+		ANALYTIC: {
+			FBAPPID: '406151426419674',
+			TAGMGRID: 'GTM-MCM6KWJ',
+			CHARTBEATUID: 65098,
+			QUANTCASTACC: 'p-uSc6wXBs-FJmv'
 		}
 	}
 }

@@ -1,5 +1,7 @@
 module.exports = {
 	set: function(obj, str, val) {
+		//if(obj == null) obj = {}
+
 	    str = str.split(".");
 	    while (str.length > 1){
 	    	let key = str.shift()
