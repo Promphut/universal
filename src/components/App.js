@@ -708,8 +708,8 @@ injectTapEventPlugin();
 const tagManager = function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
   j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id=%27+i+dl;f.parentNode.insertBefore(j,f)';
-};
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+}
 
 const facebookUI = function(d, s, id){
   var js, fjs = d.getElementsByTagName(s)[0];
@@ -773,51 +773,6 @@ const App = React.createClass({
       }
     });
 
-    let fbJS = `
-      window.fbAsyncInit =   function() {
-        console.log('CALL ME')
-        FB.init({
-          appId      : '${config.ANALYTIC.FBAPPID}',
-          xfbml      : true,
-          version    : 'v2.8'
-        });
-        FB.AppEvents.logPageView();
-      }
-
-      (function(d, s, id){
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {return;}
-        js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-      }(document, 'script', 'facebook-jssdk'));
-    `
-
-    let tagMgrJS = `
-      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://www.googletagmanager.com/gtm.js?id=%27+i+dl;f.parentNode.insertBefore(j,f)';
-      }(window,document,'script','dataLayer','${config.ANALYTIC.TAGMGRID}'));
-    `
-
-    let chartbeatJs = `
-      var _sf_async_config = { uid: ${config.ANALYTIC.CHARTBEATUID}, domain: '${config.DOMAIN}', useCanonical: true };
-      (function() {
-        function loadChartbeat() {
-          window._sf_endpt = (new Date()).getTime();
-          var e = document.createElement('script');
-          e.setAttribute('language', 'javascript');
-          e.setAttribute('type', 'text/javascript');
-          e.setAttribute('src','//static.chartbeat.com/js/chartbeat.js');
-          document.body.appendChild(e);
-        };
-        var oldonload = window.onload;
-        window.onload = (typeof window.onload != 'function') ?
-          loadChartbeat : function() { oldonload(); loadChartbeat(); };
-      }())
-    `
-
     let quantcastJs = `
       var _qevents = _qevents || [];
       (function() {
@@ -875,19 +830,12 @@ const App = React.createClass({
             chartbeat()
           }</script>
           {/* CHARTBEAT */}
-
-          {/*<script type="text/javascript" dangerouslySetInnerHTML={{__html: tagMgrJS}}></script>
-          <script type="text/javascript" dangerouslySetInnerHTML={{__html: chartbeatJs}}></script>*/}
-          {/*analytic && analytic.tagManagerId ? <script>{ tagManager(window,document,'script','dataLayer',analytic.tagManagerId) }</script> : ''*/}
-          {/*analytic && analytic.chartbeatUid ? <script>{}</script> : ''*/}
         </Helmet>
 
         {/* TAGMANAGER */}
         <noscript><iframe src={'https://www.googletagmanager.com/ns.html?id='+config.ANALYTIC.TAGMGRID}
         height="0" width="0" style={{display:"none",visibility:"hidden"}}></iframe></noscript>
         {/* TAGMANAGER */}
-
-        {/*<script dangerouslySetInnerHTML={{__html: fbJS}}></script>*/}
 
         {/* FB */}
         <div id="fb-root"></div>
