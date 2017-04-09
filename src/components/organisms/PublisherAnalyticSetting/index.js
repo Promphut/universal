@@ -73,7 +73,9 @@ const PublisherAnalyticSetting = React.createClass({
     return {
       //publisher:{},
       analytic: {
-        tagManagerId: ''
+        tagManagerId: '',
+        quantcastAcc: '',
+        chartbeatUid: ''
       },
 
       textStatus:'Unsave',
@@ -82,18 +84,21 @@ const PublisherAnalyticSetting = React.createClass({
   },
 
   componentWillReceiveProps(nextProps){
-    this.analytic = _.cloneDeep(nextProps.analytic) // saved for reset
+    if(nextProps.analytic != this.props.analytic){
+      //console.log('componentWillReceiveProps', nextProps.analytic)
+      this.analytic = _.cloneDeep(nextProps.analytic) // saved for reset
 
-    this.setState({
-      analytic: nextProps.analytic
-    })
+      this.setState({
+        analytic: nextProps.analytic
+      })
+    }
   },
 
   analyticChanged(e){
     const name = e.target.name
     let analytic = _.cloneDeep(this.state.analytic)
+    //console.log('publisherChanged', analytic, name, e.target.value)
     utils.set(analytic, name, e.target.value)
-    //console.log('publisherChanged', pub, name, e.target.value)
     this.setState({
       analytic: analytic
     })
@@ -187,7 +192,23 @@ const PublisherAnalyticSetting = React.createClass({
             <div className="sans-font">Google Tag<br/> Manager ID</div>
           </Title>
           <Edit>
-             <TextField name='tagManagerId' onChange={this.analyticChanged} value={analytic&&analytic.tagManagerId} style={{marginTop:'20px'}}/>
+             <TextField name='tagManagerId' onChange={this.analyticChanged} value={analytic&&analytic.tagManagerId}/>
+          </Edit>
+        </Flex>
+        <Flex>
+          <Title>
+            <div className="sans-font">Quantcast <br/>Account ID</div>
+          </Title>
+          <Edit>
+             <TextField name='quantcastAcc' onChange={this.analyticChanged} value={analytic&&analytic.quantcastAcc}/>
+          </Edit>
+        </Flex>
+        <Flex>
+          <Title>
+            <div className="sans-font">Chartbeat UID</div>
+          </Title>
+          <Edit>
+             <TextField name='chartbeatUid' onChange={this.analyticChanged} value={analytic&&analytic.chartbeatUid}/>
           </Edit>
         </Flex>
         <div className='sans-font row' style={{marginTop:'80px'}}>

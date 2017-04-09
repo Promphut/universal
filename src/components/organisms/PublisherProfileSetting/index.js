@@ -72,7 +72,8 @@ const PublisherProfileSetting = React.createClass({
         tagline:'',
         cover: {
           medium: ''
-        }
+        },
+        keywords:''
       },
 
       error:false,
@@ -157,6 +158,20 @@ const PublisherProfileSetting = React.createClass({
             <TextField
               value={pub.name}
               name='name'
+              onChange={this.publisherChanged}
+            />
+          </Edit>
+        </Flex>
+        <Flex>
+          <Title>
+            <div className="sans-font">Keywords</div>
+          </Title>
+          <Edit>
+            <TextField
+              value={pub.keywords}
+              name='keywords'
+              floatingLabelText="Comma separated"
+              floatingLabelFixed={true}
               onChange={this.publisherChanged}
             />
           </Edit>

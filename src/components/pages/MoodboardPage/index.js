@@ -1,6 +1,6 @@
 import React from 'react'
 import styled,{keyframes} from 'styled-components'
-import {PrimaryButton, TopBarWithNavigation, SecondaryButton,AutoComplete,EditMenu,BoxMenu,MenuList,DropdownWithIcon,LeftMenu,Stick} from 'components'
+import { GraphDashboard, PrimaryButton, TopBarWithNavigation, SecondaryButton,AutoComplete,EditMenu,BoxMenu,MenuList,DropdownWithIcon,LeftMenu,Stick} from 'components'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import Popover from 'material-ui/Popover'
@@ -95,9 +95,12 @@ const MoodboardPage = React.createClass({
 		var {alert,alertDesc,alertWhere} = this.state
 		return (
 			<Wrapper>
+
 				<Stick>
 					<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 				</Stick>
+
+				<GraphDashboard/>
 				<LeftMenu open={alert} close={this.handleRequestClose}/>
 				<h1>Medium Buttons</h1>
 				<section>

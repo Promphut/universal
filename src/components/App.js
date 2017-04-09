@@ -706,19 +706,32 @@ injectGlobal`
 injectTapEventPlugin();
 
 const tagManager = function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id=%27+i+dl;f.parentNode.insertBefore(j,f)';
-  };
-
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+}
 
 const facebookUI = function(d, s, id){
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) {return;}
-    js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/en_US/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js";
+  fjs.parentNode.insertBefore(js, fjs);
+};
+
+const chartbeat = function() {
+  function loadChartbeat() {
+    window._sf_endpt = (new Date()).getTime();
+    var e = document.createElement('script');
+    e.setAttribute('language', 'javascript');
+    e.setAttribute('type', 'text/javascript');
+    e.setAttribute('src','//static.chartbeat.com/js/chartbeat.js');
+    document.body.appendChild(e);
   };
+  var oldonload = window.onload;
+  window.onload = (typeof window.onload != 'function') ?
+    loadChartbeat : function() { oldonload(); loadChartbeat(); };
+}
 
 const muiTheme = getMuiTheme({
   appBar: {
@@ -728,10 +741,11 @@ const muiTheme = getMuiTheme({
 
 const App = React.createClass({
   render(){
-    var {name, desc, theme} = this.context.setting.publisher
-    //console.log(this.context.setting)
-    var {children} = this.props
-    var muiTheme = getMuiTheme({
+    let {name, desc, theme, tagline, keywords, analytic, channels, cover} = this.context.setting.publisher
+    if(!analytic) analytic = {}
+    console.log('context', this.context.setting, this.props.location)
+    let {children} = this.props
+    let muiTheme = getMuiTheme({
       appBar: {
         height: 60,
       },
@@ -758,31 +772,96 @@ const App = React.createClass({
         selectedTextColor: "#FFF"
       }
     });
+
+    let quantcastJs = `
+      var _qevents = _qevents || [];
+      (function() {
+        var elem = document.createElement('script');
+        elem.src = (document.location.protocol == "https:" ? "https://secure" : "http://edge") + ".quantserve.com/quant.js";
+        elem.async = true;
+        elem.type = "text/javascript";
+        var scpt = document.getElementsByTagName('script')[0];
+        scpt.parentNode.insertBefore(elem, scpt);
+      })();
+      _qevents.push({
+        qacct:"${config.ANALYTIC.QUANTCASTACC}"
+      });
+    `
+
+    let title = name + (tagline ? ' | ' + tagline : '')
+
+    var _sf_async_config = { 
+      uid: config.ANALYTIC.CHARTBEATUID, 
+      domain: config.DOMAIN, 
+      useCanonical: true 
+    };
+    if(window) window._sf_async_config = _sf_async_config
+
     return (
       <div>
         <Helmet>
-          <title>{name}</title>
-          <meta name="title" content={name} />
+          <title>{title}</title>
+          <meta name="title" content={title} />
+          <meta name="keywords" content={keywords} />
           <meta name="description" content={desc} />
-          <link rel="shortcut icon" type="image/ico" href={config.BACKURL+'/publishers/11/favicon'} />
+
+          <link rel="shortcut icon" type="image/ico" href={config.BACKURL+'/publishers/'+config.PID+'/favicon'} />
+          {channels && channels.fb ? <link rel="author" href={getFbUrl(channels.fb)} /> : ''}
+          <link rel="canonical" href={config.FRONTURL+this.props.location.pathname} />
+
           <meta property="og:sitename" content={name} />
-          <meta property="og:title" content={name} />
+          <meta property="og:url" content={config.FRONTURL+this.props.location.pathname} />
+          <meta property="og:title" content={title} />
+          <meta property="og:type" content="article" />
+          {/*<meta property="og:image" content={cover.medium} />*/}
+          <meta property="og:keywords" content={keywords} />
           <meta property="og:description" content={desc} />
-          <script>{ tagManager(window,document,'script','dataLayer','GTM-MCM6KWJ') }</script>
+          <meta property="twitter:card" content="summary_large_image" />
+          <meta property="twitter:image:alt" content={title} />
+
+          {/* TAGMANAGER */}
+          <script>{
+            tagManager(window,document,'script','dataLayer',config.ANALYTIC.TAGMGRID)
+          }</script>
+          {/* TAGMANAGER */}
+
+          {/* CHARTBEAT */}
+          <script>{
+            chartbeat()
+          }</script>
+          {/* CHARTBEAT */}
         </Helmet>
 
-        <script>{window.fbAsyncInit =   function() {
-          FB.init({
-            appId      : '443088079071757',
-            xfbml      : true,
-            version    : 'v2.8'
-          });
-          FB.AppEvents.logPageView();
-        }   }</script>
-        <script>{ facebookUI(document, 'script', 'facebook-jssdk') }</script>
-
-        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MCM6KWJ"
+        {/* TAGMANAGER */}
+        <noscript><iframe src={'https://www.googletagmanager.com/ns.html?id='+config.ANALYTIC.TAGMGRID}
         height="0" width="0" style={{display:"none",visibility:"hidden"}}></iframe></noscript>
+        {/* TAGMANAGER */}
+
+        {/* FB */}
+        <div id="fb-root"></div>
+        <script>{
+          window.fbAsyncInit =   function() {
+            FB.init({
+              appId      : config.ANALYTIC.FBAPPID,
+              xfbml      : true,
+              version    : 'v2.8'
+            });
+            FB.AppEvents.logPageView();
+          }
+        }</script>
+        <script>{
+          facebookUI(document, 'script', 'facebook-jssdk')
+        }</script>
+        {/* FB */}
+        
+        {/* QUANTCAST */}
+        <script dangerouslySetInnerHTML={{__html: quantcastJs}}></script>
+        <noscript>
+          <div style={{display:'none'}}>
+            <img src={'//pixel.quantserve.com/pixel/'+config.ANALYTIC.QUANTCASTACC+'.gif'} border="0" height="1" width="1" alt="Quantcast"/>
+          </div>
+        </noscript>
+        {/* QUANTCAST */}
 
         <MuiThemeProvider muiTheme={muiTheme}>
           {children}
