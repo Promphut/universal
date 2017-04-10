@@ -1,6 +1,6 @@
 import React from 'react'
 import {TopBarWithNavigation, ArticleBox, ArticleBoxLarge, More, TrendingSideBar,
-	BGImg, StoryMenu, Stick, Footer} from 'components'
+	BGImg, StoryMenu, Stick, Footer,EmptyStory} from 'components'
 import {findDOMNode as dom} from 'react-dom'
 import styled from 'styled-components'
 import FlatButton from 'material-ui/FlatButton';
@@ -223,9 +223,9 @@ const ColumnPage = React.createClass({
 							style={{padding:'15px 0 15px 0', margin:'0 0 50px 0'}}
 							next={column.name}
 						/>
-						<TextLine className='sans-font'>Latest</TextLine>
+						{latestStories.length!=0?<TextLine className='sans-font'>Latest</TextLine>:''}
 
-							<Infinite
+							{latestStories.length!=0?<Infinite
 									containerHeight={!isMobile?(count*210)-100:(count*356)-100}
 									elementHeight={!isMobile?210:356}
 									infiniteLoadBeginEdgeOffset={loadOffset}
@@ -237,9 +237,9 @@ const ColumnPage = React.createClass({
 								{latestStories.length!=0?latestStories.map((story, index) => (
 									<ArticleBox detail={story} key={index}/>
 								)):''}
-							</Infinite>
+							</Infinite>: <EmptyStory title='No Story, yet' description='There are no stories in this column right now. Wanna back to see other columns?' />}
 
-						<More style={{margin:'30px auto 30px auto'}} />
+						{latestStories.length!=0?<More style={{margin:'30px auto 30px auto'}} />:''}
 						<div ref='more'></div>
 			      </Main>
 			      <Aside>

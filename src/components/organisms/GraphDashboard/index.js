@@ -7,23 +7,39 @@ import api from 'components/api'
 import * as d3 from "d3";
 import {findDOMNode as dom} from 'react-dom'
 import {Tabs, Tab} from 'material-ui/Tabs';
+import FlatButton from 'material-ui/FlatButton';
+import FontIcon from 'material-ui/FontIcon';
+import DatePicker from 'react-datepicker';
+import moment from 'moment'
+import Popover from 'material-ui/Popover';
 
+require('react-datepicker/dist/react-datepicker.css');
 const Wrapper = styled.div`
     padding:80px 0 80px 0;
-
+    .row{
+        overflow:hidden;
+        display:block;
+    }
+    .total{
+        float:right;
+        margin:0 30px 0 20px;
+    }
+    .inputDate{
+        outline:none;
+    }
 `
 const Chart = styled.div`
     g {
         font-family:'nunito';
     }
     .area{
-        fill:#1EB2CF;
+        fill:${props=>props.theme.accentColor};
         opacity:0.4;
     }
     .line{
         fill:none;
         stroke-width:3px;
-        stroke:#1EB2CF;
+        stroke:${props=>props.theme.accentColor};
     }
 `
 const X = styled.g`
@@ -42,6 +58,11 @@ const Label = styled.div`
     display:inline;
     font-size:16px;
     font-weight:bold;
+`
+const Num = styled.div`
+    font-size:30px;
+    font-weight:bold;
+
 `
 
 var Axis=React.createClass({
@@ -125,21 +146,21 @@ var LineChart=React.createClass({
     },
     render(){
         var data=[
-            {day:'02-11-2016',count:180},
-            {day:'02-12-2016',count:250},
-            {day:'02-13-2016',count:150},
-            {day:'02-14-2016',count:496},
-            {day:'02-15-2016',count:140},
-            {day:'02-16-2016',count:380},
-            {day:'02-17-2016',count:100},
-            {day:'02-18-2016',count:150}
+            {day:'03/11/2017',count:180},
+            {day:'03/12/2017',count:250},
+            {day:'03/13/2017',count:150},
+            {day:'03/14/2017',count:496},
+            {day:'03/15/2017',count:140},
+            {day:'04/16/2017',count:380},
+            {day:'04/17/2017',count:100},
+            {day:'04/18/2017',count:150}
         ];
 
-        var margin = {top: 50, right: 80, bottom: 50, left: 80},
+        var margin = {top: 50, right: 30, bottom: 50, left: 30},
             w = this.state.width - (margin.left + margin.right),
             h = this.props.height - (margin.top + margin.bottom);
 
-        var parseDate =  d3.timeParse("%m-%d-%Y");
+        var parseDate =  d3.timeParse("%m/%d/%Y");
 
         data.forEach(function (d) {
             d.date = parseDate(d.day);
@@ -195,7 +216,10 @@ var LineChart=React.createClass({
 const GraphDashboard = React.createClass({
 	getInitialState(){
 		return {
-
+            startDate1:moment().subtract(30, 'days'),
+            startDate2:moment(),
+            swipPicker:true,
+            open:false,
 		}
 	},
 
@@ -207,8 +231,42 @@ const GraphDashboard = React.createClass({
 
 	},
 
+    handleChangeDate(e){
+        this.setState({
+            startDate1: e,
+            open:false,
+        });
+    },
+    handleRequestClose(){
+        this.setState({
+            open: false,
+        });
+    },
+    openDatePicker(e){
+        this.setState({
+            open:true,
+            swipPicker:true,
+            anchorEl:e.currentTarget
+        })
+    },
+    handleChangeDate2(e){
+        //console.log(e)
+        this.setState({
+            startDate2: e,
+            open:false,
+        });
+    },
+    openDatePicker2(e){
+        this.setState({
+            open:true,
+            swipPicker:false,
+            anchorEl:e.currentTarget
+        })
+    },
+
 	render(){
     var {theme} = this.context.setting.publisher
+    var {startDate1,startDate2,open,anchorEl,swipPicker} = this.state
     const styles = {
         headline: {
             fontSize: 24,
@@ -219,6 +277,21 @@ const GraphDashboard = React.createClass({
         };
 	return (
         <Wrapper>
+            <Popover
+            open={open}
+            anchorEl={anchorEl}
+            onRequestClose={this.handleRequestClose}
+            >
+            {swipPicker?
+                <DatePicker
+                selected={startDate1}
+                onChange={this.handleChangeDate}
+                inline/>:
+                <DatePicker
+                selected={startDate2}
+                onChange={this.handleChangeDate2}
+                inline/>}
+            </Popover>
             <Tabs style={{width:500}} tabItemContainerStyle={{background:theme.primaryColor,color:'#000'}} tabTemplateStyle={{background:'none',color:'#000'}} inkBarStyle={{background:theme.accentColor}}>
                 <Tab label="View" >
                 </Tab>
@@ -227,8 +300,29 @@ const GraphDashboard = React.createClass({
                 <Tab label="Number of Stories">
                 </Tab>
             </Tabs>
-            <div className='row'>
-                <Label className="sans-font">Start:</Label><Label className="sans-font">End:</Label>
+            <div className='row' style={{marginTop:'50px'}}>
+                <Label className="sans-font" style={{margin:'6px 15px 0 0'}}>Start:</Label>
+                <div style={{display:'inline-block'}}>
+                    <FlatButton
+                    onClick={this.openDatePicker}
+                    style={{border:'1px solid #c4c4c4',borderRadius:'20px',padding:'0 10px 0 15px'}}
+                    icon={<FontIcon className='material-icons' style={{color:'#c4c4c4',marginLeft:'15px'}}>keyboard_arrow_down</FontIcon>}>
+                    {moment(startDate1).format('MM/DD/YYYY')}</FlatButton>
+                </div>
+                <Label className="sans-font" style={{margin:'6px 15px 0 40px'}}>End:</Label>
+                <FlatButton
+                    onClick={this.openDatePicker2}
+                    style={{border:'1px solid #c4c4c4',borderRadius:'20px',padding:'0 10px 0 15px'}}
+                    icon={<FontIcon className='material-icons' style={{color:'#c4c4c4',marginLeft:'15px'}}>keyboard_arrow_down</FontIcon>}>
+                    {moment(startDate2).format('MM/DD/YYYY')}</FlatButton>
+                <div className="total">
+                    <Label style={{color:'#8e8e8e'}}>Average per story</Label>
+                    <Num className='serif-font' >189,057</Num>
+                </div> 
+                <div className="total">
+                    <Label style={{color:'#8e8e8e'}}>Total</Label>
+                    <Num className='serif-font' style={{color:theme.accentColor}}>189,057</Num>
+                </div>    
             </div>
             <LineChart width={1200} height={500}/>
         </Wrapper>
