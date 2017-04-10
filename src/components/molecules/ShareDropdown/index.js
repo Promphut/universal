@@ -2,9 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon'
 import FlatButton from 'material-ui/FlatButton'
-import {Dropdown} from 'components'
+import {Dropdown,TwtShareButton, FbShareButton} from 'components'
 import CopyToClipboard from 'react-copy-to-clipboard'
-import api from 'components/api'
+
 const Hover = styled.div`
 `
 
@@ -14,12 +14,6 @@ const ShareDropdown = React.createClass({
       open: false,
       copied: false,
       hover: -1
-    }
-  },
-
-  select(shareTo) {
-    if (shareTo === 'facebook') {
-      api.shareFB()
     }
   },
 
@@ -67,21 +61,28 @@ const ShareDropdown = React.createClass({
     const button = (
       <div onMouseLeave={this.onNotHover}>
         <Hover onMouseEnter={() => this.onHover(0)}>
-          <FlatButton
-            label={buttons[0]}
-            labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
-            style={{width: '180px', textAlign: 'left', display: 'inline-block'}}
-            onTouchTap={() => this.select('facebook')}
-          />
+          <FbShareButton url={config.FRONTURL+this.props.url} button={
+            <FlatButton
+              label={buttons[0]}
+              labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
+              style={{width: '180px', textAlign: 'left', display: 'inline-block'}}
+            />
+          } />
+          {/*<FlatButton
+              label={buttons[0]}
+              labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
+              style={{width: '180px', textAlign: 'left', display: 'inline-block'}}
+              onTouchTap={() => this.select('facebook')}
+            />*/}
         </Hover>
         <Hover onMouseEnter={() => this.onHover(1)}>
-          <a href={config.TWT}>
-          <FlatButton
-            label={buttons[1]}
-            labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
-            style={{width: '180px', textAlign: 'left', display: 'inline-block'}}
-          />
-          </a>
+          <TwtShareButton url={config.FRONTURL+this.props.url} button={
+            <FlatButton
+              label={buttons[1]}
+              labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
+              style={{width: '180px', textAlign: 'left', display: 'inline-block'}}
+            />
+          } />
         </Hover>
         <Hover onMouseEnter={() => this.onHover(2)}>
           <CopyToClipboard text={config.FRONTURL+this.props.url} onCopy={() => this.setState({copied: true})}>

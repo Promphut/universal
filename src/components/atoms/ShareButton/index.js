@@ -33,7 +33,7 @@ const label = (text, number) => {
   )
 }
 
-const ShareButton = ({className, number, color, style,onClick}) => {
+const ShareButton = ({className, number, color, style, onClick}) => {
   return (
     <FlatButton
       onClick={onClick}

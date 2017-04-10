@@ -548,15 +548,22 @@ api.sendContactEmail = (contactCat, message) => {
 	}, api.err)
 }
 
-api.shareFB = ()=>{
-	console.log('href', window.location.href)
-    FB.ui({
-		method: 'share',
-		display: 'popup',
-		href: window.location.href,
-	}, function(response){
-		console.log('RESPONSE', response)
-	});
+// sid and action is mandatory
+// subaction is optional
+api.incStoryInsight = (sid, action, subaction) => {
+	if(sid == null) return Promise.reject(new Error('sid is required.'))
+	if(action == null) return Promise.reject(new Error('action is required.'))
+
+	let url = config.BACKURL+'/insights/stories/'+sid+'/'+action
+	if(subaction!=null) url += '/'+subaction
+
+	return Request
+	.post(url)
+	.set('Accept','application/json')
+	.then(res => {
+		console.log('api.incStoryInsight', res.body)
+		return res.body
+	}, api.err)
 }
 
 api.uploadFile = (file, type, toUrl) => {
