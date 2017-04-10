@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {PrimaryButton,SecondaryButton} from 'components'
+import {PrimaryButton,SecondaryButton,Alert} from 'components'
 import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
 import Menu from 'material-ui/Menu';
@@ -51,11 +51,23 @@ const Edit = styled.div`
   max-width:480px;
 `
 
-const AddTag = styled.div`
+const AddTag1 = styled.div`
   color:#8F8F8F;
   font-size:16px;
   overflow:hidden;
   margin-top:20px;
+  &:hover{
+    cursor:pointer;
+  }
+`
+const AddTag2 = styled.div`
+  color:#8F8F8F;
+  font-size:16px;
+  overflow:hidden;
+  margin-top:20px;
+  &:hover{
+    cursor:${props=>props.selected?'pointer':'not-allowed'};
+  }
 `
 
 const style = {
@@ -105,36 +117,17 @@ const PublisherPublishingSetting = React.createClass({
     return {
       admins: [],
       adminToRemove: {},
-
       adminSearchText: '',
-      
+      alert:false,
       dialog:false,
       userToAdmin:[],
-      selectedTag: undefined,
+      selectedTag:'',
       autoState:false,
-      tags: [
-        'Red',
-        'Orange',
-        'Yellow',
-        'Green',
-        'Blue',
-        'Purple',
-        'Black',
-        'White',
-      ],
-      initTags: [
-        'Red',
-        'Orange',
-        'Yellow',
-        'Green',
-        'Blue',
-        'Purple',
-        'Black',
-        'White',
-      ],
-
+      tags: [],
+      initTags:[],
       textStatus:'Unsave',
-      error:false
+      error:false,
+      newTagName:''
     }
   },
 
@@ -143,7 +136,7 @@ const PublisherPublishingSetting = React.createClass({
     //const chipToDelete = admins.map((data, index) => data.id).indexOf(adminRemoveName.id);
     //admins.splice(chipToDelete, 1);
     admins = _.reject( admins, {value: adminToRemove.value} )
-
+    this.setState({alert:false})
     api.removeAdmin(adminToRemove.value)
     .then(result => {
       this.setState({
@@ -160,16 +153,20 @@ const PublisherPublishingSetting = React.createClass({
     })
   },
 
-  handleOpen(admin){
+  handleOpen(e,admin){
     //console.log(admin)
     this.setState({
-      dialog: true, 
+      alert: true,
+      alertDesc:"Are you sure to remove this person from admin role ?",
+      alertConfirm:this.deleteAdmin,
+      alertWhere:e.currentTarget,
+      alertChild:'',
       adminToRemove:admin
     });
   },
 
-  handleClose(e){
-    this.setState({dialog: false});
+  handleClose(){
+    this.setState({alert: false});
   },
 
   getAdmin(){
@@ -182,10 +179,19 @@ const PublisherPublishingSetting = React.createClass({
       this.setState({ admins:admins })
     })
   },
-
-  componentDidMount(){
+  getTag(){
+    api.getTags().then((res)=>{
+      //console.log(res)
+      this.setState({tags:res,initTags:res})
+      //console.log(res)
+    })
+  },
+  componentWillMount(){
+    this.getTag()
     this.getAdmin()
-    document.addEventListener('click', this.handleClickOutside)
+  },
+  componentDidMount(){
+
   },
 
   addAdmin(item, index){
@@ -237,35 +243,66 @@ const PublisherPublishingSetting = React.createClass({
 
   filterTags(event, searchText) {
     this.setState({
-      tags: _.filter(this.state.initTags, tag => tag.toLowerCase().indexOf(searchText.toLowerCase()) !== -1)
+      tags: _.filter(this.state.initTags, tag => tag.name.toLowerCase().indexOf(searchText.toLowerCase()) !== -1)
     }, () => {
       this.refs.searchText.focus()
     })
   },
 
   changeItem(event, menuItem, index) {
+    //console.log(menuItem.props.value)
     this.setState({
-      selectedTag: index
+      selectedTag: menuItem.props.value
     })
   },
 
-  handleClickOutside(evt) {
-    const area = dom(this.refs.menu);
 
-    if (area && !area.contains(evt.target)) {
-      this.setState({
-        selectedTag: undefined
-      })
-    }
+
+  newTag(){
+    this.setState({alert:false,newTagName:''})
+    api.addTag(this.state.newTagName).then((res)=>{
+      this.getTag()
+    })
+  },
+
+  removeTag(){
+    this.setState({alert:false,selectedTag:''})
+    //console.log(this.state.selectedTag)
+    api.removeTag(this.state.selectedTag).then((res)=>{
+      this.getTag()
+    })
+  },
+  alertRemoveTag(e){
+    this.setState({
+      alert: true,
+      alertDesc:"Are you sure to remove this tag ?",
+      alertConfirm:this.removeTag,
+      alertWhere:e.currentTarget,
+      alertChild:'',
+    });
+  },
+  alertNewTag(e){
+    this.setState({
+      alert: true,
+      alertDesc:"",
+      alertConfirm:this.newTag,
+      alertWhere:e.currentTarget,
+      alertChild:<div className='row'><TextField hintText="New Tag Name" value={this.state.value} onChange={this.ChangeTagName} style={{width:'170px',margin:'10px 15px 0 15px'}}/></div>,
+    });
+  },
+
+  ChangeTagName(e){
+    this.setState({newTagName:e.target.value})
   },
 
   render(){
-    let {admins,textStatus,error,adminToRemove,dialog,userToAdmin,adminSearchText,selectedTag,autoState,tags} = this.state
-    let menu=[]
+    var {theme} = this.context.setting.publisher
+    let {alert,alertWhere,alertChild,alertDesc,alertConfirm,admins,textStatus,error,adminToRemove,userToAdmin,adminSearchText,selectedTag,autoState,tags} = this.state
+    let tag=[]
+    
     for(let i=0;i<tags.length;i++){
-      menu.push(
-        // <MenuItem key={i} primaryText="Help &amp; feedback" />
-        <MenuItem key={i} value={i} primaryText={tags[i]} />
+      tag.push(
+        <MenuItem key={i} value={tags[i]._id} primaryText={tags[i].name} />
       )
     }
     //console.log('userToAdmin', userToAdmin, admins)
@@ -284,18 +321,16 @@ const PublisherPublishingSetting = React.createClass({
 
     return(
       <Container>
-        <Dialog
-          actions={actions}
-          modal={false}
-          contentStyle={{width:'600px'}}
-          open={dialog}
+        <Alert
+          open={alert}
+          anchorEl={alertWhere}
           onRequestClose={this.handleClose}
-        >
-          <p style={{fontSize:'20px'}}>Are you sure to remove {adminToRemove.text} ?</p>
-        </Dialog>
+          description={alertDesc}
+          child={alertChild}
+          confirm={alertConfirm}/>
+
         <div  className="head sans-font">PUBLISHING</div>
 
-        {/* THIS IS FOR THE NEXT VERSION
         <Flex>
           <Title>
             <div className="sans-font">Allowed Tags</div>
@@ -312,28 +347,28 @@ const PublisherPublishingSetting = React.createClass({
             <div className='row'>
               <Paper style={style} className="col-7">
                 <Menu
-                  selectedMenuItemStyle={{backgroundColor: '#00B2B4', color: 'black'}}
+                  selectedMenuItemStyle={{backgroundColor:theme.accentColor, color: 'white'}}
                   value={selectedTag}
                   onItemTouchTap={this.changeItem}
                   disableAutoFocus={true}
                   ref="menu">
-                  {menu}
+                  {tag}
                 </Menu>
               </Paper>
               <div className="col-4">
-                <AddTag>
+                <AddTag1 onClick={this.alertNewTag}>
                   <i className="fa fa-plus" style={{float:'left',margin:'20px 10px 0 0'}} aria-hidden="true"></i>
                   <div style={{float:'left',margin:'20px 20px 0 0'}}>New</div>
-                </AddTag>
-                <AddTag>
-                  <i className="fa fa-trash" style={(selectedTag === undefined) ? {float:'left',margin:'20px 10px 0 0', opacity:0.5} : {float:'left',margin:'20px 10px 0 0'}} aria-hidden="true"></i>
-                  <div style={(selectedTag === undefined) ? {float:'left',margin:'20px 20px 0 0', opacity:0.5} : {float:'left',margin:'20px 20px 0 0'}}>Delete Selected</div>
-                </AddTag>
+                </AddTag1>
+                <AddTag2 onClick={selectedTag!=''?this.alertRemoveTag:()=>{}} selected={selectedTag!=''?true:false}>
+                  <i className="fa fa-trash" style={(selectedTag != '') ? {float:'left',margin:'20px 10px 0 0'} : {float:'left',margin:'20px 10px 0 0', opacity:0.5}} aria-hidden="true"></i>
+                  <div style={(selectedTag != '') ? {float:'left',margin:'20px 20px 0 0'}:  {float:'left',margin:'20px 20px 0 0', opacity:0.5}}>Delete Selected</div>
+                </AddTag2>
               </div>
             </div>
             <Desc className='sans-font'>Used by a writer to tag a story. Adding a relevant tag help discovering your publiser better on search website. </Desc>
           </Edit>
-        </Flex>*/}
+        </Flex>
 
         <Flex>
           <Title>
@@ -344,7 +379,7 @@ const PublisherPublishingSetting = React.createClass({
               {admins.map((admin,index)=>(
                 <Chip
                   key={admin.value}
-                  onRequestDelete={() => this.handleOpen(admin)}
+                  onRequestDelete={(e) => this.handleOpen(e,admin)}
                   style={{margin:'4px'}}
                 >
                   {admin.text}
@@ -372,6 +407,9 @@ const PublisherPublishingSetting = React.createClass({
   },
 })
 
+PublisherPublishingSetting.contextTypes = {
+	setting: React.PropTypes.object
+};
 
 
 export default PublisherPublishingSetting

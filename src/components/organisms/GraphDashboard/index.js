@@ -234,7 +234,9 @@ const GraphDashboard = React.createClass({
 	componentWillReceiveProps(nextProps){
 
 	},
-
+    componentWillMount(){
+       // api.getStoryInsight(sid, action, subaction,period,from,to)
+	},
 	componentDidMount(){
 
 	},
@@ -306,7 +308,7 @@ const GraphDashboard = React.createClass({
             open={open}
             anchorEl={anchorEl}
             onRequestClose={this.handleRequestClose}
-            style={{background:''}}
+            style={{background:'none',boxShadow:'none'}}
             >
             {swipPicker?
                 <DatePicker
