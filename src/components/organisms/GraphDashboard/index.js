@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import api from 'components/api'
 import * as d3 from "d3";
 import {findDOMNode as dom} from 'react-dom'
-import {Tabs, Tab} from 'material-ui/Tabs';
+import {Tabs, Tab} from 'material-ui/Tabs'
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import DatePicker from 'react-datepicker';
@@ -214,6 +214,7 @@ var LineChart=React.createClass({
     }
 });
 
+
 const GraphDashboard = React.createClass({
     getDefaultProps() {
         return {
@@ -227,6 +228,7 @@ const GraphDashboard = React.createClass({
             startDate2:moment(),
             swipPicker:true,
             open:false,
+            selectTab:'view'
 		}
 	},
 
@@ -270,10 +272,14 @@ const GraphDashboard = React.createClass({
             anchorEl:e.currentTarget
         })
     },
-
+    handleChangeTab(e){
+        this.setState({
+            selectTab: e
+        })
+    },
 	render(){
     var {theme} = this.context.setting.publisher
-    var {startDate1,startDate2,open,anchorEl,swipPicker} = this.state
+    var {startDate1,startDate2,open,anchorEl,swipPicker,selectTab} = this.state
     const styles = {
         headline: {
             fontSize: 24,
@@ -281,14 +287,27 @@ const GraphDashboard = React.createClass({
             marginBottom: 12,
             fontWeight: 400,
         },
+        tabs: {
+            background: 'none',
+            height: '60px',
+            color: '#222222',
+        },
+        tab: {
+            fontFamily:"'Nunito', 'Mitr'",
+            fontSize: '16px',
+            fontWeight: 'bold',
+            textTransform: 'none'
+        }
     };
-    var {width,height} = this.props
+    var {width,height,style} = this.props
+
 	return (
         <Wrapper width={width}>
             <Popover
             open={open}
             anchorEl={anchorEl}
             onRequestClose={this.handleRequestClose}
+            style={{background:''}}
             >
             {swipPicker?
                 <DatePicker
@@ -300,13 +319,13 @@ const GraphDashboard = React.createClass({
                 onChange={this.handleChangeDate2}
                 inline/>}
             </Popover>
-            <Tabs style={{width:500}} tabItemContainerStyle={{background:theme.primaryColor,color:'#000'}} tabTemplateStyle={{background:'none',color:'#000'}} inkBarStyle={{background:theme.accentColor}}>
-                <Tab label="View" >
-                </Tab>
-                <Tab label="Share" >
-                </Tab>
-                <Tab label="Number of Stories">
-                </Tab>
+            <Tabs style={{width:500}} 
+                  tabItemContainerStyle={{...styles.tabs}} 
+                  inkBarStyle={{background:theme.accentColor,height:3}}
+                  onChange={this.handleChangeTab}
+                  value={selectTab}>
+                <Tab buttonStyle={{...styles.tab,color:selectTab=='view'?'#222':'#c4c4c4'}} label="View" value={'view'}/>
+                <Tab buttonStyle={{...styles.tab,color:selectTab=='share'?'#222':'#c4c4c4'}} label="Share" value={'share'}/>
             </Tabs>
             <div className='row' style={{marginTop:'50px'}}>
                 <Label className="sans-font" style={{margin:'6px 15px 0 0'}}>Start:</Label>
@@ -332,7 +351,7 @@ const GraphDashboard = React.createClass({
                     <Num className='serif-font' style={{color:theme.accentColor}}>189,057</Num>
                 </div>    
             </div>
-            <LineChart width={width} height={height}/>
+            <LineChart width={width} height={height} style={{...style}}/>
         </Wrapper>
 	  )
 	}
