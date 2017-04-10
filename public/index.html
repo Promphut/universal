@@ -2,14 +2,14 @@
 <html>
 <head>
   <script type="text/javascript">
-    window.config = <%= htmlWebpackPlugin.options.config %>
-
+    var config = <%= JSON.stringify(htmlWebpackPlugin.options.config) %>;
+    //console.log('CONFIG1', config);
     // ==== GOOGLE TAG MGR ====
     (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer',config.ANALYTIC.TAGMGRID);
+    })(window,document,'script','dataLayer', config.ANALYTIC.TAGMGRID);
   </script>
 
   <!--<title>The Publisher</title>-->
@@ -37,52 +37,51 @@
 
     window.getWidth = () => {
       return window.innerWidth || doc.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
-    }
+    };
 
     window.getHeight = () => {
       return window.innerHeight || doc.clientHeight || document.getElementsByTagName('body')[0].clientHeight;
-    }
+    };
 
     window.getScrollX = () => {
-      return (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0)
-    }
+      return (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
+    };
 
     window.getScrollY = () => {
-      return (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0)
-    }
+      return (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
+    };
     window.isMobile = () => {
-      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-    }
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    };
 
     window.getFbUrl = (fbid) => {
-      return 'http://facebook.com/'+fbid
-    }
+      return 'http://facebook.com/'+fbid;
+    };
     window.getTwtUrl = (username) => {
-      return 'http://twitter.com/'+username
-    }
+      return 'http://twitter.com/'+username;
+    };
     window.getIgUrl = (username) => {
-      return 'http://instagram.com/'+username
-    }
+      return 'http://instagram.com/'+username;
+    };
     window.getYtUrl = (username) => {
       // channel
       if(username.startsWith('UC') && username.length===24)
-        return 'http://youtube.com/channel/'+username
+        return 'http://youtube.com/channel/'+username;
 
       // user
-      return 'http://youtube.com/user/'+username
-    }
+      return 'http://youtube.com/user/'+username;
+    };
 
     // default twt tweet url
     window.getTweetUrl = (url, hashtags) => {
-      return 'https://twitter.com/intent/tweet?url='+encodeURIComponent(url) + (hashtags ? '&hashtags='+hashtags : '')
-    }
+      return 'https://twitter.com/intent/tweet?url='+encodeURIComponent(url) + (hashtags ? '&hashtags='+hashtags : '');
+    };
 
     // ==== Quantcast Tag, part 1 ====
     var _qevents = _qevents || [];
     (function() {
       var elem = document.createElement('script');
-      elem.src = (document.location.protocol == "https:" ? "https://secure" : "http://edge")  
-                  + ".quantserve.com/quant.js";
+      elem.src = (document.location.protocol == "https:" ? "https://secure" : "http://edge") + ".quantserve.com/quant.js";
       elem.async = true;
       elem.type = "text/javascript";
       var scpt = document.getElementsByTagName('script')[0];
@@ -150,7 +149,8 @@
     // ==== CHARTBEAT ====
     var _sf_async_config = _sf_async_config || {};
     /** CONFIGURATION START **/
-    _sf_async_config.uid = config.ANALYTIC.CHARTBEATUID
+    //console.log('CONFIG2', config);
+    _sf_async_config.uid = config.ANALYTIC.CHARTBEATUID;
     _sf_async_config.domain = config.DOMAIN; //CHANGE THIS
     _sf_async_config.useCanonical = true;
     //_sf_async_config.sections = 'Change this to your Section name'; //CHANGE THIS
