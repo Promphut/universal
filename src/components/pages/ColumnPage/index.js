@@ -223,7 +223,7 @@ const ColumnPage = React.createClass({
 							style={{padding:'15px 0 15px 0', margin:'0 0 50px 0'}}
 							next={column.name}
 						/>
-						{latestStories.length!=0?<TextLine className='sans-font'>Latest</TextLine>:''}
+						{latestStories.length!=0&&<TextLine className='sans-font'>Latest</TextLine>}
 
 							{latestStories.length!=0?<Infinite
 									containerHeight={!isMobile?(count*210)-100:(count*356)-100}
@@ -239,8 +239,7 @@ const ColumnPage = React.createClass({
 								)):''}
 							</Infinite>: <EmptyStory title='No Story, yet' description='There are no stories in this column right now. Wanna back to see other columns?' />}
 
-						{latestStories.length!=0?<More style={{margin:'30px auto 30px auto'}} />:''}
-						<div ref='more'></div>
+						{latestStories.length!=0&&<More style={{margin:'30px auto 30px auto'}} />}
 			      </Main>
 			      <Aside>
 							<Stick topOffset={70} style={{zIndex: '0'}}>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { TopBarWithNavigation,ArticleBox,ArticleBoxLarge,More,TrendingSideBar,BGImg,StoryMenu } from 'components'
+import { TopBarWithNavigation,ArticleBox,ArticleBoxLarge,More,TrendingSideBar,BGImg,StoryMenu,EmptyStory } from 'components'
 import {findDOMNode as dom} from 'react-dom'
 import {Link, browserHistory, History} from 'react-router'
 import styled from 'styled-components'
@@ -307,13 +307,13 @@ const UserStory = React.createClass({
 	 			</UserShareMobile>}
 		      <Content>
 			      <Main>
-						<TextLine className='sans-font'>
+						{latestStories.length!=0&&<TextLine className='sans-font'>
 							<strong style={{color:theme.primaryColor,marginRight:'30px'}}>
 								<span style={{fontSize:'30px'}}>{feedCount}</span> stories
 							</strong>
 							{/*<span style={{fontSize:'30px'}}>101</span> Upvotes*/}
-						</TextLine>
-						<Infinite
+						</TextLine>}
+						{latestStories.length!=0?<Infinite
 								containerHeight={!isMobile?(count*210)-100:(count*356)-100}
 								elementHeight={!isMobile?210:356}
 								infiniteLoadBeginEdgeOffset={loadOffset}
@@ -325,9 +325,10 @@ const UserStory = React.createClass({
 							{latestStories.length!=0?latestStories.map((story, index) => (
 								<ArticleBox detail={story} key={index}/>
 							)):''}
-						</Infinite>
-						<More style={{margin:'30px auto 30px auto'}} />
-						<div ref='more'></div>
+						</Infinite>:
+						<EmptyStory title='Start your story !' description='You haven’t write any stories right now.' /> }
+						{latestStories.length!=0&&<More style={{margin:'30px auto 30px auto'}} />}
+						
 			      </Main>
 		      </Content>
 		   </Wrapper>

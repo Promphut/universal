@@ -29,13 +29,13 @@ const Img = styled.div`
 
 
 
-const EmptyStory = ({style, className, title,description}) => {
+const EmptyStory = ({style, className, title,description,hideButton}) => {
 	return (
   	<Container style={{...style}} className={className}>
       <Img style={{backgroundImage:'url(/pic/pic.png)'}}/>
       <Title>{title}</Title>
       <Desc>{description}</Desc>
-      <div style={{width:'152px',margin:'0 auto 0 auto'}}><PrimaryButton 	label="Write a Story" /></div>
+      {hideButton||<div style={{width:'152px',margin:'0 auto 0 auto'}}><PrimaryButton 	label="Write a Story" /></div>}
     </Container>
 	)
 }
@@ -45,6 +45,7 @@ EmptyStory.propTypes = {
   className: PropTypes.string,
   title: PropTypes.string,
   description: PropTypes.string,
+  hideButton: PropTypes.bool
 }
 
 export default EmptyStory;
