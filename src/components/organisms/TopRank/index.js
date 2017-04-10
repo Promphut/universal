@@ -12,9 +12,6 @@ const Bold = styled.div`
 `
 
 const Trend = styled.div`
-`
-
-const Rate = styled.div`
  font-size: 14px;
  color: #C4C4C4;
  margin-top: 7px;
@@ -55,7 +52,7 @@ const styles = {
 	}
 }
 
-const PublisherInsightTrend = React.createClass({
+const TopRank = React.createClass({
 	getInitialState() {
 		return {
 			data: {}
@@ -138,24 +135,17 @@ const PublisherInsightTrend = React.createClass({
 	},
 
 	renderTableRowColumn(now, prev) {
-		let color
-		if (now > prev) {
-			color = '#219653'
-		} else if (now < prev) {
-			color = '#EB5757'
-		}
-
 		return (
-			<TableRowColumn style={{...styles.tableTextBody, color: (now != prev) ? color : ''}}>
+			<TableRowColumn style={styles.tableTextBody}>
+				{now ? this.numberWithCommas(now) : '-'}
 				{prev ?
 					<Trend>
-						<FontIcon className="material-icons" style={{...styles.arrow, color: color}}>
+						<FontIcon className="material-icons" style={styles.arrow}>
 							{this.checkRateArrow(now, prev)}
 						</FontIcon>
 						{this.checkRateNumber(now, prev)}%
 					</Trend> : <Trend>-</Trend>
 				}
-				<Rate>{now ? this.numberWithCommas(now) : '-'}</Rate>
 			</TableRowColumn>
 		)
 	},
@@ -196,6 +186,7 @@ const PublisherInsightTrend = React.createClass({
 
 						{stories ?
 							stories.map((story, index) => (
+								(index < 5) ?
 								<TableRow className="sans-font" key={index}>
 
 									<TableRowColumn style={styles.tableTextBodyName}>
@@ -208,10 +199,10 @@ const PublisherInsightTrend = React.createClass({
 									{this.renderTableRowColumn(stories[index].twoPrev, stories[index].threePrev)}
 
 									<TableRowColumn style={styles.tableTextBody}>
+										{stories[index].overall ? this.numberWithCommas(stories[index].overall) : '-'}
 										<Trend>&nbsp;</Trend>
-										<Rate>{stories[index].overall ? this.numberWithCommas(stories[index].overall) : '-'}</Rate>
 									</TableRowColumn>
-								</TableRow>
+								</TableRow> : ''
             	)) : ''
 						}
 					</TableBody>
@@ -221,4 +212,4 @@ const PublisherInsightTrend = React.createClass({
   }
 })
 
-export default PublisherInsightTrend
+export default TopRank

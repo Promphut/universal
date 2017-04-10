@@ -1,6 +1,6 @@
 import React from 'react'
 import {TopBarWithNavigation, ArticleBox, ArticleBoxLarge, More, TrendingSideBar,
-	BGImg, StoryMenu, Stick, Footer,TagSideBar} from 'components'
+	BGImg, StoryMenu, Stick, Footer,TagSideBar,EmptyStory} from 'components'
 import {findDOMNode as dom} from 'react-dom'
 import styled from 'styled-components'
 import FlatButton from 'material-ui/FlatButton';
@@ -216,9 +216,9 @@ const TagPage = React.createClass({
                 <TextLine className='sans-font' style={{border:'none',marginTop:'60px'}}>tag</TextLine>
                 <TagName className='nunito-font' style={{margin:'10px 0 50px 0'}}>{'Tag'}</TagName>
 
-                <TextLine className='sans-font'>Latest</TextLine>
+                {latestStories.length!=0&&<TextLine className='sans-font'>Latest</TextLine>}
 
-                  <Infinite
+                  {latestStories.length!=0?<Infinite
                       containerHeight={!isMobile?(count*210)-100:(count*356)-100}
                       elementHeight={!isMobile?210:356}
                       infiniteLoadBeginEdgeOffset={loadOffset}
@@ -230,10 +230,10 @@ const TagPage = React.createClass({
                     {latestStories.length!=0?latestStories.map((story, index) => (
                       <ArticleBox detail={story} key={index}/>
                     )):''}
-                  </Infinite>
+                  </Infinite>:
+									<EmptyStory title='No Story, yet' description='There are no stories under this tag right now.' />}
 
-                <More style={{margin:'30px auto 30px auto'}} />
-                <div ref='more'></div>
+                {latestStories.length!=0&&<More style={{margin:'30px auto 30px auto'}} />}
               </Main>
 			      <Aside>
               <TagSideBar style={{marginTop:'4 0px'}}/>

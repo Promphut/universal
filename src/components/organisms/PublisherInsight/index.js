@@ -65,9 +65,7 @@ const PublisherInsight = React.createClass({
     return (
       <Container>
         <Header>
-          <Title>
-            {title}
-          </Title>
+          <Title>{title}</Title>
           <Tabs style={{flex:'1', paddingRight:'32px'}}
             tabItemContainerStyle={styles.tabs}
             inkBarStyle={{background:theme.accentColor, height:'5px'}}

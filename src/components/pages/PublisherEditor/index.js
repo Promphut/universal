@@ -26,13 +26,13 @@ const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
-  width:1110px;
+  width:1310px;
   margin:0 auto 0 auto;
 `
 const Main = styled.div`
 	background: white;
-	flex: 3 855px;
-	max-width: 855px;
+	flex: 3 1055px;
+	max-width: 1055px;
 `
 const Aside = styled.div`
 	background: rgba(255,255,255,0.5);

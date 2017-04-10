@@ -12,7 +12,7 @@ const styles = {
   },
 
   listItem:{
-    padding:'16px 20px 16px 20px',
+    padding:'16px 20px',
     color:"white",
     fontFamily: "'Nunito', 'Mitr', sans-serif",
     fontWeight: 'bold'
@@ -90,7 +90,7 @@ const PublisherSettingMenu = React.createClass({
               primaryText="Writers"
             />
           ]}
-          nestedListStyle={{background: 'rgba(255,255,255,0.2)', padding: '10px 0px'}}
+          nestedListStyle={{background: 'rgba(255,255,255,0.2)', padding: '0px'}}
         />
         <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/editor/manage')} value='/editor/manage' className='nunito-font' primaryText="Manage Stories" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>description</FontIcon>} />
         {this.isAdmin && <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/editor/contact')} value='/editor/contact' className='nunito-font' primaryText="Contact & About" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>contacts</FontIcon>} />}
