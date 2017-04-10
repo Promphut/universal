@@ -1,8 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!-- Chartbeat --> 
-  <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
+  <script type="text/javascript">
+    var config = <%= htmlWebpackPlugin.options.config %>
+
+    // ==== CHARTBEAT ====
+    // var _sf_startpt=(new Date()).getTime()
+
+    // ==== GOOGLE TAG MGR ====
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer',config.ANALYTIC.TAGMGRID);
+  </script>
 
   <!--<title>The Publisher</title>-->
   <meta charset="UTF-8">
@@ -25,7 +36,6 @@
   <script src="https://use.fontawesome.com/3df470c471.js"></script>
 
   <script type="text/javascript">
-    var config = <%= htmlWebpackPlugin.options.config %>
     var doc = document.documentElement;
 
     window.getWidth = () => {
@@ -70,13 +80,48 @@
       return 'https://twitter.com/intent/tweet?url='+encodeURIComponent(url) + (hashtags ? '&hashtags='+hashtags : '')
     }
 
+    // ==== Quantcast Tag, part 1 ====
+    var _qevents = _qevents || [];
+    (function() {
+      var elem = document.createElement('script');
+      elem.src = (document.location.protocol == "https:" ? "https://secure" : "http://edge")  
+                  + ".quantserve.com/quant.js";
+      elem.async = true;
+      elem.type = "text/javascript";
+      var scpt = document.getElementsByTagName('script')[0];
+      scpt.parentNode.insertBefore(elem, scpt);  
+    })();
   </script>
 </head>
 <body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<%=config.ANALYTIC.TAGMGRID%>"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+  <!-- FACEBOOK -->
+  <div id="fb-root"></div>
+  <script type="text/javascript">
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : config.ANALYTIC.FBAPPID,
+        xfbml      : true,
+        version    : 'v2.8'
+      });
+      FB.AppEvents.logPageView();
+    };
+
+    (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "//connect.facebook.net/en_US/sdk.js";
+       fjs.parentNode.insertBefore(js, fjs);
+     }(document, 'script', 'facebook-jssdk'));
+  </script>
 
   <main id="app"></main>
   
-  <script>
+  <script type="text/javascript">
     // ==== TWTTER WEB INTENT ====
     var tweetStory = new CustomEvent("tweetStory");
 
@@ -104,10 +149,41 @@
         event.target.dispatchEvent(tweetStory);
       });
     });
-    // ==== TWTTER WEB INTENT ====
 
+    // ==== CHARTBEAT ====
+    var _sf_async_config = _sf_async_config || {};
+    /** CONFIGURATION START **/
+    _sf_async_config.uid = config.ANALYTIC.CHARTBEATUID
+    _sf_async_config.domain = config.DOMAIN; //CHANGE THIS
+    _sf_async_config.useCanonical = true;
+    //_sf_async_config.sections = 'Change this to your Section name'; //CHANGE THIS
+    //_sf_async_config.authors = 'Change this to your Author name'; //CHANGE THIS
+    /** CONFIGURATION END **/
+    (function() {
+        function loadChartbeat() {
+            var e = document.createElement('script');
+            e.setAttribute('language', 'javascript');
+            e.setAttribute('type', 'text/javascript');
+            e.setAttribute('src', '//static.chartbeat.com/js/chartbeat.js');
+            document.body.appendChild(e);
+        }
+        var oldonload = window.onload;
+        window.onload = (typeof window.onload != 'function') ?
+            loadChartbeat : function() {
+                oldonload();
+                loadChartbeat();
+            };
+    })();
 
+    // ==== Quantcast Tag, part 2 ====
+    _qevents.push( { qacct: config.ANALYTIC.QUANTCASTACC} );
   </script>
+  <!-- Quantcast Tag, part 2 -->
+  <noscript>
+    <div style="display: none;">
+      <img src="//pixel.quantserve.com/pixel/<%=config.ANALYTIC.QUANTCASTACC%>.gif" height="1" width="1" alt="Quantcast"/>
+    </div>
+  </noscript>
 
 </body>
 </html>

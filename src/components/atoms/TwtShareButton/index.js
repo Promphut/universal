@@ -16,7 +16,7 @@ const TwtShareButton = React.createClass({
 		if(sid!=null){ 
 			// add event to DOM element 
 			this.a.addEventListener('tweetStory', function(event){
-				console.log('tweetStory', sid, self.props.url, event)
+				//console.log('tweetStory', sid, self.props.url, event)
 				api.incStoryInsight(sid, 'share', 'share_twt')
 			})
 		} 

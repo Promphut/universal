@@ -22,7 +22,7 @@ const config = {
 
 	production : {
 		PID:'11',
-		NAME: 'NextEmpire',
+		NAME: 'NextEmpire', // one word, no space
 		DOMAIN: 		'nextempire.co',
 		FRONTURL: 		'http://nextempire.co',
 		BACKURL: 		'http://api.nextempire.co',

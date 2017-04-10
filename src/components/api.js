@@ -561,7 +561,7 @@ api.incStoryInsight = (sid, action, subaction) => {
 	.post(url)
 	.set('Accept','application/json')
 	.then(res => {
-		console.log('api.incStoryInsight', res.body)
+		//console.log('api.incStoryInsight', res.body)
 		return res.body
 	}, api.err)
 }
