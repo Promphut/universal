@@ -705,61 +705,6 @@ injectGlobal`
 
 injectTapEventPlugin();
 
-// const tagManager = function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-//   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-//   j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-//   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-// }
-
-// const facebookUI = function(d, s, id){
-//   var js, fjs = d.getElementsByTagName(s)[0];
-//   if (d.getElementById(id)) {return;}
-//   js = d.createElement(s); js.id = id;
-//   js.src = "//connect.facebook.net/en_US/sdk.js";
-//   fjs.parentNode.insertBefore(js, fjs);
-// };
-
-// const twtWebIntent = function() {
-//   window.twttr = (function(d, s, id) {
-//     var js, fjs = d.getElementsByTagName(s)[0],
-//       t = window.twttr || {};
-//     if (d.getElementById(id)) return t;
-//     js = d.createElement(s);
-//     js.id = id;
-//     js.src = "https://platform.twitter.com/widgets.js";
-//     fjs.parentNode.insertBefore(js, fjs);
-
-//     t._e = [];
-//     t.ready = function(f) {
-//       t._e.push(f);
-//     };
-
-//     return t;
-//   }(document, "script", "twitter-wjs"))
-
-//   twttr.ready(function (twttr) {
-//     console.log(twttr.events)
-//     twttr.events.bind('tweet', function(event) {
-//       console.log('EVENT', event, event.target)
-//       //api.incStoryInsight(sid, 'share', 'share_twt')
-//     });
-//   });
-// }
-
-// const chartbeat = function() {
-//   function loadChartbeat() {
-//     window._sf_endpt = (new Date()).getTime();
-//     var e = document.createElement('script');
-//     e.setAttribute('language', 'javascript');
-//     e.setAttribute('type', 'text/javascript');
-//     e.setAttribute('src','//static.chartbeat.com/js/chartbeat.js');
-//     document.body.appendChild(e);
-//   };
-//   var oldonload = window.onload;
-//   window.onload = (typeof window.onload != 'function') ?
-//     loadChartbeat : function() { oldonload(); loadChartbeat(); };
-// }
-
 const muiTheme = getMuiTheme({
   appBar: {
     height: 60,
@@ -800,29 +745,7 @@ const App = React.createClass({
       }
     });
 
-    // let quantcastJs = `
-    //   var _qevents = _qevents || [];
-    //   (function() {
-    //     var elem = document.createElement('script');
-    //     elem.src = (document.location.protocol == "https:" ? "https://secure" : "http://edge") + ".quantserve.com/quant.js";
-    //     elem.async = true;
-    //     elem.type = "text/javascript";
-    //     var scpt = document.getElementsByTagName('script')[0];
-    //     scpt.parentNode.insertBefore(elem, scpt);
-    //   })();
-    //   _qevents.push({
-    //     qacct:"${config.ANALYTIC.QUANTCASTACC}"
-    //   });
-    // `
-
     let title = name + (tagline ? ' | ' + tagline : '')
-
-    // var _sf_async_config = { 
-    //   uid: config.ANALYTIC.CHARTBEATUID, 
-    //   domain: config.DOMAIN, 
-    //   useCanonical: true 
-    // };
-    // if(window) window._sf_async_config = _sf_async_config
 
     return (
       <div>
@@ -845,56 +768,7 @@ const App = React.createClass({
           <meta property="og:description" content={desc} />
           <meta property="twitter:card" content="summary_large_image" />
           <meta property="twitter:image:alt" content={title} />
-
-          {/* TAGMANAGER */}
-          {/*<script>{
-            tagManager(window,document,'script','dataLayer',config.ANALYTIC.TAGMGRID)
-          }</script>*/}
-          {/* TAGMANAGER */}
-
-          {/* CHARTBEAT */}
-          {/*<script>{
-            chartbeat()
-          }</script>*/}
-          {/* CHARTBEAT */}
         </Helmet>
-
-        {/* TAGMANAGER */}
-        {/*<noscript><iframe src={'https://www.googletagmanager.com/ns.html?id='+config.ANALYTIC.TAGMGRID}
-        height="0" width="0" style={{display:"none",visibility:"hidden"}}></iframe></noscript>*/}
-        {/* TAGMANAGER */}
-
-        {/* FB */}
-        {/*<div id="fb-root"></div>
-        <script>{
-          window.fbAsyncInit =   function() {
-            FB.init({
-              appId      : config.ANALYTIC.FBAPPID,
-              xfbml      : true,
-              version    : 'v2.8'
-            });
-            FB.AppEvents.logPageView();
-          }
-        }</script>
-        <script>{
-          facebookUI(document, 'script', 'facebook-jssdk')
-        }</script>*/}
-        {/* FB */}
-
-        {/* TWT WEB INTENT */}
-        {/*<script>{
-          twtWebIntent()
-        }</script>*/}
-        {/* TWT WEB INTENT */}
-        
-        {/* QUANTCAST */}
-        {/*<script dangerouslySetInnerHTML={{__html: quantcastJs}}></script>
-        <noscript>
-          <div style={{display:'none'}}>
-            <img src={'//pixel.quantserve.com/pixel/'+config.ANALYTIC.QUANTCASTACC+'.gif'} border="0" height="1" width="1" alt="Quantcast"/>
-          </div>
-        </noscript>*/}
-        {/* QUANTCAST */}
 
         <MuiThemeProvider muiTheme={muiTheme}>
           {children}
