@@ -45,7 +45,7 @@ const config = {
     }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      config: JSON.stringify(configfile),
+      config: configfile,
       template: path.join(__dirname, '/public/index.html')
     }),
     // new webpack.DefinePlugin({

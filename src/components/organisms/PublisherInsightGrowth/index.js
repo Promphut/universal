@@ -11,6 +11,18 @@ const Bold = styled.div`
 	font-weight: bold;
 `
 
+const Text = styled.div`
+	color: ${props => props.color};
+	font-weight: ${props => props.weight};
+	background: ${props => props.color == '#FFF' ? '#27AE60' : ''};
+	width: ${props => props.color == '#FFF' ? '32px' : ''};
+	margin: auto;
+	text-align: center;
+	fontSize: 16px;
+	padding: 6px 0px;
+	border-radius: 15px;
+`
+
 const styles = {
   tableTextHeader: {
 		fontSize: '16px',
@@ -87,10 +99,44 @@ const PublisherInsightGrowth = React.createClass({
 		this.setState({data})
 	},
 
-	renderTableRowColumn(share) {
+	renderTableRowColumnAvr(rate) {
+		let color
+		let fontWeight
+		if (rate > 9) {
+			color = '#27AE60'
+			fontWeight = 'bold'
+		} else if (rate > 2) {
+			color = '#222222'
+			fontWeight = 'regular'
+		} else {
+			color = '#EB5757'
+			fontWeight = 'bold'
+		}
+
 		return (
-			<TableRowColumn style={styles.tableTextBody}>
-				{share ? share : '-'}
+			<TableRowColumn style={{...styles.tableTotal, color, fontWeight}}>
+				{rate}
+			</TableRowColumn>
+		)
+	},
+
+	renderTableRowColumn(rate) {
+		let color
+		let weight
+		if (rate > 9) {
+			color = '#FFF'
+			weight = 'bold'
+		} else if (rate > 2) {
+			color = '#222222'
+			weight = 'regular'
+		} else {
+			color = '#EB5757'
+			weight = 'bold'
+		}
+
+		return (
+			<TableRowColumn>
+				<Text color={color} weight={weight}>{rate ? rate : '-'}</Text>
 			</TableRowColumn>
 		)
 	},
@@ -116,10 +162,11 @@ const PublisherInsightGrowth = React.createClass({
 					<TableBody displayRowCheckbox={false}>
 						<TableRow className="sans-font"  style={{height: '36px', background: '#F4F4F4'}}>
 							<TableRowColumn style={styles.tableTotalName}>Average Growth Score</TableRowColumn>
-							<TableRowColumn style={styles.tableTotal}>{avr ? avr.now : '-'}</TableRowColumn>
-							<TableRowColumn style={styles.tableTotal}>{avr ? avr.prev : '-'}</TableRowColumn>
-							<TableRowColumn style={styles.tableTotal}>{avr ? avr.twoPrev : '-'}</TableRowColumn>
-							<TableRowColumn style={styles.tableTotal}>{avr ? avr.overall : '-'}</TableRowColumn>
+
+							{avr ? this.renderTableRowColumnAvr(avr.now) : <TableRowColumn style={styles.tableTotal}>-</TableRowColumn>}
+							{avr ? this.renderTableRowColumnAvr(avr.prev) : <TableRowColumn style={styles.tableTotal}>-</TableRowColumn>}
+							{avr ? this.renderTableRowColumnAvr(avr.twoPrev) : <TableRowColumn style={styles.tableTotal}>-</TableRowColumn>}
+							{avr ? this.renderTableRowColumnAvr(avr.overall) : <TableRowColumn style={styles.tableTotal}>-</TableRowColumn>}
 						</TableRow>
 
 						{stories ?
@@ -134,10 +181,7 @@ const PublisherInsightGrowth = React.createClass({
 									{this.renderTableRowColumn(stories[index].now)}
 									{this.renderTableRowColumn(stories[index].prev)}
 									{this.renderTableRowColumn(stories[index].twoPrev)}
-
-									<TableRowColumn style={styles.tableTextBody}>
-										{stories[index].overall ? stories[index].overall : '-'}
-									</TableRowColumn>
+									{this.renderTableRowColumn(stories[index].overall)}
 								</TableRow>
             	)) : ''
 						}
