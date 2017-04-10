@@ -105,12 +105,12 @@ const PublisherInsightGrowth = React.createClass({
 		if (rate > 9) {
 			color = '#27AE60'
 			fontWeight = 'bold'
-		} else if (rate > 2) {
-			color = '#222222'
-			fontWeight = 'regular'
-		} else {
+		} else if (rate < 3) {
 			color = '#EB5757'
 			fontWeight = 'bold'
+		} else {
+			color = '#222222'
+			fontWeight = 'regular'
 		}
 
 		return (
@@ -126,12 +126,12 @@ const PublisherInsightGrowth = React.createClass({
 		if (rate > 9) {
 			color = '#FFF'
 			weight = 'bold'
-		} else if (rate > 2) {
-			color = '#222222'
-			weight = 'regular'
-		} else {
+		} else if (rate < 3) {
 			color = '#EB5757'
 			weight = 'bold'
+		} else {
+			color = '#222222'
+			weight = 'regular'
 		}
 
 		return (

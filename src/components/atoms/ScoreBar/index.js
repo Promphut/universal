@@ -37,7 +37,7 @@ const ScoreBar = React.createClass({
         <VerticalLine/>
         <Item style={{color: '#8E8E8E'}}>3-9 %</Item>
         <VerticalLine/>
-        <Item style={{color: '#27AE60'}}>10+</Item>
+        <Item style={{color: '#27AE60'}}>10% +</Item>
       </Container>
     )
   }
