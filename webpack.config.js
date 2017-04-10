@@ -40,16 +40,18 @@ const config = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': `'${process.env.NODE_ENV}'`
+      'process.env.NODE_ENV': `'${process.env.NODE_ENV}'`,
+      'config': JSON.stringify(configfile)
     }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
+      config: JSON.stringify(configfile),
       template: path.join(__dirname, '/public/index.html')
     }),
-    new webpack.DefinePlugin({
-      'config': JSON.stringify(configfile),
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-    }),
+    // new webpack.DefinePlugin({
+    //   'config': JSON.stringify(configfile),
+    //   'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+    // }),
     new SitemapPlugin(configfile.FRONTURL, paths,{
       lastMod: true,
     })
