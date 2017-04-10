@@ -817,10 +817,10 @@ const App = React.createClass({
 
     let title = name + (tagline ? ' | ' + tagline : '')
 
-    var _sf_async_config = { 
-      uid: config.ANALYTIC.CHARTBEATUID, 
-      domain: config.DOMAIN, 
-      useCanonical: true 
+    var _sf_async_config = {
+      uid: config.ANALYTIC.CHARTBEATUID,
+      domain: config.DOMAIN,
+      useCanonical: true
     };
     if(window) window._sf_async_config = _sf_async_config
 
