@@ -1,4 +1,4 @@
-import React,{propTypes} from 'react'
+import React,{PropTypes} from 'react'
 import ReactDOM from 'react-dom'
 import {} from 'components'
 import {Link} from 'react-router'
@@ -16,6 +16,7 @@ import Popover from 'material-ui/Popover';
 require('react-datepicker/dist/react-datepicker.css');
 const Wrapper = styled.div`
     padding:80px 0 80px 0;
+    width:${props=>props.width}px;
     .row{
         overflow:hidden;
         display:block;
@@ -214,6 +215,12 @@ var LineChart=React.createClass({
 });
 
 const GraphDashboard = React.createClass({
+    getDefaultProps() {
+        return {
+            width: 900,
+            height: 400,
+        };
+    },
 	getInitialState(){
 		return {
             startDate1:moment().subtract(30, 'days'),
@@ -274,9 +281,10 @@ const GraphDashboard = React.createClass({
             marginBottom: 12,
             fontWeight: 400,
         },
-        };
+    };
+    var {width,height} = this.props
 	return (
-        <Wrapper>
+        <Wrapper width={width}>
             <Popover
             open={open}
             anchorEl={anchorEl}
@@ -324,12 +332,16 @@ const GraphDashboard = React.createClass({
                     <Num className='serif-font' style={{color:theme.accentColor}}>189,057</Num>
                 </div>    
             </div>
-            <LineChart width={1200} height={500}/>
+            <LineChart width={width} height={height}/>
         </Wrapper>
 	  )
 	}
 });
 
+GraphDashboard.propTypes={
+    width:PropTypes.number,
+    height:PropTypes.number,
+};
 GraphDashboard.contextTypes = {
 	setting: React.PropTypes.object
 };
