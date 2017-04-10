@@ -302,7 +302,7 @@ const GraphDashboard = React.createClass({
     var {width,height,style} = this.props
 
 	return (
-        <Wrapper width={width}>
+        <Wrapper width={width} style={{...style}}>
             <Popover
             open={open}
             anchorEl={anchorEl}
@@ -355,7 +355,7 @@ const GraphDashboard = React.createClass({
                     <Num className='serif-font' style={{color:theme.accentColor}}>189,057</Num>
                 </div>   
             </div>
-            <LineChart width={width} height={height} style={{...style}}/>
+            <LineChart width={width} height={height} />
         </Wrapper>
 	  )
 	}
