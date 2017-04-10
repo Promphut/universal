@@ -23,7 +23,7 @@ const Wrapper = styled.div`
     }
     .total{
         float:right;
-        margin:0 30px 0 20px;
+        margin:0 20px 0 10px;
     }
     .inputDate{
         outline:none;
@@ -57,11 +57,11 @@ const X = styled.g`
 `
 const Label = styled.div`
     display:inline;
-    font-size:16px;
+    font-size:14px;
     font-weight:bold;
 `
 const Num = styled.div`
-    font-size:30px;
+    font-size:24px;
     font-weight:bold;
 
 `
@@ -319,7 +319,7 @@ const GraphDashboard = React.createClass({
                 onChange={this.handleChangeDate2}
                 inline/>}
             </Popover>
-            <Tabs style={{width:500}} 
+            <Tabs style={{width:300}} 
                   tabItemContainerStyle={{...styles.tabs}} 
                   inkBarStyle={{background:theme.accentColor,height:3}}
                   onChange={this.handleChangeTab}
@@ -328,7 +328,7 @@ const GraphDashboard = React.createClass({
                 <Tab buttonStyle={{...styles.tab,color:selectTab=='share'?'#222':'#c4c4c4'}} label="Share" value={'share'}/>
             </Tabs>
             <div className='row' style={{marginTop:'50px'}}>
-                <Label className="sans-font" style={{margin:'6px 15px 0 0'}}>Start:</Label>
+                <Label className="sans-font" style={{margin:'2px 10px 0 0'}}>Start:</Label>
                 <div style={{display:'inline-block'}}>
                     <FlatButton
                     onClick={this.openDatePicker}
@@ -336,12 +336,16 @@ const GraphDashboard = React.createClass({
                     icon={<FontIcon className='material-icons' style={{color:'#c4c4c4',marginLeft:'15px'}}>keyboard_arrow_down</FontIcon>}>
                     {moment(startDate1).format('MM/DD/YYYY')}</FlatButton>
                 </div>
-                <Label className="sans-font" style={{margin:'6px 15px 0 40px'}}>End:</Label>
+                <Label className="sans-font" style={{margin:'2px 10px 0 20px'}}>End:</Label>
                 <FlatButton
                     onClick={this.openDatePicker2}
                     style={{border:'1px solid #c4c4c4',borderRadius:'20px',padding:'0 10px 0 15px'}}
                     icon={<FontIcon className='material-icons' style={{color:'#c4c4c4',marginLeft:'15px'}}>keyboard_arrow_down</FontIcon>}>
                     {moment(startDate2).format('MM/DD/YYYY')}</FlatButton>
+                <div className="total">
+                    <Label style={{color:'#8e8e8e'}}>Number of Stories</Label>
+                    <Num className='serif-font' >350</Num>
+                </div>  
                 <div className="total">
                     <Label style={{color:'#8e8e8e'}}>Average per story</Label>
                     <Num className='serif-font' >189,057</Num>
@@ -349,7 +353,7 @@ const GraphDashboard = React.createClass({
                 <div className="total">
                     <Label style={{color:'#8e8e8e'}}>Total</Label>
                     <Num className='serif-font' style={{color:theme.accentColor}}>189,057</Num>
-                </div>    
+                </div>   
             </div>
             <LineChart width={width} height={height} style={{...style}}/>
         </Wrapper>
