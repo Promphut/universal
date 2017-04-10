@@ -719,6 +719,33 @@ const facebookUI = function(d, s, id){
   fjs.parentNode.insertBefore(js, fjs);
 };
 
+// const twtWebIntent = function() {
+//   window.twttr = (function(d, s, id) {
+//     var js, fjs = d.getElementsByTagName(s)[0],
+//       t = window.twttr || {};
+//     if (d.getElementById(id)) return t;
+//     js = d.createElement(s);
+//     js.id = id;
+//     js.src = "https://platform.twitter.com/widgets.js";
+//     fjs.parentNode.insertBefore(js, fjs);
+
+//     t._e = [];
+//     t.ready = function(f) {
+//       t._e.push(f);
+//     };
+
+//     return t;
+//   }(document, "script", "twitter-wjs"))
+
+//   twttr.ready(function (twttr) {
+//     console.log(twttr.events)
+//     twttr.events.bind('tweet', function(event) {
+//       console.log('EVENT', event, event.target)
+//       //api.incStoryInsight(sid, 'share', 'share_twt')
+//     });
+//   });
+// }
+
 const chartbeat = function() {
   function loadChartbeat() {
     window._sf_endpt = (new Date()).getTime();
@@ -743,7 +770,7 @@ const App = React.createClass({
   render(){
     let {name, desc, theme, tagline, keywords, analytic, channels, cover} = this.context.setting.publisher
     if(!analytic) analytic = {}
-    console.log('context', this.context.setting, this.props.location)
+    //console.log('context', this.context.setting, this.props.location)
     let {children} = this.props
     let muiTheme = getMuiTheme({
       appBar: {
@@ -854,6 +881,12 @@ const App = React.createClass({
         }</script>
         {/* FB */}
 
+        {/* TWT WEB INTENT */}
+        {/*<script>{
+          twtWebIntent()
+        }</script>*/}
+        {/* TWT WEB INTENT */}
+        
         {/* QUANTCAST */}
         <script dangerouslySetInnerHTML={{__html: quantcastJs}}></script>
         <noscript>

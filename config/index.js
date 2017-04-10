@@ -1,7 +1,7 @@
 const config = {
 	development : {
-		TWT:'https://twitter.com/intent/tweet',
 		PID:'11',
+		NAME: 'NextEmpire',
 		DOMAIN: 		'localhost',
 		FRONTURL: 		'http://localhost:3000',
 		BACKURL: 		'http://localhost:4000',
@@ -21,8 +21,8 @@ const config = {
 	},
 
 	production : {
-		TWT:'https://twitter.com/intent/tweet',
 		PID:'11',
+		NAME: 'NextEmpire',
 		DOMAIN: 		'nextempire.co',
 		FRONTURL: 		'http://nextempire.co',
 		BACKURL: 		'http://api.nextempire.co',

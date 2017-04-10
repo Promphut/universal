@@ -125,7 +125,7 @@ const routes = (
     <IndexRoute component={HomePage2} />
     <Route path='stories/columns' component={AllColumn}/>
     <Route path='stories/:columnSlug' component={ColumnPage} onEnter={getColumnFromSlug}/>
-    {/* STORY 1 */ }
+    {/* STORY 1: HAVE COLUMN */ }
     <Route path='stories/:columnSlug/:storySlug/:sid' component={StoryPage} onEnter={getStoryFromSid(true)}/>
 
     {/*<Route path='publisher' component={PublisherPage}/>*/}
@@ -169,11 +169,11 @@ const routes = (
     <Route path='me/stories/:sid' component={StoryPage} onEnter={getStoryFromSid(false)}/>
 
     <Route path='u/:uid' onEnter={getUserFromUserId} component={UserStory}/>
-    {/* STORY 3 */ }
+    {/* STORY 3 NO COLUMN AND NO USERNAME */ }
     <Route path='u/:uid/stories/:storySlug/:sid' onEnter={getStoryFromSid(true)} component={StoryPage}/>
 
     <Route path='@:username' onEnter={getUserFromUsername} component={UserStory}/>
-    {/* STORY 2 */ }
+    {/* STORY 2 NO COLUMN */ }
     <Route path='@:username/stories/:storySlug/:sid' onEnter={getStoryFromSid(true)} component={StoryPage}/>
 
     <Route path='error' component={ErrorPage}/>

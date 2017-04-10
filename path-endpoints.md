@@ -120,6 +120,11 @@ COLUMN
 *	- ?sort : trending/latest/popular		GET 		/publishers/:pid/columns 							{sort}							{columns}
 *	Get col's public detail 				GET 		/publishers/:pid/columns/:cid 														{column} 
 
+INSIGHT 
+	Increment story insight					POST 		/insights/stories/:sid/:action						{token}			 				{insight}
+	Decrement story insight 				DELETE 		/insights/stories/:sid/:action						{token}							{insight}			this is used when downvote for example, not for view, share, and click
+	Get insights by daterange				GET 		/insights/stories/:sid/:action						{token, (from), (to), (period)}	{insights} 			period = pastsevendays/aweekago/twoweeksago 
+
 MENU
 	Get publisher and user navigation		GET 		/navigation											{?uid, pid} 					{navigation}
 

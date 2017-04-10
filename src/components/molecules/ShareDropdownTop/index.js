@@ -2,21 +2,15 @@ import React from 'react'
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon'
 import FlatButton from 'material-ui/FlatButton'
-import {Dropdown} from 'components'
+import {Dropdown,TwtShareButton} from 'components'
 import CopyToClipboard from 'react-copy-to-clipboard'
-import api from 'components/api'
+
 const ShareDropdownTop = React.createClass({
   getInitialState () {
     return {
       open: false,
       copied: false
     }
-  },
-
-  select(shareTo) {
-    if (shareTo === 'facebook') {
-      api.shareFB()
-    } 
   },
 
   render() {
@@ -36,13 +30,14 @@ const ShareDropdownTop = React.createClass({
 
     const button = (
       <div>
-        <a href={config.TWT}>
-        <FlatButton
-          label={buttons[0]}
-          labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
-          style={{width: '140px', textAlign: 'left', display: 'inline-block'}}
-        />
-        </a>
+        <TwtShareButton button={
+          <FlatButton
+            label={buttons[0]}
+            labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
+            style={{width: '140px', textAlign: 'left', display: 'inline-block'}}
+          />
+        } />
+
         <CopyToClipboard text={window.location.href} onCopy={() => this.setState({copied: true})}>
           <FlatButton
             label={buttons[1]}

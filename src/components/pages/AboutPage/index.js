@@ -1,7 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import {ContactAndAboutContainer, ShareButton, } from 'components'
+import { ContactAndAboutContainer, ShareButton, TwtShareButton, FbShareButton } from 'components'
 import api from 'components/api'
+
 const Wrapper = styled.div`
 `
 
@@ -52,8 +53,8 @@ const AboutPage = React.createClass({
           <Head className='title-font'>About Us</Head>
           <Article className='content-font' dangerouslySetInnerHTML={{__html:this.state.aboutUs}}></Article>
           <HiddenMobile>
-            <ShareButton className='fa fa-facebook' onClick={api.shareFB} number='112' color='58,88,155'/>
-            <a href={config.TWT}><ShareButton className='fa fa-twitter' number='118' color='96,170,222' style={{marginLeft: '15px'}}/></a>
+            <FbShareButton button={<ShareButton className='fa fa-facebook' number='112' color='58,88,155'/>} />
+            <TwtShareButton button={<ShareButton className='fa fa-twitter' number='118' color='96,170,222' style={{marginLeft: '15px'}}/>} />
           </HiddenMobile>
         </Wrapper>
       </ContactAndAboutContainer>

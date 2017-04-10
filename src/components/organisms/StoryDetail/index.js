@@ -140,11 +140,11 @@ const StoryDetail = React.createClass({
   },
 
   componentWillReceiveProps(nextProps){
-    if(nextProps.story){
+    if(nextProps.story != this.props.story){
       this.story = nextProps.story
 
       //this.setState({refresh: Math.random()})
-      //console.log('componentWillReceiveProps', this.story)
+      console.log('componentWillReceiveProps', this.story)
     }
   },
 

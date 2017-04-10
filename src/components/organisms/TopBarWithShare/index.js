@@ -3,8 +3,7 @@ import styled, {keyframes}  from 'styled-components'
 import {Link, browserHistory} from 'react-router'
 import Avatar from 'material-ui/Avatar'
 import {LogoLink, PrimaryButton, SecondaryButton, LeftMenu,
-	ShareButtonTop, ShareDropdownTop} from 'components'
-import api from 'components/api'
+	ShareButtonTop, ShareDropdownTop, FbShareButton} from 'components'
 import auth from 'components/auth'
 //import utils from 'components/utils'
 import FontIcon from 'material-ui/FontIcon'
@@ -262,7 +261,7 @@ const TopBarWithShare = React.createClass({
 					</Left>
 
 					<Right className="fade">
-						<ShareButtonTop onClick={api.shareFB} number='112' barTone={theme.barTone} scrolling={scrolling} hasCover={hasCover}/>
+						<FbShareButton button={<ShareButtonTop number='112' barTone={theme.barTone} scrolling={scrolling} hasCover={hasCover}/>} />
 						<ShareDropdownTop>
 							<FontIcon style={moreStyle} className="material-icons" >more_vert</FontIcon>
 						</ShareDropdownTop>

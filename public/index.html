@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <!-- Chartbeat --> 
   <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
 
   <!--<title>The Publisher</title>-->
@@ -24,6 +25,7 @@
   <script src="https://use.fontawesome.com/3df470c471.js"></script>
 
   <script type="text/javascript">
+    var config = <%= htmlWebpackPlugin.options.config %>
     var doc = document.documentElement;
 
     window.getWidth = () => {
@@ -63,11 +65,49 @@
       return 'http://youtube.com/user/'+username
     }
 
+    // default twt tweet url
+    window.getTweetUrl = (url, hashtags) => {
+      return 'https://twitter.com/intent/tweet?url='+encodeURIComponent(url) + (hashtags ? '&hashtags='+hashtags : '')
+    }
+
   </script>
 </head>
 <body>
 
   <main id="app"></main>
   
+  <script>
+    // ==== TWTTER WEB INTENT ====
+    var tweetStory = new CustomEvent("tweetStory");
+
+    window.twttr = (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {};
+      if (d.getElementById(id)) return t;
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://platform.twitter.com/widgets.js";
+      fjs.parentNode.insertBefore(js, fjs);
+
+      t._e = [];
+      t.ready = function(f) {
+        t._e.push(f);
+      };
+
+      return t;
+    }(document, "script", "twitter-wjs"))
+
+    twttr.ready(function (twttr) {
+      //console.log(twttr.events)
+      twttr.events.bind('tweet', function(event) {
+        // dispatch DOM element event that added in TwtShareButton
+        event.target.dispatchEvent(tweetStory);
+      });
+    });
+    // ==== TWTTER WEB INTENT ====
+
+
+  </script>
+
 </body>
 </html>
