@@ -15,7 +15,6 @@ import Popover from 'material-ui/Popover';
 
 require('react-datepicker/dist/react-datepicker.css');
 const Wrapper = styled.div`
-    padding:80px 0 80px 0;
     width:${props=>props.width}px;
     .row{
         overflow:hidden;
