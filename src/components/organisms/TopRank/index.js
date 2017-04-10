@@ -186,6 +186,7 @@ const TopRank = React.createClass({
 
 						{stories ?
 							stories.map((story, index) => (
+								(index < 5) ?
 								<TableRow className="sans-font" key={index}>
 
 									<TableRowColumn style={styles.tableTextBodyName}>
@@ -201,7 +202,7 @@ const TopRank = React.createClass({
 										{stories[index].overall ? this.numberWithCommas(stories[index].overall) : '-'}
 										<Trend>&nbsp;</Trend>
 									</TableRowColumn>
-								</TableRow>
+								</TableRow> : ''
             	)) : ''
 						}
 					</TableBody>

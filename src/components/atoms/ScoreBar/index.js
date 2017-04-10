@@ -33,13 +33,11 @@ const ScoreBar = React.createClass({
   render() {
     return (
       <Container className="sans-font" style={this.props.style}>
-        <Item style={{color: '#EB5757'}}>0-2</Item>
+        <Item style={{color: '#EB5757'}}>0-2 %</Item>
         <VerticalLine/>
-        <Item style={{color: '#F2994A'}}>3-5</Item>
+        <Item style={{color: '#8E8E8E'}}>3-9 %</Item>
         <VerticalLine/>
-        <Item style={{color: '#FFC000'}}>6-8</Item>
-        <VerticalLine/>
-        <Item style={{color: '#27AE60'}}>8+</Item>
+        <Item style={{color: '#27AE60'}}>10+</Item>
       </Container>
     )
   }
