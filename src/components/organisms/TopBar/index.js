@@ -206,7 +206,7 @@ const TopBar = React.createClass({
 			...logoStyleBase,
 		} : {
 			...logoStyleBase,
-	    margin: 'auto 20px auto auto'
+	    margin: 'auto 12px auto auto'
 		}
 
 		const buttonStyle = {

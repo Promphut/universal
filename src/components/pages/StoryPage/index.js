@@ -221,6 +221,7 @@ const StoryPage = React.createClass({
           <meta property="og:description" content={description} />
           <meta property="twitter:card" content="summary_large_image" />
           <meta property="twitter:image:alt" content={this.story.title} />
+          <meta property="fb:app_id" content={config.ANALYTIC.FBAPPID} />
 				</Helmet>
 
 				<Wrapper>

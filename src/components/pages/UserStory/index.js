@@ -316,6 +316,7 @@ const UserStory = React.createClass({
           <meta property="og:description" content={user.shortDesc} />
           <meta property="twitter:card" content="summary_large_image" />
           <meta property="twitter:image:alt" content={user.display} />
+          <meta property="fb:app_id" content={config.ANALYTIC.FBAPPID} />
 				</Helmet>
 
 				<TopBarWithNavigation className="hidden-mob" title={'Title of AomMoney goes here..'} />

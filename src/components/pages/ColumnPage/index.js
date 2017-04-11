@@ -213,6 +213,7 @@ const ColumnPage = React.createClass({
           <meta property="og:description" content={column.shortDesc} />
           <meta property="twitter:card" content="summary_large_image" />
           <meta property="twitter:image:alt" content={column.name} />
+          <meta property="fb:app_id" content={config.ANALYTIC.FBAPPID} />
 				</Helmet>
 				<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 				<BGImg src={column.cover.medium || column.cover.small}
