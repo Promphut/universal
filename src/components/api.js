@@ -21,6 +21,9 @@ api.columnNotFoundPromise = () => {
 api.storyNotFoundPromise = () => {
 	return Promise.reject(new NotFoundError('Story is not found.'))
 }
+api.tagNotFoundPromise = () => {
+	return Promise.reject(new NotFoundError('Tag is not found.'))
+}
 // uid and token are optional
 // if token is specified, it'll be used to make request as well.
 // uid will be auto-get if not supplied.
@@ -111,7 +114,7 @@ api.getUserFromUserId = (uid) => {
 
 api.getColumnFromSlug = (slug) => {
 	return Request
-	.get(config.BACKURL + '/slugs/publishers/' + config.PID + '/' + encodeURIComponent(slug))
+	.get(config.BACKURL + '/slugs/publishers/' + config.PID + '/columns/' + encodeURIComponent(slug))
 	.set('Accept', 'application/json')
 	.then(res => {
 		return res.body.column
@@ -263,6 +266,18 @@ api.getTags = () => {
 	.then(res => {
 		return res.body.tags
 	}, api.err)
+}
+
+api.getTagFromSlug = (slug) => {
+	return Request
+	.get(config.BACKURL + '/slugs/publishers/' + config.PID + '/tags/' + encodeURIComponent(slug))
+	.set('Accept', 'application/json')
+	.then(res => {
+		return res.body.tag
+	})
+	.catch(err => {
+		return api.tagNotFoundPromise()
+	})
 }
 
 api.addTag = (name) => {
