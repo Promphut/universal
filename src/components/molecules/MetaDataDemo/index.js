@@ -27,7 +27,7 @@ const MetaDataDemo = ({style, className, title, description, keyword, tagline}) 
 	return (
   	<Container style={{...style}} className={className+' sans-font'}>
       <Title className='sans-font'>{title+' - '+tagline}</Title>
-      <Url className='sans-font'>{window.location.hostname}</Url>
+      <Url className='sans-font'>{window.location.host}</Url>
       <Desc className='sans-font'>{description +' '+keyword }</Desc>
     </Container>
 	)
