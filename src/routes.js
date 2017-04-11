@@ -78,8 +78,8 @@ const getUserFromUserId = (nextState, replace, next) => {
   .catch(toError(nextState, replace, next))
 }
 
-
 const getColumnFromSlug = (nextState, replace, next) => {
+  console.log(nextState.params.columnSlug)
   api.getColumnFromSlug(nextState.params.columnSlug)
   .then(col => {
     nextState.params.column = col
@@ -99,6 +99,15 @@ const getStoryFromSid = (countView = false) => {
     })
     .catch(toError(nextState, replace, next))
   }
+}
+
+const getTagFromTagSlug = (nextState, replace, next) => {
+  api.getTagFromTagSlug(nextState.params.tagSlug)
+  .then(tag => {
+    nextState.params.tag = tag
+    next()
+  })
+  .catch(toError(nextState, replace, next))
 }
 
 const canEditStory = (nextState, replace, next) => {
@@ -133,7 +142,7 @@ const routes = (
     <Route path="about" component={AboutPage} />
     <Route path="contact" component={ContactPage} />
 
-    <Route path="tag/:tag" component={TagPage} />
+    <Route path="tags/:tagSlug" component={TagPage} onEnter={getTagFromTagSlug} />
 
     <Route path="forget" component={ForgetPasswordPage} />
     <Route path="signin" component={()=>(<SignInPage visible={true}/>)} />

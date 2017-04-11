@@ -126,21 +126,17 @@ const TagPage = React.createClass({
 		})
 	},
 
-	// componentWillReceiveProps(nextProps) {
-	// 	if(nextProps.params.column!=this.props.params.column){
-	// 		this.setState({
-	// 			column:nextProps.params.column,
-	// 		},()=>{
-	// 			this.setState({
-	// 				page:0,
-	// 				latestStories:[],
-	// 				loadOffset:300
-	// 			},()=>{
-	// 				this.handleInfiniteLoad()
-	// 			})
-	// 		})
-	// 	}
-	// },
+	componentWillReceiveProps(nextProps) {
+		if(nextProps.params.tag!=this.props.params.tag){
+			this.setState({
+				page:0,
+				latestStories:[],
+				loadOffset:300
+			},()=>{
+				this.handleInfiniteLoad()
+			})
+		}
+	},
 
 	// getColumnFeed(col){
 	// 	let {id, name, shortDesc, cover} = col
@@ -157,8 +153,9 @@ const TagPage = React.createClass({
 
 	buildElements() {
 		let page = this.state.page
+		var {tag} = this.props.params
 
-		api.getFeed('story', {status:1}, 'latest', null, page, 10)
+		api.getFeed('story', {status:1,tags:tag._id}, 'latest', null, page, 10)
 		.then(result => {
 			var s = this.state.latestStories.concat(result.feed)
 			this.setState({
@@ -193,6 +190,8 @@ const TagPage = React.createClass({
 	},
 
 	render(){
+		//console.log(this.props.params.tag)
+		var {tag} = this.props.params
     const BGImgSize = (window.isMobile() ? 100 : 280) + 60
 		let {column, feed} = this.state
 		//console.log('column', column)
@@ -205,7 +204,7 @@ const TagPage = React.createClass({
 		      	<Content>
               {latestStories.length!=0?<Main>
                 <TextLine className='sans-font' style={{border:'none',marginTop:'60px'}}>tag</TextLine>
-                <TagName className='nunito-font' style={{margin:'10px 0 50px 0'}}>{'Tag'}</TagName>
+                <TagName className='nunito-font' style={{margin:'10px 0 50px 0'}}>{tag.name}</TagName>
 
                 	<TextLine className='sans-font'>Latest</TextLine>
 

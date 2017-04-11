@@ -260,6 +260,30 @@ api.newColumn = (col) => {
 	})
 }
 
+api.getTagFromTagId = (tid) => {
+	return Request
+	.get(config.BACKURL+'/publishers/'+config.PID+'/tags/'+tid)
+	.then(res => {
+		return res.body.tag
+	}, api.err)
+}
+
+api.getTagFromTagSlug = (slug) => {
+	return Request
+	.get(config.BACKURL+'/slugs/publishers/'+config.PID+'/tags/'+ encodeURIComponent(slug))
+	.then(res => {
+		return res.body.tag
+	}, api.err)
+}
+
+api.getStoryTags = (sid) => {
+	return Request
+	.get(config.BACKURL+'/stories/'+sid+'/tags')
+	.then(res => {
+		return res.body.tags
+	}, api.err)
+}
+
 api.getTags = () => {
 	return Request
 	.get(config.BACKURL+'/publishers/'+config.PID+'/tags')
