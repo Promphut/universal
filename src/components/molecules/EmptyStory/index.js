@@ -13,11 +13,17 @@ const Title = styled.h4`
   font-size:20px;
   font-weight:bold;
   margin:25px 0 20px 0;
+  @media (max-width:480px){
+    font-size:18px;
+  }
 `
 const Desc = styled.div`
   text-align:center;
   font-size:16px;
   margin:0 0 20px 0;
+  @media (max-width:480px){
+    font-size:14px;
+  }
 `
 const Img = styled.div`
   background-position:center;
@@ -25,6 +31,10 @@ const Img = styled.div`
   height:223px;
   background-size:cover;
   margin:60px auto 0 auto;
+  @media (max-width:480px){
+    width:111px;
+    height:100px;
+  }
 `
 
 
@@ -35,7 +45,7 @@ const EmptyStory = ({style, className, title,description,hideButton}) => {
       <Img style={{backgroundImage:'url(/pic/pic.png)'}}/>
       <Title>{title}</Title>
       <Desc>{description}</Desc>
-      {hideButton||<div style={{width:'152px',margin:'0 auto 0 auto'}}><PrimaryButton 	label="Write a Story" /></div>}
+      {hideButton||<div className='hidden-mob' style={{width:'152px',margin:'0 auto 0 auto'}}><Link to='/me/stories/new'><PrimaryButton 	label="Write a Story" /></Link></div>}
     </Container>
 	)
 }

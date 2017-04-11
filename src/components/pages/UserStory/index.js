@@ -227,7 +227,7 @@ const UserStory = React.createClass({
 			feedCount: 0,
 			latestStories:[],
 			page:0,
-			isInfiniteLoading: false,
+			isInfiniteLoading: true,
 			loadOffset:300,
 			feedCount:0,
 			isMobile:false
@@ -235,7 +235,7 @@ const UserStory = React.createClass({
 	},
 
 	componentDidMount(){
-		//this.getFeed()
+		this.handleInfiniteLoad()
 	},
 
 	buildElements() {
@@ -306,30 +306,40 @@ const UserStory = React.createClass({
 		          {user.channels.ig && <LinkMobile href={getIgUrl(user.channels.ig)} target="_blank"><i className="fa fa-instagram" aria-hidden="true" ></i></LinkMobile>}
 	 			</UserShareMobile>}
 		      <Content>
-			      <Main>
-						{latestStories.length!=0&&<TextLine className='sans-font'>
-							<strong style={{color:theme.primaryColor,marginRight:'30px'}}>
-								<span style={{fontSize:'30px'}}>{feedCount}</span> stories
-							</strong>
-							{/*<span style={{fontSize:'30px'}}>101</span> Upvotes*/}
-						</TextLine>}
-						{latestStories.length!=0?<Infinite
-								containerHeight={!isMobile?(count*210)-100:(count*356)-100}
-								elementHeight={!isMobile?210:356}
-								infiniteLoadBeginEdgeOffset={loadOffset}
-								onInfiniteLoad={this.handleInfiniteLoad}
-								loadingSpinnerDelegate={this.elementInfiniteLoad()}
-								isInfiniteLoading={isInfiniteLoading}
-								useWindowAsScrollContainer={true}>
+			      {latestStories.length!=0?
+						<Main>
+							<TextLine className='sans-font'>
+								<strong style={{color:theme.primaryColor,marginRight:'30px'}}>
+									<span style={{fontSize:'30px'}}>{feedCount}</span> stories
+								</strong>
+								{/*<span style={{fontSize:'30px'}}>101</span> Upvotes*/}
+							</TextLine>
+							<Infinite
+									containerHeight={!isMobile?(count*210)-100:(count*356)-100}
+									elementHeight={!isMobile?210:356}
+									infiniteLoadBeginEdgeOffset={loadOffset}
+									onInfiniteLoad={this.handleInfiniteLoad}
+									loadingSpinnerDelegate={this.elementInfiniteLoad()}
+									isInfiniteLoading={isInfiniteLoading}
+									useWindowAsScrollContainer={true}>
 
-							{latestStories.length!=0?latestStories.map((story, index) => (
-								<ArticleBox detail={story} key={index}/>
-							)):''}
-						</Infinite>:
-						<EmptyStory title='Start your story !' description='You haven’t write any stories right now.' /> }
-						{latestStories.length!=0&&<More style={{margin:'30px auto 30px auto'}} />}
-						
-			      </Main>
+								{latestStories.length!=0?latestStories.map((story, index) => (
+									<ArticleBox detail={story} key={index}/>
+								)):''}
+							</Infinite>
+							<EmptyStory title='Start your story !' description='You haven’t write any stories right now.' />
+							<More style={{margin:'30px auto 30px auto'}} />
+			      </Main>:
+						<Main>
+							<TextLine className='sans-font'>
+								<strong style={{color:theme.primaryColor,marginRight:'30px'}}>
+									<span style={{fontSize:'30px'}}>{feedCount}</span> stories
+								</strong>
+								{/*<span style={{fontSize:'30px'}}>101</span> Upvotes*/}
+							</TextLine>
+							 {isInfiniteLoading?<Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>:
+							<EmptyStory title='No Story, yet' description='There are no stories in this column right now. Wanna back to see other columns?' />}
+			      </Main>}
 		      </Content>
 		   </Wrapper>
 		)
