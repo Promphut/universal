@@ -76,8 +76,14 @@ const Label = styled.span`
 `
 
 const UploadPicture = React.createClass({
+  getDefaultProps() {
+      return {
+          width: "120px",
+          height:"120px",
+          
+      };
+  },
   getInitialState(){
-
     this.maxMB = this.props.maxMB ? parseFloat(this.props.maxMB) : 5
 		this.allowTypes = this.props.allowTypes || '|jpg|png|jpeg|gif|svg+xml|'
     
@@ -170,7 +176,7 @@ const UploadPicture = React.createClass({
       <Container encType="multipart/form-data" style={{...style,width:width,height:height}}>
         {!statePreview?<Box width={width} height={height} className="menu-font" onClick={()=>(dom(this.refs.imageLoader).click())}><Label style={{...labelStyle}}>{label?label:"Upload Picture"}</Label></Box>:''}
         <Preview width={width} height={height} ref='preview' style={{display:statePreview?'block':'none',backgroundImage:'url('+(preview || src)+')'}}>
-          <Filter width={width} height={height} onClick={()=>(dom(this.refs.imageLoader).click())} ><Label style={{...labelStyle,color:'#fff'}}>Change Picture</Label></Filter>
+          <Filter width={width} height={height} onClick={()=>(dom(this.refs.imageLoader).click())} ><Label style={{...labelStyle,color:'#fff'}}>Edit</Label></Filter>
         </Preview>
         {msg!=''?<Des className='sans-font' style={{color:err?'#D8000C':theme.accentColor}}>{msg}</Des>:''}
         <input type="file" ref="imageLoader" name="imageLoader" onChange={this.upload} style={{visibility:'hidden'}}/>
@@ -187,7 +193,8 @@ UploadPicture.propTypes = {
   label: PropTypes.string,
   type: PropTypes.string,
   src: PropTypes.string,
-  path: PropTypes.string
+  path: PropTypes.string,
+  size:PropTypes.string
 }
 UploadPicture.contextTypes = {
 	setting: React.PropTypes.object
