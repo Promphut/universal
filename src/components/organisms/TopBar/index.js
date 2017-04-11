@@ -75,6 +75,9 @@ const Center = styled.div`
 	transparent .1s;
 	cursor: default;
 	justify-content: center;
+	max-width: 45%;
+	white-space: nowrap;
+	overflow: hidden;
 
 	@media (max-width: 960px) {
 		display: none;
