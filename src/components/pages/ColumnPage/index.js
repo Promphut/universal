@@ -7,14 +7,11 @@ import FlatButton from 'material-ui/FlatButton'
 import FontIcon from 'material-ui/FontIcon'
 import api from 'components/api'
 import Infinite from 'react-infinite'
-<<<<<<< HEAD
 import CircularProgress from 'material-ui/CircularProgress';
 import {Link} from 'react-router'
-=======
 import CircularProgress from 'material-ui/CircularProgress'
 import {Helmet} from 'react-helmet'
 
->>>>>>> ba79f673919651036802bf8a82c8fee6b03382ca
 const Wrapper = styled.div`
 
 `
@@ -184,13 +181,10 @@ const ColumnPage = React.createClass({
 	},
 
 	render(){
-		var {theme} = this.context.setting.publisher
-    let {keywords, channels} = this.context.setting.publisher
+    let {keywords, channels,theme} = this.context.setting.publisher
     const BGImgSize = (window.isMobile() ? 100 : 280) + 60
 		let {column, feed} = this.state
-		//console.log('column', column)
 		var {count, loadOffset, isInfiniteLoading, latestStories, isMobile} = this.state
-		// console.log(column)
 
 		let ChildCover = (
 			<Head>

@@ -25,12 +25,6 @@ const styles = {
     fontWeight: 'bold'
   }
 }
-const Con = styled.div`
-  &>div>span.nunito-font {
-    fill:white;
-    background:white;
-  }
-`
 
 const SelectableList = makeSelectable(List);
 
@@ -72,7 +66,6 @@ const PublisherSettingMenu = React.createClass({
 
   render(){
     return (
-      <Con>
       <SelectableList value={this.state.selectedIndex} style={{padding:0}}>
         <ListItem style={{...styles.listItem}}
           onClick={()=>this.changePath('/editor/')} value='/editor'
@@ -80,6 +73,7 @@ const PublisherSettingMenu = React.createClass({
           open={this.state.open}
           onNestedListToggle={this.handleNestedListToggle}
           leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>dashboard</FontIcon>}
+          rightIcon={<FontIcon className="material-icons" style={{color:'white'}}>keyboard_arrow_down</FontIcon>}
           nestedItems={[
             <ListItem
               onClick={()=>this.changePath('/editor/')}
@@ -112,7 +106,6 @@ const PublisherSettingMenu = React.createClass({
         {this.isAdmin && <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/editor/contact')} value='/editor/contact' className='nunito-font' primaryText="Contact & About" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>contacts</FontIcon>} />}
         {this.isAdmin && <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/editor/settings')} value='/editor/settings' className='nunito-font' primaryText="Settings" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>settings</FontIcon>} />}
       </SelectableList>
-      </Con>
     )
   },
 })
