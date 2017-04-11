@@ -345,7 +345,7 @@ api.createStory = (story) => {
 // 	.send({story: {status: 0}})
 // 	.then({
 // 		return res.body.story
-// 	}, api.err) 
+// 	}, api.err)
 // }
 // api.publishStory = (sid, story) => {
 // 	return Request
@@ -626,6 +626,15 @@ api.uploadFile = (file, type, toUrl) => {
 	.attach(type, file, file.name)
 	.then(res => {
 		return res.body
+	}, api.err)
+}
+
+api.getContentTypes = () => {
+	return Request
+	.get(config.BACKURL+'/publishers/'+config.PID+'/columns')
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body.contentTypes
 	}, api.err)
 }
 
