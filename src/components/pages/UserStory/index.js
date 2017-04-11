@@ -350,7 +350,6 @@ const UserStory = React.createClass({
 									<ArticleBox detail={story} key={index}/>
 								)):''}
 							</Infinite>
-							<EmptyStory title='Start your story !' description='You haven’t write any stories right now.' />
 							<More style={{margin:'30px auto 30px auto'}} />
 			      </Main>:
 						<Main>

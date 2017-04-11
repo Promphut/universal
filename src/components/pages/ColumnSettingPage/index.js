@@ -437,7 +437,7 @@ const ColumnSettingPage = React.createClass({
               <div className="sans-font">Cover picture</div>
             </Title>
             <Edit>
-              <UploadPicture src={cover.medium} path={'/publishers/'+config.PID+'/columns/'+this.props.params.cid+'/cover'} height="90px" width="200px" labelStyle={{top:'40px'}} type='cover'/>
+              <UploadPicture src={cover.medium} path={'/publishers/'+config.PID+'/columns/'+this.props.params.cid+'/cover'} size='1920x340' height={90} width={200} labelStyle={{top:'40px'}} type='cover'/>
             </Edit>
           </Flex>
           {/*<Divider/>*/}

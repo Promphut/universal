@@ -649,13 +649,13 @@ const EditStory = React.createClass({
             <Label className="nunito-font" >Select cover picture : </Label>
             <div className='row' style={{overflow:'hidden',marginTop:'20px'}}>
               <div className='col-4'>
-                <UploadPicture path={'/stories/'+sid+'/covermobile'} src={story.coverMobile} width='96px' height='137px' label='Portrait Cover' type='coverMobile' style={{width:'96px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
+                <UploadPicture path={'/stories/'+sid+'/covermobile'} src={story.coverMobile} size='330x500' width={96} height={137} label='Portrait Cover' type='coverMobile' style={{width:'96px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
               </div>
               <div className='col-1'>
                 <div style={{marginTop:'58px'}}>Or</div>
               </div>
               <div className='col-6'>
-                <UploadPicture path={'/stories/'+sid+'/cover'} src={story.cover} width='194px' height='137px' label='Landscape Cover' type='cover' style={{width:'194px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
+                <UploadPicture path={'/stories/'+sid+'/cover'} src={story.cover} size='1920x860' width={194} height={137} label='Landscape Cover' type='cover' style={{width:'194px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
               </div>
             </div>
           </div>

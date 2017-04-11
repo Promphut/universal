@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {PrimaryButton,SecondaryButton,UploadPicture} from 'components'
+import {PrimaryButton,SecondaryButton,UploadPicture,MetaDataDemo} from 'components'
 import TextField from 'material-ui/TextField';
 //import Request from 'superagent'
 import auth from 'components/auth'
@@ -150,6 +150,7 @@ const PublisherProfileSetting = React.createClass({
     return (
       <Container onSubmit={this.updatePublisher}>
         <div  className="head sans-font">PROFILE</div>
+        <MetaDataDemo style={{margin:'40px 0'}} title={pub.name} description={pub.desc} keyword={pub.keywords} tagline={pub.tagline}/>
         <Flex>
           <Title>
             <div className="sans-font">Title</div>
@@ -212,7 +213,7 @@ const PublisherProfileSetting = React.createClass({
             <div className="sans-font">Cover picture</div>
           </Title>
           <Edit>
-            <UploadPicture src={pub.cover&&pub.cover.medium} path={'/publishers/'+config.PID+'/cover'} type='cover' width='400px' height='160px' labelStyle={{top:'75px'}}/>
+            <UploadPicture src={pub.cover&&pub.cover.medium} path={'/publishers/'+config.PID+'/cover'} type='cover' size='1920x350' width={400} height={160} labelStyle={{top:'75px'}}/>
           </Edit>
         </Flex>
         <Flex>

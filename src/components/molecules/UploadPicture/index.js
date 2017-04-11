@@ -17,8 +17,8 @@ const Box = styled.div`
   position:relative;
   top:0px;
   left:0px;
-  width:${props => props.width};
-  height:${props => props.height};
+  width:${props => props.width}px;
+  height:${props => props.height}px;
   border-radius:10px;
   border:1px dashed #C2C2C2;
   background-color:#F4F4F4;
@@ -41,8 +41,8 @@ const Preview = styled.div`
   position:relative;
   top:0px;
   left:0px;
-  width:${props => props.width};
-  height:${props => props.height};
+  width:${props => props.width}px;
+  height:${props => props.height}px;
   font-size:14px;
   background-size:cover;
   background-position:center;
@@ -57,8 +57,8 @@ const Filter = styled.div`
   position:relative;
   top:0px;
   left:0px;
-  width:${props => props.width};
-  height:${props => props.height};
+  width:${props => props.width}px;
+  height:${props => props.height}px;
   background:rgba(0,0,0,0.3);
   text-align:center;
   font-size:14px;
@@ -78,9 +78,9 @@ const Label = styled.span`
 const UploadPicture = React.createClass({
   getDefaultProps() {
       return {
-          width: "120px",
-          height:"120px",
-          
+          width: 120,
+          height:120,
+          size:'120x120',
       };
   },
   getInitialState(){
@@ -91,7 +91,7 @@ const UploadPicture = React.createClass({
       statePreview:this.props.src==null?false:true,
       preview: null, 
       //file: '', 
-			msg: '',
+			msg: this.props.size,
       err:false
     }
   },
@@ -164,21 +164,22 @@ const UploadPicture = React.createClass({
   },
 
   render(){
+    
     var {msg,statePreview,err,preview} = this.state
     var {label,style,type,width,height,labelStyle,src} = this.props
     var {theme} = this.context.setting.publisher
     
     //console.log('src', src)
-    
+    //console.log(msg)
     var description = <Des className='sans-font'>{msg}</Des>
 
     return(
-      <Container encType="multipart/form-data" style={{...style,width:width,height:height}}>
+      <Container encType="multipart/form-data" style={{...style,width:width,height:height+20+'px'}}>
         {!statePreview?<Box width={width} height={height} className="menu-font" onClick={()=>(dom(this.refs.imageLoader).click())}><Label style={{...labelStyle}}>{label?label:"Upload Picture"}</Label></Box>:''}
         <Preview width={width} height={height} ref='preview' style={{display:statePreview?'block':'none',backgroundImage:'url('+(preview || src)+')'}}>
           <Filter width={width} height={height} onClick={()=>(dom(this.refs.imageLoader).click())} ><Label style={{...labelStyle,color:'#fff'}}>Edit</Label></Filter>
         </Preview>
-        {msg!=''?<Des className='sans-font' style={{color:err?'#D8000C':theme.accentColor}}>{msg}</Des>:''}
+        <Des className='sans-font' style={{color:err?'#D8000C':'#c2c2c2'}}>{msg}</Des>
         <input type="file" ref="imageLoader" name="imageLoader" onChange={this.upload} style={{visibility:'hidden'}}/>
       </Container>
     )
@@ -188,8 +189,8 @@ const UploadPicture = React.createClass({
 UploadPicture.propTypes = {
   style: PropTypes.object,
   labelStyle: PropTypes.object,
-  width: PropTypes.string,
-  height: PropTypes.string,
+  width: PropTypes.number,
+  height: PropTypes.number,
   label: PropTypes.string,
   type: PropTypes.string,
   src: PropTypes.string,
