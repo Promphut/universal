@@ -157,7 +157,7 @@ const NewStory = React.createClass({
       layout:'news',
       open:false,
       column:'no',
-      contentType:'no',
+      contentType:'NEWS',
 
       tag:[],
       addTag:[],
@@ -295,7 +295,8 @@ const NewStory = React.createClass({
   },
 
   chooseContentType(e,ind,val){
-    this.setState({contentType:val})
+    const contentType = this.state.contentTypeList[val]
+    this.setState({contentType})
   },
 
   getTags(){
@@ -321,22 +322,14 @@ const NewStory = React.createClass({
   },
 
   getContentType() {
-    let contentType = []
-    contentType[0] = {
-      name: 'Type 0'
-    }
-    contentType[1] = {
-      name: 'Type 1'
-    }
-    contentType[2] = {
-      name: 'Type 2'
-    }
-
-    this.setState({contentTypeList: contentType})
+    api.getContentTypes()
+    .then(types => {
+      this.setState({contentTypeList: types})
+    })
   },
 
   autoSave(){
-    let {prevState,sid,title,column} = this.state
+    let {prevState,sid,title,column,contentType} = this.state
     if(this.state.sid){
       if(this.state.status === this.SAVE_STATUS.DIRTIED){
         const images = [].slice.call(dom(this.refs.paper).getElementsByTagName('img'))
@@ -355,6 +348,7 @@ const NewStory = React.createClass({
           html:el
         }
         if(column!='no') s.column = column
+        s.contentType = contentType
 
         this.setState({saveStatus:'saving...'})
 
@@ -386,6 +380,7 @@ const NewStory = React.createClass({
           html:el
         }
         if(column!='no') s.column = column
+        s.contentType = contentType
 
         api.createStory(s)
         .then(story => {
@@ -406,8 +401,6 @@ const NewStory = React.createClass({
     let {sid,column,contentType,title} = this.state
     let allContents = this.editor.serialize()
 
-    console.log('contentType is ', contentType)
-
     let s = {
       title:title,
       publisher:parseInt(config.PID),
@@ -415,6 +408,7 @@ const NewStory = React.createClass({
       html:allContents.paper.value,
     }
     if(column!='no') s.column = column
+    s.contentType = contentType
 
     api.updateStory(sid, s)
     .then(story => {
@@ -544,6 +538,12 @@ const NewStory = React.createClass({
     const dataSourceConfig = {text: 'text',value: 'value',id:'id'};
     let {theme} = this.context.setting.publisher
 
+    let contentTypeId = 0
+    for (let i = 0; i < contentTypeList.length; i ++) {
+      if (contentTypeList[i] == contentType) {
+        contentTypeId = i
+      }
+    }
 
     //console.log(tag)
     return (
@@ -625,7 +625,7 @@ const NewStory = React.createClass({
             </DropDownMenu>
             <Label className="nunito-font or" style={{float:'left',marginTop:'22px',minWidth:'60px'}}>Type : </Label>
             <DropDownMenu
-              value={contentType}
+              value={contentTypeId}
               onChange={this.chooseContentType}
               autoWidth={false}
               labelStyle={{top:'-11px'}}
@@ -638,7 +638,7 @@ const NewStory = React.createClass({
             >
               <MenuItem value='no' primaryText='No Type' />
               {contentTypeList.length!=0 && contentTypeList.map((data,index)=>(
-                <MenuItem value={data._id} primaryText={data.name} key={index} />
+                <MenuItem value={index} primaryText={data} key={index} />
               ))}
             </DropDownMenu>
           </div>

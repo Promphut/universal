@@ -156,6 +156,7 @@ const EditStory = React.createClass({
       layout:'news',
       open:false,
       column:'no',
+      contentType:'NEWS',
 
       tag:[],
       addTag:[],
@@ -163,6 +164,7 @@ const EditStory = React.createClass({
       searchText:'',
 
       columnList:[],
+      contentTypeList:[],
       sid:this.props.params.sid,
       saveStatus:null,
 
@@ -253,6 +255,7 @@ const EditStory = React.createClass({
 
     this.getTags()
     this.getColumns()
+    this.getContentType()
     this.getStoryDetail()
     this.getStoryTags()
   },
@@ -316,15 +319,21 @@ const EditStory = React.createClass({
     this.setState({column:val})
   },
 
+  chooseContentType(e,ind,val){
+    const contentType = this.state.contentTypeList[val]
+    this.setState({contentType})
+  },
+
   getStoryDetail(){
     let story = this.props.params.story
-    //console.log('getStoryDetail', story)
+    console.log('getStoryDetail', story.contentType)
     if(story){
       this.setState({
         story:story,
         title:story.title,
 
-        column: story.column ? story.column._id : 'no'
+        column: story.column ? story.column._id : 'no',
+        contentType: story.contentType ? story.contentType : 'NEWS'
       })
 
       this.editor.setContent(story.html || '')
@@ -353,8 +362,15 @@ const EditStory = React.createClass({
     })
   },
 
+  getContentType() {
+    api.getContentTypes()
+    .then(types => {
+      this.setState({contentTypeList: types})
+    })
+  },
+
   autoSave(){
-    let {sid,title,column} = this.state
+    let {sid,title,column,contentType} = this.state
 
     if(this.state.status === this.SAVE_STATUS.DIRTIED){
       const images = [].slice.call(dom(this.refs.paper).getElementsByTagName('img'))
@@ -378,6 +394,7 @@ const EditStory = React.createClass({
         html:el
       }
       if(column!='no') s.column = column
+      s.contentType = contentType
 
       api.updateStory(sid, s)
       .then(story => {
@@ -390,7 +407,7 @@ const EditStory = React.createClass({
   },
 
   publishStory(){
-    let {sid,column,title} = this.state
+    let {sid,column,contentType,title} = this.state
     let allContents = this.editor.serialize()
 
     let s = {
@@ -400,6 +417,7 @@ const EditStory = React.createClass({
       html:allContents.paper.value,
     }
     if(column!='no') s.column = column
+    s.contentType = contentType
 
     api.updateStory(sid, s)
     .then(story => {
@@ -521,15 +539,20 @@ const EditStory = React.createClass({
   },
 
   render(){
-    let {chooseLayout,layout,open,anchorEl,column,tag,addTag,searchText,columnList,sid,
-          alert,alertWhere,alertConfirm,alertDesc,saveStatus,title,publishStatus,story} = this.state
-    const dataSourceConfig = {text: 'text',value:'value', id:'id'};
+    let {chooseLayout,layout,open,anchorEl,column,contentType,tag,addTag,searchText,
+      columnList,contentTypeList,sid,alert,alertWhere,alertConfirm,alertDesc,saveStatus,
+      title,publishStatus,story} = this.state
+    const dataSourceConfig = {text: 'text', value: 'value', id:'id'};
+
     let {theme} = this.context.setting.publisher
+    
+    let contentTypeId = 0
+    for (let i = 0; i < contentTypeList.length; i ++) {
+      if (contentTypeList[i] == contentType) {
+        contentTypeId = i
+      }
+    }
 
-    // console.log()
-    // console.log('tag',tag,'addtag',addTag,'difference',_.pullAllWith(tag, addTag, _.isEqual))
-
-    //console.log(tag)
     return (
       <Container onSubmit={this.updateData}>
         <Alert
@@ -576,6 +599,24 @@ const EditStory = React.createClass({
               <MenuItem value='no' primaryText='No Column' />
               {columnList.length!=0 && columnList.map((data,index)=>(
                 <MenuItem value={data._id} primaryText={data.name} key={index} />
+              ))}
+            </DropDownMenu>
+            <Label className="nunito-font or" style={{float:'left',marginTop:'22px',minWidth:'60px'}}>Type : </Label>
+            <DropDownMenu
+              value={contentTypeId}
+              onChange={this.chooseContentType}
+              autoWidth={false}
+              labelStyle={{top:'-11px'}}
+              iconStyle={{top:'-8px',left:'300px'}}
+              style={{margin:'15px 0 15px 15px',width:'340px',height:'34px',border:'1px solid #e2e2e2',float:'left'}}
+              underlineStyle={{display:'none'}}
+              menuStyle={{width:'320px'}}
+              menuItemStyle={{width:'320px'}}
+              selectedMenuItemStyle={{color:'#222',background:theme.accentColor}}
+            >
+              <MenuItem value='no' primaryText='No Type' />
+              {contentTypeList.length!=0 && contentTypeList.map((data,index)=>(
+                <MenuItem value={index} primaryText={data} key={index} />
               ))}
             </DropDownMenu>
           </div>

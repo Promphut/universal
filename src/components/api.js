@@ -21,6 +21,9 @@ api.columnNotFoundPromise = () => {
 api.storyNotFoundPromise = () => {
 	return Promise.reject(new NotFoundError('Story is not found.'))
 }
+api.tagNotFoundPromise = () => {
+	return Promise.reject(new NotFoundError('Tag is not found.'))
+}
 // uid and token are optional
 // if token is specified, it'll be used to make request as well.
 // uid will be auto-get if not supplied.
@@ -289,6 +292,18 @@ api.getTags = () => {
 	}, api.err)
 }
 
+api.getTagFromSlug = (slug) => {
+	return Request
+	.get(config.BACKURL + '/slugs/publishers/' + config.PID + '/tags/' + encodeURIComponent(slug))
+	.set('Accept', 'application/json')
+	.then(res => {
+		return res.body.tag
+	})
+	.catch(err => {
+		return api.tagNotFoundPromise()
+	})
+}
+
 api.addTag = (name) => {
 	return Request
 	.post(config.BACKURL+'/publishers/'+config.PID+'/tags')
@@ -354,7 +369,7 @@ api.createStory = (story) => {
 // 	.send({story: {status: 0}})
 // 	.then({
 // 		return res.body.story
-// 	}, api.err) 
+// 	}, api.err)
 // }
 // api.publishStory = (sid, story) => {
 // 	return Request
@@ -635,6 +650,15 @@ api.uploadFile = (file, type, toUrl) => {
 	.attach(type, file, file.name)
 	.then(res => {
 		return res.body
+	}, api.err)
+}
+
+api.getContentTypes = () => {
+	return Request
+	.get(config.BACKURL+'/publishers/'+config.PID+'/columns')
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body.contentTypes
 	}, api.err)
 }
 

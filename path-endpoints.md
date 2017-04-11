@@ -144,9 +144,9 @@ FEED
  	- ?filter : depend on the type, e.g. for a story: 'column', 'topic', 'program', 'tag'
 
 SLUG
-*	Get column by slug 						GET 		/slugs/publishers/:pid/:column-slug 				{(token)} 						{column}			same as get column (private & public)
+*	Get column by slug 						GET 		/slugs/publishers/:pid/columns/:column-slug 		{(token)} 						{column}			same as get column (private & public)
 *	Get user by username 					GET			/slugs/users/:username								{(token)} 						{user} 				same as get user (private & public)
-	Get tag by tag slug 					GET 		/slugs/tags/:tag 									{(token)} 						{tag} 				same as get tag (private & public)
+	Get tag by tag slug 					GET 		/slugs/publishers/:pid/tags/:tag 					{(token)} 						{tag} 				same as get tag (private & public)
 
 COMMENT
 	G

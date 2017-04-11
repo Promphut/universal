@@ -82,7 +82,7 @@ const ArticleBox = React.createClass({
     //console.log('URL', url)
     return (
       <Container style={{...style}}>
-        <BGImg url={url} src={cover.small || cover.medium} alt={ptitle} className='imgWidth mob-hidden' />
+        <BGImg url={url} src={cover.small || cover.medium} alt={ptitle || ''} className='imgWidth mob-hidden' />
         <BoxText className='sans-font'>
           <DivDes>
             <ShareDropdown url={url} />

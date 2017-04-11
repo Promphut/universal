@@ -716,6 +716,8 @@ const App = React.createClass({
     let {name, desc, theme, tagline, keywords, analytic, channels, cover} = this.context.setting.publisher
     if(!analytic) analytic = {}
     //console.log('context', this.context.setting, this.props.location)
+    let coverMedium
+    if (cover) coverMedium = cover.medium
     let {children} = this.props
     let muiTheme = getMuiTheme({
       appBar: {
@@ -763,11 +765,12 @@ const App = React.createClass({
           <meta property="og:url" content={config.FRONTURL+this.props.location.pathname} />
           <meta property="og:title" content={title} />
           <meta property="og:type" content="article" />
-          {/*<meta property="og:image" content={cover.medium} />*/}
+          <meta property="og:image" content={coverMedium} />
           <meta property="og:keywords" content={keywords} />
           <meta property="og:description" content={desc} />
           <meta property="twitter:card" content="summary_large_image" />
           <meta property="twitter:image:alt" content={title} />
+          <meta property="fb:app_id" content={config.ANALYTIC.FBAPPID} />
         </Helmet>
 
         <MuiThemeProvider muiTheme={muiTheme}>

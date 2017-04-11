@@ -34,7 +34,7 @@ const FbShareButton = React.createClass({
 	},
 
 	render(){
-		return <div onClick={this.handleFbShare}>{this.props.button}</div>
+		return <div onClick={this.handleFbShare} style={{...this.props.style}}>{this.props.button}</div>
 	}
 })
 

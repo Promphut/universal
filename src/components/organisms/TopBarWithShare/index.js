@@ -71,13 +71,19 @@ const HamburgerWrapper = styled.a`
   float: left;
   text-align: center;
   color: ${props => props.theme.barTone=='light'?'#222':'white'};
-  padding: 13px 22px;
+  padding: 11px 22px 13px;
   cursor: pointer;
 `
 
 const Hamburger = styled.i`
 	color: ${props => props.theme.barTone=='light'?'#222':'white'};
 	padding-top:5px;
+`
+
+const LogoWrapper = styled.div`
+	display: flex;
+	float: left;
+	height: 60px;
 `
 
 const Logo = styled.img`
@@ -227,8 +233,7 @@ const TopBarWithShare = React.createClass({
 	  const logoStyleBase = {
 	    display: 'inline-block',
 	    float: 'left',
-	    marginTop: '3px',
-	    padding: '17px 5px'
+	    margin: 'auto'
 	  }
 		const logoStyle = window.isMobile() ? {
 			...logoStyleBase,
@@ -255,13 +260,13 @@ const TopBarWithShare = React.createClass({
 			      <HamburgerWrapper onClick={() => this.openPop('left')}>
 			        <Hamburger className="material-icons" style={!scrolling && transparent && hasCover ? {color:'#FFF'} : {}}>menu</Hamburger>
 			      </HamburgerWrapper>
-
-			      <LogoLink to="/" src={theme.logo} title={this.props.title} style={logoStyle} fill={theme.barTone=='light'?'':'#FFF'} />
-			      <LogoLink to="/" src={theme.slogo} title={this.props.title} style={logoStyleMobile} fill={theme.barTone=='light'?'':'#FFF'} />
+						<LogoWrapper>
+			      	<LogoLink to="/" src={theme.slogo} title={this.props.title} style={logoStyleMobile} />
+						</LogoWrapper>
 					</Left>
 
 					<Right className="fade">
-						<FbShareButton button={<ShareButtonTop number='112' barTone={theme.barTone} scrolling={scrolling} hasCover={hasCover}/>} />
+						<FbShareButton style={{float: 'left'}} button={<ShareButtonTop number='112' barTone={theme.barTone} scrolling={scrolling} hasCover={hasCover}/>} />
 						<ShareDropdownTop>
 							<FontIcon style={moreStyle} className="material-icons" >more_vert</FontIcon>
 						</ShareDropdownTop>
