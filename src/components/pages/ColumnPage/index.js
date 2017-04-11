@@ -3,12 +3,18 @@ import {TopBarWithNavigation, ArticleBox, ArticleBoxLarge, More, TrendingSideBar
 	BGImg, StoryMenu, Stick, Footer,EmptyStory} from 'components'
 import {findDOMNode as dom} from 'react-dom'
 import styled from 'styled-components'
-import FlatButton from 'material-ui/FlatButton';
-import FontIcon from 'material-ui/FontIcon';
+import FlatButton from 'material-ui/FlatButton'
+import FontIcon from 'material-ui/FontIcon'
 import api from 'components/api'
 import Infinite from 'react-infinite'
+<<<<<<< HEAD
 import CircularProgress from 'material-ui/CircularProgress';
 import {Link} from 'react-router'
+=======
+import CircularProgress from 'material-ui/CircularProgress'
+import {Helmet} from 'react-helmet'
+
+>>>>>>> ba79f673919651036802bf8a82c8fee6b03382ca
 const Wrapper = styled.div`
 
 `
@@ -179,18 +185,42 @@ const ColumnPage = React.createClass({
 
 	render(){
 		var {theme} = this.context.setting.publisher
+    let {keywords, channels} = this.context.setting.publisher
     const BGImgSize = (window.isMobile() ? 100 : 280) + 60
 		let {column, feed} = this.state
 		//console.log('column', column)
-		var {count,loadOffset,isInfiniteLoading,latestStories,isMobile} = this.state
-		let ChildCover =
+		var {count, loadOffset, isInfiniteLoading, latestStories, isMobile} = this.state
+		// console.log(column)
+
+		let ChildCover = (
 			<Head>
 				<ColumnName className='serif-font'>{column.name}</ColumnName>
 				<ColumnDetail >{column.shortDesc}</ColumnDetail>
 			</Head>
+		)
 
 		return (
-		    <Wrapper>
+	    <Wrapper>
+				<Helmet>
+					<title>{column.name}</title>
+          <meta name="title" content={column.name} />
+          <meta name="keywords" content={keywords} />
+          <meta name="description" content={column.shortDesc} />
+
+          <link rel="shortcut icon" type="image/ico" href={config.BACKURL+'/publishers/'+config.PID+'/favicon'} />
+          {channels && channels.fb ? <link rel="author" href={getFbUrl(channels.fb)} /> : ''}
+          <link rel="canonical" href={window.location.href} />
+
+          <meta property="og:sitename" content={column.name} />
+          <meta property="og:url" content={window.location.href} />
+          <meta property="og:title" content={column.name} />
+          <meta property="og:type" content="article" />
+					<meta property="og:image" content={column.cover.medium} />
+          <meta property="og:keywords" content={keywords} />
+          <meta property="og:description" content={column.shortDesc} />
+          <meta property="twitter:card" content="summary_large_image" />
+          <meta property="twitter:image:alt" content={column.name} />
+				</Helmet>
 				<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 				<BGImg src={column.cover.medium || column.cover.small}
 					style={{width:'100%',height: BGImgSize + 'px'}} alt={column.name}
@@ -231,8 +261,9 @@ const ColumnPage = React.createClass({
 		)
 	}
 });
+
 ColumnPage.contextTypes = {
 	setting: React.PropTypes.object
-};
+}
 
-export default ColumnPage;
+export default ColumnPage

@@ -34,8 +34,8 @@ const Title = styled.div`
 const GraphGap = styled.div`
   height: 30px;
   background: #F4F4F4;
-  border-top: 2px solid #E2E2E2;
-  border-bottom: 2px solid #E2E2E2;
+  border-top: 1px solid #E2E2E2;
+  border-bottom: 1px solid #E2E2E2;
 `
 
 const TopHeader = styled.div`

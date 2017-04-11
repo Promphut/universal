@@ -10,7 +10,8 @@ import Avatar from 'material-ui/Avatar'
 import auth from 'components/auth'
 import api from 'components/api'
 import Infinite from 'react-infinite'
-import CircularProgress from 'material-ui/CircularProgress';
+import CircularProgress from 'material-ui/CircularProgress'
+import {Helmet} from 'react-helmet'
 
 const Wrapper = styled.div`
 
@@ -205,7 +206,7 @@ const UserDetail = ({style, user, checkBack}) => {
 	        	<UserName className='serif-font'>{user.display}</UserName>
 	      	  	<UserDesc className='sans-font'>{user.intro}</UserDesc>
 	      	</UserData>
-		    
+
 		    {user.channels && <UserShare>
 		        {/*<div className='row' style={{overflow:'hidden', textAlign: 'right'}}>*/}
 		        <div style={{textAlign:'right'}}>
@@ -286,19 +287,40 @@ const UserStory = React.createClass({
 	},
 
 	render(){
-    	let {theme} = this.context.setting.publisher
+  	let {theme, keywords, channels} = this.context.setting.publisher
 		//console.log('user', this.props)
 		//var article = []
 		let {feed, feedCount} = this.state
 		let {count,loadOffset,isInfiniteLoading,latestStories,isMobile} = this.state
 		let user = this.props.params.user
-		//console.log('user', user)
+		// console.log('user', user)
 
 		return (
-		    <Wrapper>
-		      <TopBarWithNavigation className="hidden-mob" title={'Title of AomMoney goes here..'} />
+			<Wrapper>
+				<Helmet>
+					<title>{user.display}</title>
+          <meta name="title" content={user.display} />
+          <meta name="keywords" content={keywords} />
+          <meta name="description" content={user.shortDesc} />
+
+          <link rel="shortcut icon" type="image/ico" href={config.BACKURL+'/publishers/'+config.PID+'/favicon'} />
+          {channels && channels.fb ? <link rel="author" href={getFbUrl(channels.fb)} /> : ''}
+          <link rel="canonical" href={window.location.href} />
+
+          <meta property="og:sitename" content={user.display} />
+          <meta property="og:url" content={window.location.href} />
+          <meta property="og:title" content={user.display} />
+          <meta property="og:type" content="article" />
+					<meta property="og:image" content={user.pic.medium} />
+          <meta property="og:keywords" content={keywords} />
+          <meta property="og:description" content={user.shortDesc} />
+          <meta property="twitter:card" content="summary_large_image" />
+          <meta property="twitter:image:alt" content={user.display} />
+				</Helmet>
+
+				<TopBarWithNavigation className="hidden-mob" title={'Title of AomMoney goes here..'} />
 				<UserDetail user={user} checkBack={this.checkBack}/>
-				
+
 				{user.channels && <UserShareMobile className='row'>
 		          {user.channels.fb && <LinkMobile href={getFbUrl(user.channels.fb)} target="_blank"><i className="fa fa-facebook" aria-hidden="true"></i></LinkMobile>}
 		          {user.channels.twt && <LinkMobile href={getTwtUrl(user.channels.twt)} target="_blank"><i className="fa fa-twitter" aria-hidden="true" ></i></LinkMobile>}
@@ -349,6 +371,6 @@ const UserStory = React.createClass({
 
 UserStory.contextTypes = {
 	setting: React.PropTypes.object
-};
+}
 
-export default UserStory;
+export default UserStory

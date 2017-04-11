@@ -57,6 +57,11 @@ const Name = styled(Link)`
   font-size:17px;
   width:190px;
   font-weight:bold;
+  white-space: pre-wrap;      /* Webkit */
+  white-space: -moz-pre-wrap; /* Firefox */
+  white-space: -pre-wrap;     /* Opera <7 */
+  white-space: -o-pre-wrap;   /* Opera 7 */
+  word-wrap: break-word;      /* IE */
 `
 
 const Img = styled.div`
