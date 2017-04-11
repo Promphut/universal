@@ -14,6 +14,7 @@ const Wrapper = styled.div`
 
 	.hide {
 		opacity: ${props => props.scroll};
+		overflow: hidden;
 	}
 `
 
@@ -49,7 +50,7 @@ const HamburgerWrapper = styled.a`
   float: left;
   text-align: center;
   color: ${props => props.theme.barTone=='light'?'#222':'white'};
-  padding: 13px 22px;
+  padding: 11px 22px 13px;
   cursor: pointer;
 `
 
@@ -75,9 +76,8 @@ const Center = styled.div`
 	transparent .1s;
 	cursor: default;
 	justify-content: center;
-	max-width: 45%;
+	max-width: 40%;
 	white-space: nowrap;
-	overflow: hidden;
 
 	@media (max-width: 960px) {
 		display: none;
@@ -195,7 +195,6 @@ const TopBar = React.createClass({
 	    display: 'inline-block',
 	    float: 'left',
 	    margin: 'auto'
-	    // padding: '17px 5px'
 	  }
 		const logoStyle = window.isMobile() ? {
 			...logoStyleBase,
@@ -204,10 +203,10 @@ const TopBar = React.createClass({
 			...logoStyleBase
 		}
 		const logoStyleMobile = window.isMobile() ? {
-			...logoStyleBase
+			...logoStyleBase,
 		} : {
 			...logoStyleBase,
-			display: 'none'
+	    margin: 'auto 20px auto auto'
 		}
 
 		const buttonStyle = {
@@ -236,8 +235,9 @@ const TopBar = React.createClass({
 			        <Hamburger className="material-icons" style={!scrolling && transparent && hasCover ? {color:'white'} : {}}>menu</Hamburger>
 			      </HamburgerWrapper>
 						<LogoWrapper>
-							<LogoLink to="/" src={theme.logo} title={this.props.title} style={logoStyle} fill={theme.barTone=='light'?'':"#FFF"} />
-	      			<LogoLink to="/" src={theme.slogo} title={this.props.title} style={logoStyleMobile} fill={theme.barTone=='light'?'':'#FFF'} />
+							<LogoLink to="/" src={theme.slogo} title={this.props.title} style={logoStyleMobile} />
+							<LogoLink to="/" src={theme.logo} title={this.props.title} style={logoStyle}
+								fill={(!scrolling && hasCover) ? '#FFF' : ''} />
 						</LogoWrapper>
 					</Left>
 
