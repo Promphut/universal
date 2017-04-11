@@ -600,7 +600,7 @@ api.incStoryInsight = (sid, action, subaction) => {
 	}, api.err)
 }
 
-api.getStoryInsight = (sid, action, subaction,period,from,to) => {
+api.getStoryInsight = (sid, action, subaction, period, from, to) => {
 	if(sid == null) return Promise.reject(new Error('sid is required.'))
 	if(action == null) return Promise.reject(new Error('action is required.'))
 
