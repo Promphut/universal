@@ -7,7 +7,8 @@ import FlatButton from 'material-ui/FlatButton'
 import FontIcon from 'material-ui/FontIcon'
 import api from 'components/api'
 import Infinite from 'react-infinite'
-import CircularProgress from 'material-ui/CircularProgress'
+import CircularProgress from 'material-ui/CircularProgress';
+import {Link} from 'react-router'
 import {Helmet} from 'react-helmet'
 
 const Wrapper = styled.div`
@@ -110,18 +111,11 @@ const Onload = styled.div`
 const ColumnPage = React.createClass({
 	getInitialState(){
 		return {
-			// column: {
-			// 	cover: {
-			// 		medium: ''
-			// 	},
-			// 	shortDesc: '',
-			// 	name: ''
-			// },
 			column:this.props.params.column,
 			feed: [],
 			latestStories:[],
 			page:0,
-			isInfiniteLoading: false,
+			isInfiniteLoading: true,
 			loadOffset:300,
 			feedCount:0,
 			isMobile:false
@@ -129,7 +123,7 @@ const ColumnPage = React.createClass({
 	},
 
 	componentDidMount() {
-		//this.getColumnFeed(this.props.params.column)
+		this.handleInfiniteLoad()
 		this.setState({
 			isMobile:window.isMobile()
 		})
@@ -139,35 +133,19 @@ const ColumnPage = React.createClass({
 		if(nextProps.params.column!=this.props.params.column){
 			this.setState({
 				column:nextProps.params.column,
+				page:0,
+				latestStories:[],
+				loadOffset:300
 			},()=>{
-				this.setState({
-					page:0,
-					latestStories:[],
-					loadOffset:300
-				},()=>{
-					this.handleInfiniteLoad()
-				})
+				this.handleInfiniteLoad()
 			})
 		}
 	},
 
-	// getColumnFeed(col){
-	// 	let {id, name, shortDesc, cover} = col
-
-	// 	api.getFeed('story', {column: id, status: 1})
-	// 	.then(result => {
-	// 		this.setState({
-	// 			column: {id, name, shortDesc, cover},
-	// 			feed: result.feed,
-	// 		})
-	// 	})
-
-	// },
-
 	buildElements() {
 		let page = this.state.page
-
-		api.getFeed('story', {status:1}, 'latest', null, page, 10)
+		var {column} = this.state
+		api.getFeed('story', {status:1,column:column.id }, 'latest', null, page, 10)
 		.then(result => {
 			var s = this.state.latestStories.concat(result.feed)
 			this.setState({
@@ -202,13 +180,10 @@ const ColumnPage = React.createClass({
 	},
 
 	render(){
-    let {keywords, channels} = this.context.setting.publisher
-
+    let {keywords, channels,theme} = this.context.setting.publisher
     const BGImgSize = (window.isMobile() ? 100 : 280) + 60
 		let {column, feed} = this.state
-		//console.log('column', column)
 		var {count, loadOffset, isInfiniteLoading, latestStories, isMobile} = this.state
-		// console.log(column)
 
 		let ChildCover = (
 			<Head>
@@ -243,16 +218,12 @@ const ColumnPage = React.createClass({
 				<BGImg src={column.cover.medium || column.cover.small}
 					style={{width:'100%',height: BGImgSize + 'px'}} alt={column.name}
 					child={ChildCover}/>
-
 		      	<Content>
-			      <Main>
-						<StoryMenu
-							style={{padding:'15px 0 15px 0', margin:'0 0 50px 0'}}
-							next={column.name}
-						/>
-						{latestStories.length!=0&&<TextLine className='sans-font'>Latest</TextLine>}
-
-							{latestStories.length!=0?<Infinite
+			      {latestStories.length!=0?
+						<Main>
+							<StoryMenu style={{padding:'15px 0 15px 0', margin:'0 0 50px 0'}}	next={column.name} />
+							<TextLine className='sans-font'>Latest</TextLine>
+							<Infinite
 									containerHeight={!isMobile?(count*210)-100:(count*356)-100}
 									elementHeight={!isMobile?210:356}
 									infiniteLoadBeginEdgeOffset={loadOffset}
@@ -264,10 +235,14 @@ const ColumnPage = React.createClass({
 								{latestStories.length!=0?latestStories.map((story, index) => (
 									<ArticleBox detail={story} key={index}/>
 								)):''}
-							</Infinite>: <EmptyStory title='No Story, yet' description='There are no stories in this column right now. Wanna back to see other columns?' />}
-
-						{latestStories.length!=0&&<More style={{margin:'30px auto 30px auto'}} />}
-			      </Main>
+							</Infinite>
+							<More style={{margin:'30px auto 30px auto'}} />
+			      </Main>:
+						<Main>
+							<StoryMenu style={{padding:'15px 0 15px 0', margin:'0 0 50px 0'}}next={column.name}/>
+						  {isInfiniteLoading?<Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>:
+							<EmptyStory title='No Story, yet' description={<div>There are no stories in this column right now. Wanna back to see <Link to='/stories/columns' style={{color:theme.accentColor}}>other columns</Link>?</div>} />}
+			      </Main>}
 			      <Aside>
 							<Stick topOffset={70} style={{zIndex: '0'}}>
 								<TrendingSideBar/>
@@ -278,7 +253,7 @@ const ColumnPage = React.createClass({
 		   </Wrapper>
 		)
 	}
-})
+});
 
 ColumnPage.contextTypes = {
 	setting: React.PropTypes.object

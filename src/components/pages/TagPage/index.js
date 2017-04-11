@@ -109,18 +109,10 @@ const Onload = styled.div`
 const TagPage = React.createClass({
 	getInitialState(){
 		return {
-			// column: {
-			// 	cover: {
-			// 		medium: ''
-			// 	},
-			// 	shortDesc: '',
-			// 	name: ''
-			// },
-			//column:this.props.params.column,
 			feed: [],
 			latestStories:[],
 			page:0,
-			isInfiniteLoading: false,
+			isInfiniteLoading: true,
 			loadOffset:300,
 			feedCount:0,
 			isMobile:false
@@ -128,7 +120,7 @@ const TagPage = React.createClass({
 	},
 
 	componentDidMount() {
-		//this.getColumnFeed(this.props.params.column)
+		this.handleInfiniteLoad()
 		this.setState({
 			isMobile:window.isMobile()
 		})
@@ -206,19 +198,18 @@ const TagPage = React.createClass({
 		//console.log('column', column)
 		var {count,loadOffset,isInfiniteLoading,latestStories,isMobile} = this.state
 
-
 		return (
 		    <Wrapper>
 				<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 
 		      	<Content>
-              <Main>
+              {latestStories.length!=0?<Main>
                 <TextLine className='sans-font' style={{border:'none',marginTop:'60px'}}>tag</TextLine>
                 <TagName className='nunito-font' style={{margin:'10px 0 50px 0'}}>{'Tag'}</TagName>
 
-                {latestStories.length!=0&&<TextLine className='sans-font'>Latest</TextLine>}
+                	<TextLine className='sans-font'>Latest</TextLine>
 
-                  {latestStories.length!=0?<Infinite
+                  <Infinite
                       containerHeight={!isMobile?(count*210)-100:(count*356)-100}
                       elementHeight={!isMobile?210:356}
                       infiniteLoadBeginEdgeOffset={loadOffset}
@@ -230,11 +221,17 @@ const TagPage = React.createClass({
                     {latestStories.length!=0?latestStories.map((story, index) => (
                       <ArticleBox detail={story} key={index}/>
                     )):''}
-                  </Infinite>:
-									<EmptyStory title='No Story, yet' description='There are no stories under this tag right now.' />}
+                  </Infinite>
 
-                {latestStories.length!=0&&<More style={{margin:'30px auto 30px auto'}} />}
-              </Main>
+                <More style={{margin:'30px auto 30px auto'}} />
+              </Main>:
+							<Main>
+                <TextLine className='sans-font' style={{border:'none',marginTop:'60px'}}>tag</TextLine>
+                <TagName className='nunito-font' style={{margin:'10px 0 50px 0'}}>{'Tag'}</TagName>
+								 {isInfiniteLoading?<Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>:
+							<EmptyStory title='No Story, yet' description='There are no stories in this column right now. Wanna back to see other columns?' />}											
+              </Main>}
+
 			      <Aside>
               <TagSideBar style={{marginTop:'4 0px'}}/>
 							<Stick topOffset={70} style={{zIndex: '0'}}>

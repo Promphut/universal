@@ -33,7 +33,8 @@ const PublisherSettingMenu = React.createClass({
     this.isAdmin = false
 
     return {
-      selectedIndex:this.props.pathname
+      selectedIndex:this.props.pathname,
+      open:true
     }
   },
 
@@ -57,13 +58,22 @@ const PublisherSettingMenu = React.createClass({
     browserHistory.push(e)
   },
 
+  handleNestedListToggle(item){
+    this.setState({
+      open: item.state.open,
+    });
+  },
+
   render(){
     return (
       <SelectableList value={this.state.selectedIndex} style={{padding:0}}>
         <ListItem style={{...styles.listItem}}
           onClick={()=>this.changePath('/editor/')} value='/editor'
           className='nunito-font' primaryText="Insights"
+          open={this.state.open}
+          onNestedListToggle={this.handleNestedListToggle}
           leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>dashboard</FontIcon>}
+          rightIcon={<FontIcon className="material-icons" style={{color:'white'}}>keyboard_arrow_down</FontIcon>}
           nestedItems={[
             <ListItem
               onClick={()=>this.changePath('/editor/')}
