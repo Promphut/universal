@@ -17,6 +17,12 @@ const Wraper = styled.div`
 const Head = styled.h1`
   font-size:36px;
   font-Weight:bold;
+  white-space: pre-wrap;      /* Webkit */
+  white-space: -moz-pre-wrap; /* Firefox */
+  white-space: -pre-wrap;     /* Opera <7 */
+  white-space: -o-pre-wrap;   /* Opera 7 */
+  word-wrap: break-word;      /* IE */
+  
   @media (max-width:480px){
     font-size:24px;
   }

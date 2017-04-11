@@ -72,6 +72,10 @@ const TopBarWithNavigation = React.createClass({
 		// titleText = 'Article'
 		let children = ''
 		if (article) {
+			// console.log('article', article)
+			if (article.length > 80) {
+				article = article.substring(0, 80) + '...'
+			}
 			children = <h4 className="menu-font">{article}</h4>
 			transparent = true
 
