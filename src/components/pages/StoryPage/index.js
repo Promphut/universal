@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import {findDOMNode as dom} from 'react-dom'
 import api from 'components/api'
 import  { StickyContainer, Sticky }  from 'react-sticky'
-import {Helmet} from "react-helmet";
+import {Helmet} from 'react-helmet'
 
 const Wrapper = styled.div`
 	 .hidden-des{
@@ -189,6 +189,7 @@ const StoryPage = React.createClass({
 
 
 	render(){
+    let {keywords, channels} = this.context.setting.publisher
 		let {stopPos, recommends, description} = this.state
 
 		let hasCover = false
@@ -203,12 +204,23 @@ const StoryPage = React.createClass({
 			<div>
 				<Helmet>
 					<title>{this.story.title}</title>
-					<meta name="title" content={this.story.title} />
-					<meta name="description" content={description}/>
-					<link rel="shortcut icon" type="image/ico" href={config.BACKURL+'/publishers/11/favicon'} />
-					<meta property="og:sitename" content={this.story.title} />
-					<meta property="og:title" content={this.story.title} />
-					<meta property="og:description" content={description} />
+          <meta name="title" content={this.story.title} />
+          <meta name="keywords" content={keywords} />
+          <meta name="description" content={description} />
+
+          <link rel="shortcut icon" type="image/ico" href={config.BACKURL+'/publishers/'+config.PID+'/favicon'} />
+          {channels && channels.fb ? <link rel="author" href={getFbUrl(channels.fb)} /> : ''}
+          <link rel="canonical" href={window.location.href} />
+
+          <meta property="og:sitename" content={this.story.title} />
+          <meta property="og:url" content={window.location.href} />
+          <meta property="og:title" content={this.story.title} />
+          <meta property="og:type" content="article" />
+					<meta property="og:image" content={this.story.cover.medium} />
+          <meta property="og:keywords" content={keywords} />
+          <meta property="og:description" content={description} />
+          <meta property="twitter:card" content="summary_large_image" />
+          <meta property="twitter:image:alt" content={this.story.title} />
 				</Helmet>
 
 				<Wrapper>
@@ -251,6 +263,10 @@ const StoryPage = React.createClass({
 			</div>
 	  )
 	}
-});
+})
 
-export default StoryPage;
+StoryPage.contextTypes = {
+	setting: React.PropTypes.object
+}
+
+export default StoryPage
