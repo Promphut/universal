@@ -111,7 +111,7 @@ api.getUserFromUserId = (uid) => {
 
 api.getColumnFromSlug = (slug) => {
 	return Request
-	.get(config.BACKURL + '/slugs/publishers/' + config.PID + '/' + encodeURIComponent(slug))
+	.get(config.BACKURL + '/slugs/publishers/' + config.PID + '/columns/' + encodeURIComponent(slug))
 	.set('Accept', 'application/json')
 	.then(res => {
 		return res.body.column
@@ -255,6 +255,30 @@ api.newColumn = (col) => {
 	.then(res => {
 		return res.body.column
 	})
+}
+
+api.getTagFromTagId = (tid) => {
+	return Request
+	.get(config.BACKURL+'/publishers/'+config.PID+'/tags/'+tid)
+	.then(res => {
+		return res.body.tag
+	}, api.err)
+}
+
+api.getTagFromTagSlug = (slug) => {
+	return Request
+	.get(config.BACKURL+'/slugs/publishers/'+config.PID+'/tags/'+ encodeURIComponent(slug))
+	.then(res => {
+		return res.body.tag
+	}, api.err)
+}
+
+api.getStoryTags = (sid) => {
+	return Request
+	.get(config.BACKURL+'/stories/'+sid+'/tags')
+	.then(res => {
+		return res.body.tags
+	}, api.err)
 }
 
 api.getTags = () => {

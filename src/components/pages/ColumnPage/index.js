@@ -7,7 +7,6 @@ import FlatButton from 'material-ui/FlatButton'
 import FontIcon from 'material-ui/FontIcon'
 import api from 'components/api'
 import Infinite from 'react-infinite'
-import CircularProgress from 'material-ui/CircularProgress';
 import {Link} from 'react-router'
 import CircularProgress from 'material-ui/CircularProgress'
 import {Helmet} from 'react-helmet'

@@ -39,18 +39,24 @@ const Divider =styled.div`
   position:relative;
 `
 
-const tagArray = [
-    {id:1,name:'tag1 asd as ',url:'/tag/tag1'},
-    {id:2,name:'tag2 sad as',url:'/tag/tag2'},
-    {id:3,name:'tag3 asd ',url:'/tag/tag3'},
-    {id:4,name:'tag4 asd sa das ',url:'/tag/tag4'}
-  ]
-
 const TagSideBar = React.createClass({
   getInitialState(){
+
     return{
-      popular:[]
+      popular:[],
+      tags:[]
     }
+  },
+
+  componentWillMount(){
+    this.getTags()
+  },
+
+  getTags(){
+    api.getTags().then((tags)=>{
+      this.setState({tags})
+      //console.log(tags)
+    })
   },
 
   componentDidMount(){
@@ -59,21 +65,18 @@ const TagSideBar = React.createClass({
 
   render(){
     let {style} = this.props
-    let tn = []
-    if(tagArray.length > 0){
-      for(let i=0;i<tagArray.length;i++){
-        tn.push(
-          <Link to={tagArray[i].url} key={i}><TagBox style={{margin:'0 20px 20px 0'}}>{tagArray[i].name}</TagBox></Link>    
-        )
-      }
-    }
+    var {tags} = this.state
 
     return(
       <Container style={{...style}} >
         <Divider/>
         <Head>SUGGESTED TAGS</Head>
         <div className='row' style={{margin:'30px 0 60px 0'}}>
-          {tagArray.length!=0?tn:[]}
+          {tags.length!=0&&tags.map((tag,index)=>(
+            <Link to={tag.url} key={index}>
+              <TagBox style={{margin:'0 20px 20px 0'}}>{tag.name}</TagBox>
+            </Link>
+          ))}
         </div>
       </Container>
     )

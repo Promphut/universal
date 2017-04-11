@@ -59,57 +59,72 @@ const PublisherSettingMenu = React.createClass({
   },
 
   handleNestedListToggle(item){
+    //console.log(item.state.open)
     this.setState({
-      open: item.state.open,
+      open: item.state.open
     });
   },
 
   render(){
+    //console.log(this.props.pathname.split('/'))
+    let {theme} = this.context.setting.publisher
+    var {selectedIndex} = this.state
     return (
-      <SelectableList value={this.state.selectedIndex} style={{padding:0}}>
-        <ListItem style={{...styles.listItem}}
-          onClick={()=>this.changePath('/editor/')} value='/editor'
+      <SelectableList  style={{padding:0}}>
+        <ListItem style={{...styles.listItem,backgroundColor:selectedIndex=='/editor/'&&theme.accentColor||
+          this.props.pathname=="/editor/stories" && theme.accentColor ||
+          this.props.pathname=="/editor/columns" && theme.accentColor ||
+          this.props.pathname=="/editor/writers" && theme.accentColor
+        }}
+          onClick={()=>this.changePath('/editor/')}
+          value={this.props.pathname=="/editor/"&& this.props.pathname ||
+          this.props.pathname=="/editor/stories" && this.props.pathname ||
+          this.props.pathname=="/editor/columns" && this.props.pathname ||
+          this.props.pathname=="/editor/writers" && this.props.pathname
+          }
+          primaryTogglesNestedList={true}
           className='nunito-font' primaryText="Insights"
           open={this.state.open}
           onNestedListToggle={this.handleNestedListToggle}
-          leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>dashboard</FontIcon>}
           rightIcon={<FontIcon className="material-icons" style={{color:'white'}}>keyboard_arrow_down</FontIcon>}
           nestedItems={[
             <ListItem
               onClick={()=>this.changePath('/editor/')}
               value='/editor/'
-              style={{...styles.listNestedItem}}
+              style={{...styles.listNestedItem,color:selectedIndex=='/editor/'?theme.accentColor:'white'}}
               primaryText="Overview"
             />,
             <ListItem
               onClick={()=>this.changePath('/editor/stories')}
               value='/editor/stories'
-              style={{...styles.listNestedItem}}
+              style={{...styles.listNestedItem,color:selectedIndex=='/editor/stories'?theme.accentColor:'white'}}
               primaryText="Stories"
             />,
             <ListItem
               onClick={()=>this.changePath('/editor/columns')}
               value='/editor/columns'
-              style={{...styles.listNestedItem}}
+              style={{...styles.listNestedItem,color:selectedIndex=='/editor/columns'?theme.accentColor:'white'}}
               primaryText="Columns"
             />,
             <ListItem
               onClick={()=>this.changePath('/editor/writers')}
               value='/editor/writers'
-              style={{...styles.listNestedItem}}
+              style={{...styles.listNestedItem,color:selectedIndex=='/editor/writers'?theme.accentColor:'white'}}
               primaryText="Writers"
             />
           ]}
           nestedListStyle={{background: 'rgba(255,255,255,0.2)', padding: '0px'}}
         />
-        <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/editor/manage')} value='/editor/manage' className='nunito-font' primaryText="Manage Stories" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>description</FontIcon>} />
-        {this.isAdmin && <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/editor/contact')} value='/editor/contact' className='nunito-font' primaryText="Contact & About" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>contacts</FontIcon>} />}
-        {this.isAdmin && <ListItem style={{...styles.listItem}} onClick={()=>this.changePath('/editor/settings')} value='/editor/settings' className='nunito-font' primaryText="Settings" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>settings</FontIcon>} />}
+        <ListItem style={{...styles.listItem,backgroundColor:selectedIndex=='/editor/manage'&&theme.accentColor}} onClick={()=>this.changePath('/editor/manage')} value='/editor/manage' className='nunito-font' primaryText="Manage Stories" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>description</FontIcon>} />
+        {this.isAdmin && <ListItem style={{...styles.listItem,backgroundColor:selectedIndex=='/editor/contact'&&theme.accentColor}} onClick={()=>this.changePath('/editor/contact')} value='/editor/contact' className='nunito-font' primaryText="Contact & About" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>contacts</FontIcon>} />}
+        {this.isAdmin && <ListItem style={{...styles.listItem,backgroundColor:selectedIndex=='/editor/settings'&&theme.accentColor}} onClick={()=>this.changePath('/editor/settings')} value='/editor/settings' className='nunito-font' primaryText="Settings" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>settings</FontIcon>} />}
       </SelectableList>
     )
   },
 })
 
-
+PublisherSettingMenu.contextTypes = {
+	setting: React.PropTypes.object
+}
 
 export default PublisherSettingMenu

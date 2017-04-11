@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
+import {Link} from 'react-router'
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon';
 import {WritedBy,TagBox,CommentBox,CommentUser,RecommendArticle,FromColumn} from 'components'
 import RaisedButton from 'material-ui/RaisedButton';
-
+import api from 'components/api'
 const Wraper = styled.div`
   color:#222;
   width:100%;
@@ -88,7 +89,7 @@ const Story = styled.div`
 const TagContainer = styled.div`
   display:flex;
   flex-wrap:wrap;
-  margin:40px 0 40px 0;
+  margin:30px 0 0 0;
   font-family:'PT Sans';
   @media (max-width:480px){
     margin:20px 0 20px 0;
@@ -140,17 +141,30 @@ const styles ={
 const StoryDetail = React.createClass({
   getInitialState(){
     this.story = this.props.story
-    //console.log('story', this.story)
+    return {
+      tags:[]
+     }
+  },
 
-    return { }
+  getStoryTags(){
+    var sid = this.story.id
+    api.getStoryTags(sid).then((tags)=>{
+      this.setState({
+        tags
+      })
+      //console.log(tags)
+    })
+  },
+
+  componentWillMount(){
+    this.getStoryTags()
   },
 
   componentWillReceiveProps(nextProps){
     if(nextProps.story != this.props.story){
       this.story = nextProps.story
-
       //this.setState({refresh: Math.random()})
-      console.log('componentWillReceiveProps', this.story)
+      //console.log('componentWillReceiveProps', this.story)
     }
   },
 
@@ -166,6 +180,7 @@ const StoryDetail = React.createClass({
   render(){
     let s = this.story
     const isMobile = window.isMobile()
+    var {tags} = this.state
     const columnStyle = window.isMobile() ? {
       marginTop: '22px'
     } : {}
@@ -174,18 +189,14 @@ const StoryDetail = React.createClass({
       <Wraper>
         <Head className='title-font'>{s.ptitle}</Head>
         <Story ref="detail" className='content-font' dangerouslySetInnerHTML={{__html:s.phtml}}></Story>
-        <WritedBy writer={s.writer} column={s.column} published={s.published} />
+        {/*<WritedBy writer={s.writer} column={s.column} published={s.published} />*/}
 
 
-        {/* NEXT ITERATION
         <TagContainer>
-          <TagBox text='MONEY IDEAS' style={{margin:'10px'}}/>
-          <TagBox text='MONEY' style={{margin:'10px'}}/>
-          <TagBox text='IDEAS' style={{margin:'10px'}}/>
-          <TagBox text='MONEY IDEAS' style={{margin:'10px'}}/>
-          <TagBox text='MONEY IDEAS' style={{margin:'10px'}}/>
-          <TagBox text='MONEY' style={{margin:'10px'}}/>
-        </TagContainer>*/}
+          {tags.length!=0&&tags.map((tag,index)=>(
+            <Link to={tag.url} key={index}><TagBox style={{margin:'0 20px 20px 0'}}>{tag.name}</TagBox></Link>
+          ))}
+        </TagContainer>
 
         <Divider/>
         <div className='row center'>

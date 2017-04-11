@@ -19,6 +19,7 @@ import Chip from 'material-ui/Chip';
 import moment from 'moment'
 import CircularProgress from 'material-ui/CircularProgress';
 import api from 'components/api'
+import _ from 'lodash'
 
 import $ from 'jquery';
 
@@ -253,8 +254,23 @@ const EditStory = React.createClass({
     this.getTags()
     this.getColumns()
     this.getStoryDetail()
-
+    this.getStoryTags()
   },
+
+  getStoryTags(){
+    var sid = this.props.params.story.id
+    api.getStoryTags(sid).then((tags)=>{
+      let result = []
+      tags.map((tag, i) => {
+        result[i] = { text:tag.name, value:tag._id, id:tag._id }
+      })
+      this.setState({
+        addTag:result
+      })
+      //console.log(tags)
+    })
+  },
+
 
   componentWillUnmount(){
     clearInterval(this.interval);
@@ -269,7 +285,7 @@ const EditStory = React.createClass({
   },
 
   selectedLayout(){
-    this.setState({chooseLayout:1},()=>{})
+    this.setState({chooseLayout:1})
   },
 
   handleEditableInput(e, editable){
@@ -320,7 +336,7 @@ const EditStory = React.createClass({
     .then(tags => {
       let result = []
       tags.map((tag, i) => {
-        result[i] = { text:tag.name, value:i, id:tag._id }
+        result[i] = { text:tag.name, value:tag._id, id:tag._id }
       })
 
       this.setState({
@@ -507,10 +523,11 @@ const EditStory = React.createClass({
   render(){
     let {chooseLayout,layout,open,anchorEl,column,tag,addTag,searchText,columnList,sid,
           alert,alertWhere,alertConfirm,alertDesc,saveStatus,title,publishStatus,story} = this.state
-    const dataSourceConfig = {text: 'text', value: 'value', id:'id'};
+    const dataSourceConfig = {text: 'text',value:'value', id:'id'};
     let {theme} = this.context.setting.publisher
 
-    //console.log('COL', column)
+    // console.log()
+    // console.log('tag',tag,'addtag',addTag,'difference',_.pullAllWith(tag, addTag, _.isEqual))
 
     //console.log(tag)
     return (
@@ -536,6 +553,7 @@ const EditStory = React.createClass({
         <Popover
           open={open}
           anchorEl={anchorEl}
+          autoCloseWhenOffScreen={false}
           anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
           targetOrigin={{horizontal: 'right', vertical: 'top'}}
           onRequestClose={this.handleRequestClose}
@@ -561,8 +579,7 @@ const EditStory = React.createClass({
               ))}
             </DropDownMenu>
           </div>
-          {/*next interation*/}
-          {/*<div className='row' style={{display:'block',overflow:'hidden'}}>
+          <div className='row' style={{display:'block',overflow:'hidden'}}>
             <Label className="nunito-font" style={{float:'left',marginTop:'26px'}}>Add up to 5 tags : </Label>
             <div className='row' style={{marginTop:'15px'}}>
               {addTag.length!=0?addTag.map((data,index)=>(
@@ -576,7 +593,7 @@ const EditStory = React.createClass({
               )):''}
               {tag.length!=0?<AutoComplete
                 hintText="Add a Tag..."
-                dataSource={tag}
+                dataSource={_.pullAllWith(tag, addTag, _.isEqual)}
                 filter={AutoComplete.fuzzyFilter}
                 onNewRequest={this.selectedTag}
                 onUpdateInput={this.handleUpdateInput}
@@ -585,7 +602,7 @@ const EditStory = React.createClass({
                 dataSourceConfig={dataSourceConfig}
               />:''}
             </div>
-          </div>*/}
+          </div>
           <Divider/>
           <div>
             <Label className="nunito-font" >Select cover picture : </Label>
