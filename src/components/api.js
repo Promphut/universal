@@ -624,17 +624,18 @@ api.incStoryInsight = (sid, action, subaction) => {
 	}, api.err)
 }
 
-api.getStoryInsight = (sid, action, subaction, period, from, to) => {
-	if(sid == null) return Promise.reject(new Error('sid is required.'))
+api.getPublisherInsight = (pid, action, subaction, period, from, to) => {
+	if(pid == null) return Promise.reject(new Error('sid is required.'))
 	if(action == null) return Promise.reject(new Error('action is required.'))
 
-	let url = config.BACKURL+'/insights/stories/'+sid+'/'+action
+	let url = config.BACKURL+'/insights/publishers/'+pid+'/'+action
 	if(subaction!=null) url += '/'+subaction
-	if(period) url+"?period="+period
-	else if(from&&to) url+"?from="+from+"&to="+to
+	if(period) url+="?period="+period
+	else if(from&&to) url+="?from="+from+"&to="+to
 	return Request
 	.get(url)
 	.set('Accept','application/json')
+	.set('x-access-token', auth.getToken())
 	.then(res => {
 		//console.log('api.incStoryInsight', res.body)
 		return res.body

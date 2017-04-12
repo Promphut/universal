@@ -100,7 +100,7 @@ var Dots=React.createClass({
 
         var circles=data.map(function(d,i){
             return (<circle className="dot" r="7" cx={_self.props.x(d.date)} 
-                      cy= {_self.props.y(d.count)} fill="#7dc7f4"
+                      cy= {_self.props.y(d.value)} fill="#7dc7f4"
                        stroke="#3f5175" strokeWidth="5px" key={i} />);
         });
         return(
@@ -145,16 +145,8 @@ var LineChart=React.createClass({
         return d;
     },
     render(){
-        var data=[
-            {day:'03/11/2017',count:180},
-            {day:'03/12/2017',count:250},
-            {day:'03/13/2017',count:150},
-            {day:'03/14/2017',count:496},
-            {day:'03/15/2017',count:140},
-            {day:'04/16/2017',count:380},
-            {day:'04/17/2017',count:100},
-            {day:'04/18/2017',count:150}
-        ];
+        var data = this.props.data
+        //console.log(data)
 
         var margin = {top: 50, right: 30, bottom: 50, left: 30},
             w = this.state.width - (margin.left + margin.right),
@@ -164,10 +156,11 @@ var LineChart=React.createClass({
 
         data.forEach(function (d) {
             d.date = parseDate(d.day);
+            //console.log(d.date)
         });
 
         var x = d3.scaleTime().domain(d3.extent(data, function(d) { return d.date; })).range([30, w]),
-            y = d3.scaleLinear().domain([0, d3.max(data, function(d) { return d.count; })]).range([h,0]);
+            y = d3.scaleLinear().domain([0, d3.max(data, function(d) { return d.value; })]).range([h,0]);
       
        var xAxis = d3.axisBottom(x).tickSize(-h-30).ticks(8),
            yAxis = d3.axisLeft(y).tickSize(-w-30).ticks(6)
@@ -188,12 +181,12 @@ var LineChart=React.createClass({
         .curve(d3.curveLinear)
         .x(function(d) { return x(d.date); })
         .y0(h)
-        .y1(function(d) { return y(d.count); });
+        .y1(function(d) { return y(d.value); });
 
        var line=  d3.line()
         .curve(d3.curveLinear)
         .x(function(d) { return x(d.date); })
-        .y(function(d) { return y(d.count); })
+        .y(function(d) { return y(d.value); })
 
         var transform='translate(' + margin.left + ',' + margin.top + ')';
 
@@ -227,24 +220,42 @@ const GraphDashboard = React.createClass({
             startDate2:moment(),
             swipPicker:true,
             open:false,
-            selectTab:'view'
+            selectTab:'view',
+            data:[],
 		}
 	},
-
 	componentWillReceiveProps(nextProps){
 
 	},
     componentWillMount(){
-       // api.getStoryInsight(sid, action, subaction,period,from,to)
-	},
+        
+	},  
 	componentDidMount(){
-
+        this.getPublisherInsight()
 	},
+    getPublisherInsight(){
+        var {selectTab,startDate1,startDate2} = this.state
+        var pid = config.PID
+        var action = selectTab
+        var from = moment(startDate1).format('YYYYMMDD');
+        var to =  moment(startDate2).format('YYYYMMDD');
+        //console.log(from,to)
+        api.getPublisherInsight(pid, action, null ,null,from,to).then((ins)=>{
+            var data = []
+            ins.insights.map((value,index)=>{
+                data[index] = {day:moment(value.date).format('MM/DD/YYYY'),value:value.value}
+            })
+           this.setState({data:data})
+           //console.log(data)
+        })
+    },
 
     handleChangeDate(e){
         this.setState({
             startDate1: e,
             open:false,
+        },()=>{
+             this.getPublisherInsight()
         });
     },
     handleRequestClose(){
@@ -264,6 +275,8 @@ const GraphDashboard = React.createClass({
         this.setState({
             startDate2: e,
             open:false,
+        },()=>{
+            this.getPublisherInsight()
         });
     },
     openDatePicker2(e){
@@ -276,11 +289,13 @@ const GraphDashboard = React.createClass({
     handleChangeTab(e){
         this.setState({
             selectTab: e
+        },()=>{
+            this.getPublisherInsight()
         })
     },
 	render(){
     var {theme} = this.context.setting.publisher
-    var {startDate1,startDate2,open,anchorEl,swipPicker,selectTab} = this.state
+    var {startDate1,startDate2,open,anchorEl,swipPicker,selectTab,data} = this.state
     const styles = {
         headline: {
             fontSize: 24,
@@ -301,7 +316,7 @@ const GraphDashboard = React.createClass({
         }
     };
     var {width,height,style} = this.props
-
+    console.log(data)
 	return (
         <Wrapper width={width} style={{...style}}>
             <Popover
@@ -356,7 +371,7 @@ const GraphDashboard = React.createClass({
                     <Num className='serif-font' style={{color:theme.accentColor}}>189,057</Num>
                 </div>   
             </div>
-            <LineChart width={width} height={height} />
+            <LineChart width={width} height={height} data={data}/>
         </Wrapper>
 	  )
 	}

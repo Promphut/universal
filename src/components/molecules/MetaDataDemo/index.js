@@ -39,7 +39,7 @@ MetaDataDemo.propTypes = {
   title: PropTypes.string,
   description: PropTypes.string,
   keyword: PropTypes.string,
-  tagline: PropTypes.string,
+  tagline: PropTypes.string
 }
 
 export default MetaDataDemo;
