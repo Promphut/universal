@@ -18,6 +18,7 @@ import AutoComplete from 'material-ui/AutoComplete';
 import Chip from 'material-ui/Chip';
 import moment from 'moment'
 import CircularProgress from 'material-ui/CircularProgress';
+import {Helmet} from 'react-helmet'
 import api from 'components/api'
 import _ from 'lodash'
 
@@ -545,7 +546,7 @@ const EditStory = React.createClass({
     const dataSourceConfig = {text: 'text', value: 'value', id:'id'};
 
     let {theme} = this.context.setting.publisher
-    
+
     let contentTypeId = 0
     for (let i = 0; i < contentTypeList.length; i ++) {
       if (contentTypeList[i] == contentType) {
@@ -555,6 +556,11 @@ const EditStory = React.createClass({
 
     return (
       <Container onSubmit={this.updateData}>
+        <Helmet>
+          <link rel="stylesheet" href="/css/medium-editor.css" type="text/css"/>
+          <link rel="stylesheet" href="/css/tim.css" type="text/css"/>
+          <link rel="stylesheet" href="/css/medium-editor-insert-plugin.css" type="text/css"/>
+				</Helmet>
         <Alert
           open={alert}
           anchorEl={alertWhere}

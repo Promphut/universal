@@ -4,23 +4,25 @@ import styled from 'styled-components'
 import {PrimaryButton, SecondaryButton, UploadPicture, DropdownWithIcon,
   Alert, MenuList} from 'components'
 import {findDOMNode as dom} from 'react-dom'
-import TextField from 'material-ui/TextField';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
+import TextField from 'material-ui/TextField'
+import SelectField from 'material-ui/SelectField'
+import MenuItem from 'material-ui/MenuItem'
 import Request from 'superagent'
 import auth from 'components/auth'
-import Snackbar from 'material-ui/Snackbar';
+import Snackbar from 'material-ui/Snackbar'
 import FontIcon from 'material-ui/FontIcon'
 import RaisedButton from 'material-ui/RaisedButton'
 import Popover from 'material-ui/Popover'
-import DropDownMenu from 'material-ui/DropDownMenu';
-import AutoComplete from 'material-ui/AutoComplete';
-import Chip from 'material-ui/Chip';
+import DropDownMenu from 'material-ui/DropDownMenu'
+import AutoComplete from 'material-ui/AutoComplete'
+import Chip from 'material-ui/Chip'
 import moment from 'moment'
-import CircularProgress from 'material-ui/CircularProgress';
+import CircularProgress from 'material-ui/CircularProgress'
+import SwipeableViews from 'react-swipeable-views'
+import {Helmet} from 'react-helmet'
 import api from 'components/api'
 
-import $ from 'jquery';
+import $ from 'jquery'
 
 import "blueimp-file-upload/js/vendor/jquery.ui.widget.js";
 import "blueimp-file-upload/js/jquery.iframe-transport.js";
@@ -141,6 +143,9 @@ const Delete = styled.div`
   }
 `
 
+const BasicSetting = styled.div`
+`
+
 const NewStory = React.createClass({
   SAVE_STATUS: {
     'INITIAL': 0,
@@ -176,7 +181,8 @@ const NewStory = React.createClass({
       saveOnload:false,
       publishStatus:'',
 
-      status: this.SAVE_STATUS.INITIAL
+      status: this.SAVE_STATUS.INITIAL,
+      settingSlideIndex: 0
     }
   },
 
@@ -190,12 +196,8 @@ const NewStory = React.createClass({
     clearInterval(this.interval);
   },
 
-  chooseNews(){
-    this.setState({layout:'news'})
-  },
-
-  chooseArticle(){
-    this.setState({layout:'article'})
+  chooseLayout(layout) {
+    this.setState({layout})
   },
 
   selectedLayout(){
@@ -531,6 +533,12 @@ const NewStory = React.createClass({
       })
   },
 
+  handleChange(value) {
+    this.setState({
+      slideIndex: value
+    })
+  },
+
   render(){
     let {chooseLayout,layout,open,anchorEl,column,contentType,tag,addTag,searchText,
       columnList,contentTypeList,sid,alert,alertWhere,alertConfirm,alertDesc,saveStatus,
@@ -553,14 +561,14 @@ const NewStory = React.createClass({
         <div className='row' style={{marginTop:'60px',padding:'10px'}}>
           <div className='col-6'>
             <Label2 className="nunito-font" >News</Label2>
-            <Layout style={{backgroundImage:'url(/pic/news.png)',boxShadow:layout=="news"?'0 0 10px '+theme.primaryColor:''}} onClick={this.chooseNews} />
+            <Layout style={{backgroundImage:'url(/pic/news.png)',boxShadow:layout=="news"?'0 0 10px '+theme.primaryColor:''}} onClick={() => this.chooseLayout('news')} />
           </div>
           <div className='col-6'>
             <Label2 className="nunito-font" >Article</Label2>
-            <Layout style={{backgroundImage:'url(/pic/article.png)',boxShadow:layout=="article"?'0 0 10px '+theme.primaryColor:''}} onClick={this.chooseArticle} />
+            <Layout style={{backgroundImage:'url(/pic/article.png)',boxShadow:layout=="article"?'0 0 10px '+theme.primaryColor:''}} onClick={() => this.chooseLayout('article')} />
           </div>
         </div>
-        <dvi className='row' style={{display:'block',overflow:'hidden',marginTop:'50px'}}>
+        <div className='row' style={{display:'block',overflow:'hidden',marginTop:'50px'}}>
           <RaisedButton
             label="next"
             labelStyle={{fontWeight:'bold', fontSize:15, top:0, fontFamily:"'Nunito', 'Mitr'"}}
@@ -573,11 +581,15 @@ const NewStory = React.createClass({
             buttonStyle={{borderRadius: '20px', background: theme.accentColor, border:'2px solid '+theme.accentColor, padding:'0 2px'}}
             icon={<FontIcon className='material-icons'>keyboard_arrow_right</FontIcon>}
           />
-        </dvi>
-
+        </div>
       </Container>
       :
       <Container onSubmit={this.updateData}>
+        <Helmet>
+          <link rel="stylesheet" href="/css/medium-editor.css" type="text/css" />
+          <link rel="stylesheet" href="/css/tim.css" type="text/css" />
+          <link rel="stylesheet" href="/css/medium-editor-insert-plugin.css" type="text/css" />
+				</Helmet>
         <Alert
           open={alert}
           anchorEl={alertWhere}
@@ -605,98 +617,98 @@ const NewStory = React.createClass({
           onRequestClose={this.handleRequestClose}
           style={{border:'3px solid '+theme.accentColor,width:'482px',padding:'30px',marginTop:8,boxShadow:'none',overflow:'hidden'}}
         >
-          <div className='row' style={{display:'block',overflow:'hidden'}}>
-            <Label className="nunito-font or" style={{float:'left',marginTop:'22px',minWidth:'60px'}}>Column : </Label>
-            <DropDownMenu
-              value={column}
-              onChange={this.chooseColumn}
-              autoWidth={false}
-              labelStyle={{top:'-11px'}}
-              iconStyle={{top:'-8px',left:'300px'}}
-              style={{margin:'15px 0 15px 15px',width:'340px',height:'34px',border:'1px solid #e2e2e2',float:'left'}}
-              underlineStyle={{display:'none'}}
-              menuStyle={{width:'320px'}}
-              menuItemStyle={{width:'320px'}}
-              selectedMenuItemStyle={{color:'#222',background:theme.accentColor}}
-            >
-              <MenuItem value='no' primaryText='No Column' />
-              {columnList.length!=0 && columnList.map((data,index)=>(
-                <MenuItem value={data._id} primaryText={data.name} key={index} />
-              ))}
-            </DropDownMenu>
-            <Label className="nunito-font or" style={{float:'left',marginTop:'22px',minWidth:'60px'}}>Type : </Label>
-            <DropDownMenu
-              value={contentTypeId}
-              onChange={this.chooseContentType}
-              autoWidth={false}
-              labelStyle={{top:'-11px'}}
-              iconStyle={{top:'-8px',left:'300px'}}
-              style={{margin:'15px 0 15px 15px',width:'340px',height:'34px',border:'1px solid #e2e2e2',float:'left'}}
-              underlineStyle={{display:'none'}}
-              menuStyle={{width:'320px'}}
-              menuItemStyle={{width:'320px'}}
-              selectedMenuItemStyle={{color:'#222',background:theme.accentColor}}
-            >
-              <MenuItem value='no' primaryText='No Type' />
-              {contentTypeList.length!=0 && contentTypeList.map((data,index)=>(
-                <MenuItem value={index} primaryText={data} key={index} />
-              ))}
-            </DropDownMenu>
-          </div>
-          <div className='row' style={{display:'block',overflow:'hidden'}}>
-            <Label className="nunito-font" style={{float:'left',marginTop:'26px'}}>Add up to 5 tags : </Label>
-            <div className='row' style={{marginTop:'15px'}}>
-              {addTag.length!=0?addTag.map((data,index)=>(
-                <Chip
-                  key={index}
-                  onRequestDelete={() => this.removeSelectedTag(data,index)}
-                  style={{margin:'4px'}}
-                >
-                  {data.text}
-                </Chip>
-              )):''}
-              {tag.length!=0?<AutoComplete
-                hintText="Add a Tag..."
-                dataSource={tag}
-                filter={AutoComplete.fuzzyFilter}
-                onNewRequest={this.selectedTag}
-                onUpdateInput={this.handleUpdateInput}
-                openOnFocus={true}
-                searchText={searchText}
-                dataSourceConfig={dataSourceConfig}
-              />:''}
+          <BasicSetting>
+            <div className='row' style={{display:'block',overflow:'hidden'}}>
+              <Label className="nunito-font or" style={{float:'left',marginTop:'22px',minWidth:'60px'}}>Column : </Label>
+              <DropDownMenu
+                value={column}
+                onChange={this.chooseColumn}
+                autoWidth={false}
+                labelStyle={{top:'-11px'}}
+                iconStyle={{top:'-8px',left:'300px'}}
+                style={{margin:'15px 0 15px 15px',width:'340px',height:'34px',border:'1px solid #e2e2e2',float:'left'}}
+                underlineStyle={{display:'none'}}
+                menuStyle={{width:'320px'}}
+                menuItemStyle={{width:'320px'}}
+                selectedMenuItemStyle={{color:'#222',background:theme.accentColor}}
+              >
+                <MenuItem value='no' primaryText='No Column' />
+                {columnList.length!=0 && columnList.map((data,index)=>(
+                  <MenuItem value={data._id} primaryText={data.name} key={index} />
+                ))}
+              </DropDownMenu>
+              <Label className="nunito-font or" style={{float:'left',marginTop:'22px',minWidth:'60px'}}>Type : </Label>
+              <DropDownMenu
+                value={contentTypeId}
+                onChange={this.chooseContentType}
+                autoWidth={false}
+                labelStyle={{top:'-11px'}}
+                iconStyle={{top:'-8px',left:'300px'}}
+                style={{margin:'15px 0 15px 15px',width:'340px',height:'34px',border:'1px solid #e2e2e2',float:'left'}}
+                underlineStyle={{display:'none'}}
+                menuStyle={{width:'320px'}}
+                menuItemStyle={{width:'320px'}}
+                selectedMenuItemStyle={{color:'#222',background:theme.accentColor}}
+              >
+                <MenuItem value='no' primaryText='No Type' />
+                {contentTypeList.length!=0 && contentTypeList.map((data,index)=>(
+                  <MenuItem value={index} primaryText={data} key={index} />
+                ))}
+              </DropDownMenu>
             </div>
-          </div>
-          <Divider/>
-          <div>
-            <Label className="nunito-font" >Select cover picture : </Label>
-            <div className='row' style={{overflow:'hidden',marginTop:'20px'}}>
-              <div className='col-4'>
-                <UploadPicture path={'/stories/'+sid+'/covermobile'} size='330x500' width={96} height={137} label='Portrait Cover' type='coverMobile' style={{width:'96px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
-              </div>
-              <div className='col-1'>
-                <div style={{marginTop:'58px'}}>Or</div>
-              </div>
-              <div className='col-6'>
-                <UploadPicture path={'/stories/'+sid+'/cover'} size='1920x860' width={194} height={137} label='Landscape Cover' type='cover' style={{width:'194px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
+            <div className='row' style={{display:'block',overflow:'hidden'}}>
+              <Label className="nunito-font" style={{float:'left',marginTop:'26px'}}>Add up to 5 tags : </Label>
+              <div className='row' style={{marginTop:'15px'}}>
+                {addTag.length!=0?addTag.map((data,index)=>(
+                  <Chip
+                    key={index}
+                    onRequestDelete={() => this.removeSelectedTag(data,index)}
+                    style={{margin:'4px'}}
+                  >
+                    {data.text}
+                  </Chip>
+                )):''}
+                {tag.length!=0?<AutoComplete
+                  hintText="Add a Tag..."
+                  dataSource={tag}
+                  filter={AutoComplete.fuzzyFilter}
+                  onNewRequest={this.selectedTag}
+                  onUpdateInput={this.handleUpdateInput}
+                  openOnFocus={true}
+                  searchText={searchText}
+                  dataSourceConfig={dataSourceConfig}
+                />:''}
               </div>
             </div>
-          </div>
-          <div className='row' style={{overflow:'hidden',display:'block'}}>
-            <TextStatus className='sans-font' style={{color:'#DC143C',float:'right',marginTop:'30px'}}>{publishStatus}</TextStatus>
-          </div>
-          <div className='row' style={{display:'block',overflow:'hidden',marginTop:'0px'}}>
-            <Delete style={{float:'left',margin:'10px'}} onClick={this.showAlert}>Delete</Delete>
-            <PrimaryButton label={story.status===1 ? moment(story.published).format('ddd, [at] h:mm a') : 'Publish'} style={{float:'right'}} onClick={this.publishStory} iconName="done"/>
-            {story.status===1 && <SecondaryButton label="Unpublish" style={{float:'right',marginRight:'20px'}} onClick={this.unpublishStory}/>}
-          </div>
+            <Divider/>
+            <div>
+              <Label className="nunito-font" >Select cover picture : </Label>
+              <div className='row' style={{overflow:'hidden',marginTop:'20px'}}>
+                <div className='col-4'>
+                  <UploadPicture path={'/stories/'+sid+'/covermobile'} size='330x500' width={96} height={137} label='Portrait Cover' type='coverMobile' style={{width:'96px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
+                </div>
+                <div className='col-1'>
+                  <div style={{marginTop:'58px'}}>Or</div>
+                </div>
+                <div className='col-6'>
+                  <UploadPicture path={'/stories/'+sid+'/cover'} size='1920x860' width={194} height={137} label='Landscape Cover' type='cover' style={{width:'194px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
+                </div>
+              </div>
+            </div>
+            <div className='row' style={{overflow:'hidden',display:'block'}}>
+              <TextStatus className='sans-font' style={{color:'#DC143C',float:'right',marginTop:'30px'}}>{publishStatus}</TextStatus>
+            </div>
+            <div className='row' style={{display:'block',overflow:'hidden',marginTop:'0px'}}>
+              <Delete style={{float:'left',margin:'10px'}} onClick={this.showAlert}>Delete</Delete>
+              <PrimaryButton label={story.status===1 ? moment(story.published).format('ddd, [at] h:mm a') : 'Publish'} style={{float:'right'}} onClick={this.publishStory} iconName="done"/>
+              {story.status===1 && <SecondaryButton label="Unpublish" style={{float:'right',marginRight:'20px'}} onClick={this.unpublishStory}/>}
+            </div>
+          </BasicSetting>
         </Popover>
         </RaisedButton>
         {sid!=null && <TextStatus className='sans-font'>{saveStatus}</TextStatus>}
 
-        <Title placeholder='Title' className='serif-font' value={title} onChange={this.titleChanged}>
-
-        </Title>
+        <Title placeholder='Title' className='serif-font' value={title} onChange={this.titleChanged}/>
 
         <Paper ref='paper'  id='paper' />
       </Container>

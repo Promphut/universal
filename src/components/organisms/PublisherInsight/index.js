@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import {PublisherInsightView, PublisherInsightTrend, PublisherInsightShare,
 	PublisherInsightGrowth} from 'components'
 import {Tabs, Tab} from 'material-ui/Tabs'
-import SwipeableViews from 'react-swipeable-views';
+import SwipeableViews from 'react-swipeable-views'
 
 const Container = styled.div`
 `
