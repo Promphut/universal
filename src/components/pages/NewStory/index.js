@@ -134,17 +134,50 @@ const Label2 = styled.div`
   width:50px;
 `
 const Delete = styled.div`
-  color:#bfbfbf;
-  font-size:14px;
-  text-decoration:underline;
-  &:hover{
-    cursor:pointer;
-    color:#222;
+  font-family: 'Nunito', 'Mitr';
+  color: #8E8E8E;
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover {
+    color: #222;
   }
 `
 
 const BasicSetting = styled.div`
 `
+
+const AdvanceSetting = styled.div`
+`
+
+const AdvancedEdit = styled.div`
+  font-family: 'Nunito', 'Mitr';
+  color: #8E8E8E;
+  text-decoration: underline;
+  cursor: pointer;
+  float: right;
+  display: inline-block;
+
+  &:hover {
+    color: #222;
+  }
+`
+
+const HintLabel = styled.div`
+  margin-left: 130px;
+  color: #C2C2C2;
+  font-style: italic;
+  font-size: 11px;
+  line-height: 8px;
+`
+
+const styles = {
+  backButton: {
+    color: '#8E8E8E',
+    cursor: 'pointer',
+    height: '20px'
+  }
+}
 
 const NewStory = React.createClass({
   SAVE_STATUS: {
@@ -282,7 +315,10 @@ const NewStory = React.createClass({
   },*/
 
   handleRequestClose(){
-    this.setState({open:false})
+    this.setState({
+      open: false,
+      settingSlideIndex: 0
+    })
   },
 
   popoverSave(e){
@@ -533,9 +569,9 @@ const NewStory = React.createClass({
       })
   },
 
-  handleChange(value) {
+  settingHandleChange(value) {
     this.setState({
-      slideIndex: value
+      settingSlideIndex: value
     })
   },
 
@@ -617,9 +653,14 @@ const NewStory = React.createClass({
           onRequestClose={this.handleRequestClose}
           style={{border:'3px solid '+theme.accentColor,width:'482px',padding:'30px',marginTop:8,boxShadow:'none',overflow:'hidden'}}
         >
+        <SwipeableViews
+          index={this.state.settingSlideIndex}
+          onChangeIndex={this.settingHandleChange}
+        >
           <BasicSetting>
-            <div className='row' style={{display:'block',overflow:'hidden'}}>
-              <Label className="nunito-font or" style={{float:'left',marginTop:'22px',minWidth:'60px'}}>Column : </Label>
+            <AdvancedEdit onClick={() => this.settingHandleChange(1)}>Advanced Edit</AdvancedEdit>
+            <div className='row' style={{display:'block',overflow:'hidden', clear:'both'}}>
+              <Label className="nunito-font or" style={{float:'left',marginTop:'22px',minWidth:'60px'}}>Column: </Label>
               <DropDownMenu
                 value={column}
                 onChange={this.chooseColumn}
@@ -637,7 +678,7 @@ const NewStory = React.createClass({
                   <MenuItem value={data._id} primaryText={data.name} key={index} />
                 ))}
               </DropDownMenu>
-              <Label className="nunito-font or" style={{float:'left',marginTop:'22px',minWidth:'60px'}}>Type : </Label>
+              <Label className="nunito-font or" style={{float:'left',marginTop:'22px',minWidth:'60px'}}>Type: </Label>
               <DropDownMenu
                 value={contentTypeId}
                 onChange={this.chooseContentType}
@@ -657,7 +698,7 @@ const NewStory = React.createClass({
               </DropDownMenu>
             </div>
             <div className='row' style={{display:'block',overflow:'hidden'}}>
-              <Label className="nunito-font" style={{float:'left',marginTop:'26px'}}>Add up to 5 tags : </Label>
+              <Label className="nunito-font" style={{float:'left',marginTop:'26px'}}>Add up to 5 tags: </Label>
               <div className='row' style={{marginTop:'15px'}}>
                 {addTag.length!=0?addTag.map((data,index)=>(
                   <Chip
@@ -682,7 +723,7 @@ const NewStory = React.createClass({
             </div>
             <Divider/>
             <div>
-              <Label className="nunito-font" >Select cover picture : </Label>
+              <Label className="nunito-font" >Select cover picture: </Label>
               <div className='row' style={{overflow:'hidden',marginTop:'20px'}}>
                 <div className='col-4'>
                   <UploadPicture path={'/stories/'+sid+'/covermobile'} size='330x500' width={96} height={137} label='Portrait Cover' type='coverMobile' style={{width:'96px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
@@ -704,6 +745,32 @@ const NewStory = React.createClass({
               {story.status===1 && <SecondaryButton label="Unpublish" style={{float:'right',marginRight:'20px'}} onClick={this.unpublishStory}/>}
             </div>
           </BasicSetting>
+          <AdvanceSetting>
+            <FontIcon className='material-icons'
+              style={styles.backButton}
+              onClick={() => this.settingHandleChange(0)}
+            >
+              chevron_left
+            </FontIcon>
+            <div className='row' style={{display:'block', overflow:'hidden'}}>
+              <Label className="nunito-font or" style={{float:'left', margin:'19px 15px auto', minWidth:'80px'}}>URL: </Label>
+              <TextField hintText="URL"/><br/>
+              <Label className="nunito-font or" style={{float:'left', margin:'19px 15px auto', minWidth:'80px'}}>Title: </Label>
+              <TextField hintText="Title"/><br/>
+              <Label className="nunito-font or" style={{float:'left', margin:'19px 15px auto', minWidth:'80px'}}>Tagline: </Label>
+              <TextField hintText="Tagline" multiLine={true} rows={1} rowsMax={4}/><br/>
+              <HintLabel className='sans-font'>80 characters</HintLabel>
+              <Label className="nunito-font or" style={{float:'left', margin:'19px 15px auto', minWidth:'80px'}}>Description: </Label>
+              <TextField hintText="Description" multiLine={true} rows={1} rowsMax={4}/><br/>
+              <HintLabel className='sans-font'>140 characters</HintLabel>
+
+              <div style={{marginTop: '35px'}}>
+                <SecondaryButton label='Reset' style={{float: 'right'}}/>
+                <PrimaryButton label='Save' style={{float: 'right', marginRight:'10px'}}/>
+              </div>
+            </div>
+          </AdvanceSetting>
+        </SwipeableViews>
         </Popover>
         </RaisedButton>
         {sid!=null && <TextStatus className='sans-font'>{saveStatus}</TextStatus>}
