@@ -154,12 +154,12 @@ const Nav = styled.nav`
 
   & ul li .arrow.toggleUp {
     transform: rotate(0deg);
-    transition-duration: 1s
+    transition-duration: 1s;
   }
 
   & ul li .arrow.toggleDown {
-    transform: rotate(180deg);
-    transition-duration: 1s
+    transform: rotate(-180deg);
+    transition-duration: 1s;
   }
 
   @media (max-width:480px){

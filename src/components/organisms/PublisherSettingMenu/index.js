@@ -6,6 +6,13 @@ import FontIcon from 'material-ui/FontIcon'
 import {Link,browserHistory} from 'react-router'
 import auth from 'components/auth'
 
+const Wrapper = styled.div`
+  .open {
+    transform: rotate(180deg);
+    transition-duration: 1s;
+  }
+`
+
 const styles = {
   list:{
     color:'white'
@@ -59,17 +66,23 @@ const PublisherSettingMenu = React.createClass({
   },
 
   handleNestedListToggle(item){
-    //console.log(item.state.open)
     this.setState({
       open: item.state.open
-    });
+    })
+  },
+
+  toggleNested() {
+    this.setState({
+      open: !this.state.open
+    })
   },
 
   render(){
     //console.log(this.props.pathname.split('/'))
     let {theme} = this.context.setting.publisher
-    var {selectedIndex} = this.state
+    var {selectedIndex, open} = this.state
     return (
+      <Wrapper>
       <SelectableList  style={{padding:0}}>
         <ListItem style={{...styles.listItem,backgroundColor:selectedIndex=='/editor/'&&theme.accentColor||
           this.props.pathname=="/editor/stories" && theme.accentColor ||
@@ -84,9 +97,8 @@ const PublisherSettingMenu = React.createClass({
           }
           primaryTogglesNestedList={true}
           className='nunito-font' primaryText="Insights"
-          open={this.state.open}
-          onNestedListToggle={this.handleNestedListToggle}
-          rightIcon={<FontIcon className="material-icons" style={{color:'white'}}>keyboard_arrow_down</FontIcon>}
+          open={open}
+          rightIcon={<FontIcon className={'material-icons ' + (open ? 'open' : '')} onClick={this.toggleNested} style={{color:'white'}}>keyboard_arrow_up</FontIcon>}
           nestedItems={[
             <ListItem
               onClick={()=>this.changePath('/editor/')}
@@ -115,10 +127,11 @@ const PublisherSettingMenu = React.createClass({
           ]}
           nestedListStyle={{background: 'rgba(255,255,255,0.2)', padding: '0px'}}
         />
-        <ListItem style={{...styles.listItem,backgroundColor:selectedIndex=='/editor/manage'&&theme.accentColor}} onClick={()=>this.changePath('/editor/manage')} value='/editor/manage' className='nunito-font' primaryText="Manage Stories" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>description</FontIcon>} />
-        {this.isAdmin && <ListItem style={{...styles.listItem,backgroundColor:selectedIndex=='/editor/contact'&&theme.accentColor}} onClick={()=>this.changePath('/editor/contact')} value='/editor/contact' className='nunito-font' primaryText="Contact & About" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>contacts</FontIcon>} />}
-        {this.isAdmin && <ListItem style={{...styles.listItem,backgroundColor:selectedIndex=='/editor/settings'&&theme.accentColor}} onClick={()=>this.changePath('/editor/settings')} value='/editor/settings' className='nunito-font' primaryText="Settings" leftIcon={<FontIcon className="material-icons" style={{color:'white'}}>settings</FontIcon>} />}
+        <ListItem style={{...styles.listItem,backgroundColor:selectedIndex=='/editor/manage'&&theme.accentColor}} onClick={()=>this.changePath('/editor/manage')} value='/editor/manage' className='nunito-font' primaryText="Manage Stories"/>
+        {this.isAdmin && <ListItem style={{...styles.listItem,backgroundColor:selectedIndex=='/editor/contact'&&theme.accentColor}} onClick={()=>this.changePath('/editor/contact')} value='/editor/contact' className='nunito-font' primaryText="Contact & About"/>}
+        {this.isAdmin && <ListItem style={{...styles.listItem,backgroundColor:selectedIndex=='/editor/settings'&&theme.accentColor}} onClick={()=>this.changePath('/editor/settings')} value='/editor/settings' className='nunito-font' primaryText="Settings"/>}
       </SelectableList>
+    </Wrapper>
     )
   },
 })
