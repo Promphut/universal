@@ -10,7 +10,7 @@ const PublisherInsightWriters = React.createClass({
   render() {
     return (
       <Container>
-        <PublisherInsight title='Writer Analytic'/>
+        <PublisherInsight title='Writer Analytic' insigth='topwriters'/>
       </Container>
     )
   }

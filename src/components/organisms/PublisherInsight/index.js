@@ -60,7 +60,7 @@ const PublisherInsight = React.createClass({
 
   render() {
 		const {theme} = this.context.setting.publisher
-		const {title} = this.props
+		const {title, insigth} = this.props
 
     return (
       <Container>
@@ -83,16 +83,16 @@ const PublisherInsight = React.createClass({
           onChangeIndex={this.handleChange}
         >
           <Item>
-						<PublisherInsightView />
+						<PublisherInsightView insigth={insigth}/>
           </Item>
           <Item>
-						<PublisherInsightTrend />
+						<PublisherInsightTrend insigth={insigth}/>
           </Item>
           <Item>
-						<PublisherInsightShare />
+						<PublisherInsightShare insigth={insigth}/>
           </Item>
 					<Item>
-						<PublisherInsightGrowth />
+						<PublisherInsightGrowth insigth={insigth}/>
 					</Item>
         </SwipeableViews>
       </Container>

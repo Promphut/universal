@@ -1,8 +1,19 @@
 import React from 'react'
 import styled from 'styled-components'
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow,
-	TableRowColumn} from 'material-ui/Table'
-import {ScoreBar} from 'components'
+import {
+	Table,
+	TableBody,
+	TableHeader,
+	TableHeaderColumn,
+	TableRow,
+	TableRowColumn
+} from 'material-ui/Table'
+import { ScoreBar } from 'components'
+import FontIcon from 'material-ui/FontIcon'
+import DatePicker from 'react-datepicker'
+import Popover from 'material-ui/Popover'
+import moment from 'moment'
+import api from 'components/api'
 
 const Container = styled.div`
 `
@@ -14,50 +25,76 @@ const Bold = styled.div`
 const Text = styled.div`
 	color: ${props => props.color};
 	font-weight: ${props => props.weight};
-	background: ${props => props.color == '#FFF' ? '#27AE60' : ''};
-	width: ${props => props.color == '#FFF' ? '32px' : ''};
 	margin: auto;
 	text-align: center;
 	fontSize: 16px;
-	padding: 6px 0px;
-	border-radius: 15px;
+`
+
+const Line = styled.div`
+	white-space: nowrap;
 `
 
 const styles = {
-  tableTextHeader: {
+	tableTextHeader: {
 		fontSize: '16px',
 		fontWeight: 'bold',
 		color: '#001738',
 		textAlign: 'center'
-  },
-  tableTotalName: {
+	},
+	tableTextHeaderMulLine: {
+		fontSize: '16px',
+		fontWeight: 'bold',
+		color: '#001738',
+		textAlign: 'center',
+		whiteSpace: 'normal',
+		paddingLeft: '10px'
+	},
+	tableTotalName: {
 		fontSize: '16px',
 		height: '36px',
 		width: '30%'
-  },
-  tableTotal: {
+	},
+	tableTotal: {
 		fontSize: '16px',
 		height: '36px',
 		textAlign: 'center'
-  },
-  tableTextBodyName: {
+	},
+	tableTextBodyName: {
 		fontSize: '16px',
 		whiteSpace: 'initial',
 		padding: '12px 24px',
 		lineHeight: '25px',
 		width: '30%'
-  },
-  tableTextBody: {
+	},
+	tableTextBody: {
 		fontSize: '16px',
 		textAlign: 'center'
-  }
+	},
+	arrow: {
+		fontSize: '12px',
+		color: '#C4C4C4',
+		padding: '0px 5px 0px 0px'
+	},
+	dropdown(accentColor) {
+		return {
+			fontSize: '20px',
+			position: 'absolute',
+			top: '33%',
+			right: 0,
+			color: accentColor,
+			cursor: 'pointer'
+		}
+	}
 }
 
 const PublisherInsightGrowth = React.createClass({
 	getInitialState() {
 		return {
-			data: {}
-    }
+			data: {},
+			open: false,
+			startDate: moment().zone('+07:00').subtract(6, 'days'),
+			endDate: moment().zone('+07:00')
+		}
 	},
 
 	componentDidMount() {
@@ -68,8 +105,7 @@ const PublisherInsightGrowth = React.createClass({
 				twoPrev: 10,
 				overall: 8
 			},
-			stories:
-			[
+			stories: [
 				{
 					name: 'AAA',
 					by: 'Mr.A',
@@ -96,7 +132,35 @@ const PublisherInsightGrowth = React.createClass({
 			]
 		}
 
-		this.setState({data})
+		this.setState({ data })
+	},
+
+	openDatePicker(e) {
+		this.setState({
+			open: true,
+			anchorEl: e.currentTarget
+		})
+	},
+
+	handleRequestClose() {
+		this.setState({
+			open: false
+		})
+	},
+
+	handleChangeDate(e) {
+		this.setState(
+			{
+				startDate: moment(e).subtract(6, 'days'),
+				endDate: e,
+				open: false
+			},
+			() => {
+				api.getShareInsight('topcolumns').then((res) => {
+					console.log(res)
+        })
+			}
+		)
 	},
 
 	renderTableRowColumnAvr(rate) {
@@ -114,7 +178,7 @@ const PublisherInsightGrowth = React.createClass({
 		}
 
 		return (
-			<TableRowColumn style={{...styles.tableTotal, color, fontWeight}}>
+			<TableRowColumn style={{ ...styles.tableTotal, color, fontWeight }}>
 				{rate}
 			</TableRowColumn>
 		)
@@ -124,7 +188,7 @@ const PublisherInsightGrowth = React.createClass({
 		let color
 		let weight
 		if (rate > 9) {
-			color = '#FFF'
+			color = '#27AE60'
 			weight = 'bold'
 		} else if (rate < 3) {
 			color = '#EB5757'
@@ -141,55 +205,100 @@ const PublisherInsightGrowth = React.createClass({
 		)
 	},
 
-  render() {
-		const {avr, stories} = this.state.data
+	render() {
+		const { avr, stories } = this.state.data
+		const { startDate, endDate, anchorEl, open } = this.state
+		const { theme } = this.context.setting.publisher
 
-    return (
-      <Container>
-				<ScoreBar style={{float: 'right', marginBottom: '13px'}}/>
-				<Table selectable={false} wrapperStyle={{clear: 'both'}}>
-
+		return (
+			<Container>
+				<Popover
+					open={open}
+					anchorEl={anchorEl}
+					onRequestClose={this.handleRequestClose}
+					style={{ background: 'none', boxShadow: 'none' }}>
+					<DatePicker
+				    selected={endDate}
+				    startDate={startDate}
+				    endDate={endDate}
+						onChange={this.handleChangeDate}
+						inline
+					/>
+				</Popover>
+				<ScoreBar style={{ float: 'right', marginBottom: '13px' }} />
+				<Table selectable={false} wrapperStyle={{ clear: 'both' }}>
 					<TableHeader displaySelectAll={false} adjustForCheckbox={false}>
 						<TableRow className="sans-font">
-							<TableHeaderColumn style={styles.tableTextBodyName}></TableHeaderColumn>
-							<TableHeaderColumn style={styles.tableTextHeader}>Today</TableHeaderColumn>
-							<TableHeaderColumn style={styles.tableTextHeader}>Previous Week</TableHeaderColumn>
-							<TableHeaderColumn style={styles.tableTextHeader}>Previous 2 Weeks</TableHeaderColumn>
-							<TableHeaderColumn style={styles.tableTextHeader}>Overall</TableHeaderColumn>
+							<TableHeaderColumn style={styles.tableTextBodyName} />
+							<TableHeaderColumn style={styles.tableTextHeaderMulLine}>
+								<Line>{moment(startDate).format('MMM DD, YYYY')} -</Line>
+								<FontIcon
+									className="material-icons"
+									style={styles.dropdown(theme.accentColor)}
+									onClick={this.openDatePicker}>
+									arrow_drop_down
+								</FontIcon>
+								<Line>{moment(endDate).format('MMM DD, YYYY')}</Line>
+							</TableHeaderColumn>
+							<TableHeaderColumn style={styles.tableTextHeader}>
+								Previous Week
+							</TableHeaderColumn>
+							<TableHeaderColumn style={styles.tableTextHeader}>
+								Previous 2 Weeks
+							</TableHeaderColumn>
+							<TableHeaderColumn style={styles.tableTextHeader}>
+								Overall
+							</TableHeaderColumn>
 						</TableRow>
 					</TableHeader>
 
 					<TableBody displayRowCheckbox={false}>
-						<TableRow className="sans-font"  style={{height: '36px', background: '#F4F4F4'}}>
-							<TableRowColumn style={styles.tableTotalName}>Average Growth Score</TableRowColumn>
+						<TableRow
+							className="sans-font"
+							style={{ height: '36px', background: '#F4F4F4' }}>
+							<TableRowColumn style={styles.tableTotalName}>
+								Average Growth Score
+							</TableRowColumn>
 
-							{avr ? this.renderTableRowColumnAvr(avr.now) : <TableRowColumn style={styles.tableTotal}>-</TableRowColumn>}
-							{avr ? this.renderTableRowColumnAvr(avr.prev) : <TableRowColumn style={styles.tableTotal}>-</TableRowColumn>}
-							{avr ? this.renderTableRowColumnAvr(avr.twoPrev) : <TableRowColumn style={styles.tableTotal}>-</TableRowColumn>}
-							{avr ? this.renderTableRowColumnAvr(avr.overall) : <TableRowColumn style={styles.tableTotal}>-</TableRowColumn>}
+							{avr
+								? this.renderTableRowColumnAvr(avr.now)
+								: <TableRowColumn style={styles.tableTotal}>-</TableRowColumn>}
+							{avr
+								? this.renderTableRowColumnAvr(avr.prev)
+								: <TableRowColumn style={styles.tableTotal}>-</TableRowColumn>}
+							{avr
+								? this.renderTableRowColumnAvr(avr.twoPrev)
+								: <TableRowColumn style={styles.tableTotal}>-</TableRowColumn>}
+							{avr
+								? this.renderTableRowColumnAvr(avr.overall)
+								: <TableRowColumn style={styles.tableTotal}>-</TableRowColumn>}
 						</TableRow>
 
-						{stories ?
-							stories.map((story, index) => (
-								<TableRow className="sans-font" key={index}>
+						{stories
+							? stories.map((story, index) => (
+									<TableRow className="sans-font" key={index}>
 
-									<TableRowColumn style={styles.tableTextBodyName}>
-										<Bold>{index + 1}. {stories[index].name}</Bold>
-										{stories[index].by}
-									</TableRowColumn>
+										<TableRowColumn style={styles.tableTextBodyName}>
+											<Bold>{index + 1}. {stories[index].name}</Bold>
+											{stories[index].by}
+										</TableRowColumn>
 
-									{this.renderTableRowColumn(stories[index].now)}
-									{this.renderTableRowColumn(stories[index].prev)}
-									{this.renderTableRowColumn(stories[index].twoPrev)}
-									{this.renderTableRowColumn(stories[index].overall)}
-								</TableRow>
-            	)) : ''
-						}
+										{this.renderTableRowColumn(stories[index].now)}
+										{this.renderTableRowColumn(stories[index].prev)}
+										{this.renderTableRowColumn(stories[index].twoPrev)}
+										{this.renderTableRowColumn(stories[index].overall)}
+									</TableRow>
+								))
+							: ''}
 					</TableBody>
 				</Table>
-      </Container>
-    )
-  }
+			</Container>
+		)
+	}
 })
+
+PublisherInsightGrowth.contextTypes = {
+	setting: React.PropTypes.object
+}
 
 export default PublisherInsightGrowth

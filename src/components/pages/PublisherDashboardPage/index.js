@@ -90,7 +90,7 @@ const PublisherDashboardPage = React.createClass({
           <Title>Overview</Title>
         </Header>
         <SubContainer>
-          <GraphDashboard width={1000} />
+          <GraphDashboard width={800} />
         </SubContainer>
         <GraphGap/>
 

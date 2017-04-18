@@ -99,7 +99,7 @@ var Dots=React.createClass({
         data.pop();
 
         var circles=data.map(function(d,i){
-            return (<circle className="dot" r="7" cx={_self.props.x(d.date)} 
+            return (<circle className="dot" r="7" cx={_self.props.x(d.date)}
                       cy= {_self.props.y(d.value)} fill="#7dc7f4"
                        stroke="#3f5175" strokeWidth="5px" key={i} />);
         });
@@ -161,7 +161,7 @@ var LineChart=React.createClass({
 
         var x = d3.scaleTime().domain(d3.extent(data, function(d) { return d.date; })).range([30, w]),
             y = d3.scaleLinear().domain([0, d3.max(data, function(d) { return d.value; })]).range([h,0]);
-      
+
        var xAxis = d3.axisBottom(x).tickSize(-h-30).ticks(8),
            yAxis = d3.axisLeft(y).tickSize(-w-30).ticks(6)
 
@@ -216,8 +216,8 @@ const GraphDashboard = React.createClass({
     },
 	getInitialState(){
 		return {
-            startDate1:moment().subtract(30, 'days'),
-            startDate2:moment(),
+            startDate1:moment().zone("+07:00").subtract(30, 'days'),
+            startDate2:moment().zone("+07:00"),
             swipPicker:true,
             open:false,
             selectTab:'view',
@@ -228,8 +228,8 @@ const GraphDashboard = React.createClass({
 
 	},
     componentWillMount(){
-        
-	},  
+
+	},
 	componentDidMount(){
         this.getPublisherInsight()
 	},
@@ -335,8 +335,8 @@ const GraphDashboard = React.createClass({
                 onChange={this.handleChangeDate2}
                 inline/>}
             </Popover>
-            <Tabs style={{width:300}} 
-                  tabItemContainerStyle={{...styles.tabs}} 
+            <Tabs style={{width:300}}
+                  tabItemContainerStyle={{...styles.tabs}}
                   inkBarStyle={{background:theme.accentColor,height:3}}
                   onChange={this.handleChangeTab}
                   value={selectTab}>
@@ -361,15 +361,15 @@ const GraphDashboard = React.createClass({
                 <div className="total">
                     <Label style={{color:'#8e8e8e'}}>Number of Stories</Label>
                     <Num className='serif-font' >350</Num>
-                </div>  
+                </div>
                 <div className="total">
                     <Label style={{color:'#8e8e8e'}}>Average per story</Label>
                     <Num className='serif-font' >189,057</Num>
-                </div> 
+                </div>
                 <div className="total">
                     <Label style={{color:'#8e8e8e'}}>Total</Label>
                     <Num className='serif-font' style={{color:theme.accentColor}}>189,057</Num>
-                </div>   
+                </div>
             </div>
             <LineChart width={width} height={height} data={data}/>
         </Wrapper>

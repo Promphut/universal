@@ -10,7 +10,7 @@ const PublisherInsightColumns = React.createClass({
   render() {
     return (
       <Container>
-        <PublisherInsight title='Column Analytic'/>
+        <PublisherInsight title='Column Analytic' insigth='topcolumns'/>
       </Container>
     )
   }
