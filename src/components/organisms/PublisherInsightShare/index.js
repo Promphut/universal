@@ -25,20 +25,21 @@ const Line = styled.div`
 	white-space: nowrap;
 `
 
+const SortText = styled.div`
+`
+
 const styles = {
-	tableTextHeader: {
-		fontSize: '16px',
-		fontWeight: 'bold',
-		color: '#001738',
-		textAlign: 'center'
-	},
-	tableTextHeaderMulLine: {
-		fontSize: '16px',
-		fontWeight: 'bold',
-		color: '#001738',
-		textAlign: 'center',
-		whiteSpace: 'normal',
-		paddingLeft: '10px'
+	tableTextHeader(textDecoration, whiteSpace = 'nowrap', paddingLeft) {
+		return {
+			fontSize: '16px',
+			fontWeight: 'bold',
+			color: '#001738',
+			textAlign: 'center',
+			cursor: 'pointer',
+			whiteSpace,
+			paddingLeft,
+			textDecoration
+		}
 	},
 	tableTotalName: {
 		fontSize: '16px',
@@ -84,11 +85,12 @@ const PublisherInsightShare = React.createClass({
 			data: {},
 			open: false,
 			startDate: moment().zone('+07:00').subtract(6, 'days'),
-			endDate: moment().zone('+07:00')
+			endDate: moment().zone('+07:00'),
+			hover: -1
 		}
 	},
 
-	getShareInsight(current, subaction, filter, sort, limit) {
+	getShareInsight(current, sort, subaction, filter, limit) {
 		api
 			.getShareInsight(
 				this.props.insigth,
@@ -99,7 +101,6 @@ const PublisherInsightShare = React.createClass({
 				current
 			)
 			.then(data => {
-				console.log(data)
 				this.setState({ data })
 			})
 	},
@@ -150,6 +151,12 @@ const PublisherInsightShare = React.createClass({
 		)
 	},
 
+	sortBy(sort) {
+		this.getShareInsight(moment(this.state.endDate).format('YYYYMMDD'), {
+			[sort]: -1
+		})
+	},
+
 	renderTableRowColumn(share) {
 		return (
 			<TableRowColumn style={styles.tableTextBody}>
@@ -160,7 +167,7 @@ const PublisherInsightShare = React.createClass({
 
 	render() {
 		const { entries, summary } = this.state.data
-		const { startDate, endDate, anchorEl, open } = this.state
+		const { startDate, endDate, anchorEl, open, hover } = this.state
 		const { insigth } = this.props
 		const { theme } = this.context.setting.publisher
 
@@ -183,24 +190,69 @@ const PublisherInsightShare = React.createClass({
 					<TableHeader displaySelectAll={false} adjustForCheckbox={false}>
 						<TableRow className="sans-font">
 							<TableHeaderColumn style={styles.tableTextBodyName} />
-							<TableHeaderColumn style={styles.tableTextHeaderMulLine}>
-								<Line>{moment(startDate).format('MMM DD, YYYY')} -</Line>
+							<TableHeaderColumn
+								style={
+									hover == 1
+										? styles.tableTextHeader('underline', 'normal', '20px')
+										: styles.tableTextHeader('none', 'normal', '20px')
+								}>
+								<SortText
+									onClick={() => this.sortBy('pastSevenDays')}
+									onMouseOver={() => this.setState({ hover: 1 })}
+									onMouseLeave={() => this.setState({ hover: -1 })}>
+									<Line>{moment(startDate).format('MMM DD, YYYY')} -</Line>
+								</SortText>
 								<FontIcon
 									className="material-icons"
 									style={styles.dropdown(theme.accentColor)}
 									onClick={this.openDatePicker}>
 									arrow_drop_down
 								</FontIcon>
-								<Line>{moment(endDate).format('MMM DD, YYYY')}</Line>
+								<SortText
+									onClick={() => this.sortBy('pastSevenDays')}
+									onMouseOver={() => this.setState({ hover: 1 })}
+									onMouseLeave={() => this.setState({ hover: -1 })}>
+									<Line>{moment(endDate).format('MMM DD, YYYY')}</Line>
+								</SortText>
 							</TableHeaderColumn>
-							<TableHeaderColumn style={styles.tableTextHeader}>
-								Previous Week
+							<TableHeaderColumn
+								style={
+									hover == 2
+										? styles.tableTextHeader('underline')
+										: styles.tableTextHeader()
+								}>
+								<SortText
+									onClick={() => this.sortBy('aWeekAgo')}
+									onMouseOver={() => this.setState({ hover: 2 })}
+									onMouseLeave={() => this.setState({ hover: -1 })}>
+									Previous Week
+								</SortText>
 							</TableHeaderColumn>
-							<TableHeaderColumn style={styles.tableTextHeader}>
-								Previous 2 Weeks
+							<TableHeaderColumn
+								style={
+									hover == 3
+										? styles.tableTextHeader('underline')
+										: styles.tableTextHeader()
+								}>
+								<SortText
+									onClick={() => this.sortBy('twoWeeksAgo')}
+									onMouseOver={() => this.setState({ hover: 3 })}
+									onMouseLeave={() => this.setState({ hover: -1 })}>
+									Previous 2 Weeks
+								</SortText>
 							</TableHeaderColumn>
-							<TableHeaderColumn style={styles.tableTextHeader}>
-								Overall
+							<TableHeaderColumn
+								style={
+									hover == 4
+										? styles.tableTextHeader('underline')
+										: styles.tableTextHeader()
+								}>
+								<SortText
+									onClick={() => this.sortBy('overall')}
+									onMouseOver={() => this.setState({ hover: 4 })}
+									onMouseLeave={() => this.setState({ hover: -1 })}>
+									Overall
+								</SortText>
 							</TableHeaderColumn>
 						</TableRow>
 					</TableHeader>

@@ -34,20 +34,21 @@ const Line = styled.div`
 	white-space: nowrap;
 `
 
+const SortText = styled.div`
+`
+
 const styles = {
-	tableTextHeader: {
-		fontSize: '16px',
-		fontWeight: 'bold',
-		color: '#001738',
-		textAlign: 'center'
-	},
-	tableTextHeaderMulLine: {
-		fontSize: '16px',
-		fontWeight: 'bold',
-		color: '#001738',
-		textAlign: 'center',
-		whiteSpace: 'normal',
-		paddingLeft: '10px'
+	tableTextHeader(textDecoration, whiteSpace = 'nowrap', paddingLeft) {
+		return {
+			fontSize: '16px',
+			fontWeight: 'bold',
+			color: '#001738',
+			textAlign: 'center',
+			cursor: 'pointer',
+			whiteSpace,
+			paddingLeft,
+			textDecoration
+		}
 	},
 	tableTotalName: {
 		fontSize: '16px',
@@ -93,46 +94,28 @@ const PublisherInsightGrowth = React.createClass({
 			data: {},
 			open: false,
 			startDate: moment().zone('+07:00').subtract(6, 'days'),
-			endDate: moment().zone('+07:00')
+			endDate: moment().zone('+07:00'),
+			hover: -1
 		}
 	},
 
-	componentDidMount() {
-		const data = {
-			avr: {
-				now: 11,
-				prev: 2,
-				twoPrev: 10,
-				overall: 8
-			},
-			stories: [
-				{
-					name: 'AAA',
-					by: 'Mr.A',
-					now: 4,
-					prev: 5,
-					twoPrev: 10,
-					overall: 8
-				},
-				{
-					name: 'BBB',
-					by: 'Mr.B',
-					now: 3,
-					prev: 6,
-					overall: 7
-				},
-				{
-					name: 'CCC',
-					by: 'Mrs.C',
-					now: 10,
-					prev: 1,
-					twoPrev: 5,
-					overall: 11
-				}
-			]
-		}
+	getGrowthInsight(current, sort, subaction, filter, limit) {
+		api
+			.getGrowthInsight(
+				this.props.insigth,
+				subaction,
+				filter,
+				sort,
+				limit,
+				current
+			)
+			.then(data => {
+				this.setState({ data })
+			})
+	},
 
-		this.setState({ data })
+	componentDidMount() {
+		this.getGrowthInsight()
 	},
 
 	openDatePicker(e) {
@@ -156,11 +139,15 @@ const PublisherInsightGrowth = React.createClass({
 				open: false
 			},
 			() => {
-				api.getShareInsight('topcolumns').then((res) => {
-					console.log(res)
-        })
+				this.getGrowthInsight(moment(e).format('YYYYMMDD'))
 			}
 		)
+	},
+
+	sortBy(sort) {
+		this.getGrowthInsight(moment(this.state.endDate).format('YYYYMMDD'), {
+			[sort]: -1
+		})
 	},
 
 	renderTableRowColumnAvr(rate) {
@@ -200,14 +187,18 @@ const PublisherInsightGrowth = React.createClass({
 
 		return (
 			<TableRowColumn>
-				<Text color={color} weight={weight}>{rate ? rate : '-'}</Text>
+				<Text color={color} weight={weight}>
+					{rate || rate === 0 ? rate : '-'}
+				</Text>
 			</TableRowColumn>
 		)
 	},
 
 	render() {
-		const { avr, stories } = this.state.data
-		const { startDate, endDate, anchorEl, open } = this.state
+		// const { avr, stories } = this.state.data
+		const { entries, summary } = this.state.data
+		const { startDate, endDate, anchorEl, open, hover } = this.state
+		const { insigth } = this.props
 		const { theme } = this.context.setting.publisher
 
 		return (
@@ -218,9 +209,9 @@ const PublisherInsightGrowth = React.createClass({
 					onRequestClose={this.handleRequestClose}
 					style={{ background: 'none', boxShadow: 'none' }}>
 					<DatePicker
-				    selected={endDate}
-				    startDate={startDate}
-				    endDate={endDate}
+						selected={endDate}
+						startDate={startDate}
+						endDate={endDate}
 						onChange={this.handleChangeDate}
 						inline
 					/>
@@ -230,24 +221,69 @@ const PublisherInsightGrowth = React.createClass({
 					<TableHeader displaySelectAll={false} adjustForCheckbox={false}>
 						<TableRow className="sans-font">
 							<TableHeaderColumn style={styles.tableTextBodyName} />
-							<TableHeaderColumn style={styles.tableTextHeaderMulLine}>
-								<Line>{moment(startDate).format('MMM DD, YYYY')} -</Line>
+							<TableHeaderColumn
+								style={
+									hover == 1
+										? styles.tableTextHeader('underline', 'normal', '20px')
+										: styles.tableTextHeader('none', 'normal', '20px')
+								}>
+								<SortText
+									onClick={() => this.sortBy('pastSevenDays')}
+									onMouseOver={() => this.setState({ hover: 1 })}
+									onMouseLeave={() => this.setState({ hover: -1 })}>
+									<Line>{moment(startDate).format('MMM DD, YYYY')} -</Line>
+								</SortText>
 								<FontIcon
 									className="material-icons"
 									style={styles.dropdown(theme.accentColor)}
 									onClick={this.openDatePicker}>
 									arrow_drop_down
 								</FontIcon>
-								<Line>{moment(endDate).format('MMM DD, YYYY')}</Line>
+								<SortText
+									onClick={() => this.sortBy('pastSevenDays')}
+									onMouseOver={() => this.setState({ hover: 1 })}
+									onMouseLeave={() => this.setState({ hover: -1 })}>
+									<Line>{moment(endDate).format('MMM DD, YYYY')}</Line>
+								</SortText>
 							</TableHeaderColumn>
-							<TableHeaderColumn style={styles.tableTextHeader}>
-								Previous Week
+							<TableHeaderColumn
+								style={
+									hover == 2
+										? styles.tableTextHeader('underline')
+										: styles.tableTextHeader()
+								}>
+								<SortText
+									onClick={() => this.sortBy('aWeekAgo')}
+									onMouseOver={() => this.setState({ hover: 2 })}
+									onMouseLeave={() => this.setState({ hover: -1 })}>
+									Previous Week
+								</SortText>
 							</TableHeaderColumn>
-							<TableHeaderColumn style={styles.tableTextHeader}>
-								Previous 2 Weeks
+							<TableHeaderColumn
+								style={
+									hover == 3
+										? styles.tableTextHeader('underline')
+										: styles.tableTextHeader()
+								}>
+								<SortText
+									onClick={() => this.sortBy('twoWeeksAgo')}
+									onMouseOver={() => this.setState({ hover: 3 })}
+									onMouseLeave={() => this.setState({ hover: -1 })}>
+									Previous 2 Weeks
+								</SortText>
 							</TableHeaderColumn>
-							<TableHeaderColumn style={styles.tableTextHeader}>
-								Overall
+							<TableHeaderColumn
+								style={
+									hover == 4
+										? styles.tableTextHeader('underline')
+										: styles.tableTextHeader()
+								}>
+								<SortText
+									onClick={() => this.sortBy('overall')}
+									onMouseOver={() => this.setState({ hover: 4 })}
+									onMouseLeave={() => this.setState({ hover: -1 })}>
+									Overall
+								</SortText>
 							</TableHeaderColumn>
 						</TableRow>
 					</TableHeader>
@@ -260,36 +296,46 @@ const PublisherInsightGrowth = React.createClass({
 								Average Growth Score
 							</TableRowColumn>
 
-							{avr
-								? this.renderTableRowColumnAvr(avr.now)
+							{summary
+								? this.renderTableRowColumnAvr(summary.pastSevenDays)
 								: <TableRowColumn style={styles.tableTotal}>-</TableRowColumn>}
-							{avr
-								? this.renderTableRowColumnAvr(avr.prev)
+							{summary
+								? this.renderTableRowColumnAvr(summary.aWeekAgo)
 								: <TableRowColumn style={styles.tableTotal}>-</TableRowColumn>}
-							{avr
-								? this.renderTableRowColumnAvr(avr.twoPrev)
+							{summary
+								? this.renderTableRowColumnAvr(summary.twoWeeksAgo)
 								: <TableRowColumn style={styles.tableTotal}>-</TableRowColumn>}
-							{avr
-								? this.renderTableRowColumnAvr(avr.overall)
+							{summary
+								? this.renderTableRowColumnAvr(summary.overall)
 								: <TableRowColumn style={styles.tableTotal}>-</TableRowColumn>}
 						</TableRow>
 
-						{stories
-							? stories.map((story, index) => (
+						{entries
+							? entries.map((entry, index) => (
 									<TableRow className="sans-font" key={index}>
-
-										<TableRowColumn style={styles.tableTextBodyName}>
-											<Bold>{index + 1}. {stories[index].name}</Bold>
-											{stories[index].by}
-										</TableRowColumn>
-
-										{this.renderTableRowColumn(stories[index].now)}
-										{this.renderTableRowColumn(stories[index].prev)}
-										{this.renderTableRowColumn(stories[index].twoPrev)}
-										{this.renderTableRowColumn(stories[index].overall)}
+										{insigth == 'topstories'
+											? <TableRowColumn style={styles.tableTextBodyName}>
+													<Bold>{index + 1}. {entry.story.title}</Bold>
+													{entry.story.writer.username}
+												</TableRowColumn>
+											: ''}
+										{insigth == 'topcolumns'
+											? <TableRowColumn style={styles.tableTextBodyName}>
+													<Bold>{index + 1}. {entry.column.name}</Bold>
+												</TableRowColumn>
+											: ''}
+										{insigth == 'topwriters'
+											? <TableRowColumn style={styles.tableTextBodyName}>
+													<Bold>{index + 1}. {entry.writer.username}</Bold>
+												</TableRowColumn>
+											: ''}
+										{this.renderTableRowColumn(entry.pastSevenDays)}
+										{this.renderTableRowColumn(entry.aWeekAgo)}
+										{this.renderTableRowColumn(entry.twoWeeksAgo)}
+										{this.renderTableRowColumn(entry.overall)}
 									</TableRow>
 								))
-							: ''}
+							: ''}*/}
 					</TableBody>
 				</Table>
 			</Container>

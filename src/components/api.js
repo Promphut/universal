@@ -670,7 +670,24 @@ api.getShareInsight = (insight, subaction, filter, sort, limit, current) => {
 	.get(config.BACKURL+'/insights/'+insight+'/share/'+subaction)
 	.set('x-access-token', token)
 	.query({filter: filter ? JSON.stringify(filter) : null})
-	.query({sort: sort})
+	.query({sort: sort ? JSON.stringify(sort) : null})
+	.query({limit: limit})
+	.query({current: current})
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body
+	}, api.err)
+}
+
+
+api.getGrowthInsight = (insight, subaction, filter, sort, limit, current) => {
+	const token = auth.getToken()
+
+	return Request
+	.get(config.BACKURL+'/insights/'+insight+'/growth/'+subaction)
+	.set('x-access-token', token)
+	.query({filter: filter ? JSON.stringify(filter) : null})
+	.query({sort: sort ? JSON.stringify(sort) : null})
 	.query({limit: limit})
 	.query({current: current})
 	.set('Accept','application/json')

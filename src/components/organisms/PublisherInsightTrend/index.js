@@ -47,7 +47,7 @@ const styles = {
 		color: '#001738',
 		textAlign: 'center',
 		whiteSpace: 'normal',
-		paddingLeft: '10px'
+		paddingLeft: '20px'
 	},
 	tableTotalName: {
 		fontSize: '16px',
