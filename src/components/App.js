@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import { injectGlobal } from 'styled-components'
-import {Helmet} from "react-helmet";
+import Helmet from "react-helmet";
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import injectTapEventPlugin from 'react-tap-event-plugin';
