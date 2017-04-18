@@ -4,6 +4,8 @@ import Helmet from "react-helmet";
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import DocumentMeta from 'react-document-meta';
+
 
 injectGlobal`
   /* FOR DESKTOP AND TABLET
@@ -748,30 +750,21 @@ const App = React.createClass({
     });
 
     let title = name + (tagline ? ' | ' + tagline : '')
-
+    const meta = {
+      title: title,
+      description: desc,
+      canonical: config.FRONTURL+this.props.location.pathname ,
+      meta: {
+        name: {
+          keywords: keywords
+        }
+      }
+    };
     return (
       <div>
-        <Helmet>
-          <title>{title}</title>
-          <meta name="title" content={title} />
-          <meta name="keywords" content={keywords} />
-          <meta name="description" content={desc} />
 
-          <link rel="shortcut icon" type="image/ico" href={config.BACKURL+'/publishers/'+config.PID+'/favicon'} />
-          {channels && channels.fb ? <link rel="author" href={getFbUrl(channels.fb)} /> : ''}
-          <link rel="canonical" href={config.FRONTURL+this.props.location.pathname} />
 
-          <meta property="og:sitename" content={name} />
-          <meta property="og:url" content={config.FRONTURL+this.props.location.pathname} />
-          <meta property="og:title" content={title} />
-          <meta property="og:type" content="article" />
-          <meta property="og:image" content={coverMedium} />
-          <meta property="og:keywords" content={keywords} />
-          <meta property="og:description" content={desc} />
-          <meta property="twitter:card" content="summary_large_image" />
-          <meta property="twitter:image:alt" content={title} />
-          <meta property="fb:app_id" content={config.ANALYTIC.FBAPPID} />
-        </Helmet>
+        <DocumentMeta {...meta} />
 
         <MuiThemeProvider muiTheme={muiTheme}>
           {children}
