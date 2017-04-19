@@ -4,7 +4,7 @@ import Helmet from "react-helmet";
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-
+import DocMeta from 'react-doc-meta'
 injectGlobal`
   /* FOR DESKTOP AND TABLET
   @media (min-width:481px) {
@@ -748,31 +748,31 @@ const App = React.createClass({
     });
 
     let title = name + (tagline ? ' | ' + tagline : '')
-
+    var tags = [
+      {name: "description", content: desc},
+      {itemProp: "name", content: name},
+      {itemProp: "description", content: desc},
+      {itemProp: "image", content: coverMedium},
+      {name: "twitter:card", content: "product"},
+      {name: "twitter:site", content: "@publisher_handle"},
+      {name: "twitter:title", content: "Page Title"},
+      {name: "twitter:description", content: "Page description less than 200 characters"},
+      {name: "twitter:creator", content: "@author_handle"},
+      {name: "twitter:image", content: "http://www.example.com/image.html"},
+      {name: "twitter:data1", content: "$3"},
+      {name: "twitter:label1", content: "Price"},
+      {name: "twitter:data2", content: "Black"},
+      {name: "twitter:label2", content: "Color"},
+      {property: "og:title", content: title},
+      {property: "og:type", content: "article"},
+      {property: "og:url", content: config.FRONTURL+this.props.location.pathname},
+      {property: "og:image", content: coverMedium},
+      {property: "og:description", content: desc},
+      {property: "og:site_name", content: name}
+    ]
     return (
       <div>
-        <Helmet>
-          <title>{title}</title>
-          <meta name="title" content={title} />
-          <meta name="keywords" content={keywords} />
-          <meta name="description" content={desc} />
-
-          <link rel="shortcut icon" type="image/ico" href={config.BACKURL+'/publishers/'+config.PID+'/favicon'} />
-          {channels && channels.fb ? <link rel="author" href={getFbUrl(channels.fb)} /> : ''}
-          <link rel="canonical" href={config.FRONTURL+this.props.location.pathname} />
-
-          <meta property="og:sitename" content={name} />
-          <meta property="og:url" content={config.FRONTURL+this.props.location.pathname} />
-          <meta property="og:title" content={title} />
-          <meta property="og:type" content="article" />
-          <meta property="og:image" content={coverMedium} />
-          <meta property="og:keywords" content={keywords} />
-          <meta property="og:description" content={desc} />
-          <meta property="twitter:card" content="summary_large_image" />
-          <meta property="twitter:image:alt" content={title} />
-          <meta property="fb:app_id" content={config.ANALYTIC.FBAPPID} />
-        </Helmet>
-
+        <DocMeta tags={tags} />
         <MuiThemeProvider muiTheme={muiTheme}>
           {children}
         </MuiThemeProvider>
