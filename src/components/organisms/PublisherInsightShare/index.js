@@ -297,6 +297,7 @@ const PublisherInsightShare = React.createClass({
 													<Bold>{index + 1}. {entry.writer.username}</Bold>
 												</TableRowColumn>
 											: ''}
+											
 										{this.renderTableRowColumn(entry.pastSevenDays)}
 										{this.renderTableRowColumn(entry.aWeekAgo)}
 										{this.renderTableRowColumn(entry.twoWeeksAgo)}
