@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <script type="text/javascript">
+    var config = <%= JSON.stringify(htmlWebpackPlugin.options.config) %>;
+    //console.log('CONFIG1', config);
+    // ==== GOOGLE TAG MGR ====
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer', config.ANALYTIC.TAGMGRID);
+  </script>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="keywords" content={keywords} />
+    <meta name="description" content={desc} />
+
+    <link rel="shortcut icon" type="image/ico" href={config.BACKURL+'/publishers/'+config.PID+'/favicon'} />
+    {channels && channels.fb ? <link rel="author" href={getFbUrl(channels.fb)} /> : ''}
+    <link rel="canonical" href={config.FRONTURL+this.props.location.pathname} />
+
+    <meta property="og:sitename" content={name} />
+    <meta property="og:url" content={config.FRONTURL+this.props.location.pathname} />
+    <meta property="og:title" content={title} />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content={coverMedium} />
+    <meta property="og:keywords" content={keywords} />
+    <meta property="og:description" content={desc} />
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:image:alt" content={title} />
+    <meta property="fb:app_id" content={config.ANALYTIC.FBAPPID} />
+  </head>
+</html>
