@@ -11,6 +11,7 @@ import {
 import FontIcon from 'material-ui/FontIcon'
 import DatePicker from 'react-datepicker'
 import Popover from 'material-ui/Popover'
+import FlatButton from 'material-ui/FlatButton'
 import moment from 'moment'
 import api from 'components/api'
 
@@ -25,6 +26,16 @@ const Trend = styled.div`
  font-size: 14px;
  color: #C4C4C4;
  margin-top: 7px;
+`
+
+const DateSelect = styled.div`
+	float: right;
+	marginBottom: 13px;
+`
+
+const Date = styled.div`
+	display: inline-block;
+	marginRight: 10px;
 `
 
 const Line = styled.div`
@@ -275,7 +286,37 @@ const PublisherInsightView = React.createClass({
 						inline
 					/>
 				</Popover>
-				<Table selectable={false}>
+				<DateSelect>
+					<Date className="sans-font">Date:</Date>
+					<FlatButton
+						onClick={this.openDatePicker}
+						style={{
+							border: '1px solid #C4C4C4',
+							borderRadius: '20px',
+							padding: '0px 10px 0px 12px',
+							fontSize: '14px',
+							height: '28px',
+							lineHeight: '28px'
+						}}
+						icon={
+							<FontIcon
+								className="material-icons"
+								style={{
+									color: '#C4C4C4',
+									fontSize: '18px',
+									marginLeft: '8px'
+								}}>
+								keyboard_arrow_down
+							</FontIcon>
+						}>
+						{moment(startDate).format('MM/DD/YYYY')}
+						{' '}
+						-
+						{' '}
+						{moment(endDate).format('MM/DD/YYYY')}
+					</FlatButton>
+				</DateSelect>
+				<Table selectable={false} wrapperStyle={{ clear: 'both' }}>
 					<TableHeader displaySelectAll={false} adjustForCheckbox={false}>
 						<TableRow className="sans-font">
 							<TableHeaderColumn style={{ width: '30%' }} />

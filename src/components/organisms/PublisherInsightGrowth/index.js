@@ -12,6 +12,7 @@ import { ScoreBar } from 'components'
 import FontIcon from 'material-ui/FontIcon'
 import DatePicker from 'react-datepicker'
 import Popover from 'material-ui/Popover'
+import FlatButton from 'material-ui/FlatButton'
 import moment from 'moment'
 import api from 'components/api'
 
@@ -28,6 +29,16 @@ const Text = styled.div`
 	margin: auto;
 	text-align: center;
 	fontSize: 16px;
+`
+
+const DateSelect = styled.div`
+	float: right;
+	marginBottom: 13px;
+`
+
+const Date = styled.div`
+	display: inline-block;
+	marginRight: 10px;
 `
 
 const Line = styled.div`
@@ -220,17 +231,14 @@ const PublisherInsightGrowth = React.createClass({
 		let fontWeight
 		if (rate > 9) {
 			color = '#27AE60'
-			fontWeight = 'bold'
 		} else if (rate < 3) {
 			color = '#EB5757'
-			fontWeight = 'bold'
 		} else {
 			color = '#222222'
-			fontWeight = 'regular'
 		}
 
 		return (
-			<TableRowColumn style={{ ...styles.tableTotal, color, fontWeight }}>
+			<TableRowColumn style={{ ...styles.tableTotal, color }}>
 				{rate}
 			</TableRowColumn>
 		)
@@ -281,7 +289,37 @@ const PublisherInsightGrowth = React.createClass({
 						inline
 					/>
 				</Popover>
-				<ScoreBar style={{ float: 'right', marginBottom: '13px' }} />
+				<DateSelect>
+					<Date className="sans-font">Date:</Date>
+					<FlatButton
+						onClick={this.openDatePicker}
+						style={{
+							border: '1px solid #C4C4C4',
+							borderRadius: '20px',
+							padding: '0px 10px 0px 12px',
+							fontSize: '14px',
+							height: '28px',
+							lineHeight: '28px'
+						}}
+						icon={
+							<FontIcon
+								className="material-icons"
+								style={{
+									color: '#C4C4C4',
+									fontSize: '18px',
+									marginLeft: '8px'
+								}}>
+								keyboard_arrow_down
+							</FontIcon>
+						}>
+						{moment(startDate).format('MM/DD/YYYY')}
+						{' '}
+						-
+						{' '}
+						{moment(endDate).format('MM/DD/YYYY')}
+					</FlatButton>
+				</DateSelect>
+				<ScoreBar style={{ float: 'right', margin: '2px 18px 10px 0px' }} />
 				<Table selectable={false} wrapperStyle={{ clear: 'both' }}>
 					<TableHeader displaySelectAll={false} adjustForCheckbox={false}>
 						<TableRow className="sans-font">

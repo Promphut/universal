@@ -315,7 +315,6 @@ const GraphDashboard = React.createClass({
         }
     };
     var {width,height,style} = this.props
-    console.log(data)
 	return (
         <Wrapper width={width} style={{...style}}>
             <Popover
