@@ -38,15 +38,15 @@ const SortText = styled.div`
 `
 
 const styles = {
-	tableTextHeader(textDecoration, whiteSpace = 'nowrap', paddingLeft) {
+	tableTextHeader(textDecoration, paddingRight = 'auto') {
 		return {
-			fontSize: '16px',
+			fontSize: '14px',
 			fontWeight: 'bold',
 			color: '#001738',
 			textAlign: 'center',
 			cursor: 'pointer',
-			whiteSpace,
-			paddingLeft,
+			paddingLeft: 'auto',
+			paddingRight,
 			textDecoration
 		}
 	},
@@ -101,9 +101,9 @@ const PublisherInsightTrend = React.createClass({
 		}
 	},
 
-	getViewInsight(current, sort, subaction, filter, limit) {
+	getTrendInsight(current, sort, subaction, filter, limit) {
 		api
-			.getViewInsight(
+			.getTrendInsight(
 				this.props.insigth,
 				subaction,
 				filter,
@@ -112,12 +112,13 @@ const PublisherInsightTrend = React.createClass({
 				current
 			)
 			.then(data => {
+				console.log(data)
 				this.setState({ data })
 			})
 	},
 
 	componentDidMount() {
-		this.getViewInsight()
+		this.getTrendInsight()
 	},
 
 	toShortNumber(number) {
@@ -136,21 +137,11 @@ const PublisherInsightTrend = React.createClass({
 		return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 	},
 
-	checkRateArrow(now, prev) {
-		if (now > prev) {
+	checkRateArrow(trend) {
+		if (trend > 0) {
 			return 'arrow_upward'
-		} else if (now < prev) {
+		} else if (trend < 0) {
 			return 'arrow_downward'
-		}
-	},
-
-	checkRateNumber(now, prev) {
-		if (now > prev) {
-			return Math.floor(now / prev * 100)
-		} else if (now < prev) {
-			return Math.floor((prev - now) * 100 / prev)
-		} else {
-			return 0
 		}
 	},
 
@@ -175,39 +166,39 @@ const PublisherInsightTrend = React.createClass({
 				open: false
 			},
 			() => {
-				this.getViewInsight(moment(e).format('YYYYMMDD'))
+				this.getTrendInsight(moment(e).format('YYYYMMDD'))
 			}
 		)
 	},
 
 	sortBy(sort) {
-		this.getViewInsight(moment(this.state.endDate).format('YYYYMMDD'), {
+		this.getTrendInsight(moment(this.state.endDate).format('YYYYMMDD'), {
 			[sort]: -1
 		})
 	},
 
-	renderTableRowColumn(now, prev) {
+	renderTableRowColumn(trend, view) {
 		let color
-		if (now > prev) {
+		if (trend > 0) {
 			color = '#219653'
-		} else if (now < prev) {
+		} else if (trend < 0) {
 			color = '#EB5757'
 		}
 
 		return (
 			<TableRowColumn
-				style={{ ...styles.tableTextBody, color: now != prev ? color : '' }}>
-				{prev
+				style={{ ...styles.tableTextBody, color: trend ? color : '' }}>
+				{trend
 					? <Trend>
 							<FontIcon
 								className="material-icons"
 								style={{ ...styles.arrow, color: color }}>
-								{this.checkRateArrow(now, prev)}
+								{this.checkRateArrow(trend)}
 							</FontIcon>
-							{this.checkRateNumber(now, prev)}%
+							{Math.abs(trend)}%
 						</Trend>
 					: <Trend>-</Trend>}
-				<Rate>{now ? this.numberWithCommas(now) : '-'}</Rate>
+				<Rate>{view ? this.numberWithCommas(view) : '-'}</Rate>
 			</TableRowColumn>
 		)
 	},
@@ -236,18 +227,18 @@ const PublisherInsightTrend = React.createClass({
 				<Table selectable={false}>
 					<TableHeader displaySelectAll={false} adjustForCheckbox={false}>
 						<TableRow className="sans-font">
-							<TableHeaderColumn style={styles.tableTextBodyName} />
+							<TableHeaderColumn style={{ width: '30%' }} />
 							<TableHeaderColumn
 								style={
 									hover == 1
-										? styles.tableTextHeader('underline', 'normal', '20px')
-										: styles.tableTextHeader('none', 'normal', '20px')
+										? styles.tableTextHeader('underline', '8px')
+										: styles.tableTextHeader('none', '8px')
 								}>
 								<SortText
 									onClick={() => this.sortBy('pastSevenDays')}
 									onMouseOver={() => this.setState({ hover: 1 })}
 									onMouseLeave={() => this.setState({ hover: -1 })}>
-									<Line>{moment(startDate).format('MMM DD, YYYY')} -</Line>
+									<Line>Week of {moment(endDate).format('DD/MM/YY')}</Line>
 								</SortText>
 								<FontIcon
 									className="material-icons"
@@ -255,12 +246,6 @@ const PublisherInsightTrend = React.createClass({
 									onClick={this.openDatePicker}>
 									arrow_drop_down
 								</FontIcon>
-								<SortText
-									onClick={() => this.sortBy('pastSevenDays')}
-									onMouseOver={() => this.setState({ hover: 1 })}
-									onMouseLeave={() => this.setState({ hover: -1 })}>
-									<Line>{moment(endDate).format('MMM DD, YYYY')}</Line>
-								</SortText>
 							</TableHeaderColumn>
 							<TableHeaderColumn
 								style={
@@ -347,15 +332,15 @@ const PublisherInsightTrend = React.createClass({
 
 										{this.renderTableRowColumn(
 											entry.pastSevenDays,
-											entry.aWeekAgo
+											entry.view.pastSevenDays
 										)}
 										{this.renderTableRowColumn(
 											entry.aWeekAgo,
-											entry.twoWeeksAgo
+											entry.view.aWeekAgo
 										)}
 										{this.renderTableRowColumn(
 											entry.twoWeeksAgo,
-											entry.twoWeeksAgo
+											entry.view.twoWeeksAgo
 										)}
 
 										<TableRowColumn style={styles.tableTextBody}>

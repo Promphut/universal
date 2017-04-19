@@ -29,15 +29,15 @@ const SortText = styled.div`
 `
 
 const styles = {
-	tableTextHeader(textDecoration, whiteSpace = 'nowrap', paddingLeft) {
+	tableTextHeader(textDecoration, paddingRight = 'auto') {
 		return {
-			fontSize: '16px',
+			fontSize: '14px',
 			fontWeight: 'bold',
 			color: '#001738',
 			textAlign: 'center',
 			cursor: 'pointer',
-			whiteSpace,
-			paddingLeft,
+			paddingLeft: 'auto',
+			paddingRight,
 			textDecoration
 		}
 	},
@@ -54,7 +54,7 @@ const styles = {
 	tableTextBodyName: {
 		fontSize: '16px',
 		whiteSpace: 'initial',
-		padding: '12px 24px',
+		padding: '12px',
 		lineHeight: '25px',
 		width: '30%'
 	},
@@ -70,10 +70,10 @@ const styles = {
 	dropdown(accentColor) {
 		return {
 			fontSize: '20px',
-			position: 'absolute',
-			top: '33%',
-			right: 0,
 			color: accentColor,
+			position: 'absolute',
+			top: '35%',
+			right: 0,
 			cursor: 'pointer'
 		}
 	}
@@ -189,18 +189,18 @@ const PublisherInsightShare = React.createClass({
 				<Table selectable={false}>
 					<TableHeader displaySelectAll={false} adjustForCheckbox={false}>
 						<TableRow className="sans-font">
-							<TableHeaderColumn style={styles.tableTextBodyName} />
+							<TableHeaderColumn style={{ width: '30%' }} />
 							<TableHeaderColumn
 								style={
 									hover == 1
-										? styles.tableTextHeader('underline', 'normal', '20px')
-										: styles.tableTextHeader('none', 'normal', '20px')
+										? styles.tableTextHeader('underline', '8px')
+										: styles.tableTextHeader('none', '8px')
 								}>
 								<SortText
 									onClick={() => this.sortBy('pastSevenDays')}
 									onMouseOver={() => this.setState({ hover: 1 })}
 									onMouseLeave={() => this.setState({ hover: -1 })}>
-									<Line>{moment(startDate).format('MMM DD, YYYY')} -</Line>
+									<Line>Week of {moment(endDate).format('DD/MM/YY')}</Line>
 								</SortText>
 								<FontIcon
 									className="material-icons"
@@ -208,12 +208,6 @@ const PublisherInsightShare = React.createClass({
 									onClick={this.openDatePicker}>
 									arrow_drop_down
 								</FontIcon>
-								<SortText
-									onClick={() => this.sortBy('pastSevenDays')}
-									onMouseOver={() => this.setState({ hover: 1 })}
-									onMouseLeave={() => this.setState({ hover: -1 })}>
-									<Line>{moment(endDate).format('MMM DD, YYYY')}</Line>
-								</SortText>
 							</TableHeaderColumn>
 							<TableHeaderColumn
 								style={
@@ -297,7 +291,7 @@ const PublisherInsightShare = React.createClass({
 													<Bold>{index + 1}. {entry.writer.username}</Bold>
 												</TableRowColumn>
 											: ''}
-											
+
 										{this.renderTableRowColumn(entry.pastSevenDays)}
 										{this.renderTableRowColumn(entry.aWeekAgo)}
 										{this.renderTableRowColumn(entry.twoWeeksAgo)}

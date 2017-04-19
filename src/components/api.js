@@ -679,6 +679,22 @@ api.getViewInsight = (insight, subaction, filter, sort, limit, current) => {
 	}, api.err)
 }
 
+api.getTrendInsight = (insight, subaction, filter, sort, limit, current) => {
+	const token = auth.getToken()
+
+	return Request
+	.get(config.BACKURL+'/insights/'+insight+'/trend/'+subaction)
+	.set('x-access-token', token)
+	.query({filter: filter ? JSON.stringify(filter) : null})
+	.query({sort: sort ? JSON.stringify(sort) : null})
+	.query({limit: limit})
+	.query({current: current})
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body
+	}, api.err)
+}
+
 api.getShareInsight = (insight, subaction, filter, sort, limit, current) => {
 	const token = auth.getToken()
 

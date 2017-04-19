@@ -35,15 +35,15 @@ const SortText = styled.div`
 `
 
 const styles = {
-	tableTextHeader(textDecoration, whiteSpace = 'nowrap', paddingLeft) {
+	tableTextHeader(textDecoration, paddingRight = 'auto') {
 		return {
-			fontSize: '16px',
+			fontSize: '14px',
 			fontWeight: 'bold',
 			color: '#001738',
 			textAlign: 'center',
 			cursor: 'pointer',
-			whiteSpace,
-			paddingLeft,
+			paddingLeft: 'auto',
+			paddingRight,
 			textDecoration
 		}
 	},
@@ -109,7 +109,6 @@ const PublisherInsightView = React.createClass({
 				current
 			)
 			.then(data => {
-				console.log(data)
 				this.setState({ data })
 			})
 	},
@@ -134,21 +133,11 @@ const PublisherInsightView = React.createClass({
 		return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 	},
 
-	checkRateArrow(now, prev) {
-		if (now > prev) {
+	checkRateArrow(trend) {
+		if (trend > 0) {
 			return 'arrow_upward'
-		} else if (now < prev) {
+		} else if (trend < 0) {
 			return 'arrow_downward'
-		}
-	},
-
-	checkRateNumber(now, prev) {
-		if (now > prev) {
-			return Math.floor(now / prev * 100)
-		} else if (now < prev) {
-			return Math.floor((prev - now) * 100 / prev)
-		} else {
-			return 0
 		}
 	},
 
@@ -184,16 +173,16 @@ const PublisherInsightView = React.createClass({
 		})
 	},
 
-	renderTableRowColumn(now, prev) {
+	renderTableRowColumn(view, trend) {
 		return (
 			<TableRowColumn style={styles.tableTextBody}>
-				{now ? this.numberWithCommas(now) : '-'}
-				{prev
+				{view ? this.numberWithCommas(view) : '-'}
+				{trend
 					? <Trend>
 							<FontIcon className="material-icons" style={styles.arrow}>
-								{this.checkRateArrow(now, prev)}
+								{this.checkRateArrow(trend)}
 							</FontIcon>
-							{this.checkRateNumber(now, prev)}%
+							{Math.abs(trend)}%
 						</Trend>
 					: <Trend>-</Trend>}
 			</TableRowColumn>
@@ -224,18 +213,18 @@ const PublisherInsightView = React.createClass({
 				<Table selectable={false}>
 					<TableHeader displaySelectAll={false} adjustForCheckbox={false}>
 						<TableRow className="sans-font">
-							<TableHeaderColumn style={styles.tableTextBodyName} />
+							<TableHeaderColumn style={{ width: '30%' }} />
 							<TableHeaderColumn
 								style={
 									hover == 1
-										? styles.tableTextHeader('underline', 'normal', '20px')
-										: styles.tableTextHeader('none', 'normal', '20px')
+										? styles.tableTextHeader('underline', '8px')
+										: styles.tableTextHeader('none', '8px')
 								}>
 								<SortText
 									onClick={() => this.sortBy('pastSevenDays')}
 									onMouseOver={() => this.setState({ hover: 1 })}
 									onMouseLeave={() => this.setState({ hover: -1 })}>
-									<Line>{moment(startDate).format('MMM DD, YYYY')} -</Line>
+									<Line>Week of {moment(endDate).format('DD/MM/YY')}</Line>
 								</SortText>
 								<FontIcon
 									className="material-icons"
@@ -243,12 +232,6 @@ const PublisherInsightView = React.createClass({
 									onClick={this.openDatePicker}>
 									arrow_drop_down
 								</FontIcon>
-								<SortText
-									onClick={() => this.sortBy('pastSevenDays')}
-									onMouseOver={() => this.setState({ hover: 1 })}
-									onMouseLeave={() => this.setState({ hover: -1 })}>
-									<Line>{moment(endDate).format('MMM DD, YYYY')}</Line>
-								</SortText>
 							</TableHeaderColumn>
 							<TableHeaderColumn
 								style={
@@ -335,15 +318,15 @@ const PublisherInsightView = React.createClass({
 
 										{this.renderTableRowColumn(
 											entry.pastSevenDays,
-											entry.aWeekAgo
+											entry.trend.pastSevenDays
 										)}
 										{this.renderTableRowColumn(
 											entry.aWeekAgo,
-											entry.twoWeeksAgo
+											entry.trend.aWeekAgo
 										)}
 										{this.renderTableRowColumn(
 											entry.twoWeeksAgo,
-											entry.twoWeeksAgo
+											entry.trend.twoWeeksAgo
 										)}
 
 										<TableRowColumn style={styles.tableTextBody}>
