@@ -34,20 +34,21 @@ const Line = styled.div`
 	white-space: nowrap;
 `
 
+const SortText = styled.div`
+`
+
 const styles = {
-	tableTextHeader: {
-		fontSize: '16px',
-		fontWeight: 'bold',
-		color: '#001738',
-		textAlign: 'center'
-	},
-	tableTextHeaderMulLine: {
-		fontSize: '16px',
-		fontWeight: 'bold',
-		color: '#001738',
-		textAlign: 'center',
-		whiteSpace: 'normal',
-		paddingLeft: '20px'
+	tableTextHeader(opacity = '.8', paddingRight = 'auto') {
+		return {
+			fontSize: '14px',
+			fontWeight: 'bold',
+			color: '#222',
+			textAlign: 'center',
+			cursor: 'pointer',
+			paddingLeft: 'auto',
+			paddingRight,
+			opacity
+		}
 	},
 	tableTotalName: {
 		fontSize: '16px',
@@ -64,11 +65,13 @@ const styles = {
 		whiteSpace: 'initial',
 		padding: '12px 24px',
 		lineHeight: '25px',
-		width: '30%'
+		width: '30%',
+		height: '72px'
 	},
 	tableTextBody: {
 		fontSize: '16px',
-		textAlign: 'center'
+		textAlign: 'center',
+		height: '72px'
 	},
 	arrow: {
 		fontSize: '12px',
@@ -93,48 +96,29 @@ const PublisherInsightTrend = React.createClass({
 			data: {},
 			open: false,
 			startDate: moment().zone('+07:00').subtract(6, 'days'),
-			endDate: moment().zone('+07:00')
+			endDate: moment().zone('+07:00'),
+			hover: -1
 		}
 	},
 
-	componentDidMount() {
-		const data = {
-			total: {
-				now: 90901,
-				prev: 88989,
-				twoPrev: 56415,
-				overall: 655215
-			},
-			stories: [
-				{
-					name: 'AAA',
-					by: 'Mr.A',
-					now: 3000,
-					prev: 3000,
-					twoPrev: 1000,
-					threePrev: 2000,
-					overall: 12000
-				},
-				{
-					name: 'BBB',
-					by: 'Mr.B',
-					now: 2000,
-					prev: 4000,
-					overall: 6000
-				},
-				{
-					name: 'CCC',
-					by: 'Mrs.C',
-					now: 5000,
-					prev: 2000,
-					twoPrev: 4000,
-					threePrev: 1000,
-					overall: 8000
-				}
-			]
-		}
+	getTrendInsight(current, sort, subaction, filter, limit) {
+		api
+			.getTrendInsight(
+				this.props.insigth,
+				subaction,
+				filter,
+				sort,
+				limit,
+				current
+			)
+			.then(data => {
+				console.log(data)
+				this.setState({ data })
+			})
+	},
 
-		this.setState({ data })
+	componentDidMount() {
+		this.getTrendInsight()
 	},
 
 	toShortNumber(number) {
@@ -153,21 +137,11 @@ const PublisherInsightTrend = React.createClass({
 		return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 	},
 
-	checkRateArrow(now, prev) {
-		if (now > prev) {
+	checkRateArrow(trend) {
+		if (trend > 0) {
 			return 'arrow_upward'
-		} else if (now < prev) {
+		} else if (trend < 0) {
 			return 'arrow_downward'
-		}
-	},
-
-	checkRateNumber(now, prev) {
-		if (now > prev) {
-			return Math.floor(now / prev * 100)
-		} else if (now < prev) {
-			return Math.floor((prev - now) * 100 / prev)
-		} else {
-			return 0
 		}
 	},
 
@@ -192,42 +166,47 @@ const PublisherInsightTrend = React.createClass({
 				open: false
 			},
 			() => {
-				api.getShareInsight('topcolumns').then((res) => {
-					console.log(res)
-        })
+				this.getTrendInsight(moment(e).format('YYYYMMDD'))
 			}
 		)
 	},
 
-	renderTableRowColumn(now, prev) {
+	sortBy(sort) {
+		this.getTrendInsight(moment(this.state.endDate).format('YYYYMMDD'), {
+			[sort]: -1
+		})
+	},
+
+	renderTableRowColumn(trend, view) {
 		let color
-		if (now > prev) {
+		if (trend > 0) {
 			color = '#219653'
-		} else if (now < prev) {
+		} else if (trend < 0) {
 			color = '#EB5757'
 		}
 
 		return (
 			<TableRowColumn
-				style={{ ...styles.tableTextBody, color: now != prev ? color : '' }}>
-				{prev
+				style={{ ...styles.tableTextBody, color: trend ? color : '' }}>
+				{trend
 					? <Trend>
 							<FontIcon
 								className="material-icons"
 								style={{ ...styles.arrow, color: color }}>
-								{this.checkRateArrow(now, prev)}
+								{this.checkRateArrow(trend)}
 							</FontIcon>
-							{this.checkRateNumber(now, prev)}%
+							{Math.abs(trend)}%
 						</Trend>
 					: <Trend>-</Trend>}
-				<Rate>{now ? this.numberWithCommas(now) : '-'}</Rate>
+				<Rate>{view ? this.numberWithCommas(view) : '-'}</Rate>
 			</TableRowColumn>
 		)
 	},
 
 	render() {
-		const { total, stories } = this.state.data
-		const { startDate, endDate, anchorEl, open } = this.state
+		const { entries, summary } = this.state.data
+		const { startDate, endDate, anchorEl, open, hover } = this.state
+		const { insigth } = this.props
 		const { theme } = this.context.setting.publisher
 
 		return (
@@ -238,9 +217,9 @@ const PublisherInsightTrend = React.createClass({
 					onRequestClose={this.handleRequestClose}
 					style={{ background: 'none', boxShadow: 'none' }}>
 					<DatePicker
-				    selected={endDate}
-				    startDate={startDate}
-				    endDate={endDate}
+						selected={endDate}
+						startDate={startDate}
+						endDate={endDate}
 						onChange={this.handleChangeDate}
 						inline
 					/>
@@ -248,25 +227,64 @@ const PublisherInsightTrend = React.createClass({
 				<Table selectable={false}>
 					<TableHeader displaySelectAll={false} adjustForCheckbox={false}>
 						<TableRow className="sans-font">
-							<TableHeaderColumn style={styles.tableTextBodyName} />
-							<TableHeaderColumn style={styles.tableTextHeaderMulLine}>
-								<Line>{moment(startDate).format('MMM DD, YYYY')} -</Line>
+							<TableHeaderColumn style={{ width: '30%' }} />
+							<TableHeaderColumn
+								style={
+									hover == 1
+										? styles.tableTextHeader('1', '8px')
+										: styles.tableTextHeader('.8', '8px')
+								}>
+								<SortText
+									onClick={() => this.sortBy('pastSevenDays')}
+									onMouseOver={() => this.setState({ hover: 1 })}
+									onMouseLeave={() => this.setState({ hover: -1 })}>
+									<Line>Week of {moment(endDate).format('DD/MM/YY')}</Line>
+								</SortText>
 								<FontIcon
 									className="material-icons"
 									style={styles.dropdown(theme.accentColor)}
 									onClick={this.openDatePicker}>
 									arrow_drop_down
 								</FontIcon>
-								<Line>{moment(endDate).format('MMM DD, YYYY')}</Line>
 							</TableHeaderColumn>
-							<TableHeaderColumn style={styles.tableTextHeader}>
-								Previous Week
+							<TableHeaderColumn
+								style={
+									hover == 2
+										? styles.tableTextHeader('1')
+										: styles.tableTextHeader()
+								}>
+								<SortText
+									onClick={() => this.sortBy('aWeekAgo')}
+									onMouseOver={() => this.setState({ hover: 2 })}
+									onMouseLeave={() => this.setState({ hover: -1 })}>
+									Previous Week
+								</SortText>
 							</TableHeaderColumn>
-							<TableHeaderColumn style={styles.tableTextHeader}>
-								Previous 2 Weeks
+							<TableHeaderColumn
+								style={
+									hover == 3
+										? styles.tableTextHeader('1')
+										: styles.tableTextHeader()
+								}>
+								<SortText
+									onClick={() => this.sortBy('twoWeeksAgo')}
+									onMouseOver={() => this.setState({ hover: 3 })}
+									onMouseLeave={() => this.setState({ hover: -1 })}>
+									Previous 2 Weeks
+								</SortText>
 							</TableHeaderColumn>
-							<TableHeaderColumn style={styles.tableTextHeader}>
-								Overall
+							<TableHeaderColumn
+								style={
+									hover == 4
+										? styles.tableTextHeader('1')
+										: styles.tableTextHeader()
+								}>
+								<SortText
+									onClick={() => this.sortBy('overall')}
+									onMouseOver={() => this.setState({ hover: 4 })}
+									onMouseLeave={() => this.setState({ hover: -1 })}>
+									Overall
+								</SortText>
 							</TableHeaderColumn>
 						</TableRow>
 					</TableHeader>
@@ -279,46 +297,57 @@ const PublisherInsightTrend = React.createClass({
 								Total View
 							</TableRowColumn>
 							<TableRowColumn style={styles.tableTotal}>
-								{total ? this.toShortNumber(total.now) : '-'}
+								{summary ? this.toShortNumber(summary.pastSevenDays) : '-'}
 							</TableRowColumn>
 							<TableRowColumn style={styles.tableTotal}>
-								{total ? this.toShortNumber(total.prev) : '-'}
+								{summary ? this.toShortNumber(summary.aWeekAgo) : '-'}
 							</TableRowColumn>
 							<TableRowColumn style={styles.tableTotal}>
-								{total ? this.toShortNumber(total.twoPrev) : '-'}
+								{summary ? this.toShortNumber(summary.twoWeeksAgo) : '-'}
 							</TableRowColumn>
 							<TableRowColumn style={styles.tableTotal}>
-								{total ? this.toShortNumber(total.overall) : '-'}
+								{summary ? this.toShortNumber(summary.overall) : '-'}
 							</TableRowColumn>
 						</TableRow>
 
-						{stories
-							? stories.map((story, index) => (
+						{entries
+							? entries.map((entry, index) => (
 									<TableRow className="sans-font" key={index}>
-
-										<TableRowColumn style={styles.tableTextBodyName}>
-											<Bold>{index + 1}. {stories[index].name}</Bold>
-											{stories[index].by}
-										</TableRowColumn>
+										{insigth == 'topstories'
+											? <TableRowColumn style={styles.tableTextBodyName}>
+													<Bold>{index + 1}. {entry.story.title}</Bold>
+													{entry.story.writer.username}
+												</TableRowColumn>
+											: ''}
+										{insigth == 'topcolumns'
+											? <TableRowColumn style={styles.tableTextBodyName}>
+													<Bold>{index + 1}. {entry.column.name}</Bold>
+												</TableRowColumn>
+											: ''}
+										{insigth == 'topwriters'
+											? <TableRowColumn style={styles.tableTextBodyName}>
+													<Bold>{index + 1}. {entry.writer.username}</Bold>
+												</TableRowColumn>
+											: ''}
 
 										{this.renderTableRowColumn(
-											stories[index].now,
-											stories[index].prev
+											entry.pastSevenDays,
+											entry.view.pastSevenDays
 										)}
 										{this.renderTableRowColumn(
-											stories[index].prev,
-											stories[index].twoPrev
+											entry.aWeekAgo,
+											entry.view.aWeekAgo
 										)}
 										{this.renderTableRowColumn(
-											stories[index].twoPrev,
-											stories[index].threePrev
+											entry.twoWeeksAgo,
+											entry.view.twoWeeksAgo
 										)}
 
 										<TableRowColumn style={styles.tableTextBody}>
 											<Trend>&nbsp;</Trend>
 											<Rate>
-												{stories[index].overall
-													? this.numberWithCommas(stories[index].overall)
+												{entry.view.overall
+													? this.numberWithCommas(entry.view.overall)
 													: '-'}
 											</Rate>
 										</TableRowColumn>

@@ -38,16 +38,16 @@ const SortText = styled.div`
 `
 
 const styles = {
-	tableTextHeader(textDecoration, whiteSpace = 'nowrap', paddingLeft) {
+	tableTextHeader(opacity = '.8', paddingRight = 'auto') {
 		return {
-			fontSize: '16px',
+			fontSize: '14px',
 			fontWeight: 'bold',
-			color: '#001738',
+			color: '#222',
 			textAlign: 'center',
 			cursor: 'pointer',
-			whiteSpace,
-			paddingLeft,
-			textDecoration
+			paddingLeft: 'auto',
+			paddingRight,
+			opacity
 		}
 	},
 	tableTotalName: {
@@ -220,18 +220,18 @@ const PublisherInsightGrowth = React.createClass({
 				<Table selectable={false} wrapperStyle={{ clear: 'both' }}>
 					<TableHeader displaySelectAll={false} adjustForCheckbox={false}>
 						<TableRow className="sans-font">
-							<TableHeaderColumn style={styles.tableTextBodyName} />
+							<TableHeaderColumn style={{ width: '30%' }} />
 							<TableHeaderColumn
 								style={
 									hover == 1
-										? styles.tableTextHeader('underline', 'normal', '20px')
-										: styles.tableTextHeader('none', 'normal', '20px')
+										? styles.tableTextHeader('1', '8px')
+										: styles.tableTextHeader('.8', '8px')
 								}>
 								<SortText
 									onClick={() => this.sortBy('pastSevenDays')}
 									onMouseOver={() => this.setState({ hover: 1 })}
 									onMouseLeave={() => this.setState({ hover: -1 })}>
-									<Line>{moment(startDate).format('MMM DD, YYYY')} -</Line>
+									<Line>Week of {moment(endDate).format('DD/MM/YY')}</Line>
 								</SortText>
 								<FontIcon
 									className="material-icons"
@@ -239,17 +239,11 @@ const PublisherInsightGrowth = React.createClass({
 									onClick={this.openDatePicker}>
 									arrow_drop_down
 								</FontIcon>
-								<SortText
-									onClick={() => this.sortBy('pastSevenDays')}
-									onMouseOver={() => this.setState({ hover: 1 })}
-									onMouseLeave={() => this.setState({ hover: -1 })}>
-									<Line>{moment(endDate).format('MMM DD, YYYY')}</Line>
-								</SortText>
 							</TableHeaderColumn>
 							<TableHeaderColumn
 								style={
 									hover == 2
-										? styles.tableTextHeader('underline')
+										? styles.tableTextHeader('1')
 										: styles.tableTextHeader()
 								}>
 								<SortText
@@ -262,7 +256,7 @@ const PublisherInsightGrowth = React.createClass({
 							<TableHeaderColumn
 								style={
 									hover == 3
-										? styles.tableTextHeader('underline')
+										? styles.tableTextHeader('1')
 										: styles.tableTextHeader()
 								}>
 								<SortText
@@ -275,7 +269,7 @@ const PublisherInsightGrowth = React.createClass({
 							<TableHeaderColumn
 								style={
 									hover == 4
-										? styles.tableTextHeader('underline')
+										? styles.tableTextHeader('1')
 										: styles.tableTextHeader()
 								}>
 								<SortText
@@ -329,6 +323,7 @@ const PublisherInsightGrowth = React.createClass({
 													<Bold>{index + 1}. {entry.writer.username}</Bold>
 												</TableRowColumn>
 											: ''}
+
 										{this.renderTableRowColumn(entry.pastSevenDays)}
 										{this.renderTableRowColumn(entry.aWeekAgo)}
 										{this.renderTableRowColumn(entry.twoWeeksAgo)}

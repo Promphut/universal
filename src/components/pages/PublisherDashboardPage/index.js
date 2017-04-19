@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import {GraphDashboard, TopRank} from 'components'
+import { GraphDashboard, TopRank } from 'components'
 import Divider from 'material-ui/Divider'
 import FlatButton from 'material-ui/FlatButton'
-import {Link} from 'react-router'
+import { Link } from 'react-router'
 import api from 'components/api'
 
 const Container = styled.div`
@@ -49,73 +49,94 @@ const ButtonWrapper = styled.div`
 `
 
 const styles = {
-  button: {
-    display: 'block',
-    width: '309px',
-    height: '39px',
-    margin: '20px auto 10px',
-    borderRadius: '20px'
-  },
-  labelButton: {
-    color: '#8F8F8F',
-    textTransform: 'none',
-    fontFamily: "'PT Sans', 'cs_prajad', sans-serif"
-  }
+	button: {
+		display: 'block',
+		width: '309px',
+		height: '39px',
+		margin: '20px auto 10px',
+		borderRadius: '20px'
+	},
+	labelButton: {
+		color: '#8F8F8F',
+		textTransform: 'none',
+		fontFamily: "'PT Sans', 'cs_prajad', sans-serif"
+	}
 }
 
 const PublisherDashboardPage = React.createClass({
 	getInitialState() {
 		return {
-    }
+			topstories: {},
+			topcolumns: {},
+			topwriters: {}
+		}
 	},
 
-  ShowAllButton(label, to) {
-    return (
-      <Link to={to} style={{width:'100px'}}>
-        <FlatButton
-          label={label}
-          labelStyle={styles.labelButton}
-          style={styles.button}
-          backgroundColor="#F4F4F4"
-          hoverColor="#E0E0E0"
-        />
-      </Link>
-    )
-  },
+	getInsight(insigth, limit, subaction, filter, sort, current) {
+		api
+			.getViewInsight(insigth, subaction, filter, sort, limit, current)
+			.then(data => {
+				this.setState({ [insigth]: data })
+			})
+	},
 
-  render() {
-    return (
-      <Container>
-        <Header>
-          <Title>Overview</Title>
-        </Header>
-        <SubContainer>
-          <GraphDashboard width={800} />
-        </SubContainer>
-        <GraphGap/>
+	componentDidMount() {
+		const limit = 5
 
-        <SubContainer>
-          <TopHeader className="sans-font">Top Stories</TopHeader>
-          <TopRank/>
-          {this.ShowAllButton('Show All Top Stories', '/editor/stories')}
-        </SubContainer>
-        <Divider/>
+		this.getInsight('topstories', limit)
+		this.getInsight('topcolumns', limit)
+		this.getInsight('topwriters', limit)
+	},
 
-        <SubContainer>
-          <TopHeader className="sans-font">Top Columns</TopHeader>
-          <TopRank/>
-          {this.ShowAllButton('Show All Top Columns', '/editor/columns')}
-        </SubContainer>
-        <Divider/>
+	ShowAllButton(label, to) {
+		return (
+			<Link to={to} style={{ width: '100px' }}>
+				<FlatButton
+					label={label}
+					labelStyle={styles.labelButton}
+					style={styles.button}
+					backgroundColor="#F4F4F4"
+					hoverColor="#E0E0E0"
+				/>
+			</Link>
+		)
+	},
 
-        <SubContainer>
-          <TopHeader className="sans-font">Top Writers</TopHeader>
-          <TopRank/>
-          {this.ShowAllButton('Show All Top Columns', '/editor/writers')}
-        </SubContainer>
-      </Container>
-    )
-  }
+	render() {
+		const { topstories, topcolumns, topwriters } = this.state
+
+		return (
+			<Container>
+				<Header>
+					<Title>Overview</Title>
+				</Header>
+				<SubContainer>
+					<GraphDashboard width={800} />
+				</SubContainer>
+				<GraphGap />
+
+				<SubContainer>
+					<TopHeader className="sans-font">Top Stories</TopHeader>
+					<TopRank insigth={'topstories'} data={topstories} />
+					{this.ShowAllButton('Show All Top Stories', '/editor/stories')}
+				</SubContainer>
+				<Divider />
+
+				<SubContainer>
+					<TopHeader className="sans-font">Top Columns</TopHeader>
+					<TopRank insigth={'topcolumns'} data={topcolumns} />
+					{this.ShowAllButton('Show All Top Columns', '/editor/columns')}
+				</SubContainer>
+				<Divider />
+
+				<SubContainer>
+					<TopHeader className="sans-font">Top Writers</TopHeader>
+					<TopRank insigth={'topwriters'} data={topwriters} />
+					{this.ShowAllButton('Show All Top Columns', '/editor/writers')}
+				</SubContainer>
+			</Container>
+		)
+	}
 })
 
-export default PublisherDashboardPage;
+export default PublisherDashboardPage

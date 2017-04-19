@@ -22,7 +22,7 @@ const Wrapper = styled.div`
     }
     .total{
         float:right;
-        margin:0 20px 0 10px;
+        margin:0 15px 0 10px;
     }
     .inputDate{
         outline:none;
@@ -57,7 +57,6 @@ const X = styled.g`
 const Label = styled.div`
     display:inline;
     font-size:14px;
-    font-weight:bold;
 `
 const Num = styled.div`
     font-size:24px;
@@ -352,7 +351,7 @@ const GraphDashboard = React.createClass({
                     icon={<FontIcon className='material-icons' style={{color:'#c4c4c4',marginLeft:'15px'}}>keyboard_arrow_down</FontIcon>}>
                     {moment(startDate1).format('MM/DD/YYYY')}</FlatButton>
                 </div>
-                <Label className="sans-font" style={{margin:'2px 10px 0 20px'}}>End:</Label>
+                <Label className="sans-font" style={{margin:'2px 10px 0 15px'}}>End:</Label>
                 <FlatButton
                     onClick={this.openDatePicker2}
                     style={{border:'1px solid #c4c4c4',borderRadius:'20px',padding:'0 10px 0 15px'}}

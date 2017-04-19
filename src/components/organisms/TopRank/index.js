@@ -1,7 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow,
-	TableRowColumn} from 'material-ui/Table'
+import {
+	Table,
+	TableBody,
+	TableHeader,
+	TableHeaderColumn,
+	TableRow,
+	TableRowColumn
+} from 'material-ui/Table'
 import FontIcon from 'material-ui/FontIcon'
 
 const Container = styled.div`
@@ -18,88 +24,43 @@ const Trend = styled.div`
 `
 
 const styles = {
-  tableTextHeader: {
-		fontSize: '16px',
+	tableTextHeader: {
+		fontSize: '14px',
 		fontWeight: 'bold',
-		color: '#001738',
+		color: '#222',
 		textAlign: 'center'
-  },
-  tableTotalName: {
+	},
+	tableTotalName: {
 		fontSize: '16px',
 		height: '36px',
 		width: '30%'
-  },
-  tableTotal: {
+	},
+	tableTotal: {
 		fontSize: '16px',
 		height: '36px',
 		textAlign: 'center'
-  },
-  tableTextBodyName: {
+	},
+	tableTextBodyName: {
 		fontSize: '16px',
 		whiteSpace: 'initial',
 		padding: '12px 24px',
 		lineHeight: '25px',
-		width: '30%'
-  },
-  tableTextBody: {
+		width: '30%',
+		height: '72px'
+	},
+	tableTextBody: {
 		fontSize: '16px',
-		textAlign: 'center'
-  },
+		textAlign: 'center',
+		height: '72px'
+	},
 	arrow: {
-	 fontSize: '12px',
-	 color: '#C4C4C4',
-	 padding: '0px 5px 0px 0px'
+		fontSize: '12px',
+		color: '#C4C4C4',
+		padding: '0px 5px 0px 0px'
 	}
 }
 
 const TopRank = React.createClass({
-	getInitialState() {
-		return {
-			data: {}
-    }
-	},
-
-	componentDidMount() {
-		const data = {
-			total: {
-				now: 90901,
-				prev: 88989,
-				twoPrev: 56415,
-				overall: 655215
-			},
-			stories:
-			[
-				{
-					name: 'AAA',
-					by: 'Mr.A',
-					now: 3000,
-					prev: 3000,
-					twoPrev: 1000,
-					threePrev: 2000,
-					overall: 12000
-				},
-				{
-					name: 'BBB',
-					by: 'Mr.B',
-					now: 2000,
-					prev: 4000,
-					overall: 6000
-				},
-				{
-					name: 'CCC',
-					by: 'Mrs.C',
-					now: 5000,
-					prev: 2000,
-					twoPrev: 4000,
-					threePrev: 1000,
-					overall: 8000
-				}
-			]
-		}
-
-		this.setState({data})
-	},
-
 	toShortNumber(number) {
 		if (number > 1000000000) {
 			number = Math.floor(number / 1000000000) + 'B'
@@ -113,7 +74,7 @@ const TopRank = React.createClass({
 	},
 
 	numberWithCommas(number) {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 	},
 
 	checkRateArrow(now, prev) {
@@ -126,7 +87,7 @@ const TopRank = React.createClass({
 
 	checkRateNumber(now, prev) {
 		if (now > prev) {
-			return Math.floor((now / prev) * 100)
+			return Math.floor(now / prev * 100)
 		} else if (now < prev) {
 			return Math.floor((prev - now) * 100 / prev)
 		} else {
@@ -138,78 +99,112 @@ const TopRank = React.createClass({
 		return (
 			<TableRowColumn style={styles.tableTextBody}>
 				{now ? this.numberWithCommas(now) : '-'}
-				{prev ?
-					<Trend>
-						<FontIcon className="material-icons" style={styles.arrow}>
-							{this.checkRateArrow(now, prev)}
-						</FontIcon>
-						{this.checkRateNumber(now, prev)}%
-					</Trend> : <Trend>-</Trend>
-				}
+				{prev
+					? <Trend>
+							<FontIcon className="material-icons" style={styles.arrow}>
+								{this.checkRateArrow(now, prev)}
+							</FontIcon>
+							{this.checkRateNumber(now, prev)}%
+						</Trend>
+					: <Trend>-</Trend>}
 			</TableRowColumn>
 		)
 	},
 
-  render() {
-		const {total, stories} = this.state.data
+	render() {
+		const { insigth } = this.props
+		const { entries, summary } = this.props.data
 
-    return (
-      <Container>
+		return (
+			<Container>
 				<Table selectable={false}>
 
 					<TableHeader displaySelectAll={false} adjustForCheckbox={false}>
 						<TableRow className="sans-font">
-							<TableHeaderColumn style={styles.tableTextBodyName}></TableHeaderColumn>
-							<TableHeaderColumn style={styles.tableTextHeader}>Today</TableHeaderColumn>
-							<TableHeaderColumn style={styles.tableTextHeader}>Previous Week</TableHeaderColumn>
-							<TableHeaderColumn style={styles.tableTextHeader}>Previous 2 Weeks</TableHeaderColumn>
-							<TableHeaderColumn style={styles.tableTextHeader}>Overall</TableHeaderColumn>
+							<TableHeaderColumn style={{ width: '30%' }} />
+							<TableHeaderColumn style={styles.tableTextHeader}>
+								This Week
+							</TableHeaderColumn>
+							<TableHeaderColumn style={styles.tableTextHeader}>
+								Previous Week
+							</TableHeaderColumn>
+							<TableHeaderColumn style={styles.tableTextHeader}>
+								Previous 2 Weeks
+							</TableHeaderColumn>
+							<TableHeaderColumn style={styles.tableTextHeader}>
+								Overall
+							</TableHeaderColumn>
 						</TableRow>
 					</TableHeader>
 
 					<TableBody displayRowCheckbox={false}>
-						<TableRow className="sans-font"  style={{height: '36px', background: '#F4F4F4'}}>
-							<TableRowColumn style={styles.tableTotalName}>Total View</TableRowColumn>
-							<TableRowColumn style={styles.tableTotal}>
-								{total ? this.toShortNumber(total.now) : '-'}
+						<TableRow
+							className="sans-font"
+							style={{ height: '36px', background: '#F4F4F4' }}>
+							<TableRowColumn style={styles.tableTotalName}>
+								Total View
 							</TableRowColumn>
 							<TableRowColumn style={styles.tableTotal}>
-								{total ? this.toShortNumber(total.prev) : '-'}
+								{summary ? this.toShortNumber(summary.pastSevenDays) : '-'}
 							</TableRowColumn>
 							<TableRowColumn style={styles.tableTotal}>
-								{total ? this.toShortNumber(total.twoPrev) : '-'}
+								{summary ? this.toShortNumber(summary.aWeekAgo) : '-'}
 							</TableRowColumn>
 							<TableRowColumn style={styles.tableTotal}>
-								{total ? this.toShortNumber(total.overall) : '-'}
+								{summary ? this.toShortNumber(summary.twoWeeksAgo) : '-'}
+							</TableRowColumn>
+							<TableRowColumn style={styles.tableTotal}>
+								{summary ? this.toShortNumber(summary.overall) : '-'}
 							</TableRowColumn>
 						</TableRow>
 
-						{stories ?
-							stories.map((story, index) => (
-								(index < 5) ?
-								<TableRow className="sans-font" key={index}>
+						{entries
+							? entries.map((entry, index) => (
+									<TableRow className="sans-font" key={index}>
+										{insigth == 'topstories'
+											? <TableRowColumn style={styles.tableTextBodyName}>
+													<Bold>{index + 1}. {entry.story.title}</Bold>
+													{entry.story.writer.username}
+												</TableRowColumn>
+											: ''}
+										{insigth == 'topcolumns'
+											? <TableRowColumn style={styles.tableTextBodyName}>
+													<Bold>{index + 1}. {entry.column.name}</Bold>
+												</TableRowColumn>
+											: ''}
+										{insigth == 'topwriters'
+											? <TableRowColumn style={styles.tableTextBodyName}>
+													<Bold>{index + 1}. {entry.writer.username}</Bold>
+												</TableRowColumn>
+											: ''}
 
-									<TableRowColumn style={styles.tableTextBodyName}>
-										<Bold>{index + 1}. {stories[index].name}</Bold>
-										{stories[index].by}
-									</TableRowColumn>
+										{this.renderTableRowColumn(
+											entry.pastSevenDays,
+											entry.aWeekAgo
+										)}
+										{this.renderTableRowColumn(
+											entry.aWeekAgo,
+											entry.twoWeeksAgo
+										)}
+										{this.renderTableRowColumn(
+											entry.twoWeeksAgo,
+											entry.twoWeeksAgo
+										)}
 
-									{this.renderTableRowColumn(stories[index].now, stories[index].prev)}
-									{this.renderTableRowColumn(stories[index].prev, stories[index].twoPrev)}
-									{this.renderTableRowColumn(stories[index].twoPrev, stories[index].threePrev)}
-
-									<TableRowColumn style={styles.tableTextBody}>
-										{stories[index].overall ? this.numberWithCommas(stories[index].overall) : '-'}
-										<Trend>&nbsp;</Trend>
-									</TableRowColumn>
-								</TableRow> : ''
-            	)) : ''
-						}
+										<TableRowColumn style={styles.tableTextBody}>
+											{entry.overall
+												? this.numberWithCommas(entry.overall)
+												: '-'}
+											<Trend>&nbsp;</Trend>
+										</TableRowColumn>
+									</TableRow>
+								))
+							: ''}
 					</TableBody>
 				</Table>
-      </Container>
-    )
-  }
+			</Container>
+		)
+	}
 })
 
 export default TopRank
