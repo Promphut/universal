@@ -27,7 +27,7 @@ const styles = {
 	tableTextHeader: {
 		fontSize: '14px',
 		fontWeight: 'bold',
-		color: '#001738',
+		color: '#222',
 		textAlign: 'center'
 	},
 	tableTotalName: {

@@ -29,16 +29,16 @@ const SortText = styled.div`
 `
 
 const styles = {
-	tableTextHeader(textDecoration, paddingRight = 'auto') {
+	tableTextHeader(opacity = '.8', paddingRight = 'auto') {
 		return {
 			fontSize: '14px',
 			fontWeight: 'bold',
-			color: '#001738',
+			color: '#222',
 			textAlign: 'center',
 			cursor: 'pointer',
 			paddingLeft: 'auto',
 			paddingRight,
-			textDecoration
+			opacity
 		}
 	},
 	tableTotalName: {
@@ -193,8 +193,8 @@ const PublisherInsightShare = React.createClass({
 							<TableHeaderColumn
 								style={
 									hover == 1
-										? styles.tableTextHeader('underline', '8px')
-										: styles.tableTextHeader('none', '8px')
+										? styles.tableTextHeader('1', '8px')
+										: styles.tableTextHeader('.8', '8px')
 								}>
 								<SortText
 									onClick={() => this.sortBy('pastSevenDays')}
@@ -212,7 +212,7 @@ const PublisherInsightShare = React.createClass({
 							<TableHeaderColumn
 								style={
 									hover == 2
-										? styles.tableTextHeader('underline')
+										? styles.tableTextHeader('1')
 										: styles.tableTextHeader()
 								}>
 								<SortText
@@ -225,7 +225,7 @@ const PublisherInsightShare = React.createClass({
 							<TableHeaderColumn
 								style={
 									hover == 3
-										? styles.tableTextHeader('underline')
+										? styles.tableTextHeader('1')
 										: styles.tableTextHeader()
 								}>
 								<SortText
@@ -238,7 +238,7 @@ const PublisherInsightShare = React.createClass({
 							<TableHeaderColumn
 								style={
 									hover == 4
-										? styles.tableTextHeader('underline')
+										? styles.tableTextHeader('1')
 										: styles.tableTextHeader()
 								}>
 								<SortText
