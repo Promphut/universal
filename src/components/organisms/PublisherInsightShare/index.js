@@ -67,14 +67,26 @@ const styles = {
 		color: '#C4C4C4',
 		padding: '0px 5px 0px 0px'
 	},
-	dropdown(accentColor) {
+	dropup(color, right = 0) {
 		return {
-			fontSize: '20px',
-			color: accentColor,
+			fontSize: '16px',
 			position: 'absolute',
-			top: '35%',
-			right: 0,
-			cursor: 'pointer'
+			top: '31%',
+			cursor: 'pointer',
+			transition: '.2s',
+			right,
+			color
+		}
+	},
+	dropdown(color, right = 0) {
+		return {
+			fontSize: '16px',
+			position: 'absolute',
+			top: '42%',
+			cursor: 'pointer',
+			transition: '.2s',
+			right,
+			color
 		}
 	}
 }
@@ -86,7 +98,8 @@ const PublisherInsightShare = React.createClass({
 			open: false,
 			startDate: moment().zone('+07:00').subtract(6, 'days'),
 			endDate: moment().zone('+07:00'),
-			hover: -1
+			hover: -1,
+			sortNumber: 1
 		}
 	},
 
@@ -151,10 +164,62 @@ const PublisherInsightShare = React.createClass({
 		)
 	},
 
-	sortBy(sort) {
-		this.getShareInsight(moment(this.state.endDate).format('YYYYMMDD'), {
-			[sort]: -1
+	sortBy(sort, number, forceChange = false) {
+		if (forceChange) {
+			number = number
+		} else {
+			number = number === this.state.sortNumber ? -number : number
+		}
+		this.setState({
+			sortNumber: number
 		})
+
+		this.getShareInsight(moment(this.state.endDate).format('YYYYMMDD'), {
+			[sort]: number < 0 ? 1 : -1
+		})
+	},
+
+	renderHeader(text, sort, index, paddingRight, right) {
+		const { endDate, hover, sortNumber } = this.state
+		const { theme } = this.context.setting.publisher
+
+		return (
+			<TableHeaderColumn
+				style={
+					hover == index
+						? styles.tableTextHeader('.8', paddingRight + 'px')
+						: styles.tableTextHeader('1', paddingRight + 'px')
+				}>
+				<SortText
+					onClick={() => this.sortBy(sort, index)}
+					onMouseOver={() => this.setState({ hover: index })}
+					onMouseLeave={() => this.setState({ hover: -1 })}>
+					<Line>
+						{text} {text == 'Week of' ? moment(endDate).format('DD/MM/YY') : ''}
+					</Line>
+				</SortText>
+				<FontIcon
+					className="material-icons"
+					style={
+						sortNumber === index
+							? styles.dropup(theme.accentColor, right)
+							: styles.dropup('#C4C4C4', right)
+					}
+					onClick={() => this.sortBy(sort, index, true)}>
+					arrow_drop_up
+				</FontIcon>
+				<FontIcon
+					className="material-icons"
+					style={
+						sortNumber === -index
+							? styles.dropdown(theme.accentColor, right)
+							: styles.dropdown('#C4C4C4', right)
+					}
+					onClick={() => this.sortBy(sort, -index, true)}>
+					arrow_drop_down
+				</FontIcon>
+			</TableHeaderColumn>
+		)
 	},
 
 	renderTableRowColumn(share) {
@@ -190,64 +255,10 @@ const PublisherInsightShare = React.createClass({
 					<TableHeader displaySelectAll={false} adjustForCheckbox={false}>
 						<TableRow className="sans-font">
 							<TableHeaderColumn style={{ width: '30%' }} />
-							<TableHeaderColumn
-								style={
-									hover == 1
-										? styles.tableTextHeader('.8', '8px')
-										: styles.tableTextHeader('1', '8px')
-								}>
-								<SortText
-									onClick={() => this.sortBy('pastSevenDays')}
-									onMouseOver={() => this.setState({ hover: 1 })}
-									onMouseLeave={() => this.setState({ hover: -1 })}>
-									<Line>Week of {moment(endDate).format('DD/MM/YY')}</Line>
-								</SortText>
-								<FontIcon
-									className="material-icons"
-									style={styles.dropdown(theme.accentColor)}
-									onClick={this.openDatePicker}>
-									arrow_drop_down
-								</FontIcon>
-							</TableHeaderColumn>
-							<TableHeaderColumn
-								style={
-									hover == 2
-										? styles.tableTextHeader('.8')
-										: styles.tableTextHeader()
-								}>
-								<SortText
-									onClick={() => this.sortBy('aWeekAgo')}
-									onMouseOver={() => this.setState({ hover: 2 })}
-									onMouseLeave={() => this.setState({ hover: -1 })}>
-									Previous Week
-								</SortText>
-							</TableHeaderColumn>
-							<TableHeaderColumn
-								style={
-									hover == 3
-										? styles.tableTextHeader('.8')
-										: styles.tableTextHeader()
-								}>
-								<SortText
-									onClick={() => this.sortBy('twoWeeksAgo')}
-									onMouseOver={() => this.setState({ hover: 3 })}
-									onMouseLeave={() => this.setState({ hover: -1 })}>
-									Previous 2 Weeks
-								</SortText>
-							</TableHeaderColumn>
-							<TableHeaderColumn
-								style={
-									hover == 4
-										? styles.tableTextHeader('.8')
-										: styles.tableTextHeader()
-								}>
-								<SortText
-									onClick={() => this.sortBy('overall')}
-									onMouseOver={() => this.setState({ hover: 4 })}
-									onMouseLeave={() => this.setState({ hover: -1 })}>
-									Overall
-								</SortText>
-							</TableHeaderColumn>
+							{this.renderHeader('Week of', 'pastSevenDays', 1, 6, 0)}
+							{this.renderHeader('Previous Week', 'aWeekAgo', 2, 0, 7)}
+							{this.renderHeader('Previous 2 Weeks', 'twoWeeksAgo', 3, 5, 0)}
+							{this.renderHeader('Overall', 'overall', 4, 0, 30)}
 						</TableRow>
 					</TableHeader>
 
