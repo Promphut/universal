@@ -285,11 +285,9 @@ const PublisherInsightShare = React.createClass({
 								keyboard_arrow_down
 							</FontIcon>
 						}>
-						{moment(startDate).format('MM/DD/YYYY')}
-						{' '}
-						-
-						{' '}
-						{moment(endDate).format('MM/DD/YYYY')}
+						{moment(startDate).format('MM/DD/YYYY') +
+							' - ' +
+							moment(endDate).format('MM/DD/YYYY')}
 					</FlatButton>
 				</DateSelect>
 				<Table selectable={false} wrapperStyle={{ clear: 'both' }}>

@@ -146,6 +146,7 @@ const PublisherProfileSetting = React.createClass({
     let {textStatus,error,errText} = this.state
     let pub = this.state.publisher
     var {theme} = this.context.setting.publisher
+
     //console.log('render', pub)
     return (
       <Container onSubmit={this.updatePublisher}>

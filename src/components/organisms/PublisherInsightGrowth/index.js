@@ -312,11 +312,9 @@ const PublisherInsightGrowth = React.createClass({
 								keyboard_arrow_down
 							</FontIcon>
 						}>
-						{moment(startDate).format('MM/DD/YYYY')}
-						{' '}
-						-
-						{' '}
-						{moment(endDate).format('MM/DD/YYYY')}
+						{moment(startDate).format('MM/DD/YYYY') +
+							' - ' +
+							moment(endDate).format('MM/DD/YYYY')}
 					</FlatButton>
 				</DateSelect>
 				<ScoreBar style={{ float: 'right', margin: '2px 18px 10px 0px' }} />
