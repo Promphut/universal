@@ -16,7 +16,8 @@ const config = {
 			FBAPPID: '407326816302135',
 			TAGMGRID: 'GTM-MCM6KWJ',
 			CHARTBEATUID: 65098,
-			QUANTCASTACC: 'p-uSc6wXBs-FJmv'
+			QUANTCASTACC: 'p-uSc6wXBs-FJmv',
+			BITLY: '45602029bdf37773b3c3887a281ed9b7e13c5622' // infographicthailand
 		}
 	},
 
@@ -37,7 +38,8 @@ const config = {
 			FBAPPID: '406151426419674',
 			TAGMGRID: 'GTM-MCM6KWJ',
 			CHARTBEATUID: 65098,
-			QUANTCASTACC: 'p-uSc6wXBs-FJmv'
+			QUANTCASTACC: 'p-uSc6wXBs-FJmv',
+			BITLY: '45602029bdf37773b3c3887a281ed9b7e13c5622' // infographicthailand
 		}
 	}
 }

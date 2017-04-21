@@ -73,6 +73,17 @@
       return 'https://twitter.com/intent/tweet?url='+encodeURIComponent(url) + (hashtags ? '&hashtags='+hashtags : '');
     };
 
+    // append UTM to url
+    // utm: {source, medium, campaign, content}
+    window.appendUTM = (url, utm) => {
+      if(!utm) return url
+      return url + '?' + 
+        (utm ? 'utm_source='+encodeURIComponent(utm.source || config.DOMAIN)+'&' : '') +
+        (utm && utm.medium ? 'utm_medium='+encodeURIComponent(utm.medium)+'&' : '') +
+        (utm && utm.campaign ? 'utm_campaign='+encodeURIComponent(utm.campaign)+'&' : '') +
+        (utm && utm.content ? 'utm_content='+encodeURIComponent(utm.content)+'&' : '')
+    }
+
     // ==== Quantcast Tag, part 1 ====
     var _qevents = _qevents || [];
     (function() {

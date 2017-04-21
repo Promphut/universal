@@ -20,14 +20,18 @@ const LogoLink = React.createClass({
 	fillSvgDocument(fill){
 		//console.log('FILL', fill)
 		let {className} = this.props
-		let svg = this.svgObject.contentDocument
-		if(className) svg.class += ' ' + className
+		
+		try {
+			let svg = this.svgObject.contentDocument
+			if(className) svg.class += ' ' + className
 
-		svg.querySelectorAll('path')
-		.forEach(ele => ele.setAttribute('fill', fill))
+			svg.querySelectorAll('path')
+			.forEach(ele => ele.setAttribute('fill', fill))
 
-		svg.querySelectorAll('use')
-		.forEach(ele => ele.setAttribute('fill', fill))
+			svg.querySelectorAll('use')
+			.forEach(ele => ele.setAttribute('fill', fill))
+		} 
+		catch(e){}
 	},
 
 	componentDidMount(){
@@ -47,7 +51,10 @@ const LogoLink = React.createClass({
 				this.fillSvgDocument(fill)
 			} else {
 				// force inside content to reload
-				this.svgObject.contentDocument.location.reload()
+				try {
+					this.svgObject.contentDocument.location.reload()
+				}
+				catch(e){}
 			}
 		}
 	},

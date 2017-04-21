@@ -727,4 +727,27 @@ api.getGrowthInsight = (insight, subaction, filter, sort, limit, current) => {
 	}, api.err)
 }
 
+// utm: {source, medium, campaign, content}
+// response: {success:true/false, url:'url'} 
+// if unable to shorten, success will be false
+api.shorten = (url, utm) => {
+	return Request
+	.get('https://api-ssl.bitly.com/v3/shorten')
+	.query({
+		access_token: config.ANALYTIC.BITLY,
+		longUrl: encodeURIComponent(url)
+	})
+	.set('Accept','application/json')
+	.then(res => {
+		if(res.body.status_code != 200) 
+			//return Promise.reject(new Error('Unable to shorten the link'))
+			return {success:false, url:appendUTM(url, utm)}
+
+		return {
+			success: true, 
+			url: appendUTM(res.body.data.url, utm)
+		}
+	}, () => { return {success:false, url:appendUTM(url, utm)} })
+}
+
 module.exports = api
