@@ -64,6 +64,8 @@ const NameLink = styled(Link)`
 `
 
 const RecommendArticle = ({detail})=>{
+  if(!detail) return (<Container/>)
+
   let {column,ptitle,writer,votes,comments,url,cover,style,coverMobile} = detail
 
   return(

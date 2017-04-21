@@ -24,7 +24,7 @@ const FbShareButton = React.createClass({
 		if(sid==null) sid = socialUtil.getTrailingSid(this.props.url)
 
 		this.getUrl(res => {
-			console.log('URL', res)
+			//console.log('URL', res)
 
 			// Set hashtags
 			let hashtag = this.props.hashtag
