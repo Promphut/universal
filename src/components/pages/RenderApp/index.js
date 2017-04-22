@@ -3,7 +3,13 @@ var React = require('react'),
 	{ useScroll } = require('react-router-scroll'),
 	api = require('components/api'),
 	{ ThemeProvider } = require('styled-components')
+	//createHistory = require('react-router/history/createBrowserHistory')
 
+browserHistory.listen( location =>  {
+	//console.log('CHANGED', location)
+	//location.hash = 'something'
+	//window.location.hash = (new Date().valueOf().toString(36)+Math.round(Math.random()*100)) //new Date().valueOf().toString(36) //new Date().valueOf().toString(36)+Math.round(Math.random()*100)
+})
 
 var RenderApp = React.createClass({
 	getInitialState(){
@@ -26,6 +32,10 @@ var RenderApp = React.createClass({
 				setting: setting
 			})
 		})
+
+		//console.log('HASH', window.location.hash)
+
+		//window.location.hash = new Date().valueOf().toString(36)+Math.round(Math.random()*100)
 	},
 
 	getChildContext() {

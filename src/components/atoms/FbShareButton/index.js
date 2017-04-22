@@ -1,5 +1,4 @@
 import React, {PropTypes} from 'react'
-import socialUtil from 'components/socialUtil'
 import api from 'components/api'
 
 const FbShareButton = React.createClass({
@@ -21,7 +20,7 @@ const FbShareButton = React.createClass({
 	handleFbShare(){
 		// Get sid
 		let sid = this.props.sid
-		if(sid==null) sid = socialUtil.getTrailingSid(this.props.url)
+		if(sid==null) sid = getTrailingSid(this.props.url)
 
 		this.getUrl(res => {
 			//console.log('URL', res)

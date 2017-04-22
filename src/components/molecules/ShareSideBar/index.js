@@ -4,7 +4,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import {FbIcon, TwtShareButton, FbShareButton} from 'components';
 import {findDOMNode as dom} from 'react-dom'
-import socialUtil from 'components/socialUtil'
 
 const Div = styled.div`
   width:70px;

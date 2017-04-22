@@ -1,5 +1,4 @@
 import React, {PropTypes} from 'react'
-import socialUtil from 'components/socialUtil'
 import api from 'components/api'
 
 const TwtShareButton = React.createClass({
@@ -20,7 +19,7 @@ const TwtShareButton = React.createClass({
 	componentDidMount(){
 		// Handle story insight
 		let sid = this.props.sid
-		if(sid==null) sid = socialUtil.getTrailingSid(this.props.url)
+		if(sid==null) sid = getTrailingSid(this.props.url)
 
 		// The story page will have sid, else just ignore.
 		if(sid!=null){ 

@@ -79,7 +79,7 @@ const getUserFromUserId = (nextState, replace, next) => {
 }
 
 const getColumnFromSlug = (nextState, replace, next) => {
-  console.log(nextState.params.columnSlug)
+  //console.log(nextState.params.columnSlug)
   api.getColumnFromSlug(nextState.params.columnSlug)
   .then(col => {
     nextState.params.column = col

@@ -4,6 +4,7 @@ import FontIcon from 'material-ui/FontIcon'
 import FlatButton from 'material-ui/FlatButton'
 import {Dropdown,TwtShareButton, FbShareButton} from 'components'
 import CopyToClipboard from 'react-copy-to-clipboard'
+import api from 'components/api' 
 
 const Hover = styled.div`
 `
@@ -12,7 +13,7 @@ const ShareDropdown = React.createClass({
   getInitialState () {
     return {
       open: false,
-      copied: false,
+      //copied: false,
       hover: -1
     }
   },
@@ -27,6 +28,14 @@ const ShareDropdown = React.createClass({
     this.setState({
       hover: -1
     })
+  },
+
+  onStoryCopied(val){
+    //console.log('onStoryCopied', val)
+    // get sid
+    val = getTrailingSid(val)
+    //this.setState({copied: true})
+    if(val!=null) api.incStoryInsight(val, 'share', 'share_dark')
   },
 
   render() {
@@ -85,7 +94,7 @@ const ShareDropdown = React.createClass({
           } />
         </Hover>
         <Hover onMouseEnter={() => this.onHover(2)}>
-          <CopyToClipboard text={config.FRONTURL+this.props.url} onCopy={() => this.setState({copied: true})}>
+          <CopyToClipboard text={config.FRONTURL+this.props.url} onCopy={this.onStoryCopied}>
             <FlatButton
               label={buttons[2]}
               labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
