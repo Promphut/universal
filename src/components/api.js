@@ -752,4 +752,34 @@ api.shorten = (url, utm) => {
 	}, () => { return {success:false, url:url} })
 }
 
+// hash is without #
+api.createHash = (hash, sid) => {
+	return Request
+	.post(config.BACKURL+'/publishers/'+config.PID+'/hashes')
+	.send({
+		hash: hash,
+		story: sid
+	})
+	.set('Accept','application/json')
+	.then(res => {
+		//console.log('1. CREATE HASH', res.body)
+		return res.body
+	}, api.err)
+}
+
+// hash is without #
+// sid is optional
+api.checkHash = (hash) => {
+	return Request
+	.get(config.BACKURL+'/publishers/'+config.PID+'/hashes/'+hash)
+	// .query({
+	// 	story: sid!=null ? sid : ''
+	// })
+	.set('Accept','application/json')
+	.then(res => {
+		//console.log('2. CHECK HASH', res.body)
+		return res.body
+	}, api.err)
+}
+
 module.exports = api
