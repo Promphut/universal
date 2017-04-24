@@ -714,7 +714,7 @@ const muiTheme = getMuiTheme({
 
 const App = React.createClass({
   genHash(nextProps){
-    console.log('HASHED')
+    //console.log('HASHED')
     let hash = new Date().valueOf().toString(36)+Math.round(Math.random()*100)
     
     // 1. Create hash
@@ -733,20 +733,20 @@ const App = React.createClass({
   },
 
   componentDidMount(){
-    console.log('MOUNTED', this.props.location)
+    //console.log('MOUNTED', this.props.location)
     // key'll be null if enter for the first time
     // for page refresh or re-enter on url bar, key'll have value
     if(this.props.location.hash && !this.props.location.key){
       // direct enter with hash, mean dark social traffic
       // if have hash, send to dark social service
-      console.log('CASE 1', this.props.location)
+      //console.log('CASE 1', this.props.location)
       //api.checkHash(hash)
       //console.log('nextState', nextState, nextProps)
       api.checkHash(this.props.location.hash.substring(1))
       return this.genHash(this.props)
     } else {
       // first time but no hash presented or have key, gen hash
-      console.log('CASE 2')
+      //console.log('CASE 2')
       return this.genHash(this.props)
     }
   },
@@ -762,11 +762,11 @@ const App = React.createClass({
 
     if(nextProps.location.action==='PUSH' && nextProps.location.pathname !== this.props.location.pathname) {
       // if pushing for the next path, gen hash
-      console.log('CASE 3')
+      //console.log('CASE 3')
       return this.genHash(nextProps)
     }
     // for case POP i.e. reenter url with hash
-    console.log('CASE 4', nextProps.location, this.props.location)
+    //console.log('CASE 4', nextProps.location, this.props.location)
   },
 
   shouldComponentUpdate(nextProps, nextState){
@@ -776,7 +776,7 @@ const App = React.createClass({
     if(nextProps.location.action === 'REPLACE' && nextProps.location.hash===this.props.location.hash) {
       return false
     }
-    console.log('-- Component Updated --')
+    //console.log('-- Component Updated --')
     return true
   },
 
