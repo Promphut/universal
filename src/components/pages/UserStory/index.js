@@ -287,7 +287,7 @@ const UserStory = React.createClass({
 	},
 
 	render(){
-  	let {theme, keywords, channels} = this.context.setting.publisher
+  		let {theme, keywords, channels} = this.context.setting.publisher
 		//console.log('user', this.props)
 		//var article = []
 		let {feed, feedCount} = this.state
@@ -295,28 +295,30 @@ const UserStory = React.createClass({
 		let user = this.props.params.user
 		// console.log('user', user)
 
-		return (
+		if(!user) return <Wrapper/>
+
+		return ( 
 			<Wrapper>
 				<Helmet>
 					<title>{user.display}</title>
-          <meta name="title" content={user.display} />
-          <meta name="keywords" content={keywords} />
-          <meta name="description" content={user.shortDesc} />
+					<meta name="title" content={user.display} />
+					<meta name="keywords" content={keywords} />
+					<meta name="description" content={user.shortDesc} />
 
-          <link rel="shortcut icon" type="image/ico" href={config.BACKURL+'/publishers/'+config.PID+'/favicon'} />
-          {channels && channels.fb ? <link rel="author" href={getFbUrl(channels.fb)} /> : ''}
-          <link rel="canonical" href={window.location.href} />
+					<link rel="shortcut icon" type="image/ico" href={config.BACKURL+'/publishers/'+config.PID+'/favicon'} />
+					{channels && channels.fb ? <link rel="author" href={getFbUrl(channels.fb)} /> : ''}
+					<link rel="canonical" href={window.location.href} />
 
-          <meta property="og:sitename" content={user.display} />
-          <meta property="og:url" content={window.location.href} />
-          <meta property="og:title" content={user.display} />
-          <meta property="og:type" content="article" />
+					<meta property="og:sitename" content={user.display} />
+					<meta property="og:url" content={window.location.href} />
+					<meta property="og:title" content={user.display} />
+					<meta property="og:type" content="article" />
 					<meta property="og:image" content={user.pic.medium} />
-          <meta property="og:keywords" content={keywords} />
-          <meta property="og:description" content={user.shortDesc} />
-          <meta property="twitter:card" content="summary_large_image" />
-          <meta property="twitter:image:alt" content={user.display} />
-          <meta property="fb:app_id" content={config.ANALYTIC.FBAPPID} />
+					<meta property="og:keywords" content={keywords} />
+					<meta property="og:description" content={user.shortDesc} />
+					<meta property="twitter:card" content="summary_large_image" />
+					<meta property="twitter:image:alt" content={user.display} />
+					<meta property="fb:app_id" content={config.ANALYTIC.FBAPPID} />
 				</Helmet>
 
 				<TopBarWithNavigation className="hidden-mob" title={'Title of AomMoney goes here..'} />
