@@ -79,7 +79,7 @@ const getUserFromUserId = (nextState, replace, next) => {
 }
 
 const getColumnFromSlug = (nextState, replace, next) => {
-  console.log(nextState.params.columnSlug)
+  //console.log(nextState.params.columnSlug)
   api.getColumnFromSlug(nextState.params.columnSlug)
   .then(col => {
     nextState.params.column = col
@@ -88,12 +88,17 @@ const getColumnFromSlug = (nextState, replace, next) => {
   .catch(toError(nextState, replace, next))
 }
 
-const getStoryFromSid = (countView = false) => {
+const getStoryFromSid = (opt) => {
+  opt = _.assign({
+    countView:false
+  }, opt)
+
   return (nextState, replace, next) => {
-    api.getStoryFromSid(nextState.params.sid, auth.getToken(), countView)
+    api.getStoryFromSid(nextState.params.sid, auth.getToken(), opt.countView)
     .then(result => {
       nextState.params.story = result.story
       nextState.params.canEditStory = result.canEditStory
+      nextState.params.countView = opt.countView
       //console.log('getStoryFromSid', result)
       next()
     })
@@ -135,7 +140,7 @@ const routes = (
     <Route path='stories/columns' component={AllColumn}/>
     <Route path='stories/:columnSlug' component={ColumnPage} onEnter={getColumnFromSlug}/>
     {/* STORY 1: HAVE COLUMN */ }
-    <Route path='stories/:columnSlug/:storySlug/:sid' component={StoryPage} onEnter={getStoryFromSid(true)}/>
+    <Route path='stories/:columnSlug/:storySlug/:sid' component={StoryPage} onEnter={getStoryFromSid({countView:true})}/>
 
     {/*<Route path='publisher' component={PublisherPage}/>*/}
     <Route path="mood" component={MoodboardPage} />
@@ -175,15 +180,15 @@ const routes = (
     </Route>
 
 
-    <Route path='me/stories/:sid' component={StoryPage} onEnter={getStoryFromSid(false)}/>
+    <Route path='me/stories/:sid' component={StoryPage} onEnter={getStoryFromSid()}/>
 
     <Route path='u/:uid' onEnter={getUserFromUserId} component={UserStory}/>
     {/* STORY 3 NO COLUMN AND NO USERNAME */ }
-    <Route path='u/:uid/stories/:storySlug/:sid' onEnter={getStoryFromSid(true)} component={StoryPage}/>
+    <Route path='u/:uid/stories/:storySlug/:sid' onEnter={getStoryFromSid({countView:true})} component={StoryPage}/>
 
     <Route path='@:username' onEnter={getUserFromUsername} component={UserStory}/>
     {/* STORY 2 NO COLUMN */ }
-    <Route path='@:username/stories/:storySlug/:sid' onEnter={getStoryFromSid(true)} component={StoryPage}/>
+    <Route path='@:username/stories/:storySlug/:sid' onEnter={getStoryFromSid({countView:true})} component={StoryPage}/>
 
     <Route path='error' component={ErrorPage}/>
     <Route path='404' component={NotFoundPage}/>

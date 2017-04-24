@@ -22,10 +22,6 @@
 
   <link href="https://fonts.googleapis.com/css?family=Mitr|Nunito|PT+Sans|PT+Serif|Roboto|Roboto+Slab" rel="stylesheet"/>
 
-  <!-- react-slick-->
-  <!--<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" />
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css" />-->
-
   <script src="https://use.fontawesome.com/3df470c471.js"></script>
 
   <script type="text/javascript">
@@ -71,6 +67,24 @@
     // default twt tweet url
     window.getTweetUrl = (url, hashtags) => {
       return 'https://twitter.com/intent/tweet?url='+encodeURIComponent(url) + (hashtags ? '&hashtags='+hashtags : '');
+    };
+
+    // append UTM to url
+    // utm: {source, medium, campaign, content}
+    window.appendUTM = (url, utm) => {
+      if(!utm) return url
+      return url + '?' + 
+        (utm ? 'utm_source='+encodeURIComponent(utm.source || config.DOMAIN)+'&' : '') +
+        (utm && utm.medium ? 'utm_medium='+encodeURIComponent(utm.medium)+'&' : '') +
+        (utm && utm.campaign ? 'utm_campaign='+encodeURIComponent(utm.campaign)+'&' : '') +
+        (utm && utm.content ? 'utm_content='+encodeURIComponent(utm.content)+'&' : '')
+    };
+
+    window.getTrailingSid = (url) => {
+      // Get sid by trailing the last param from url 
+      // because all story url have trailing :sid
+      let arr = url ? url.split('/') : window.location.href.split('/')
+      return parseInt(arr[arr.length-1])
     };
 
     // ==== Quantcast Tag, part 1 ====

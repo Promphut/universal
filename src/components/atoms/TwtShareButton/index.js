@@ -1,38 +1,51 @@
 import React, {PropTypes} from 'react'
-import socialUtil from 'components/socialUtil'
 import api from 'components/api'
 
 const TwtShareButton = React.createClass({
 	getInitialState(){
-		return { }
+		return { url:'' }
+	},
+
+	getUrl(done){
+		let url = this.props.url
+		if(!url){
+			let loc = window.location
+			url = [loc.protocol, '//', loc.host, loc.pathname].join('')
+		}
+		api.shorten(url, {medium:'social', source:'twitter'})
+		.then(done)
 	},
 
 	componentDidMount(){
-		let self = this
+		// Handle story insight
 		let sid = this.props.sid
-		if(sid==null) sid = socialUtil.getTrailingSid(this.props.url)
+		if(sid==null) sid = getTrailingSid(this.props.url)
 
 		// The story page will have sid, else just ignore.
 		if(sid!=null){ 
+			// When twt button clicked
 			// add event to DOM element 
 			this.a.addEventListener('tweetStory', function(event){
 				//console.log('tweetStory', sid, self.props.url, event)
 				api.incStoryInsight(sid, 'share', 'share_twt')
 			})
 		} 
+
+		// Handel url
+		this.getUrl(res => {
+			//console.log('URL', res)
+			this.setState({url: res.url})
+		})
 	},
 
 	render(){
 		// Set url
-		let url = this.props.url
-		if(!url){
-			let loc = window.location
-			url = [loc.protocol, '//', loc.host, loc.pathname].join('')
-		}
+		let url = this.state.url || this.props.sid
 
 		// Set hashtags
 		let hashtags = this.props.hashtags
 		if(hashtags==null) hashtags = config.NAME
+
 
 		return <a href={getTweetUrl(url, hashtags)} ref={(_a => this.a = _a)}>{this.props.button}</a>
 	}

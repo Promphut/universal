@@ -4,6 +4,7 @@ import Helmet from "react-helmet";
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import api from 'components/api'
 
 injectGlobal`
   /* FOR DESKTOP AND TABLET
@@ -712,7 +713,68 @@ const muiTheme = getMuiTheme({
 });
 
 const App = React.createClass({
+  // componentDidMount(){
+  //   console.log('MOUNT')
+  // },
+  componentWillReceiveProps(nextProps){
+    //console.log("RECEIVE1", /*nextProps.location.pathname, this.props.location.pathname, */nextProps.location.action, nextProps.location.key, this.props.location.key)
+    //console.log("RECEIVE2", nextProps.location.hash, nextProps.location.action)
+    
+    let isFirstTime = !nextProps.location.key && !this.props.location.key
+    let genHash = () => {
+      //console.log('HASHED')
+      let hash = new Date().valueOf().toString(36)+Math.round(Math.random()*100)
+      
+      // 1. Create hash
+      // 1.1 For story URL 
+      // count dark social if story countView is true
+      if(nextProps.params.countView) api.createHash(hash, nextProps.params.story._id)
+      // 1.2 For non-story URL
+      else api.createHash(hash)
+
+      // 2. Append #hash to url
+      this.props.router.replace({
+        ...nextProps.location, 
+        hash:'#'+hash
+      })
+    }
+
+    if(isFirstTime){
+      if(nextProps.location.hash){
+        // direct enter with hash, mean dark social traffic
+        // if have hash, send to dark social service
+        //console.log('CASE 1', nextProps.location.hash.substring(1), nextProps.location)
+        //api.checkHash(hash)
+        //console.log('nextState', nextState, nextProps)
+        api.checkHash(nextProps.location.hash.substring(1))
+        return genHash()
+      } else {
+        // first time but no hash presented, gen hash
+        //console.log('CASE 2')
+        return genHash()
+      }
+
+    } else if(nextProps.location.action==='PUSH' && nextProps.location.pathname !== this.props.location.pathname) {
+      // if pushing for the next path, gen hash
+      //console.log('CASE 3')
+      return genHash()
+    }
+    // for case POP i.e. reenter url with hash
+    //console.log('CASE 4', nextProps.location, this.props.location)
+  },
+
+  shouldComponentUpdate(nextProps, nextState){
+    //console.log('UPDATE0', nextProps, this.props)
+
+    // If intention is to change hash, no need to update component
+    if(nextProps.location.action === 'REPLACE' && nextProps.location.hash) 
+      return false
+
+    return true
+  },
+
   render(){
+    //console.log('RERENDER')
     let {name, desc, theme, tagline, keywords, analytic, channels, cover} = this.context.setting.publisher
     if(!analytic) analytic = {}
     //console.log('context', this.context.setting, this.props.location)

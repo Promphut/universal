@@ -727,4 +727,59 @@ api.getGrowthInsight = (insight, subaction = '', filter, sort, limit, current) =
 	}, api.err)
 }
 
+// utm: {source, medium, campaign, content}
+// response: {success:true/false, url:'url'} 
+// if unable to shorten, success will be false
+api.shorten = (url, utm) => {
+	url = appendUTM(url, utm)
+
+	return Request
+	.get('https://api-ssl.bitly.com/v3/shorten')
+	.query({
+		access_token: config.ANALYTIC.BITLY,
+		longUrl: url
+	})
+	.set('Accept','application/json')
+	.then(res => {
+		if(res.body.status_code != 200) 
+			//return Promise.reject(new Error('Unable to shorten the link'))
+			return {success:false, url:url}
+
+		return {
+			success: true, 
+			url: res.body.data.url
+		}
+	}, () => { return {success:false, url:url} })
+}
+
+// hash is without #
+api.createHash = (hash, sid) => {
+	return Request
+	.post(config.BACKURL+'/publishers/'+config.PID+'/hashes')
+	.send({
+		hash: hash,
+		story: sid
+	})
+	.set('Accept','application/json')
+	.then(res => {
+		//console.log('1. CREATE HASH', res.body)
+		return res.body
+	}, api.err)
+}
+
+// hash is without #
+// sid is optional
+api.checkHash = (hash) => {
+	return Request
+	.get(config.BACKURL+'/publishers/'+config.PID+'/hashes/'+hash)
+	// .query({
+	// 	story: sid!=null ? sid : ''
+	// })
+	.set('Accept','application/json')
+	.then(res => {
+		//console.log('2. CHECK HASH', res.body)
+		return res.body
+	}, api.err)
+}
+
 module.exports = api

@@ -1,5 +1,4 @@
 import React, {PropTypes} from 'react'
-import socialUtil from 'components/socialUtil'
 import api from 'components/api'
 
 const FbShareButton = React.createClass({
@@ -7,29 +6,37 @@ const FbShareButton = React.createClass({
 		return { }
 	},
 
-	handleFbShare(){
-		// Get sid
-		let sid = this.props.sid
-		if(sid==null) sid = socialUtil.getTrailingSid(this.props.url)
-
-		// Set url
+	getUrl(done){
+		// Get url
 		let url = this.props.url
 		if(!url){
 			let loc = window.location
 			url = [loc.protocol, '//', loc.host, loc.pathname].join('')
 		}
+		api.shorten(url, {medium:'social', source:'facebook'})
+		.then(done)
+	},
 
-		// Set hashtags
-		let hashtag = this.props.hashtag
-		if(hashtag==null) hashtag = '#'+config.NAME
+	handleFbShare(){
+		// Get sid
+		let sid = this.props.sid
+		if(sid==null) sid = getTrailingSid(this.props.url)
 
-		FB.ui({
-			method: 'share',
-			display: 'popup',
-			hashtag: hashtag,
-			href: url
-		}, function(response){
-			if(sid!=null) api.incStoryInsight(sid, 'share', 'share_fb')
+		this.getUrl(res => {
+			//console.log('URL', res)
+
+			// Set hashtags
+			let hashtag = this.props.hashtag
+			if(hashtag==null) hashtag = '#'+config.NAME
+
+			FB.ui({
+				method: 'share',
+				display: 'popup',
+				hashtag: hashtag,
+				href: res.url
+			}, function(response){
+				if(sid!=null) api.incStoryInsight(sid, 'share', 'share_fb')
+			})
 		})
 	},
 

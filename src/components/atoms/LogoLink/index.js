@@ -1,106 +1,70 @@
 import React from 'react'
-import Request from 'superagent'
+import ReactDOM from 'react-dom'
 import {Link} from 'react-router'
-import cheerio from 'cheerio'
 import styled from 'styled-components'
-
-/*const Link2 = styled(Link)`
-	svg path{
-		fill:${props=>props.fill} !important;
-	}
-` */
 
 const LogoLink = React.createClass({
 	getInitialState(){
-		//this.svg = ''
 		return {
-			svg:''
+			//src: '',
+			fill: ''
 		}
 	},
 
 	componentWillReceiveProps(nextProps){
-		if(this.props.src != nextProps.src || this.props.fill != nextProps.fill) {
-			//console.log('componentWillReceiveProps')
-			//this.props = nextProps
-			//console.log('nextProps', nextProps)
-			//this.setState({src:''}) // will reget the svg and render fill
-			this.getSvg(nextProps.src)
-			.then(svg => {
-				this.setState({svg: svg})
-				//console.log(this.props.fill)
-			})
+		if(this.props.fill != nextProps.fill){
+			this.setState({fill: nextProps.fill})
 		}
 	},
 
-	componentDidMount(){
-		this.getSvg(this.props.src)
-		.then(svg => {
-			this.setState({svg: svg})
-			//console.log("test")
-		})
+	fillSvgDocument(fill){
+		//console.log('FILL', fill)
+		let {className} = this.props
+
+		try {
+			let svg = this.svgObject.contentDocument
+			if(className) svg.class += ' ' + className
+
+			svg.querySelectorAll('path')
+			.forEach(ele => ele.setAttribute('fill', fill))
+
+			svg.querySelectorAll('use')
+			.forEach(ele => ele.setAttribute('fill', fill))
+		}
+		catch(e){}
 	},
 
-	getSvg(src){
-		return Request.get(src)
-		.then(res => {
-			if(!res.text) return
-			let {className, id, style, fill} = this.props
-			// do svg manipulation
-			let $ = cheerio.load(res.text, { xmlMode: true }),
-				$svg = $('svg')
-			if(!$svg) return
-			$svg.addClass(className)
-			//console.log(className,fill)
-
-			//console.log('id', id)
-			if(!id) id = Math.round(Math.random()*10000)
-			$svg.attr('id', id)
-			//$svg.attr('fill', fill)
-
-			if(style && style.width) $svg.attr('width',style.width)
-			if(style && style.height) $svg.attr('height',style.height)
+	componentDidMount(){
+		this.svgObject.addEventListener("load", () => {
+			//console.log('SVG LOADED', this.props.fill)
+			let fill = this.props.fill
+			if(fill) this.fillSvgDocument(fill)
+		})
+	},
+	componentDidUpdate(prevProps, prevState){
+		if (prevProps.fill !== this.props.fill) {
+			let {fill} = this.state
+			//console.log('FILL CHANGED')
 
 			if(fill){
-				$svg.find('path').each(function(index,ele){
-					$(this).attr('fill', fill)
-					let oldId = $(this).attr('id')
-					if(oldId) $(this).attr('id', id+oldId)
-					//console.log(this)
-				})
-				$svg.find('use').each(function(index,ele){
-					$(this).attr('fill', fill)
-					let oldId = $(this).attr('xlink:href').replace('#', '')
-					if(oldId) $(this).attr('xlink:href', '#'+id+oldId)
-					//console.log(this)
-				})
-			}else{
-				$svg.find('path').each(function(index,ele){
-					//$(this).attr('fill', fill)
-					let oldId = $(this).attr('id')
-					if(oldId) $(this).attr('id', id+oldId)
-					//console.log(this)
-				})
-				$svg.find('use').each(function(index,ele){
-					//$(this).attr('fill', fill)
-					let oldId = $(this).attr('xlink:href').replace('#', '')
-					if(oldId) $(this).attr('xlink:href', '#'+id+oldId)
-					//console.log(this)
-				})
+				this.fillSvgDocument(fill)
+			} else {
+				// force inside content to reload
+				try {
+					this.svgObject.contentDocument.location.reload()
+				}
+				catch(e){}
 			}
-
-			return $svg.toString()
-			//console.log('SVG', res.text)
-		})
+		}
 	},
 
 	render() {
-		let {style, title, to, fill} = this.props
+		let {style, title, to} = this.props
+		let id = 'svg_'+Math.round(Math.random()*10000)
 
-		return (<Link to={to} title={title} style={{...style}} dangerouslySetInnerHTML={{__html:this.state.svg}}></Link>)
-
-		/*return (<Link2 to={to} title={title} fill={fill} style={{...style}} dangerouslySetInnerHTML={{__html:this.state.svg}}>
-
-		</Link2>)*/
+		return (<Link to={to} title={title} style={{...style}}>
+			<object id={id} data={this.props.src} type="image/svg+xml" ref={(input) => {this.svgObject = input}} style={{pointerEvents:'none'}}></object>
+		</Link>)
 	}
 });
 
