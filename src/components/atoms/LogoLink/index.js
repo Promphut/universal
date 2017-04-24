@@ -51,7 +51,7 @@ const LogoLink = React.createClass({
 			if(!$svg) return
 			$svg.addClass(className)
 			//console.log(className,fill)
-			
+
 			//console.log('id', id)
 			if(!id) id = Math.round(Math.random()*10000)
 			$svg.attr('id', id)
