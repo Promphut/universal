@@ -1,8 +1,14 @@
-import React, {PropTypes} from 'react'
+import React, { PropTypes } from 'react'
 import styled from 'styled-components'
-import {Link, browserHistory} from 'react-router'
+import { Link, browserHistory } from 'react-router'
 import Avatar from 'material-ui/Avatar'
-import {LogoLink, PrimaryButton, SecondaryButton, LeftMenu, RightMenu} from 'components'
+import {
+	LogoLink,
+	PrimaryButton,
+	SecondaryButton,
+	LeftMenu,
+	RightMenu
+} from 'components'
 import auth from 'components/auth'
 //import utils from 'components/utils'
 import FontIcon from 'material-ui/FontIcon'
@@ -21,10 +27,10 @@ const Wrapper = styled.div`
 const Container = styled.div`
 	margin: 0;
 	padding: 0;
-  background: ${props => props.theme.barTone=='light'?'white':props.theme.primaryColor};
-	color: ${props => props.theme.barTone=='light'?'#222':'white'};
+  background: ${props => (props.theme.barTone == 'light' ? 'white' : props.theme.primaryColor)};
+	color: ${props => (props.theme.barTone == 'light' ? '#222' : 'white')};
   height: 60px;
-  border-bottom: ${props => props.theme.barTone=='light'?'1px solid #e2e2e2':'none'};
+  border-bottom: ${props => (props.theme.barTone == 'light' ? '1px solid #e2e2e2' : 'none')};
 	width: 100%;
 	transition: .1s;
 	position: absolute;
@@ -49,13 +55,13 @@ const HamburgerWrapper = styled.a`
 	display: inline-block;
   float: left;
   text-align: center;
-  color: ${props => props.theme.barTone=='light'?'#222':'white'};
+  color: ${props => (props.theme.barTone == 'light' ? '#222' : 'white')};
   padding: 11px 22px 13px;
   cursor: pointer;
 `
 
 const Hamburger = styled.i`
-	color: ${props => props.theme.barTone=='light'?'#222':'white'};
+	color: ${props => (props.theme.barTone == 'light' ? '#222' : 'white')};
 	padding-top:5px;
 `
 
@@ -104,7 +110,7 @@ const NotLogin = styled.div`
 	margin: 9px 20px;
 
 	& * {
-		color: ${props => props.theme.barTone=='light'?'#222':'white'};
+		color: ${props => (props.theme.barTone == 'light' ? '#222' : 'white')};
 	}
 
 	& a:hover {
@@ -124,7 +130,7 @@ const Edit = styled(Link)`
 `
 
 const TopBar = React.createClass({
-	getInitialState(){
+	getInitialState() {
 		return {
 			alertLeft: false,
 			alertRight: false,
@@ -133,195 +139,226 @@ const TopBar = React.createClass({
 		}
 	},
 
-	componentWillMount(){
-		this.role = auth.hasRoles(["ADMIN","EDITOR","WRITER"])
+	componentWillMount() {
+		this.role = auth.hasRoles(['ADMIN', 'EDITOR', 'WRITER'])
 	},
 
 	componentWillUnmount() {
-		if(this.props.onScroll) window.removeEventListener('scroll', this.handleScroll)
-
+		if (this.props.onScroll)
+			window.removeEventListener('scroll', this.handleScroll)
 	},
 
 	componentDidMount() {
-		if(this.props.onScroll)window.addEventListener('scroll', this.handleScroll)
-			//console.log(this.role)
+		if (this.props.onScroll)
+			window.addEventListener('scroll', this.handleScroll)
+
+		//console.log(this.role)
 	},
 
 	handleScroll(e) {
 		this.props.onScroll(e)
 
 		let top = e.srcElement.body.scrollTop / 500
-		this.setState({scroll: top})
+		this.setState({ scroll: top })
 	},
 
-	openPop(side){
+	openPop(side) {
 		if (side === 'left') {
-			this.setState({alertLeft: true})
+			this.setState({ alertLeft: true })
 		} else if (side === 'right') {
-			this.setState({alertRight: true})
+			this.setState({ alertRight: true })
 		}
 	},
 
-	handleRequestClose(side){
+	handleRequestClose(side) {
 		if (side === 'left') {
-			this.setState({alertLeft: false})
+			this.setState({ alertLeft: false })
 		} else if (side === 'right') {
-			this.setState({alertRight: false})
+			this.setState({ alertRight: false })
 		}
 	},
 
-	close(e,to,side){
+	close(e, to, side) {
 		e.preventDefault()
 		//console.log(e,to,side)
 		if (side === 'left') {
-			this.setState({alertLeft: false})
+			this.setState({ alertLeft: false })
 		} else if (side === 'right') {
-			this.setState({alertRight: false})
+			this.setState({ alertRight: false })
 		}
-		if(window.location.pathname != to) browserHistory.push(to)
+		if (window.location.pathname != to) browserHistory.push(to)
 	},
 
-	signup(){
+	signup() {
 		browserHistory.push('/signup')
 	},
 
-	render () {
-		var {theme} = this.context.setting.publisher
-		let {alertLeft, alertRight, scroll} = this.state
+	render() {
+		var { theme } = this.context.setting.publisher
+		let { alertLeft, alertRight, scroll } = this.state
 		let status = this.props.status || 'UNLOGGEDIN',
-			{scrolling, user, menu, transparent, editButton, hasCover}  = this.props
+			{ scrolling, user, menu, transparent, editButton, hasCover } = this.props
 
-	  const logoStyleBase = {
-	    display: 'inline-block',
-	    float: 'left',
-	    margin: 'auto'
-	  }
-		const logoStyle = window.isMobile() ? {
-			...logoStyleBase,
-			display: 'none'
-		} : {
-			...logoStyleBase
+		const logoStyleBase = {
+			display: 'inline-block',
+			float: 'left',
+			margin: 'auto'
 		}
-		const logoStyleMobile = window.isMobile() ? {
-			...logoStyleBase,
-		} : {
-			...logoStyleBase,
-	    margin: 'auto 12px auto auto'
-		}
+		const logoStyle = window.isMobile()
+			? {
+					...logoStyleBase,
+					display: 'none'
+				}
+			: {
+					...logoStyleBase
+				}
+		const logoStyleMobile = window.isMobile()
+			? {
+					...logoStyleBase
+				}
+			: {
+					...logoStyleBase,
+					margin: 'auto 12px auto auto'
+				}
 
 		const buttonStyle = {
-	    display: 'inline-block',
-	    float: 'left',
+			display: 'inline-block',
+			float: 'left',
 			boxShadow: 'none',
 			verticalAlign: 'middle',
-	    marginTop: '9px'
+			marginTop: '9px'
 		}
 
 		const avatarStyle = {
 			display: 'inline-block',
-		  float: 'left',
-		  textAlign: 'center',
+			float: 'left',
+			textAlign: 'center',
 			margin: '13px 20px 13px 13px',
 			cursor: 'pointer'
 		}
 		//console.log(theme, theme.barTone, theme.primaryColor)
-	  return (
-
-	    <Wrapper scroll={scroll}>
-				<Container className={'menu-font '
-					+ ((!scrolling && transparent && hasCover) ? 'transparent' : '')}>
+		return (
+			<Wrapper scroll={scroll}>
+				<Container
+					className={
+						'menu-font ' +
+							(!scrolling && transparent && hasCover ? 'transparent' : '')
+					}>
 					<Left>
-			      <HamburgerWrapper onClick={() => this.openPop('left')}>
-			        <Hamburger className="material-icons" style={!scrolling && transparent && hasCover ? {color:'white'} : {}}>menu</Hamburger>
-			      </HamburgerWrapper>
+						<HamburgerWrapper onClick={() => this.openPop('left')}>
+							<Hamburger
+								className="material-icons"
+								style={
+									!scrolling && transparent && hasCover
+										? { color: 'white' }
+										: {}
+								}>
+								menu
+							</Hamburger>
+						</HamburgerWrapper>
 						<LogoWrapper>
-							<LogoLink to="/" src={theme.slogo} title={this.props.title} style={logoStyleMobile} />
-							<LogoLink to="/" src={theme.logo} title={this.props.title} style={logoStyle}
-								fill={(!scrolling && hasCover) ? '#FFF' : ''} />
+							<LogoLink
+								to="/"
+								src={theme.slogo}
+								title={this.props.title}
+								style={logoStyleMobile}
+								id={'slogo'}
+							/>
+							<LogoLink
+								to="/"
+								src={theme.logo}
+								title={this.props.title}
+								style={logoStyle}
+								id={'logo'}
+								fill={!scrolling && hasCover ? '#FFF' : ''}
+							/>
 						</LogoWrapper>
 					</Left>
 
-					<Center className={transparent ? 'hide': ''}>
-   					{this.props.children}
+					<Center className={transparent ? 'hide' : ''}>
+						{this.props.children}
 					</Center>
 
 					{status == 'LOGGEDIN' &&
 						<Right>
-							{this.role && editButton &&
+							{this.role &&
+								editButton &&
 								<Edit
-									className='nunito-font'
-									style={{color:((!scrolling && transparent && hasCover) || (theme.barTone!='light')) ? '#FFF' : '#222'}}
+									className="nunito-font"
+									style={{
+										color: (!scrolling && transparent && hasCover) ||
+											theme.barTone != 'light'
+											? '#FFF'
+											: '#222'
+									}}
 									to={editButton}>
 									Edit Story
-								</Edit>
-							}
+								</Edit>}
 
-				      {this.role && <HideOnTablet>
-								<Link to="/me/stories/new">
-					        <PrimaryButton
-					          label="Story"
-					          iconName="add"
-					          style={buttonStyle}
-					        />
-								</Link>
-				      </HideOnTablet>}
+							{this.role &&
+								<HideOnTablet>
+									<Link to="/me/stories/new">
+										<PrimaryButton
+											label="Story"
+											iconName="add"
+											style={buttonStyle}
+										/>
+									</Link>
+								</HideOnTablet>}
 
 							<Avatar
 								src={user.pic.medium}
-								size={30} style={avatarStyle}
+								size={30}
+								style={avatarStyle}
 								onClick={() => this.openPop('right')}
 							/>
-						</Right>
-					}
+						</Right>}
 					{status == 'UNLOGGEDIN' &&
 						<Right>
 							<NotLogin>
 								<SecondaryButton
 									label="Sign Up"
 									onClick={this.signup}
-									style={{verticalAlign: 'middle'}}
+									style={{ verticalAlign: 'middle' }}
 								/>
 								<span>&nbsp; or </span>
-								<Link to="/signin" style={{fontWeight:'bold'}}>
+								<Link to="/signin" style={{ fontWeight: 'bold' }}>
 									Sign In
 								</Link>
 							</NotLogin>
-						</Right>
-					}
+						</Right>}
 				</Container>
 
 				<LeftMenu
 					menu={menu}
 					open={alertLeft}
 					close={() => this.handleRequestClose('left')}
-					closeAndLink={(e,to) => this.close(e,to,'left')}
+					closeAndLink={(e, to) => this.close(e, to, 'left')}
 				/>
-				{status=='LOGGEDIN' &&
+				{status == 'LOGGEDIN' &&
 					<RightMenu
 						open={alertRight}
 						user={user}
 						close={() => this.handleRequestClose('right')}
-					/>
-				}
-	    </Wrapper>
-	  )
+					/>}
+			</Wrapper>
+		)
 	}
 })
 
 TopBar.propTypes = {
-  onScroll: PropTypes.func,
-  scrolling: PropTypes.bool,
-  status: PropTypes.string,
-  editButton:PropTypes.string,
-  title: PropTypes.string,
+	onScroll: PropTypes.func,
+	scrolling: PropTypes.bool,
+	status: PropTypes.string,
+	editButton: PropTypes.string,
+	title: PropTypes.string,
 
-  menu: PropTypes.object,
-  user: PropTypes.object
+	menu: PropTypes.object,
+	user: PropTypes.object
 }
 
 TopBar.contextTypes = {
 	setting: React.PropTypes.object
 }
 
-
-export default TopBar;
+export default TopBar

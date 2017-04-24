@@ -663,7 +663,7 @@ api.getContentTypes = () => {
 	}, api.err)
 }
 
-api.getViewInsight = (insight, subaction, filter, sort, limit, current) => {
+api.getViewInsight = (insight, subaction = '', filter, sort, limit, current) => {
 	const token = auth.getToken()
 
 	return Request
@@ -679,7 +679,7 @@ api.getViewInsight = (insight, subaction, filter, sort, limit, current) => {
 	}, api.err)
 }
 
-api.getTrendInsight = (insight, subaction, filter, sort, limit, current) => {
+api.getTrendInsight = (insight, subaction = '', filter, sort, limit, current) => {
 	const token = auth.getToken()
 
 	return Request
@@ -695,7 +695,7 @@ api.getTrendInsight = (insight, subaction, filter, sort, limit, current) => {
 	}, api.err)
 }
 
-api.getShareInsight = (insight, subaction, filter, sort, limit, current) => {
+api.getShareInsight = (insight, subaction = '', filter, sort, limit, current) => {
 	const token = auth.getToken()
 
 	return Request
@@ -711,7 +711,7 @@ api.getShareInsight = (insight, subaction, filter, sort, limit, current) => {
 	}, api.err)
 }
 
-api.getGrowthInsight = (insight, subaction, filter, sort, limit, current) => {
+api.getGrowthInsight = (insight, subaction = '', filter, sort, limit, current) => {
 	const token = auth.getToken()
 
 	return Request

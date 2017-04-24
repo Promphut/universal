@@ -20,7 +20,7 @@ const LogoLink = React.createClass({
 	fillSvgDocument(fill){
 		//console.log('FILL', fill)
 		let {className} = this.props
-		
+
 		try {
 			let svg = this.svgObject.contentDocument
 			if(className) svg.class += ' ' + className
@@ -30,18 +30,17 @@ const LogoLink = React.createClass({
 
 			svg.querySelectorAll('use')
 			.forEach(ele => ele.setAttribute('fill', fill))
-		} 
+		}
 		catch(e){}
 	},
 
 	componentDidMount(){
-		this.svgObject.addEventListener("load", () => {			
+		this.svgObject.addEventListener("load", () => {
 			//console.log('SVG LOADED', this.props.fill)
 			let fill = this.props.fill
 			if(fill) this.fillSvgDocument(fill)
 		})
 	},
-
 	componentDidUpdate(prevProps, prevState){
 		if (prevProps.fill !== this.props.fill) {
 			let {fill} = this.state
