@@ -740,7 +740,6 @@ const App = React.createClass({
       // direct enter with hash, mean dark social traffic
       // if have hash, send to dark social service
       //console.log('CASE 1', this.props.location)
-      //api.checkHash(hash)
       //console.log('nextState', nextState, nextProps)
       api.checkHash(this.props.location.hash.substring(1))
       return this.genHash(this.props)
@@ -756,9 +755,6 @@ const App = React.createClass({
     //console.log("RECEIVE2", nextProps.location.hash, nextProps.location.action)
     
     //let isFirstTime = !nextProps.location.key && !this.props.location.key
-    // let genHash = () => {
-      
-    // }
 
     if(nextProps.location.action==='PUSH' && nextProps.location.pathname !== this.props.location.pathname) {
       // if pushing for the next path, gen hash
@@ -773,7 +769,7 @@ const App = React.createClass({
     //console.log('UPDATE0', (nextProps.location.action === 'REPLACE' && !!nextProps.location.hash), nextProps.location.hash, this.props.location.hash)
 
     // If intention is to change hash, no need to update component
-    if(nextProps.location.action === 'REPLACE' && nextProps.location.hash===this.props.location.hash) {
+    if(nextProps.location.action === 'REPLACE' && nextProps.location.hash!==this.props.location.hash) {
       return false
     }
     //console.log('-- Component Updated --')
