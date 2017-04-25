@@ -202,7 +202,7 @@ const HomePage2 = React.createClass({
 		// console.log('PUB', pub)
 		return (
 		    <Wrapper>
-		    	{pub && <BGImg src={pub.cover.medium} style={{width:'100%',height:'350px'}}
+		    	{pub && <BGImg src={pub.cover.medium} opacity={-1} style={{width:'100%',height:'350px'}}
 					className="hidden-mob" alt={pub.name} />}
 
 	      		<TopBarWithNavigation title={'Title of AomMoney goes here..'} />

@@ -24,7 +24,7 @@ const BGImg = ({style, className, src, url, alt, opacity, child, children}) => {
 	return (
   	<ImgLink to={url} style={{...style, backgroundImage:'url('+src+')'}}
       className={className} title={alt}>
-      <Filter opacity={opacity} >
+      <Filter opacity={opacity}>
         {child?child:''}
         {children}
       </Filter>
