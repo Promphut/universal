@@ -278,6 +278,7 @@ const EditStory = React.createClass({
 
   componentWillUnmount(){
     clearInterval(this.interval);
+    this.editor.destroy()
   },
 
   chooseNews(){
@@ -384,7 +385,7 @@ const EditStory = React.createClass({
 
       let allContents = this.editor.serialize()
       let el =  allContents.paper.value
-
+      console.log(allContents.paper.value)
       this.setState({
         saveStatus:'Saving...'
       })
@@ -655,13 +656,13 @@ const EditStory = React.createClass({
             <Label className="nunito-font" >Select cover picture : </Label>
             <div className='row' style={{overflow:'hidden',marginTop:'20px'}}>
               <div className='col-4'>
-                <UploadPicture path={'/stories/'+sid+'/covermobile'} src={story.coverMobile} size='330x500' width={96} height={137} label='Portrait Cover' type='coverMobile' style={{width:'96px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
+                <UploadPicture path={'/stories/'+sid+'/covermobile'} src={story.coverMobile&&story.coverMobile.medium} size='330x500' width={96} height={137} label='Portrait Cover' type='coverMobile' style={{width:'96px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
               </div>
               <div className='col-1'>
                 <div style={{marginTop:'58px'}}>Or</div>
               </div>
               <div className='col-6'>
-                <UploadPicture path={'/stories/'+sid+'/cover'} src={story.cover} size='1920x860' width={194} height={137} label='Landscape Cover' type='cover' style={{width:'194px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
+                <UploadPicture path={'/stories/'+sid+'/cover'} src={story.cover&&story.cover.medium} size='1920x860' width={194} height={137} label='Landscape Cover' type='cover' style={{width:'194px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
               </div>
             </div>
           </div>
