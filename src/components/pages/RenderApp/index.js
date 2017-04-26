@@ -38,6 +38,11 @@ var RenderApp = React.createClass({
 		//window.location.hash = new Date().valueOf().toString(36)+Math.round(Math.random()*100)
 	},
 
+	// shouldComponentUpdate(nextProps, nextState){
+	// 	console.log('-- RenderApp Updated --', nextProps, nextState)
+	// 	return true
+	// },
+
 	getChildContext() {
 		return {setting: this.state.setting};
 	},

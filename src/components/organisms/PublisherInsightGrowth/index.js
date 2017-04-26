@@ -334,7 +334,7 @@ const PublisherInsightGrowth = React.createClass({
 							className="sans-font"
 							style={{ height: '36px', background: '#F4F4F4' }}>
 							<TableRowColumn style={styles.tableTotalName}>
-								Average Growth Score
+								Average Engagement
 							</TableRowColumn>
 
 							{summary

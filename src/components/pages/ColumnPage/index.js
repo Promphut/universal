@@ -110,7 +110,9 @@ const Onload = styled.div`
 const ColumnPage = React.createClass({
 	getInitialState(){
 		return {
-			column:this.props.params.column,
+			column: this.props.params.column || {
+				cover:{}
+			},	//this.props.params.column || {},
 			feed: [],
 			latestStories:[],
 			page:0,
@@ -129,7 +131,7 @@ const ColumnPage = React.createClass({
 	},
 
 	componentWillReceiveProps(nextProps) {
-		if(nextProps.params.column!=this.props.params.column){
+		if(nextProps.params.column && nextProps.params.column!=this.props.params.column){
 			this.setState({
 				column:nextProps.params.column,
 				page:0,
@@ -141,27 +143,50 @@ const ColumnPage = React.createClass({
 		}
 	},
 
+	// shouldComponentUpdate(nextProps, nextState){
+	// 	console.log('-- ColumnPage Updated --', nextProps, nextState)
+	// 	return true
+	// },
+
 	buildElements() {
 		let page = this.state.page
 		var {column} = this.state
 		api.getFeed('story', {status:1,column:column.id }, 'latest', null, page, 10)
 		.then(result => {
 			var s = this.state.latestStories.concat(result.feed)
-			this.setState({
-				feedCount:result.count[1],
-				latestStories:s,
-			},()=>{
-				if(s.length==result.count[1]){
-					this.setState({
-						loadOffset:'undefined',
-						isInfiniteLoading: false,
-					})
-				}else{
-					this.setState({
-						isInfiniteLoading: false
-					})
-				}
-			})
+			if(s.length==result.count[1]){
+				this.setState({
+					feedCount:result.count[1],
+					latestStories:s,
+
+					loadOffset:'undefined',
+					isInfiniteLoading: false,
+				})
+
+			} else {
+				this.setState({
+					feedCount:result.count[1],
+					latestStories:s,
+
+					isInfiniteLoading: false
+				})
+			}
+
+			// this.setState({
+			// 	feedCount:result.count[1],
+			// 	latestStories:s,
+			// },()=>{
+			// 	if(s.length==result.count[1]){
+			// 		this.setState({
+			// 			loadOffset:'undefined',
+			// 			isInfiniteLoading: false,
+			// 		})
+			// 	}else{
+			// 		this.setState({
+			// 			isInfiniteLoading: false
+			// 		})
+			// 	}
+			// })
 		})
 	},
 
@@ -179,11 +204,11 @@ const ColumnPage = React.createClass({
 	},
 
 	render(){
-    let {keywords, channels,theme} = this.context.setting.publisher
-    const BGImgSize = (window.isMobile() ? 100 : 280) + 60
+	    let {keywords, channels,theme} = this.context.setting.publisher
+	    const BGImgSize = (window.isMobile() ? 100 : 280) + 60
 		let {column, feed} = this.state
 		var {count, loadOffset, isInfiniteLoading, latestStories, isMobile} = this.state
-
+		//console.log('COL', column)
 		let ChildCover = (
 			<Head>
 				<ColumnName className='serif-font'>{column.name}</ColumnName>

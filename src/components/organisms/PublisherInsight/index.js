@@ -75,7 +75,7 @@ const PublisherInsight = React.createClass({
             <Tab buttonStyle={styles.tab} label="View" value={0} />
             <Tab buttonStyle={styles.tab} label="Trend" value={1} />
             <Tab buttonStyle={styles.tab} label="Share" value={2} />
-            <Tab buttonStyle={styles.tab} label="Growth Score" value={3} />
+            <Tab buttonStyle={styles.tab} label="Engagement" value={3} />
           </Tabs>
         </Header>
         <SwipeableViews
