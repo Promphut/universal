@@ -385,7 +385,7 @@ const EditStory = React.createClass({
 
       let allContents = this.editor.serialize()
       let el =  allContents.paper.value
-      console.log(allContents.paper.value)
+      //console.log(allContents.paper.value)
       this.setState({
         saveStatus:'Saving...'
       })
