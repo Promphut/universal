@@ -298,15 +298,23 @@ const GraphDashboard = React.createClass({
 	},
 
 	handleChangeDate(e) {
-		this.setState(
-			{
-				startDate1: e,
+		//console.log(e)
+		if(e>new Date()){
+			this.setState({
 				open: false
-			},
-			() => {
-				this.getPublisherInsight()
-			}
-		)
+			})
+			return false
+		}else{
+			this.setState(
+				{
+					startDate1: e,
+					open: false
+				},
+				() => {
+					this.getPublisherInsight()
+				}
+			)
+		}
 	},
 	handleRequestClose() {
 		this.setState({
@@ -322,15 +330,22 @@ const GraphDashboard = React.createClass({
 	},
 	handleChangeDate2(e) {
 		//console.log(e)
-		this.setState(
-			{
-				startDate2: e,
+		if(e<=this.state.startDate1){
+			this.setState({
 				open: false
-			},
-			() => {
-				this.getPublisherInsight()
-			}
-		)
+			})
+			return false
+		}else{
+			this.setState(
+				{
+					startDate2: e,
+					open: false
+				},
+				() => {
+					this.getPublisherInsight()
+				}
+			)
+		}
 	},
 	openDatePicker2(e) {
 		this.setState({
@@ -380,21 +395,28 @@ const GraphDashboard = React.createClass({
 			}
 		}
 		var { width, height, style } = this.props
+		//console.log(this.state.startDate1<this.state.startDate2)
 		return (
 			<Wrapper width={width} style={{ ...style }}>
 				<Popover
 					open={open}
 					anchorEl={anchorEl}
 					onRequestClose={this.handleRequestClose}
-					style={{ background: 'none', boxShadow: 'none' }}>
+					style={{ background: 'none', boxShadow: 'none',margin:'0 5px 0 5px' }}>
 					{swipPicker
 						? <DatePicker
 								selected={startDate1}
+								selectsStart
+								startDate={this.state.startDate1}
+								endDate={this.state.startDate2}
 								onChange={this.handleChangeDate}
 								inline
 							/>
 						: <DatePicker
 								selected={startDate2}
+								selectsEnd
+								startDate={this.state.startDate1}
+								endDate={this.state.startDate2}
 								onChange={this.handleChangeDate2}
 								inline
 							/>}

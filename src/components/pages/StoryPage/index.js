@@ -222,6 +222,10 @@ const StoryPage = React.createClass({
           <meta property="twitter:card" content="summary_large_image" />
           <meta property="twitter:image:alt" content={this.story.title} />
           <meta property="fb:app_id" content={config.ANALYTIC.FBAPPID} />
+
+					<link rel="stylesheet" href="/css/medium-editor.css" type="text/css"/>
+          <link rel="stylesheet" href="/css/tim.css" type="text/css"/>
+          <link rel="stylesheet" href="/css/medium-editor-insert-plugin.css" type="text/css"/>
 				</Helmet>
 
 				<Wrapper>
