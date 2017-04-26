@@ -9,6 +9,7 @@ import api from 'components/api'
 import slider from 'react-slick'
 import Infinite from 'react-infinite'
 import CircularProgress from 'material-ui/CircularProgress';
+import LinearProgress from 'material-ui/LinearProgress';
 
 const Wrapper = styled.div`
 	@media (max-width:480px) {
@@ -93,7 +94,7 @@ const HomePage2 = React.createClass({
 		this.latestStories = []
 		this.writer = []
 		this.column = []
-
+		
 		return {
 			latestStories:[],
 			refresh: 0,
@@ -101,19 +102,30 @@ const HomePage2 = React.createClass({
 			isInfiniteLoading: false,
 			loadOffset:300,
 			feedCount:0,
-			isMobile:false
+			isMobile:false,
+			completed:0
 		}
 	},
-
+	componentWillMount(){
+		this.timer = this.progress(0)
+	},
 	componentDidMount(){
 		this.getPublisher()
 		this.getFeed()
 		this.getSidebar()
 		this.setState({
-			isMobile:window.isMobile()
+			isMobile:window.isMobile(),
+			completed:100
 		})
-		//console.log(window.isMobile())
+
+		// this.progress(100)
 	},
+
+	// componentDidUpdate(prevProps, prevState){
+  //   clearTimeout(this.timer);
+	// 	this.progress(100)
+  // },
+
 
 	getPublisher(){
 		api.getPublisher()
@@ -191,17 +203,34 @@ const HomePage2 = React.createClass({
 		});
 	},
 
+	componentWillUnmount() {
+    clearTimeout(this.timer);
+  },
+
+  progress(completed) {
+		if(this.state.completed<100){
+			if (completed > 100) {
+      	this.setState({completed: 100});
+			} else {
+				this.setState({completed});
+				const diff = Math.random() * 10;
+				this.timer = setTimeout(() => this.progress(completed + diff), 200);
+			}
+		}
+  },
+
 	elementInfiniteLoad() {
 			return <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>;
 	},
 
 	render(){
 		//console.log('context', this.context.setting)
-		var {count,loadOffset,isInfiniteLoading,latestStories,isMobile} = this.state
+		var {count,loadOffset,isInfiniteLoading,latestStories,isMobile,completed} = this.state
 		let pub = this.publisher
 		// console.log('PUB', pub)
 		return (
 		    <Wrapper>
+					{completed<100&&<LinearProgress mode="determinate" value={completed} />}
 		    	{pub && <BGImg src={pub.cover.medium} opacity={-1} style={{width:'100%',height:'350px'}}
 					className="hidden-mob" alt={pub.name} />}
 

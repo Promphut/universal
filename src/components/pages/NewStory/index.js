@@ -227,6 +227,9 @@ const NewStory = React.createClass({
 
   componentWillUnmount(){
     clearInterval(this.interval);
+    if(this.state.chooseLayout!=null){
+      this.editor.destroy()
+    }
   },
 
   chooseLayout(layout) {

@@ -1,15 +1,20 @@
-import React from 'react'
-import styled from 'styled-components'
-import {PrimaryButton, SecondaryButton, UploadPicture, Footer} from 'components'
-import TextField from 'material-ui/TextField';
-import Chip from 'material-ui/Chip';
-import auth from 'components/auth'
+import React from "react";
+import styled from "styled-components";
+import {
+  PrimaryButton,
+  SecondaryButton,
+  UploadPicture
+} from "components";
+import TextField from "material-ui/TextField";
+import Chip from "material-ui/Chip";
+import auth from "components/auth";
 //import Request from 'superagent'
-import AutoComplete from 'material-ui/AutoComplete';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton'
-import {findDOMNode as dom } from 'react-dom'
-import api from 'components/api'
+import AutoComplete from "material-ui/AutoComplete";
+import Dialog from "material-ui/Dialog";
+import FlatButton from "material-ui/FlatButton";
+import { findDOMNode as dom } from "react-dom";
+import api from "components/api";
+import utils from 'components/utils'
 
 const Container = styled.form`
   width:100%;
@@ -25,14 +30,14 @@ const Container = styled.form`
     font-family:'Nunito';
     font-size:18px;
   }
-`
+`;
 
 const Flex = styled.div`
   display:flex;
   items-align:center;
   flex-flow: row wrap;
   margin:50px 0 0 50px;
-`
+`;
 
 const Title = styled.div`
   flex:2 150px;
@@ -40,32 +45,32 @@ const Title = styled.div`
   color:#C2C2C2;
   font-size:17px;
   padding-top:15px;
-`
+`;
 
 const Edit = styled.div`
   flex:6 450px;
   max-width:450px;
-`
+`;
 
 const Social = styled.div`
   color:#8F8F8F;
   font-size:19px;
   overflow:hidden;
-`
+`;
 
 const Desc = styled.div`
   color:#C2C2C2;
   font-size:14px;
   font-style:italic;
-`
+`;
 
 const TextStatus = styled.div`
-  color:${props=> props.theme.primaryColor};
+  color:${props => props.theme.primaryColor};
   font-size:15px;
   font-style:italic;
   float:left;
   margin:10px 0 0 15px;
-`
+`;
 
 const Admin = styled.div`
   color:#8F8F8F;
@@ -79,14 +84,14 @@ const Admin = styled.div`
     text-decoration:underline;
     text-shadow: 0 0 1px #C2C2C2;
   }
-`
+`;
 
 const Divider = styled.div`
   width:100%;
   height:1px;
   background-color:#E2E2E2;
   margin:40px 0 40px 0;
-`
+`;
 /*const dataSource3 = [
   {textKey: 'Some Text', valueKey: 'someFirstValue'},
   {textKey: 'Some Text', valueKey: 'someSecondValue'},
@@ -94,281 +99,321 @@ const Divider = styled.div`
 */
 
 const ColumnSettingPage = React.createClass({
-  getInitialState(){
-
-    return{
-      column:{},
-      user:{},
-
-			cover:{
-        medium: ''
+  getInitialState() {
+    return {
+      user: {},
+      column: {
+        name: "",
+        url: "",
+        desc: "",
+        cover: {
+          medium: ""
+        }
       },
-      dialogText:'',
 
-      writers:[],
+      cover: {
+        medium: ""
+      },
+      dialogText: "",
+
+      writers: [],
       writersAutoComplete: [],
       writerToRemove: {},
-      writerSearchText: '',
+      writerSearchText: "",
 
-			editors:[],
+      editors: [],
       editorsAutoComplete: [],
       editorToRemove: {},
-      editorSearchText: '',
+      editorSearchText: "",
 
-      switchTo:'',
+      switchTo: "",
 
-      textStatus:'Unsave',
-      error:false,
-      dialog:false,
-      errText:'',
-      descText:''
-    }
+      textStatus: "Unsave",
+      error: false,
+      dialog: false,
+      errText: "",
+      descText: ""
+    };
   },
 
-  componentDidMount(){
-    this.getWriters()
-		this.getEditors()
-    this.getColumn()
+  componentDidMount() {
+    this.getWriters();
+    this.getEditors();
+    this.getColumn();
   },
 
-	setData(){
-    var {name,shortDesc,slug,cover} = this.state.column
-    document.getElementById('name').value = !name?'':name
-    document.getElementById('shortDesc').value = !shortDesc?'':shortDesc
-    document.getElementById('slug').value = !slug?'':"/"+slug
-		this.setState({cover:cover})
-  },
+  // setData(){
+  //   var {name,shortDesc,slug,cover} = this.state.column
+  //   document.getElementById('name').value = !name?'':name
+  //   document.getElementById('shortDesc').value = !shortDesc?'':shortDesc
+  //   document.getElementById('slug').value = !slug?'':"/"+slug
+  // 	this.setState({cover:cover})
+  // },
 
-  getEditors(){
-    let cid = this.props.params.cid
-    if(cid==null) return
+  getEditors() {
+    let cid = this.props.params.cid;
+    if (cid == null) return;
 
-    api.getEditors(cid)
-    .then(editors => {
+    api.getEditors(cid).then(editors => {
       editors = editors.map(editor => {
-        return {text:editor.username, value:editor.id}
-      })
+        return { text: editor.username, value: editor.id };
+      });
 
-      this.setState({editors:editors})
-    })
+      this.setState({ editors: editors });
+    });
   },
 
-  getWriters(){
-    let cid = this.props.params.cid
-    if(cid==null) return
+  getWriters() {
+    let cid = this.props.params.cid;
+    if (cid == null) return;
 
-    api.getColumnWriters(cid)
-    .then(writers => {
+    api.getColumnWriters(cid).then(writers => {
       writers = writers.map(writer => {
-        return {text:writer.username, value:writer.id}
-      })
+        return { text: writer.username, value: writer.id };
+      });
 
-      this.setState({writers:writers})
-    })
+      this.setState({ writers: writers });
+    });
   },
 
-  getColumn(){
-    let cid = this.props.params.cid
-    if(cid==null) return
+  getColumn() {
+    let cid = this.props.params.cid;
+    if (cid == null) return;
 
-    api.getColumn(cid)
-    .then(col => {
-      //console.log(res.body)
-      this.setState({column:col})
-      this.setData()
-    })
+    api.getColumn(cid).then(col => {
+      //console.log(col)
+      this.column = col
+      this.setState({ column: col });
+    });
   },
 
-	deleteWriter(){
-    let cid = this.props.params.cid
-    if(cid==null) return
+  deleteWriter() {
+    let cid = this.props.params.cid;
+    if (cid == null) return;
 
-    let {writers, writerToRemove} = this.state
-    writers = _.reject( writers, {value: writerToRemove.value} )
+    let { writers, writerToRemove } = this.state;
+    writers = _.reject(writers, { value: writerToRemove.value });
 
-    api.removeWriter(writerToRemove.value, cid)
-    .then(result => {
+    api.removeWriter(writerToRemove.value, cid).then(result => {
       this.setState({
         dialog: false,
-        writerToRemove:{},
+        writerToRemove: {},
         writers
       });
-    })
+    });
   },
 
-	deleteEditor(){
-    let cid = this.props.params.cid
-    if(cid==null) return
+  deleteEditor() {
+    let cid = this.props.params.cid;
+    if (cid == null) return;
 
-    let {editors, editorToRemove} = this.state
-    editors = _.reject( editors, {value: editorToRemove.value} )
+    let { editors, editorToRemove } = this.state;
+    editors = _.reject(editors, { value: editorToRemove.value });
 
-    api.removeEditor(editorToRemove.value, cid)
-    .then(result => {
+    api.removeEditor(editorToRemove.value, cid).then(result => {
       this.setState({
         dialog: false,
-        editorToRemove:{},
+        editorToRemove: {},
         editors
       });
-    })
+    });
   },
 
-  handleClose(e){
-    this.setState({dialog: false});
+  handleClose(e) {
+    this.setState({ dialog: false });
   },
 
-	confirmDeleteEditor(editorToRemove){
-		this.setState({
+  confirmDeleteEditor(editorToRemove) {
+    this.setState({
       dialog: true,
-      dialogText:'Are you sure to delete '+ editorToRemove.text +' ?',
-      switchTo:'editor',
+      dialogText: "Are you sure to delete " + editorToRemove.text + " ?",
+      switchTo: "editor",
       editorToRemove
     });
-	},
+  },
 
-	confirmDeleteWriter(writerToRemove){
-		this.setState({
+  confirmDeleteWriter(writerToRemove) {
+    this.setState({
       dialog: true,
-      dialogText:'Are you sure to delete '+ writerToRemove.text +' ?',
-      switchTo:'writer',
+      dialogText: "Are you sure to delete " + writerToRemove.text + " ?",
+      switchTo: "writer",
       writerToRemove
     });
-	},
-
-  updateColumn(e){
-    e.preventDefault()
-
-    let cid = this.props.params.cid
-    if(cid==null) return
-
-    let data = {}
-    let input = dom(this.refs.columnForm).getElementsByTagName("input")
-    input = [].slice.call(input)
-    input.forEach((field,index)=>{
-      data[field.name] = field.value
-    })
-    data['shortDesc'] = document.getElementById('shortDesc').value
-
-    let column = {
-      name:data.name,
-      shortDesc:data.shortDesc,
-      slug:data.slug,
-    }
-    api.updateColumn(cid, column)
-    .then(col => {
-      this.setState({
-        textStatus:'Saved successfully',
-        error:false
-      })
-    })
-    .catch(err => {
-      this.setState({
-        textStatus:err.message,
-        error:true
-      })
-    })
   },
 
-  fetchEditorsAutoComplete(keyword){
+  updateColumn(e) {
+    e.preventDefault();
 
-    this.setState({editorSearchText:keyword})
+    let cid = this.props.params.cid;
+    if (cid == null) return;
 
-    let inp = keyword.split('').length,
-        a = []
+    let data = {};
+    // let input = dom(this.refs.columnForm).getElementsByTagName("input");
+    // input = [].slice.call(input);
+    // input.forEach((field, index) => {
+    //   data[field.name] = field.value;
+    // });
+    // data["shortDesc"] = document.getElementById("shortDesc").value;
+
+    let column = this.state.column
+    api
+      .updateColumn(cid, column)
+      .then(col => {
+        this.setState({
+          textStatus: "Saved successfully",
+          error: false
+        });
+      })
+      .catch(err => {
+        this.setState({
+          textStatus: err.message,
+          error: true
+        });
+      });
+  },
+
+  fetchEditorsAutoComplete(keyword) {
+    this.setState({ editorSearchText: keyword });
+
+    let inp = keyword.split("").length, a = [];
     //this.setState({userToAdmin:[text,text+text]})
-    if(inp==3){
-      api.getUsers(keyword)
-      .then(users => {
+    if (inp == 3) {
+      api.getUsers(keyword).then(users => {
         users.map((user, index) => {
-          a[index] = {text:user.username, value:user.id}
-        })
+          a[index] = { text: user.username, value: user.id };
+        });
 
         this.setState({
-          editorsAutoComplete:a
-        })
-      })
+          editorsAutoComplete: a
+        });
+      });
     }
   },
 
-  fetchWritersAutoComplete(keyword){
+  fetchWritersAutoComplete(keyword) {
+    this.setState({ writerSearchText: keyword });
 
-    this.setState({writerSearchText:keyword})
-
-    let inp = keyword.split('').length,
-        a = []
+    let inp = keyword.split("").length, a = [];
     //this.setState({userToAdmin:[text,text+text]})
-    if(inp==3){
-      api.getUsers(keyword)
-      .then(users => {
+    if (inp == 3) {
+      api.getUsers(keyword).then(users => {
         users.map((user, index) => {
-          a[index] = {text:user.username, value:user.id}
-        })
+          a[index] = { text: user.username, value: user.id };
+        });
 
         this.setState({
-          writersAutoComplete:a
-        })
-      })
+          writersAutoComplete: a
+        });
+      });
     }
   },
 
-  addEditor(item, index){
-    let cid = this.state.column._id
-    if(cid==null) return
+  addEditor(item, index) {
+    let cid = this.state.column._id;
+    if (cid == null) return;
 
-    if(typeof item==='object'){
+    if (typeof item === "object") {
+      api
+        .addEditorToColumn(parseInt(item.value), cid)
+        .then(result => {
+          let editors = this.state.editors.slice();
+          editors.push(item);
 
-      api.addEditorToColumn(parseInt(item.value), cid)
-      .then(result => {
-        let editors = this.state.editors.slice()
-        editors.push(item)
-
-        this.setState({
-          editors: editors,
-          editorSearchText: ''
+          this.setState({
+            editors: editors,
+            editorSearchText: ""
+          });
         })
-      })
-      .catch(err => {})
+        .catch(err => {});
     }
   },
 
-  addWriter(item, index){
-    let cid = this.state.column._id
-    if(cid==null) return
+  addWriter(item, index) {
+    let cid = this.state.column._id;
+    if (cid == null) return;
 
-    if(typeof item==='object'){
+    if (typeof item === "object") {
+      api
+        .addWriterToColumn(parseInt(item.value), cid)
+        .then(result => {
+          let writers = this.state.writers.slice();
+          writers.push(item);
 
-      api.addWriterToColumn(parseInt(item.value), cid)
-      .then(result => {
-        let writers = this.state.writers.slice()
-        writers.push(item)
-
-        this.setState({
-          writers: writers,
-          writerSearchText: ''
+          this.setState({
+            writers: writers,
+            writerSearchText: ""
+          });
         })
-      })
-      .catch(err => {})
+        .catch(err => {});
     }
   },
 
-  editDesc(e){
-    var val = e.target.value.split('')
-    if(val.length>=140){
+  editDesc(e) {
+    var val = e.target.value.split("");
+    if (val.length >= 140) {
       this.setState({
-        errText:'Maximun characters'
-      })
-      return
-    }else{
+        errText: "Maximun characters"
+      });
+      return;
+    } else {
       this.setState({
-        descText:e.target.value,
-        errText:''
-      })
+        descText: e.target.value,
+        errText: ""
+      });
     }
   },
 
-  render(){
-    var {theme} = this.context.setting.publisher
-    var {descText,errText,dialog,error,textStatus,dialogText,cover,writers,editors,switchTo, editorsAutoComplete, writersAutoComplete, writerSearchText,editorSearchText} = this.state
+  resetDate(e) {
+    if (e) e.preventDefault();
+
+    this.setState({
+      column: this.column
+    });
+  },
+
+  columnChanged(e){
+    const name = e.target.name
+    if(name=='shortDesc'){
+      var val = e.target.value.split('')
+      if(val.length>=140){
+        this.setState({
+          errText:'Maximun characters'
+        })
+        return
+      }else{
+        this.setState({
+          errText:''
+        })
+      }
+    }
+    let col = _.cloneDeep(this.state.column)
+    utils.set(col, name, e.target.value)
+    this.setState({
+      column: col
+    })
+  },
+
+
+  render() {
+    let col = this.state.column;
+    //console.log(col);
+    var { theme } = this.context.setting.publisher;
+    var {
+      descText,
+      errText,
+      dialog,
+      error,
+      textStatus,
+      dialogText,
+      cover,
+      writers,
+      editors,
+      switchTo,
+      editorsAutoComplete,
+      writersAutoComplete,
+      writerSearchText,
+      editorSearchText
+    } = this.state;
     const actions = [
       <FlatButton
         label="Cancel"
@@ -378,137 +423,178 @@ const ColumnSettingPage = React.createClass({
       <FlatButton
         label="Confirm"
         secondary={true}
-        onTouchTap={switchTo=='writer'?this.deleteWriter:this.deleteEditor}
-      />,
+        onTouchTap={
+          switchTo == "writer" ? this.deleteWriter : this.deleteEditor
+        }
+      />
     ];
-    return(
-        <Container onSubmit={this.updateColumn} ref='columnForm'>
-          <Dialog
-            actions={actions}
-            modal={false}
-            contentStyle={{width:'600px'}}
-            open={dialog}
-            onRequestClose={this.handleClose}
-          >
-            <p style={{fontSize:'20px'}}>{dialogText}</p>
-          </Dialog>
-          <div  className="head sans-font">PROFILE</div>
-          <Flex>
-            <Title>
-              <div className="sans-font">Name</div>
-            </Title>
-            <Edit>
-              <TextField id='name' name='name'/>
-            </Edit>
-          </Flex>
-          <Flex>
-            <Title>
-              <div className="sans-font">URL</div>
-            </Title>
-            <Edit>
-              <Social className="sans-font">
-                <TextField style={{float:'left',margin:'5px 0 0 0'}} id='slug' name='slug'/>
-              </Social>
-              <Desc className='sans-font'>Note that changing slug will affect the whole URL structure of this publisher, meaning that previously used URLs won't be able to be accessed anymore. Are you sure to edit?</Desc>
-            </Edit>
-          </Flex>
-          <Flex>
-            <Title>
-              <div className="sans-font">Description</div>
-            </Title>
-            <Edit>
-              <TextField
-                multiLine={true}
-                fullWidth={true}
-                floatingLabelText="140 characters"
-                floatingLabelFixed={true}
-                rows={3}
-                rowsMax={6}
-                value={descText}
-                onChange={this.editDesc}
-                errorText={errText}
-                id='shortDesc'
-                name='shortDesc'
+    return (
+      <Container onSubmit={this.updateColumn} ref="columnForm">
+        <Dialog
+          actions={actions}
+          modal={false}
+          contentStyle={{ width: "600px" }}
+          open={dialog}
+          onRequestClose={this.handleClose}
+        >
+          <p style={{ fontSize: "20px" }}>{dialogText}</p>
+        </Dialog>
+        <div className="head sans-font">PROFILE</div>
+        <Flex>
+          <Title>
+            <div className="sans-font">Name</div>
+          </Title>
+          <Edit>
+            <TextField 
+              id="name" 
+              name="name"
+              value={col.name}
+              onChange={this.columnChanged}
               />
-            </Edit>
-          </Flex>
-          <Flex>
-            <Title>
-              <div className="sans-font">Cover picture</div>
-            </Title>
-            <Edit>
-              <UploadPicture src={cover.medium} path={'/publishers/'+config.PID+'/columns/'+this.props.params.cid+'/cover'} size='1920x340' height={90} width={200} labelStyle={{top:'40px'}} type='cover'/>
-            </Edit>
-          </Flex>
-          {/*<Divider/>*/}
-          <br/><br/><br/>
-          <div  className="head sans-font">TEAM</div>
-          <Flex>
-            <Title>
-              <div className="sans-font">Writers</div>
-            </Title>
-            <Edit>
-              <div className='row' style={{marginTop:'15px'}}>
-                {writers.map((data, index) => (
-                  <Chip
-                    key={data.value}
-                    onRequestDelete={() => this.confirmDeleteWriter(data)}
-                    style={{margin:'4px'}}
-                  >
-                    {data.text}
-                  </Chip>
-                ))}
-                <AutoComplete
-                  hintText="Add an writer..."
-                  filter={AutoComplete.noFilter}
-                  dataSource={writersAutoComplete}
-                  onUpdateInput={this.fetchWritersAutoComplete}
-                  onNewRequest={this.addWriter}
-                  searchText={writerSearchText}
-                  style={{marginLeft:'10px', height:'32px'}}
-                />
-              </div>
-            </Edit>
-          </Flex>
-          <Flex>
-            <Title>
-              <div className="sans-font">Editors</div>
-            </Title>
-            <Edit>
-              <div className='row' style={{marginTop:'15px'}}>
-                {editors.map((data,index)=>(
-                  <Chip
-                    key={data.value}
-                    onRequestDelete={() => this.confirmDeleteEditor(data)}
-                    style={{margin:'4px'}}
-                  >
-                    {data.text}
-                  </Chip>
-                ))}
-                <AutoComplete
-                  hintText="Add an editor..."
-                  filter={AutoComplete.noFilter}
-                  dataSource={editorsAutoComplete}
-                  onUpdateInput={this.fetchEditorsAutoComplete}
-                  onNewRequest={this.addEditor}
-                  searchText={editorSearchText}
-                  style={{marginLeft:'10px', height:'32px'}}
-                />
-              </div>
-            </Edit>
-          </Flex>
-          <div className='sans-font' style={{marginTop:'80px',overflow:'hidden'}}>
-            <PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/>
-            <SecondaryButton label='Reset' style={{float:'left',margin:'0 20px 0 0'}}/>
-          <TextStatus style={{color:error?'#D8000C':theme.accentColor}}>{textStatus}</TextStatus></div>
-        <Footer/>
+          </Edit>
+        </Flex>
+        <Flex>
+          <Title>
+            <div className="sans-font">URL</div>
+          </Title>
+          <Edit>
+            <Social className="sans-font">
+              <TextField
+                style={{ float: "left", margin: "5px 0 0 0" }}
+                id="url"
+                name="url"
+                value={col.url}
+                onChange={this.columnChanged}
+              />
+            </Social>
+            <Desc className="sans-font">
+              Note that changing slug will affect the whole URL structure of this publisher, meaning that previously used URLs won't be able to be accessed anymore. Are you sure to edit?
+            </Desc>
+          </Edit>
+        </Flex>
+        <Flex>
+          <Title>
+            <div className="sans-font">Description</div>
+          </Title>
+          <Edit>
+            <TextField
+              multiLine={true}
+              fullWidth={true}
+              floatingLabelText="140 characters"
+              floatingLabelFixed={true}
+              rows={3}
+              rowsMax={6}
+              errorText={errText}
+              id="shortDesc"
+              name="shortDesc"
+              value={col.shortDesc}
+              onChange={this.columnChanged}
+            />
+          </Edit>
+        </Flex>
+        <Flex>
+          <Title>
+            <div className="sans-font">Cover picture</div>
+          </Title>
+          <Edit>
+            <UploadPicture
+              src={col.cover.medium}
+              path={
+                "/publishers/" +
+                  config.PID +
+                  "/columns/" +
+                  this.props.params.cid +
+                  "/cover"
+              }
+              size="1920x340"
+              height={90}
+              width={200}
+              labelStyle={{ top: "40px" }}
+              type="cover"
+            />
+          </Edit>
+        </Flex>
+        {/*<Divider/>*/}
+        <br /><br /><br />
+        <div className="head sans-font">TEAM</div>
+        <Flex>
+          <Title>
+            <div className="sans-font">Writers</div>
+          </Title>
+          <Edit>
+            <div className="row" style={{ marginTop: "15px" }}>
+              {writers.map((data, index) => (
+                <Chip
+                  key={data.value}
+                  onRequestDelete={() => this.confirmDeleteWriter(data)}
+                  style={{ margin: "4px" }}
+                >
+                  {data.text}
+                </Chip>
+              ))}
+              <AutoComplete
+                hintText="Add an writer..."
+                filter={AutoComplete.noFilter}
+                dataSource={writersAutoComplete}
+                onUpdateInput={this.fetchWritersAutoComplete}
+                onNewRequest={this.addWriter}
+                searchText={writerSearchText}
+                style={{ marginLeft: "10px", height: "32px" }}
+              />
+            </div>
+          </Edit>
+        </Flex>
+        <Flex>
+          <Title>
+            <div className="sans-font">Editors</div>
+          </Title>
+          <Edit>
+            <div className="row" style={{ marginTop: "15px" }}>
+              {editors.map((data, index) => (
+                <Chip
+                  key={data.value}
+                  onRequestDelete={() => this.confirmDeleteEditor(data)}
+                  style={{ margin: "4px" }}
+                >
+                  {data.text}
+                </Chip>
+              ))}
+              <AutoComplete
+                hintText="Add an editor..."
+                filter={AutoComplete.noFilter}
+                dataSource={editorsAutoComplete}
+                onUpdateInput={this.fetchEditorsAutoComplete}
+                onNewRequest={this.addEditor}
+                searchText={editorSearchText}
+                style={{ marginLeft: "10px", height: "32px" }}
+              />
+            </div>
+          </Edit>
+        </Flex>
+        <div
+          className="sans-font"
+          style={{ marginTop: "80px", overflow: "hidden" }}
+        >
+          <PrimaryButton
+            label="Save"
+            type="submit"
+            style={{ float: "left", margin: "0 20px 0 0" }}
+          />
+          <SecondaryButton
+            label="Reset"
+            onClick={this.resetDate}
+            style={{ float: "left", margin: "0 20px 0 0" }}
+          />
+          <TextStatus style={{ color: error ? "#D8000C" : theme.accentColor }}>
+            {textStatus}
+          </TextStatus>
+        </div>
       </Container>
-    )
-  },
-})
+    );
+  }
+});
 ColumnSettingPage.contextTypes = {
-	setting: React.PropTypes.object
+  setting: React.PropTypes.object
 };
 
-
-export default ColumnSettingPage
+export default ColumnSettingPage;
