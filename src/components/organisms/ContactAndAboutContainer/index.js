@@ -114,7 +114,7 @@ const ContactAndAboutContainer = React.createClass({
 
 	    return (
 	      <Wrapper>
-					{pub.cover && <BGImg src={pub.cover.medium} style={{width:'100%',height:'350px'}} className="hidden-mob" />}
+					{pub.cover && <BGImg src={pub.cover.medium} opacity={-1} style={{width:'100%',height:'350px'}} className="hidden-mob" />}
 
 					<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
 	        <Content>

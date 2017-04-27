@@ -6,7 +6,7 @@ import Cookies from 'react-cookie'
 import Request from 'superagent'
 import _ from 'lodash'
 import {
-    HomePage2, Page3, MoodboardPage, SignInPage, SignUpPage,
+    HomePage2, Page3, MoodboardPage, SignInPage, SignUpPage,NewsPage,
     PublisherDashboardPage,ColumnEditor,ColumnSettingPage,PublisherStoryPage,UserSetting,
     PublisherSettingPage, ForgetPasswordPage, PublisherEditor, PublisherContactAndAboutPage,
     UserSettingProfile, UserSettingAccount, UserSettingStory, ColumnPage, PublisherPage,
@@ -137,6 +137,8 @@ const logout = (nextState, replace, next) => {
 const routes = (
   <Route path="/" component={App}>
     <IndexRoute component={HomePage2} />
+    <Route path="news" component={NewsPage} />
+
     <Route path='stories/columns' component={AllColumn}/>
     <Route path='stories/:columnSlug' component={ColumnPage} onEnter={getColumnFromSlug}/>
     {/* STORY 1: HAVE COLUMN */ }

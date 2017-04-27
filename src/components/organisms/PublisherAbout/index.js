@@ -175,6 +175,10 @@ const PublisherAbout = React.createClass({
 		//this.editor.setContent(this.state.aboutUs || '')
 	},
 
+	componentWillUnmount(){
+		this.editor.destroy()
+	},
+
 	updateAboutUs(e) {
 		if (e) e.preventDefault()
 
