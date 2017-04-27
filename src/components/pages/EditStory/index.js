@@ -18,6 +18,7 @@ import AutoComplete from 'material-ui/AutoComplete';
 import Chip from 'material-ui/Chip';
 import moment from 'moment'
 import CircularProgress from 'material-ui/CircularProgress';
+import SwipeableViews from 'react-swipeable-views'
 import {Helmet} from 'react-helmet'
 import api from 'components/api'
 import _ from 'lodash'
@@ -141,6 +142,38 @@ const Delete = styled.div`
     color:#222;
   }
 `
+const BasicSetting = styled.div`
+`
+
+const AdvanceSetting = styled.div`
+`
+
+const AdvancedEdit = styled.div`
+  font-family: 'Nunito', 'Mitr';
+  color: #8E8E8E;
+  text-decoration: underline;
+  cursor: pointer;
+  float: right;
+  display: inline-block;
+
+  &:hover {
+    color: #222;
+  }
+`
+const HintLabel = styled.div`
+  margin-left: 130px;
+  color: #C2C2C2;
+  font-style: italic;
+  font-size: 11px;
+  line-height: 8px;
+`
+const styles = {
+  backButton: {
+    color: '#8E8E8E',
+    cursor: 'pointer',
+    height: '20px'
+  }
+}
 
 const EditStory = React.createClass({
   SAVE_STATUS: {
@@ -172,11 +205,15 @@ const EditStory = React.createClass({
       alert:false,
 
       title:'',
+      slug:'',
+      metaDesc:'',
+      metaTitle:'',
 
       saveOnload:false,
       publishStatus:'',
 
-      status: this.SAVE_STATUS.INITIAL
+      status: this.SAVE_STATUS.INITIAL,
+      settingSlideIndex:0
     }
   },
 
@@ -275,7 +312,6 @@ const EditStory = React.createClass({
     })
   },
 
-
   componentWillUnmount(){
     clearInterval(this.interval);
     this.editor.destroy()
@@ -328,12 +364,15 @@ const EditStory = React.createClass({
 
   getStoryDetail(){
     let story = this.props.params.story
-    console.log('getStoryDetail', story.contentType)
+    //console.log('getStoryDetail', story.contentType)
+    //console.log(story)
     if(story){
       this.setState({
         story:story,
         title:story.title,
-
+        slug:story.slug,
+        metaTitle:story.meta&&story.meta.title,
+        metaDesc:story.meta&&story.meta.desc,
         column: story.column ? story.column._id : 'no',
         contentType: story.contentType ? story.contentType : 'NEWS'
       })
@@ -540,10 +579,56 @@ const EditStory = React.createClass({
       })
   },
 
+  settingHandleChange(value) {
+    this.setState({
+      settingSlideIndex: value
+    })
+  },
+
+  changeSlug(e){
+    this.setState({slug:e.target.value})
+  },
+
+  changeTitle(e){
+    this.setState({metaTitle:e.target.value})
+  },
+
+  changeDesc(e){
+    this.setState({metaDesc:e.target.value})
+  },
+
+  changeMeta(){
+    var sid =this.state.sid
+    var slug = this.state.slug
+    var title = this.state.metaTitle
+    var desc = this.state.metaDesc
+    var s = {
+      slug,
+      meta:{
+        title,
+        desc
+      }
+    }
+    api.updateStory(sid, s).then((story)=>{
+      this.setState({
+        story
+      })
+    })
+  },
+  resetMeta(){
+    var s = this.state.story
+    //console.log(s)
+    this.setState({
+      slug:s.slug,
+      metaTitle:s.meta.title,
+      metaDesc:s.meta.desc
+    })
+  },
+
   render(){
     let {chooseLayout,layout,open,anchorEl,column,contentType,tag,addTag,searchText,
       columnList,contentTypeList,sid,alert,alertWhere,alertConfirm,alertDesc,saveStatus,
-      title,publishStatus,story} = this.state
+      title,publishStatus,story, slug,metaTitle,metaDesc} = this.state
     const dataSourceConfig = {text: 'text', value: 'value', id:'id'};
 
     let {theme} = this.context.setting.publisher
@@ -589,92 +674,122 @@ const EditStory = React.createClass({
           onRequestClose={this.handleRequestClose}
           style={{border:'3px solid '+theme.accentColor,width:'482px',padding:'30px',marginTop:8,boxShadow:'none',overflow:'hidden'}}
         >
-          <div className='row' style={{display:'block',overflow:'hidden'}}>
-            <Label className="nunito-font or" style={{float:'left',marginTop:'22px'}}>Column : </Label>
-            <DropDownMenu
-              value={column}
-              onChange={this.chooseColumn}
-              autoWidth={false}
-              labelStyle={{top:'-11px'}}
-              iconStyle={{top:'-8px',left:'300px'}}
-              style={{margin:'15px 0 15px 15px',width:'340px',height:'34px',border:'1px solid #e2e2e2',float:'left'}}
-              underlineStyle={{display:'none'}}
-              menuStyle={{width:'320px'}}
-              menuItemStyle={{width:'320px'}}
-              selectedMenuItemStyle={{color:'#222',background:theme.accentColor}}
-            >
-              <MenuItem value='no' primaryText='No Column' />
-              {columnList.length!=0 && columnList.map((data,index)=>(
-                <MenuItem value={data._id} primaryText={data.name} key={index} />
-              ))}
-            </DropDownMenu>
-            <Label className="nunito-font or" style={{float:'left',marginTop:'22px',minWidth:'60px'}}>Type : </Label>
-            <DropDownMenu
-              value={contentTypeId}
-              onChange={this.chooseContentType}
-              autoWidth={false}
-              labelStyle={{top:'-11px'}}
-              iconStyle={{top:'-8px',left:'300px'}}
-              style={{margin:'15px 0 15px 15px',width:'340px',height:'34px',border:'1px solid #e2e2e2',float:'left'}}
-              underlineStyle={{display:'none'}}
-              menuStyle={{width:'320px'}}
-              menuItemStyle={{width:'320px'}}
-              selectedMenuItemStyle={{color:'#222',background:theme.accentColor}}
-            >
-              <MenuItem value='no' primaryText='No Type' />
-              {contentTypeList.length!=0 && contentTypeList.map((data,index)=>(
-                <MenuItem value={index} primaryText={data} key={index} />
-              ))}
-            </DropDownMenu>
-          </div>
-          <div className='row' style={{display:'block',overflow:'hidden'}}>
-            <Label className="nunito-font" style={{float:'left',marginTop:'26px'}}>Add up to 5 tags : </Label>
-            <div className='row' style={{marginTop:'15px'}}>
-              {addTag.length!=0?addTag.map((data,index)=>(
-                <Chip
-                  key={index}
-                  onRequestDelete={() => this.removeSelectedTag(data,index)}
-                  style={{margin:'4px'}}
-                >
-                  {data.text}
-                </Chip>
-              )):''}
-              {tag.length!=0?<AutoComplete
-                hintText="Add a Tag..."
-                dataSource={_.pullAllWith(tag, addTag, _.isEqual)}
-                filter={AutoComplete.fuzzyFilter}
-                onNewRequest={this.selectedTag}
-                onUpdateInput={this.handleUpdateInput}
-                openOnFocus={true}
-                searchText={searchText}
-                dataSourceConfig={dataSourceConfig}
-              />:''}
+        <SwipeableViews
+          index={this.state.settingSlideIndex}
+          onChangeIndex={this.settingHandleChange}
+        >
+          <BasicSetting>
+            <AdvancedEdit onClick={() => this.settingHandleChange(1)}>Advanced Edit</AdvancedEdit>
+            <div className='row' style={{display:'block',overflow:'hidden'}}>
+              <Label className="nunito-font or" style={{float:'left',marginTop:'22px'}}>Column : </Label>
+              <DropDownMenu
+                value={column}
+                onChange={this.chooseColumn}
+                autoWidth={false}
+                labelStyle={{top:'-11px'}}
+                iconStyle={{top:'-8px',left:'300px'}}
+                style={{margin:'15px 0 15px 15px',width:'340px',height:'34px',border:'1px solid #e2e2e2',float:'left'}}
+                underlineStyle={{display:'none'}}
+                menuStyle={{width:'320px'}}
+                menuItemStyle={{width:'320px'}}
+                selectedMenuItemStyle={{color:'#222',background:theme.accentColor}}
+              >
+                <MenuItem value='no' primaryText='No Column' />
+                {columnList.length!=0 && columnList.map((data,index)=>(
+                  <MenuItem value={data._id} primaryText={data.name} key={index} />
+                ))}
+              </DropDownMenu>
+              <Label className="nunito-font or" style={{float:'left',marginTop:'22px',minWidth:'60px'}}>Type : </Label>
+              <DropDownMenu
+                value={contentTypeId}
+                onChange={this.chooseContentType}
+                autoWidth={false}
+                labelStyle={{top:'-11px'}}
+                iconStyle={{top:'-8px',left:'300px'}}
+                style={{margin:'15px 0 15px 15px',width:'340px',height:'34px',border:'1px solid #e2e2e2',float:'left'}}
+                underlineStyle={{display:'none'}}
+                menuStyle={{width:'320px'}}
+                menuItemStyle={{width:'320px'}}
+                selectedMenuItemStyle={{color:'#222',background:theme.accentColor}}
+              >
+                <MenuItem value='no' primaryText='No Type' />
+                {contentTypeList.length!=0 && contentTypeList.map((data,index)=>(
+                  <MenuItem value={index} primaryText={data} key={index} />
+                ))}
+              </DropDownMenu>
             </div>
-          </div>
-          <Divider/>
-          <div>
-            <Label className="nunito-font" >Select cover picture : </Label>
-            <div className='row' style={{overflow:'hidden',marginTop:'20px'}}>
-              <div className='col-4'>
-                <UploadPicture path={'/stories/'+sid+'/covermobile'} src={story.coverMobile&&story.coverMobile.medium} size='330x500' width={96} height={137} label='Portrait Cover' type='coverMobile' style={{width:'96px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
-              </div>
-              <div className='col-1'>
-                <div style={{marginTop:'58px'}}>Or</div>
-              </div>
-              <div className='col-6'>
-                <UploadPicture path={'/stories/'+sid+'/cover'} src={story.cover&&story.cover.medium} size='1920x860' width={194} height={137} label='Landscape Cover' type='cover' style={{width:'194px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
+            <div className='row' style={{display:'block',overflow:'hidden'}}>
+              <Label className="nunito-font" style={{float:'left',marginTop:'26px'}}>Add up to 5 tags : </Label>
+              <div className='row' style={{marginTop:'15px'}}>
+                {addTag.length!=0?addTag.map((data,index)=>(
+                  <Chip
+                    key={index}
+                    onRequestDelete={() => this.removeSelectedTag(data,index)}
+                    style={{margin:'4px'}}
+                  >
+                    {data.text}
+                  </Chip>
+                )):''}
+                {tag.length!=0?<AutoComplete
+                  hintText="Add a Tag..."
+                  dataSource={_.pullAllWith(tag, addTag, _.isEqual)}
+                  filter={AutoComplete.fuzzyFilter}
+                  onNewRequest={this.selectedTag}
+                  onUpdateInput={this.handleUpdateInput}
+                  openOnFocus={true}
+                  searchText={searchText}
+                  dataSourceConfig={dataSourceConfig}
+                />:''}
               </div>
             </div>
-          </div>
-          <div className='row' style={{overflow:'hidden',display:'block'}}>
-            <TextStatus className='sans-font' style={{color:'#DC143C',float:'right',marginTop:'30px'}}>{publishStatus}</TextStatus>
-          </div>
-          <div className='row' style={{display:'block',overflow:'hidden',marginTop:'0px'}}>
-            <Delete style={{float:'left',margin:'10px'}} onClick={this.showAlert}>Delete</Delete>
-            <PrimaryButton label={story.status===1 ? moment(story.published).format('ddd, [at] h:mm a') : 'Publish'} style={{float:'right'}} onClick={this.publishStory} iconName="done"/>
-            {/*<SecondaryButton label="Save" style={{float:'right',marginRight:'20px'}} onClick={this.save}/>*/}
-            {story.status===1 && <SecondaryButton label="Unpublish" style={{float:'right',marginRight:'20px'}} onClick={this.unpublishStory}/>}
-          </div>
+            <Divider/>
+            <div>
+              <Label className="nunito-font" >Select cover picture : </Label>
+              <div className='row' style={{overflow:'hidden',marginTop:'20px'}}>
+                <div className='col-4'>
+                  <UploadPicture path={'/stories/'+sid+'/covermobile'} src={story.coverMobile&&story.coverMobile.medium} size='330x500' width={96} height={137} label='Portrait Cover' type='coverMobile' style={{width:'96px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
+                </div>
+                <div className='col-1'>
+                  <div style={{marginTop:'58px'}}>Or</div>
+                </div>
+                <div className='col-6'>
+                  <UploadPicture path={'/stories/'+sid+'/cover'} src={story.cover&&story.cover.medium} size='1920x860' width={194} height={137} label='Landscape Cover' type='cover' style={{width:'194px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
+                </div>
+              </div>
+            </div>
+            <div className='row' style={{overflow:'hidden',display:'block'}}>
+              <TextStatus className='sans-font' style={{color:'#DC143C',float:'right',marginTop:'30px'}}>{publishStatus}</TextStatus>
+            </div>
+            <div className='row' style={{display:'block',overflow:'hidden',marginTop:'0px'}}>
+              <Delete style={{float:'left',margin:'10px'}} onClick={this.showAlert}>Delete</Delete>
+              <PrimaryButton label={story.status===1 ? moment(story.published).format('ddd, [at] h:mm a') : 'Publish'} style={{float:'right'}} onClick={this.publishStory} iconName="done"/>
+              {/*<SecondaryButton label="Save" style={{float:'right',marginRight:'20px'}} onClick={this.save}/>*/}
+              {story.status===1 && <SecondaryButton label="Unpublish" style={{float:'right',marginRight:'20px'}} onClick={this.unpublishStory}/>}
+            </div>
+          </BasicSetting>
+          <AdvanceSetting>
+            <FontIcon className='material-icons'
+              style={styles.backButton}
+              onClick={() => this.settingHandleChange(0)}
+            >
+              chevron_left
+            </FontIcon>
+            <div className='row' style={{display:'block', overflow:'hidden'}}>
+              <Label className="nunito-font or" style={{float:'left', margin:'19px 15px auto', minWidth:'80px'}}>URL: </Label>
+              <TextField hintText="URL" name='slug' value={slug} onChange={this.changeSlug}/><br/>
+              <Label className="nunito-font or" style={{float:'left', margin:'19px 15px auto', minWidth:'80px'}}>Title: </Label>
+              <TextField hintText="Title" name='metaTitle' value={metaTitle} onChange={this.changeTitle}/><br/>
+              <Label className="nunito-font or" style={{float:'left', margin:'19px 15px auto', minWidth:'80px'}}>Description: </Label>
+              <TextField hintText="Description" name='metaDesc' value={metaDesc} onChange={this.changeDesc} multiLine={true} rows={1} rowsMax={4}/><br/>
+              <HintLabel className='sans-font'>140 characters</HintLabel>
+
+              <div style={{marginTop: '35px'}}>
+                <SecondaryButton label='Reset' style={{float: 'right'}} onClick={this.resetMeta}/>
+                <PrimaryButton label='Save' style={{float: 'right', marginRight:'10px'}} onClick={this.changeMeta}/>
+              </div>
+            </div>
+          </AdvanceSetting>
+        </SwipeableViews>
         </Popover>
         </RaisedButton>
         {sid!=null && <TextStatus className='sans-font'>{saveStatus}</TextStatus>}

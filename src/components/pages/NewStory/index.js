@@ -210,6 +210,10 @@ const NewStory = React.createClass({
       alert:false,
 
       title:'',
+      slug:'',
+      metaDesc:'',
+      metaTitle:'',
+      hintDesc:'',
 
       saveOnload:false,
       publishStatus:'',
@@ -307,7 +311,27 @@ const NewStory = React.createClass({
         status: this.SAVE_STATUS.DIRTIED,
         saveStatus:'Unsave'
       })
+      this.findDescription()
   },
+
+  findDescription(maxLength = 140){
+		if (document.getElementsByTagName('p')) {
+			const story = document.getElementsByTagName('p')
+			let description = ''
+
+			for (let i = 0; i < story.length; i++) {
+		    let item = story[i].innerHTML
+				description += item + ' '
+
+				if (description.length > maxLength) {
+					description = description.substring(0, maxLength) + '...'
+					break
+				}
+			}
+
+			this.setState({hintDesc:description})
+		}
+	},
 
   /*handleEditableInput(e){
     var allContents = this.editor.serialize()
@@ -397,7 +421,10 @@ const NewStory = React.createClass({
         .then(story => {
           this.setState({
             status: this.SAVE_STATUS.UNDIRTIED,
-            saveStatus:"Saved "+ moment(story.updated).calendar()
+            saveStatus:"Saved "+ moment(story.updated).calendar(),
+            slug:story.slug,
+            metaTitle:story.meta&&story.meta.title,
+            metaDesc:story.meta&&story.meta.desc
           })
         })
       }
@@ -578,10 +605,50 @@ const NewStory = React.createClass({
     })
   },
 
+  changeSlug(e){
+    this.setState({slug:e.target.value})
+  },
+
+  changeTitle(e){
+    this.setState({metaTitle:e.target.value})
+  },
+
+  changeDesc(e){
+    this.setState({metaDesc:e.target.value})
+  },
+
+  changeMeta(){
+    var sid =this.state.sid
+    var slug = this.state.slug
+    var title = this.state.metaTitle
+    var desc = this.state.metaDesc
+    var s = {
+      slug,
+      meta:{
+        title,
+        desc
+      }
+    }
+    api.updateStory(sid, s).then((story)=>{
+      this.setState({
+        story
+      })
+    })
+  },
+  resetMeta(){
+    var s = this.state.story
+    //console.log(s)
+    this.setState({
+      slug:s.slug,
+      metaTitle:s.meta.title,
+      metaDesc:s.meta.desc
+    })
+  },
+
   render(){
     let {chooseLayout,layout,open,anchorEl,column,contentType,tag,addTag,searchText,
       columnList,contentTypeList,sid,alert,alertWhere,alertConfirm,alertDesc,saveStatus,
-      title,publishStatus, story} = this.state
+      title,publishStatus, story, slug,metaTitle,metaDesc,hintDesc} = this.state
     const dataSourceConfig = {text: 'text',value: 'value',id:'id'};
     let {theme} = this.context.setting.publisher
 
@@ -592,7 +659,6 @@ const NewStory = React.createClass({
       }
     }
 
-    //console.log(tag)
     return (
       chooseLayout==null?
       <Container onSubmit={this.updateData}>
@@ -757,19 +823,16 @@ const NewStory = React.createClass({
             </FontIcon>
             <div className='row' style={{display:'block', overflow:'hidden'}}>
               <Label className="nunito-font or" style={{float:'left', margin:'19px 15px auto', minWidth:'80px'}}>URL: </Label>
-              <TextField hintText="URL"/><br/>
+              <TextField hintText={story.slug} name='slug' value={slug} onChange={this.changeSlug}/><br/>
               <Label className="nunito-font or" style={{float:'left', margin:'19px 15px auto', minWidth:'80px'}}>Title: </Label>
-              <TextField hintText="Title"/><br/>
-              <Label className="nunito-font or" style={{float:'left', margin:'19px 15px auto', minWidth:'80px'}}>Tagline: </Label>
-              <TextField hintText="Tagline" multiLine={true} rows={1} rowsMax={4}/><br/>
-              <HintLabel className='sans-font'>80 characters</HintLabel>
+              <TextField hintText={title} name='metaTitle' value={metaTitle} onChange={this.changeTitle}/><br/>
               <Label className="nunito-font or" style={{float:'left', margin:'19px 15px auto', minWidth:'80px'}}>Description: </Label>
-              <TextField hintText="Description" multiLine={true} rows={1} rowsMax={4}/><br/>
+              <TextField hintText={hintDesc} name='metaDesc' value={metaDesc} onChange={this.changeDesc} multiLine={true} rows={1} rowsMax={5}/><br/>
               <HintLabel className='sans-font'>140 characters</HintLabel>
 
               <div style={{marginTop: '35px'}}>
-                <SecondaryButton label='Reset' style={{float: 'right'}}/>
-                <PrimaryButton label='Save' style={{float: 'right', marginRight:'10px'}}/>
+                <SecondaryButton label='Reset' style={{float: 'right'}} onClick={this.resetMeta}/>
+                <PrimaryButton label='Save' style={{float: 'right', marginRight:'10px'}} onClick={this.changeMeta}/>
               </div>
             </div>
           </AdvanceSetting>

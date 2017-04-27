@@ -291,9 +291,9 @@ const GraphDashboard = React.createClass({
 					value: value.value
 				}
 			})
-			this.setState({ data: data })
+			this.setState({ data: data,sum:ins.summary })
 
-			//console.log(data)
+			//console.log(ins)
 		})
 	},
 
@@ -395,6 +395,7 @@ const GraphDashboard = React.createClass({
 			}
 		}
 		var { width, height, style } = this.props
+		var { sum } = this.state
 		//console.log(this.state.startDate1<this.state.startDate2)
 		return (
 			<Wrapper width={width} style={{ ...style }}>
@@ -493,16 +494,16 @@ const GraphDashboard = React.createClass({
 					</FlatButton>
 					<div className="total">
 						<Label style={{ color: '#8e8e8e' }}>Number of Stories</Label>
-						<Num className="serif-font">350</Num>
+						<Num className="serif-font">{sum&&sum.count}</Num>
 					</div>
 					<div className="total">
 						<Label style={{ color: '#8e8e8e' }}>Average per story</Label>
-						<Num className="serif-font">189,057</Num>
+						<Num className="serif-font">{sum&&sum.avg}</Num>
 					</div>
 					<div className="total">
 						<Label style={{ color: '#8e8e8e' }}>Total</Label>
 						<Num className="serif-font" style={{ color: theme.accentColor }}>
-							189,057
+							{sum&&sum.total}
 						</Num>
 					</div>
 				</div>
