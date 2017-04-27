@@ -112,7 +112,7 @@ const ShareDropdown = React.createClass({
     )
 
     return(
-      <Dropdown button={buttonDropdown} float='right' marginMobile='0px 0px 0px -160px'>
+      <Dropdown button={buttonDropdown} float='right' marginMobile='0px 0px 0px -160px' margin='0px 0px 0px -160px'>
         {button}
       </Dropdown>
     )

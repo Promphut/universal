@@ -94,6 +94,7 @@ const Line = styled.div`
   background-color:#C4C4C4;
 `
 const Latest = styled.div`
+  margin:30px 0 0 0;
 `
 const Trending = styled.div`
 `
@@ -265,6 +266,7 @@ const NewsPage = React.createClass({
 				textTransform: 'none'
 			}
 		}
+    //console.log(latestStories)
 		return (
 		    <Wrapper>
 	      	<TopBarWithNavigation title={'Title of AomMoney goes here..'} />

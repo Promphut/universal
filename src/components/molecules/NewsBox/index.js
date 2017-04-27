@@ -11,8 +11,7 @@ import moment from 'moment'
 
 const Container = styled.div`
   width:100%;
-  padding:30px 0 30px 0;
-  border-bottom:1px solid #e2e2e2;
+  z-index:100;
   overflow:hidden;
   .imgWidth{
     width:254px;
@@ -63,17 +62,50 @@ const NameLink = styled(Link)`
 
 const BoxText = styled.div`
   float:left;
-  width:850px;
+  width:750px;
   padding-left:38px;
+  border-bottom:1px solid ##C4C4C4;
   @media (max-width:480px) {
     width:100%;
     padding-left:0px;
     margin-top:10px;
   }
 `
+const Desc = styled.div`
+  color:#8E8E8E;
+  font-size:14px;
 
-const DivDes = styled.div`
+  margin:10px 0 10px 0;
 `
+const Time = styled.div`
+  float:left;
+  color:#8F8F8F;
+  font-size:12px;
+  width:50px;
+  text-align:center;
+`
+const VerticalTimeline = styled.div`
+  width:10px;
+  height:200px;
+  margin:0 10px 0 10px;
+  border-radius:2em;
+  background-color:#F4F4F4;
+  position:relative;
+  z-index:-5;
+`
+const Doughnut = styled.div`
+  margin:0 10px 0 10px;
+  border: 3px solid ${props=>props.theme.accentColor};
+  border-radius: 50%;
+  height:10px;
+  width:10px;
+`
+const Box = styled.div`
+  float:left;
+  border-bottom:1px solid #C4C4C4;
+  padding-bottom:30px;
+`
+
 
 const NewsBox = React.createClass({
   render(){
@@ -82,14 +114,21 @@ const NewsBox = React.createClass({
     //console.log('URL', url)
     return (
       <Container style={{...style}}>
-        <BGImg url={url} src={cover.small || cover.medium} alt={ptitle || ''} className='imgWidth mob-hidden' />
-        <BoxText className='sans-font'>
-          <DivDes>
+        <Time>15 min</Time>
+        <div style={{float:'left',marginRight:'10px'}}>
+          <Doughnut/>
+          <VerticalTimeline/>
+        </div>
+        <Box>
+          <BGImg url={url} src={cover.small || cover.medium} alt={ptitle || ''} className='imgWidth mob-hidden' />
+          <BoxText className='sans-font'>
             <ShareDropdown url={url} />
-          </DivDes>
-          <BGImg url={url} src={cover.medium || cover.small} className='imgWidth des-hidden'/>
-          <NameLink to={url} className='serif-font' >{ptitle}</NameLink>
-        </BoxText>
+            <NameLink to={url} className='serif-font' >{ptitle}</NameLink>
+            <Desc className='nunito-font'>“นิด้าโพล” สถาบันบัณฑิตพัฒนบริหารศาสตร์ (นิด้า) เปิดเผยผลสำรวจ เรื่อง “พฤติกรรมการใช้อินเทอร์เน็ตบน
+  มือถือ” ทำการสำรวจระหว่างวันที่ 30 มกราคม – 2 กุมภาพันธ์ 2560 จากประชาชนที่มีอายุ 15 – 40 ปี ในเข...</Desc>
+            <Desc>by <strong>Krungsri Plan Your Money</strong></Desc>
+          </BoxText>
+        </Box>
       </Container>
     )
   }
