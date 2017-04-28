@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from 'react-router'
 import styled from 'styled-components'
 import {
 	Table,
@@ -13,8 +14,13 @@ import FontIcon from 'material-ui/FontIcon'
 const Container = styled.div`
 `
 
-const Bold = styled.div`
+const Bold = styled(Link)`
 	font-weight: bold;
+	color:#222;
+	display:block;
+	&:hover{
+		cursor:pointer;
+	}
 `
 
 const Trend = styled.div`
@@ -163,18 +169,18 @@ const TopRank = React.createClass({
 									<TableRow className="sans-font" key={index}>
 										{insigth == 'topstories'
 											? <TableRowColumn style={styles.tableTextBodyName}>
-													<Bold>{index + 1}. {entry.story.title}</Bold>
+													<Bold to={entry.story.url}>{index + 1}. {entry.story.title}</Bold>
 													{entry.story.writer.username}
 												</TableRowColumn>
 											: ''}
 										{insigth == 'topcolumns'
 											? <TableRowColumn style={styles.tableTextBodyName}>
-													<Bold>{index + 1}. {entry.column.name}</Bold>
+													<Bold to={entry.column.url}>{index + 1}. {entry.column.name}</Bold>
 												</TableRowColumn>
 											: ''}
 										{insigth == 'topwriters'
 											? <TableRowColumn style={styles.tableTextBodyName}>
-													<Bold>{index + 1}. {entry.writer.username}</Bold>
+													<Bold to={entry.writer.url}>{index + 1}. {entry.writer.username}</Bold>
 												</TableRowColumn>
 											: ''}
 

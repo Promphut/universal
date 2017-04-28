@@ -1,6 +1,6 @@
 import React from 'react'
 import {  TopBarWithNavigation,TopWriterSidebar, More, BGImg, StoryDropdown, 
-        NewsBox,Footer} from 'components'
+        NewsBox,Footer,TopNews,TopNewsSmall} from 'components'
 import styled from 'styled-components'
 //import Request from 'superagent'
 import auth from 'components/auth'
@@ -16,17 +16,26 @@ const Wrapper = styled.div`
 	@media (max-width:480px) {
 		max-width: 100%;
 		width:100%;
+		.paddingTop{
+			padding-top:10px;
+		}
   }
+	.center{
+		margin:0 auto 0 auto;
+	}
+	.paddingTop{
+		padding-top:40px;
+	}
 `
 
 const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
-	padding: 140px 0 0 0;
+	padding: 40px 0 0 0;
 
 	@media (max-width:480px) {
-		padding: 70px 0 0 0;
+		padding: 10px 0 0 0;
   }
 
 	@media (min-width: 481px) {
@@ -69,8 +78,15 @@ const Aside = styled.div`
 	}
 `
 const Text = styled.div`
-	color:#8F8F8F;
-	font-size:19px;
+	color:#8E8E8E;
+	font-size:16px;
+	text-align:center;
+	width:864px;
+	padding:35px;
+	@media (max-width: 480px) {
+		width:100%;
+		padding:15px;
+	}
 `
 
 const TextLine = styled.div`
@@ -97,7 +113,29 @@ const Latest = styled.div`
   margin:30px 0 0 0;
 `
 const Trending = styled.div`
+	margin:30px 0 0 0;
 `
+const Head = styled.h1`
+	font-size:64px;
+	font-weight:bold;
+	text-align:center;
+	padding:0 25px 0 25px;
+	margin:0 auto 0 auto;
+	background:white;
+	width:280px;
+`
+const News = styled.div`
+	font-size:18px;
+	color:white;
+	z-index:0;
+	height:60px;
+	text-align:center;
+	vertical-align: middle;
+	@media (max-width: 480px) {
+		z-index:1000;
+	}
+`
+
 // const Infinite2 = styled(Infinite)`
 // 	overflow-y:visible !important;
 // `
@@ -269,15 +307,50 @@ const NewsPage = React.createClass({
     //console.log(latestStories)
 		return (
 		    <Wrapper>
-	      	<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
+	      	<TopBarWithNavigation />
+					<News>News</News>
+					<Content >
+						<Feed>	
+							<Head className='serif-font hidden-mob'>NEWS</Head>
+							<Line className='hidden-mob' style={{top:'-41px'}}/>
+							<Text className='center'>โมหจริต ละตินฮิปฮอปด็อกเตอร์โมหจริตแอดมิสชัน บร็อคโคลีคีตปฏิภาณเมจิค โอเวอร์คลิปโปรโมชั่นแบล็คสงบสุข ยังไงอึ้มไรเฟิลบร็อกโคลี ฮ็อตมั้ย แอ็กชั่นแอ็กชั่น อุปสงค์ฟลุกซีนีเพล็กซ์เลกเชอร์อิเหนา บัลลาสต์โรแมนติก</Text>
+            </Feed>
+						<Main className='hidden-mob'>
+							<TopNews/>
+						</Main>
+						<Aside className='hidden-mob'>
+							<TopNewsSmall/>
+							<TopNewsSmall/>
+							<TopNewsSmall style={{borderBottom:'1px solid #000'}}/>
+						</Aside>
+					</Content>
 		      <Content>
-            <Feed>
-              <Tabs
+						<Feed>
+							<Tabs
+                style={{ width:'100%'}}
+                tabItemContainerStyle={{ ...styles.tabs }}
+                inkBarStyle={{ background: theme.accentColor, height: 3 }}
+                onChange={this.handleChangeTab}
+                value={selectTab}
+								className='hidden-des'>
+                <Tab
+                  buttonStyle={{...styles.tab,color: selectTab == 0 ? '#222' : '#c4c4c4'}}
+                  label="Latest"
+                  value={0}
+                />
+                <Tab
+                  buttonStyle={{...styles.tab,color: selectTab == 1 ? '#222' : '#c4c4c4'}}
+                  label="Trending"
+                  value={1}
+                />
+              </Tabs>	  
+							<Tabs
                 style={{ width: 360 }}
                 tabItemContainerStyle={{ ...styles.tabs }}
                 inkBarStyle={{ background: theme.accentColor, height: 3 }}
                 onChange={this.handleChangeTab}
-                value={selectTab}>
+                value={selectTab}
+								className='hidden-mob'>
                 <Tab
                   buttonStyle={{...styles.tab,color: selectTab == 0 ? '#222' : '#c4c4c4'}}
                   label="LATEST NEWS"
@@ -305,12 +378,24 @@ const NewsPage = React.createClass({
                     useWindowAsScrollContainer={true}>
 
                     {latestStories.length!=0?latestStories.map((story, index) => (
-                      <NewsBox detail={story} key={index}/>
+                      <NewsBox detail={story} key={index} timeline={true}/>
                     )):''}
                   </Infinite>
                 </Latest>
                 <Trending>
-                  Trending
+                  <Infinite
+                    containerHeight={!isMobile?(count*210)-100:(count*356)-100}
+                    elementHeight={!isMobile?210:356}
+                    infiniteLoadBeginEdgeOffset={loadOffset}
+                    onInfiniteLoad={this.handleInfiniteLoad}
+                    loadingSpinnerDelegate={this.elementInfiniteLoad()}
+                    isInfiniteLoading={isInfiniteLoading}
+                    useWindowAsScrollContainer={true}>
+
+                    {latestStories.length!=0?latestStories.map((story, index) => (
+                      <NewsBox detail={story} key={index} style={{margin:'0 auto 0 auto'}}/>
+                    )):''}
+                  </Infinite>
                 </Trending>
               </SwipeableViews>
             </Feed>

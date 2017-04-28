@@ -28,7 +28,7 @@ const Container = styled.div`
   }
   @media (max-width:480px) {
     width:100%;
-    padding:10px 0 20px 0;
+    padding:10px 0 10px 0;
     margin-left:auto;
     margin-right:auto;
     .mob-hidden{
@@ -83,6 +83,9 @@ const Time = styled.div`
   font-size:12px;
   width:50px;
   text-align:center;
+  @media (max-width:480px) {
+    margin-bottom:10px;
+  }
 `
 const VerticalTimeline = styled.div`
   width:10px;
@@ -104,29 +107,34 @@ const Box = styled.div`
   float:left;
   border-bottom:1px solid #C4C4C4;
   padding-bottom:30px;
+  @media (max-width:480px) {
+    padding-bottom:10px;
+  }
 `
 
 
 const NewsBox = React.createClass({
   render(){
-    let {detail,style} = this.props
+    let {detail,style,timeline} = this.props
     let {ptitle,cover,writer,column,votes,comments,updated,url,readTime} = detail
     //console.log('URL', url)
     return (
       <Container style={{...style}}>
-        <Time>15 min</Time>
-        <div style={{float:'left',marginRight:'10px'}}>
+        <Time className='hidden-mob' style={{display:timeline?'block':'none'}}>15 min</Time>
+        <div className='hidden-mob' style={{float:'left',marginRight:'10px',visibility:timeline?'show':'hidden'}}>
           <Doughnut/>
           <VerticalTimeline/>
         </div>
         <Box>
-          <BGImg url={url} src={cover.small || cover.medium} alt={ptitle || ''} className='imgWidth mob-hidden' />
-          <BoxText className='sans-font'>
-            <ShareDropdown url={url} />
-            <NameLink to={url} className='serif-font' >{ptitle}</NameLink>
+          <ShareDropdown url={url} className='hidden-des'/>
+          <Time className='hidden-des' style={{display:timeline?'block':'none'}}>15 min</Time>
+          <BGImg url={url} src={cover.small || cover.medium} alt={ptitle || ''} className='imgWidth ' />
+          <BoxText>
+            <ShareDropdown url={url} className='hidden-mob'/>
+            <NameLink to={url} className='nunito-font' >{ptitle}</NameLink>
             <Desc className='nunito-font'>“นิด้าโพล” สถาบันบัณฑิตพัฒนบริหารศาสตร์ (นิด้า) เปิดเผยผลสำรวจ เรื่อง “พฤติกรรมการใช้อินเทอร์เน็ตบน
   มือถือ” ทำการสำรวจระหว่างวันที่ 30 มกราคม – 2 กุมภาพันธ์ 2560 จากประชาชนที่มีอายุ 15 – 40 ปี ในเข...</Desc>
-            <Desc>by <strong>Krungsri Plan Your Money</strong></Desc>
+            <Desc className='nunito-font'>by <strong>Krungsri Plan Your Money</strong></Desc>
           </BoxText>
         </Box>
       </Container>
