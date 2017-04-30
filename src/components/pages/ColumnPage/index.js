@@ -151,7 +151,7 @@ const ColumnPage = React.createClass({
 	buildElements() {
 		let page = this.state.page
 		var {column} = this.state
-		api.getFeed('story', {status:1,column:column.id }, 'latest', null, page, 10)
+		api.getFeed('article', {status:1,column:column.id }, 'latest', null, page, 10)
 		.then(result => {
 			var s = this.state.latestStories.concat(result.feed)
 			if(s.length==result.count[1]){

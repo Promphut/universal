@@ -10,13 +10,15 @@ FRONTEND PATHS:
 
 
 	STORIES:
-		Story Index (All Stories)		/stories
+		Story Index (All Articles)		/stories
 
 		All Columns 					/stories/columns 
+		* News Index (All News)  		/stories/news 
 		Column Index					/stories/:column-slug
 		
 		Story Page						/stories/:column-slug/:story-slug/:sid
-
+		* News Page (has no column) 	/stories/news/:story-slug/:sid
+		
 
 	USER:
 		NO USERNAME:

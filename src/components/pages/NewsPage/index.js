@@ -180,7 +180,7 @@ const NewsPage = React.createClass({
   // },
   getFeed(){
 		// - Fetching latestStories
-		api.getFeed('story', {status:1}, 'latest', null, 0, 15)
+		api.getFeed('news', {status:1}, 'latest', null, 0, 15)
 		.then(result => {
 			if(result) {
 				this.trendingStories = result.feed
@@ -195,7 +195,7 @@ const NewsPage = React.createClass({
 	buildElements() {
 		let page = this.state.page
 
-		api.getFeed('story', {status:1}, 'latest', null, page, 10)
+		api.getFeed('news', {status:1}, 'latest', null, page, 10)
 		.then(result => {
 			var s = this.state.latestStories.concat(result.feed)
 			this.setState({

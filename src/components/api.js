@@ -197,7 +197,7 @@ api.signup = (data) => {
 }
 
 /*
-	type: 'story'/'video'/'qa' - (mandatory)
+	type: 'story'/'news'/'article'/'video'/'qa' - (mandatory)
 	filter: {...} - (optional)
 	sort: 'latest'/'popular'/'trending' - (optional) Sort mode
 	sortby: {...} - (optional) Sorted by which field

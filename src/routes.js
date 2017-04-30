@@ -10,7 +10,7 @@ import {
     PublisherDashboardPage,ColumnEditor,ColumnSettingPage,PublisherStoryPage,UserSetting,
     PublisherSettingPage, ForgetPasswordPage, PublisherEditor, PublisherContactAndAboutPage,
     UserSettingProfile, UserSettingAccount, UserSettingStory, ColumnPage, PublisherPage,
-    UserStory, AllStory, AllColumn, NewStory, NotFoundPage, ErrorPage, AboutPage, ContactPage, StoryPage,
+    UserStory, AllColumn, NewStory, NotFoundPage, ErrorPage, AboutPage, ContactPage, StoryPage,
     EditStory,TagPage, PublisherInsightStories,PublisherInsightColumns, PublisherInsightWriters
   } from 'components'
 import api from 'components/api'
@@ -137,11 +137,13 @@ const logout = (nextState, replace, next) => {
 const routes = (
   <Route path="/" component={App}>
     <IndexRoute component={HomePage2} />
-    <Route path="news" component={NewsPage} />
 
+    <Route path="stories/news" component={NewsPage} />
     <Route path='stories/columns' component={AllColumn}/>
     <Route path='stories/:columnSlug' component={ColumnPage} onEnter={getColumnFromSlug}/>
-    {/* STORY 1: HAVE COLUMN */ }
+    {/* STORY 1: FORMAT is 'NEWS' */ }
+    <Route path='stories/news/:storySlug/:sid' component={StoryPage} onEnter={getStoryFromSid({countView:true})}/>
+    {/* STORY 2: HAVE COLUMN */ }
     <Route path='stories/:columnSlug/:storySlug/:sid' component={StoryPage} onEnter={getStoryFromSid({countView:true})}/>
 
     {/*<Route path='publisher' component={PublisherPage}/>*/}
@@ -177,7 +179,7 @@ const routes = (
       <Route path='stories' component={UserSettingStory}/>
 
       <Route path='stories/new' component={NewStory}  onEnter={hasRoles(['ADMIN', 'WRITER', 'EDITOR'])}/>
-      {/* STORY 4 */ }
+      {/* STORY 5 */ }
       <Route path='stories/:sid/edit' component={EditStory} onEnter={canEditStory}/>
     </Route>
 
@@ -185,11 +187,11 @@ const routes = (
     <Route path='me/stories/:sid' component={StoryPage} onEnter={getStoryFromSid()}/>
 
     <Route path='u/:uid' onEnter={getUserFromUserId} component={UserStory}/>
-    {/* STORY 3 NO COLUMN AND NO USERNAME */ }
+    {/* STORY 4 NO COLUMN AND NO USERNAME */ }
     <Route path='u/:uid/stories/:storySlug/:sid' onEnter={getStoryFromSid({countView:true})} component={StoryPage}/>
 
     <Route path='@:username' onEnter={getUserFromUsername} component={UserStory}/>
-    {/* STORY 2 NO COLUMN */ }
+    {/* STORY 3 NO COLUMN */ }
     <Route path='@:username/stories/:storySlug/:sid' onEnter={getStoryFromSid({countView:true})} component={StoryPage}/>
 
     <Route path='error' component={ErrorPage}/>
