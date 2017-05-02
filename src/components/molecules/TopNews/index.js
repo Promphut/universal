@@ -8,7 +8,7 @@ import Popover from 'material-ui/Popover'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import moment from 'moment'
-
+import _ from 'lodash'
 const Container = styled.div`
   width:100%;
   z-index:100;
@@ -47,9 +47,6 @@ const NameLink = styled(Link)`
   font-weight:bold;
   font-size:20px;
   height:50px;
-  text-overflow: ellipsis;
-  white-space: wrap;
-  overflow: hidden;
   @media (max-width:480px) {
     font-size:15px;
   }
@@ -75,14 +72,16 @@ const BoxText = styled.div`
 const TopNews = React.createClass({
   render(){
     let {detail,style} = this.props
-    //let {ptitle,cover,writer,column,votes,comments,updated,url,readTime} = detail
-
     return (
       <Container style={{...style}}>
-        <BGImg src='/tmp/story-list/1486747497349-robertjinx.jpeg' className='imgWidth mob-hidden' >
+        <BGImg url={detail&&detail.url} src={detail&&detail.cover.medium} className='imgWidth mob-hidden' >
           <BoxText>
-            <NameLink>เปิดบ้าน VR Sphere ท่องโลกเสมือนจริง ด้วยพาหนะแห่งจินตนาการของคนไทยคน
-ไทยคนไทยคนไทยคนไทยคนไทยคนไทยคนไทยคนไทย จินตนาการของคนไทย</NameLink>
+            <NameLink>
+            {_.truncate(detail&&detail.ptitle, {
+              'length': 133,
+              'separator': ''
+            })}
+            </NameLink>
           </BoxText>
         </BGImg>    
       </Container>
