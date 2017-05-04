@@ -254,6 +254,7 @@ const NewStory = React.createClass({
     clearInterval(this.interval);
     if(this.state.chooseLayout!=null){
       this.editor.destroy()
+      this.editor2.destroy()
     }
   },
 

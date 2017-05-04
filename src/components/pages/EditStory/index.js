@@ -355,6 +355,7 @@ const EditStory = React.createClass({
   componentWillUnmount(){
     clearInterval(this.interval);
     this.editor.destroy()
+    this.editor2.destroy()
   },
 
   chooseNews(){
