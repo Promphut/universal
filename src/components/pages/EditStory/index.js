@@ -42,6 +42,20 @@ const Container = styled.form`
     font-size: 18px;
     margin:10px 0 10px 0;
   }
+  #highlight ul > li {
+    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    font-size: 18px;
+    margin:10px 0 10px 0;
+  }
+  #highlight ol > li {
+    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    font-size: 18px;
+    margin:10px 0 10px 0;
+  }
+  #highlight p {
+    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    font-size: 18px;
+  }
   .medium-editor-insert-plugin p {
     font-family: 'PT Sans', 'cs_prajad', sans-serif;
     font-size: 18px;
@@ -295,7 +309,25 @@ const EditStory = React.createClass({
         }
     });
 
+    this.editor2 = new MediumEditor('#highlight', {
+      toolbar: {
+        buttons: [
+            {name: 'bold',contentDefault: '<span class="fa fa-bold" ></span>'},
+            {name: 'italic',contentDefault: '<span class="fa fa-italic" ></span>'},
+            {name: 'underline',contentDefault: '<span class="fa fa-underline" ></span>',},
+            {name: 'anchor',contentDefault: '<span class="fa fa-link" ></span>'},
+            {name: 'unorderedlist',contentDefault: '<span class="fa fa-list-ul" ></span>'},
+            {name: 'orderedlist',contentDefault: '<span class="fa fa-list-ol" ></span>'}
+        ]
+      },
+      targetBlank: true,
+      placeholder: {
+        text: 'Highlight'
+      }
+    });
+
     this.editor.subscribe('editableInput', this.handleEditableInput);
+    this.editor2.subscribe('editableInput', this.handleEditableInput);
 
     this.interval = setInterval(this.autoSave, 3000)
 
@@ -432,6 +464,7 @@ const EditStory = React.createClass({
 
       let allContents = this.editor.serialize()
       let el =  allContents.paper.value
+      let highlight = this.editor2.serialize().highlight.value
       //console.log(allContents.paper.value)
       this.setState({
         saveStatus:'Saving...'
@@ -440,7 +473,8 @@ const EditStory = React.createClass({
       let s = {
         title:title,
         publisher:parseInt(config.PID),
-        html:el
+        html:el,
+        highlight
       }
       if(column!='no') s.column = column
       s.contentType = contentType
@@ -458,12 +492,14 @@ const EditStory = React.createClass({
   publishStory(){
     let {sid,column,contentType,title} = this.state
     let allContents = this.editor.serialize()
+    let highlight = this.editor2.serialize().highlight.value
 
     let s = {
       title:title,
       publisher:parseInt(config.PID),
       status:1,
       html:allContents.paper.value,
+      highlight
     }
     if(column!='no') s.column = column
     s.contentType = contentType
@@ -810,13 +846,13 @@ const EditStory = React.createClass({
           {/*<Label className="nunito-font" >Select cover picture : </Label>*/}
           <div className='row' style={{overflow:'hidden',marginTop:'20px'}}>
             <div className='col-4'>
-              <UploadPicture ratio={330/500} path={'/stories/'+sid+'/covermobile'} src={story.coverMobile&&story.coverMobile.medium} size='330x500' width={96} height={137} label='Portrait Cover' type='coverMobile' style={{width:'96px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
+              <UploadPicture ratio={330/500} path={'/stories/'+sid+'/covermobile'} src={story.coverMobile&&story.coverMobile.medium} size='330x500' width={120} height={170} label='Portrait Cover' type='coverMobile' style={{width:'96px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
             </div>
             <div className='col-1'>
               <div style={{marginTop:'58px'}}>Or</div>
             </div>
             <div className='col-6'>
-              <UploadPicture ratio={1920/860} path={'/stories/'+sid+'/cover'} src={story.cover&&story.cover.medium} size='1920x860' width={194} height={137} label='Landscape Cover' type='cover' style={{width:'194px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
+              <UploadPicture ratio={1920/860} path={'/stories/'+sid+'/cover'} src={story.cover&&story.cover.medium} size='1920x860' width={300} height={170} label='Landscape Cover' type='cover' style={{width:'194px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
             </div>
           </div>
         </div>
