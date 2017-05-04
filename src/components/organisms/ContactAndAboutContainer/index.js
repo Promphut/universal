@@ -116,7 +116,7 @@ const ContactAndAboutContainer = React.createClass({
 	      <Wrapper>
 					{pub.cover && <BGImg src={pub.cover.medium} opacity={-1} style={{width:'100%',height:'350px'}} className="hidden-mob" />}
 
-					<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
+					<TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={this.props.onLoading}/>
 	        <Content>
 	          <Main>
 	            {this.props.children}

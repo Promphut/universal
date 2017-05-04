@@ -83,7 +83,7 @@ const UserSetting = React.createClass({
 		return (
 		    <Wrapper>
           {isMobile ? <TopBarWithBack title={title}/> :
-            <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
+            <TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={this.props.onLoading} />
           }
 
           <Container>

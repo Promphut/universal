@@ -173,7 +173,7 @@ const AllColumn = React.createClass({
     //console.log('column', column)
 		return (
 		    <Wrapper>
-        	<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
+        	<TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={this.props.onLoading}/>
 					<Content >
             <Feed>
               <div className='row' style={{width: '100%'}}>

@@ -39,7 +39,7 @@ const Content = styled.div`
   }
 
 	@media (min-width: 481px) {
-		min-height: 480px;
+		
 	}
 `
 
@@ -72,7 +72,7 @@ const Feed = styled.div`
 const Aside = styled.div`
 	flex: 1 350px;
 	max-width: 350px;
-	margin-left:60px;
+	margin-left:25px;
 	@media (max-width: 1160px) {
 		display:none;
 	}
@@ -156,16 +156,16 @@ const NewsPage = React.createClass({
 			feedCount:0,
 			isMobile:false,
 			completed:0,
-      selectTab:0
+      selectTab:0,
+			newsTrending:[],
 		}
 	},
 	componentWillMount(){
-		this.timer = this.progress(0)
-	},
-	componentDidMount(){
 		this.getPublisher()
 		this.getFeed()
-		this.getSidebar()
+		this.getNewsTrending()
+	},
+	componentDidMount(){
 		this.setState({
 			isMobile:window.isMobile(),
 			completed:100
@@ -184,7 +184,6 @@ const NewsPage = React.createClass({
 		.then(result => {
 			if(result) {
 				this.trendingStories = result.feed
-
 				this.setState({
 					refresh: Math.random()
 				})
@@ -192,9 +191,17 @@ const NewsPage = React.createClass({
 		})
 	},
 
+	getNewsTrending(){
+		api.getFeed('news', {status:1}, 'trending', null, 0, 14)
+		.then(result => {
+			if(result) {
+				this.setState({newsTrending:result.feed})
+			}
+		})
+	},
+
 	buildElements() {
 		let page = this.state.page
-
 		api.getFeed('news', {status:1}, 'latest', null, page, 10)
 		.then(result => {
 			var s = this.state.latestStories.concat(result.feed)
@@ -230,47 +237,12 @@ const NewsPage = React.createClass({
 		api.getPublisher()
 		.then(pub => {
 			this.publisher = pub
-
 			this.setState({
 				refresh: Math.random()
 			})
 		})
 	},
 
-	getSidebar(){
-		// - Fetching top columns
-		// - Fetch top writers
-		Promise.all([
-			api.getColumns(),
-			api.getPublisherWriters(),
-		])
-		.then(([columns, writers]) => {
-			//console.log('GET FEED', result, columns, writers)
-			if(columns) this.column = columns
-			if(writers) this.writer = writers
-
-			this.setState({
-				refresh: Math.random()
-			})
-		})
-	},
-
-
-	componentWillUnmount() {
-    clearTimeout(this.timer);
-  },
-
-  progress(completed) {
-		if(this.state.completed<100){
-			if (completed > 100) {
-      	this.setState({completed: 100});
-			} else {
-				this.setState({completed});
-				const diff = Math.random() * 10;
-				this.timer = setTimeout(() => this.progress(completed + diff), 200);
-			}
-		}
-  },
 
 	handleChangeTab(e) {
 		this.setState({selectTab: e})
@@ -282,7 +254,7 @@ const NewsPage = React.createClass({
 
 	render(){
 		var {count,loadOffset,isInfiniteLoading,latestStories,isMobile,completed
-      ,latestStories,selectTab} = this.state
+      ,latestStories,selectTab,newsTrending} = this.state
 		let pub = this.publisher
     var { theme } = this.context.setting.publisher
 		const styles = {
@@ -304,10 +276,16 @@ const NewsPage = React.createClass({
 				textTransform: 'none'
 			}
 		}
+		var trend = []
+		for(var i=4;i<newsTrending.length;i++){
+			trend.push(
+				<NewsBox detail={newsTrending[i]} key={i} style={{margin:'0 auto 0 auto'}}/>
+			)
+		}
     //console.log(latestStories)
 		return (
 		    <Wrapper>
-	      	<TopBarWithNavigation />
+	      	<TopBarWithNavigation onLoading={this.props.onLoading}/>
 					<News>News</News>
 					<Content >
 						<Feed>	
@@ -315,13 +293,15 @@ const NewsPage = React.createClass({
 							<Line className='hidden-mob' style={{top:'-41px'}}/>
 							<Text className='center'>โมหจริต ละตินฮิปฮอปด็อกเตอร์โมหจริตแอดมิสชัน บร็อคโคลีคีตปฏิภาณเมจิค โอเวอร์คลิปโปรโมชั่นแบล็คสงบสุข ยังไงอึ้มไรเฟิลบร็อกโคลี ฮ็อตมั้ย แอ็กชั่นแอ็กชั่น อุปสงค์ฟลุกซีนีเพล็กซ์เลกเชอร์อิเหนา บัลลาสต์โรแมนติก</Text>
             </Feed>
-						<Main className='hidden-mob'>
-							<TopNews/>
+					</Content>
+					<Content style={{paddingTop:'0px'}}  className='hidden-mob'>
+						<Main>
+							<TopNews detail={newsTrending[0]}/>
 						</Main>
-						<Aside className='hidden-mob'>
-							<TopNewsSmall/>
-							<TopNewsSmall/>
-							<TopNewsSmall style={{borderBottom:'1px solid #000'}}/>
+						<Aside >
+							<TopNewsSmall detail={newsTrending[1]} />
+							<TopNewsSmall detail={newsTrending[2]} />
+							<TopNewsSmall detail={newsTrending[3]} style={{borderBottom:'1px solid #000'}}/>
 						</Aside>
 					</Content>
 		      <Content>
@@ -383,19 +363,7 @@ const NewsPage = React.createClass({
                   </Infinite>
                 </Latest>
                 <Trending>
-                  <Infinite
-                    containerHeight={!isMobile?(count*210)-100:(count*356)-100}
-                    elementHeight={!isMobile?210:356}
-                    infiniteLoadBeginEdgeOffset={loadOffset}
-                    onInfiniteLoad={this.handleInfiniteLoad}
-                    loadingSpinnerDelegate={this.elementInfiniteLoad()}
-                    isInfiniteLoading={isInfiniteLoading}
-                    useWindowAsScrollContainer={true}>
-
-                    {latestStories.length!=0?latestStories.map((story, index) => (
-                      <NewsBox detail={story} key={index} style={{margin:'0 auto 0 auto'}}/>
-                    )):''}
-                  </Infinite>
+									{trend}
                 </Trending>
               </SwipeableViews>
             </Feed>

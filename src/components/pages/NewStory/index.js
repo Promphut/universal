@@ -791,20 +791,20 @@ const NewStory = React.createClass({
               </div>
             </div>
             <Divider/>
-            <div>
-              <Label className="nunito-font" >Select cover picture: </Label>
+            {/*<div>
+              <Label className="nunito-font" >Select cover picture : </Label>
               <div className='row' style={{overflow:'hidden',marginTop:'20px'}}>
                 <div className='col-4'>
-                  <UploadPicture path={'/stories/'+sid+'/covermobile'} size='330x500' width={96} height={137} label='Portrait Cover' type='coverMobile' style={{width:'96px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
+                  <UploadPicture ratio={330/500} path={'/stories/'+sid+'/covermobile'} src={story.coverMobile&&story.coverMobile.medium} size='330x500' width={96} height={137} label='Portrait Cover' type='coverMobile' style={{width:'96px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
                 </div>
                 <div className='col-1'>
                   <div style={{marginTop:'58px'}}>Or</div>
                 </div>
                 <div className='col-6'>
-                  <UploadPicture path={'/stories/'+sid+'/cover'} size='1920x860' width={194} height={137} label='Landscape Cover' type='cover' style={{width:'194px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
+                  <UploadPicture ratio={1920/860} path={'/stories/'+sid+'/cover'} src={story.cover&&story.cover.medium} size='1920x860' width={194} height={137} label='Landscape Cover' type='cover' style={{width:'194px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'60px'}}/>
                 </div>
               </div>
-            </div>
+            </div>*/}
             <div className='row' style={{overflow:'hidden',display:'block'}}>
               <TextStatus className='sans-font' style={{color:'#DC143C',float:'right',marginTop:'30px'}}>{publishStatus}</TextStatus>
             </div>
@@ -840,10 +840,23 @@ const NewStory = React.createClass({
         </Popover>
         </RaisedButton>
         {sid!=null && <TextStatus className='sans-font'>{saveStatus}</TextStatus>}
-
         <Title placeholder='Title' className='serif-font' value={title} onChange={this.titleChanged}/>
 
         <Paper ref='paper'  id='paper' />
+        {sid&&<div>
+          {/*<Label className="nunito-font" >Select cover picture: </Label>*/}
+          <div className='row' style={{overflow:'hidden',marginTop:'20px'}}>
+            <div className='col-4'>
+              <UploadPicture ratio={330/500} path={'/stories/'+sid+'/covermobile'} size='330x500' width={120} height={170} label='Portrait Cover' type='coverMobile' style={{width:'96px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'70px'}}/>
+            </div>
+            <div className='col-1'>
+              <div style={{marginTop:'58px'}}>Or</div>
+            </div>
+            <div className='col-6'>
+              <UploadPicture ratio={1920/860} path={'/stories/'+sid+'/cover'} size='1920x860' width={300} height={170} label='Landscape Cover' type='cover' style={{width:'194px',height:'137px',margin:'0 auto 0 auto'}} labelStyle={{top:'70px'}}/>
+            </div>
+          </div>
+        </div>}
       </Container>
     )
   },

@@ -506,6 +506,7 @@ const ColumnSettingPage = React.createClass({
                   this.props.params.cid +
                   "/cover"
               }
+              ratio={1920/340}
               size="1920x340"
               height={90}
               width={200}

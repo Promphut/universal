@@ -229,7 +229,7 @@ const StoryPage = React.createClass({
 				</Helmet>
 
 				<Wrapper>
-					<TopBarWithNavigation title={'Title of AomMoney goes here..'} article={this.story.title} editButton={'/me/stories/'+this.story.id+'/edit'} hasCover={hasCover} />
+					<TopBarWithNavigation onLoading={this.props.onLoading} title={'Title of AomMoney goes here..'} article={this.story.title} editButton={'/me/stories/'+this.story.id+'/edit'} hasCover={hasCover} />
 
 					{this.story.cover.medium!=config.BACKURL+'/imgs/article_cover_landscape.png' &&
 					<BGImg style={{width:'100%',height:'85vh'}} src={this.story.cover.large ||

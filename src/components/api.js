@@ -642,12 +642,16 @@ api.getPublisherInsight = (pid, action, subaction, period, from, to) => {
 	}, api.err)
 }
 
-api.uploadFile = (file, type, toUrl) => {
+api.uploadFile = (file, type, toUrl, query) => {
 	let token = auth.getToken()
 	if(!token) return api.userNotFoundPromise()
 
 	return Request.post(toUrl)
 	.set('x-access-token', token)
+	.query({x:query.x})
+	.query({y:query.y})
+	.query({w:query.width})
+	.query({h:query.height})
 	.attach(type, file, file.name)
 	.then(res => {
 		return res.body

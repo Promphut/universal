@@ -199,7 +199,7 @@ const TagPage = React.createClass({
 
 		return (
 		    <Wrapper>
-				<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
+				<TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={this.props.onLoading}/>
 
 		      	<Content>
               {latestStories.length!=0?<Main>

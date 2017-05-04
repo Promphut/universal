@@ -53,7 +53,7 @@ const AboutPage = React.createClass({
 
 	render() {
 		return (
-			<ContactAndAboutContainer>
+			<ContactAndAboutContainer onLoading={this.props.onLoading}>
 				<Helmet>
 					<link
 						rel="stylesheet"

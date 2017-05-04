@@ -8,45 +8,39 @@ import Popover from 'material-ui/Popover'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import moment from 'moment'
-
+import _ from 'lodash'
 const Container = styled.div`
   width:100%;
   z-index:100;
   overflow:hidden;
+  height:141px;
   border-top:1px solid #000;
   border-right:1px solid #000;
   border-left:1px solid #000;
-  display:flex;
+  .showText{
+    padding:45px 40px;
+  }
   .imgWidth{
-    width:40px;
+    width:100%;
     height:141px;
   }
-  .des-hidden{
-    display:block;
+  .hideText{
+    position:relative;
+    top:-141px;
+    width:87%;
+    margin:0 0 0 13%;
   }
-  @media (min-width:481px) {
-    .des-hidden{
-      display:none;
-    }
-  }
-  @media (max-width:480px) {
-    width:100%;
-    padding:10px 0 20px 0;
-    margin-left:auto;
-    margin-right:auto;
-    .mob-hidden{
-      display:none;
-    }
-    .imgWidth{
-      float:none;
-      width:100%;
-      height:175px;
+  &:hover{
+    .hideText{
+      z-index:-10;
     }
   }
 `
 const BG = styled(BGImg)`
+  width:100%;
+  animation: ${props=> props.hover?slideOut:slideIn} ${props=> props.hover?0.4:0.2}s forwards;
   &:hover{
-
+    cursor:pointer;
   }
 `
 const NameLink = styled(Link)`
@@ -66,36 +60,75 @@ const NameLink = styled(Link)`
     cursor:pointer;
   }
 `
-
 const BoxText = styled.div`
   width:100%;
-  color:#222;
-  font-size:12px;
+  color:${props=> props.hover?props.theme.accentColor:'#222'};
+  font-size:16px;
   height:141px;
-  padding:12px;
-  display:flex;
+  padding:45px 12px;
   text-align:center;
-	vertical-align: middle;
-  align-items: center;
+`
+const Cover = styled.div`
+  background:rgba(0,0,0,0.6);
 `
 
-
-
+const slideOut = keyframes`
+	from {
+    transform: translateX(-87%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+`
+const slideIn = keyframes`
+	from {
+    transform: translateX(0%);;
+  }
+  to {
+    transform: translateX(-87%);
+  }
+`
 
 const TopNewsSmall = React.createClass({
+  getInitialState(){
+    return{
+      hover:false
+    }
+  },
+  hoverOff(){
+    this.setState({
+      hover:false
+    })
+  },
+  hoverOn(){
+    this.setState({
+      hover:true
+    })
+  },
   render(){
     let {detail,style} = this.props
-    //let {ptitle,cover,writer,column,votes,comments,updated,url,readTime} = detail
-
     return (
-      <Container style={{...style}}>
-        <BG src='/tmp/story-list/1486747497349-robertjinx.jpeg' className='imgWidth mob-hidden' /> 
-        <BoxText className='nunito-font'>
+      <Container className="row" style={{...style}} onMouseOver={this.hoverOn} onMouseLeave={this.hoverOff} >
+        <BG hover={this.state.hover} url={detail&&detail.url} src={detail&&detail.cover.medium} className='imgWidth mob-hidden' style={{backgroundPosition:'right'}}>
+          <Cover>
+            <BoxText className='nunito-font showText' hover={this.state.hover}>
+              <span>
+                {_.truncate(detail&&detail.ptitle, {
+                  'length': 70,
+                  'separator': ''
+                })}
+              </span>       
+            </BoxText> 
+          </Cover>
+        </BG>
+        <BoxText className='nunito-font hideText'>
           <span>
-                        เปิดบ้าน VR Sphere ท่องโลกเสมือนจริง ด้วยพาหนะแห่งจินตนาการของคนไทยคนไทยคนไทยคนไทยค
-            นไทยคนไทยคนไทยคนไทยคนไทย จินตนาการของคนไทย
+            {_.truncate(detail&&detail.ptitle, {
+              'length': 70,
+              'separator': ''
+            })}
           </span>       
-        </BoxText>
+        </BoxText> 
       </Container>
     )
   }

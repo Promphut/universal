@@ -52,7 +52,7 @@ const PublisherEditor = React.createClass({
   render(){
 		return (
 		    <Wrapper>
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} />
+		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={this.props.onLoading}/>
           <Container>
             <Content>
               <Aside>

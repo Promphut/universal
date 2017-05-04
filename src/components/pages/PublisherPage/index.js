@@ -120,7 +120,7 @@ const PublisherPage = React.createClass({
 					<BGImg src="/tmp/a-story/pic-min.jpg" style={{width:'100%',height:'510px'}} />
 
 					<Stick>
-						<TopBarWithNavigation title={'Title of AomMoney goes here..'}/>
+						<TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={this.props.onLoading}/>
 					</Stick>
 
 					<Content style={{paddingTop:'100px'}}>

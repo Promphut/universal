@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { PrimaryButton, SecondaryButton, UploadPicture } from 'components'
+import { PrimaryButton, SecondaryButton } from 'components'
 import TextField from 'material-ui/TextField'
 import SelectField from 'material-ui/SelectField'
 import MenuItem from 'material-ui/MenuItem'

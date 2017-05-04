@@ -5,7 +5,9 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import api from 'components/api'
-
+import LinearProgress from 'material-ui/LinearProgress';
+import {FullPageLoading} from 'components'
+import _ from 'lodash'
 injectGlobal`
   /* FOR DESKTOP AND TABLET
   @media (min-width:481px) {
@@ -713,6 +715,11 @@ const muiTheme = getMuiTheme({
 });
 
 const App = React.createClass({
+  getInitialState(){
+    return{
+      completed:0,
+    }
+  },
   genHash(nextProps){
     //console.log('HASHED')
     let hash = new Date().valueOf().toString(36)+Math.round(Math.random()*100)
@@ -732,20 +739,25 @@ const App = React.createClass({
     // })
   },
 
+  componentWillMount(){
+		
+	},
+
   componentDidMount(){
+    //this.timer = setTimeout(() => this.progress(10), 100);
     //console.log('MOUNTED', this.props.location)
     // key'll be null if enter for the first time
     // for page refresh or re-enter on url bar, key'll have value
     if(this.props.location.hash && !this.props.location.key){
       // direct enter with hash, mean dark social traffic
       // if have hash, send to dark social service
-      //console.log('CASE 1', this.props.location)
+      console.log('CASE 1', this.props.location)
       //console.log('nextState', nextState, nextProps)
       api.checkHash(this.props.location.hash.substring(1))
       return this.genHash(this.props)
     } else {
       // first time but no hash presented or have key, gen hash
-      //console.log('CASE 2')
+      //console.log('CASE 2', this.props.location)
       return this.genHash(this.props)
     }
   },
@@ -757,6 +769,8 @@ const App = React.createClass({
     //let isFirstTime = !nextProps.location.key && !this.props.location.key
 
     if(nextProps.location.action==='PUSH' && nextProps.location.pathname !== this.props.location.pathname) {
+      
+      //this.timer = setTimeout(() => this.progress(10), 100); //loading
       // if pushing for the next path, gen hash
       //console.log('CASE 3')
       return this.genHash(nextProps)
@@ -766,6 +780,9 @@ const App = React.createClass({
   },
 
   shouldComponentUpdate(nextProps, nextState){
+    if(_.differenceWith(nextProps.children, this.props.children, _.isEqual)){
+      this.timer = setTimeout(() => this.progress(10), 100);
+    } 
     //console.log('UPDATE0', (nextProps.location.action === 'REPLACE' && !!nextProps.location.hash), nextProps.location.hash, this.props.location.hash)
 
     // If intention is to change hash, no need to update component
@@ -776,7 +793,25 @@ const App = React.createClass({
     return true
   },
 
+  progress(completed) {
+    if (completed > 100) {
+      this.setState({completed: 100});
+    } else {
+      this.setState({completed});
+      const diff = Math.random() * 30;
+      this.timer = setTimeout(() => this.progress(completed + diff), 100);
+    }
+  },
+
+  componentDidUpdate(prevProps, prevState){
+    clearTimeout(this.timer);
+    //this.setState({completed:120})
+    //this.progress(200)
+    //console.log(this.timer)
+  },
+
   render(){
+    var {completed} = this.state
     //console.log('RERENDER')
     let {name, desc, theme, tagline, keywords, analytic, channels, cover} = this.context.setting.publisher
     if(!analytic) analytic = {}
@@ -839,7 +874,10 @@ const App = React.createClass({
         </Helmet>
 
         <MuiThemeProvider muiTheme={muiTheme}>
-          {children}
+          <div>
+            {completed<100&&<LinearProgress mode="determinate" value={completed} />}
+            {React.cloneElement(children, { onLoading: completed<100?true:false })}
+          </div> 
         </MuiThemeProvider>
       </div>
     )
