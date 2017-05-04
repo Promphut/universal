@@ -111,6 +111,7 @@ const TopBarWithNavigation = React.createClass({
 						transparent={transparent}
 						editButton={editButton}
 						hasCover={hasCover}
+						onLoading={this.props.onLoading}
 					> {children}
 					</TopBar>
 				}

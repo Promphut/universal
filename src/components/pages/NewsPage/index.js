@@ -285,7 +285,7 @@ const NewsPage = React.createClass({
     //console.log(latestStories)
 		return (
 		    <Wrapper>
-	      	<TopBarWithNavigation />
+	      	<TopBarWithNavigation onLoading={this.props.onLoading}/>
 					<News>News</News>
 					<Content >
 						<Feed>	

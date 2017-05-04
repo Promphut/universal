@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react'
 import styled from 'styled-components'
-import {PrimaryButton,SecondaryButton,UploadPicture} from 'components'
+import {PrimaryButton,SecondaryButton} from 'components'
 import {List, ListItem, makeSelectable} from 'material-ui/List';
 import FontIcon from 'material-ui/FontIcon'
 import {Link,browserHistory} from 'react-router'

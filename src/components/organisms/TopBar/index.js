@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react'
-import styled from 'styled-components'
+import styled,{keyframes} from 'styled-components'
 import { Link, browserHistory } from 'react-router'
 import Avatar from 'material-ui/Avatar'
 import {
@@ -22,6 +22,23 @@ const Wrapper = styled.div`
 		opacity: ${props => props.scroll};
 		overflow: hidden;
 	}
+`
+const rot = keyframes`
+	from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`
+const rot2 = keyframes`
+
+`
+const Rotate = styled.div`
+	width:50px;
+	height:50px;
+	background:red;
+	animation: ${props=> props.open?rot:rot2}  1s forwards;
 `
 
 const Container = styled.div`
@@ -236,6 +253,7 @@ const TopBar = React.createClass({
 			margin: '13px 20px 13px 13px',
 			cursor: 'pointer'
 		}
+		//console.log(this.props.onLoading)
 		//console.log(theme, theme.barTone, theme.primaryColor)
 		return (
 			<Wrapper scroll={scroll}>
@@ -257,13 +275,15 @@ const TopBar = React.createClass({
 							</Hamburger>
 						</HamburgerWrapper>
 						<LogoWrapper>
-							<LogoLink
-								to="/"
-								src={theme.slogo}
-								title={this.props.title}
-								style={logoStyleMobile}
-								id={'slogo'}
-							/>
+						{this.props.onLoading?<Rotate open={this.props.onLoading}></Rotate>:
+						<LogoLink
+							to="/"
+							src={theme.slogo}
+							title={this.props.title}
+							style={logoStyleMobile}
+							id={'slogo'}
+						/>}
+							
 							<LogoLink
 								to="/"
 								src={theme.logo}

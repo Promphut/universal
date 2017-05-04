@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {PrimaryButton,SecondaryButton,UploadPicture} from 'components'
+import {PrimaryButton,SecondaryButton} from 'components'
 import TextField from 'material-ui/TextField';
 import Request from 'superagent'
 import auth from 'components/auth'

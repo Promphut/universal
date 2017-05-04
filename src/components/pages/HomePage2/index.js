@@ -107,7 +107,7 @@ const HomePage2 = React.createClass({
 		}
 	},
 	componentWillMount(){
-		this.timer = this.progress(0)
+		//this.timer = this.progress(0)
 	},
 	componentDidMount(){
 		this.getPublisher()
@@ -204,20 +204,20 @@ const HomePage2 = React.createClass({
 	},
 
 	componentWillUnmount() {
-    clearTimeout(this.timer);
+    //clearTimeout(this.timer);
   },
 
-  progress(completed) {
-		if(this.state.completed<100){
-			if (completed > 100) {
-      	this.setState({completed: 100});
-			} else {
-				this.setState({completed});
-				const diff = Math.random() * 10;
-				this.timer = setTimeout(() => this.progress(completed + diff), 200);
-			}
-		}
-  },
+  // progress(completed) {
+	// 	if(this.state.completed<100){
+	// 		if (completed > 100) {
+  //     	this.setState({completed: 100});
+	// 		} else {
+	// 			this.setState({completed});
+	// 			const diff = Math.random() * 10;
+	// 			this.timer = setTimeout(() => this.progress(completed + diff), 200);
+	// 		}
+	// 	}
+  // },
 
 	elementInfiniteLoad() {
 			return <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>;
@@ -227,14 +227,14 @@ const HomePage2 = React.createClass({
 		//console.log('context', this.context.setting)
 		var {count,loadOffset,isInfiniteLoading,latestStories,isMobile,completed} = this.state
 		let pub = this.publisher
-		// console.log('PUB', pub)
+		//console.log(this.props.onLoading)
 		return (
 		    <Wrapper>
-					{completed<100&&<LinearProgress mode="determinate" value={completed} />}
+					{/*{completed<100&&<LinearProgress mode="determinate" value={completed} />}*/}
 		    	{pub && <BGImg src={pub.cover.medium} opacity={-1} style={{width:'100%',height:'350px'}}
 					className="hidden-mob" alt={pub.name} />}
 
-	      		<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
+	      		<TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={this.props.onLoading}/>
 
 				{/* THIS IS FOR NEXT VERSION - TRENDING
 				<Content style={{paddingTop:'100px'}}>

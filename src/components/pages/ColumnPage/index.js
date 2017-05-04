@@ -239,7 +239,7 @@ const ColumnPage = React.createClass({
           <meta property="twitter:image:alt" content={column.name} />
           <meta property="fb:app_id" content={config.ANALYTIC.FBAPPID} />
 				</Helmet>
-				<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
+				<TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={this.props.onLoading}/>
 				<BGImg src={column.cover.medium || column.cover.small}
 					style={{width:'100%',height: BGImgSize + 'px'}} alt={column.name}
 					child={ChildCover}/>

@@ -355,7 +355,7 @@ const ContactPage = React.createClass({
     }
 
     return (
-      <ContactAndAboutContainer>
+      <ContactAndAboutContainer onLoading={this.props.onLoading}>
         <Wrapper>
           <Head className='title-font'>{head}</Head>
           <Subhead className='title-font'>What do you want to contact us about?</Subhead>
