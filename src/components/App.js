@@ -751,7 +751,7 @@ const App = React.createClass({
     if(this.props.location.hash && !this.props.location.key){
       // direct enter with hash, mean dark social traffic
       // if have hash, send to dark social service
-      console.log('CASE 1', this.props.location)
+      //console.log('CASE 1', this.props.location)
       //console.log('nextState', nextState, nextProps)
       api.checkHash(this.props.location.hash.substring(1))
       return this.genHash(this.props)

@@ -10,7 +10,7 @@ import auth from 'components/auth'
 import api from 'components/api'
 
 const Box = styled.div`
-  width:477px;
+  width:600px;
   
   background-color:#fff;
   padding:10px 0 10px 0;
@@ -19,21 +19,32 @@ const Box = styled.div`
   } 
 `
 const Head = styled.div`
-  margin:50px auto 10px auto;
+  margin:25px auto 0px auto;
   text-align:center;
-  font-size:42px;
+  font-size:32px;
   color:${props=> props.theme.primaryColor};
-  font-family:'Nunito'
+  font-family:'Nunito';
+  @media (max-width:480px) {
+    margin:0px auto 10px auto;
+    font-weight:bold;
+    color:#fff;
+  } 
 `
 const Text = styled.div`
   color:#8f8f8f;
   font-size:18px;
   text-align:center;
-  font-family:'Mitr'
+  font-family:'Nunito';
+  margin:20px 0 20px 0;
+`
+const LinkUnderLine = styled(Link)`
+  color:${props=> props.theme.primaryColor};
+  font-size:18px;
+  text-decoration:underline; 
 `
 
 const InputBox = styled.form`
-  width:308px;
+  width:350px;
   margin:0 auto 0 auto;
   @media (max-width:480px) {
     margin:50px auto 0 auto;
@@ -44,7 +55,7 @@ var styles={
     background:'#3A579A',
     borderRadius:'24px',
     height:'48px',
-    width:'167px'
+    width:'350px'
   },
   btn:{
     background:'#3A579A',
@@ -125,19 +136,9 @@ const SignUp = React.createClass({
 
     return (
       <Box style={{...style}}>
-        <Head className='hidden-mob'>Email Sign Up</Head>
-        <Text className='hidden-mob'>ไม่พลาดทุกเรื่องราวการเงินดีๆ สมัครสมาชิค</Text>
+        <Head >Create a Password</Head>
+        <Text style={{marginBottom:'0px'}}>Sign up using <span style={{color:'#222'}}>aommoney@likemeasia.com</span></Text>
         <InputBox onSubmit={this.signup} ref='signupForm'>
-          <TextField
-            autoFocus
-            hintText="Email"
-            floatingLabelText="Email"
-            type="email"
-            fullWidth={true}
-            style={{marginTop:'15px'}}
-            name='email'
-            errorText={errText0}
-          /><br />
           <TextField
             hintText="Password must be at least 6 characters"
             floatingLabelText="Password"
@@ -148,8 +149,8 @@ const SignUp = React.createClass({
             errorText={errText1}
           /><br />
           <TextField
-            hintText="Password Again"
-            floatingLabelText="Password"
+            hintText="Password must be at least 6 characters"
+            floatingLabelText="Password Again"
             type="password"
             fullWidth={true}
             style={{marginTop:'15px'}}
@@ -157,7 +158,8 @@ const SignUp = React.createClass({
             errorText={errText2}
             onBlur={this.checkPWD}
           /><br />
-          <div style={{...styles.btnCon,width:'120px'}}><PrimaryButton label='Sign Up' type='submit' style={{width:'120px'}}/></div>
+          <div style={{...styles.btnCon,width:'350px'}}><PrimaryButton label='Sign Up' type='submit' style={{width:'350px'}}/></div>
+          <Text style={{textAlign:'left'}}>Already have ab account? <LinkUnderLine to='/signin'> Sign In</LinkUnderLine> </Text>
         </InputBox>
       </Box>
     )

@@ -121,7 +121,7 @@ const HideOnTablet = styled.div`
 `
 
 const NotLogin = styled.div`
-	width: 180px;
+	width: 100px;
 	display: inline-block;
 	font-size: 15px;
 	margin: 9px 20px;
@@ -206,9 +206,9 @@ const TopBar = React.createClass({
 		if (window.location.pathname != to) browserHistory.push(to)
 	},
 
-	signup() {
-		browserHistory.push('/signup')
-	},
+	// signup() {
+		
+	// },
 
 	render() {
 		var { theme } = this.context.setting.publisher
@@ -337,14 +337,10 @@ const TopBar = React.createClass({
 						<Right>
 							<NotLogin>
 								<SecondaryButton
-									label="Sign Up"
-									onClick={this.signup}
+									label="Sign In"
+									onClick={()=>{browserHistory.push('/signin')}}
 									style={{ verticalAlign: 'middle' }}
 								/>
-								<span>&nbsp; or </span>
-								<Link to="/signin" style={{ fontWeight: 'bold' }}>
-									Sign In
-								</Link>
 							</NotLogin>
 						</Right>}
 				</Container>
