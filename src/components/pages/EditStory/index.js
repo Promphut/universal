@@ -419,6 +419,7 @@ const EditStory = React.createClass({
       })
 
       this.editor.setContent(story.html || '')
+      this.editor2.setContent(story.highlight || '')
     }
   },
 

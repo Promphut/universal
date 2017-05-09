@@ -355,11 +355,7 @@ const GraphDashboard = React.createClass({
 		})
 	},
 	handleChangeTab(e) {
-		this.setState(
-			{
-				selectTab: e
-			},
-			() => {
+		this.setState({selectTab: e},() => {
 				this.getPublisherInsight()
 			}
 		)

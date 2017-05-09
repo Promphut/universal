@@ -12,7 +12,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 const Container = styled.form`
   width:100%;
-  padding:80px;
+  padding:0px 80px 80px 80px;
   border-bottom:1px solid #E2E2E2;
   .textTitle{
     color:#C2C2C2;
@@ -55,7 +55,7 @@ const Flex = styled.div`
   display:flex;
   items-align:center;
   flex-flow: row wrap;
-  margin:50px 0 0 50px;
+  margin:50px 0 0 0;
 `
 
 const Title = styled.div`
@@ -77,7 +77,7 @@ const TextStatus = styled.div`
   font-size:15px;
   font-style:italic;
   float:left;
-  margin:10px 0 0 15px;
+  margin:10px 20px 0 15px;
 `
 
 const Color = styled.div`
@@ -130,7 +130,7 @@ const PublisherThemeSetting = React.createClass({
       textStatus:'Unsave',
       open1: false,
       open2: false,
-      open2: false,
+      open3: false,
 
       colorTheme:'light',
       primaryColor:'',
@@ -263,6 +263,7 @@ const PublisherThemeSetting = React.createClass({
 
   render(){
     //console.log(this.context.setting.publisher.theme)
+    let pub = this.state.publisher
     var {theme} = this.context.setting.publisher
     var {primaryColor,secondaryColor,accentColor,colorTheme,anchorEl1,anchorEl2,anchorEl3,open1,open2,open3,textStatus,uploadFavicon,uploadLogo,uploadSLogo,error} = this.state
     var styles={
@@ -294,7 +295,14 @@ const PublisherThemeSetting = React.createClass({
     //console.log('colorTheme', colorTheme, primaryColor)
     return(
       <Container onSubmit={this.updateData}>
-        <div  className="head sans-font">Theme</div>
+        <Flex>
+          <Title>
+            <div className="sans-font">Cover picture</div>
+          </Title>
+          <Edit>
+            <UploadPicture ratio={1920/350} src={pub.cover&&pub.cover.medium} ratio={1920/350} path={'/publishers/'+config.PID+'/cover'} type='cover' size='1920x350' width={400} height={160} labelStyle={{top:'75px'}}/>
+          </Edit>
+        </Flex>
         <Flex>
           <Title>
             <div className="sans-font">Favicon (.ico)</div>
@@ -469,10 +477,10 @@ const PublisherThemeSetting = React.createClass({
             </div>
           </Edit>
         </Flex>
-        <div className='sans-font' style={{marginTop:'30px'}}>
-          <PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/>
-          <SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/>
-          <TextStatus style={{color:error?'#D8000C':theme.accentColor}}>{textStatus}</TextStatus>
+        <div className='sans-font' style={{marginTop:'30px',overflow:'hidden'}}>
+          <PrimaryButton label='Save' type='submit' style={{float:'right',margin:'0 20px 0 0'}}/>
+          <SecondaryButton label='Reset' onClick={this.setData} style={{float:'right',margin:'0 20px 0 0'}}/>
+          <TextStatus style={{color:error?'#D8000C':theme.accentColor,float:'right'}}>{textStatus}</TextStatus>
         </div>
 
       </Container>

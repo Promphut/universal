@@ -55,8 +55,17 @@ api.getUsers = (keyword) => {
 	.set('Accept','application/json')
 	.then(res => {
 		return res.body.users
-	})
+	}, api.err)
 }
+api.getPublisherColumns = () => {
+   return Request
+	.get(config.BACKURL+'/publishers/'+config.PID+'/columns')
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body.columns
+	}, api.err)
+}
+
 
 api.changePassword = (data) => {
 	let token = auth.getToken(),
