@@ -1,6 +1,8 @@
 import Request from 'superagent'
 import cookies from './cookies'
-import _ from 'lodash'
+import toUpper from 'lodash/toUpper'
+import filter from 'lodash/filter'
+import config from '../config'
 
 let auth = {}
 auth = {
@@ -73,7 +75,7 @@ auth = {
     if(!user) return false
     //console.log('getRoles', auth.getRoles())
     roles.forEach(role => {
-      role = _.toUpper(role)
+      role = toUpper(role)
       let compare
       //console.log('CID', cid, cid!=null)
       if(role==='ADMIN') compare = {type:config.ROLES.ADMIN, user:user._id, publisher:pid}
@@ -88,8 +90,8 @@ auth = {
       // Optimistic check
       else if(role==='WRITER') compare = {type:config.ROLES.WRITER, user:user._id}
       
-      //console.log('role compare', role, compare, _.filter(cookieRoles, compare), cookieRoles)
-      if(compare) authorized = authorized || (_.filter(cookieRoles, compare).length > 0)
+      //console.log('role compare', role, compare, filter(cookieRoles, compare), cookieRoles)
+      if(compare) authorized = authorized || (filter(cookieRoles, compare).length > 0)
     })
 
     //console.log('authorized', authorized)

@@ -1,7 +1,6 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router';
+import React from 'react';
+import {Link} from 'react-router-dom';
 import styled from 'styled-components'
-import {TrendingSideBarInner} from 'components'
 import {findDOMNode as dom} from 'react-dom'
 
 const Container = styled.div`
@@ -26,6 +25,7 @@ const Container = styled.div`
     background-color:${props=> props.theme.primaryColor} ;
   }
 `
+
 const Head = styled.div`
   color:#8F8F8F;
   font-size:20px;
@@ -44,6 +44,7 @@ const Head = styled.div`
 	user-select: none;
 	cursor: default;
 `
+
 const Divider =styled.div`
   height:1px;
   width:100%;
@@ -52,12 +53,14 @@ const Divider =styled.div`
   z-index:-5;
   position:relative;
 `
+
 const Column = styled.div`
   font-weight:bold;
   font-size:36px;
   color:${props=> props.theme.primaryColor};
   text-align:center;
 `
+
 const Div = styled.div`
   width:100%;
   padding:12px 0px;
@@ -65,6 +68,7 @@ const Div = styled.div`
   cursor: pointer;
   color: initial;
 `
+
 const Number = styled.div`
   color: #FFF;
   width:60px;
@@ -82,36 +86,36 @@ const Number = styled.div`
 	user-select: none;
 	cursor: default;
 `
+
 const Name = styled.div`
   color:#222;
   font-size:19px;
   font-weight:bold;
 `
+
 const Sty = styled.div`
   color:#8F8F8F;
   font-size:16px;
 `
 //if height less than 900px remove last item
 
-const TopColumnSidebar = React.createClass({
-  getInitialState(){
-    return{
+class TopColumnSidebar extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
       stopPos:''
     }
-  },
-
-  componentDidMount(){
-
-	},
+  }
 
   componentWillReceiveProps(nextProps){
     if(nextProps.stop != this.props.stop){
       this.setState({stopPos:nextProps.stop})
     }
-  },
+  }
 
   render(){
-    var {column} = this.props
+    let {column} = this.props
     //console.log(column)
     /*var Sort = []
     for(let i=0;i<6;i++){
@@ -125,7 +129,7 @@ const TopColumnSidebar = React.createClass({
         </Div>
       )
     }*/
-    return(
+    return (
       <Container style={{...this.props.style}} ref='contain'>
         <Divider/>
         <Head>TOP COLUMNS</Head>
@@ -143,8 +147,7 @@ const TopColumnSidebar = React.createClass({
         <Divider/>
       </Container>
     )
-  },
-})
-
+  }
+}
 
 export default TopColumnSidebar;

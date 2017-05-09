@@ -1,4 +1,5 @@
 import Cookies from 'react-cookie'
+import config from '../config'
 
 const domain = {domain:config.DOMAIN, path:'/'}
 

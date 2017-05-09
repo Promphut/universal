@@ -1,7 +1,6 @@
 import React from 'react'
-import { PageTemplate, TopBarWithNavigation, OverlayImg, Thumpnail,
-	ThumpnailSmall, ArticleBox, ArticleBoxLarge, ThumpnailRow, TopColumnSidebar,
-	TopWriterSidebar, More, BGImg, StoryDropdown, Footer} from 'components'
+import PropTypes from 'prop-types'
+import { TopBarWithNavigation, BGImg, ArticleBox, TopColumnSidebar, TopWriterSidebar, More, Footer} from 'components'
 import styled from 'styled-components'
 //import Request from 'superagent'
 import auth from 'components/auth'
@@ -10,6 +9,7 @@ import slider from 'react-slick'
 import Infinite from 'react-infinite'
 import CircularProgress from 'material-ui/CircularProgress';
 import LinearProgress from 'material-ui/LinearProgress';
+import utils from '../../../services/clientUtils'
 
 const Wrapper = styled.div`
 	@media (max-width:480px) {
@@ -88,16 +88,22 @@ const Onload = styled.div`
 // 	overflow-y:visible !important;
 // `
 
-const HomePage2 = React.createClass({
-	getInitialState(){
+class HomePage2 extends React.Component {
+	static contextTypes = {
+		setting: PropTypes.object
+	}
+
+	constructor(props) {
+		super(props)
+
 		this.trendingStories = []
 		this.latestStories = []
 		this.writer = []
 		this.column = []
-		
-		return {
+
+		this.state = {
 			latestStories:[],
-			refresh: 0,
+			//refresh: 0,
 			page:0,
 			isInfiniteLoading: false,
 			loadOffset:300,
@@ -105,40 +111,20 @@ const HomePage2 = React.createClass({
 			isMobile:false,
 			completed:0
 		}
-	},
-	componentWillMount(){
-		//this.timer = this.progress(0)
-	},
-	componentDidMount(){
-		this.getPublisher()
-		this.getFeed()
-		this.getSidebar()
-		this.setState({
-			isMobile:window.isMobile(),
-			completed:100
-		})
+	}	
 
-		// this.progress(100)
-	},
-
-	// componentDidUpdate(prevProps, prevState){
-  //   clearTimeout(this.timer);
-	// 	this.progress(100)
-  // },
-
-
-	getPublisher(){
+	getPublisher = () => {
 		api.getPublisher()
 		.then(pub => {
 			this.publisher = pub
 
 			this.setState({
-				refresh: Math.random()
+				//refresh: Math.random()
 			})
 		})
-	},
+	}
 
-	getFeed(){
+	getFeed = () => {
 		// - Fetching latestStories
 		api.getFeed('article', {status:1}, 'latest', null, 0, 15)
 		.then(result => {
@@ -146,13 +132,13 @@ const HomePage2 = React.createClass({
 				this.trendingStories = result.feed
 
 				this.setState({
-					refresh: Math.random()
+					//refresh: Math.random()
 				})
 			}
 		})
-	},
+	}
 
-	getSidebar(){
+	getSidebar = () => {
 		// - Fetching top columns
 		// - Fetch top writers
 		Promise.all([
@@ -165,24 +151,24 @@ const HomePage2 = React.createClass({
 			if(writers) this.writer = writers
 
 			this.setState({
-				refresh: Math.random()
+				//refresh: Math.random()
 			})
 		})
-	},
+	}
 
-	buildElements() {
+	buildElements = () => {
 		let page = this.state.page
 
 		api.getFeed('article', {status:1}, 'latest', null, page, 10)
 		.then(result => {
 			var s = this.state.latestStories.concat(result.feed)
 			this.setState({
-				feedCount:result.count[1],
+				feedCount:result.count['1'],
 				latestStories:s,
 			},()=>{
-				if(s.length==result.count[1]){
+				if(s.length==result.count['1']){
 					this.setState({
-						loadOffset:'undefined',
+						loadOffset:undefined,
 						isInfiniteLoading: false,
 					})
 				}else{
@@ -192,50 +178,42 @@ const HomePage2 = React.createClass({
 				}
 			})
 		})
-	},
+	}
 
-	handleInfiniteLoad() {
+	handleInfiniteLoad = () => {
 		//console.log('Onload')
 		this.buildElements(this.state.page)
 		this.setState({
-				isInfiniteLoading: true,
-				page:this.state.page+1
+			isInfiniteLoading: true,
+			page:this.state.page+1
 		});
-	},
+	}
 
-	componentWillUnmount() {
-    //clearTimeout(this.timer);
-  },
+	elementInfiniteLoad = () => {
+		return <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>;
+	}
 
-  // progress(completed) {
-	// 	if(this.state.completed<100){
-	// 		if (completed > 100) {
-  //     	this.setState({completed: 100});
-	// 		} else {
-	// 			this.setState({completed});
-	// 			const diff = Math.random() * 10;
-	// 			this.timer = setTimeout(() => this.progress(completed + diff), 200);
-	// 		}
-	// 	}
-  // },
-
-	elementInfiniteLoad() {
-			return <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>;
-	},
+	componentDidMount(){
+		this.getPublisher()
+		this.getFeed()
+		this.getSidebar()
+		this.setState({
+			isMobile:utils.isMobile(),
+			completed:100
+		})
+	}
 
 	render(){
-		//console.log('context', this.context.setting)
-		var {count,loadOffset,isInfiniteLoading,latestStories,isMobile,completed} = this.state
+		let {count,loadOffset,isInfiniteLoading,latestStories,isMobile,completed} = this.state
 		let pub = this.publisher
 		//console.log(this.props.onLoading)
+		//console.log(this.state)
 		return (
 		    <Wrapper>
-					{/*{completed<100&&<LinearProgress mode="determinate" value={completed} />}*/}
-		    	{pub && <BGImg src={pub.cover.medium} opacity={-1} style={{width:'100%',height:'350px'}}
-					className="hidden-mob" alt={pub.name} />}
+				{completed<100&&<LinearProgress mode="determinate" value={completed} />}
+		    	{pub && <BGImg src={pub.cover.medium} opacity={-1} style={{width:'100%',height:'350px'}} className="hidden-mob" alt={pub.name} />}
 
 	      		<TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={this.props.onLoading}/>
-
 				{/* THIS IS FOR NEXT VERSION - TRENDING
 				<Content style={{paddingTop:'100px'}}>
 					<Feed>
@@ -247,37 +225,34 @@ const HomePage2 = React.createClass({
 						{!_.isEmpty(this.trendingStories) && <ThumpnailRow detail={this.trendingStories} size='small' style={{margin:'30px 0 30px 0'}}/>}
 					</Feed>
 				</Content>*/}
-		      <Content>
+		      	
+		      	<Content>
 			      <Main>
-							<TextLine className='sans-font'>Latest</TextLine>
-							<Infinite
-									containerHeight={!isMobile?(count*210)-100:(count*356)-100}
-									elementHeight={!isMobile?210:356}
-									infiniteLoadBeginEdgeOffset={loadOffset}
-									onInfiniteLoad={this.handleInfiniteLoad}
-									loadingSpinnerDelegate={this.elementInfiniteLoad()}
-									isInfiniteLoading={isInfiniteLoading}
-									useWindowAsScrollContainer={true}>
+						<TextLine className='sans-font'>Latest</TextLine>
+						<Infinite
+						containerHeight={!isMobile?(count*210)-100:(count*356)-100}
+						elementHeight={!isMobile?210:356}
+						infiniteLoadBeginEdgeOffset={loadOffset}
+						onInfiniteLoad={this.handleInfiniteLoad}
+						loadingSpinnerDelegate={this.elementInfiniteLoad()}
+						isInfiniteLoading={isInfiniteLoading}
+						useWindowAsScrollContainer={true}>
 
-								{latestStories.length!=0?latestStories.map((story, index) => (
-									<ArticleBox detail={story} key={index}/>
-								)):''}
-							</Infinite>
-							<More style={{margin:'30px auto 30px auto'}}/>
+							{latestStories.length!=0?latestStories.map((story, index) => (
+								<ArticleBox detail={story} key={index}/>
+							)):''}
+						</Infinite>
+						<More style={{margin:'30px auto 30px auto'}}/>
 			      </Main>
 			      <Aside>
-							<TopColumnSidebar column={this.column}/>
-							<TopWriterSidebar writer={this.writer}/>
-						</Aside>
-		      </Content>
-					<Footer/>
+						<TopColumnSidebar column={this.column}/>
+						<TopWriterSidebar writer={this.writer}/>
+					</Aside>
+		      	</Content>
+				<Footer/>
 		   </Wrapper>
-		  )
+		)
 	}
-});
-
-HomePage2.contextTypes = {
-	setting: React.PropTypes.object
-};
+}
 
 export default HomePage2;

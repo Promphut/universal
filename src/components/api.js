@@ -1,7 +1,8 @@
-const _ = require('lodash'),
-	auth = require('./auth'),
+const auth = require('./auth'),
 	Request = require('superagent'),
-	{NotFoundError} = require('./error')
+	{NotFoundError} = require('./error'),
+	config = require('../config'),
+	utils = require('../services/clientUtils')
 
 let api =  {}
 
@@ -735,7 +736,7 @@ api.getGrowthInsight = (insight, subaction = '', filter, sort, limit, current) =
 // response: {success:true/false, url:'url'} 
 // if unable to shorten, success will be false
 api.shorten = (url, utm) => {
-	url = appendUTM(url, utm)
+	url = utils.appendUTM(url, utm)
 
 	return Request
 	.get('https://api-ssl.bitly.com/v3/shorten')

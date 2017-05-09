@@ -1,16 +1,12 @@
-import React from 'react'
-import { render } from 'react-dom'
-import { AppContainer } from 'react-hot-loader'
-var RenderApp = require('./components/pages/RenderApp/index.js')
-import routes from 'routes'
+require('babel-polyfill')
+require('babel-core/register')({
+  plugins: ['transform-es2015-modules-commonjs'],
+})
 
-const root = document.getElementById('app')
+const WebpackIsomorphicTools = require('webpack-isomorphic-tools')
+const webpackIsomorphicToolsConfig = require('../webpack/webpack-isomorphic-tools-configuration')
 
-render(<AppContainer><RenderApp routes={routes}/></AppContainer>, root)
-
-if (module.hot) {
-  module.hot.accept('routes', () => {
-    require('routes')
-    render(<AppContainer><RenderApp routes={routes}/></AppContainer>, root)
+global.webpackIsomorphicTools = new WebpackIsomorphicTools(webpackIsomorphicToolsConfig)
+  .server('./', () => {
+    require('./server')
   })
-}

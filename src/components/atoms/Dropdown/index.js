@@ -30,15 +30,16 @@ const DropdownContent = styled.div`
   }
 `
 
+class Dropdown extends React.Component {
+  constructor(props) {
+    super(props)
 
-const Dropdown = onClickOutside(React.createClass({
-  getInitialState () {
-    return {
+    this.state = {
       open: false
     }
-  },
+  }
 
-  handleClick () {
+  handleClick = () => {
     if (!this.state.open) {
       this.setState({
         open: true
@@ -48,20 +49,20 @@ const Dropdown = onClickOutside(React.createClass({
         open: false
       })
     }
-  },
+  }
 
-  handleSelect () {
+  handleSelect = () => {
     this.setState({
       open: false
     })
-  },
+  }
 
   // method from onClickOutside
-  handleClickOutside () {
+  handleClickOutside = () => {
     this.setState({
       open: false
     })
-  },
+  }
 
   render () {
     return (
@@ -81,6 +82,6 @@ const Dropdown = onClickOutside(React.createClass({
       </DropdownWrapper>
     )
   }
-}))
+}
 
-export default Dropdown
+export default onClickOutside(Dropdown)

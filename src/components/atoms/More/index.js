@@ -1,11 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 
-var Box = styled.div`
+const Box = styled.div`
   width:40px;
   display:flex;
 `
-var Dot = styled.div`
+
+const Dot = styled.div`
   width:8px;
   height:8px;
   border-radius:50%;

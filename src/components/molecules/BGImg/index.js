@@ -1,5 +1,6 @@
-import React, {PropTypes} from 'react'
-import {Link} from 'react-router'
+import React from 'react'
+import PropTypes from 'prop-types'
+import {Link} from 'react-router-dom'
 import styled, {css} from 'styled-components'
 import {GradientOverlay} from 'components'
 
@@ -20,9 +21,10 @@ const Filter = styled(GradientOverlay)`
   height:100%;
 `
 
-const BGImg = ({style, className, src, url, alt, opacity, child, children}) => {
+const BGImg = ({style, className, src, url, alt, opacity, child, children, match}) => {
+  //console.log('URL', url, match)
 	return (
-  	<ImgLink to={url} style={{...style, backgroundImage:'url('+src+')'}}
+  	<ImgLink to={url || '#'} style={{...style, backgroundImage:'url('+src+')'}}
       className={className} title={alt}>
       {opacity === -1 ? (<div>
         {child?child:''}

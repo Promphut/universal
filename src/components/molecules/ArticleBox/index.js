@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router';
+import React from 'react';
+import {Link} from 'react-router-dom';
 import styled from 'styled-components'
 import {BGImg, ShareDropdown} from 'components'
 import Avatar from 'material-ui/Avatar';
@@ -75,11 +75,15 @@ const BoxText = styled.div`
 const DivDes = styled.div`
 `
 
-const ArticleBox = React.createClass({
+class ArticleBox extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+
   render(){
     let {detail,style} = this.props
     let {ptitle,cover,writer,column,votes,comments,updated,url,readTime} = detail
-    //console.log('URL', url)
+    //console.log('URL', url, detail, style)
     return (
       <Container style={{...style}}>
         <BGImg url={url} src={cover.small || cover.medium} alt={ptitle || ''} className='imgWidth mob-hidden' />
@@ -105,10 +109,6 @@ const ArticleBox = React.createClass({
       </Container>
     )
   }
-})
-
-
-
-
+}
 
 export default ArticleBox;

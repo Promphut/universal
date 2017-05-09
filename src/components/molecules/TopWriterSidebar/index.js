@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import styled from 'styled-components'
-import {TrendingSideBarInner} from 'components'
 import {findDOMNode as dom} from 'react-dom'
 import Avatar from 'material-ui/Avatar'
+
 const Container = styled.div`
   width:324px;
   position:relative;
@@ -26,6 +26,7 @@ const Container = styled.div`
     background-color:#DAF8F9;
   }
 `
+
 const Head = styled.div`
   color:#8F8F8F;
   font-size:20px;
@@ -44,6 +45,7 @@ const Head = styled.div`
 	user-select: none;
 	cursor: default;
 `
+
 const Divider =styled.div`
   height:1px;
   width:100%;
@@ -52,18 +54,21 @@ const Divider =styled.div`
   z-index:-5;
   position:relative;
 `
+
 const Column = styled.div`
   font-weight:bold;
   font-size:36px;
   color:${props=> props.theme.primaryColor};
   text-align:center;
 `
+
 const Div = styled.div`
   width:100%;
   padding:12px 0px;
   display:flex;
   cursor: pointer;
 `
+
 const Number = styled.div`
   width:60px;
   height:60px;
@@ -73,38 +78,39 @@ const Number = styled.div`
   font-weight:bold;
   float:left;
 `
+
 const Name = styled.div`
   color:#222;
   font-size:19px;
   font-weight:bold;
 `
+
 const Sty = styled.div`
   color:#8F8F8F;
   font-size:13px;
 `
+
 //if height less than 900px remove last item
 const defaultPic = '/tmp/avatar.png'
 
-const TopWriterSidebar = React.createClass({
-  getInitialState(){
-    return{
+class TopWriterSidebar extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
       stopPos:''
     }
-  },
-
-  componentDidMount(){
-
-	},
+  }
 
   componentWillReceiveProps(nextProps){
     if(nextProps.stop != this.props.stop){
       this.setState({stopPos:nextProps.stop})
     }
-  },
+  }
 
   render(){
     //console.log(this.props.writer)
-    var {writer} = this.props
+    let {writer} = this.props
     /*var Sort = []
     for(let i=0;i<writer.length;i++){
       Sort.push(
@@ -135,8 +141,7 @@ const TopWriterSidebar = React.createClass({
         <Divider/>
       </Container>
     )
-  },
-})
-
+  }
+}
 
 export default TopWriterSidebar;

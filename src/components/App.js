@@ -1,13 +1,18 @@
-import React, { PropTypes } from 'react'
-import { injectGlobal } from 'styled-components'
-import Helmet from "react-helmet";
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import injectTapEventPlugin from 'react-tap-event-plugin';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { injectGlobal, ThemeProvider } from 'styled-components'
+import Helmet from 'react-helmet'
 import api from 'components/api'
+import differenceWith from 'lodash/differenceWith'
+import isEqual from 'lodash/isEqual'
+import { withRouter } from 'react-router'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import LinearProgress from 'material-ui/LinearProgress';
-import {FullPageLoading} from 'components'
-import _ from 'lodash'
+
+//import theme from './themes/default'
+
 injectGlobal`
   /* FOR DESKTOP AND TABLET
   @media (min-width:481px) {
@@ -706,7 +711,7 @@ injectGlobal`
   }
 `
 
-injectTapEventPlugin();
+injectTapEventPlugin()
 
 const muiTheme = getMuiTheme({
   appBar: {
@@ -714,34 +719,58 @@ const muiTheme = getMuiTheme({
   },
 });
 
-const App = React.createClass({
-  getInitialState(){
-    return{
+class App extends React.Component {
+
+  static propTypes = {
+    match: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
+    children: PropTypes.any
+  }
+
+  static contextTypes = {
+    setting: PropTypes.object
+  }
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
       completed:0,
     }
-  },
-  genHash(nextProps){
+  }
+
+  genHash = (nextProps) => {
     //console.log('HASHED')
     let hash = new Date().valueOf().toString(36)+Math.round(Math.random()*100)
+    let {match, location, history} = nextProps
     
     // 1. Create hash
     // 1.1 For story URL 
     // count dark social if story countView is true
-    if(nextProps.params.countView) api.createHash(hash, nextProps.params.story._id)
+    if(match.params.countView) api.createHash(hash, match.params.story._id)
     // 1.2 For non-story URL
     else api.createHash(hash)
 
     // 2. Append #hash to url
-    this.props.router.replace(nextProps.location.pathname+'#'+hash)
+    //history.replace(location.pathname+'#'+hash)
+    //console.log(location)
+    history.replace({hash:'#'+hash})
     // this.props.router.replace({
     //   ...nextProps.location, 
     //   hash:'#'+hash
     // })
-  },
+  }
 
-  componentWillMount(){
-		
-	},
+  progress = (completed) => {
+    if (completed > 100) {
+      this.setState({completed: 100});
+    } else {
+      this.setState({completed:completed});
+      const diff = Math.random() * 30;
+      this.timer = setTimeout(() => this.progress(completed + diff), 100);
+    }
+  }
 
   componentDidMount(){
     //this.timer = setTimeout(() => this.progress(10), 100);
@@ -760,65 +789,57 @@ const App = React.createClass({
       //console.log('CASE 2', this.props.location)
       return this.genHash(this.props)
     }
-  },
+  }
 
   componentWillReceiveProps(nextProps){
     //console.log("RECEIVE1", /*nextProps.location.pathname, this.props.location.pathname, */nextProps.location.action, nextProps.location.key, this.props.location.key)
     //console.log("RECEIVE2", nextProps.location.hash, nextProps.location.action)
-    
+    //console.log('componentWillReceiveProps', nextProps.history, nextProps.location, this.props.location)
     //let isFirstTime = !nextProps.location.key && !this.props.location.key
 
-    if(nextProps.location.action==='PUSH' && nextProps.location.pathname !== this.props.location.pathname) {
+    if(nextProps.history.action==='PUSH') {
       
       //this.timer = setTimeout(() => this.progress(10), 100); //loading
       // if pushing for the next path, gen hash
       //console.log('CASE 3')
-      return this.genHash(nextProps)
-    }
+      if(nextProps.location.pathname !== this.props.location.pathname) return this.genHash(nextProps)
+      // if reclick the same url
+      // if(this.props.location.hash && !nextProps.location.hash) {
+
+      //   nextProps.location.hash = this.props.location.hash
+      //   console.log('XXX', this.props.location.hash, 'ZZ', nextProps.location.hash)
+      // }
+    } 
     // for case POP i.e. reenter url with hash
     //console.log('CASE 4', nextProps.location, this.props.location)
-  },
+  }
 
   shouldComponentUpdate(nextProps, nextState){
-    if(_.differenceWith(nextProps.children, this.props.children, _.isEqual)){
+    if(differenceWith(nextProps.children, this.props.children, isEqual)){
       this.timer = setTimeout(() => this.progress(10), 100);
     } 
     //console.log('UPDATE0', (nextProps.location.action === 'REPLACE' && !!nextProps.location.hash), nextProps.location.hash, this.props.location.hash)
 
     // If intention is to change hash, no need to update component
-    if(nextProps.location.action === 'REPLACE' && nextProps.location.hash!==this.props.location.hash) {
+    if(nextProps.history.action === 'REPLACE' && nextProps.location.hash!==this.props.location.hash) {
       return false
     }
     //console.log('-- Component Updated --')
     return true
-  },
-
-  progress(completed) {
-    if (completed > 100) {
-      this.setState({completed: 100});
-    } else {
-      this.setState({completed});
-      const diff = Math.random() * 30;
-      this.timer = setTimeout(() => this.progress(completed + diff), 100);
-    }
-  },
+  }
 
   componentDidUpdate(prevProps, prevState){
     clearTimeout(this.timer);
     //this.setState({completed:120})
     //this.progress(200)
     //console.log(this.timer)
-  },
+  }
 
   render(){
-    var {completed} = this.state
-    //console.log('RERENDER')
-    let {name, desc, theme, tagline, keywords, analytic, channels, cover} = this.context.setting.publisher
-    if(!analytic) analytic = {}
-    //console.log('context', this.context.setting, this.props.location)
-    let coverMedium
-    if (cover) coverMedium = cover.medium
-    let {children} = this.props
+    let {completed} = this.state
+    let {theme} = this.context.setting.publisher
+
+    //console.log('AGENT', navigator.userAgent)
     let muiTheme = getMuiTheme({
       appBar: {
         height: 60,
@@ -844,55 +865,44 @@ const App = React.createClass({
       },
       tabs: {
         selectedTextColor: "#FFF"
-      }
+      },
+      userAgent: navigator.userAgent
     });
-
-    let title = name + (tagline ? ' | ' + tagline : '')
 
     return (
       <div>
-        <Helmet>
-          <title>{title}</title>
-          <meta name="title" content={title} />
-          <meta name="keywords" content={keywords} />
-          <meta name="description" content={desc} />
-
-          <link rel="shortcut icon" type="image/ico" href={config.BACKURL+'/publishers/'+config.PID+'/favicon'} />
-          {channels && channels.fb ? <link rel="author" href={getFbUrl(channels.fb)} /> : ''}
-          <link rel="canonical" href={config.FRONTURL+this.props.location.pathname} />
-
-          <meta property="og:sitename" content={name} />
-          <meta property="og:url" content={config.FRONTURL+this.props.location.pathname} />
-          <meta property="og:title" content={title} />
-          <meta property="og:type" content="article" />
-          <meta property="og:image" content={coverMedium} />
-          <meta property="og:keywords" content={keywords} />
-          <meta property="og:description" content={desc} />
-          <meta property="twitter:card" content="summary_large_image" />
-          <meta property="twitter:image:alt" content={title} />
-          <meta property="fb:app_id" content={config.ANALYTIC.FBAPPID} />
-        </Helmet>
-
-        <MuiThemeProvider muiTheme={muiTheme}>
-          <div>
-            {completed<100&&<LinearProgress mode="determinate" value={completed} />}
-            {React.cloneElement(children, { onLoading: completed<100?true:false })}
-          </div> 
-        </MuiThemeProvider>
+        <Helmet
+          title="Atomic React"
+          titleTemplate="ARc - %s"
+          meta={[
+            { name: 'description', content: 'React starter kit based on Atomic Design with React Router v4, Webpack, Redux, Server Side Rendering and more.' },
+            { property: 'og:site_name', content: 'ARc' },
+            { property: 'og:image', content: 'https://diegohaz.github.io/arc/thumbnail.png' },
+            { property: 'og:image:type', content: 'image/png' },
+            { property: 'og:image:width', content: '1200' },
+            { property: 'og:image:height', content: '630' },
+          ]}
+          link={[
+            //{ rel: 'icon', href: 'https://diegohaz.github.io/arc/icon.png' },
+            { rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' },
+            { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css'},
+            { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Mitr|Nunito|PT+Sans|PT+Serif|Roboto|Roboto+Slab'},
+          ]}
+          script={[
+            { src: 'https://use.fontawesome.com/3df470c471.js' },
+          ]}
+        />
+        <ThemeProvider theme={theme}>
+          <MuiThemeProvider muiTheme={muiTheme}>
+            <div>
+              {completed<100&&<LinearProgress mode="determinate" value={completed} />}
+              {React.cloneElement(this.props.children, { onLoading: completed<100?true:false })}
+            </div> 
+          </MuiThemeProvider>
+        </ThemeProvider>
       </div>
     )
   }
-})
-
-App.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node
-  ])
 }
 
-App.contextTypes = {
-    setting: React.PropTypes.object
-};
-
-export default App
+export default withRouter(App)

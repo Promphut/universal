@@ -1,6 +1,8 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Link } from 'react-router'
+import { NavLink } from 'react-router-dom'
+import { withRouter } from 'react-router'
 
 const Nav = styled.nav`
 	ul {
@@ -78,7 +80,7 @@ const Nav = styled.nav`
 	}
 `
 
-const TopNavigation = ({ menu }) => {
+const TopNavigation = ({ menu, location }) => {
 	let cols = menu && menu.column ? menu.column : []
 
 	// Menu items from menu props
@@ -86,44 +88,44 @@ const TopNavigation = ({ menu }) => {
 	for (let i = 0; i < cols.length; i++) {
 		items.push(
 			<li key={i}>
-				<Link to={'/stories/' + cols[i].slug} activeClassName="active">
+				<NavLink to={'/stories/' + cols[i].slug} activeClassName="active">
 					{cols[i].name}
-				</Link>
+				</NavLink>
 			</li>
 		)
 	}
-	//console.log(window.location.pathname.split("/")[1]=='stories')
 	return (
 		<Nav>
 			<ul>
 				<li>
-					<Link to="/" activeClassName="active" onlyActiveOnIndex={true}>
+					<NavLink to="/" activeClassName="active">
 						Home
-					</Link>
+					</NavLink>
 				</li>
 				<li>
-					<Link
-						style={{ cursor: 'pointer' }}
-						style={{ top: '0px' }}
+					<NavLink
+						to={'/stories/columns'}
+						style={{ cursor: 'pointer', top: '0px' }}
 						className={
-							window.location.pathname.split('/')[1] == 'stories'
+							location.pathname.split('/')[1] == 'stories'
 								? 'active'
 								: ''
 						}
-						activeClassName="active">
+						activeClassName="active"
+					>
 						Stories ▾
-					</Link>
+					</NavLink>
 					<ul className="dropdown">
 						{items}
 						<li key={999}>
-							<Link to={'/stories/columns'} activeClassName="active">
+							<NavLink to={'/stories/columns'} activeClassName="active">
 								All Columns
-							</Link>
+							</NavLink>
 						</li>
 					</ul>
 				</li>
-				<li><Link to="/about" activeClassName="active">About Us</Link></li>
-				<li><Link to="/contact" activeClassName="active">Contact</Link></li>
+				<li><NavLink to="/about" activeClassName="active">About Us</NavLink></li>
+				<li><NavLink to="/contact" activeClassName="active">Contact</NavLink></li>
 			</ul>
 		</Nav>
 	)
@@ -133,4 +135,4 @@ TopNavigation.propTypes = {
 	menu: PropTypes.object
 }
 
-export default TopNavigation
+export default withRouter(TopNavigation)
