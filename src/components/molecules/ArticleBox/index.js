@@ -24,7 +24,7 @@ const Container = styled.div`
   }
   @media (min-width:481px) {
     .des-hidden{
-      display:none;
+      display:none !important;
     }
   }
   @media (max-width:480px) {
@@ -33,7 +33,7 @@ const Container = styled.div`
     margin-left:auto;
     margin-right:auto;
     .mob-hidden{
-      display:none;
+      display:none !important;
     }
     .imgWidth{
       float:none;

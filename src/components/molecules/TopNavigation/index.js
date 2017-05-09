@@ -88,7 +88,7 @@ const TopNavigation = ({ menu, location }) => {
 	for (let i = 0; i < cols.length; i++) {
 		items.push(
 			<li key={i}>
-				<NavLink to={'/stories/' + cols[i].slug} activeClassName="active">
+				<NavLink exact to={'/stories/' + cols[i].slug} activeClassName="active">
 					{cols[i].name}
 				</NavLink>
 			</li>
@@ -98,12 +98,13 @@ const TopNavigation = ({ menu, location }) => {
 		<Nav>
 			<ul>
 				<li>
-					<NavLink to="/" activeClassName="active">
+					<NavLink exact to="/" activeClassName="active">
 						Home
 					</NavLink>
 				</li>
 				<li>
 					<NavLink
+						exact
 						to={'/stories/columns'}
 						style={{ cursor: 'pointer', top: '0px' }}
 						className={
@@ -118,14 +119,14 @@ const TopNavigation = ({ menu, location }) => {
 					<ul className="dropdown">
 						{items}
 						<li key={999}>
-							<NavLink to={'/stories/columns'} activeClassName="active">
+							<NavLink exact to={'/stories/columns'} activeClassName="active">
 								All Columns
 							</NavLink>
 						</li>
 					</ul>
 				</li>
-				<li><NavLink to="/about" activeClassName="active">About Us</NavLink></li>
-				<li><NavLink to="/contact" activeClassName="active">Contact</NavLink></li>
+				<li><NavLink exact to="/about" activeClassName="active">About Us</NavLink></li>
+				<li><NavLink exact to="/contact" activeClassName="active">Contact</NavLink></li>
 			</ul>
 		</Nav>
 	)

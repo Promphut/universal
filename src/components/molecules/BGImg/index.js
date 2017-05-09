@@ -4,12 +4,12 @@ import {Link} from 'react-router-dom'
 import styled, {css} from 'styled-components'
 import {GradientOverlay} from 'components'
 
-const ImgLink = styled(Link)`
-  display:block;
-  background-position:center;
-  background-size:cover;
-  overflow:auto;
-`
+// const ImgLink = styled(Link)`
+//   display:block;
+//   background-position:center;
+//   background-size:cover;
+//   overflow:auto;
+// `
 
 const Filter = styled(GradientOverlay)`
   position:relative;
@@ -21,21 +21,38 @@ const Filter = styled(GradientOverlay)`
   height:100%;
 `
 
-const BGImg = ({style, className, src, url, alt, opacity, child, children, match}) => {
+const BGImg = ({style, className, src, url, alt, opacity, child, children}) => {
   //console.log('URL', url, match)
-	return (
-  	<ImgLink to={url || '#'} style={{...style, backgroundImage:'url('+src+')'}}
-      className={className} title={alt}>
-      {opacity === -1 ? (<div>
-        {child?child:''}
-        {children}
-      </div>) : (<Filter opacity={opacity}>
-        {child?child:''}
-        {children}
-      </Filter>)
-      }
-    </ImgLink>
-	)
+  //if(!src) console.log('SRC', src)
+  style = {display:'block', backgroundPosition:'center', backgroundSize:'cover', overflow:'auto', ...style}
+  if(src) style.backgroundImage = 'url('+src+')'
+
+  if(url)
+  	return (
+    	<Link to={url || '#'} style={style} className={className} title={alt}>
+        {opacity === -1 ? (<div>
+          {child?child:''}
+          {children}
+        </div>) : (<Filter opacity={opacity}>
+          {child?child:''}
+          {children}
+        </Filter>)
+        }
+      </Link>
+  	)
+  else 
+    return (
+      <div style={style} className={className} title={alt}>
+        {opacity === -1 ? (<div>
+          {child?child:''}
+          {children}
+        </div>) : (<Filter opacity={opacity}>
+          {child?child:''}
+          {children}
+        </Filter>)
+        }
+      </div>
+    )
 }
 
 export default BGImg;

@@ -22,7 +22,7 @@ class TwtShareButton extends React.Component {
 	getUrl = (done) => {
 		let url = this.props.url
 		if(!url){
-			config.FRONTURL + this.props.location
+			url = config.FRONTURL + this.props.location
 		}
 		api.shorten(url, {medium:'social', source:'twitter'})
 		.then(done)

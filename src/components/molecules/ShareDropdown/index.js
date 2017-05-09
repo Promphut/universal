@@ -9,10 +9,6 @@ import api from 'components/api'
 import config from '../../../config'
 import utils from '../../../services/clientUtils'
 
-
-const Hover = styled.div`
-`
-
 class ShareDropdown extends React.Component {
   static contextTypes = {
     setting: PropTypes.object
@@ -79,7 +75,7 @@ class ShareDropdown extends React.Component {
 
     const button = (
       <div onMouseLeave={this.onNotHover}>
-        <Hover onMouseEnter={() => this.onHover(0)}>
+        <div onMouseEnter={() => this.onHover(0)}>
           <FbShareButton url={config.FRONTURL+this.props.url} button={
             <FlatButton
               label={buttons[0]}
@@ -93,8 +89,8 @@ class ShareDropdown extends React.Component {
               style={{width: '180px', textAlign: 'left', display: 'inline-block'}}
               onTouchTap={() => this.select('facebook')}
             />*/}
-        </Hover>
-        <Hover onMouseEnter={() => this.onHover(1)}>
+        </div>
+        <div onMouseEnter={() => this.onHover(1)}>
           <TwtShareButton url={config.FRONTURL+this.props.url} button={
             <FlatButton
               label={buttons[1]}
@@ -102,8 +98,8 @@ class ShareDropdown extends React.Component {
               style={{width: '180px', textAlign: 'left', display: 'inline-block'}}
             />
           } />
-        </Hover>
-        <Hover onMouseEnter={() => this.onHover(2)}>
+        </div>
+        <div onMouseEnter={() => this.onHover(2)}>
           <CopyToClipboard text={config.FRONTURL+this.props.url} onCopy={this.onStoryCopied}>
             <FlatButton
               label={buttons[2]}
@@ -111,7 +107,7 @@ class ShareDropdown extends React.Component {
               style={{width: '180px', textAlign: 'left', display: 'inline-block'}}
             />
           </CopyToClipboard>
-        </Hover>
+        </div>
       </div>
     )
 

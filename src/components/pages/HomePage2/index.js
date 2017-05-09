@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import auth from 'components/auth'
 import api from 'components/api'
 import slider from 'react-slick'
-import Infinite from 'react-infinite'
+import InfiniteScroll from 'react-infinite-scroller';
 import CircularProgress from 'material-ui/CircularProgress';
 import LinearProgress from 'material-ui/LinearProgress';
 import utils from '../../../services/clientUtils'
@@ -96,20 +96,22 @@ class HomePage2 extends React.Component {
 	constructor(props) {
 		super(props)
 
-		this.trendingStories = []
-		this.latestStories = []
+		//this.trendingStories = []
+		//this.latestStories = []
 		this.writer = []
 		this.column = []
 
 		this.state = {
-			latestStories:[],
+			//latestStories:[],
 			//refresh: 0,
+			//isInfiniteLoading: false,
+			//loadOffset:300,
 			page:0,
-			isInfiniteLoading: false,
-			loadOffset:300,
 			feedCount:0,
-			isMobile:false,
-			completed:0
+			feed: [],
+			hasMoreFeed: true,
+
+			isMobile:false
 		}
 	}	
 
@@ -124,19 +126,19 @@ class HomePage2 extends React.Component {
 		})
 	}
 
-	getFeed = () => {
-		// - Fetching latestStories
-		api.getFeed('article', {status:1}, 'latest', null, 0, 15)
-		.then(result => {
-			if(result) {
-				this.trendingStories = result.feed
+	// getFeed = () => {
+	// 	// - Fetching latestStories
+	// 	api.getFeed('article', {status:1}, 'latest', null, 0, 15)
+	// 	.then(result => {
+	// 		if(result) {
+	// 			this.trendingStories = result.feed
 
-				this.setState({
-					//refresh: Math.random()
-				})
-			}
-		})
-	}
+	// 			this.setState({
+	// 				//refresh: Math.random()
+	// 			})
+	// 		}
+	// 	})
+	// }
 
 	getSidebar = () => {
 		// - Fetching top columns
@@ -156,61 +158,84 @@ class HomePage2 extends React.Component {
 		})
 	}
 
-	buildElements = () => {
-		let page = this.state.page
+	loadFeed = () => {
+		// ensure this method is called only once at a time
+		if(this.loading == null) this.loading = false
+		else if(this.loading===true) return 
+		this.loading = true
 
-		api.getFeed('article', {status:1}, 'latest', null, page, 10)
+		let page = this.state.page
+		//console.log('page', page)
+
+		api.getFeed('article', {status:1}, 'latest', null, page, 15)
 		.then(result => {
-			var s = this.state.latestStories.concat(result.feed)
+
+			let feed = this.state.feed.concat(result.feed)
 			this.setState({
-				feedCount:result.count['1'],
-				latestStories:s,
-			},()=>{
-				if(s.length==result.count['1']){
-					this.setState({
-						loadOffset:undefined,
-						isInfiniteLoading: false,
-					})
-				}else{
-					this.setState({
-						isInfiniteLoading: false
-					})
-				}
-			})
+				page: ++page,
+				feed: feed,
+				feedCount: result.count['1'],
+				hasMoreFeed: feed.length < result.count['1']
+			}, () => {this.loading = false})
 		})
 	}
 
-	handleInfiniteLoad = () => {
-		//console.log('Onload')
-		this.buildElements(this.state.page)
-		this.setState({
-			isInfiniteLoading: true,
-			page:this.state.page+1
-		});
-	}
+	// buildElements = () => {
+	// 	let page = this.state.page
 
-	elementInfiniteLoad = () => {
-		return <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>;
-	}
+	// 	api.getFeed('article', {status:1}, 'latest', null, page, 2)
+	// 	.then(result => {
+	// 		let s = this.state.latestStories.concat(result.feed)
+	// 		this.setState({
+	// 			feedCount:result.count['1'],
+	// 			latestStories:s,
+	// 		},()=>{
+	// 			if(s.length==result.count['1']){
+	// 				//console.log('000000')
+	// 				this.setState({
+	// 					loadOffset:undefined,
+	// 					isInfiniteLoading: false,
+	// 				})
+	// 			}else{
+	// 				//console.log('111111111')
+	// 				this.setState({
+	// 					isInfiniteLoading: false
+	// 				})
+	// 			}
+	// 		})
+	// 	})
+	// }
+
+	// handleInfiniteLoad = () => {
+	// 	//console.log('Onload')
+	// 	this.buildElements(this.state.page)
+	// 	this.setState({
+	// 		isInfiniteLoading: true,
+	// 		page:this.state.page+1
+	// 	});
+	// }
+
+	// elementInfiniteLoad = () => {
+	// 	return <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>;
+	// }
 
 	componentDidMount(){
 		this.getPublisher()
-		this.getFeed()
+		//this.getFeed()
 		this.getSidebar()
 		this.setState({
-			isMobile:utils.isMobile(),
-			completed:100
+			isMobile:utils.isMobile()
 		})
 	}
 
 	render(){
-		let {count,loadOffset,isInfiniteLoading,latestStories,isMobile,completed} = this.state
+		//let {feedCount,loadOffset,isInfiniteLoading,latestStories,isMobile,completed} = this.state
+		let {feedCount,feed,hasMoreFeed,isMobile} = this.state
 		let pub = this.publisher
 		//console.log(this.props.onLoading)
-		//console.log(this.state)
+		//console.log(feedCount)
 		return (
 		    <Wrapper>
-				{completed<100&&<LinearProgress mode="determinate" value={completed} />}
 		    	{pub && <BGImg src={pub.cover.medium} opacity={-1} style={{width:'100%',height:'350px'}} className="hidden-mob" alt={pub.name} />}
 
 	      		<TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={this.props.onLoading}/>
@@ -229,8 +254,19 @@ class HomePage2 extends React.Component {
 		      	<Content>
 			      <Main>
 						<TextLine className='sans-font'>Latest</TextLine>
-						<Infinite
-						containerHeight={!isMobile?(count*210)-100:(count*356)-100}
+						<InfiniteScroll
+						    loadMore={this.loadFeed}
+						    hasMore={hasMoreFeed}
+						    loader={<Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>}
+						>
+							<div>
+							    {feed.length!=0  && feed.map((item, index) => (
+									<ArticleBox detail={item} key={index}/>
+								))}
+							</div>
+						</InfiniteScroll>
+						{/*<Infinite
+						containerHeight={!isMobile?(feedCount*210)-100:(feedCount*356)-100}
 						elementHeight={!isMobile?210:356}
 						infiniteLoadBeginEdgeOffset={loadOffset}
 						onInfiniteLoad={this.handleInfiniteLoad}
@@ -238,10 +274,12 @@ class HomePage2 extends React.Component {
 						isInfiniteLoading={isInfiniteLoading}
 						useWindowAsScrollContainer={true}>
 
-							{latestStories.length!=0?latestStories.map((story, index) => (
+							{latestStories.length!=0  && latestStories.map((story, index) => (
 								<ArticleBox detail={story} key={index}/>
-							)):''}
-						</Infinite>
+							))}
+
+						</Infinite>*/}
+
 						<More style={{margin:'30px auto 30px auto'}}/>
 			      </Main>
 			      <Aside>

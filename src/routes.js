@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Route, Switch, Link } from 'react-router-dom'
 import api from 'components/api'
 import App from 'components/App'
-import { HomePage2 } from 'components'
+import { HomePage2, NewsPage } from 'components'
 
 const NotFound = ({ location }) => (
 	<Status code={404}>
@@ -101,6 +101,8 @@ class AppRoutes extends React.Component {
 		  <App>
 	  	    <Switch>
 	  	      <Route exact path="/" component={HomePage2}/>
+	  	      <Route exact path="/stories/news" component={NewsPage} />
+
 	  	      <Route path="/topics" component={Topics}/>
 	  	      <Route component={NotFound}/>
 	  	    </Switch>

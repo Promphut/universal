@@ -222,7 +222,7 @@ const SearchBtn = styled(IconButton)`
 	}
 `
 
-const Story = styled(Link)`
+const DropDownListLink = styled.a`
   font-size:40px;
   @media (max-width:480px){
     font-size:32px;
@@ -308,9 +308,9 @@ class LeftMenu extends React.Component {
             <ul>
               {isMobile &&
                 <div>
-                  <li><Story to="#" onClick={this.shrinkDrawer}>Stories
+                  <li><DropDownListLink href="#" onClick={this.shrinkDrawer}>Stories
                     <FontIcon className={'material-icons arrow ' + toggleArrow}>keyboard_arrow_down</FontIcon>
-                  </Story></li>
+                  </DropDownListLink></li>
                   <MiniMenu height={height+'px'}>
                     {items}
                     {/*The last one is 'all columns'*/}
@@ -324,9 +324,9 @@ class LeftMenu extends React.Component {
               {!isMobile &&
                 <div>
                   <Divider />
-                  <li><Story to="#" onClick={this.shrinkDrawer}>Stories
+                  <li><DropDownListLink href="#" onClick={this.shrinkDrawer}>Stories
                     <FontIcon className={'material-icons arrow ' + toggleArrow}>keyboard_arrow_down</FontIcon>
-                  </Story></li>
+                  </DropDownListLink></li>
                   <MiniMenu height={height+'px'}>
                     {items}
                     {/*The last one is 'all columns'*/}
