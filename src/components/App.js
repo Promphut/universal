@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import PropTypes, {instanceOf} from 'prop-types'
 import { injectGlobal, ThemeProvider } from 'styled-components'
 import Helmet from 'react-helmet'
 import api from 'components/api'
@@ -10,7 +10,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import LinearProgress from 'material-ui/LinearProgress';
-
+import { withCookies, Cookies } from 'react-cookie';
 //import theme from './themes/default'
 
 injectGlobal`
@@ -725,7 +725,8 @@ class App extends React.Component {
     match: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
-    children: PropTypes.any
+    children: PropTypes.any,
+    cookies: instanceOf(Cookies).isRequired
   }
 
   static contextTypes = {
@@ -770,6 +771,11 @@ class App extends React.Component {
       const diff = Math.random() * 30;
       this.timer = setTimeout(() => this.progress(completed + diff), 100);
     }
+  }
+
+  componentWillMount() {
+    //console.log('COOK', this.props.cookies)
+    global.cookies = this.props.cookies
   }
 
   componentDidMount(){
@@ -905,4 +911,4 @@ class App extends React.Component {
   }
 }
 
-export default withRouter(App)
+export default withRouter(withCookies(App))

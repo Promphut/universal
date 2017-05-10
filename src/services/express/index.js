@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
 import path from 'path'
 import { env } from 'config'
+import cookiesMiddleware from 'universal-cookie-express'
 
 const root = path.join(__dirname, '../../..')
 
@@ -33,8 +34,9 @@ export default (routes) => {
   if (env === 'production' || env === 'development') {
     app.use(compression())
     app.use(morgan('dev'))
-    app.use(cookieParser())
+    //app.use(cookieParser())
     app.use(express.static(path.join(root, env === 'development' ? 'public' : 'dist')))
+    app.use(cookiesMiddleware())
   }
 
   app.use(bodyParser.urlencoded({ extended: false }))

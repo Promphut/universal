@@ -3,6 +3,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { basename } from 'config'
+import { CookiesProvider } from 'react-cookie'
 
 import AppRoutes from 'routes'
 //import App from 'components/App'
@@ -13,9 +14,11 @@ import AppRoutes from 'routes'
 //   </BrowserRouter>
 // )
 const renderApp = () => (
-	<Router>
-		<AppRoutes/>
-	</Router>
+	<CookiesProvider>
+		<Router>
+			<AppRoutes/>
+		</Router>
+	</CookiesProvider>
 )
 
 const root = document.getElementById('app')

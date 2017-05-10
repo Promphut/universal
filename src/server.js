@@ -11,11 +11,12 @@ import { StaticRouter } from 'react-router'
 //import createHistory from 'history/createMemoryHistory'
 import { Router } from 'express'
 import express from 'services/express'
-import AppRoutes, { routes } from 'routes'
+import AppRoutes/*, { routes }*/ from 'routes'
 //import configureStore from 'store/configure'
 import { env, port, ip, basename } from 'config'
 //import { setCsrfToken } from 'store/actions'
 import Html from 'components/Html'
+import { CookiesProvider } from 'react-cookie'
 
 const router = new Router()
 
@@ -60,12 +61,14 @@ router.use((req, res) => {
   // })
 
   const content = renderToString(
-    <StaticRouter
-      context={context}
-      location={location}
-    >
-      <AppRoutes />
-    </StaticRouter>
+    <CookiesProvider cookies={req.universalCookies}>
+      <StaticRouter
+        context={context}
+        location={location}
+      >
+        <AppRoutes />
+      </StaticRouter>
+    </CookiesProvider>
   )
 
   //console.log('context', context)

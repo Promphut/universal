@@ -1,25 +1,28 @@
-import Cookies from 'react-cookie'
 import config from '../config'
+//let cookies = new Cookies()
+//console.log('COOKIE', global.cookies, 'x', window.cookies)
+//const cookies = new Cookies()
 
 const domain = {domain:config.DOMAIN, path:'/'}
 
-var cookies = {}
-cookies = {
+let cookieService = {}
+cookieService = {
 	// Set cookie string by name
 	set(cookieName, str){ 
-		Cookies.save(cookieName, str, domain)
+		cookies.set(cookieName, str, domain)
 	},
 
 	// Set cookie json by name
 	setJSON(cookieName, json){
-		Cookies.save(cookieName, JSON.stringify(json), domain)
+		cookies.set(cookieName, JSON.stringify(json), domain)
 	},
 
 	// Get cookie string by name
 	get(cookieName){
-		//return Cookies.get(cookieName, domain)
-		return Cookies.load(cookieName, domain) || null
-		//return Cookies.load(cookieName)
+		//console.log('COOKIE', window.cookies, global.cookies)
+		//return cookies.get(cookieName, domain)
+		return cookies.get(cookieName, domain) || null
+		//return cookies.load(cookieName)
 	},
 
 	// Get cookie json by name
@@ -27,7 +30,7 @@ cookies = {
 		let json 
 
 		try{
-		  json = JSON.parse(cookies.get(cookieName))
+		  json = JSON.parse(cookieService.get(cookieName))
 		} 
 		catch(err) {json = null}
 
@@ -36,22 +39,22 @@ cookies = {
 
 	// Remove cookie by name
 	remove(cookieName){
-		Cookies.remove(cookieName, domain)
+		cookies.remove(cookieName, domain)
 	},
 	
 	// // Set article viewed flag in cookie
 	// viewArticle(aid){
-	// 	let viewed = cookies.getJSON('viewed') || []
+	// 	let viewed = cookieService.getJSON('viewed') || []
 	// 	if(viewed && aid!=null){
 	// 		viewed.push(aid)
 	// 		viewed = _.uniq(viewed)
 	// 		//console.log('viewed', viewed)
-	// 		cookies.setJSON('viewed', viewed)
+	// 		cookieService.setJSON('viewed', viewed)
 	// 	}
 	// },
 
 	// getArticlesViewed(articles){
-	// 	let viewed = cookies.getJSON('viewed') || []
+	// 	let viewed = cookieService.getJSON('viewed') || []
 
 	// 	if(viewed && articles && articles.length>0) { 
 	// 		articles.forEach(a => {
@@ -63,4 +66,4 @@ cookies = {
 	// }
 }
 
-module.exports = cookies
+module.exports = cookieService
