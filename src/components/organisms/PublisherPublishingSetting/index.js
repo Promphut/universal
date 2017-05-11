@@ -398,11 +398,11 @@ const PublisherPublishingSetting = React.createClass({
             </div>
           </Edit>
         </Flex>
-        <div className='sans-font' style={{marginTop:'30px',overflow:'hidden'}}>
+        {/*<div className='sans-font' style={{marginTop:'30px',overflow:'hidden'}}>
           <PrimaryButton label='Save' style={{float:'right',margin:'0 20px 0 0'}}/>
           <SecondaryButton label='Reset' style={{float:'right',margin:'0 20px 0 0'}}/>
           <TextStatus style={{color:error?'#D8000C':'#00B2B4',float:'right'}}>{this.state.textStatus}</TextStatus>
-        </div>
+        </div>*/}
       </Container>
     )
   },
