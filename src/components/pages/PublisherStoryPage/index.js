@@ -1,8 +1,7 @@
 import React from 'react'
-import { OverlayImg, Pagination,Alert,EditMenu,BoxMenu,MenuList,DropdownWithIcon} from 'components'
+import { OverlayImg, Pagination,Alert,EditMenu,BoxMenu,MenuList,DropdownWithIcon,StoriesTable,Filter} from 'components'
 import FontIcon from 'material-ui/FontIcon'
 import styled from 'styled-components'
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import Popover from 'material-ui/Popover'
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
@@ -19,18 +18,16 @@ import CircularProgress from 'material-ui/CircularProgress';
 import moment from 'moment'
 import api from 'components/api'
 import utils from 'components/utils'
+import { Tabs, Tab } from 'material-ui/Tabs'
+import SwipeableViews from 'react-swipeable-views';
+import AutoComplete from 'material-ui/AutoComplete';
 
 const Container = styled.div`
   width:100%;
 `
 
 const Section1  = styled.div`
-  background-color:#F7F7F7;
-  color:#8F8F8F;
-  font-family:'Nunito';
-  padding:15px;
-  font-size:16px;
-  border:1px solid #E2E2E2;
+  display:flex;
 `
 
 const TabHead = styled.div`
@@ -45,7 +42,7 @@ const TabHead = styled.div`
 `
 const Section2 = styled.div`
   width:100%;
-  padding:50px 15px 50px 15px;
+  padding:15px;
   border-bottom:1px solid #E2E2E2;
 `
 
@@ -122,29 +119,49 @@ const Page = styled.div`
   padding:30px 0 30px 0;
 `
 
-const Onload =styled.div`
-  position:relative;
-  width:100%;
-  height:500px;
-  padding-top:200px;
-  background:white;
+const Header = styled.div`
+	margin: 0;
+	padding: 0;
+  height: 80px;
+	width: 100%;
+  background: #F4F4F4;
+  display: flex;
 `
 
-const StoryTitle = ({style, story, selectStatus})=>{
-  let {title, ptitle, cover, url} = story
-  return(
-    <Cont style={{...style}}>
-      <Link to={url}><OverlayImg src={cover.small || cover.medium}
-        style={{width:'87',height:'52',float:'left'}} alt={ptitle} /></Link>
-      <TitleLink to={url} className="sans-font">{selectStatus===STATUS.DRAFTED ? title : ptitle}</TitleLink>
-    </Cont>
-  )
-}
+const Title = styled.div`
+  display: flex;
+  flex: 1;
+  align-items: center;
+  font-family: 'Nunito', 'Mitr';
+  font-size: 22px;
+  font-weight: bold;
+  padding-left: 32px;
+`
+const Line = styled.div`
+  position:relative;
+  top:-2px;
+  z-index:0;
+  width:320px;
+  margin-left:20px;
+  height:1px;
+  background-color:#C4C4C4;
+`
+const AutoCompleteBox = styled.div`
+  display:flex;
+  border:1px solid #c4c4c4;
+  float:right;
+  margin:30px;
+  padding:5px 20px;
+`
 
 const STATUS = {
   'DRAFTED': 0,
   'PUBLISHED': 1
 }
+
+const dataSource = [{text: 'text0', value: 0, id:0},
+                    {text: 'text1', value: 1, id:1},
+                    {text: 'text2', value: 2, id:2}]
 
 const PublisherStoryPage = React.createClass({
   FEED_LIMIT: config.FEED_LIMIT,
@@ -172,22 +189,26 @@ const PublisherStoryPage = React.createClass({
       onLoad:false,
       snackbar:false,
       snackbarMS:'',
-      editStory:false
+      editStory:false,
+      selectTab: 0,
+      searchText:'',
+      sortBy:'',
+      sortByState:0
     }
 	},
 
-  getColumns(){
-    return api.getColumns()
-    .then(cols => {
-      let a = cols.map((col,index) => ({value:col.id, text:col.name}))
-      a.unshift({value:'all', text:'All Stories'})
+  // getColumns(){
+  //   return api.getColumns()
+  //   .then(cols => {
+  //     let a = cols.map((col,index) => ({value:col.id, text:col.name}))
+  //     a.unshift({value:'all', text:'All Stories'})
 
-      this.setState({
-        columns:cols,
-        columnArray:a
-      })
-    })
-  },
+  //     this.setState({
+  //       columns:cols,
+  //       columnArray:a
+  //     })
+  //   })
+  // },
 
   removeColumn(){
     let cid = this.state.selectColumn
@@ -213,8 +234,13 @@ const PublisherStoryPage = React.createClass({
   },
 
   getCurrentFilter(){
+    var {id,value,searchText} = this.refs.filter.state
+    if(!searchText){
+      value = ''
+    }
     return {
-      column: this.state.selectColumn==='all' ? null : parseInt(this.state.selectColumn),
+      writer: value=='Writer' ? parseInt(id) : null, 
+      column: value=='Column' ? parseInt(id) : null, 
       status: this.state.selectStatus
     }
   },
@@ -222,10 +248,16 @@ const PublisherStoryPage = React.createClass({
   getStories(){
     this.setState({onLoad:true})
 
-    let {currentPage, sort} = this.state
+    let {currentPage, sort,sortBy,sortByState} = this.state
     //console.log('filter', filter)
-
-    api.getFeed('story', this.getCurrentFilter(), sort, null, currentPage, this.FEED_LIMIT, {onlyAuthorized: true})
+    if(sortBy=="stats"){
+      sortBy='popular'
+    }else if(sortBy=='drafted'){
+      sortBy='published'
+    }
+    var sb = [[sortBy,parseInt(sortByState)]] 
+    //console.log('story', this.getCurrentFilter(), null, sb, currentPage, this.FEED_LIMIT, {onlyAuthorized: true})
+    api.getFeed('story', this.getCurrentFilter(), null, sb, currentPage, this.FEED_LIMIT, {onlyAuthorized: true})
     .then(result => {
       //console.log('getFeed()', result)
       this.setState({
@@ -277,7 +309,7 @@ const PublisherStoryPage = React.createClass({
   },
 
   componentDidMount(){
-    this.getColumns()
+    //this.getColumns()
     this.getStories()
   },
 
@@ -296,13 +328,13 @@ const PublisherStoryPage = React.createClass({
     });
   },
 
-  changeColumn(e, selectColumn){
-    this.setState({
-      selectColumn:selectColumn
-    }, () => {
-      this.getStories()
-    })
-  },
+  // changeColumn(e, selectColumn){
+  //   this.setState({
+  //     selectColumn:selectColumn
+  //   }, () => {
+  //     this.getStories()
+  //   })
+  // },
 
   goEditPage(){
     browserHistory.push('/editor/columns/'+this.state.selectColumn+'/settings')
@@ -433,10 +465,56 @@ const PublisherStoryPage = React.createClass({
     browserHistory.push('/me/stories/'+this.state.selectStoryId+'/edit')
   },
 
+  handleChangeTab(e) {
+		this.setState({selectTab: e},()=>{
+      if(!e){
+        this.filterPublished()
+      }else{
+        this.filterDrafted()
+      }
+    })
+	},
+
+  sortBy(e,val){
+    e.preventDefault()
+    var {sortBy,sortByState}  = this.state
+    if(sortByState==0){
+      this.setState({
+        sortBy:val,
+        sortByState:1
+      },()=>{this.getStories()})
+    }else if(sortByState==1&&sortBy==val){
+      this.setState({
+        sortByState:(-1)
+      },()=>{this.getStories()})
+    }else if(sortByState==1&&sortBy!=val){
+      this.setState({
+        sortBy:val,
+        sortByState:1
+      },()=>{this.getStories()})
+    }else if(sortByState==(-1)&&sortBy==val){
+      this.setState({
+        sortByState:1
+      },()=>{this.getStories()})
+    }else if(sortByState==(-1)&&sortBy!=val){
+      this.setState({
+        sortBy:val,
+        sortByState:1
+      },()=>{this.getStories()})
+    }
+  },
+  // filterData(){
+  //   console.log(this.refs.filter.state.value)
+  // },
+
   render(){
 
     //console.log('theme',theme)
-    let { sort,totalPages,storiesCount,editStory,editStoryWhere,selectStatus,snackbar,snackbarMS,currentPage,stories,columns,selectColumn,alert,alertDesc,alertWhere,alertLoading,alertChild,alertConfirm,columnArray,onLoad} = this.state
+    let { sort,totalPages,storiesCount,editStory,
+      editStoryWhere,selectStatus,snackbar,snackbarMS,
+      currentPage,stories,columns,selectColumn,alert,alertDesc
+      ,alertWhere,alertLoading,alertChild,alertConfirm,columnArray,
+      onLoad,selectTab,searchText,sortBy,sortByState} = this.state
     //console.log('storiesCount',storiesCount)
     var {theme} = this.context.setting.publisher
     const styles = {
@@ -462,8 +540,26 @@ const PublisherStoryPage = React.createClass({
       showInactive:{
         textDecoration:'underline',
         color:'#8F8F8F'
-      }
+      },
+      headline: {
+				fontSize: 24,
+				paddingTop: 16,
+				marginBottom: 12,
+				fontWeight: 400
+			},
+			tabs: {
+				background: 'none',
+				height: '50px',
+				color: '#222222'
+			},
+			tab: {
+				fontFamily: "'Nunito', 'Mitr'",
+				fontSize: '16px',
+				fontWeight: 'bold',
+				textTransform: 'none'
+			}
     }
+    const dataSourceConfig = {text: 'text', value: 'value', id:'id'};
     return (
       <Container>
         <Snackbar
@@ -496,12 +592,58 @@ const PublisherStoryPage = React.createClass({
           child={alertChild}
           loading={alertLoading}
           confirm={alertConfirm}/>
-        <div className='row' style={{padding:'30px 15px 20px 30px'}}>
+        
+        <Header>
+          <Title>Manage Stories</Title>
+        </Header>
+        <Section1>
+          <div style={{flex:1}}>
+            <Tabs
+              style={{ width: 320,margin:'20px',marginBottom:'0'}}
+              tabItemContainerStyle={{ ...styles.tabs }}
+              inkBarStyle={{ background: theme.accentColor, height: 3,zIndex:2 }}
+              onChange={this.handleChangeTab}
+              value={selectTab}>
+              <Tab
+                buttonStyle={{...styles.tab,color: selectTab == 0 ? theme.accentColor : '#C4C4C4'}}
+                label={(storiesCount[STATUS.PUBLISHED] || ' 0 ') +' Published'}
+                value={0}
+              />
+              <Tab
+                buttonStyle={{...styles.tab,color: selectTab == 1 ? theme.accentColor : '#C4C4C4'}}
+                label={(storiesCount[STATUS.DRAFTED] || ' 0 ') + ' Draft'}
+                value={1}
+              />
+            </Tabs>
+            <Line/>
+          </div>
+          <div style={{flex:1,overflow:'hidden'}}>
+            <Filter
+              ref='filter'
+              search={this.getStories}
+            />
+          </div>
+        </Section1>
+
+        <Section2>
+          <SwipeableViews
+            index={selectTab}
+            onChangeIndex={this.handleChangeTab}
+          >
+            <div>
+              <StoriesTable stories={stories} selectStatus={selectStatus} onload={onLoad} editStory={this.editStory} sortBy={this.sortBy} sort={sortBy} sortState={sortByState}/>
+            </div>
+            <div>
+              <StoriesTable stories={stories} selectStatus={selectStatus} editStory={this.editStory} sortBy={this.sortBy} sort={sortBy} sortState={sortByState}/>
+            </div>
+          </SwipeableViews>
+        </Section2>
+        {/*<div className='row' style={{padding:'30px 15px 20px 30px'}}>
           <DropdownWithIcon
             onChange={this.changeColumn}
             menuItem={!columnArray ? null : columnArray}
             value={selectColumn}
-            editMenu={
+            editMenu={ 
               [<MenuList onClick={this.goEditPage} key="edit">Edit</MenuList>,
                <MenuList onClick={this.alertDelete} key='delete'>Delete</MenuList>,
                <MenuList onClick={this.alertNew} key='new'>+ New Column</MenuList>]}
@@ -512,50 +654,15 @@ const PublisherStoryPage = React.createClass({
             <Section1 className="sans-font">
               <TabHead onClick={this.filterPublished} style={selectStatus===STATUS.PUBLISHED ? {fontWeight:'bold',color:'#222'} : {}}>{storiesCount[STATUS.PUBLISHED+''] || '0 '} Published</TabHead>
               <TabHead onClick={this.filterDrafted} style={selectStatus===STATUS.DRAFTED ? {fontWeight:'bold',color:'#222'} : {}}>{storiesCount[STATUS.DRAFTED+''] || '0 '} Drafted</TabHead>
-              {/*<TabHead>3 Scheduled</TabHead>*/}
             </Section1>
           </div>
           <div className='col-6'>
             <Section1 className="sans-font">
               <TabHead onClick={this.recent} style={sort=='latest'?{fontWeight:'bold',color:'#222'}:{}}>Recent</TabHead>
-              {/*<TabHead>Trending</TabHead>*/}
               <TabHead onClick={this.popular} style={sort=='popular'?{fontWeight:'bold',color:'#222'}:{}}>Most Popular</TabHead>
-              {/*<FontIcon className="material-icons" style={{float:'right',margin:'0 0 0 0',color:'#8f8f8f'}}>search</FontIcon>*/}
             </Section1>
           </div>
-        </div>
-
-        <Section2 style={{padding:'40px 5px 40px 5px'}}>
-          {onLoad ? <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload> :
-          <Table >
-            <TableHeader
-              displaySelectAll={false}
-              adjustForCheckbox={false}>
-              <TableRow>
-                <TableHeaderColumn style={{width:'40%'}}>Title</TableHeaderColumn>
-                <TableHeaderColumn style={{width:'10%',textAlign:'center'}}>Writer</TableHeaderColumn>
-                <TableHeaderColumn style={{width:'15%',textAlign:'center'}}>Column</TableHeaderColumn>
-                <TableHeaderColumn style={{width:'15%'}}>stats</TableHeaderColumn>
-                <TableHeaderColumn style={{width:'15%'}}>{selectStatus===STATUS.PUBLISHED ? 'Published' : 'Drafted'}</TableHeaderColumn>
-                <TableHeaderColumn style={{width:'5%'}}></TableHeaderColumn>
-              </TableRow>
-            </TableHeader>
-            <TableBody
-              showRowHover={true}
-              displayRowCheckbox={false}>
-              {stories ? stories.map((story, index) => (
-                <TableRow key={index}>
-                  <TableRowColumn style={{width:'40%',padding:'10px 0 10px 0'}}><StoryTitle story={story} selectStatus={selectStatus} /></TableRowColumn>
-                  <TableRowColumn style={{width:'10%',paddingRight:0,paddingLeft:0,textAlign:'center'}}>{story.writer && <Link to={story.writer.url}>{story.writer.display}</Link>}</TableRowColumn>
-                  <TableRowColumn style={{width:'15%',paddingRight:0,paddingLeft:0,textAlign:'center'}}>{story.column && <Link to={story.column.url}>{story.column.name}</Link>}</TableRowColumn>
-                  <TableRowColumn style={{width:'15%'}}>{story.views || 0} Views<br/>{story.shares ? story.shares.total : 0} Shares</TableRowColumn>
-                  <TableRowColumn style={{width:'15%',wordWrap:'break-word',whiteSpace:'pre-wrap'}}>{selectStatus===STATUS.PUBLISHED ? moment(story.published).format('lll') : moment(story.created).format('lll')}</TableRowColumn>
-                  <TableHeaderColumn style={{width:'5%',paddingRight:0,paddingLeft:0,textAlign:'center',cursor:'pointer'}} ><FontIcon className='material-icons' onClick={(e)=>{this.editStory(e,story.id)}} style={{color:'#bfbfbf'}}>more_vert</FontIcon></TableHeaderColumn>
-                </TableRow>
-              )) : ''}
-            </TableBody>
-          </Table>}
-        </Section2>
+        </div>*/}
         {totalPages > 0 && <Page>
           <Pagination
             currentPage={currentPage+1}

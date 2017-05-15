@@ -17,8 +17,7 @@ import _ from 'lodash'
 
 const Container = styled.div`
   width:100%;
-  padding:80px;
-  border-bottom:1px solid #E2E2E2;
+  padding:0px 80px 80px 80px;
   .textTitle{
     color:#C2C2C2;
     font-family:'PT Sas';
@@ -35,7 +34,7 @@ const Flex = styled.div`
   display:flex;
   items-align:center;
   flex-flow: row wrap;
-  margin:50px 0 0 50px;
+  margin:50px 0 0 0;
 `
 
 const Title = styled.div`
@@ -90,7 +89,7 @@ const TextStatus = styled.div`
   font-size:15px;
   font-style:italic;
   float:left;
-  margin:10px 0 0 15px;
+  margin:10px 20px 0 15px;
 `
 
 const Admin = styled.div`
@@ -329,8 +328,6 @@ const PublisherPublishingSetting = React.createClass({
           child={alertChild}
           confirm={alertConfirm}/>
 
-        <div  className="head sans-font">PUBLISHING</div>
-
         <Flex>
           <Title>
             <div className="sans-font">Allowed Tags</div>
@@ -401,7 +398,11 @@ const PublisherPublishingSetting = React.createClass({
             </div>
           </Edit>
         </Flex>
-        {/*<div className='sans-font' style={{marginTop:'30px'}}><PrimaryButton label='Save' style={{float:'left',margin:'0 20px 0 0'}}/><SecondaryButton label='Reset' style={{float:'left',margin:'0 20px 0 0'}}/><TextStatus style={{color:error?'#D8000C':'#00B2B4'}}>{this.state.textStatus}</TextStatus></div>*/}
+        {/*<div className='sans-font' style={{marginTop:'30px',overflow:'hidden'}}>
+          <PrimaryButton label='Save' style={{float:'right',margin:'0 20px 0 0'}}/>
+          <SecondaryButton label='Reset' style={{float:'right',margin:'0 20px 0 0'}}/>
+          <TextStatus style={{color:error?'#D8000C':'#00B2B4',float:'right'}}>{this.state.textStatus}</TextStatus>
+        </div>*/}
       </Container>
     )
   },

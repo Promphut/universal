@@ -4,6 +4,7 @@ import Avatar from 'material-ui/Avatar'
 import RaisedButton from 'material-ui/RaisedButton';
 import {Link,browserHistory} from 'react-router'
 import Request from 'superagent'
+import TextField from 'material-ui/TextField';
 
 const Box = styled.div`
   width:600px;
@@ -40,32 +41,50 @@ const LinkUnderLine = styled(Link)`
   font-size:18px;
   text-decoration:underline; 
 `
-var styles={
-  button:{
-    background:'#3A579A',
-    borderRadius:'30px',
-    height:'40px',
-    width:'350px'
-  },
-  btn:{
-    background:'#3A579A',
-    borderRadius:'30px',
-  },
-  btnCon:{
-    width:'350px',
-    margin:'0px auto 20px auto'
-  },
-  labelBtn:{
-    top:'5px',
-    fontWeight:'bold'
-  }
-}
-const SignUpFb = React.createClass({
+const InputBox = styled.form`
+  width:350px;
+  margin:0 auto 0 auto;
+`
+const NewLink = styled(Link)`
+  color:#C2C2C2;
+  font-size:14px;
+  font-family:'Nunito';
+`
+
+const SignIn2 = React.createClass({
   getInitialState(){
-    return{}
+    return{
+      email:''
+    }
+  },
+
+  onChangeText(e){
+    this.setState({email:e.target.value})
   },
 
   render(){
+    var { theme } = this.context.setting.publisher
+    var styles={
+      button:{
+        background:theme.accentColor,
+        borderRadius:'24px',
+        height:'40px',
+        width:'350px',
+        marginTop:'25px'
+      },
+      btn:{
+        background:theme.accentColor,
+        borderRadius:'24px',
+      },
+      btnCon:{
+        width:'350px',
+        margin:'0px auto 20px auto'
+      },
+      labelBtn:{
+        top:'10px',
+        fontWeight:'bold'
+      }
+    }
     return(
       <Box>
         <Head >You already have an account</Head>
@@ -75,25 +94,37 @@ const SignUpFb = React.createClass({
           Do you want to continue log in with this account?
         </Text>
         <div style={{width:'70px',margin:'40px auto 20px auto'}}><Avatar src='/tmp/avatar.png' size={70}/></div>
-        <Text className='sans-font' style={{color:"#222",margin:'30px'}}>Ochawin Chirasottikul</Text>
-        <div style={styles.btnCon}>
-          <a href={config.BACKURL+'/auth/facebook?publisher='+config.PID+'&nextpathname='+encodeURIComponent(this.props.nextPathname)}>
+        <Text className='sans-font' style={{color:"#222",margin:'30px',marginBottom:'0px'}}>Ochawin Chirasottikul</Text>
+        <InputBox onSubmit={(e)=>this.props.onSubmit(e,this.state.email)}>
+          <TextField
+            floatingLabelText="Email"
+            type="email"
+            fullWidth={true}
+            name='email'
+            inputStyle={{color:'#222'}}
+            value={this.state.email}
+            onChange={this.onChangeText}
+          />
+          <NewLink to="/forget" style={{float:'left'}}>Forget Password?</NewLink>
+          <div style={styles.btnCon}>
             <RaisedButton
-              label="Sign Up with facebook"
+              label="Next"
               labelPosition="after"
               labelColor='white'
               labelStyle={styles.labelBtn}
-              icon={<i className="fa fa-facebook" style={{color:'white',margin:'10px 10px 0 0',fontSize:'24px'}} aria-hidden="true"></i>}
               style={styles.button}
               buttonStyle={styles.btn}
+              type='button'
             />
-          </a>  
-        </div>
+          </div>
+        </InputBox>
       </Box>
     )
   }
 })
 
+SignIn2.contextTypes = {
+	setting: React.PropTypes.object
+}
 
-
-export default SignUpFb 
+export default SignIn2 

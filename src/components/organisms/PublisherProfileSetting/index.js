@@ -9,8 +9,7 @@ import utils from 'components/utils'
 
 const Container = styled.form`
   width:100%;
-  padding:80px;
-  border-bottom:1px solid #E2E2E2;
+  padding:0px 80px 80px 80px;
   .textTitle{
     color:#C2C2C2;
     font-family:'PT Sas';
@@ -27,7 +26,7 @@ const Flex = styled.div`
   display:flex;
   items-align:center;
   flex-flow: row wrap;
-  margin:50px 0 0 50px;
+  margin:50px 0 0 0;
 `
 
 const Title = styled.div`
@@ -53,8 +52,7 @@ const TextStatus = styled.div`
   color:${props=> props.theme.primaryColor};
   font-size:15px;
   font-style:italic;
-  float:left;
-  margin:10px 0 0 15px;
+  margin:10px 20px 0 15px;
 `
 
 const PublisherProfileSetting = React.createClass({
@@ -150,8 +148,6 @@ const PublisherProfileSetting = React.createClass({
     //console.log('render', pub)
     return (
       <Container onSubmit={this.updatePublisher}>
-        <div  className="head sans-font">PROFILE</div>
-        <MetaDataDemo style={{margin:'40px 0'}} title={pub.name} description={pub.desc} keyword={pub.keywords} tagline={pub.tagline}/>
         <Flex>
           <Title>
             <div className="sans-font">Title</div>
@@ -166,6 +162,33 @@ const PublisherProfileSetting = React.createClass({
         </Flex>
         <Flex>
           <Title>
+            <div className="sans-font">Description</div>
+          </Title>
+          <Edit>
+            <TextField
+              value={pub.desc}
+              name='desc'
+              onChange={this.publisherChanged}
+            />
+          </Edit>
+        </Flex>
+        <Title style={{marginTop:'50px'}}>
+          <div className="sans-font">Example</div>
+        </Title>
+        <TextStatus className='sans-font' style={{color:"#C4C4C4",margin:'15px 0 5px 0'}}>Google Search Result</TextStatus>
+        <MetaDataDemo style={{margin:'5px 0 5px 0'}} title={pub.name} description={pub.desc} keyword={pub.keywords} tagline={pub.tagline}/>
+        <TextStatus className='sans-font' style={{color:"#C4C4C4",margin:'15px 0 5px 0'}}>Facebook Share</TextStatus>
+        <div style={{border:'1px solid #c4c4c4',width:'350px'}}>
+          <div style={{background:'#f4f4f4',width:'100%',height:'140px'}}></div>
+          <div style={{background:'white',width:'100%',height:'77px'}}>
+          <div style={{color:"#222",fontSize:'18px',margin:'5px 15px'}} className='sans-font'>{pub.name||'Title'}</div>
+          <div style={{color:"#545454",fontSize:'14px',margin:'5px 15px'}} className='sans-font'>{pub.desc||'This is a description'}</div>
+          <TextStatus className='sans-font' style={{color:"#C4C4C4",margin:'5px 15px'}}>{location.host}</TextStatus>
+          </div>
+        </div>
+
+        <Flex>
+          <Title>
             <div className="sans-font">Keywords</div>
           </Title>
           <Edit>
@@ -174,18 +197,6 @@ const PublisherProfileSetting = React.createClass({
               name='keywords'
               floatingLabelText="Comma separated"
               floatingLabelFixed={true}
-              onChange={this.publisherChanged}
-            />
-          </Edit>
-        </Flex>
-        <Flex>
-          <Title>
-            <div className="sans-font">Description</div>
-          </Title>
-          <Edit>
-            <TextField
-              value={pub.desc}
-              name='desc'
               onChange={this.publisherChanged}
             />
           </Edit>
@@ -207,14 +218,6 @@ const PublisherProfileSetting = React.createClass({
               onChange={this.publisherChanged}
               errorText={errText}
             />
-          </Edit>
-        </Flex>
-        <Flex>
-          <Title>
-            <div className="sans-font">Cover picture</div>
-          </Title>
-          <Edit>
-            <UploadPicture ratio={1920/350} src={pub.cover&&pub.cover.medium} ratio={1920/350} path={'/publishers/'+config.PID+'/cover'} type='cover' size='1920x350' width={400} height={160} labelStyle={{top:'75px'}}/>
           </Edit>
         </Flex>
         <Flex>
@@ -244,10 +247,10 @@ const PublisherProfileSetting = React.createClass({
             </Social>
           </Edit>
         </Flex>
-        <div className='sans-font' style={{marginTop:'30px'}}>
-          <PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/>
-          <SecondaryButton label='Reset' onClick={this.resetDate} style={{float:'left',margin:'0 20px 0 0'}}/>
-          <TextStatus  style={{color:error?'#D8000C':theme.accentColor}}>{textStatus}</TextStatus>
+        <div className='sans-font' style={{marginTop:'50px',overflow:'hidden'}}>
+          <PrimaryButton label='Save' type='submit' style={{float:'right',margin:'0 20px 0 0'}}/>
+          <SecondaryButton label='Reset' onClick={this.resetDate} style={{float:'right',margin:'0 20px 0 0'}}/>
+          <TextStatus  style={{color:error?'#D8000C':theme.accentColor,float:'right'}}>{textStatus}</TextStatus>
         </div>
       </Container>
     )

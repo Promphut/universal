@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {PrimaryButton,SecondaryButton,UploadPicture,LogoLink} from 'components'
+import {PrimaryButton,SecondaryButton,UploadPicture,LogoLink,BGImg} from 'components'
 import TextField from 'material-ui/TextField';
 import { ChromePicker } from 'react-color';
 import {findDOMNode as dom} from 'react-dom'
@@ -12,7 +12,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 const Container = styled.form`
   width:100%;
-  padding:80px;
+  padding:0px 80px 80px 80px;
   border-bottom:1px solid #E2E2E2;
   .textTitle{
     color:#C2C2C2;
@@ -55,7 +55,7 @@ const Flex = styled.div`
   display:flex;
   items-align:center;
   flex-flow: row wrap;
-  margin:50px 0 0 50px;
+  margin:50px 0 0 0;
 `
 
 const Title = styled.div`
@@ -77,7 +77,7 @@ const TextStatus = styled.div`
   font-size:15px;
   font-style:italic;
   float:left;
-  margin:10px 0 0 15px;
+  margin:10px 20px 0 15px;
 `
 
 const Color = styled.div`
@@ -121,6 +121,12 @@ const Topbar = styled.div`
   height:40px;
   border:1px solid #c4c4c4;
 `
+const BreakLine = styled.div`
+  width:100%;
+  height:1px;
+  background-color:#E2E2E2;
+  margin:50px 0;
+`
 
 const PublisherThemeSetting = React.createClass({
   getInitialState(){
@@ -130,7 +136,7 @@ const PublisherThemeSetting = React.createClass({
       textStatus:'Unsave',
       open1: false,
       open2: false,
-      open2: false,
+      open3: false,
 
       colorTheme:'light',
       primaryColor:'',
@@ -263,6 +269,7 @@ const PublisherThemeSetting = React.createClass({
 
   render(){
     //console.log(this.context.setting.publisher.theme)
+    let pub = this.state.publisher
     var {theme} = this.context.setting.publisher
     var {primaryColor,secondaryColor,accentColor,colorTheme,anchorEl1,anchorEl2,anchorEl3,open1,open2,open3,textStatus,uploadFavicon,uploadLogo,uploadSLogo,error} = this.state
     var styles={
@@ -294,13 +301,31 @@ const PublisherThemeSetting = React.createClass({
     //console.log('colorTheme', colorTheme, primaryColor)
     return(
       <Container onSubmit={this.updateData}>
-        <div  className="head sans-font">Theme</div>
+        <Flex>
+          <Title>
+            <div className="sans-font">Cover picture</div>
+          </Title>
+          <Edit>
+            <UploadPicture ratio={1920/350} src={pub.cover&&pub.cover.medium} ratio={1920/350} path={'/publishers/'+config.PID+'/cover'} type='cover' size='1920x350' width={500} height={100} labelStyle={{top:'45px'}}/>
+          </Edit>
+        </Flex>
+        <Flex>
+          <Title>
+            <div className="sans-font">Cover Logo (.svg)</div>
+          </Title>
+          <Edit>
+            <div className='row'>
+              <UploadPicture src={uploadLogo} path={'/publishers/'+config.PID+'/logo'} size='.svg' type='logo' allowTypes='|svg+xml|' width={200} height={23} labelStyle={{top:'10px'}} style={{flex:1}}/>
+              <UploadPicture src={uploadLogo} path={'/publishers/'+config.PID+'/logo'} size='.svg' type='logo' allowTypes='|svg+xml|' width={200} height={23} labelStyle={{top:'10px'}} style={{flex:1}}/>
+            </div>
+          </Edit>
+        </Flex>
         <Flex>
           <Title>
             <div className="sans-font">Favicon (.ico)</div>
           </Title>
           <Edit>
-            <UploadPicture src={uploadFavicon} path={'/publishers/'+config.PID+'/favicon'} size='' type='favicon' allowTypes='|x-icon|vnd.microsoft.icon|' width={60} height={60} labelStyle={{top:'10px'}}/>
+            <UploadPicture src={uploadFavicon} path={'/publishers/'+config.PID+'/favicon'} size='.ico' type='favicon' allowTypes='|x-icon|vnd.microsoft.icon|' width={60} height={60} labelStyle={{top:'25px'}}/>
           </Edit>
         </Flex>
         <Flex>
@@ -308,7 +333,10 @@ const PublisherThemeSetting = React.createClass({
             <div className="sans-font">Small Logo (.svg)</div>
           </Title>
           <Edit>
-            <UploadPicture src={uploadSLogo} path={'/publishers/'+config.PID+'/slogo'} size='' type='slogo' allowTypes='|svg+xml|' width={60} height={60} labelStyle={{top:'10px'}}/>
+            <div className='row'>
+              <UploadPicture src={uploadSLogo} path={'/publishers/'+config.PID+'/slogo'} size='.svg' type='slogo' allowTypes='|svg+xml|' width={60} height={60} labelStyle={{top:'25px'}} style={{flex:1}}/>
+              <UploadPicture src={uploadSLogo} path={'/publishers/'+config.PID+'/slogo'} size='.gif' type='slogo' allowTypes='|gif|' width={60} height={60} labelStyle={{top:'25px'}} style={{flex:3}}/>
+            </div>
           </Edit>
         </Flex>
         <Flex>
@@ -316,9 +344,21 @@ const PublisherThemeSetting = React.createClass({
             <div className="sans-font">Large Logo (.svg)</div>
           </Title>
           <Edit>
-            <UploadPicture src={uploadLogo} path={'/publishers/'+config.PID+'/logo'} size='' type='logo' allowTypes='|svg+xml|' width={300} height={70} labelStyle={{top:'25px'}}/>
+            <UploadPicture src={uploadLogo} path={'/publishers/'+config.PID+'/logo'} size='.svg' type='logo' allowTypes='|svg+xml|' width={300} height={35} labelStyle={{top:'10px'}}/>
           </Edit>
         </Flex>
+
+        <Title style={{marginTop:'50px'}}>
+          <div className="sans-font">Example</div>
+        </Title>
+        <BGImg src={pub.cover&&pub.cover.medium} opacity={-1} style={{width:'100%',height:'160px',margin:'15px 0'}} alt={pub.name} >
+          <div style={{width:150,margin:'60px auto 0px auto'}}>
+            <LogoLink id='priview2'  src={theme.logo} style={{width:'100'}} fill={colorTheme=='light'?primaryColor:'#ffffff'} title='logo'/>
+          </div>
+          <TextStatus className='nunito-font' style={{textAlign:'center',color:'white',float:'none',margin:'0'}}>{pub&&pub.tagline}</TextStatus>
+        </BGImg>
+        <BreakLine/>
+
         <Flex>
           <Title>
             <div className="sans-font">Primary Color</div>
@@ -469,10 +509,10 @@ const PublisherThemeSetting = React.createClass({
             </div>
           </Edit>
         </Flex>
-        <div className='sans-font' style={{marginTop:'30px'}}>
-          <PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/>
-          <SecondaryButton label='Reset' onClick={this.setData} style={{float:'left',margin:'0 20px 0 0'}}/>
-          <TextStatus style={{color:error?'#D8000C':theme.accentColor}}>{textStatus}</TextStatus>
+        <div className='sans-font' style={{marginTop:'30px',overflow:'hidden'}}>
+          <PrimaryButton label='Save' type='submit' style={{float:'right',margin:'0 20px 0 0'}}/>
+          <SecondaryButton label='Reset' onClick={this.setData} style={{float:'right',margin:'0 20px 0 0'}}/>
+          <TextStatus style={{color:error?'#D8000C':theme.accentColor,float:'right'}}>{textStatus}</TextStatus>
         </div>
 
       </Container>

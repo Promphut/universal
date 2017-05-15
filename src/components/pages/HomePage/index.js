@@ -1,117 +1,370 @@
 import React from 'react'
-import {TopBarWithNavigation, SignUpFb, SignUp, SignInFb, SignIn} from 'components'
-import {Link} from 'react-router'
+import { PageTemplate, TopBarWithNavigation, OverlayImg, Thumpnail,
+	ThumpnailSmall, ArticleBox, ArticleBoxLarge, ThumpnailRow, TopColumnSidebar,
+	TopWriterSidebar, More, BGImg, StoryDropdown, Footer,TopStory,TopVideo} from 'components'
 import styled from 'styled-components'
-import {findDOMNode as dom} from 'react-dom'
+//import Request from 'superagent'
+import auth from 'components/auth'
+import api from 'components/api'
+import slider from 'react-slick'
+import Infinite from 'react-infinite'
+import CircularProgress from 'material-ui/CircularProgress';
+import LinearProgress from 'material-ui/LinearProgress';
+import FontIcon from 'material-ui/FontIcon';
 
 const Wrapper = styled.div`
-	.fixedPos{
-		position:fixed;
-		top:70px;
-
-	}
-  background:rgba(0,0,0,0.5);
+	@media (max-width:480px) {
+		max-width: 100%;
+		width:100%;
+  }
 `
-
 
 const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
+	padding: 140px 0 0 0;
 
-`
-const Share = styled.div`
-	flex: 1 90px;
-	position:relative;
-	max-width: 90px;
-	@media (max-width: 1160px) {
-		display:none;
+	@media (max-width:480px) {
+		padding: 70px 0 0 0;
+  }
+
+	@media (min-width: 481px) {
+		min-height: 480px;
 	}
 `
 
 const Main = styled.div`
-	flex: 8 730px;
-	max-width: 730px;
-  background:rgba(0,0,0,0.5);
-	@media (max-width: 480px) {
-		flex: 12;
+	flex: 3 731px;
+	max-width: 731px;
+	@media (max-width:480px) {
+    flex: 0 100%;
+		max-width: 100%;
+		padding:0 15px 0 15px;
+  }
+
+	.hidden-des-flex {
+		display: none !important;
+		@media (max-width: 480px) {
+			display: flex !important;
+	  }
 	}
+`
+const Feed = styled.div`
+	flex: 12 1120px;
+	max-width: 1120px;
+	display:flex;
+	@media (max-width:480px) {
+    flex: 0 100%;
+		max-width: 100%;
+		padding:0 15px 0 15px;
+  }
 `
 
 const Aside = styled.div`
-	flex: 3 350px;
-	position:relative;
+	flex: 1 350px;
 	max-width: 350px;
-	margin-left:20px;
+	margin-left:60px;
 	@media (max-width: 1160px) {
 		display:none;
 	}
-
+`
+const Text = styled.div`
+	color:#8F8F8F;
+	font-size:19px;
 `
 
-const Footer = styled.div`
-	text-align:center;
-	background: lightgreen;
-	height:400px;
+const TextLine = styled.div`
+	color:#8F8F8F;
+	font-size:19px;
+	border-bottom:1px solid #E2E2E2;
+	padding-bottom:11px;
 `
-
-const Homepage = React.createClass({
+const Onload = styled.div`
+	width:100%;
+	height:70px;
+	margin:50px 0 50px 0;
+`
+const LargeBox =styled(BGImg)`
+	flex:2;
+	height:222px;
+`
+const MiniBox = styled(BGImg)`
+	flex:1;
+	height:222px;
+`
+const MiniBoxDark = styled.div`
+	flex:1;
+	height:222px;
+	background-color:${props=>props.theme.primaryColor};
+	display:flex;
+  align-items: center;
+  justify-content: center;
+`
+const MiniBoxLight = styled.div`
+	flex:1;
+	height:222px;
+	background-color:white;
+`
+const ArrowLeft = styled.div`
+	position:relative;
+	left:-15px;
+	top:96px;
+	width:0;
+	height:0;
+	z-index:10; 
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-left:15px solid ${props=>props.theme.primaryColor};
+`
+const ArrowRight = styled.div`
+	position:relative;
+	left:-15px;
+	top:96px;
+	width:0;
+	height:0;
+	z-index:10; 
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-right:15px solid ${props=>props.theme.primaryColor};
+`
+const NewsBox = styled.div`
+	flex:2;
+	height:444px;
+`
+const SName = styled.div`
+	font-size:18px;
+	background:white;
+	display: inline;
+	padding:5px;
+	line-height:1.5;
+	box-shadow: 7px 0 0 white, -7px 0 0 white;
+`
+const HName = styled.div`
+	text-transform: uppercase;
+	color:${props=>props.theme.accentColor};
+	font-size:14px;
+	background:white;
+	display: inline;
+	padding:5px;
+	font-weight:bold;
+	line-height:2;
+	box-shadow: 7px 0 0 white, -7px 0 0 white;
+`
+const Line = styled.div`
+	background:${props=>props.theme.accentColor};
+	width:100%;
+	height:4px;
+	margin:20px 0 20px 0;
+`
+const HomePage = React.createClass({
 	getInitialState(){
+		this.trendingStories = []
+		this.latestStories = []
+		this.writer = []
+		this.column = []
+		
 		return {
+			latestStories:[],
+			refresh: 0,
+			page:0,
+			isInfiniteLoading: false,
+			loadOffset:300,
+			feedCount:0,
+			isMobile:false,
+			completed:0
 		}
 	},
-
-	updateDimensions(){
-			this.setState({
-				width: window.getWidth(),
-				height: window.getHeight()
-			});
-    },
-
 	componentWillMount(){
-			this.updateDimensions();
+		//this.timer = this.progress(0)
 	},
-
 	componentDidMount(){
+		this.getPublisher()
+		this.getFeed()
+		this.getSidebar()
+		this.setState({
+			isMobile:window.isMobile(),
+			completed:100
+		})
 
+		// this.progress(100)
 	},
 
-	fixedTrending(e){
+	// componentDidUpdate(prevProps, prevState){
+  //   clearTimeout(this.timer);
+	// 	this.progress(100)
+  // },
 
+
+	getPublisher(){
+		api.getPublisher()
+		.then(pub => {
+			this.publisher = pub
+
+			this.setState({
+				refresh: Math.random()
+			})
+		})
+	},
+
+	getFeed(){
+		// - Fetching latestStories
+		api.getFeed('article', {status:1}, 'latest', null, 0, 15)
+		.then(result => {
+			if(result) {
+				this.trendingStories = result.feed
+
+				this.setState({
+					refresh: Math.random()
+				})
+			}
+		})
+	},
+
+	getSidebar(){
+		// - Fetching top columns
+		// - Fetch top writers
+		Promise.all([
+			api.getColumns(),
+			api.getPublisherWriters(),
+		])
+		.then(([columns, writers]) => {
+			//console.log('GET FEED', result, columns, writers)
+			if(columns) this.column = columns
+			if(writers) this.writer = writers
+
+			this.setState({
+				refresh: Math.random()
+			})
+		})
+	},
+
+	buildElements() {
+		let page = this.state.page
+
+		api.getFeed('article', {status:1}, 'latest', null, page, 10)
+		.then(result => {
+			var s = this.state.latestStories.concat(result.feed)
+			this.setState({
+				feedCount:result.count[1],
+				latestStories:s,
+			},()=>{
+				if(s.length==result.count[1]){
+					this.setState({
+						loadOffset:'undefined',
+						isInfiniteLoading: false,
+					})
+				}else{
+					this.setState({
+						isInfiniteLoading: false
+					})
+				}
+			})
+		})
+	},
+
+	handleInfiniteLoad() {
+		//console.log('Onload')
+		this.buildElements(this.state.page)
+		this.setState({
+				isInfiniteLoading: true,
+				page:this.state.page+1
+		});
 	},
 
 	componentWillUnmount() {
-        //window.removeEventListener("resize", this.updateDimensions);
+    //clearTimeout(this.timer);
   },
 
-	trendingScroll(e){
-		console.log(e)
+  // progress(completed) {
+	// 	if(this.state.completed<100){
+	// 		if (completed > 100) {
+  //     	this.setState({completed: 100});
+	// 		} else {
+	// 			this.setState({completed});
+	// 			const diff = Math.random() * 10;
+	// 			this.timer = setTimeout(() => this.progress(completed + diff), 200);
+	// 		}
+	// 	}
+  // },
+
+	elementInfiniteLoad() {
+			return <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>;
 	},
 
 	render(){
-		var {stopPos} = this.state
+		//console.log('context', this.context.setting)
+		var {count,loadOffset,isInfiniteLoading,latestStories,isMobile,completed} = this.state
+		let pub = this.publisher
+		//console.log(this.props.onLoading)
 		return (
-		    <Wrapper >
-        	<TopBarWithNavigation title={'Title of AomMoney goes here..'} />
+		    <Wrapper>
+					{/*{completed<100&&<LinearProgress mode="determinate" value={completed} />}*/}
+		    	{pub && <BGImg src={pub.cover.medium} opacity={-1} style={{width:'100%',height:'350px'}}
+					className="hidden-mob" alt={pub.name} />}
 
+	      		<TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={this.props.onLoading}/>
+				<Content style={{paddingTop:'100px'}}>
+					<Feed>
+						<TopStory swift={true}></TopStory>
+						<TopVideo large={true}></TopVideo>
+					</Feed>
+					<Feed>
+						<TopStory></TopStory>
+						<TopVideo large={true} swift={true}></TopVideo>
+					</Feed>
+					<Feed>
+						<div style={{flex:3}}>
+							<div style={{display:'flex'}}>
+								<TopStory swift={true} large={true}></TopStory>
+							</div>
+							<div style={{display:'flex'}}>
+								<TopStory></TopStory>
+								<MiniBoxDark>
+									<div style={{width:30}}>
+										<i className="fa fa-facebook" style={{margin:'5px',fontSize:'30px',color:'white',display:'block'}} aria-hidden="true"></i>
+										<Line></Line>
+										<i className="fa fa-twitter" style={{fontSize:'30px',color:'white',display:'block'}} aria-hidden="true"></i>
+									</div>	
+								</MiniBoxDark>
+							</div>
+						</div>
+						<div style={{flex:2,display:'flex'}}>
+							<NewsBox></NewsBox>
+						</div>
+					</Feed>
+				</Content>
 		      <Content>
-						<Share ref='share'>
+			      <Main>
+							<TextLine className='sans-font'>Latest</TextLine>
+							<Infinite
+									containerHeight={!isMobile?(count*210)-100:(count*356)-100}
+									elementHeight={!isMobile?210:356}
+									infiniteLoadBeginEdgeOffset={loadOffset}
+									onInfiniteLoad={this.handleInfiniteLoad}
+									loadingSpinnerDelegate={this.elementInfiniteLoad()}
+									isInfiniteLoading={isInfiniteLoading}
+									useWindowAsScrollContainer={true}>
 
-						</Share>
-
-						<Main>
-
+								{latestStories.length!=0?latestStories.map((story, index) => (
+									<ArticleBox detail={story} key={index}/>
+								)):''}
+							</Infinite>
+							<More style={{margin:'30px auto 30px auto'}}/>
 			      </Main>
-
-			      <Aside  id='trendingBar' className='' ref='trendingBar'></Aside>
+			      <Aside>
+							<TopColumnSidebar column={this.column}/>
+							<TopWriterSidebar writer={this.writer}/>
+						</Aside>
 		      </Content>
-          <SignUpFb/>
-          <SignUp/>
-          <SignInFb/>
-          <SignIn/>
+					<Footer/>
 		   </Wrapper>
 		  )
 	}
 });
 
-export default Homepage;
+HomePage.contextTypes = {
+	setting: React.PropTypes.object
+};
+
+export default HomePage;

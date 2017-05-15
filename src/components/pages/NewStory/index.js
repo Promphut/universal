@@ -36,7 +36,20 @@ const Container = styled.form`
   width:100%;
   padding:60px;
   border-bottom:1px solid #E2E2E2;
-
+  #highlight ul > li {
+    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    font-size: 18px;
+    margin:10px 0 10px 0;
+  }
+  #highlight ol > li {
+    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    font-size: 18px;
+    margin:10px 0 10px 0;
+  }
+  #highlight p {
+    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    font-size: 18px;
+  }
   .medium-editor-insert-plugin p {
     font-family: 'PT Sans', 'cs_prajad', sans-serif;
     font-size: 18px;
@@ -74,6 +87,14 @@ const Paper = styled.div`
   position:relative;
   width:100%;
   min-height:500px;
+  &:focus{
+    outline: none;
+  }
+`
+const Highlight = styled.div`
+  background-color:#F4F4F4;
+  border:1px dashed ${props=>props.theme.accentColor};
+  width:100%;
   &:focus{
     outline: none;
   }
@@ -233,6 +254,7 @@ const NewStory = React.createClass({
     clearInterval(this.interval);
     if(this.state.chooseLayout!=null){
       this.editor.destroy()
+      this.editor2.destroy()
     }
   },
 
@@ -294,8 +316,25 @@ const NewStory = React.createClass({
           }
       });
 
-      this.editor.subscribe('editableInput', this.handleEditableInput);
+      this.editor2 = new MediumEditor('#highlight', {
+        toolbar: {
+          buttons: [
+              {name: 'bold',contentDefault: '<span class="fa fa-bold" ></span>'},
+              {name: 'italic',contentDefault: '<span class="fa fa-italic" ></span>'},
+              {name: 'underline',contentDefault: '<span class="fa fa-underline" ></span>',},
+              {name: 'anchor',contentDefault: '<span class="fa fa-link" ></span>'},
+              {name: 'unorderedlist',contentDefault: '<span class="fa fa-list-ul" ></span>'},
+              {name: 'orderedlist',contentDefault: '<span class="fa fa-list-ol" ></span>'}
+          ]
+        },
+        targetBlank: true,
+        placeholder: {
+          text: 'Highlight'
+        }
+      });
 
+      this.editor.subscribe('editableInput', this.handleEditableInput);
+      this.editor2.subscribe('editableInput', this.handleEditableInput);
       this.interval = setInterval(this.autoSave, 3000)
     })
   },
@@ -328,7 +367,6 @@ const NewStory = React.createClass({
 					break
 				}
 			}
-
 			this.setState({hintDesc:description})
 		}
 	},
@@ -407,10 +445,12 @@ const NewStory = React.createClass({
 
         let allContents = this.editor.serialize()
         let el =  allContents.paper.value
+        let highlight = this.editor2.serialize().highlight.value
         let s = {
           title:title,
           publisher:parseInt(config.PID),
-          html:el
+          html:el,
+          highlight
         }
         if(column!='no') s.column = column
         s.contentType = contentType
@@ -442,10 +482,12 @@ const NewStory = React.createClass({
 
         let allContents = this.editor.serialize()
         let el =  allContents.paper.value
+        let highlight = this.editor2.serialize().highlight.value
         let s = {
           title:title,
           publisher:parseInt(config.PID),
-          html:el
+          html:el,
+          highlight
         }
         if(column!='no') s.column = column
         s.contentType = contentType
@@ -468,12 +510,14 @@ const NewStory = React.createClass({
   publishStory(){
     let {sid,column,contentType,title} = this.state
     let allContents = this.editor.serialize()
+    let highlight = this.editor2.serialize().highlight.value
 
     let s = {
       title:title,
       publisher:parseInt(config.PID),
       status:1,
       html:allContents.paper.value,
+      highlight
     }
     if(column!='no') s.column = column
     s.contentType = contentType
@@ -841,7 +885,7 @@ const NewStory = React.createClass({
         </RaisedButton>
         {sid!=null && <TextStatus className='sans-font'>{saveStatus}</TextStatus>}
         <Title placeholder='Title' className='serif-font' value={title} onChange={this.titleChanged}/>
-
+        <Highlight ref='highlight' id='highlight'/>
         <Paper ref='paper'  id='paper' />
         {sid&&<div>
           {/*<Label className="nunito-font" >Select cover picture: </Label>*/}

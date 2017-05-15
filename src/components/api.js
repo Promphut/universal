@@ -55,8 +55,17 @@ api.getUsers = (keyword) => {
 	.set('Accept','application/json')
 	.then(res => {
 		return res.body.users
-	})
+	}, api.err)
 }
+api.getPublisherColumns = () => {
+   return Request
+	.get(config.BACKURL+'/publishers/'+config.PID+'/columns')
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body.columns
+	}, api.err)
+}
+
 
 api.changePassword = (data) => {
 	let token = auth.getToken(),
@@ -648,10 +657,10 @@ api.uploadFile = (file, type, toUrl, query) => {
 
 	return Request.post(toUrl)
 	.set('x-access-token', token)
-	.query({x:query.x})
-	.query({y:query.y})
-	.query({w:query.width})
-	.query({h:query.height})
+	.query({x:parseInt(query.x) })
+	.query({y:parseInt(query.y)})
+	.query({w:parseInt(query.width)})
+	.query({h:parseInt(query.height)})
 	.attach(type, file, file.name)
 	.then(res => {
 		return res.body

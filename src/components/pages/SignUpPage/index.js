@@ -1,5 +1,5 @@
 import React from 'react'
-import {SignUp,SignUpFb,LogoLink,BackButton,CloseButton} from 'components'
+import {SignUp,SignUpFb,LogoLink,BackButton,CloseButton,EmailSignUp,SignIn2} from 'components'
 import FlatButton from 'material-ui/FlatButton';
 import styled from 'styled-components'
 import {Link,browserHistory} from 'react-router'
@@ -30,7 +30,7 @@ const Modal = styled.div`
 
 const Container = styled.div`
   margin:7% auto 0 auto;
-  width:477px;
+  width:600px;
   @media (max-width:480px) {
     width: 100vw;
 		height: 100vh;
@@ -45,8 +45,8 @@ const BoxButton= styled.div`
 const SignUpPage = React.createClass({
 	getInitialState(){
 		return {
-      statePage:true,
-      visible:this.props.visible
+      statePage:1,
+      visible:this.props.visible,
     }
 	},
 
@@ -67,11 +67,12 @@ const SignUpPage = React.createClass({
 
   checkBack(e){
     e.preventDefault()
-    if(this.state.statePage){
+    var {statePage} = this.state
+    if(statePage==1){
       browserHistory.goBack()
     }else{
       this.setState({
-        statePage:!this.state.statePage
+        statePage:1
       })
     }
   },
@@ -82,49 +83,41 @@ const SignUpPage = React.createClass({
     })
   },
 
+  checkEmail(e,email){
+    e.preventDefault()
+    console.log(email)
+    this.setState({statePage:4})
+  },
+
 	render(){
     var {statePage} = this.state
-    if(this.state.visible){
-      var styles={}
-    }else{
-      var styles={display:'none'}
-    }
-    if(!this.props.modal){
-      return (
-		    <Wrapper style={{...styles}} page={statePage}>
-          <Container>
-            <div  style={{margin:'0 auto 15px auto',width:'146px'}}>
-              <LogoLink className='hidden-des' fill={statePage?'#E2E2E2':''}/>
-              <LogoLink className='hidden-mob' fill='#E2E2E2'/>
-            </div>
-            <BoxButton>
-              <Link to='#' onClick={this.checkBack} className='hidden-mob'>
-                <BackButton style={{float:'left'}} />
-              </Link>
-              <Link to='#' onClick={this.checkBack} className='hidden-des'>
-                <BackButton style={{float:'left'}}  labelStyle={{color:statePage?'#E2E2E2':'#00b2b4'}}/>
-              </Link>
-            </BoxButton>
-            {statePage?<SignUpFb emailSignUp={this.changeStatePage}/>:<SignUp onClick={this.signup}/>}
-          </Container>
-		   </Wrapper>
-		  )
-    }else{
-      return (
-		    <Modal style={{...styles}}>
-          <Container>
-            <div  style={{margin:'0 auto 15px auto',width:'146px'}}><LogoLink fill='#E2E2E2'/></div>
-            <BoxButton>
-              <Link to='#' onClick={this.checkBack} ><BackButton style={{float:'left'}}/></Link>
-              <CloseButton onClick={this.closeModal} style={{float:'right',paddingTop:'0px'}}/>
-            </BoxButton>
-            {statePage?<SignUpFb emailSignUp={this.changeStatePage}/>:<SignUp/>}
-          </Container>
-		   </Modal>
-		  )
-    }
-
+    var { theme } = this.context.setting.publisher
+    return (
+      <Wrapper style={{display:this.state.visible?'block':'none'}} page={statePage}>
+        <Container>
+          <div  style={{margin:'0 auto 15px auto',width:'146px'}}>
+            <LogoLink src={theme.logo} fill='#E2E2E2' id={'logoSignIn'} to='/'/>
+          </div>
+          <BoxButton>
+            <Link to='#' onClick={this.checkBack} className='hidden-mob'>
+              <BackButton style={{float:'left'}} />
+            </Link>
+            <Link to='#' onClick={this.checkBack} className='hidden-des'>
+              <BackButton style={{float:'left'}} />
+            </Link>
+          </BoxButton>
+          {statePage==1&&<EmailSignUp onSubmit={this.checkEmail} />}
+          {statePage==2&&<SignUp onSubmit={this.checkEmail} />}
+          {statePage==3&&<SignUpFb onSubmit={this.checkEmail} />}
+          {statePage==4&&<SignIn2 onSubmit={this.checkEmail} />}
+        </Container>
+      </Wrapper>
+    )
 	}
 });
+
+SignUpPage.contextTypes = {
+	setting: React.PropTypes.object
+}
 
 export default SignUpPage

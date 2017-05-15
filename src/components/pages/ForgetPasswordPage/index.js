@@ -29,10 +29,10 @@ const Modal = styled.div`
 
 const Container = styled.div`
   margin:7% auto 0 auto;
-  width:477px;
+  width:600px;
   @media (max-width:480px){
-    width: 100vw;
-		height: 100vh;
+    width: 100%;
+		height: 100%;
   }
 `
 const BoxButton= styled.div`
@@ -82,11 +82,12 @@ const ForgetPasswordPage = React.createClass({
   },
 
 	render(){
+    var { theme } = this.context.setting.publisher
     return(
       <Wrapper >
         <Container>
           <div style={{margin:'0 auto 30px auto',width:'146px'}}>
-            <LogoLink fill='#E2E2E2' className='hidden-mob'/><LogoLink fill='' className='hidden-des'/>
+            <LogoLink src={theme.logo} fill='#E2E2E2' id={'logoSignIn'} to='/'/>
             {/*<Logo fill='#E2E2E2' className='hidden-mob'/><Logo fill='#00b2b4' className='hidden-des'/>*/}
           </div>
           <BoxButton>
@@ -99,5 +100,9 @@ const ForgetPasswordPage = React.createClass({
     )
 	}
 });
+
+ForgetPasswordPage.contextTypes = {
+	setting: React.PropTypes.object
+}
 
 export default ForgetPasswordPage

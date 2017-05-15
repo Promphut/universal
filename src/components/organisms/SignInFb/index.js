@@ -11,9 +11,8 @@ import auth from 'components/auth'
 
 const Box = styled.div`
   width:477px;
-  height:427px;
   background-color:#fff;
-  padding:10px 0 10px 0;
+  padding:25px 0 25px 0;
   @media (max-width:480px){
     width:100vw;
     background:none;
@@ -22,7 +21,7 @@ const Box = styled.div`
   }
 `
 const Head = styled.div`
-  margin:70px auto 10px auto;
+  margin:20px auto 20px auto;
   text-align:center;
   font-size:42px;
   font-family:'Nunito'
@@ -151,8 +150,8 @@ const SignInFb = React.createClass({
           />
         </a>
       </div>
-      <Text style={{marginTop:'20px',fontFamily:'Nunito'}}>Or <LinkUnderLine to="#" className='hidden-mob' onClick={this.props.emailSignIn}>Sign In with an E-mail</LinkUnderLine></Text>
-      <InputBox onSubmit={this.signin} ref='signinForm' className='hidden-des'>
+      {/*<Text style={{marginTop:'20px',fontFamily:'Nunito'}}>Or <LinkUnderLine to="#" className='hidden-mob' onClick={this.props.emailSignIn}>Sign In with an E-mail</LinkUnderLine></Text>*/}
+      <InputBox onSubmit={this.signin} ref='signinForm' >
         <TextField
           hintText="Email"
           floatingLabelText="Email"
@@ -160,7 +159,7 @@ const SignInFb = React.createClass({
           fullWidth={true}
           name='username'
           errorText={errText0}
-          inputStyle={{color:'white'}}
+          inputStyle={{color:'#222'}}
         /><br />
         <TextField
           hintText="Password Field"
@@ -169,7 +168,7 @@ const SignInFb = React.createClass({
           fullWidth={true}
           name='password'
           errorText={errText1}
-          inputStyle={{color:'white'}}
+          inputStyle={{color:'#222'}}
         /><br />
         <div style={{width:307,margin:'57px auto 0 auto'}}>
           <RaisedButton
@@ -183,7 +182,7 @@ const SignInFb = React.createClass({
           />
         </div>
       </InputBox>
-      <Div>
+      <Div className='row' style={{display:'block',overflow:'auto'}}>
         <NewLink to="/forget" style={{float:'left'}}>Forget Password?</NewLink>
         <NewLink to="/signup" style={{float:'right'}}>Sign Up</NewLink>
       </Div>

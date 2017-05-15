@@ -117,6 +117,27 @@ const NoComment = styled.div`
     font-size:16px;
   }
 `
+const Highlight = styled.div`
+  background-color:#F4F4F4;
+  border:1px dashed ${props=>props.theme.accentColor};
+  width:100%;
+  padding:20px;
+  ul > li {
+    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    font-size: 18px;
+    margin:10px 0 10px 0;
+  }
+  ol > li {
+    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    font-size: 18px;
+    margin:10px 0 10px 0;
+  }
+  p {
+    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    font-size: 18px;
+  }
+`
+
 var commentUserObj = {
   id:'1',
   name:'Jirunya Bewvy',
@@ -188,6 +209,7 @@ const StoryDetail = React.createClass({
     return (
       <Wraper>
         <Head className='title-font'>{s.ptitle}</Head>
+        {s.phighlight&&<Highlight className='content-font'  dangerouslySetInnerHTML={{__html:s.phighlight}}></Highlight>} 
         <Story ref="detail" className='content-font' dangerouslySetInnerHTML={{__html:s.phtml}}></Story>
         {/*<WritedBy writer={s.writer} column={s.column} published={s.published} />*/}
 

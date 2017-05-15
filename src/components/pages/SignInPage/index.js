@@ -32,8 +32,8 @@ const Container = styled.div`
   margin:7% auto 0 auto;
   width:477px;
   @media (max-width:480px) {
-    width: 100vw;
-		height: 100vh;
+    width: 100%;
+		height: 100%;
   }
 `
 const BoxButton= styled.div`
@@ -83,45 +83,27 @@ const SignInPage = React.createClass({
 
 	render(){
     //console.log('PROP', this.props, this.props.params, this.props.location, this.location, browserHistory.getCurrentLocation())
-
     let state = browserHistory.getCurrentLocation().state,
         nextPathname = '/'
     if(state && state.nextPathname) nextPathname = state.nextPathname
+    var { theme } = this.context.setting.publisher
 
-
-    if(this.state.visible){
-      var styles={}
-    }else{
-      var styles={display:'none'}
-    }
-    if(!this.props.modal){
-      return(
-        <Wrapper style={{...styles}}>
-          <Container>
-            <div  style={{margin:'0 auto 30px auto',width:'146px'}}><LogoLink fill='#E2E2E2'/></div>
-            <BoxButton>
-              <Link to='#' onClick={this.checkBack} ><BackButton style={{float:'left'}}/></Link>
-            </BoxButton>
-            {this.state.statePage?<SignInFb emailSignIn={this.changeStatePage} nextPathname={nextPathname}/>:<SignIn nextPathname={nextPathname}/>}
-          </Container>
-		   </Wrapper>
-      )
-    }else{
-      return(
-        <Modal style={{...styles}}>
-          <Container>
-            <div  style={{margin:'0 auto 30px auto',width:'146px'}}><LogoLink fill='#E2E2E2'/></div>
-            <BoxButton>
-              <Link to='#' onClick={this.checkBack} ><BackButton style={{float:'left'}}/></Link>
-              <CloseButton style={{float:'right',paddingTop:'0px'}}/>
-            </BoxButton>
-            {this.state.statePage?<SignInFb emailSignIn={this.changeStatePage} nextPathname={nextPathname}/>:<SignIn nextPathname={nextPathname}/>}
-          </Container>
-		   </Modal>
-      )
-    }
+    return(
+      <Wrapper style={{display:this.state.visible?'block':'none'}}>
+        <Container>
+          <div  style={{margin:'0 auto 30px auto',width:'146px'}}><LogoLink src={theme.logo} fill='#FFF' id={'logoSignIn'} to='/'/></div>
+          <BoxButton>
+            <Link to='#' onClick={this.checkBack} ><BackButton style={{float:'left'}}/></Link>
+          </BoxButton>
+          <SignInFb emailSignIn={this.changeStatePage} nextPathname={nextPathname}/>
+        </Container>
+      </Wrapper>
+    )
 	}
 });
 
+SignInPage.contextTypes = {
+	setting: React.PropTypes.object
+}
 
 export default SignInPage

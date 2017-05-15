@@ -176,7 +176,7 @@ const UploadPicture = React.createClass({
 
   _crop(){
 		// image in dataUrl
-		this.setState({data:this.refs.cropper.getData(),previewUrl:this.refs.cropper.getCroppedCanvas().toDataURL()})
+		this.setState({data:this.refs.cropper.getData()})
 		//console.log(this.refs.cropper.getCroppedCanvas().toDataURL());
 	},
 
@@ -251,7 +251,7 @@ const UploadPicture = React.createClass({
 						crop={this._crop} />
         </Dialog>
         {!statePreview&&<Box width={width} height={height} className="menu-font" id={id} onClick={()=>(dom(this.refs.imageLoader).click())}><Label style={{...labelStyle}}>{label?label:"Upload Picture"}</Label></Box>}
-        <Preview width={width} height={height} ref='preview' style={{display:statePreview?'block':'none',backgroundImage:'url('+(previewUrl || src)+')'}}>
+        <Preview width={width} height={height} ref='preview' style={{display:statePreview?'block':'none',backgroundImage:'url('+(preview || src)+')'}}>
           <Filter width={width} height={height} onClick={()=>(dom(this.refs.imageLoader).click())} ><Label style={{...labelStyle,color:'#fff'}}>Edit</Label></Filter>
         </Preview>
         <Des className='sans-font' style={{color:err?'#D8000C':'#c2c2c2'}}>{msg}</Des>
