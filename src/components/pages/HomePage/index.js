@@ -1,7 +1,7 @@
 import React from 'react'
 import { PageTemplate, TopBarWithNavigation, OverlayImg, Thumpnail,
 	ThumpnailSmall, ArticleBox, ArticleBoxLarge, ThumpnailRow, TopColumnSidebar,
-	TopWriterSidebar, More, BGImg, StoryDropdown, Footer,TopStory,TopVideo} from 'components'
+	TopWriterSidebar, More, BGImg, StoryDropdown, Footer,TopStory,TopVideo,TopNewsHome,StaffPickSideBar} from 'components'
 import styled from 'styled-components'
 //import Request from 'superagent'
 import auth from 'components/auth'
@@ -23,7 +23,7 @@ const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
-	padding: 140px 0 0 0;
+	padding: 80px 0 0 0;
 
 	@media (max-width:480px) {
 		padding: 70px 0 0 0;
@@ -35,8 +35,8 @@ const Content = styled.div`
 `
 
 const Main = styled.div`
-	flex: 3 731px;
-	max-width: 731px;
+	flex: 3 825px;
+	max-width: 825px;
 	@media (max-width:480px) {
     flex: 0 100%;
 		max-width: 100%;
@@ -62,8 +62,8 @@ const Feed = styled.div`
 `
 
 const Aside = styled.div`
-	flex: 1 350px;
-	max-width: 350px;
+	flex: 1 255px;
+	max-width: 255px;
 	margin-left:60px;
 	@media (max-width: 1160px) {
 		display:none;
@@ -73,26 +73,24 @@ const Text = styled.div`
 	color:#8F8F8F;
 	font-size:19px;
 `
+const Dash = styled.div`
+  margin:5px 0 0 0;
+  width:30px;
+  height:4px;
+  background-color:${props=>props.theme.accentColor};
+`
 
 const TextLine = styled.div`
-	color:#8F8F8F;
-	font-size:19px;
-	border-bottom:1px solid #E2E2E2;
-	padding-bottom:11px;
+  color:${props=>props.theme.primaryColor};
+  font-size:28px;
+  font-weight:bold;
 `
 const Onload = styled.div`
 	width:100%;
 	height:70px;
 	margin:50px 0 50px 0;
 `
-const LargeBox =styled(BGImg)`
-	flex:2;
-	height:222px;
-`
-const MiniBox = styled(BGImg)`
-	flex:1;
-	height:222px;
-`
+
 const MiniBoxDark = styled.div`
 	flex:1;
 	height:222px;
@@ -101,56 +99,7 @@ const MiniBoxDark = styled.div`
   align-items: center;
   justify-content: center;
 `
-const MiniBoxLight = styled.div`
-	flex:1;
-	height:222px;
-	background-color:white;
-`
-const ArrowLeft = styled.div`
-	position:relative;
-	left:-15px;
-	top:96px;
-	width:0;
-	height:0;
-	z-index:10; 
-  border-top: 15px solid transparent;
-  border-bottom: 15px solid transparent;
-  border-left:15px solid ${props=>props.theme.primaryColor};
-`
-const ArrowRight = styled.div`
-	position:relative;
-	left:-15px;
-	top:96px;
-	width:0;
-	height:0;
-	z-index:10; 
-  border-top: 15px solid transparent;
-  border-bottom: 15px solid transparent;
-  border-right:15px solid ${props=>props.theme.primaryColor};
-`
-const NewsBox = styled.div`
-	flex:2;
-	height:444px;
-`
-const SName = styled.div`
-	font-size:18px;
-	background:white;
-	display: inline;
-	padding:5px;
-	line-height:1.5;
-	box-shadow: 7px 0 0 white, -7px 0 0 white;
-`
-const HName = styled.div`
-	text-transform: uppercase;
-	color:${props=>props.theme.accentColor};
-	font-size:14px;
-	background:white;
-	display: inline;
-	padding:5px;
-	font-weight:bold;
-	line-height:2;
-	box-shadow: 7px 0 0 white, -7px 0 0 white;
-`
+
 const Line = styled.div`
 	background:${props=>props.theme.accentColor};
 	width:100%;
@@ -212,10 +161,8 @@ const HomePage = React.createClass({
 		api.getFeed('article', {status:1}, 'latest', null, 0, 15)
 		.then(result => {
 			if(result) {
-				this.trendingStories = result.feed
-
 				this.setState({
-					refresh: Math.random()
+					latestStories: result.feed
 				})
 			}
 		})
@@ -304,57 +251,51 @@ const HomePage = React.createClass({
 					className="hidden-mob" alt={pub.name} />}
 
 	      		<TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={this.props.onLoading}/>
-				<Content style={{paddingTop:'100px'}}>
-					<Feed>
-						<TopStory swift={true}></TopStory>
-						<TopVideo large={true}></TopVideo>
-					</Feed>
-					<Feed>
-						<TopStory></TopStory>
-						<TopVideo large={true} swift={true}></TopVideo>
-					</Feed>
-					<Feed>
-						<div style={{flex:3}}>
-							<div style={{display:'flex'}}>
-								<TopStory swift={true} large={true}></TopStory>
+					
+					<Content style={{padding:'100px 0 60px 0',backgroundColor:'#F4F4F4'}}>
+						<Feed>
+							<TopStory swift={true}></TopStory>
+							<TopVideo large={true}></TopVideo>
+						</Feed>
+						<Feed>
+							<TopStory></TopStory>
+							<TopVideo large={true} swift={true}></TopVideo>
+						</Feed>
+						<Feed>
+							<div style={{flex:3}}>
+								<div style={{display:'flex'}}>
+									<TopStory swift={true} large={true}></TopStory>
+								</div>
+								<div style={{display:'flex'}}>
+									<TopStory></TopStory>
+									<MiniBoxDark>
+										<div style={{width:30}}>
+											<i className="fa fa-facebook" style={{margin:'5px',fontSize:'30px',color:'white',display:'block'}} aria-hidden="true"></i>
+											<Line></Line>
+											<i className="fa fa-twitter" style={{fontSize:'30px',color:'white',display:'block'}} aria-hidden="true"></i>
+										</div>	
+									</MiniBoxDark>
+								</div>
 							</div>
-							<div style={{display:'flex'}}>
-								<TopStory></TopStory>
-								<MiniBoxDark>
-									<div style={{width:30}}>
-										<i className="fa fa-facebook" style={{margin:'5px',fontSize:'30px',color:'white',display:'block'}} aria-hidden="true"></i>
-										<Line></Line>
-										<i className="fa fa-twitter" style={{fontSize:'30px',color:'white',display:'block'}} aria-hidden="true"></i>
-									</div>	
-								</MiniBoxDark>
+							<div style={{flex:2,display:'flex'}}>
+								<TopNewsHome></TopNewsHome>
 							</div>
-						</div>
-						<div style={{flex:2,display:'flex'}}>
-							<NewsBox></NewsBox>
-						</div>
-					</Feed>
-				</Content>
+						</Feed>
+					</Content>
+
 		      <Content>
 			      <Main>
-							<TextLine className='sans-font'>Latest</TextLine>
-							<Infinite
-									containerHeight={!isMobile?(count*210)-100:(count*356)-100}
-									elementHeight={!isMobile?210:356}
-									infiniteLoadBeginEdgeOffset={loadOffset}
-									onInfiniteLoad={this.handleInfiniteLoad}
-									loadingSpinnerDelegate={this.elementInfiniteLoad()}
-									isInfiniteLoading={isInfiniteLoading}
-									useWindowAsScrollContainer={true}>
+							<TextLine className='sans-font'>LATEST STORIES</TextLine>
+							<Dash style={{margin:'5px 0 10px 0'}}></Dash>
 
-								{latestStories.length!=0?latestStories.map((story, index) => (
-									<ArticleBox detail={story} key={index}/>
-								)):''}
-							</Infinite>
+							{latestStories.length!=0?latestStories.map((story, index) => (
+								<ArticleBox detail={story} key={index}/>
+							)):''}
+
 							<More style={{margin:'30px auto 30px auto'}}/>
 			      </Main>
 			      <Aside>
-							<TopColumnSidebar column={this.column}/>
-							<TopWriterSidebar writer={this.writer}/>
+							<StaffPickSideBar></StaffPickSideBar>
 						</Aside>
 		      </Content>
 					<Footer/>

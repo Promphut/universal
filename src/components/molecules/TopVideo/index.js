@@ -11,7 +11,7 @@ const LargeBox =styled(Link)`
 const MiniBox = styled(BGImg)`
   flex:${props=>props.large?2:1};
 	height:222px;
-  z-index:-1;
+  z-index:0;
 `
 const Box1 = styled.div`
   flex:${props=>props.large?2:1};
@@ -128,7 +128,7 @@ const TopVideo = React.createClass({
           <MiniBoxDark>
             <ArrowLeft style={{marginLeft:'100%',left:'0px'}}/>
             <div style={{width:'174px',margin:'0 0 0 20px'}}>
-              <HName className='sans-font' style={{}}>TOP STORIES</HName>
+              <HName className='sans-font' style={{}}>TOP VIDEO</HName>
               <SName hover={hover} to={'#'} className='nunito-font' >“เน็ตมือถือไม่พอใช้” ปัญหาใหญ่ของผู้ใช้ สมาร์ทโฟนชาวไทยในยุคนี้</SName>
             </div>
           </MiniBoxDark>
@@ -154,7 +154,7 @@ const TopVideo = React.createClass({
           <MiniBoxDark>
             <ArrowRight />
             <div style={{width:'174px',margin:'0 0 0 20px'}}>
-              <HName className='sans-font' style={{}}>TOP STORIES</HName>
+              <HName className='sans-font' style={{}}>TOP VIDEO</HName>
               <SName hover={hover} to={'#'} className='nunito-font' >“เน็ตมือถือไม่พอใช้” ปัญหาใหญ่ของผู้ใช้ สมาร์ทโฟนชาวไทยในยุคนี้</SName>
             </div>
           </MiniBoxDark>
