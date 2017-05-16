@@ -1,7 +1,8 @@
 import React from 'react'
 import { PageTemplate, TopBarWithNavigation, OverlayImg, Thumpnail,
 	ThumpnailSmall, ArticleBox, ArticleBoxLarge, ThumpnailRow, TopColumnSidebar,
-	TopWriterSidebar, More, BGImg, StoryDropdown, Footer,TopStory,TopVideo,TopNewsHome,StaffPickSideBar} from 'components'
+	TopWriterSidebar, More, BGImg, StoryDropdown, Footer,StaffPickSideBar,TopHome,
+TopVideoHome } from 'components'
 import styled from 'styled-components'
 //import Request from 'superagent'
 import auth from 'components/auth'
@@ -100,12 +101,6 @@ const MiniBoxDark = styled.div`
   justify-content: center;
 `
 
-const Line = styled.div`
-	background:${props=>props.theme.accentColor};
-	width:100%;
-	height:4px;
-	margin:20px 0 20px 0;
-`
 const HomePage = React.createClass({
 	getInitialState(){
 		this.trendingStories = []
@@ -250,40 +245,11 @@ const HomePage = React.createClass({
 		    	{pub && <BGImg src={pub.cover.medium} opacity={-1} style={{width:'100%',height:'350px'}}
 					className="hidden-mob" alt={pub.name} />}
 
-	      		<TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={this.props.onLoading}/>
+	      	<TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={this.props.onLoading}/>
 					
-					<Content style={{padding:'100px 0 60px 0',backgroundColor:'#F4F4F4'}}>
-						<Feed>
-							<TopStory swift={true}></TopStory>
-							<TopVideo large={true}></TopVideo>
-						</Feed>
-						<Feed>
-							<TopStory></TopStory>
-							<TopVideo large={true} swift={true}></TopVideo>
-						</Feed>
-						<Feed>
-							<div style={{flex:3}}>
-								<div style={{display:'flex'}}>
-									<TopStory swift={true} large={true}></TopStory>
-								</div>
-								<div style={{display:'flex'}}>
-									<TopStory></TopStory>
-									<MiniBoxDark>
-										<div style={{width:30}}>
-											<i className="fa fa-facebook" style={{margin:'5px',fontSize:'30px',color:'white',display:'block'}} aria-hidden="true"></i>
-											<Line></Line>
-											<i className="fa fa-twitter" style={{fontSize:'30px',color:'white',display:'block'}} aria-hidden="true"></i>
-										</div>	
-									</MiniBoxDark>
-								</div>
-							</div>
-							<div style={{flex:2,display:'flex'}}>
-								<TopNewsHome></TopNewsHome>
-							</div>
-						</Feed>
-					</Content>
-
-		      <Content>
+					<TopHome></TopHome>
+		      <TopVideoHome></TopVideoHome>
+					<Content style={{padding:'0px'}}>
 			      <Main>
 							<TextLine className='sans-font'>LATEST STORIES</TextLine>
 							<Dash style={{margin:'5px 0 10px 0'}}></Dash>
@@ -298,6 +264,7 @@ const HomePage = React.createClass({
 							<StaffPickSideBar></StaffPickSideBar>
 						</Aside>
 		      </Content>
+					
 					<Footer/>
 		   </Wrapper>
 		  )

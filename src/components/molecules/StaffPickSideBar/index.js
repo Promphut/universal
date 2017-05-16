@@ -1,5 +1,5 @@
 import React from 'react'
-import {BGImg} from 'components'
+import {BGImg,Stick} from 'components'
 import styled,{keyframes} from 'styled-components'
 import {Link} from 'react-router'
 import api from 'components/api' 
@@ -83,33 +83,35 @@ const StaffPickSideBar = React.createClass({
     var {hover,news} = this.state
     //console.log(news)
     return (
-      <Container >
-        <TextLine className='sans-font'>OUR PICKS</TextLine>
-				<Dash style={{margin:'5px 0 10px 0'}}></Dash>
-        <div style={{padding:'25px 0 0 25px'}}>
-          <Box  src='/tmp/story-list/1485309433041-Screen-Shot-2017-01-23-at-33221-PM-1.png'>
-            <Grad to='#' className='grad nunito-font'>{_.truncate(`“เน็ตมือถือไม่พอใช้” ปัญหาใหญ่ของผู้ใช้สมาร์ท
-โฟนชาวไทยในยุคนี้ สมาร์ทโฟนชาวไทยในยุคนี้...`, {
-              'length': 150,
-              'separator': ''
-            })}</Grad>
-          </Box>
-          <Box src='/tmp/story-list/1485309433041-Screen-Shot-2017-01-23-at-33221-PM-1.png'>
-            <Grad to='#' className='grad nunito-font'>{_.truncate(`“เน็ตมือถือไม่พอใช้” ปัญหาใหญ่ของผู้ใช้สมาร์ท
-โฟนชาวไทยในยุคนี้ สมาร์ทโฟนชาวไทยในยุคนี้...`, {
-              'length': 150,
-              'separator': ''
-            })}</Grad>
-          </Box>
-          <Box src='/tmp/story-list/1485309433041-Screen-Shot-2017-01-23-at-33221-PM-1.png'>
-            <Grad to='#' className='grad nunito-font'>{_.truncate(`“เน็ตมือถือไม่พอใช้” ปัญหาใหญ่ของผู้ใช้สมาร์ท
-โฟนชาวไทยในยุคนี้ สมาร์ทโฟนชาวไทยในยุคนี้...`, {
-              'length': 150,
-              'separator': ''
-            })}</Grad>
-          </Box>
-        </div>
-      </Container>
+      <Stick topOffset={60}>
+        <Container >
+          <TextLine className='sans-font'>OUR PICKS</TextLine>
+          <Dash style={{margin:'5px 0 10px 0'}}></Dash>
+          <div style={{padding:'25px 0 0 25px'}}>
+            <Box  src='/tmp/story-list/1485309433041-Screen-Shot-2017-01-23-at-33221-PM-1.png'>
+              <Grad to='#' className='grad nunito-font'>{_.truncate(`“เน็ตมือถือไม่พอใช้” ปัญหาใหญ่ของผู้ใช้สมาร์ท
+  โฟนชาวไทยในยุคนี้ สมาร์ทโฟนชาวไทยในยุคนี้...`, {
+                'length': 150,
+                'separator': ''
+              })}</Grad>
+            </Box>
+            <Box src='/tmp/story-list/1485309433041-Screen-Shot-2017-01-23-at-33221-PM-1.png'>
+              <Grad to='#' className='grad nunito-font'>{_.truncate(`“เน็ตมือถือไม่พอใช้” ปัญหาใหญ่ของผู้ใช้สมาร์ท
+  โฟนชาวไทยในยุคนี้ สมาร์ทโฟนชาวไทยในยุคนี้...`, {
+                'length': 150,
+                'separator': ''
+              })}</Grad>
+            </Box>
+            <Box src='/tmp/story-list/1485309433041-Screen-Shot-2017-01-23-at-33221-PM-1.png'>
+              <Grad to='#' className='grad nunito-font'>{_.truncate(`“เน็ตมือถือไม่พอใช้” ปัญหาใหญ่ของผู้ใช้สมาร์ท
+  โฟนชาวไทยในยุคนี้ สมาร์ทโฟนชาวไทยในยุคนี้...`, {
+                'length': 150,
+                'separator': ''
+              })}</Grad>
+            </Box>
+          </div>
+        </Container>
+      </Stick> 
     )
 	}
 });
