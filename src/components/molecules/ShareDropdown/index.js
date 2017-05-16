@@ -7,7 +7,7 @@ import {Dropdown,TwtShareButton, FbShareButton} from 'components'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import api from 'components/api' 
 import config from '../../../config'
-import utils from '../../../services/clientUtils'
+import utils from '../../../services/utils'
 
 class ShareDropdown extends React.Component {
   static contextTypes = {

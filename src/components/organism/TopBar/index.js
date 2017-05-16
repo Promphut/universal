@@ -13,7 +13,7 @@ import {
 import auth from 'components/auth'
 //import utils from 'components/utils'
 import FontIcon from 'material-ui/FontIcon'
-import utils from '../../../services/clientUtils'
+import utils from '../../../services/utils'
 import { withRouter } from 'react-router'
 
 const Wrapper = styled.div`

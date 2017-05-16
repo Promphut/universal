@@ -10,7 +10,7 @@ import CircularProgress from 'material-ui/CircularProgress';
 import LinearProgress from 'material-ui/LinearProgress';
 import { Tabs, Tab } from 'material-ui/Tabs'
 import SwipeableViews from 'react-swipeable-views';
-import utils from '../../../services/clientUtils'
+import utils from '../../../services/utils'
 
 const Wrapper = styled.div`
 	@media (max-width:480px) {
@@ -164,7 +164,7 @@ class NewsPage extends React.Component {
 			//isInfiniteLoading: false,
 			//loadOffset:300,
 			page:0,
-			feedCount:0,
+			feedCount:-1,
 			feed: [],
 			hasMoreFeed: true,
 
@@ -204,26 +204,28 @@ class NewsPage extends React.Component {
 		})
 	}
 
+	onload = () => <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>
 	loadFeed = () => {
-		// ensure this method is called only once at a time
-		if(this.loading == null) this.loading = false
-		else if(this.loading===true) return 
-		this.loading = true
+		return () => {
+			// ensure this method is called only once at a time
+			if(this.loading===true) return 
+			this.loading = true
 
-		let page = this.state.page
-		//console.log('page', page)
+			let page = this.state.page
+			//console.log('page', page)
 
-		api.getFeed('news', {status:1}, 'latest', null, page, 15)
-		.then(result => {
+			api.getFeed('news', {status:1}, 'latest', null, page, 15)
+			.then(result => {
 
-			let feed = this.state.feed.concat(result.feed)
-			this.setState({
-				page: ++page,
-				feed: feed,
-				feedCount: result.count['1'],
-				hasMoreFeed: feed.length < result.count['1']
-			}, () => {this.loading = false})
-		})
+				let feed = this.state.feed.concat(result.feed)
+				this.setState({
+					page: ++page,
+					feed: feed,
+					feedCount: result.count['1'],
+					hasMoreFeed: feed.length < result.count['1']
+				}, () => {this.loading = false})
+			})
+		}
 	}
 
 	// buildElements() {
@@ -385,12 +387,12 @@ class NewsPage extends React.Component {
 			              >
 			                <Latest>
 			                	<InfiniteScroll
-								    loadMore={this.loadFeed}
+								    loadMore={this.loadFeed()}
 								    hasMore={hasMoreFeed}
-								    loader={<Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>}
+								    loader={this.onload()}
 								>
 									<div>
-									    {feed.length!=0  && feed.map((item, index) => (
+									    {feed.map((item, index) => (
 											<NewsBox detail={item} key={index} timeline={true}/>
 										))}
 									</div>

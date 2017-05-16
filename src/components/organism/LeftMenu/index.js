@@ -6,7 +6,7 @@ import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import Divider from 'material-ui/Divider'
 import {findDOMNode as dom} from 'react-dom'
-import utils from '../../../services/clientUtils'
+import utils from '../../../services/utils'
 
 const Container = styled.div`
   position:fixed;

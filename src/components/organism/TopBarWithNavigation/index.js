@@ -4,7 +4,7 @@ import {TopBar, TopNavigation, TopBarWithShare, Stick} from 'components'
 import auth from 'components/auth'
 import api from 'components/api'
 import { withRouter } from 'react-router'
-import utils from '../../../services/clientUtils'
+import utils from '../../../services/utils'
 import { parse } from 'query-string'
 
 class TopBarWithNavigation extends React.Component {

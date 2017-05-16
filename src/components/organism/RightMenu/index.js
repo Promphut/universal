@@ -8,7 +8,7 @@ import Divider from 'material-ui/Divider'
 import {findDOMNode as dom} from 'react-dom'
 import Avatar from 'material-ui/Avatar';
 import auth from 'components/auth'
-import utils from '../../../services/clientUtils'
+import utils from '../../../services/utils'
 
 const Container = styled.div`
   text-align: left;

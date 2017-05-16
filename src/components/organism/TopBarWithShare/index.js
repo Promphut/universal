@@ -9,7 +9,7 @@ import auth from 'components/auth'
 //import utils from 'components/utils'
 import FontIcon from 'material-ui/FontIcon'
 import { withRouter } from 'react-router'
-import utils from '../../../services/clientUtils'
+import utils from '../../../services/utils'
 
 const Wrapper = styled.div`
 	.transparent {

@@ -7,7 +7,7 @@ import FontIcon from 'material-ui/FontIcon';
 import auth from 'components/auth'
 import api from 'components/api'
 import { parse } from 'query-string'
-import utils from '../../../services/clientUtils'
+import utils from '../../../services/utils'
 import { withRouter } from 'react-router'
 
 const Container = styled.div`

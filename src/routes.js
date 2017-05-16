@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import { Route, Switch, Link } from 'react-router-dom'
 import api from 'components/api'
 import App from 'components/App'
-import { HomePage2, NewsPage, AllColumn, AboutPage, ContactPage } from 'components'
+//import utils from './services/utils'
+import { HomePage2, NewsPage, AllColumn, AboutPage, ContactPage, TagPage, ColumnPage } from 'components'
 
 const NotFound = ({ location }) => (
 	<Status code={404}>
@@ -66,6 +67,19 @@ const Topics = ({ match }) => (
 //   </App>
 // )
 
+// const getTagAndRender = (component) => {
+// 	return (props) => {
+// 		let tagSlug = props.match.params.tagSlug
+// 		if(!tagSlug) utils.notFound(props.history)
+
+// 		api.getTagFromTagSlug(tagSlug)
+// 		.then(tag => {
+// 			props.tag = tag
+// 		})
+// 		.catch(utils.toError(props.history))
+// 	}
+// } 
+
 class AppRoutes extends React.Component {
 	constructor(props) {
 		super(props)
@@ -103,11 +117,18 @@ class AppRoutes extends React.Component {
 	  	      <Route exact path='/' component={HomePage2}/>
 	  	      <Route exact path='/stories/news' component={NewsPage} />
 	  	      <Route exact path='/stories/columns' component={AllColumn}/>
+	  	      <Route path='/stories/:columnSlug' component={ColumnPage}/>
 
 	  	      <Route exact path='/about' component={AboutPage} />
 	  	      <Route exact path='/contact' component={ContactPage} />
 
+	  	      {/*<Route exact path="/tags/:tagSlug" component={withFetcher(TagPage, (props, done) => {done()})} />*/}
+	  	      <Route exact path='/tags/:tagSlug' component={TagPage} />
+
 	  	      <Route path='/topics' component={Topics}/>
+
+	  	     {/* <Route exact path='error' component={ErrorPage}/>
+	  	      <Route exact path='404' component={NotFoundPage}/>*/}
 	  	      <Route component={NotFound}/>
 	  	    </Switch>
 	  	  </App>

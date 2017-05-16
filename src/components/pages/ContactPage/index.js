@@ -7,7 +7,7 @@ import FlatButton from 'material-ui/FlatButton'
 import auth from 'components/auth'
 import api from 'components/api'
 import {ContactAndAboutContainer, PrimaryButton, SecondaryButton} from 'components'
-import utils from '../../../services/clientUtils'
+import utils from '../../../services/utils'
 
 const Wrapper = styled.div`
 `

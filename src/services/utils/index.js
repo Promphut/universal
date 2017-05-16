@@ -69,4 +69,36 @@ utils.getTrailingSid = (url) => {
   return parseInt(arr[arr.length-1])
 };
 
+utils.dotToObj = (obj, str, val) => {
+  str = str.split(".");
+  while (str.length > 1){
+    let key = str.shift()
+    if(!obj[key]) obj[key] = {}
+      obj = obj[key];
+  }
+  return obj[str.shift()] = val;
+};
+
+utils.getTotalPages = (itemsLimit, itemsCount) => {
+  let count = Math.ceil(itemsCount / itemsLimit)
+  return isNaN(count) ? 0 : count
+};
+
+utils.toError = (history) => {
+  return (err) => {
+    console.error('err', err)
+
+    history.replace({
+      pathname: '/error',
+      state: { error: err }
+    })
+  }
+}
+utils.notFound = (history) => {
+  
+}
+utils.toSignin = (history) => {
+
+}
+
 module.exports = utils
