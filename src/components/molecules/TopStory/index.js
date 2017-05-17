@@ -93,6 +93,7 @@ const TopStory = React.createClass({
 
 	render(){
     var {style,swift,className,large} = this.props
+    var {cover,writer,column,votes,comments,updated,url,readTime,contentShort,ptitle} = this.props.detail
     var {hover} = this.state
     if(swift){
       return (
@@ -101,11 +102,11 @@ const TopStory = React.createClass({
             <ArrowLeft style={{marginLeft:'100%',left:'0px',borderLeft:'15px solid white'}}/>
             <div style={{width:'174px',margin:'0 0 0 20px'}}>
               <HName className='sans-font' style={{}}>TOP STORIES</HName>
-              <SName hover={hover} to={'#'} className='nunito-font' >“เน็ตมือถือไม่พอใช้” ปัญหาใหญ่ของผู้ใช้ สมาร์ทโฟนชาวไทยในยุคนี้</SName>
+              <SName hover={hover} to={this.props.detail&&url} className='nunito-font' >{_.truncate(ptitle?ptitle:'', {'length': 150,'separator': ''})}</SName>
             </div>
           </MiniBoxLight>
           <Box1 large={large}>
-            <MiniBox hover={hover} src={'/tmp/story-list/1486687443533-Dakota.jpeg'}  opacity={0.7}/>
+            <MiniBox hover={hover} src={cover&&cover.medium}  opacity={0.7}/>
           </Box1>
         </LargeBox>    
       )
@@ -113,13 +114,13 @@ const TopStory = React.createClass({
       return (
         <LargeBox to='#' large={large} style={{...style}} className={' '+className} onMouseOver={this.hover} onMouseLeave={this.leave}>
           <Box1 large={large}>
-            <MiniBox hover={hover} src={'/tmp/story-list/1486687443533-Dakota.jpeg'}  opacity={0.7}/>
+            <MiniBox hover={hover} src={cover&&cover.medium}  opacity={0.7}/>
           </Box1>
           <MiniBoxLight>
             <ArrowRight style={{borderRight:'15px solid white',left:'-14px'}}/>
             <div style={{width:'174px',margin:'0 0 0 20px'}}>
               <HName className='sans-font' style={{}}>TOP STORIES</HName>
-              <SName hover={hover} to={'#'} className='nunito-font' >“เน็ตมือถือไม่พอใช้” ปัญหาใหญ่ของผู้ใช้ สมาร์ทโฟนชาวไทยในยุคนี้</SName>
+              <SName hover={hover} to={url} className='nunito-font' >{_.truncate(ptitle?ptitle:'', {'length': 150,'separator': ''})}</SName>
             </div>
           </MiniBoxLight>
         </LargeBox>    

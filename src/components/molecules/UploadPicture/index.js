@@ -30,6 +30,9 @@ const Box = styled.div`
   text-align:center;
   font-size:14px;
   color:${props=> props.theme.accentColor};
+  display:flex;
+  align-items:center;
+  justify-content:center;
   &:hover{
     cursor:pointer;
     text-decoration:underline;
@@ -68,6 +71,9 @@ const Filter = styled.div`
   text-align:center;
   font-size:14px;
   color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   &:hover{
     cursor:pointer;
     text-decoration:underline;

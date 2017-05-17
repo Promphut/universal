@@ -1,7 +1,8 @@
 import React from 'react'
-import {BGImg,TopStory,TopVideo,TopNewsHome} from 'components'
+import {BGImg,TopStory,TopVideo,TopNewsHome, TwtShareButton, FbShareButton} from 'components'
 import styled,{keyframes} from 'styled-components'
 import {Link} from 'react-router'
+import api from 'components/api'
 
 const LargeBox =styled(Link)`
   display:flex;
@@ -106,16 +107,38 @@ const Content = styled.div`
 		min-height: 480px;
 	}
 `
+const Share = styled.a`
+  color:white;
+  &:hover{
+    cursor:pointer;
+    color:${props=>props.theme.accentColor};
+    > i{
+      color:${props=>props.theme.accentColor};
+    }
+  }
+`
 
 const TopHome = React.createClass({
 	getInitialState(){
 		return {
-      hover:false
+      hover:false,
+      trendingStories:[]
 		}
 	},
 
 	componentDidMount(){
-
+    this.getFeed()
+	},
+  getFeed(){
+		// - Fetching latestStories
+		api.getFeed('article', {status:1}, 'trending', null, 0, 6)
+		.then(result => {
+			if(result) {
+				this.setState({
+					trendingStories: result.feed
+				})
+			}
+		})
 	},
   hover(){
     this.setState({hover:true})
@@ -126,29 +149,32 @@ const TopHome = React.createClass({
 
 	render(){
     var {style,swift,className,large} = this.props
-    var {hover} = this.state
+    var {hover,trendingStories} = this.state
+    console.log(trendingStories)
     return (
       <Content style={{padding:'100px 0 60px 0',backgroundColor:'#F4F4F4'}}>
         <Feed>
-          <TopStory swift={true}></TopStory>
-          <TopVideo large={true}></TopVideo>
+          {trendingStories.length!=0?<TopStory swift={true} detail={trendingStories[0]}></TopStory>:''}
+          {trendingStories.length!=0?<TopStory large={true} detail={trendingStories[1]}></TopStory>:''}
+          {/*<TopVideo large={true}></TopVideo>*/}
         </Feed>
         <Feed>
-          <TopStory></TopStory>
-          <TopVideo large={true} swift={true}></TopVideo>
+          {trendingStories.length!=0?<TopStory detail={trendingStories[2]}></TopStory>:''}
+          {trendingStories.length!=0?<TopStory detail={trendingStories[3]} swift={true} large={true}></TopStory>:''}
+          {/*<TopVideo large={true} swift={true}></TopVideo>*/}
         </Feed>
         <Feed>
           <div style={{flex:3}}>
             <div style={{display:'flex'}}>
-              <TopStory swift={true} large={true}></TopStory>
+              {trendingStories.length!=0?<TopStory detail={trendingStories[4]} swift={true} large={true}></TopStory>:''}
             </div>
             <div style={{display:'flex'}}>
-              <TopStory></TopStory>
+              {trendingStories.length!=0?<TopStory detail={trendingStories[5]}></TopStory>:''}
               <MiniBoxDark>
                 <div style={{width:30}}>
-                  <i className="fa fa-facebook" style={{margin:'5px',fontSize:'30px',color:'white',display:'block'}} aria-hidden="true"></i>
+                  <FbShareButton button={<Share><i className="fa fa-facebook" style={{margin:'5px',fontSize:'30px',display:'block'}} aria-hidden="true"></i></Share>}/>
                   <Line></Line>
-                  <i className="fa fa-twitter" style={{fontSize:'30px',color:'white',display:'block'}} aria-hidden="true"></i>
+                  <TwtShareButton button={<Share><i className="fa fa-twitter" style={{fontSize:'30px',display:'block'}} aria-hidden="true"></i></Share>}/>
                 </div>	
               </MiniBoxDark>
             </div>

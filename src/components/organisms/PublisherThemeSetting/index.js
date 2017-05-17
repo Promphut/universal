@@ -298,7 +298,7 @@ const PublisherThemeSetting = React.createClass({
         <ShadeColor key={i} className={'bg'+i}></ShadeColor>
       )
     }
-    //console.log('colorTheme', colorTheme, primaryColor)
+    //console.log(pub)
     return(
       <Container onSubmit={this.updateData}>
         <Flex>
@@ -306,7 +306,7 @@ const PublisherThemeSetting = React.createClass({
             <div className="sans-font">Cover picture</div>
           </Title>
           <Edit>
-            <UploadPicture ratio={1920/350} src={pub.cover&&pub.cover.medium} ratio={1920/350} path={'/publishers/'+config.PID+'/cover'} type='cover' size='1920x350' width={500} height={100} labelStyle={{top:'45px'}}/>
+            <UploadPicture ratio={1920/350} src={pub.cover&&pub.cover.medium} ratio={1920/350} path={'/publishers/'+config.PID+'/cover'} type='cover' size='1920x350' width={500} height={100} />
           </Edit>
         </Flex>
         <Flex>
@@ -315,8 +315,8 @@ const PublisherThemeSetting = React.createClass({
           </Title>
           <Edit>
             <div className='row'>
-              <UploadPicture src={uploadLogo} path={'/publishers/'+config.PID+'/logo'} size='.svg' type='logo' allowTypes='|svg+xml|' width={200} height={23} labelStyle={{top:'10px'}} style={{flex:1}}/>
-              <UploadPicture src={uploadLogo} path={'/publishers/'+config.PID+'/logo'} size='.svg' type='logo' allowTypes='|svg+xml|' width={200} height={23} labelStyle={{top:'10px'}} style={{flex:1}}/>
+              <UploadPicture src={theme.llogo} path={'/publishers/'+config.PID+'/llogo'} size='.svg' type='llogo' allowTypes='|svg+xml|' width={200} height={23}  style={{flex:1}}/>
+              <UploadPicture src={theme.llogoGif} path={'/publishers/'+config.PID+'/llogo/gif'} size='.gif' type='llogoGif' allowTypes='|gif|' width={200} height={23}  style={{flex:1}}/>
             </div>
           </Edit>
         </Flex>
@@ -325,7 +325,7 @@ const PublisherThemeSetting = React.createClass({
             <div className="sans-font">Favicon (.ico)</div>
           </Title>
           <Edit>
-            <UploadPicture src={uploadFavicon} path={'/publishers/'+config.PID+'/favicon'} size='.ico' type='favicon' allowTypes='|x-icon|vnd.microsoft.icon|' width={60} height={60} labelStyle={{top:'25px'}}/>
+            <UploadPicture src={uploadFavicon} path={'/publishers/'+config.PID+'/favicon'} size='.ico' type='favicon' allowTypes='|x-icon|vnd.microsoft.icon|' width={60} height={60} />
           </Edit>
         </Flex>
         <Flex>
@@ -334,8 +334,8 @@ const PublisherThemeSetting = React.createClass({
           </Title>
           <Edit>
             <div className='row'>
-              <UploadPicture src={uploadSLogo} path={'/publishers/'+config.PID+'/slogo'} size='.svg' type='slogo' allowTypes='|svg+xml|' width={60} height={60} labelStyle={{top:'25px'}} style={{flex:1}}/>
-              <UploadPicture src={uploadSLogo} path={'/publishers/'+config.PID+'/slogo'} size='.gif' type='slogo' allowTypes='|gif|' width={60} height={60} labelStyle={{top:'25px'}} style={{flex:3}}/>
+              <UploadPicture src={uploadSLogo} path={'/publishers/'+config.PID+'/slogo'} size='.svg' type='slogo' allowTypes='|svg+xml|' width={60} height={60}  style={{flex:1}}/>
+              <UploadPicture src={theme.slogoGif} path={'/publishers/'+config.PID+'/slogo/gif'} size='.gif' type='slogoGif' allowTypes='|gif|' width={60} height={60}  style={{flex:3}}/>
             </div>
           </Edit>
         </Flex>
@@ -344,7 +344,7 @@ const PublisherThemeSetting = React.createClass({
             <div className="sans-font">Large Logo (.svg)</div>
           </Title>
           <Edit>
-            <UploadPicture src={uploadLogo} path={'/publishers/'+config.PID+'/logo'} size='.svg' type='logo' allowTypes='|svg+xml|' width={300} height={35} labelStyle={{top:'10px'}}/>
+            <UploadPicture src={uploadLogo} path={'/publishers/'+config.PID+'/logo'} size='.svg' type='logo' allowTypes='|svg+xml|' width={300} height={35} />
           </Edit>
         </Flex>
 

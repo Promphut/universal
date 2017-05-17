@@ -116,7 +116,7 @@ const Box = styled.div`
 const NewsBox = React.createClass({
   render(){
     let {detail,style,timeline} = this.props
-    let {ptitle,cover,writer,column,votes,comments,updated,url,readTime} = detail
+    let {ptitle,cover,writer,column,votes,comments,updated,url,readTime,contentShort} = detail
     //console.log('URL', url)
     return (
       <Container style={{...style}}>
@@ -132,9 +132,11 @@ const NewsBox = React.createClass({
           <BoxText>
             <ShareDropdown url={url} className='hidden-mob'/>
             <NameLink to={url} className='nunito-font' >{ptitle}</NameLink>
-            <Desc className='nunito-font'>“นิด้าโพล” สถาบันบัณฑิตพัฒนบริหารศาสตร์ (นิด้า) เปิดเผยผลสำรวจ เรื่อง “พฤติกรรมการใช้อินเทอร์เน็ตบน
-  มือถือ” ทำการสำรวจระหว่างวันที่ 30 มกราคม – 2 กุมภาพันธ์ 2560 จากประชาชนที่มีอายุ 15 – 40 ปี ในเข...</Desc>
-            <Desc className='nunito-font'>by <strong>Krungsri Plan Your Money</strong></Desc>
+            <Desc className='nunito-font'>{_.truncate(contentShort, {
+                'length': 200,
+                'separator': ''
+              })}</Desc>
+            <Desc className='nunito-font'>by <strong><Link to={writer&&writer.url}>{writer&&writer.display}</Link></strong></Desc>
           </BoxText>
         </Box>
       </Container>
