@@ -7,7 +7,8 @@ import {
 	PrimaryButton,
 	SecondaryButton,
 	LeftMenu,
-	RightMenu
+	RightMenu,
+	BGImg
 } from 'components'
 import auth from 'components/auth'
 //import utils from 'components/utils'
@@ -145,6 +146,10 @@ const Edit = styled(Link)`
 		cursor:pointer;
 	}
 `
+const LogoGif = styled(BGImg)`
+	width:50px;
+	height:50px;
+`
 
 const TopBar = React.createClass({
 	getInitialState() {
@@ -275,7 +280,7 @@ const TopBar = React.createClass({
 							</Hamburger>
 						</HamburgerWrapper>
 						<LogoWrapper>
-						{this.props.onLoading?<Rotate open={this.props.onLoading}></Rotate>:
+						{this.props.onLoading?<LogoGif src={theme.slogoGif} opacity={-1}></LogoGif>:
 						<LogoLink
 							to="/"
 							src={theme.slogo}

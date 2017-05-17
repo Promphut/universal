@@ -17,7 +17,7 @@ const Container = styled.div`
   display:flex;
   .imgWidth{
     width:100%;
-    height:273px;
+    height:222px;
   }
   .des-hidden{
     display:block;
@@ -85,7 +85,7 @@ const Box = styled.div`
 const ArticleBox = React.createClass({
   render(){
     let {detail,style} = this.props
-    let {ptitle,cover,writer,column,votes,comments,updated,url,readTime} = detail
+    let {ptitle,cover,writer,column,votes,comments,updated,url,readTime,contentShort} = detail
     var {theme} = this.context.setting.publisher
     //console.log('URL', url)
 
@@ -105,9 +105,12 @@ const ArticleBox = React.createClass({
             <Div className='sans-font' style={{margin:'0 0 7px 0',flex:20}}>{readTime + ' min read'}</Div>
           </div>
           <NameLink to={url} className='nunito-font' style={{marginTop:'5px'}}>{ptitle}</NameLink>
-          <Div className='nunito-font' style={{marginTop:'10px'}}>“นิด้าโพล” สถาบันบัณฑิตพัฒนบริหารศาสตร์ (นิด้า) เปิด
-เผยผลสำรวจ เรื่อง“พฤติกรรมการใช้อินเทอร์เน็ตบนมือถือ” ทำการสำรวจระหว่างวันที่ 30 มกราคม – 2 กุมภาพันธ์ 25...</Div>
-          <Div className='nunito-font' style={{ marginTop: "auto"}}>by <strong> {writherDisplay} </strong> in <span style={{color:theme.accentColor,fontWeight:'bold'}}>{column.name}</span></Div>
+
+          <Div className='nunito-font' style={{marginTop:'10px'}}>{_.truncate(contentShort, {
+                'length': 200,
+                'separator': ''
+              })}</Div>
+          <Div className='nunito-font' style={{ marginTop: "auto"}}>by <strong><Link to={writer&&writer.url}> {writer.display} </Link></strong> in <Link to={column&&column.url} style={{color:theme.accentColor,fontWeight:'bold'}}>{column.name}</Link></Div>
         </Box>
       </Container>
     )
