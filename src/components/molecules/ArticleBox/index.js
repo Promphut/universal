@@ -88,6 +88,11 @@ const ArticleBox = React.createClass({
     let {ptitle,cover,writer,column,votes,comments,updated,url,readTime,contentShort} = detail
     var {theme} = this.context.setting.publisher
     //console.log('URL', url)
+
+    let writherDisplay = ''
+    if (writer && writer.display) {
+      writherDisplay = writer.display ? writer.display : ''
+    }
     return (
       <Container style={{...style}}>
         <div style={{flex:'1'}}>
@@ -100,6 +105,7 @@ const ArticleBox = React.createClass({
             <Div className='sans-font' style={{margin:'0 0 7px 0',flex:20}}>{readTime + ' min read'}</Div>
           </div>
           <NameLink to={url} className='nunito-font' style={{marginTop:'5px'}}>{ptitle}</NameLink>
+
           <Div className='nunito-font' style={{marginTop:'10px'}}>{_.truncate(contentShort, {
                 'length': 200,
                 'separator': ''
