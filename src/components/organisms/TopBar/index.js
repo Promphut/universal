@@ -147,8 +147,8 @@ const Edit = styled(Link)`
 	}
 `
 const LogoGif = styled(BGImg)`
-	width:50px;
-	height:50px;
+	width:60px;
+	height:60px;
 `
 
 const TopBar = React.createClass({

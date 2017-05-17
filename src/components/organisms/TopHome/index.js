@@ -155,12 +155,12 @@ const TopHome = React.createClass({
       <Content style={{padding:'100px 0 60px 0',backgroundColor:'#F4F4F4'}}>
         <Feed>
           {trendingStories.length!=0?<TopStory swift={true} detail={trendingStories[0]}></TopStory>:''}
-          {trendingStories.length!=0?<TopStory large={true} detail={trendingStories[1]}></TopStory>:''}
+          {trendingStories.length!=0?<TopStory swift={true} large={true} detail={trendingStories[1]}></TopStory>:''}
           {/*<TopVideo large={true}></TopVideo>*/}
         </Feed>
         <Feed>
           {trendingStories.length!=0?<TopStory detail={trendingStories[2]}></TopStory>:''}
-          {trendingStories.length!=0?<TopStory detail={trendingStories[3]} swift={true} large={true}></TopStory>:''}
+          {trendingStories.length!=0?<TopStory detail={trendingStories[3]}  large={true}></TopStory>:''}
           {/*<TopVideo large={true} swift={true}></TopVideo>*/}
         </Feed>
         <Feed>

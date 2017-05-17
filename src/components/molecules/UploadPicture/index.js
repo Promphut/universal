@@ -91,8 +91,9 @@ const UploadPicture = React.createClass({
       return {
           width: 120,
           height:120,
-          size:'120x120',
-          ratio:1
+          size:'',
+          ratio:1,
+          crop:true
       };
   },
   getInitialState(){
@@ -155,28 +156,34 @@ const UploadPicture = React.createClass({
     reader.onload = (event)=>{
 
     }
-
     reader.onloadend = (event) => {
-      this.setState({
-        statePreview:true,
-        //src:event.target.result
-        preview: reader.result,
-        open:true
-      })
-      // api.uploadFile(file, this.props.type, config.BACKURL + this.props.path)
-    	// .then(res => {
-      //   this.setState({
-      //     msg: 'Upload Completed!',
-      //     err: false
-      //   })
-      // })
-      // .catch(err => {
-      //   this.setState({
-      //     msg: err.message,
-      //     err: true
-      //   })
-      // })
-    }      
+      if(this.props.crop){
+        this.setState({
+          statePreview:true,
+          //src:event.target.result
+          preview: reader.result,
+          open:true
+        })
+      }else{
+        this.setState({
+          statePreview:true,
+          preview: reader.result,
+        })
+        api.uploadFile(file, this.props.type, config.BACKURL + this.props.path,null)
+        .then(res => {
+          this.setState({
+            msg: 'Upload Completed!',
+            err: false
+          })
+        })
+        .catch(err => {
+          this.setState({
+            msg: err.message,
+            err: true
+          })
+        })
+      }
+    }   
     reader.readAsDataURL(file);     
   },
 

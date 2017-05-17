@@ -875,7 +875,7 @@ const App = React.createClass({
 
         <MuiThemeProvider muiTheme={muiTheme}>
           <div>
-            {completed<100&&<LinearProgress mode="determinate" value={completed} />}
+            {completed<100&&<LinearProgress mode="determinate" value={completed} style={{position:'absolute'}}/>}
             {React.cloneElement(children, { onLoading: completed<100?true:false })}
           </div> 
         </MuiThemeProvider>

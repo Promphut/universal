@@ -654,17 +654,26 @@ api.getPublisherInsight = (pid, action, subaction, period, from, to) => {
 api.uploadFile = (file, type, toUrl, query) => {
 	let token = auth.getToken()
 	if(!token) return api.userNotFoundPromise()
+	if(query){
+		return Request.post(toUrl)
+		.set('x-access-token', token)
+		.query({x:parseInt(query.x) })
+		.query({y:parseInt(query.y)})
+		.query({w:parseInt(query.width)})
+		.query({h:parseInt(query.height)})
+		.attach(type, file, file.name)
+		.then(res => {
+			return res.body
+		}, api.err)
+	}else{
+		return Request.post(toUrl)
+		.set('x-access-token', token)
+		.attach(type, file, file.name)
+		.then(res => {
+			return res.body
+		}, api.err)
+	}
 
-	return Request.post(toUrl)
-	.set('x-access-token', token)
-	.query({x:parseInt(query.x) })
-	.query({y:parseInt(query.y)})
-	.query({w:parseInt(query.width)})
-	.query({h:parseInt(query.height)})
-	.attach(type, file, file.name)
-	.then(res => {
-		return res.body
-	}, api.err)
 }
 
 api.getContentTypes = () => {
