@@ -88,6 +88,11 @@ const ArticleBox = React.createClass({
     let {ptitle,cover,writer,column,votes,comments,updated,url,readTime} = detail
     var {theme} = this.context.setting.publisher
     //console.log('URL', url)
+
+    let writherDisplay = ''
+    if (writer && writer.display) {
+      writherDisplay = writer.display ? writer.display : ''
+    }
     return (
       <Container style={{...style}}>
         <div style={{flex:'1'}}>
@@ -102,7 +107,7 @@ const ArticleBox = React.createClass({
           <NameLink to={url} className='nunito-font' style={{marginTop:'5px'}}>{ptitle}</NameLink>
           <Div className='nunito-font' style={{marginTop:'10px'}}>“นิด้าโพล” สถาบันบัณฑิตพัฒนบริหารศาสตร์ (นิด้า) เปิด
 เผยผลสำรวจ เรื่อง“พฤติกรรมการใช้อินเทอร์เน็ตบนมือถือ” ทำการสำรวจระหว่างวันที่ 30 มกราคม – 2 กุมภาพันธ์ 25...</Div>
-          <Div className='nunito-font' style={{ marginTop: "auto"}}>by <strong> {writer.display} </strong> in <span style={{color:theme.accentColor,fontWeight:'bold'}}>{column.name}</span></Div>
+          <Div className='nunito-font' style={{ marginTop: "auto"}}>by <strong> {writherDisplay} </strong> in <span style={{color:theme.accentColor,fontWeight:'bold'}}>{column.name}</span></Div>
         </Box>
       </Container>
     )

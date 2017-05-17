@@ -94,7 +94,7 @@ const HomePage2 = React.createClass({
 		this.latestStories = []
 		this.writer = []
 		this.column = []
-		
+
 		return {
 			latestStories:[],
 			refresh: 0,
