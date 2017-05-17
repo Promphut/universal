@@ -141,7 +141,6 @@ class AllColumn extends React.Component {
     super(props)
 
     this.state = {
-      stopPos:0,
       columns:[],
       //popular:[]
     }

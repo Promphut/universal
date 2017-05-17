@@ -86,7 +86,7 @@
     "express-force-ssl": "^0.3.2",
     "history": "^4.6.1",
     "lodash": "^4.17.4",
-    "material-ui": "^0.16.7",
+    "material-ui": "^0.18.1",
     "medium-editor": "^5.23.0",
     "medium-editor-insert-plugin": "git+https://github.com/Promphut/medium-editor-insert-plugin.git",
     "moment": "^2.17.1",

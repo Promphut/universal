@@ -117,37 +117,32 @@ const Box = styled.div`
   }
 `
 
-class NewsBox extends React.Component {
-  constructor(props) {
-    super(props)
-  }
+const NewsBox = ({detail, style, timeline}) => {
 
-  render(){
-    let {detail,style,timeline} = this.props
-    let {ptitle,cover,writer,column,votes,comments,updated,url,readTime} = detail
-    //console.log('URL', url)
-    return (
-      <Container style={{...style}}>
-        <Time className='hidden-mob' style={{display:timeline?'block':'none'}}>15 min</Time>
-        <div className='hidden-mob' style={{float:'left',marginRight:'10px',visibility:timeline?'show':'hidden'}}>
-          <Doughnut/>
-          <VerticalTimeline/>
-        </div>
-        <Box>
-          <ShareDropdown url={url} className='hidden-des'/>
-          <Time className='hidden-des' style={{display:timeline?'block':'none'}}>15 min</Time>
-          <BGImg url={url} src={cover.small || cover.medium} alt={ptitle || ''} className='imgWidth ' />
-          <BoxText>
-            <ShareDropdown url={url} className='hidden-mob'/>
-            <NameLink to={url} className='nunito-font' >{ptitle}</NameLink>
-            <Desc className='nunito-font'>“นิด้าโพล” สถาบันบัณฑิตพัฒนบริหารศาสตร์ (นิด้า) เปิดเผยผลสำรวจ เรื่อง “พฤติกรรมการใช้อินเทอร์เน็ตบน
-  มือถือ” ทำการสำรวจระหว่างวันที่ 30 มกราคม – 2 กุมภาพันธ์ 2560 จากประชาชนที่มีอายุ 15 – 40 ปี ในเข...</Desc>
-            <Desc className='nunito-font'>by <strong>Krungsri Plan Your Money</strong></Desc>
-          </BoxText>
-        </Box>
-      </Container>
-    )
-  }
+  let {ptitle,cover,writer,column,votes,comments,updated,url,readTime} = detail
+
+  //console.log('URL', url)
+  return (
+    <Container style={{...style}}>
+      <Time className='hidden-mob' style={{display:timeline?'block':'none'}}>15 min</Time>
+      <div className='hidden-mob' style={{float:'left',marginRight:'10px',visibility:timeline?'show':'hidden'}}>
+        <Doughnut/>
+        <VerticalTimeline/>
+      </div>
+      <Box>
+        <ShareDropdown url={url} className='hidden-des'/>
+        <Time className='hidden-des' style={{display:timeline?'block':'none'}}>15 min</Time>
+        <BGImg url={url} src={cover.small || cover.medium} alt={ptitle || ''} className='imgWidth ' />
+        <BoxText>
+          <ShareDropdown url={url} className='hidden-mob'/>
+          <NameLink to={url} className='nunito-font' >{ptitle}</NameLink>
+          <Desc className='nunito-font'>“นิด้าโพล” สถาบันบัณฑิตพัฒนบริหารศาสตร์ (นิด้า) เปิดเผยผลสำรวจ เรื่อง “พฤติกรรมการใช้อินเทอร์เน็ตบน
+มือถือ” ทำการสำรวจระหว่างวันที่ 30 มกราคม – 2 กุมภาพันธ์ 2560 จากประชาชนที่มีอายุ 15 – 40 ปี ในเข...</Desc>
+          <Desc className='nunito-font'>by <strong>Krungsri Plan Your Money</strong></Desc>
+        </BoxText>
+      </Box>
+    </Container>
+  )
 }
 
 export default NewsBox;

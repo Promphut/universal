@@ -53,30 +53,30 @@ const A = styled.a`
   }
 `
 
+let logoStyle = {
+  display: 'inline-block',
+  float: 'left',
+  marginTop: '3px',
+  padding: '17px 5px'
+}
+
+let buttonStyle = {
+  display: 'inline-block',
+  float: 'left',
+  boxShadow: 'none',
+  verticalAlign: 'middle',
+  marginTop: '9px'
+}
+
+let avatarStyle = {
+  display: 'inline-block',
+  float: 'left',
+  textAlign: 'center',
+  margin: '13px',
+  cursor: 'pointer'
+}
+
 const Navbar = () => {
-  const logoStyle = {
-    display: 'inline-block',
-    float: 'left',
-    marginTop: '3px',
-    padding: '17px 5px'
-  }
-
-	const buttonStyle = {
-    display: 'inline-block',
-    float: 'left',
-		boxShadow: 'none',
-		verticalAlign: 'middle',
-    marginTop: '9px'
-	}
-
-	const avatarStyle = {
-		display: 'inline-block',
-	  float: 'left',
-	  textAlign: 'center',
-		margin: '13px',
-		cursor: 'pointer'
-	}
-
   return (
     <Wrapper className="menu-font">
       <HamburgerWrapper>

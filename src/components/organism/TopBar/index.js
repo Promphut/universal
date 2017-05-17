@@ -150,6 +150,26 @@ const Edit = styled(Link)`
 	}
 `
 
+let logoStyleBase = {
+	display: 'inline-block',
+	float: 'left',
+	margin: 'auto'
+}
+let buttonStyle = {
+	display: 'inline-block',
+	float: 'left',
+	boxShadow: 'none',
+	verticalAlign: 'middle',
+	marginTop: '9px'
+}
+let avatarStyle = {
+	display: 'inline-block',
+	float: 'left',
+	textAlign: 'center',
+	margin: '13px 20px 13px 13px',
+	cursor: 'pointer'
+}
+
 class TopBar extends React.Component {
 	static propTypes = {
 		onScroll: PropTypes.func,
@@ -237,12 +257,7 @@ class TopBar extends React.Component {
 		let status = this.props.status || 'UNLOGGEDIN',
 			{ scrolling, user, menu, transparent, editButton, hasCover } = this.props
 
-		const logoStyleBase = {
-			display: 'inline-block',
-			float: 'left',
-			margin: 'auto'
-		}
-		const logoStyle = utils.isMobile()
+		let logoStyle = utils.isMobile()
 			? {
 					...logoStyleBase,
 					display: 'none'
@@ -250,7 +265,7 @@ class TopBar extends React.Component {
 			: {
 					...logoStyleBase
 				}
-		const logoStyleMobile = utils.isMobile()
+		let logoStyleMobile = utils.isMobile()
 			? {
 					...logoStyleBase
 				}
@@ -258,22 +273,7 @@ class TopBar extends React.Component {
 					...logoStyleBase,
 					margin: 'auto 12px auto auto'
 				}
-
-		const buttonStyle = {
-			display: 'inline-block',
-			float: 'left',
-			boxShadow: 'none',
-			verticalAlign: 'middle',
-			marginTop: '9px'
-		}
-
-		const avatarStyle = {
-			display: 'inline-block',
-			float: 'left',
-			textAlign: 'center',
-			margin: '13px 20px 13px 13px',
-			cursor: 'pointer'
-		}
+		
 		//console.log(this.props.onLoading)
 		//console.log(theme, theme.barTone, theme.primaryColor)
 		return (

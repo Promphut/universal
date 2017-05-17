@@ -12,28 +12,18 @@ const Container = styled.div`
 	margin-bottom: ${props => props.marginBottom ? props.marginBottom : 0}px;
 `
 
-class Stick extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      stick:true,
-    }
-  }
-
-  render(){
-    return (
-      <Container
-        topOffset={this.props.fixed ? -100 : this.props.topOffset}
-        bottomOffset={this.props.bottomOffset}
-        style={{...this.props.style}}
-        className={this.props.className}
-        marginBottom={this.props.marginBottom}
-      >
-        {this.props.children}
-      </Container>
-    )
-  }
+const Stick = (props) => {
+  return (
+    <Container
+      topOffset={props.fixed ? -100 : props.topOffset}
+      bottomOffset={props.bottomOffset}
+      style={{...props.style}}
+      className={props.className}
+      marginBottom={props.marginBottom}
+    >
+      {props.children}
+    </Container>
+  )
 }
 
 export default Stick;

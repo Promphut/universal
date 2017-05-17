@@ -67,30 +67,21 @@ const BoxText = styled.div`
 
 `
 
-class TopNews extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
-  render(){
-    let {detail,style} = this.props
-
-    return (
-      <Container style={{...style}}>
-        <BGImg url={detail&&detail.url} src={detail&&detail.cover.medium} className='imgWidth mob-hidden' >
-          <BoxText>
-            <span>
-            {truncate(detail&&detail.ptitle, {
-              'length': 133,
-              'separator': ''
-            })}
-            </span>
-          </BoxText>
-        </BGImg>    
-      </Container>
-    )
-  }
+const TopNews = ({detail, style}) => {
+  return (
+    <Container style={{...style}}>
+      <BGImg url={detail&&detail.url} src={detail&&detail.cover.medium} className='imgWidth mob-hidden' >
+        <BoxText>
+          <span>
+          {truncate(detail&&detail.ptitle, {
+            'length': 133,
+            'separator': ''
+          })}
+          </span>
+        </BoxText>
+      </BGImg>    
+    </Container>
+  )
 }
-
 
 export default TopNews;

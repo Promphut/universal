@@ -1,7 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import styled from 'styled-components'
-import {findDOMNode as dom} from 'react-dom'
 
 const Container = styled.div`
   width:324px;
@@ -99,55 +98,25 @@ const Sty = styled.div`
 `
 //if height less than 900px remove last item
 
-class TopColumnSidebar extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      stopPos:''
-    }
-  }
-
-  componentWillReceiveProps(nextProps){
-    if(nextProps.stop != this.props.stop){
-      this.setState({stopPos:nextProps.stop})
-    }
-  }
-
-  render(){
-    let {column} = this.props
-    //console.log(column)
-    /*var Sort = []
-    for(let i=0;i<6;i++){
-      Sort.push(
-        <Div className='serif-font' key={i}>
-          <Number className={'bg'+(1+i)}>{i+1}</Number>
-          <div style={{padding:'10px 30px 0 30px'}}>
-            <Name>Money Ideas</Name>
-            <Sty className='sans-font'>31 Stories</Sty>
-          </div>
-        </Div>
-      )
-    }*/
-    return (
-      <Container style={{...this.props.style}} ref='contain'>
-        <Divider/>
-        <Head>TOP COLUMNS</Head>
-          {column && column.map((data, index) => (
-            <Link to={data.url} key={index}>
-              <Div className='serif-font'>
-                <Number className={'bg'+(1+index)}>{index+1}</Number>
-                <div style={{padding:'14px 30px 0 30px'}}>
-                  <Name>{data.name}</Name>
-                  {/*<Sty className='sans-font'>{data.shortDesc}</Sty>*/}
-                </div>
-              </Div>
-            </Link>
-          ))}
-        <Divider/>
-      </Container>
-    )
-  }
+const TopColumnSidebar = ({column, style}) => {
+  return (
+    <Container style={{...style}}>
+      <Divider/>
+      <Head>TOP COLUMNS</Head>
+        {column && column.map((data, index) => (
+          <a href={data.url} key={index}>
+            <Div className='serif-font'>
+              <Number className={'bg'+(1+index)}>{index+1}</Number>
+              <div style={{padding:'14px 30px 0 30px'}}>
+                <Name>{data.name}</Name>
+                {/*<Sty className='sans-font'>{data.shortDesc}</Sty>*/}
+              </div>
+            </Div>
+          </a>
+        ))}
+      <Divider/>
+    </Container>
+  )
 }
 
 export default TopColumnSidebar;

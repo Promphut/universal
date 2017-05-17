@@ -73,6 +73,7 @@ router.use((req, res) => {
 
   //console.log('context', context)
   if (context.url) {
+    if(!context.status) context.status = 302 //default is redirect 302
     res.redirect(context.status, context.url)
   } else {
     const styles = styleSheet.rules().map(rule => rule.cssText).join('\n')

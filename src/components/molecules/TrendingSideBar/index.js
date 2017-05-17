@@ -80,6 +80,7 @@ const Vote = styled.div`
 
 const TrendingSideBarInner = ({style, detail, index}) => {
   let {ptitle,comments,votes,cover} = detail
+  
   return(
     <Con style={{...style}}>
       <BGImg url={detail.url} src={cover.small || cover.medium} style={{width:'127px',height:'75px',float:'right'}}/>
@@ -105,35 +106,6 @@ class TrendingSideBar extends React.Component {
       this.setState({popular:result.feed})
     })
   }
-
-  // Slider(){
-  //   var self = this
-  //   var item = dom(self.refs.contain)
-  //   var startPos = item.getBoundingClientRect().top
-  //   var height = item.scrollHeight;
-  //   var direction = 0
-  //  window.addEventListener("scroll", function(event) {
-  //    var top = this.scrollY
-  //     var stopPos = self.state.stopPos
-  //     //console.log(height +' : '+startPos+' : '+top +' : '+stopPos)
-  //     if(top>direction){
-  //       if(top>=startPos-60&&top<=stopPos-height){
-  //         item.style.top = top-startPos+'px';
-  //       }
-  //     }else{
-  //       if(top>=startPos&&top<=stopPos-height){
-  //         item.style.top =  top-startPos+'px';
-  //       }
-  //     }
-  //     direction = top
-  //  });
-  // },
-
-  // componentWillReceiveProps(nextProps){
-  //   if(nextProps.stop != this.props.stop){
-  //     this.setState({stopPos:nextProps.stop})
-  //   }
-  // },
 
   componentDidMount(){
     this.getPopular()

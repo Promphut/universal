@@ -713,11 +713,11 @@ injectGlobal`
 
 injectTapEventPlugin()
 
-const muiTheme = getMuiTheme({
-  appBar: {
-    height: 60,
-  },
-});
+// const muiTheme = getMuiTheme({
+//   appBar: {
+//     height: 60,
+//   },
+// });
 
 class App extends React.Component {
 
@@ -733,7 +733,7 @@ class App extends React.Component {
     setting: PropTypes.object
   }
 
-  constructor(props) {
+  constructor(props, context) {
     super(props)
 
     this.state = {
@@ -846,7 +846,7 @@ class App extends React.Component {
     let {theme} = this.context.setting.publisher
 
     //console.log('AGENT', navigator.userAgent)
-    let muiTheme = getMuiTheme({
+    let context = {
       appBar: {
         height: 60,
       },
@@ -871,9 +871,10 @@ class App extends React.Component {
       },
       tabs: {
         selectedTextColor: "#FFF"
-      },
-      userAgent: navigator.userAgent
-    });
+      }
+    }
+    if(navigator.userAgent) context.userAgent = navigator.userAgent
+    let muiTheme = getMuiTheme(context);
 
     return (
       <div>

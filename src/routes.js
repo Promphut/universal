@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Route, Switch, Link } from 'react-router-dom'
+import { Route, Switch, Link, Redirect } from 'react-router-dom'
 import api from 'components/api'
+import auth from 'components/auth'
 import App from 'components/App'
 //import utils from './services/utils'
-import { HomePage2, NewsPage, AllColumn, AboutPage, ContactPage, TagPage, ColumnPage } from 'components'
+import { HomePage2, NewsPage, AllColumn, AboutPage, ContactPage, TagPage, ColumnPage, StoryPage, ForgetPasswordPage, SignInPage, SignUpPage, UserStory } from 'components'
 
 const NotFound = ({ location }) => (
 	<Status code={404}>
@@ -22,41 +23,6 @@ const Status = ({ code, children }) => (
     return children
   }}/>
 )
-
-const Topic = ({ match }) => (
-  <div>
-    <h3>{match.params.topicId}</h3>
-  </div>
-)
-
-const Topics = ({ match }) => (
-  <div>
-    <h2>Topics</h2>
-    <ul>
-      <li>
-        <Link to={`${match.url}/rendering`}>
-          Rendering with React
-        </Link>
-      </li>
-      <li>
-        <Link to={`${match.url}/components`}>
-          Components
-        </Link>
-      </li>
-      <li>
-        <Link to={`${match.url}/props-v-state`}>
-          Props v. State
-        </Link>
-      </li>
-    </ul>
-
-    <Route path={`${match.url}/:topicId`} component={Topic}/>
-    <Route exact path={match.url} render={() => (
-      <h3>Please select a topic.</h3>
-    )}/>
-  </div>
-)
-
 
 // const AppRoutes = () => (
 //   <App>
@@ -113,45 +79,45 @@ class AppRoutes extends React.Component {
 
 		return (
 		  <App>
-	  	    <Switch>
-	  	      <Route exact path='/' component={HomePage2}/>
-	  	      <Route exact path='/stories/news' component={NewsPage} />
-	  	      <Route exact path='/stories/columns' component={AllColumn}/>
-	  	      <Route path='/stories/:columnSlug' component={ColumnPage}/>
+			<Switch>
+				<Route exact path='/' component={HomePage2}/>
+				<Route exact path='/stories/news' component={NewsPage} />
+				<Route exact path='/stories/columns' component={AllColumn}/>
+				<Route exact path='/stories/:columnSlug' component={ColumnPage}/>
+				{/* STORY 1: FORMAT is 'NEWS' */ }
+				<Route exact path='/stories/news/:storySlug/:sid' render={props => <StoryPage {...props} countView={true}/>} />
+				{/* STORY 2: HAVE COLUMN */ }
+				<Route exact path='/stories/:columnSlug/:storySlug/:sid' render={props => <StoryPage {...props} countView={true}/>} />
 
-	  	      <Route exact path='/about' component={AboutPage} />
-	  	      <Route exact path='/contact' component={ContactPage} />
+				<Route exact path='/about' component={AboutPage} />
+				<Route exact path='/contact' component={ContactPage} />
 
-	  	      {/*<Route exact path="/tags/:tagSlug" component={withFetcher(TagPage, (props, done) => {done()})} />*/}
-	  	      <Route exact path='/tags/:tagSlug' component={TagPage} />
+				<Route exact path='/tags/:tagSlug' component={TagPage} />
 
-	  	      <Route path='/topics' component={Topics}/>
+				<Route exact path='/forget' component={ForgetPasswordPage} />
+				<Route exact path='/signin' render={props => <SignInPage {...props} visible={true}/> } />
+    			<Route exact path='/signup' render={props => <SignUpPage {...props} visible={true}/> } />
+    			<Route exact path='/logout' render={props => {
+    				auth.logout()
+    				return <Redirect to={{
+						pathname: '/'
+					}} />
+    			}} />
 
-	  	     {/* <Route exact path='error' component={ErrorPage}/>
-	  	      <Route exact path='404' component={NotFoundPage}/>*/}
-	  	      <Route component={NotFound}/>
-	  	    </Switch>
+    			<Route exact path='/u/:uid' render={props => <UserStory {...props} uid={props.match.params.uid}/>} />
+				{/* STORY 4 NO COLUMN AND NO USERNAME */ }
+    			<Route exact path='/u/:uid/stories/:storySlug/:sid' render={props => <StoryPage {...props} countView={true}/>} />
+				
+				<Route exact path='/@:username' render={props => <UserStory {...props} username={props.match.params.username}/>}/>
+				{/* STORY 3 NO COLUMN */ }
+    			<Route exact path='/@:username/stories/:storySlug/:sid' render={props => <StoryPage {...props} countView={true}/>} />
+
+				{/* <Route exact path='error' component={ErrorPage}/>
+				<Route exact path='404' component={NotFoundPage}/>*/}
+				<Route component={NotFound}/>
+			</Switch>
 	  	  </App>
 	  	)
-		// return (
-		//   <App>
-		//   	<div>
-		// 	  	<ul>
-		// 			<li><Link to="/">Home</Link></li>
-		// 			<li><Link to="/topics">Topics</Link></li>
-		// 			<li><Link to="/nomatch">NoMatch</Link></li>
-		// 		</ul>
-
-		// 		<hr/>
-
-		//   	    <Switch>
-		//   	      <Route exact path="/" component={HomePage}/>
-		//   	      <Route path="/topics" component={Topics}/>
-		//   	      <Route component={NotFound}/>
-		//   	    </Switch>
-		//   	</div>
-	 //  	  </App>
-	 //  	)
 	}
 }
 

@@ -64,10 +64,10 @@ class ContactAndAboutContainer extends React.Component {
 		this.recommends = []
 		this.publisher = {}
 
-		this.state = {
-			refresh: 0
+		//this.state = {
+			//refresh: 0
 			//recommends: []
-		}
+		//}
 	}
 
 	getRecommendStories = () => {
@@ -75,9 +75,7 @@ class ContactAndAboutContainer extends React.Component {
 		.then(result => {
 			this.recommends = result.feed
 
-			this.setState({
-				refresh: Math.random()
-			})
+			this.setState({ })
 			//console.log('feed', result.feed.length)
 			// this.setState({
 			// 	recommends: result.feed,
@@ -90,9 +88,7 @@ class ContactAndAboutContainer extends React.Component {
 		.then(pub => {
 			this.publisher = pub
 
-			this.setState({
-				refresh: Math.random()
-			})
+			this.setState({ })
 		})
 	}
 

@@ -76,40 +76,34 @@ const DivDes = styled.div`
 
 `
 
-class ArticleBoxLarge extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
-  render(){
-    let {detail,style} = this.props
-    let {ptitle,cover,writer,column,votes,comments,updated,url,readTime} = detail
-    //console.log('URL', url)
-    return (
-      <Container style={{...style}}>
-        <BGImg url={url} src={cover.medium || cover.small} alt={ptitle || ''} className='imgWidth mob-hidden' />
-        <BoxText className='sans-font'>
-          <DivDes>
-            <ShareDropdown />
-            {column && <Div>
-              A story of <span style={{textDecoration:'underline'}}>
-              <Link to={column.url}>{column.name}</Link></span>
-            </Div>}
-          </DivDes>
-          <BGImg url={url} src={cover.medium || cover.small} className='imgWidth des-hidden'/>
-          <NameLink to={url} style={{marginTop:'15px'}}>{ptitle}</NameLink>
-          <div className="row" style={{margin:'10px 0 10px 0'}}>
-            <Link to={writer.url}><Avatar src={writer.pic.medium}/></Link>
-            <div style={{margin:'5px 0 0 8px'}}>
-              <NameLink to={writer.url} style={{fontSize:'14px'}}>{writer.display} </NameLink>
-              <Div stlye={{fontSize:'12px'}}>{moment(updated).fromNow()} hrs ago</Div>
-            </div>
+const ArticleBoxLarge = ({detail, style}) => {
+  let {ptitle,cover,writer,column,votes,comments,updated,url,readTime} = detail
+  
+  //console.log('URL', url)
+  return (
+    <Container style={{...style}}>
+      <BGImg url={url} src={cover.medium || cover.small} alt={ptitle || ''} className='imgWidth mob-hidden' />
+      <BoxText className='sans-font'>
+        <DivDes>
+          <ShareDropdown />
+          {column && <Div>
+            A story of <span style={{textDecoration:'underline'}}>
+            <Link to={column.url}>{column.name}</Link></span>
+          </Div>}
+        </DivDes>
+        <BGImg url={url} src={cover.medium || cover.small} className='imgWidth des-hidden'/>
+        <NameLink to={url} style={{marginTop:'15px'}}>{ptitle}</NameLink>
+        <div className="row" style={{margin:'10px 0 10px 0'}}>
+          <Link to={writer.url}><Avatar src={writer.pic.medium}/></Link>
+          <div style={{margin:'5px 0 0 8px'}}>
+            <NameLink to={writer.url} style={{fontSize:'14px'}}>{writer.display} </NameLink>
+            <Div stlye={{fontSize:'12px'}}>{moment(updated).fromNow()} hrs ago</Div>
           </div>
-          <Div style={{margin:'10px 0 0 0'}}>{votes.total} Votes  <span style={{marginLeft:'15px'}}>{comments.count} Comments</span> {readTime && <span style={{float:'right'}}>Read {readTime} min</span>}</Div>
-        </BoxText>
-      </Container>
-    )
-  }
+        </div>
+        <Div style={{margin:'10px 0 0 0'}}>{votes.total} Votes  <span style={{marginLeft:'15px'}}>{comments.count} Comments</span> {readTime && <span style={{float:'right'}}>Read {readTime} min</span>}</Div>
+      </BoxText>
+    </Container>
+  )
 }
 
 export default ArticleBoxLarge;
