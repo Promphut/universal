@@ -90,6 +90,7 @@ const ForgetPassword = React.createClass({
             type="email"
             fullWidth={true}
             style={{marginTop:'15px'}}
+            autoFocus
           /><br />
           <div style={styles.btnCon}>
             <RaisedButton
@@ -99,7 +100,7 @@ const ForgetPassword = React.createClass({
               labelStyle={styles.labelBtn}
               style={styles.button}
               buttonStyle={styles.btn}
-              type='button'
+              type='submit'
             />
           </div>
         </InputBox>

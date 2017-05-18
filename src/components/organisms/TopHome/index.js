@@ -150,7 +150,7 @@ const TopHome = React.createClass({
 	render(){
     var {style,swift,className,large} = this.props
     var {hover,trendingStories} = this.state
-    console.log(trendingStories)
+    //console.log(trendingStories)
     return (
       <Content style={{padding:'100px 0 60px 0',backgroundColor:'#F4F4F4'}}>
         <Feed>

@@ -3,9 +3,9 @@ import styled from 'styled-components'
 import Avatar from 'material-ui/Avatar'
 import RaisedButton from 'material-ui/RaisedButton';
 import {Link,browserHistory} from 'react-router'
-import Request from 'superagent'
+import api from 'components/api'
 import TextField from 'material-ui/TextField';
-
+import auth from 'components/auth'
 const Box = styled.div`
   width:600px;
   background-color:#fff;
@@ -54,16 +54,57 @@ const NewLink = styled(Link)`
 const SignIn2 = React.createClass({
   getInitialState(){
     return{
-      email:''
+      password:'',
+      pub:{},
+      errText:''
     }
   },
 
+  componentDidMount(){
+    this.getPublisher()
+  },
+
+  getPublisher(){
+    var id = this.props.user.memberOfs[0]
+    api.getOtherPublisher(id).then((p)=>{
+      console.log(p)
+      this.setState({pub:p})
+    })
+  },
+
   onChangeText(e){
-    this.setState({email:e.target.value})
+    this.setState({password:e.target.value})
+  },
+
+  signin(e){
+    e.preventDefault()
+    var {email} = this.props.user
+    var {password} = this.state
+    var data = { username:email,password }
+    api.signin(data)
+      .then(res => {
+        //console.log('SIGN IN', res)
+        auth.setCookieAndToken(res)
+        browserHistory.push('/')
+      }, err => {
+        if(err.errors){
+          this.setState({
+            errText: err.errors.password && err.errors.password.message
+          })
+        }
+        else{
+          this.setState({
+            errText: err.message
+          })
+        }
+      })
   },
 
   render(){
     var { theme } = this.context.setting.publisher
+    var {user} = this.props
+    var {pub,password,errText} = this.state
+
     var styles={
       button:{
         background:theme.accentColor,
@@ -89,32 +130,34 @@ const SignIn2 = React.createClass({
       <Box>
         <Head >You already have an account</Head>
         <Text className='sans-font' style={{marginBottom:'0px'}}>
-          <span style={{color:'#222'}}>aommoney@likemeasia.com </span>is signed up<br/>
-          with Infographic Thailand by Facebook.<br/>
+          <span style={{color:'#222'}}>{user.email} </span>is signed up<br/>
+          with {pub.name} by Facebook.<br/>
           Do you want to continue log in with this account?
         </Text>
-        <div style={{width:'70px',margin:'40px auto 20px auto'}}><Avatar src='/tmp/avatar.png' size={70}/></div>
-        <Text className='sans-font' style={{color:"#222",margin:'30px',marginBottom:'0px'}}>Ochawin Chirasottikul</Text>
-        <InputBox onSubmit={(e)=>this.props.onSubmit(e,this.state.email)}>
+        <div style={{width:'70px',margin:'40px auto 20px auto'}}><Avatar src={user.pic.medium} size={70}/></div>
+        <Text className='sans-font' style={{color:"#222",margin:'30px',marginBottom:'0px'}}>{user.display}</Text>
+        <InputBox onSubmit={this.signin}>
           <TextField
-            floatingLabelText="Email"
-            type="email"
+            floatingLabelText="Password"
+            type="password"
             fullWidth={true}
-            name='email'
+            name='password'
             inputStyle={{color:'#222'}}
-            value={this.state.email}
+            value={password}
             onChange={this.onChangeText}
+            errorText={errText}
+            autoFocus
           />
           <NewLink to="/forget" style={{float:'left'}}>Forget Password?</NewLink>
-          <div style={styles.btnCon}>
+          <div style={{...styles.btnCon}}>
             <RaisedButton
               label="Next"
               labelPosition="after"
               labelColor='white'
-              labelStyle={styles.labelBtn}
-              style={styles.button}
-              buttonStyle={styles.btn}
-              type='button'
+              labelStyle={{...styles.labelBtn}}
+              style={{...styles.button}}
+              buttonStyle={{...styles.btn}}
+              type='submit'
             />
           </div>
         </InputBox>

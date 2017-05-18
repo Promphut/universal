@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Avatar from 'material-ui/Avatar'
 import RaisedButton from 'material-ui/RaisedButton';
 import {Link,browserHistory} from 'react-router'
-import Request from 'superagent'
+import api from 'components/api'
 
 const Box = styled.div`
   width:600px;
@@ -62,30 +62,45 @@ var styles={
 }
 const SignUpFb = React.createClass({
   getInitialState(){
-    return{}
+    return{
+      pub:{}
+    }
+  },
+
+  componentDidMount(){
+    this.getPublisher()
+  },
+
+  getPublisher(){
+    var id = this.props.user.memberOfs[0]
+    api.getOtherPublisher(id).then((p)=>{
+      this.setState({pub:p})
+    })
   },
 
   render(){
+    var {user} = this.props
+    var {pub} = this.state
     return(
       <Box>
         <Head >You already have an account</Head>
         <Text className='sans-font' style={{marginBottom:'0px'}}>
-          <span style={{color:'#222'}}>aommoney@likemeasia.com </span>is signed up<br/>
-          with Infographic Thailand by Facebook.<br/>
+          <span style={{color:'#222'}}>{user.email} </span>is signed up<br/>
+          with {pub.name} by Facebook.<br/>
           Do you want to continue log in with this account?
         </Text>
-        <div style={{width:'70px',margin:'40px auto 20px auto'}}><Avatar src='/tmp/avatar.png' size={70}/></div>
-        <Text className='sans-font' style={{color:"#222",margin:'30px'}}>Ochawin Chirasottikul</Text>
+        <div style={{width:'70px',margin:'40px auto 20px auto'}}><Avatar src={user.pic.medium} size={70}/></div>
+        <Text className='sans-font' style={{color:"#222",margin:'30px'}}>{user.display}</Text>
         <div style={styles.btnCon}>
           <a href={config.BACKURL+'/auth/facebook?publisher='+config.PID+'&nextpathname='+encodeURIComponent(this.props.nextPathname)}>
             <RaisedButton
               label="Sign Up with facebook"
               labelPosition="after"
               labelColor='white'
-              labelStyle={styles.labelBtn}
+              labelStyle={{...styles.labelBtn}}
               icon={<i className="fa fa-facebook" style={{color:'white',margin:'10px 10px 0 0',fontSize:'24px'}} aria-hidden="true"></i>}
-              style={styles.button}
-              buttonStyle={styles.btn}
+              style={{...styles.button}}
+              buttonStyle={{...styles.btn}}
             />
           </a>  
         </div>

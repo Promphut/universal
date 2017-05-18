@@ -358,7 +358,7 @@ const PublisherInsightView = React.createClass({
 										{insigth == 'topstories'
 											? <TableRowColumn style={styles.tableTextBodyName}>
 													<Bold to={entry.story.url}>{index + 1}. {entry.story.title}</Bold>
-													{entry.story.writer.username}
+													{entry.story.writer&&entry.story.writer.display}
 												</TableRowColumn>
 											: ''}
 										{insigth == 'topcolumns'
@@ -368,7 +368,7 @@ const PublisherInsightView = React.createClass({
 											: ''}
 										{insigth == 'topwriters'
 											? <TableRowColumn style={styles.tableTextBodyName}>
-													<Bold to={entry.writer.url}>{index + 1}. {entry.writer.username}</Bold>
+													<Bold to={entry.writer.url}>{index + 1}. {entry.writer.display}</Bold>
 												</TableRowColumn>
 											: ''}
 

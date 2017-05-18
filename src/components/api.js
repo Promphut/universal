@@ -404,6 +404,14 @@ api.setStoryStatus = (sid, status) => {
 	}, api.err)
 }
 
+api.getOtherPublisher = (id) => {
+	return Request
+	.get(config.BACKURL+'/publishers/'+id)
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body.publisher
+	}, api.err)
+}
 // token can be null in that case the public publisher object will be fetched.
 api.getPublisher = (token) => {
 	return Request
@@ -811,6 +819,16 @@ api.checkSignUp = (email)=> {
 	.set('Accept','application/json')
 	.then(res => {
 		return res.body.user
+	}, api.err)
+}
+
+api.filterStoryByTitle = (title)=> {
+	return Request
+	.post(config.BACKURL+'/stories/find')
+	.send({title})
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body.stories
 	}, api.err)
 }
 
