@@ -88,7 +88,7 @@ const Feed = styled.div`
 	max-width: 1120px;
 	display:flex;
 	@media (max-width:480px) {
-    flex: 0 100%;
+    display:block;
 		max-width: 100%;
 		padding:0 15px 0 15px;
   }
@@ -97,8 +97,8 @@ const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
-	padding: 80px 0 0 0;
-
+	padding: 100px 0 60px 0;
+  background:${props=>props.theme.primaryColor};
 	@media (max-width:480px) {
 		padding: 70px 0 0 0;
   }
@@ -152,9 +152,9 @@ const TopHome = React.createClass({
     var {hover,trendingStories} = this.state
     //console.log(trendingStories)
     return (
-      <Content style={{padding:'100px 0 60px 0',backgroundColor:'#F4F4F4'}}>
+      <Content>
         <Feed>
-          {trendingStories.length!=0?<TopStory swift={true} detail={trendingStories[0]}></TopStory>:''}
+          {trendingStories.length!=0?<TopStory head={true} swift={true} detail={trendingStories[0]}></TopStory>:''}
           {trendingStories.length!=0?<TopStory swift={true} large={true} detail={trendingStories[1]}></TopStory>:''}
           {/*<TopVideo large={true}></TopVideo>*/}
         </Feed>
@@ -170,7 +170,7 @@ const TopHome = React.createClass({
             </div>
             <div style={{display:'flex'}}>
               {trendingStories.length!=0?<TopStory detail={trendingStories[5]}></TopStory>:''}
-              <MiniBoxDark>
+              <MiniBoxDark className='hidden-mob'>
                 <div style={{width:30}}>
                   <FbShareButton button={<Share><i className="fa fa-facebook" style={{margin:'5px',fontSize:'30px',display:'block'}} aria-hidden="true"></i></Share>}/>
                   <Line></Line>
@@ -179,7 +179,7 @@ const TopHome = React.createClass({
               </MiniBoxDark>
             </div>
           </div>
-          <div style={{flex:2,display:'flex'}}>
+          <div className='hidden-mob' style={{flex:2,display:'flex'}}>
             <TopNewsHome></TopNewsHome>
           </div>
         </Feed>

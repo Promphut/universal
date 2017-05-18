@@ -822,10 +822,10 @@ api.checkSignUp = (email)=> {
 	}, api.err)
 }
 
-api.filterStoryByTitle = (title)=> {
+api.filterStoryByTitle = (title,sort)=> {
 	return Request
 	.post(config.BACKURL+'/stories/find')
-	.send({title})
+	.send({title,sort})
 	.set('Accept','application/json')
 	.then(res => {
 		return res.body.stories

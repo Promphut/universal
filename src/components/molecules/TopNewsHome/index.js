@@ -10,6 +10,10 @@ const NewsBox = styled.div`
 	height:444px;
   padding:18px;
   background:white;
+  @media (max-width:480px) {
+    padding:0px;
+    height:auto;
+  }
 `
 const News = styled.div`
   color:${props=>props.theme.primaryColor};
@@ -48,7 +52,7 @@ const NameLink = styled(Link)`
     color:${props=>props.theme.accentColor}
   }
   @media (max-width:480px) {
-    font-size:12px;
+    font-size:14px;
   }
 `
 const Time = styled.div`
@@ -122,12 +126,12 @@ const TopNewsHome = React.createClass({
     //console.log(news)
     return (
       <NewsBox>
-        <News>NEWS</News>
-        <Dash/>
+        <News className='hidden-mob'>NEWS</News>
+        <Dash className='hidden-mob'/>
         <BoxInner>
           {news.length!=0&&news.map((val,ind)=>(
             <Box>
-              <div className='hidden-mob' style={{float:'left',marginRight:'10px',overflow:'hidden'}}>
+              <div  style={{float:'left',marginRight:'10px',overflow:'hidden'}}>
                 <Doughnut/>
                 <VerticalTimeline/>
               </div>

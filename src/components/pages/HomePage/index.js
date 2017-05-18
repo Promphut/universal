@@ -2,7 +2,7 @@ import React from 'react'
 import { PageTemplate, TopBarWithNavigation, OverlayImg, Thumpnail,
 	ThumpnailSmall, ArticleBox, ArticleBoxLarge, ThumpnailRow, TopColumnSidebar,
 	TopWriterSidebar, More, BGImg, StoryDropdown, Footer,StaffPickSideBar,TopHome,
-TopVideoHome } from 'components'
+TopVideoHome,TopNewsHome } from 'components'
 import styled from 'styled-components'
 //import Request from 'superagent'
 import auth from 'components/auth'
@@ -12,6 +12,8 @@ import Infinite from 'react-infinite'
 import CircularProgress from 'material-ui/CircularProgress';
 import LinearProgress from 'material-ui/LinearProgress';
 import FontIcon from 'material-ui/FontIcon';
+import { Tabs, Tab } from 'material-ui/Tabs'
+import SwipeableViews from 'react-swipeable-views';
 
 const Wrapper = styled.div`
 	@media (max-width:480px) {
@@ -41,7 +43,7 @@ const Main = styled.div`
 	@media (max-width:480px) {
     flex: 0 100%;
 		max-width: 100%;
-		padding:0 15px 0 15px;
+		padding:0 16px 0 16px;
   }
 
 	.hidden-des-flex {
@@ -100,7 +102,14 @@ const MiniBoxDark = styled.div`
   align-items: center;
   justify-content: center;
 `
-
+const Line = styled.div`
+  position:relative;
+  top:-2px;
+  z-index:-5;
+  width:100%;
+  height:1px;
+  background-color:#C4C4C4;
+`
 const HomePage = React.createClass({
 	getInitialState(){
 		this.trendingStories = []
@@ -116,7 +125,8 @@ const HomePage = React.createClass({
 			loadOffset:300,
 			feedCount:0,
 			isMobile:false,
-			completed:0
+			completed:0,
+			selectTab:0
 		}
 	},
 	componentWillMount(){
@@ -234,10 +244,34 @@ const HomePage = React.createClass({
 			return <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>;
 	},
 
+	handleChangeTab(e) {
+		this.setState({selectTab: e})
+	},
+
 	render(){
 		//console.log('context', this.context.setting)
-		var {count,loadOffset,isInfiniteLoading,latestStories,isMobile,completed} = this.state
+		var {count,loadOffset,isInfiniteLoading,latestStories,isMobile,completed,selectTab} = this.state
 		let pub = this.publisher
+		var { theme } = this.context.setting.publisher
+		const styles = {
+			headline: {
+				fontSize: 24,
+				paddingTop: 16,
+				marginBottom: 12,
+				fontWeight: 400
+			},
+			tabs: {
+				background: 'none',
+				height: '60px',
+				color: '#222222'
+			},
+			tab: {
+				fontFamily: "'Nunito', 'Mitr'",
+				fontSize: '20px',
+				fontWeight: 'bold',
+				textTransform: 'none'
+			}
+		}
 		//console.log(this.props.onLoading)
 		return (
 		    <Wrapper>
@@ -248,17 +282,61 @@ const HomePage = React.createClass({
 	      	<TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={this.props.onLoading}/>
 					
 					<TopHome></TopHome>
-		      <TopVideoHome></TopVideoHome>
+		      <TopVideoHome className='hidden-mob'></TopVideoHome>
 					<Content style={{padding:'0px'}}>
 			      <Main>
-							<TextLine className='sans-font'>LATEST STORIES</TextLine>
-							<Dash style={{margin:'5px 0 10px 0'}}></Dash>
+							<TextLine className='sans-font hidden-mob'>LATEST STORIES</TextLine>
+							<Dash className='hidden-mob' style={{margin:'5px 0 10px 0'}}></Dash>
 
-							{latestStories.length!=0?latestStories.map((story, index) => (
+							{latestStories.length!=0&&screen.width>480?latestStories.map((story, index) => (
 								<ArticleBox detail={story} key={index}/>
 							)):''}
+							<Tabs
+                style={{ width:'100%'}}
+                tabItemContainerStyle={{ ...styles.tabs }}
+                inkBarStyle={{ background: theme.accentColor, height: 3 }}
+                onChange={this.handleChangeTab}
+                value={selectTab}
+								className='hidden-des'>
+                <Tab
+                  buttonStyle={{...styles.tab,color: selectTab == 0 ? '#222' : '#c4c4c4'}}
+                  label="Stories"
+                  value={0}
+                />
+                <Tab
+                  buttonStyle={{...styles.tab,color: selectTab == 1 ? '#222' : '#c4c4c4'}}
+                  label="News"
+                  value={1}
+                />
+								<Tab
+                  buttonStyle={{...styles.tab,color: selectTab == 2 ? '#222' : '#c4c4c4'}}
+                  label="Video"
+                  value={2}
+                />
+              </Tabs>
+							<Line/>
+              <SwipeableViews
+                index={selectTab}
+                onChangeIndex={this.handleChangeTab}
+								className='hidden-des'
+              >
+                <div className='story'>
+									{latestStories.length!=0&&screen.width<480?latestStories.map((story, index) => (
+										<ArticleBox detail={story} key={index}/>
+									)):''}
+								</div>
 
-							<More style={{margin:'30px auto 30px auto'}}/>
+								<div className='news'>
+									<TopNewsHome></TopNewsHome>
+								</div>
+
+								<div className='video'>
+
+								</div>
+              </SwipeableViews>
+
+							<More className='hidden-mob' style={{margin:'30px auto 30px auto'}}/>
+
 			      </Main>
 			      <Aside>
 							<StaffPickSideBar></StaffPickSideBar>

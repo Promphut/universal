@@ -248,25 +248,34 @@ const PublisherStoryPage = React.createClass({
   getStories(){
     this.setState({onLoad:true})
     let {currentPage, sort,sortBy,sortByState} = this.state
-    // var {id,value,searchText} = this.refs.filter.state
-    //console.log('filter', filter)
+    var {id,value,searchText} = this.refs.filter.state
     if(sortBy=="stats"){
       sortBy='popular'
     }else if(sortBy=='drafted'){
       sortBy='published'
     }
-    var sb = [[sortBy,parseInt(sortByState)]] 
-    //console.log('story', this.getCurrentFilter(), null, sb, currentPage, this.FEED_LIMIT, {onlyAuthorized: true})
-    api.getFeed('story', this.getCurrentFilter(), null, sb, currentPage, this.FEED_LIMIT, {onlyAuthorized: true})
-    .then(result => {
-      //console.log('getFeed()', result)
-      this.setState({
-        stories: result.feed,
-        storiesCount: result.count,
-        onLoad: false,
-        totalPages: utils.getTotalPages(this.FEED_LIMIT, result.count[this.state.selectStatus])
+    var sb = sortBy ? [sortBy,parseInt(sortByState)] : null
+    if(value=='Title'&&searchText){
+      api.filterStoryByTitle(searchText,sb).then((s)=>{
+        console.log(s)
+        this.setState({
+          stories: s,
+          storiesCount: s.length,
+          onLoad: false,
+          totalPages: utils.getTotalPages(this.FEED_LIMIT, s.length)
+        })
       })
-    })
+    }else{
+      api.getFeed('story', this.getCurrentFilter(), null, [sb], currentPage, this.FEED_LIMIT, {onlyAuthorized: true})
+      .then(result => {
+        this.setState({
+          stories: result.feed,
+          storiesCount: result.count,
+          onLoad: false,
+          totalPages: utils.getTotalPages(this.FEED_LIMIT, result.count[this.state.selectStatus])
+        })
+      })
+    }
   },
 
   filterPublished(){

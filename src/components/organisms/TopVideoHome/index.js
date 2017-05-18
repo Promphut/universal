@@ -120,7 +120,8 @@ const TopVideoHome = React.createClass({
             centerMode: true,
             draggable: true,
             centerPadding: '10px',
-            slidesToShow: 2
+            slidesToShow: 1,
+            slidesToScroll: 1,
           }
         }
       ]
@@ -144,7 +145,7 @@ const TopVideoHome = React.createClass({
       )
     }
     return (
-      <Content style={{padding:'50px 0 80px 0'}}>
+      <Content className={className} style={{padding:'50px 0 80px 0'}}>
         <Feed>
           <TextLine className='sans-font'>VIDEO</TextLine>
 				  <Dash style={{margin:'5px 0 30px 0'}}></Dash>

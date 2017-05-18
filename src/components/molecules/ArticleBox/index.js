@@ -22,23 +22,29 @@ const Container = styled.div`
   .des-hidden{
     display:block;
   }
+  .by{
+    margin-top:auto;
+  }
   @media (min-width:481px) {
     .des-hidden{
       display:none;
     }
   }
   @media (max-width:480px) {
+    display:block;
     width:100%;
-    padding:10px 0 20px 0;
+    padding:16px 0 16px 0;
     margin-left:auto;
     margin-right:auto;
     .mob-hidden{
       display:none;
     }
     .imgWidth{
-      float:none;
       width:100%;
-      height:175px;
+      height:${props=>props.height}px;
+    }
+    .by{
+      margin-top:12px;
     }
   }
 `
@@ -80,12 +86,27 @@ const Box = styled.div`
   display:flex;
   flex-direction:column;
   padding:25px 0 0 20px;
+  @media (max-width:480px) {
+    margin:5px;
+    display:block;
+    padding:0px;
+    padding-top:5px;
+  }
+`
+const Box1 = styled.div`
+  flex:1 444px;
+  min-width:444px;
+  @media (max-width:480px) {
+    display:block;
+    min-width:100%;
+    width:100%;
+  }
 `
 
 const ArticleBox = React.createClass({
   render(){
     let {detail,style} = this.props
-    let {ptitle,cover,writer,column,votes,comments,updated,url,readTime,contentShort} = detail
+    let {ptitle,cover,writer,column,votes,comments,updated,url,readTime,contentShort,created,published} = detail
     var {theme} = this.context.setting.publisher
     //console.log('URL', url)
 
@@ -94,13 +115,13 @@ const ArticleBox = React.createClass({
       writherDisplay = writer.display ? writer.display : ''
     }
     return (
-      <Container style={{...style}}>
-        <div style={{flex:'1'}}>
-          <Div className='sans-font' style={{margin:'0 0 8px 0'}}>{moment(updated).fromNow()}</Div>
+      <Container style={{...style}} height={(screen.width-32)/2}>
+        <Box1 style={{flex:'1'}} >
+          <Div className='sans-font' style={{margin:'0 0 8px 0'}}>{moment(published).fromNow()}</Div>
           <BGImg url={url} src={cover.medium || cover.small} className='imgWidth'/>
-        </div>
+        </Box1>
         <Box>
-          <div className='row'>
+          <div className='row' style={{overflow:'hidden',display:'flex'}}>
             <div style={{width:'16px',height:'1px',background:'#8E8E8E',flex:1,margin:'10px 10px 0 0'}}></div>
             <Div className='sans-font' style={{margin:'0 0 7px 0',flex:20}}>{readTime + ' min read'}</Div>
           </div>
@@ -110,7 +131,7 @@ const ArticleBox = React.createClass({
                 'length': 200,
                 'separator': ''
               })}</Div>
-          <Div className='nunito-font' style={{ marginTop: "auto"}}>by <strong><Link to={writer&&writer.url}> {writer.display} </Link></strong> in <Link to={column&&column.url} style={{color:theme.accentColor,fontWeight:'bold'}}>{column.name}</Link></Div>
+          <Div className='nunito-font by' >by <strong><Link to={writer&&writer.url}> {writer.display} </Link></strong> in <Link to={column&&column.url} style={{color:theme.accentColor,fontWeight:'bold'}}>{column.name}</Link></Div>
         </Box>
       </Container>
     )

@@ -134,6 +134,9 @@ injectGlobal`
     .hidden-des{
       display:block !important;
     }
+    .nunito-font{
+      font-family: 'Nunito', 'Mitr';
+    }
   }
 
 

@@ -7,12 +7,22 @@ const LargeBox =styled(Link)`
   display:flex;
 	flex:${props=>props.large?3:2};
 	height:222px;
+  @media (max-width:480px) {
+    height:auto;
+    padding:16px 0 16px 0;
+    border-bottom:1px solid #E2E2E2;
+    display:${props=>props.head?'block':'flex'};
+  }
 `
 const MiniBox = styled(BGImg)`
 	height:222px;
   transition: all 0.3s;
   transform: ${props=>props.hover?'scale(1.15)':'scale(1)'};
   z-index:-1;
+  @media (max-width:480px) {
+    height:${props=>props.head?props.height:'80'}px;
+    margin-bottom:${props=>props.head?'10':'0'}px;
+  }
 `
 const Box1 = styled.div`
   flex:${props=>props.large?2:1};
@@ -21,6 +31,10 @@ const Box1 = styled.div`
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+  @media (max-width:480px) {
+    flex: 1 ;
+    height:auto;
+  }
 `
 const MiniBoxDark = styled.div`
 	flex:1;
@@ -31,6 +45,11 @@ const MiniBoxLight = styled.div`
 	flex:1;
 	height:222px;
 	background-color:white;
+  @media (max-width:480px) {
+    flex: 2 ;
+  	height:auto;
+    background:none;
+  }
 `
 const ArrowLeft = styled.div`
 	position:relative;
@@ -42,6 +61,9 @@ const ArrowLeft = styled.div`
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent;
   border-left:15px solid ${props=>props.theme.primaryColor};
+  @media (max-width:480px) {
+    display:none;
+  }
 `
 const ArrowRight = styled.div`
 	position:relative;
@@ -53,6 +75,9 @@ const ArrowRight = styled.div`
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent;
   border-right:15px solid ${props=>props.theme.primaryColor};
+  @media (max-width:480px) {
+    display:none;
+  }
 `
 const NewsBox = styled.div`
 	flex:2;
@@ -65,6 +90,10 @@ const SName = styled(Link)`
   &:hover{
     color:${props=>props.theme.accentColor};
   }
+  @media (max-width:480px) {
+    color:white;
+    font-size:14px;
+  }
 `
 const HName = styled.div`
 	text-transform: uppercase;
@@ -72,6 +101,19 @@ const HName = styled.div`
 	font-size:14px;
 	font-weight:bold;
   margin-bottom:8px;
+  @media (max-width:480px) {
+    font-size:10px;
+    margin-bottom:4px;
+    color:${props=>props.theme.accentColor};
+  }
+`
+const Inner = styled.div`
+  width:174px;
+  margin:0 0 0 20px;
+  @media (max-width:480px) {
+    width:auto;
+    margin:0 0 0 15px;
+  }
 `
 
 const TopStory = React.createClass({
@@ -92,36 +134,36 @@ const TopStory = React.createClass({
   },
 
 	render(){
-    var {style,swift,className,large} = this.props
+    var {style,swift,className,large,head} = this.props
     var {cover,writer,column,votes,comments,updated,url,readTime,contentShort,ptitle} = this.props.detail
     var {hover} = this.state
-    if(swift){
+    if(swift&&screen.width>480){
       return (
-        <LargeBox to='#' large={large} style={{...style}} className={' '+className} onMouseOver={this.hover} onMouseLeave={this.leave}>
+        <LargeBox to='#' head={head}  large={large} style={{...style}} className={' '+className} onMouseOver={this.hover} onMouseLeave={this.leave}>
           <MiniBoxLight>
             <ArrowLeft style={{marginLeft:'100%',left:'0px',borderLeft:'15px solid white'}}/>
-            <div style={{width:'174px',margin:'0 0 0 20px'}}>
+            <Inner>
               <HName className='sans-font' style={{}}>TOP STORIES</HName>
               <SName hover={hover} to={this.props.detail&&url} className='nunito-font' >{_.truncate(ptitle?ptitle:'', {'length': 150,'separator': ''})}</SName>
-            </div>
+            </Inner>
           </MiniBoxLight>
           <Box1 large={large}>
-            <MiniBox hover={hover} src={cover&&cover.medium}  opacity={0.7}/>
+            <MiniBox hover={hover}  head={head} height={(screen.width-16)/2} src={cover&&cover.medium}  opacity={0.7}/>
           </Box1>
         </LargeBox>    
       )
     }else{
       return (
-        <LargeBox to='#' large={large} style={{...style}} className={' '+className} onMouseOver={this.hover} onMouseLeave={this.leave}>
+        <LargeBox to='#'  head={head} large={large} style={{...style}} className={' '+className} onMouseOver={this.hover} onMouseLeave={this.leave}>
           <Box1 large={large}>
-            <MiniBox hover={hover} src={cover&&cover.medium}  opacity={0.7}/>
+            <MiniBox  head={head} height={(screen.width-16)/2} hover={hover} src={cover&&cover.medium}  opacity={0.7}/>
           </Box1>
           <MiniBoxLight>
             <ArrowRight style={{borderRight:'15px solid white',left:'-14px'}}/>
-            <div style={{width:'174px',margin:'0 0 0 20px'}}>
+            <Inner>
               <HName className='sans-font' style={{}}>TOP STORIES</HName>
               <SName hover={hover} to={url} className='nunito-font' >{_.truncate(ptitle?ptitle:'', {'length': 150,'separator': ''})}</SName>
-            </div>
+            </Inner>
           </MiniBoxLight>
         </LargeBox>    
       )
