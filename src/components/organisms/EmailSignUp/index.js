@@ -6,6 +6,7 @@ import {Link,browserHistory} from 'react-router'
 import Request from 'superagent'
 import TextField from 'material-ui/TextField';
 
+
 const Box = styled.div`
   width:600px;
   background-color:#fff;
@@ -58,6 +59,8 @@ const EmailSignUp = React.createClass({
   },
 
   render(){
+  var { email } = this.state
+  var { errorText,onSubmit } = this.props
   var { theme } = this.context.setting.publisher
   var styles={
     button:{
@@ -84,25 +87,26 @@ const EmailSignUp = React.createClass({
     return(
       <Box>
         <Head >Enter your Email</Head>
-        <InputBox onSubmit={(e)=>this.props.onSubmit(e,this.state.email)}>
+        <InputBox onSubmit={(e)=>onSubmit(e,this.state.email)}>
           <TextField
             floatingLabelText="Email"
             type="email"
             fullWidth={true}
             name='email'
             inputStyle={{color:'#222'}}
-            value={this.state.email}
+            value={email}
             onChange={this.onChangeText}
+            errorText={errorText}
           />
-          <div style={styles.btnCon}>
+          <div style={{...styles.btnCon}}>
             <RaisedButton
               label="Next"
               labelPosition="after"
               labelColor='white'
-              labelStyle={styles.labelBtn}
-              style={styles.button}
-              buttonStyle={styles.btn}
-              type='buttom'
+              labelStyle={{...styles.labelBtn}}
+              style={{...styles.button}}
+              buttonStyle={{...styles.btn}}
+              type='submit'
             />
           </div>
           <Text>Already have ab account? <LinkUnderLine to='/signin'> Sign In</LinkUnderLine> </Text>

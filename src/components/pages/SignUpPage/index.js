@@ -4,6 +4,8 @@ import FlatButton from 'material-ui/FlatButton';
 import styled from 'styled-components'
 import {Link,browserHistory} from 'react-router'
 import Request from 'superagent';
+import api from 'components/api'
+
 const Wrapper = styled.div`
 	width:100%;
   height:100%;
@@ -47,6 +49,7 @@ const SignUpPage = React.createClass({
 		return {
       statePage:1,
       visible:this.props.visible,
+      user:{}
     }
 	},
 
@@ -85,12 +88,21 @@ const SignUpPage = React.createClass({
 
   checkEmail(e,email){
     e.preventDefault()
-    console.log(email)
-    this.setState({statePage:4})
+    //console.log(email)
+    api.checkSignUp(email).then((u)=>{
+      //console.log(u)
+      if(u){
+        if(u.facebook.id) this.setState({statePage:3,user:u})
+        else this.setState({statePage:4,user:u})
+      }else{
+        this.setState({statePage:2,user:email})
+      }
+    })
+    //this.setState({statePage:2})
   },
 
 	render(){
-    var {statePage} = this.state
+    var {statePage,user} = this.state
     var { theme } = this.context.setting.publisher
     return (
       <Wrapper style={{display:this.state.visible?'block':'none'}} page={statePage}>
@@ -107,9 +119,9 @@ const SignUpPage = React.createClass({
             </Link>
           </BoxButton>
           {statePage==1&&<EmailSignUp onSubmit={this.checkEmail} />}
-          {statePage==2&&<SignUp onSubmit={this.checkEmail} />}
-          {statePage==3&&<SignUpFb onSubmit={this.checkEmail} />}
-          {statePage==4&&<SignIn2 onSubmit={this.checkEmail} />}
+          {statePage==2&&<SignUp user={user} />}
+          {statePage==3&&<SignUpFb user={user} />}
+          {statePage==4&&<SignIn2 user={user} />}
         </Container>
       </Wrapper>
     )

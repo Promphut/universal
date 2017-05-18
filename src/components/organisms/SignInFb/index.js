@@ -176,7 +176,7 @@ const SignInFb = React.createClass({
             labelPosition="after"
             type='submit'
             labelColor={theme.accentColor}
-            labelStyle={{color:theme.accentColor}}
+            labelStyle={{color:theme.accentColor,top:'-2px'}}
             style={{borderRadius:'20px',boxShadow:'none',background:'none'}}
             buttonStyle={{background:'none',border:'2px solid '+theme.accentColor,borderRadius:'20px',width:'307px'}}
           />

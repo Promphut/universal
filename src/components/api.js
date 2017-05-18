@@ -804,4 +804,14 @@ api.checkHash = (hash) => {
 	}, api.err)
 }
 
+api.checkSignUp = (email)=> {
+	return Request
+	.post(config.BACKURL+'/signup/check')
+	.send({email})
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body.user
+	}, api.err)
+}
+
 module.exports = api
