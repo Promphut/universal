@@ -13,21 +13,21 @@ const ImgLink = styled(Link)`
 const Filter = styled(GradientOverlay)`
   position:relative;
   display:block;
-  overflow:auto;
+  overflow: ${props => props.hidden ? 'hidden' : 'auto'};
   top:0;
   left:0;
   width:100%;
   height:100%;
 `
 
-const BGImg = ({style, className, src, url, alt, opacity, child, children}) => {
+const BGImg = ({style, className, src, url, alt, opacity, hidden, child, children}) => {
 	return (
   	<ImgLink to={url} style={{...style, backgroundImage:'url('+src+')'}}
       className={className} title={alt}>
       {opacity === -1 ? (<div>
         {child?child:''}
         {children}
-      </div>) : (<Filter opacity={opacity}>
+      </div>) : (<Filter opacity={opacity} hidden={hidden}>
         {child?child:''}
         {children}
       </Filter>)
