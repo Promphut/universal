@@ -136,7 +136,6 @@ const Nav = styled.nav`
 
 	& ul li a:hover {
 		text-decoration: underline;
-		text-shadow:0px 0px 1px #222;
 	}
 
 	& ul hr {
@@ -148,7 +147,7 @@ const Nav = styled.nav`
 		font-size: 32px !important;
 		line-height: 40px;
 		vertical-align: middle;
-		margin-left: 140px !important;
+		margin-left: 125px !important;
     color: #FFF !important;
 	}
 

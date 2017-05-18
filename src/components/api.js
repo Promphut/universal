@@ -239,9 +239,10 @@ api.getFeed = (type, filter, sort, sortby, page, limit, option) => {
 	}, api.err)
 }
 
-api.getColumns = () => {
+api.getColumns = (status = 1) => {
 	return Request
 	.get(config.BACKURL+'/publishers/'+config.PID+'/columns')
+	.query({status})
 	.set('Accept','application/json')
 	.then(res => {
 		return res.body.columns
@@ -750,7 +751,7 @@ api.getGrowthInsight = (insight, subaction = '', filter, sort, limit, current) =
 }
 
 // utm: {source, medium, campaign, content}
-// response: {success:true/false, url:'url'} 
+// response: {success:true/false, url:'url'}
 // if unable to shorten, success will be false
 api.shorten = (url, utm) => {
 	url = appendUTM(url, utm)
@@ -763,12 +764,12 @@ api.shorten = (url, utm) => {
 	})
 	.set('Accept','application/json')
 	.then(res => {
-		if(res.body.status_code != 200) 
+		if(res.body.status_code != 200)
 			//return Promise.reject(new Error('Unable to shorten the link'))
 			return {success:false, url:url}
 
 		return {
-			success: true, 
+			success: true,
 			url: res.body.data.url
 		}
 	}, () => { return {success:false, url:url} })
