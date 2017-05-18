@@ -9,8 +9,8 @@ auth = {
   setCookieAndToken(cookieAndToken){
    // //console.log('setCookieAndToken', cookieAndToken)
     if(cookieAndToken.token) cookieService.set('token', cookieAndToken.token)
-    if(cookieAndToken.user) cookieService.setJSON('user', cookieAndToken.user)
-    if(cookieAndToken.roles) cookieService.setJSON('roles', cookieAndToken.roles)
+    if(cookieAndToken.user) cookieService.set('user', cookieAndToken.user) //cookieService.setJSON('user', cookieAndToken.user)
+    if(cookieAndToken.roles) cookieService.set('roles', cookieAndToken.roles) //cookieService.setJSON('roles', cookieAndToken.roles)
     //if(cookieAndToken.menu) cookieService.setJSON('menu', cookieAndToken.menu)
   },
 
@@ -19,11 +19,13 @@ auth = {
   },
 
   getUser(){
-    return cookieService.getJSON('user')
+    //return cookieService.getJSON('user')
+    return cookieService.get('user')
   },
 
   getRoles(){
-    return cookieService.getJSON('roles')
+    //return cookieService.getJSON('roles')
+    return cookieService.get('roles')
   },
 
   // hasRoleOf(roleName, ofId){

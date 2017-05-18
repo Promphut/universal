@@ -5,7 +5,7 @@ import api from 'components/api'
 import auth from 'components/auth'
 import App from 'components/App'
 //import utils from './services/utils'
-import { HomePage2, NewsPage, AllColumn, AboutPage, ContactPage, TagPage, ColumnPage, StoryPage, ForgetPasswordPage, SignInPage, SignUpPage, UserStory } from 'components'
+import { HomePage2, NewsPage, AllColumn, AboutPage, ContactPage, TagPage, ColumnPage, StoryPage, ForgetPasswordPage, SignInPage, SignUpPage, UserStory, PublisherEditor } from 'components'
 
 const NotFound = ({ location }) => (
 	<Status code={404}>
@@ -103,6 +103,8 @@ class AppRoutes extends React.Component {
 						pathname: '/'
 					}} />
     			}} />
+
+    			<Route path='/editor' component={PublisherEditor}/>
 
     			<Route exact path='/u/:uid' render={props => <UserStory {...props} uid={props.match.params.uid}/>} />
 				{/* STORY 4 NO COLUMN AND NO USERNAME */ }

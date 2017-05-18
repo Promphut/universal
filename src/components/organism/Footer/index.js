@@ -6,7 +6,6 @@ import {LogoLink} from 'components'
 import FontIcon from 'material-ui/FontIcon';
 import auth from 'components/auth'
 import api from 'components/api'
-import { parse } from 'query-string'
 import utils from '../../../services/utils'
 import { withRouter } from 'react-router'
 
@@ -86,8 +85,9 @@ class Footer extends React.Component {
 
   componentDidMount(){
     // Get from cookie, else get from query
-    let query = parse(this.props.location.search)
-    let token = query ? query.token : auth.getToken()
+    let token = utils.querystring('token', this.props.location) || auth.getToken()
+    // let query = parse(this.props.location.search)
+    // let token = query && query.token ? query.token : auth.getToken()
 
     // 1. Fetch menu, user, and roles information
     api.getCookieAndToken(token)

@@ -13,29 +13,29 @@ cookieService = {
 	},
 
 	// Set cookie json by name
-	setJSON(cookieName, json){
-		cookies.set(cookieName, JSON.stringify(json), domain)
-	},
+	// setJSON(cookieName, json){
+	// 	cookies.set(cookieName, JSON.stringify(json), domain)
+	// },
 
 	// Get cookie string by name
 	get(cookieName){
-		//console.log('COOKIE', window.cookies, global.cookies)
+		//console.log('COOKIE', window.cookies, global.cookies, cookies.get(cookieName, domain))
 		//return cookies.get(cookieName, domain)
 		return cookies.get(cookieName, domain) || null
 		//return cookies.load(cookieName)
 	},
 
 	// Get cookie json by name
-	getJSON(cookieName){
-		let json 
+	// getJSON(cookieName){
+	// 	let json 
+	// 	//console.log('getJSON', cookieService.get(cookieName))
+	// 	try{
+	// 	  json = JSON.parse(cookieService.get(cookieName))
+	// 	} 
+	// 	catch(err) {json = null}
 
-		try{
-		  json = JSON.parse(cookieService.get(cookieName))
-		} 
-		catch(err) {json = null}
-
-		return json
-	},
+	// 	return json
+	// },
 
 	// Remove cookie by name
 	remove(cookieName){

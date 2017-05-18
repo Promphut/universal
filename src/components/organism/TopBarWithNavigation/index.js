@@ -5,7 +5,6 @@ import auth from 'components/auth'
 import api from 'components/api'
 import { withRouter } from 'react-router'
 import utils from '../../../services/utils'
-import { parse } from 'query-string'
 
 class TopBarWithNavigation extends React.Component {
 	static contextTypes = {
@@ -49,10 +48,11 @@ class TopBarWithNavigation extends React.Component {
 
 	componentDidMount(){
 		// Get from cookie, else get from query
+		let token = utils.querystring('token', this.props.location) || auth.getToken()
 		//let token = browserHistory.getCurrentLocation().query.token || auth.getToken()
-		let query = parse(this.props.location.search)
-		let token = query ? query.token : auth.getToken()
-
+		// let query = parse(this.props.location.search)
+		// let token = query && query.token ? query.token : auth.getToken()
+		//console.log('TOKEN', this.props.location, token, 'YYY', query.token, 'XXX', auth.getToken())
 		// 1. Fetch menu, user, and roles information
 		api.getCookieAndToken(token)
 		.then(result => {

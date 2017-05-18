@@ -256,7 +256,7 @@ class RightMenu extends React.Component {
       introStyle = {}
       AvatarSize = 70
     }
-
+    //console.log('USER', user)
     return (
       <Container open={open}>
         <Container2 onClick={close} />

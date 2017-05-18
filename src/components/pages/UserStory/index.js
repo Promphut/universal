@@ -213,10 +213,10 @@ const UserDetail = ({style, user, checkBack}) => {
 		    {user.channels && <UserShare>
 		        {/*<div className='row' style={{overflow:'hidden', textAlign: 'right'}}>*/}
 		        <div style={{textAlign:'right'}}>
-		          {user.channels.fb && <A href={getFbUrl(user.channels.fb)} target="_blank"><i className="fa fa-facebook" aria-hidden="true"></i></A>}
-		          {user.channels.twt && <A href={getTwtUrl(user.channels.twt)} target="_blank"><i className="fa fa-twitter" aria-hidden="true" ></i></A>}
-		          {user.channels.yt && <A href={getYtUrl(user.channels.yt)} target="_blank"><i className="fa fa-youtube-play" aria-hidden="true" ></i></A>}
-		          {user.channels.ig && <A href={getIgUrl(user.channels.ig)} target="_blank"><i className="fa fa-instagram" aria-hidden="true" ></i></A>}
+		          {user.channels.fb && <A href={utils.getFbUrl(user.channels.fb)} target="_blank"><i className="fa fa-facebook" aria-hidden="true"></i></A>}
+		          {user.channels.twt && <A href={utils.getTwtUrl(user.channels.twt)} target="_blank"><i className="fa fa-twitter" aria-hidden="true" ></i></A>}
+		          {user.channels.yt && <A href={utils.getYtUrl(user.channels.yt)} target="_blank"><i className="fa fa-youtube-play" aria-hidden="true" ></i></A>}
+		          {user.channels.ig && <A href={utils.getIgUrl(user.channels.ig)} target="_blank"><i className="fa fa-instagram" aria-hidden="true" ></i></A>}
 		        </div>
 		    </UserShare>}
 	    </div>

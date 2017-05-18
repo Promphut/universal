@@ -5,7 +5,7 @@ import Helmet from 'react-helmet'
 const Html = ({ styles, assets, /*state, */content }) => {
   const helmet = Helmet.rewind()
   const attrs = helmet.htmlAttributes.toComponent()
-
+  //console.log('HAHAHA', styles, assets)
   return (
     <html {...attrs}>
       <head>
@@ -16,6 +16,9 @@ const Html = ({ styles, assets, /*state, */content }) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         {helmet.link.toComponent()}
         <style dangerouslySetInnerHTML={{ __html: styles }} />
+        {Object.keys(assets.styles).map((key) =>
+          <link href={assets.styles[key]} key={key} rel="stylesheet" type="text/css"/>
+        )}
         {/*<base href="/" />*/}
       </head>
       <body>

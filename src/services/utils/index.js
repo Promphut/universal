@@ -1,4 +1,5 @@
 import config from '../../config'
+import { parse } from 'query-string'
 
 const utils = {}
 
@@ -83,6 +84,11 @@ utils.getTotalPages = (itemsLimit, itemsCount) => {
   let count = Math.ceil(itemsCount / itemsLimit)
   return isNaN(count) ? 0 : count
 };
+
+utils.querystring = (field, location) => {
+  if(!location || !field) throw new Error('location and field are required.')
+  return parse(location.search)[field]
+}
 
 utils.toError = (history) => {
   return (err) => {

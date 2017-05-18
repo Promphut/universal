@@ -7,6 +7,7 @@ const happypack = require('webpack-blocks-happypack')
 const WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin')
 const webpackIsomorphicToolsConfig = require('./webpack-isomorphic-tools-configuration')
 const configfile = require('../config')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 const {
   addPlugins, createConfig, entryPoint, env, setOutput,
@@ -31,6 +32,21 @@ const babel = () => () => ({
   },
 })
 
+const assets = () => () => ({
+  module: {
+    rules: [
+      { test: /\.(png|jpe?g|svg|woff2?|ttf|eot)$/, loader: 'url-loader?limit=8000' },
+      { test: /\.css/, loader: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader' }) },
+    ],
+  },
+})
+
+const resolveModules = modules => () => ({
+  resolve: {
+    modules: [].concat(modules, ['node_modules']),
+  },
+})
+
 const config = createConfig([
   entryPoint({
     app: path.join(process.cwd(), sourceDir, 'client') //sourcePath,
@@ -51,25 +67,15 @@ const config = createConfig([
   //     template: path.join(process.cwd(), 'public/index.html'),
   //   }),
   // ]),
-  happypack([
-    babel(),
-  ], {
-    cacheContext: { sourceDir },
-  }),
   addPlugins([
     new webpack.ProgressPlugin(),
+    new ExtractTextPlugin({ filename: '[name].[hash].css', disable: false, allChunks: true }),
   ]),
-  () => ({
-    resolve: {
-      modules: [sourceDir, 'node_modules'],
-    },
-    module: {
-      rules: [
-        { test: /\.(png|jpe?g|svg)$/, loader: 'url-loader?&limit=8000' },
-        { test: /\.(woff2?|ttf|eot)$/, loader: 'url-loader?&limit=8000' },
-      ],
-    },
-  }),
+  happypack([
+    babel(),
+  ]),
+  assets(),
+  resolveModules(sourceDir),
 
   env('development', [
     devServer({
