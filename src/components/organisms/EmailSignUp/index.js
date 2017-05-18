@@ -97,6 +97,7 @@ const EmailSignUp = React.createClass({
             value={email}
             onChange={this.onChangeText}
             errorText={errorText}
+            autoFocus
           />
           <div style={{...styles.btnCon}}>
             <RaisedButton

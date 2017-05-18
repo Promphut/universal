@@ -88,17 +88,16 @@ const SignUpPage = React.createClass({
 
   checkEmail(e,email){
     e.preventDefault()
-    //console.log(email)
     api.checkSignUp(email).then((u)=>{
-      //console.log(u)
       if(u){
+        u.email = email
+        //console.log(u)
         if(u.facebook.id) this.setState({statePage:3,user:u})
         else this.setState({statePage:4,user:u})
       }else{
         this.setState({statePage:2,user:email})
       }
     })
-    //this.setState({statePage:2})
   },
 
 	render(){

@@ -247,8 +247,8 @@ const PublisherStoryPage = React.createClass({
 
   getStories(){
     this.setState({onLoad:true})
-
     let {currentPage, sort,sortBy,sortByState} = this.state
+    // var {id,value,searchText} = this.refs.filter.state
     //console.log('filter', filter)
     if(sortBy=="stats"){
       sortBy='popular'
