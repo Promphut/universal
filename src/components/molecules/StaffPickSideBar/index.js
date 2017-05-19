@@ -83,7 +83,7 @@ const StaffPickSideBar = React.createClass({
     var {hover,news} = this.state
     //console.log(news)
     return (
-      <Stick topOffset={60}>
+      <Stick topOffset={60} style={{zIndex:'0'}}>
         <Container >
           <TextLine className='sans-font'>OUR PICKS</TextLine>
           <Dash style={{margin:'5px 0 10px 0'}}></Dash>

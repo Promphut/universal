@@ -67,6 +67,7 @@ const Container = styled.div`
 const Left = styled.div`
 	justify-content: flex-start;
 	display: inline-block;
+	z-index:10;
 `
 
 const HamburgerWrapper = styled.a`
@@ -96,10 +97,6 @@ const Logo = styled.img`
 `
 
 const Center = styled.div`
-	opacity: 1;
-	transparent .1s;
-	cursor: default;
-	justify-content: center;
 	max-width: 40%;
 	white-space: nowrap;
 
@@ -111,6 +108,7 @@ const Center = styled.div`
 const Right = styled.div`
 	justify-content: flex-end;
 	display: inline-block;
+	z-index:10;
 `
 
 const HideOnTablet = styled.div`
@@ -150,6 +148,13 @@ const LogoGif = styled(BGImg)`
 	width:60px;
 	height:60px;
 	margin-right:12px;
+`
+const ContainerCenter = styled.div`
+	position:absolute;
+	width:100vw;
+	height:100%;
+	display:flex;
+	justify-content: center;
 `
 
 const TopBar = React.createClass({
@@ -301,9 +306,11 @@ const TopBar = React.createClass({
 						</LogoWrapper>
 					</Left>
 
-					<Center className={transparent ? 'hide' : ''}>
-						{this.props.children}
-					</Center>
+					<ContainerCenter>
+					  <Center className={transparent ? 'hide' : ''}>
+							{this.props.children}
+						</Center>
+					</ContainerCenter>
 
 					{status == 'LOGGEDIN' &&
 						<Right>

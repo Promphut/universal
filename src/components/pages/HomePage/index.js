@@ -308,11 +308,11 @@ const HomePage = React.createClass({
                   label="News"
                   value={1}
                 />
-								<Tab
+								{/*<Tab
                   buttonStyle={{...styles.tab,color: selectTab == 2 ? '#222' : '#c4c4c4'}}
                   label="Video"
                   value={2}
-                />
+                />*/}
               </Tabs>
 							<Line/>
               <SwipeableViews
@@ -330,9 +330,9 @@ const HomePage = React.createClass({
 									<TopNewsHome></TopNewsHome>
 								</div>
 
-								<div className='video'>
+								{/*<div className='video'>
 
-								</div>
+								</div>*/}
               </SwipeableViews>
 
 							<More className='hidden-mob' style={{margin:'30px auto 30px auto'}}/>

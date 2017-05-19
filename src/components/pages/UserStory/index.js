@@ -223,32 +223,46 @@ const UserDetail = ({style, user, checkBack}) => {
 
 const UserStory = React.createClass({
 	getInitialState(){
+		this.user = this.props.params.user
 		return {
 			//feed:[],
 			feedCount: 0,
 			latestStories:[],
-			page:0,
-			isInfiniteLoading: true,
-			loadOffset:300,
-			feedCount:0,
+			page:1,
+			isInfiniteLoading: false,
+			loadOffset:500,
 			isMobile:false
 		}
 	},
 
 	componentDidMount(){
-		this.handleInfiniteLoad()
+		//this.handleInfiniteLoad()
+		this.getFeed()
+	},
+
+	getFeed(){
+		// - Fetching latestStories
+		let uid = this.props.params.user ? this.props.params.user._id : null
+		api.getFeed('story', {writer:uid, status:1}, 'latest', null, 0, 10)
+		.then(result => {
+			if(result) {
+				this.setState({
+					latestStories: result.feed
+				})
+			}
+		})
 	},
 
 	buildElements() {
 		let page = this.state.page
-		let uid = this.props.params.user ? this.props.params.user._id : null
+		let uid = this.user
 
 		if(page!=null && uid!=null){
 			api.getFeed('story', {writer:uid, status:1}, 'latest', null, page, 10)
 			.then(result => {
 				//console.log('api.getFeed', result)
 				var s = this.state.latestStories.concat(result.feed)
-				if(s.length==result.count['1']){
+				if(s.length<page*10){
 					this.setState({
 						feedCount:result.count['1'] || 0,
 						latestStories:s,
@@ -287,19 +301,17 @@ const UserStory = React.createClass({
 	},
 
 	render(){
-  		let {theme, keywords, channels} = this.context.setting.publisher
+  	let {theme} = this.context.setting.publisher
 		//console.log('user', this.props)
 		//var article = []
 		let {feed, feedCount} = this.state
 		let {count,loadOffset,isInfiniteLoading,latestStories,isMobile} = this.state
-		let user = this.props.params.user
-		// console.log('user', user)
-
-		if(!user) return <Wrapper/>
+		let user = this.user
+		//console.log('user', user)
 
 		return ( 
 			<Wrapper>
-				<Helmet>
+				{/*<Helmet>
 					<title>{user.display}</title>
 					<meta name="title" content={user.display} />
 					<meta name="keywords" content={keywords} />
@@ -319,19 +331,18 @@ const UserStory = React.createClass({
 					<meta property="twitter:card" content="summary_large_image" />
 					<meta property="twitter:image:alt" content={user.display} />
 					<meta property="fb:app_id" content={config.ANALYTIC.FBAPPID} />
-				</Helmet>
+				</Helmet>*/}
 
 				<TopBarWithNavigation className="hidden-mob" title={'Title of AomMoney goes here..'} />
 				<UserDetail user={user} checkBack={this.checkBack}/>
 
 				{user.channels && <UserShareMobile className='row'>
-		          {user.channels.fb && <LinkMobile href={getFbUrl(user.channels.fb)} target="_blank"><i className="fa fa-facebook" aria-hidden="true"></i></LinkMobile>}
-		          {user.channels.twt && <LinkMobile href={getTwtUrl(user.channels.twt)} target="_blank"><i className="fa fa-twitter" aria-hidden="true" ></i></LinkMobile>}
-		          {user.channels.yt && <LinkMobile href={getYtUrl(user.channels.yt)} target="_blank"><i className="fa fa-youtube-play" aria-hidden="true" ></i></LinkMobile>}
-		          {user.channels.ig && <LinkMobile href={getIgUrl(user.channels.ig)} target="_blank"><i className="fa fa-instagram" aria-hidden="true" ></i></LinkMobile>}
+				{user.channels.fb && <LinkMobile href={getFbUrl(user.channels.fb)} target="_blank"><i className="fa fa-facebook" aria-hidden="true"></i></LinkMobile>}
+				{user.channels.twt && <LinkMobile href={getTwtUrl(user.channels.twt)} target="_blank"><i className="fa fa-twitter" aria-hidden="true" ></i></LinkMobile>}
+				{user.channels.yt && <LinkMobile href={getYtUrl(user.channels.yt)} target="_blank"><i className="fa fa-youtube-play" aria-hidden="true" ></i></LinkMobile>}
+				{user.channels.ig && <LinkMobile href={getIgUrl(user.channels.ig)} target="_blank"><i className="fa fa-instagram" aria-hidden="true" ></i></LinkMobile>}
 	 			</UserShareMobile>}
 		      <Content>
-			      {latestStories.length!=0?
 						<Main>
 							<TextLine className='sans-font'>
 								<strong style={{color:theme.primaryColor,marginRight:'30px'}}>
@@ -340,8 +351,8 @@ const UserStory = React.createClass({
 								{/*<span style={{fontSize:'30px'}}>101</span> Upvotes*/}
 							</TextLine>
 							<Infinite
-									containerHeight={!isMobile?(count*210)-100:(count*356)-100}
-									elementHeight={!isMobile?210:356}
+									containerHeight={2000}
+									elementHeight={!isMobile?309:393.5}
 									infiniteLoadBeginEdgeOffset={loadOffset}
 									onInfiniteLoad={this.handleInfiniteLoad}
 									loadingSpinnerDelegate={this.elementInfiniteLoad()}
@@ -352,18 +363,10 @@ const UserStory = React.createClass({
 									<ArticleBox detail={story} key={index}/>
 								)):''}
 							</Infinite>
-							<More style={{margin:'30px auto 30px auto'}} />
-			      </Main>:
-						<Main>
-							<TextLine className='sans-font'>
-								<strong style={{color:theme.primaryColor,marginRight:'30px'}}>
-									<span style={{fontSize:'30px'}}>{feedCount}</span> stories
-								</strong>
-								{/*<span style={{fontSize:'30px'}}>101</span> Upvotes*/}
-							</TextLine>
-							 {isInfiniteLoading?<Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>:
-							<EmptyStory title='No Story, yet' description='There are no stories in this column right now. Wanna back to see other columns?' />}
-			      </Main>}
+							{latestStories.length!=0&&<More style={{margin:'30px auto 30px auto'}} />}
+
+							{latestStories.length==0&&<EmptyStory title='No Story, yet' description='There are no stories in this column right now. Wanna back to see other columns?' />}
+			      </Main>
 		      </Content>
 		   </Wrapper>
 		)
