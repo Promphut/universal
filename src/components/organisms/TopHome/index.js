@@ -98,9 +98,10 @@ const Content = styled.div`
 	flex-flow: row wrap;
 	justify-content: center;
 	padding: 100px 0 60px 0;
-  background:${props=>props.theme.primaryColor};
+  background:#F4F4F4;
 	@media (max-width:480px) {
 		padding: 70px 0 0 0;
+    background:${props=>props.theme.primaryColor};
   }
 
 	@media (min-width: 481px) {
