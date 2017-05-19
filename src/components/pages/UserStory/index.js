@@ -228,7 +228,7 @@ const UserStory = React.createClass({
 			//feed:[],
 			feedCount: 0,
 			latestStories:[],
-			page:1,
+			page:0,
 			isInfiniteLoading: false,
 			loadOffset:500,
 			isMobile:false
@@ -237,34 +237,21 @@ const UserStory = React.createClass({
 
 	componentDidMount(){
 		//this.handleInfiniteLoad()
-		this.getFeed()
-	},
-
-	getFeed(){
-		// - Fetching latestStories
-		let uid = this.props.params.user ? this.props.params.user._id : null
-		api.getFeed('story', {writer:uid, status:1}, 'latest', null, 0, 10)
-		.then(result => {
-			if(result) {
-				this.setState({
-					latestStories: result.feed
-				})
-			}
-		})
+		//this.getFeed()
 	},
 
 	buildElements() {
 		let page = this.state.page
-		let uid = this.user
-
+		let uid = this.user._id
+		//console.log('load')
 		if(page!=null && uid!=null){
-			api.getFeed('story', {writer:uid, status:1}, 'latest', null, page, 10)
+			api.getFeed('story', {writer:parseInt(uid), status:1}, 'latest', null, page, 10)
 			.then(result => {
-				//console.log('api.getFeed', result)
+				//console.log(result)
 				var s = this.state.latestStories.concat(result.feed)
-				if(s.length<page*10){
+				if(s.length==result.count[1]){
 					this.setState({
-						feedCount:result.count['1'] || 0,
+						feedCount:result.count[1],
 						latestStories:s,
 
 						loadOffset:'undefined',
@@ -272,7 +259,7 @@ const UserStory = React.createClass({
 					})
 				} else {
 					this.setState({
-						feedCount:result.count['1'] || 0,
+						feedCount:result.count[1],
 						latestStories:s,
 
 						isInfiniteLoading: false

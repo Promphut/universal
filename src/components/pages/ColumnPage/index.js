@@ -117,7 +117,7 @@ const ColumnPage = React.createClass({
 			latestStories:[],
 			page:0,
 			isInfiniteLoading: true,
-			loadOffset:300,
+			loadOffset:200,
 			feedCount:0,
 			isMobile:false
 		}
@@ -151,7 +151,7 @@ const ColumnPage = React.createClass({
 	buildElements() {
 		let page = this.state.page
 		var {column} = this.state
-		api.getFeed('article', {status:1,column:column.id }, 'latest', null, page, 10)
+		api.getFeed('article', {status:1,column:parseInt(column.id )}, 'latest', null, page, 10)
 		.then(result => {
 			var s = this.state.latestStories.concat(result.feed)
 			if(s.length==result.count[1]){
@@ -171,22 +171,6 @@ const ColumnPage = React.createClass({
 					isInfiniteLoading: false
 				})
 			}
-
-			// this.setState({
-			// 	feedCount:result.count[1],
-			// 	latestStories:s,
-			// },()=>{
-			// 	if(s.length==result.count[1]){
-			// 		this.setState({
-			// 			loadOffset:'undefined',
-			// 			isInfiniteLoading: false,
-			// 		})
-			// 	}else{
-			// 		this.setState({
-			// 			isInfiniteLoading: false
-			// 		})
-			// 	}
-			// })
 		})
 	},
 
@@ -249,8 +233,8 @@ const ColumnPage = React.createClass({
 							<StoryMenu style={{padding:'15px 0 15px 0', margin:'0 0 50px 0'}}	next={column.name} />
 							<TextLine className='sans-font'>Latest</TextLine>
 							<Infinite
-									containerHeight={!isMobile?(count*210)-100:(count*356)-100}
-									elementHeight={!isMobile?210:356}
+									containerHeight={2000}
+									elementHeight={!isMobile?309:393.5}
 									infiniteLoadBeginEdgeOffset={loadOffset}
 									onInfiniteLoad={this.handleInfiniteLoad}
 									loadingSpinnerDelegate={this.elementInfiniteLoad()}

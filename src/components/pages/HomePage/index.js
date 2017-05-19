@@ -134,7 +134,7 @@ const HomePage = React.createClass({
 			refresh: 0,
 			page:0,
 			isInfiniteLoading: false,
-			loadOffset:300,
+			loadOffset:200,
 			feedCount:0,
 			isMobile:false,
 			completed:0,
@@ -146,7 +146,7 @@ const HomePage = React.createClass({
 	},
 	componentDidMount(){
 		this.getPublisher()
-		this.getFeed()
+		//this.getFeed()
 		this.getSidebar()
 		this.setState({
 			isMobile:window.isMobile(),
@@ -173,17 +173,19 @@ const HomePage = React.createClass({
 		})
 	},
 
-	getFeed(){
-		// - Fetching latestStories
-		api.getFeed('article', {status:1}, 'latest', null, 0, 10)
-		.then(result => {
-			if(result) {
-				this.setState({
-					latestStories: result.feed
-				})
-			}
-		})
-	},
+	// getFeed(){
+	// 	// - Fetching latestStories
+	// 	api.getFeed('article', {status:1}, 'latest', null, 0, 10)
+	// 	.then(result => {
+	// 		if(result) {
+				
+	// 			this.setState({
+	// 				latestStories: result.feed
+					
+	// 			})
+	// 		}
+	// 	})
+	// },
 
 	getSidebar(){
 		// - Fetching top columns
@@ -205,26 +207,29 @@ const HomePage = React.createClass({
 
 	buildElements() {
 		let page = this.state.page
+		if(page!=null){
+			api.getFeed('article', {status:1}, 'latest', null, page, 10)
+			.then(result => {
+				console.log(result)
+				var s = this.state.latestStories.concat(result.feed)
+				if(s.length==result.count[1]){
+					this.setState({
+						feedCount:result.count[1],
+						latestStories:s,
 
-		api.getFeed('article', {status:1}, 'latest', null, page, 10)
-		.then(result => {
-			var s = this.state.latestStories.concat(result.feed)
-			this.setState({
-				feedCount:result.count[1],
-				latestStories:s,
-			},()=>{
-				if(s.length<page*10){
-					this.setState({
 						loadOffset:'undefined',
-						isInfiniteLoading: false,
+						isInfiniteLoading: false
 					})
-				}else{
+				} else {
 					this.setState({
+						feedCount:result.count[1],
+						latestStories:s,
+
 						isInfiniteLoading: false
 					})
 				}
 			})
-		})
+		}
 	},
 
 	handleInfiniteLoad() {
@@ -284,7 +289,7 @@ const HomePage = React.createClass({
 				textTransform: 'none'
 			}
 		}
-		//console.log(this.props.onLoading)
+		//console.log(this.state.feedCount)
 		return (
 		    <Wrapper>
 					{/*{completed<100&&<LinearProgress mode="determinate" value={completed} />}*/}
@@ -307,10 +312,20 @@ const HomePage = React.createClass({
 			      <Main>
 							<TextLine className='sans-font hidden-mob'>LATEST STORIES</TextLine>
 							<Dash className='hidden-mob' style={{margin:'5px 0 10px 0'}}></Dash>
+							<Infinite
+								containerHeight={2000}
+								elementHeight={!isMobile?309:393.5}
+								infiniteLoadBeginEdgeOffset={loadOffset}
+								onInfiniteLoad={this.handleInfiniteLoad}
+								loadingSpinnerDelegate={this.elementInfiniteLoad()}
+								isInfiniteLoading={isInfiniteLoading}
+								useWindowAsScrollContainer={true}>
 
 							{latestStories.length!=0&&screen.width>480?latestStories.map((story, index) => (
 								<ArticleBox detail={story} key={index}/>
 							)):''}
+						</Infinite>  
+
 							<Tabs
                 style={{ width:'100%'}}
                 tabItemContainerStyle={{ ...styles.tabs }}
