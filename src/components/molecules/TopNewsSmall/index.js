@@ -65,8 +65,12 @@ const BoxText = styled.div`
   color:${props=> props.hover?props.theme.accentColor:'#222'};
   font-size:16px;
   height:141px;
-  padding:45px 12px;
+  display:flex;
+  padding:0 25px;
+  justify-content:center;
+  align-items:center;
   text-align:center;
+
 `
 const Cover = styled.div`
   background:rgba(0,0,0,0.6);

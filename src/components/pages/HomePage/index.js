@@ -2,7 +2,7 @@ import React from 'react'
 import { PageTemplate, TopBarWithNavigation, OverlayImg, Thumpnail,
 	ThumpnailSmall, ArticleBox, ArticleBoxLarge, ThumpnailRow, TopColumnSidebar,
 	TopWriterSidebar, More, BGImg, StoryDropdown, Footer,StaffPickSideBar,TopHome,
-TopVideoHome,TopNewsHome } from 'components'
+TopVideoHome,TopNewsHome,LogoLink } from 'components'
 import styled from 'styled-components'
 //import Request from 'superagent'
 import auth from 'components/auth'
@@ -26,10 +26,9 @@ const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
-	padding: 80px 0 0 0;
-
+	padding: 40px 0 0 0;
 	@media (max-width:480px) {
-		padding: 70px 0 0 0;
+		padding: 0;
   }
 
 	@media (min-width: 481px) {
@@ -110,6 +109,19 @@ const Line = styled.div`
   height:1px;
   background-color:#C4C4C4;
 `
+const BG = styled(BGImg)`
+	width:100%;
+	height:350px;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+`
+const Tagline = styled.div`
+	font-size:20px;
+	margin:30px auto 0 auto;
+	text-align:center;
+	color:white;
+`
 const HomePage = React.createClass({
 	getInitialState(){
 		this.trendingStories = []
@@ -163,7 +175,7 @@ const HomePage = React.createClass({
 
 	getFeed(){
 		// - Fetching latestStories
-		api.getFeed('article', {status:1}, 'latest', null, 0, 15)
+		api.getFeed('article', {status:1}, 'latest', null, 0, 10)
 		.then(result => {
 			if(result) {
 				this.setState({
@@ -201,7 +213,7 @@ const HomePage = React.createClass({
 				feedCount:result.count[1],
 				latestStories:s,
 			},()=>{
-				if(s.length==result.count[1]){
+				if(s.length<page*10){
 					this.setState({
 						loadOffset:'undefined',
 						isInfiniteLoading: false,
@@ -276,14 +288,22 @@ const HomePage = React.createClass({
 		return (
 		    <Wrapper>
 					{/*{completed<100&&<LinearProgress mode="determinate" value={completed} />}*/}
-		    	{pub && <BGImg src={pub.cover.medium} opacity={-1} style={{width:'100%',height:'350px'}}
-					className="hidden-mob" alt={pub.name} />}
+		    	{pub && <BG src={pub.cover.medium} opacity={-1} 
+					className="hidden-mob" alt={pub.name} >
+						<div>
+							<LogoLink 							
+							to="/"
+							src={theme.llogo}
+							id={'Largelogo'}/>
+							<Tagline className='nunito-font'>{pub.tagline}</Tagline>
+						</div>
+					</BG>}
 
 	      	<TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={this.props.onLoading}/>
 					
 					<TopHome></TopHome>
-		      <TopVideoHome className='hidden-mob'></TopVideoHome>
-					<Content style={{padding:'0px'}}>
+		      {/*<TopVideoHome className='hidden-mob'></TopVideoHome>*/}
+					<Content>
 			      <Main>
 							<TextLine className='sans-font hidden-mob'>LATEST STORIES</TextLine>
 							<Dash className='hidden-mob' style={{margin:'5px 0 10px 0'}}></Dash>
@@ -338,9 +358,9 @@ const HomePage = React.createClass({
 							<More className='hidden-mob' style={{margin:'30px auto 30px auto'}}/>
 
 			      </Main>
-			      <Aside>
+			      {/*<Aside>
 							<StaffPickSideBar></StaffPickSideBar>
-						</Aside>
+						</Aside>*/}
 		      </Content>
 					
 					<Footer/>
