@@ -1,8 +1,8 @@
 const merge = require('lodash/merge')
 
-const browser = typeof window !== 'undefined'
-const ip = process.env.IP || '0.0.0.0'
-const port = process.env.PORT || 3000
+//const browser = typeof window !== 'undefined'
+//const ip = process.env.IP || '0.0.0.0'
+//const port = process.env.PORT || 3000
 
 const config = {
   all: {
@@ -10,9 +10,9 @@ const config = {
     isDev: process.env.NODE_ENV !== 'production',
     basename: process.env.PUBLIC_PATH,
     isBrowser: typeof window !== 'undefined',
-    browser,
-    ip,
-    port,
+    isServer: typeof window === 'undefined',
+    host: process.env.HOST || 'localhost',
+    port: process.env.PORT || 3000,
 
     PID:'11',
     NAME: 'NextEmpire', // one word, no space

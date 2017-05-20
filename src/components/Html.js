@@ -1,32 +1,26 @@
 /* eslint-disable react/no-danger */
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 
-const Html = ({ styles, assets, /*state, */content }) => {
+const Html = ({ styles, assets, content }) => {
   const helmet = Helmet.rewind()
-  const attrs = helmet.htmlAttributes.toComponent()
-  //console.log('HAHAHA', styles, assets)
+  const htmlAttrs = helmet.htmlAttributes.toComponent()
+  const bodyAttrs = helmet.bodyAttributes.toComponent()
+
   return (
-    <html {...attrs}>
+    <html lang="en" {...htmlAttrs}>
       <head>
         {helmet.title.toComponent()}
         {helmet.meta.toComponent()}
-        <meta charSet="UTF-8"/>
-        <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         {helmet.link.toComponent()}
+        {assets.css.map(path => <link rel="stylesheet" type="text/css" key={path} href={path} />)}
         <style dangerouslySetInnerHTML={{ __html: styles }} />
-        {Object.keys(assets.styles).map((key) =>
-          <link href={assets.styles[key]} key={key} rel="stylesheet" type="text/css"/>
-        )}
-        {/*<base href="/" />*/}
       </head>
-      <body>
+      <body {...bodyAttrs}>
         <main id="app" dangerouslySetInnerHTML={{ __html: content }} />
-        {/*<script dangerouslySetInnerHTML={{ __html: state }} />*/}
-        {Object.keys(assets.javascript).reverse().map((key) =>
-          <script key={key} src={assets.javascript[key]} />
-        )}
+        
+        {assets.js.map(path => <script key={path} src={path} />)}
       </body>
     </html>
   )
@@ -34,9 +28,10 @@ const Html = ({ styles, assets, /*state, */content }) => {
 
 Html.propTypes = {
   styles: PropTypes.string.isRequired,
-  assets: PropTypes.object.isRequired,
-  //state: PropTypes.string.isRequired,
+  assets: PropTypes.shape({
+    css: PropTypes.array.isRequired,
+    js: PropTypes.array.isRequired,
+  }).isRequired,
   content: PropTypes.string.isRequired,
 }
-
 export default Html

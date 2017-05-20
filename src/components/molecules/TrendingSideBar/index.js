@@ -79,12 +79,13 @@ const Vote = styled.div`
 `
 
 const TrendingSideBarInner = ({style, detail, index}) => {
+  if(!detail) return (<div></div>)
   let {ptitle,comments,votes,cover} = detail
-  
+
   return(
     <Con style={{...style}}>
       <BGImg url={detail.url} src={cover.small || cover.medium} style={{width:'127px',height:'75px',float:'right'}}/>
-      <Name to={detail.url} className="sans-font">{index+'.'+ptitle}</Name>
+      <Name to={detail.url} className="sans-font">{index+'. '+ptitle}</Name>
       <Vote className="sans-font">{votes.total} Votes {''+ comments.count} Comments</Vote>
     </Con>
   )
@@ -118,7 +119,7 @@ class TrendingSideBar extends React.Component {
     let {style} = this.props
     let tn = []
     if(popular.length > 0){
-      for(let i=0;i<6;i++){
+      for(let i=0;i<Math.min(6, popular.length);i++){
         tn.push(
           <TrendingSideBarInner key={i} detail={popular[i]} index={i+1}/>
         )

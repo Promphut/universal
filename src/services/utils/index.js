@@ -1,5 +1,5 @@
-import config from '../../config'
-import { parse } from 'query-string'
+const config = require('../../config'),
+  { parse } = require('query-string')
 
 const utils = {}
 

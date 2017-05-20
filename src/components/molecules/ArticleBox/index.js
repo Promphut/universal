@@ -76,8 +76,9 @@ const DivDes = styled.div`
 `
 
 const ArticleBox = ({detail, style}) => {
+  if(!detail) return (<div></div>)
   let {ptitle,cover,writer,column,votes,comments,updated,url,readTime} = detail
-  
+
   //console.log('URL', url, detail, style)
   return (
     <Container style={{...style}}>

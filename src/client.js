@@ -1,23 +1,22 @@
 import 'react-hot-loader/patch'
+import 'babel-polyfill'
+// require.extensions['.css'] = () => {
+//   return null
+// }
 import React from 'react'
 import { render } from 'react-dom'
-import { BrowserRouter as Router } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 import { basename } from 'config'
 import { CookiesProvider } from 'react-cookie'
 
-import AppRoutes from 'routes'
+import AppRoutes from 'components/routes'
 //import App from 'components/App'
 
-// const renderApp = () => (
-//   <BrowserRouter basename={basename}>
-//     <App />
-//   </BrowserRouter>
-// )
 const renderApp = () => (
 	<CookiesProvider>
-		<Router>
+		<BrowserRouter basename={basename}>
 			<AppRoutes/>
-		</Router>
+		</BrowserRouter>
 	</CookiesProvider>
 )
 
@@ -26,9 +25,9 @@ render(renderApp(), root)
 
 if (module.hot) {
   //module.hot.accept('components/App', () => {
-  module.hot.accept('routes', () => {
+  module.hot.accept('components/routes', () => {
     //require('components/App')
-    require('routes')
+    require('components/routes')
     render(renderApp(), root)
   })
 }

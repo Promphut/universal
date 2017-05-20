@@ -1,4 +1,4 @@
-import config from '../config'
+const config = require('../config')
 //let cookies = new Cookies()
 //console.log('COOKIE', global.cookies, 'x', window.cookies)
 //const cookies = new Cookies()

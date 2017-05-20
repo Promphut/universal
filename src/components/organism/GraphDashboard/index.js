@@ -14,7 +14,13 @@ import moment from 'moment'
 import Popover from 'material-ui/Popover'
 import config from '../../../config'
 
-import 'react-datepicker/dist/react-datepicker.css'
+// require.extensions['.css'] = () => {
+//   return;
+// };
+if (process.env.BROWSER) {
+  require('react-datepicker/dist/react-datepicker.css');
+}
+//import 'react-datepicker/dist/react-datepicker.css'
 
 const Wrapper = styled.div`
     width:${props => props.width}px;

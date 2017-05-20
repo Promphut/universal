@@ -1,5 +1,5 @@
 import React from 'react'
-import { TopBarWithNavigation, PublisherSettingMenu, Footer, PrivateRoute, PublisherDashboardPage, PublisherSettingPage } from 'components'
+import { TopBarWithNavigation, PublisherSettingMenu, Footer, PrivateRoute, PublisherDashboardPage, PublisherSettingPage, PublisherContactAndAboutPage } from 'components'
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
@@ -49,8 +49,9 @@ const PublisherEditor = ({onLoading, location, children, match}) => {
             <PublisherSettingMenu pathname={location.pathname}/>
           </Aside>
           <Main>
-             <PrivateRoute exact path={`${match.url}/`} roles={['ADMIN', 'EDITOR']} component={PublisherDashboardPage} />
-             <PrivateRoute exact path={`${match.url}/settings`} roles={['ADMIN']} component={PublisherSettingPage} />
+              <PrivateRoute exact path={`${match.url}/`} roles={['ADMIN', 'EDITOR']} component={PublisherDashboardPage} />
+              <PrivateRoute exact path={`${match.url}/settings`} roles={['ADMIN']} component={PublisherSettingPage} />
+              <PrivateRoute exact path={`${match.url}/contact`} roles={['ADMIN']} component={PublisherContactAndAboutPage} />
           </Main>
         </Content>
       </Container>

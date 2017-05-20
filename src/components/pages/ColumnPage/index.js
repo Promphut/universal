@@ -318,7 +318,7 @@ class ColumnPage extends React.Component {
 						    loader={this.onload()}
 						>
 							<div>
-							    {feed.map((item, index) => (
+							    {feed && feed.map((item, index) => (
 									<ArticleBox detail={item} key={index}/>
 								))}
 							</div>

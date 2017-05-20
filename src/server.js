@@ -1,66 +1,25 @@
 /* eslint-disable no-console */
+import 'babel-polyfill'
+// require.extensions['.css'] = () => {
+//   return null
+// }
+import path from 'path'
+import express from 'express'
 import React from 'react'
-//import serialize from 'serialize-javascript'
 import styleSheet from 'styled-components/lib/models/StyleSheet'
-//import csrf from 'csurf'
-import { renderToString, renderToStaticMarkup } from 'react-dom/server'
-//import { Provider } from 'react-redux'
-//import { matchRoutes } from 'react-router-config'
-//import { ConnectedRouter, push } from 'react-router-redux'
+import { renderToStaticMarkup } from 'react-dom/server'
 import { StaticRouter } from 'react-router'
-//import createHistory from 'history/createMemoryHistory'
-import { Router } from 'express'
-import express from 'services/express'
-import AppRoutes/*, { routes }*/ from 'routes'
-//import configureStore from 'store/configure'
-import { env, port, ip, basename } from 'config'
-//import { setCsrfToken } from 'store/actions'
-import Html from 'components/Html'
+import { renderToString } from 'react-router-server'
 import { CookiesProvider } from 'react-cookie'
+import cookiesMiddleware from 'universal-cookie-express'
 
-const router = new Router()
+import { port, host, basename } from 'config'
+import AppRoutes from 'components/routes'
+import Html from 'components/Html'
+import Error from 'components/Error'
 
-//router.use(csrf({ cookie: true }))
-
-router.use((req, res) => {
-  if (env === 'development') {
-    global.webpackIsomorphicTools.refresh()
-  }
-
-  const location = req.url.replace(basename, '')
-  //console.log('LOC', location, req.url)
-  //const history = createHistory()
-  //const store = configureStore({}, history)
-
-  //store.dispatch(setCsrfToken(req.csrfToken()))
-  //store.dispatch(push(req.url))
-
-  const context = {}
-
-  // const fetchData = () => new Promise((resolve, reject) => {
-  //   const branch = matchRoutes(routes, req.path)
-  //   const method = req.method.toLowerCase()
-
-  //   const promises = branch.map(({ route, match }) => {
-  //     let component = route.component
-
-  //     if (component) {
-  //       while (component && !component[method]) {
-  //         // eslint-disable-next-line no-param-reassign
-  //         component = component.WrappedComponent
-  //       }
-  //       return component &&
-  //         component[method] &&
-  //         component[method]({ req, res, match, store })
-  //     }
-
-  //     return Promise.resolve(null)
-  //   })
-
-  //   Promise.all(promises).then(resolve).catch(reject)
-  // })
-
-  const content = renderToString(
+const renderApp = ({ req, context, location }) => {
+  return renderToString(
     <CookiesProvider cookies={req.universalCookies}>
       <StaticRouter
         context={context}
@@ -70,41 +29,52 @@ router.use((req, res) => {
       </StaticRouter>
     </CookiesProvider>
   )
+}
 
-  //console.log('context', context)
-  if (context.url) {
-    if(!context.status) context.status = 302 //default is redirect 302
-    res.redirect(context.status, context.url)
-  } else {
-    const styles = styleSheet.rules().map(rule => rule.cssText).join('\n')
-    //const initialState = store.getState()
-    const assets = global.webpackIsomorphicTools.assets()
-    //const state = `window.__INITIAL_STATE__ = ${serialize(initialState)}`
-    const markup = <Html {...{ styles, assets, /*state, */content }} />
-    const doctype = '<!doctype html>\n'
-    const html = renderToStaticMarkup(markup)
-    //console.log('HTML', html)
+const renderHtml = ({ content }) => {
+  const styles = styleSheet.rules().map(rule => rule.cssText).join('\n')
+  const assets = global.assets
+  const html = <Html {...{ styles, assets, content }} />
+  return `<!doctype html>\n${renderToStaticMarkup(html)}`
+}
 
-    if(context.status!=null) res.status(context.status)
-    res.send(doctype + html)
-  }
+const app = express()
 
-  // return fetchData().then(() => {
-  //   render()
-  // }).catch((err) => {
-  //   console.log(err)
-  //   res.status(500).end()
-  // })
+app.use(basename, express.static(path.resolve(process.cwd(), 'dist/public')))
+app.use(cookiesMiddleware())
+
+app.use((req, res, next) => {
+  global.window = global.window || {};
+  global.navigator = global.navigator || {};
+  global.navigator.userAgent = req.headers['user-agent'] || 'all';
+
+  const location = req.url
+  const context = {}
+
+  renderApp({ req, context, location }).then(({ html: content }) => {
+    if (context.status) {
+      res.status(context.status)
+    }
+    if (context.url) {
+      res.redirect(context.url)
+    } else {
+      res.send(renderHtml({ content }))
+    }
+  }).catch(next)
 })
 
-const app = express(router)
+app.use((err, req, res, next) => {
+  const content = renderToStaticMarkup(<Error />)
+  res.status(500).send(renderHtml({ content }))
+  console.error(err)
+  next(err)
+})
 
-app.listen(port, (error) => {
+var server = app.listen(port, (error) => {
+  const boldBlue = text => `\u001b[1m\u001b[34m${text}\u001b[39m\u001b[22m`
   if (error) {
     console.error(error)
   } else {
-    console.info(`local: http://${ip}:${port}`)
+    console.info(`Server is running at ${boldBlue(`http://${host}:${port}${basename}/`)}`)
   }
 })
-
-export default app

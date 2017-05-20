@@ -77,8 +77,9 @@ const DivDes = styled.div`
 `
 
 const ArticleBoxLarge = ({detail, style}) => {
+  if(!detail) return (<div></div>)
   let {ptitle,cover,writer,column,votes,comments,updated,url,readTime} = detail
-  
+
   //console.log('URL', url)
   return (
     <Container style={{...style}}>

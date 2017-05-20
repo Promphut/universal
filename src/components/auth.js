@@ -1,8 +1,8 @@
-import Request from 'superagent'
-import cookieService from './cookieService'
-import toUpper from 'lodash/toUpper'
-import filter from 'lodash/filter'
-import config from '../config'
+const Request = require('superagent'),
+  cookieService = require('./cookieService'),
+  toUpper = require('lodash/toUpper'),
+  filter = require('lodash/filter'),
+  config = require('../config')
 
 let auth = {}
 auth = {
