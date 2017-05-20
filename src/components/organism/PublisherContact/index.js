@@ -78,7 +78,7 @@ class PublisherContact extends React.Component {
   static contextTypes = {
     setting: PropTypes.object
   }
-  static defaultContactCat = {
+  defaultContactCat = {
     _id:'',
     toEmail: '',
     catName: '',

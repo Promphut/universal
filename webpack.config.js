@@ -50,6 +50,7 @@ const resolveModules = modules => () => ({
       'load-image-meta': 'blueimp-load-image/js/load-image-meta.js',
       'load-image-exif': 'blueimp-load-image/js/load-image-exif.js',
       'canvas-to-blob': 'blueimp-canvas-to-blob/js/canvas-to-blob.js',
+      'jquery-ui/ui/widget': 'blueimp-file-upload/js/vendor/jquery.ui.widget.js',
       'jquery-ui/widget': 'blueimp-file-upload/js/vendor/jquery.ui.widget.js',
       'load-image-scale': 'blueimp-file-upload/js/jquery.fileupload-image.js'
     },
@@ -134,6 +135,10 @@ const client = createConfig([
         "process.env": {
             BROWSER: JSON.stringify(true)
         }
+    }),
+    new webpack.ProvidePlugin({
+     $: "jquery",
+     jQuery: "jquery"
     }),
     new ExtractTextPlugin({
       filename: '[name].[chunkhash].css',
