@@ -105,14 +105,6 @@ background: linear-gradient(to bottom, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#222222', endColorstr='#000000', GradientType=0 );
 `
 
-// const rec = {
-// 	name:'Donald Trump’s First, Alarming Week',
-// 	column:'Money Ideas',
-// 	writer:'RYAN LIZZA',
-// 	vote:'18',
-// 	comment:'3'
-// }
-
 class StoryPage extends React.Component {
 	state = {
 		recommends: [], 	// trending stories
@@ -181,22 +173,9 @@ class StoryPage extends React.Component {
 		api.getStoryFromSid(sid, auth.getToken(), this.props.countView)
 	    .then(result => {
 	    	this.story = result.story
-	      // nextState.params.story = result.story
-	      // nextState.params.canEditStory = result.canEditStory
-	      // nextState.params.countView = opt.countView
-	      // //console.log('getStoryFromSid', result)
-	      // next()
 	    })
 	    .catch(utils.toError(this.props.history))
 	}
-
-	// componentWillReceiveProps(nextProps){
-	// 	//console.log('componentWillReceiveProps', nextProps)
-	// 	if(nextProps.params.story){
-	// 		this.story = nextProps.params.story
-	// 		this.setState({})
-	// 	}
-	// }
 
 	componentDidMount(){
 		this.getStoryFromSid(this.props.match.params.sid, () => {

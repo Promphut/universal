@@ -4,7 +4,6 @@ import { Route, Switch, Link, Redirect } from 'react-router-dom'
 import api from 'components/api'
 import auth from 'components/auth'
 import App from 'components/App'
-//import utils from './services/utils'
 import { HomePage2, NewsPage, AllColumn, AboutPage, ContactPage, TagPage, ColumnPage, StoryPage, ForgetPasswordPage, SignInPage, SignUpPage, UserStory, PublisherEditor } from 'components'
 
 const NotFound = ({ location }) => (
@@ -23,28 +22,6 @@ const Status = ({ code, children }) => (
     return children
   }}/>
 )
-
-// const AppRoutes = () => (
-//   <App>
-//     <Switch>
-//       <Route exact path="/" component={HomePage}/>
-//       <Route component={NoMatch}/>
-//     </Switch>
-//   </App>
-// )
-
-// const getTagAndRender = (component) => {
-// 	return (props) => {
-// 		let tagSlug = props.match.params.tagSlug
-// 		if(!tagSlug) utils.notFound(props.history)
-
-// 		api.getTagFromTagSlug(tagSlug)
-// 		.then(tag => {
-// 			props.tag = tag
-// 		})
-// 		.catch(utils.toError(props.history))
-// 	}
-// } 
 
 class AppRoutes extends React.Component {
 	constructor(props) {

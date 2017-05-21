@@ -191,11 +191,8 @@ class TagPage extends React.Component {
 	}
 
 	render(){
-		//console.log(this.props.params.tag)
     	//const BGImgSize = (utils.isMobile() ? 100 : 280) + 60
 		let {column, isMobile, tag} = this.state
-		//console.log('column', column)
-		//let {count,loadOffset,isInfiniteLoading,latestStories,isMobile} = this.state
 		let {feedCount,feed,hasMoreFeed} = this.state
 
 		return (

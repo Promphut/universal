@@ -114,18 +114,9 @@ const Onload = styled.div`
 
 class ColumnPage extends React.Component {
 	state = {
-		// column: this.props.params.column || {
-		// 	cover:{}
-		// },	//this.props.params.column || {},
 		column: {
 			cover:{}
 		},
-		//feed: [],
-		//latestStories:[],
-		//page:0,
-		//isInfiniteLoading: true,
-		//loadOffset:300,
-		//feedCount:0,
 		isMobile:false,
 
 		page:0,
@@ -206,58 +197,6 @@ class ColumnPage extends React.Component {
 			//this.reloadFeed()
 		}
 	}
-
-	// componentWillReceiveProps(nextProps) {
-	// 	if(nextProps.params.column && nextProps.params.column!=this.props.params.column){
-	// 		this.setState({
-	// 			column:nextProps.params.column,
-	// 			page:0,
-	// 			latestStories:[],
-	// 			loadOffset:300
-	// 		},()=>{
-	// 			this.handleInfiniteLoad()
-	// 		})
-	// 	}
-	// }
-
-	// buildElements() {
-	// 	let page = this.state.page
-	// 	var {column} = this.state
-	// 	api.getFeed('article', {status:1,column:column.id }, 'latest', null, page, 10)
-	// 	.then(result => {
-	// 		var s = this.state.latestStories.concat(result.feed)
-	// 		if(s.length==result.count['1']){
-	// 			this.setState({
-	// 				feedCount:result.count['1'],
-	// 				latestStories:s,
-
-	// 				loadOffset:undefined,
-	// 				isInfiniteLoading: false,
-	// 			})
-
-	// 		} else {
-	// 			this.setState({
-	// 				feedCount:result.count['1'],
-	// 				latestStories:s,
-
-	// 				isInfiniteLoading: false
-	// 			})
-	// 		}
-	// 	})
-	// }
-
-	// handleInfiniteLoad() {
-	// 	//console.log('Onload')
-	// 	this.buildElements(this.state.page)
-	// 	this.setState({
-	// 			isInfiniteLoading: true,
-	// 			page:this.state.page+1
-	// 	});
-	// }
-
-	// elementInfiniteLoad() {
-	// 		return <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>;
-	// }
 
 	render(){
 	    let {keywords, channels,theme} = this.context.setting.publisher

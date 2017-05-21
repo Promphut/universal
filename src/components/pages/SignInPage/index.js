@@ -88,8 +88,6 @@ class SignInPage extends React.Component {
   }
 
   render(){
-    //console.log('PROP', this.props, this.props.params, this.props.location, this.location, browserHistory.getCurrentLocation())
-
     let state = this.props.location.state,
         nextPathname = '/'
     if(state && state.nextPathname) nextPathname = state.nextPathname

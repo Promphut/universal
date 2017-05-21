@@ -248,53 +248,7 @@ class UserStory extends React.Component {
 	static contextTypes = {
 		setting: PropTypes.object
 	}
-
-	// componentDidMount(){
-	// 	this.handleInfiniteLoad()
-	// }
-
-	// buildElements() {
-	// 	let page = this.state.page
-	// 	let uid = this.props.params.user ? this.props.params.user._id : null
-
-	// 	if(page!=null && uid!=null){
-	// 		api.getFeed('story', {writer:uid, status:1}, 'latest', null, page, 10)
-	// 		.then(result => {
-	// 			//console.log('api.getFeed', result)
-	// 			var s = this.state.latestStories.concat(result.feed)
-	// 			if(s.length==result.count['1']){
-	// 				this.setState({
-	// 					feedCount:result.count['1'] || 0,
-	// 					latestStories:s,
-
-	// 					loadOffset:undefined,
-	// 					isInfiniteLoading: false
-	// 				})
-	// 			} else {
-	// 				this.setState({
-	// 					feedCount:result.count['1'] || 0,
-	// 					latestStories:s,
-
-	// 					isInfiniteLoading: false
-	// 				})
-	// 			}
-	// 		})
-	// 	}
-	// },
-
-	// handleInfiniteLoad() {
-	// 	//console.log('Onload')
-	// 	this.buildElements(this.state.page)
-	// 	this.setState({
-	// 			isInfiniteLoading: true,
-	// 			page:this.state.page+1
-	// 	});
-	// },
-
-	// elementInfiniteLoad() {
-	// 		return <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>;
-	// },
-
+	
 	checkBack = (e) => {
 		e.preventDefault()
 		this.props.history.goBack()

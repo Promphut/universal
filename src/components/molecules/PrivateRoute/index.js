@@ -19,8 +19,8 @@ let toSigninPage = (props) => <Redirect to={{
 
 	Component Properties Params:
 	'rest':
-		hasRoles={['ADMIN', 'EDITOR']}
-		bypassCidCheck=Boolean
+		hasRoles={['ADMIN', 'EDITOR']}, default will ignore hasRoles checking
+		bypassCidCheck=Boolean, default is true
 */
 const PrivateRoute = ({ component: Component, ...rest }) => {
 	return <Route {...rest} render={props => {
