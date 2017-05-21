@@ -4,26 +4,12 @@ import { Route, Switch, Link, Redirect } from 'react-router-dom'
 import api from 'components/api'
 import auth from 'components/auth'
 import App from 'components/App'
-import { HomePage2, NewsPage, AllColumn, AboutPage, ContactPage, TagPage, ColumnPage, StoryPage, ForgetPasswordPage, SignInPage, SignUpPage, UserStory, PublisherEditor } from 'components'
-
-const NotFound = ({ location }) => (
-	<Status code={404}>
-		<div>
-			<h3>No match for <code>{location.pathname}</code></h3>
-		</div>
-	</Status>
-)
-
-const Status = ({ code, children }) => (
-  <Route render={({ staticContext }) => {
-  	//console.log('staticContext', staticContext)
-    if (staticContext)
-      staticContext.status = code
-    return children
-  }}/>
-)
+import { HomePage2, NewsPage, AllColumn, AboutPage, ContactPage, TagPage, ColumnPage, StoryPage, ForgetPasswordPage, SignInPage, SignUpPage, UserStory, PublisherEditor, UserSetting, PrivateRoute, NotFoundPage, ErrorPage } from 'components'
 
 class AppRoutes extends React.Component {
+	static childContextTypes = {
+	  setting: PropTypes.object
+	}
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -83,6 +69,11 @@ class AppRoutes extends React.Component {
 
     			<Route path='/editor' component={PublisherEditor}/>
 
+    			{/* STORY 5 PREVIEW DRAFTED STORY*/ }
+    			<Route exact path='/me/stories/:sid' render={props => <StoryPage {...props} countView={false}/>} />
+
+    			<PrivateRoute path='/me' component={UserSetting} />
+
     			<Route exact path='/u/:uid' render={props => <UserStory {...props} uid={props.match.params.uid}/>} />
 				{/* STORY 4 NO COLUMN AND NO USERNAME */ }
     			<Route exact path='/u/:uid/stories/:storySlug/:sid' render={props => <StoryPage {...props} countView={true}/>} />
@@ -93,15 +84,14 @@ class AppRoutes extends React.Component {
 
 				{/* <Route exact path='error' component={ErrorPage}/>
 				<Route exact path='404' component={NotFoundPage}/>*/}
-				<Route component={NotFound}/>
+				<Route exact path='/error' component={ErrorPage}/>
+				<Route exact path='/404' component={NotFoundPage}/>
+				<Route component={NotFoundPage}/>
+
 			</Switch>
 	  	  </App>
 	  	)
 	}
 }
-
-AppRoutes.childContextTypes = {
-  setting: PropTypes.object
-};
 
 export default AppRoutes
