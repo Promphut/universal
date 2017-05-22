@@ -134,7 +134,7 @@ const HomePage = React.createClass({
 			refresh: 0,
 			page:0,
 			isInfiniteLoading: false,
-			loadOffset:200,
+			loadOffset:0,
 			feedCount:0,
 			isMobile:false,
 			completed:0,
@@ -233,7 +233,7 @@ const HomePage = React.createClass({
 	},
 
 	handleInfiniteLoad() {
-		//console.log('Onload')
+		console.log('Onload')
 		this.buildElements(this.state.page)
 		this.setState({
 				isInfiniteLoading: true,
@@ -313,18 +313,18 @@ const HomePage = React.createClass({
 							<TextLine className='sans-font hidden-mob'>LATEST STORIES</TextLine>
 							<Dash className='hidden-mob' style={{margin:'5px 0 10px 0'}}></Dash>
 							<Infinite
-								containerHeight={2000}
-								elementHeight={!isMobile?309:393.5}
-								infiniteLoadBeginEdgeOffset={loadOffset}
-								onInfiniteLoad={this.handleInfiniteLoad}
-								loadingSpinnerDelegate={this.elementInfiniteLoad()}
-								isInfiniteLoading={isInfiniteLoading}
-								useWindowAsScrollContainer={true}>
+									preloadBatchSize={Infinite.containerHeightScaleFactor(latestStories.length)}
+									elementHeight={309}
+									infiniteLoadBeginEdgeOffset={loadOffset}
+									onInfiniteLoad={this.handleInfiniteLoad}
+									loadingSpinnerDelegate={this.elementInfiniteLoad()}
+									isInfiniteLoading={isInfiniteLoading}
+									useWindowAsScrollContainer={true}>
 
-							{latestStories.length!=0&&screen.width>480?latestStories.map((story, index) => (
-								<ArticleBox detail={story} key={index}/>
-							)):''}
-						</Infinite>  
+								{latestStories.length!=0&&screen.width>480?latestStories.map((story, index) => (
+									<ArticleBox detail={story} key={index}/>
+								)):''}
+							</Infinite>  
 
 							<Tabs
                 style={{ width:'100%'}}

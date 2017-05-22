@@ -130,7 +130,7 @@ const TopNewsHome = React.createClass({
         <Dash className='hidden-mob'/>
         <BoxInner>
           {news.length!=0&&news.map((val,ind)=>(
-            <Box>
+            <Box key={ind}>
               <div  style={{float:'left',marginRight:'10px',overflow:'hidden'}}>
                 <Doughnut/>
                 <VerticalTimeline/>

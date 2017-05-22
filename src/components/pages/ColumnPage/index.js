@@ -233,7 +233,7 @@ const ColumnPage = React.createClass({
 							<StoryMenu style={{padding:'15px 0 15px 0', margin:'0 0 50px 0'}}	next={column.name} />
 							<TextLine className='sans-font'>Latest</TextLine>
 							<Infinite
-									containerHeight={2000}
+									preloadBatchSize={Infinite.containerHeightScaleFactor(latestStories.length)}
 									elementHeight={!isMobile?309:393.5}
 									infiniteLoadBeginEdgeOffset={loadOffset}
 									onInfiniteLoad={this.handleInfiniteLoad}

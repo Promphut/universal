@@ -338,7 +338,7 @@ const UserStory = React.createClass({
 								{/*<span style={{fontSize:'30px'}}>101</span> Upvotes*/}
 							</TextLine>
 							<Infinite
-									containerHeight={2000}
+									preloadBatchSize={Infinite.containerHeightScaleFactor(latestStories.length)}
 									elementHeight={!isMobile?309:393.5}
 									infiniteLoadBeginEdgeOffset={loadOffset}
 									onInfiniteLoad={this.handleInfiniteLoad}
