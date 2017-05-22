@@ -8,10 +8,8 @@ import MenuItem from 'material-ui/MenuItem'
 import auth from 'components/auth'
 import api from 'components/api'
 import { Helmet } from 'react-helmet'
-//import MediumEditor from 'medium-editor'
 
-var MediumEditor = {}//, MediumInsert = {}
-
+var MediumEditor = {}
 if (process.env.BROWSER) {
 	require('jquery-ui-bundle')
 	require('blueimp-file-upload/js/vendor/jquery.ui.widget.js')
@@ -20,7 +18,6 @@ if (process.env.BROWSER) {
 	require('blueimp-file-upload/js/jquery.fileupload-image.js')
 
 	MediumEditor = require('medium-editor')
-	//MediumInsert = require('medium-editor-insert-plugin')
 	window.MediumInsert = require('medium-editor-insert-plugin').MediumInsert
 }
 

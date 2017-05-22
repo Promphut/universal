@@ -1,6 +1,6 @@
 import React from 'react'
 import {Route} from 'react-router-dom'
-import { TopBarWithNavigation, TopBarWithBack, UserSettingMenu, Footer, UserSettingProfile, UserSettingAccount, UserSettingStory} from 'components'
+import { TopBarWithNavigation, TopBarWithBack, UserSettingMenu, Footer} from 'components'
 import styled from 'styled-components'
 import auth from 'components/auth'
 import utils from '../../../services/utils'
@@ -67,7 +67,7 @@ class UserSetting extends React.Component {
 
   render(){
     const isMobile = utils.isMobile()
-    let {match, location, onLoading} = this.props
+    let {match, location, onLoading, children} = this.props
 
     let title = ''
     if (location.pathname == '/me/settings') {
@@ -88,9 +88,11 @@ class UserSetting extends React.Component {
                 <UserSettingMenu pathname={location.pathname} user={this.user}/>
               </Aside>
               <Main>
-                <Route exact path={`${match.url}/settings`} component={UserSettingProfile}/>
+                {children}
+                {/*<Route exact path={`${match.url}/settings`} component={UserSettingProfile}/>
                 <Route exact path={`${match.url}/settings/account`} component={UserSettingAccount} {...this.props}/>
-                <Route exact path={`${match.url}/stories`} component={UserSettingStory} {...this.props}/>
+                <PrivateRoute exact path={`${match.url}/stories/new`} component={NewStory} hasRoles={['ADMIN', 'WRITER', 'EDITOR']} {...this.props} />
+                <Route exact path={`${match.url}/stories`} component={UserSettingStory} {...this.props}/>*/}
               </Main>
             </Content>
           </Container>

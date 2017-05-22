@@ -38,10 +38,12 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
     		if(!auth.hasRoles(rest.roles, cid, rest.bypassCidCheck)) 
     			utils.toError(props.history)(new Error('Unauthorized access'))
 
+    		if(rest.render) return rest.render(props)
     		return <Component {...props}/>
 		}
 
 		// no need to check roles just return
+		if(rest.render) return rest.render(props)
 		return <Component {...props}/>
 	}} />
 }

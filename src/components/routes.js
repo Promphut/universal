@@ -4,7 +4,10 @@ import { Route, Switch, Link, Redirect } from 'react-router-dom'
 import api from 'components/api'
 import auth from 'components/auth'
 import App from 'components/App'
-import { HomePage2, NewsPage, AllColumn, AboutPage, ContactPage, TagPage, ColumnPage, StoryPage, ForgetPasswordPage, SignInPage, SignUpPage, UserStory, PublisherEditor, UserSetting, PrivateRoute, NotFoundPage, ErrorPage } from 'components'
+import { HomePage2, NewsPage, AllColumn, AboutPage, ContactPage, TagPage, ColumnPage, 
+	StoryPage, ForgetPasswordPage, SignInPage, SignUpPage, UserStory, 
+	PublisherEditor, UserSetting, PrivateRoute, NotFoundPage, ErrorPage,
+	UserSettingProfile, UserSettingAccount, UserSettingStory, NewStory, EditStory } from 'components'
 
 class AppRoutes extends React.Component {
 	static childContextTypes = {
@@ -69,10 +72,14 @@ class AppRoutes extends React.Component {
 
     			<Route path='/editor' component={PublisherEditor}/>
 
+    			<PrivateRoute exact path='/me/settings' render={props => <UserSetting {...props}><UserSettingProfile/></UserSetting>} />
+    			<PrivateRoute exact path='/me/settings/account' render={props => <UserSetting {...props}><UserSettingAccount {...props}/></UserSetting>} />
+    			<PrivateRoute exact path='/me/stories' render={props => <UserSetting {...props}><UserSettingStory {...props}/></UserSetting>} />
+    			<PrivateRoute exact path='/me/stories/new' hasRoles={['ADMIN', 'WRITER', 'EDITOR']} render={props => <UserSetting {...props}><NewStory {...props}/></UserSetting>} />
+    			<PrivateRoute exact path='/me/stories/:sid/edit' render={props => <UserSetting {...props}><EditStory {...props}/></UserSetting>} />
+
     			{/* STORY 5 PREVIEW DRAFTED STORY*/ }
     			<Route exact path='/me/stories/:sid' render={props => <StoryPage {...props} countView={false}/>} />
-
-    			<PrivateRoute path='/me' component={UserSetting} />
 
     			<Route exact path='/u/:uid' render={props => <UserStory {...props} uid={props.match.params.uid}/>} />
 				{/* STORY 4 NO COLUMN AND NO USERNAME */ }
@@ -82,8 +89,6 @@ class AppRoutes extends React.Component {
 				{/* STORY 3 NO COLUMN */ }
     			<Route exact path='/@:username/stories/:storySlug/:sid' render={props => <StoryPage {...props} countView={true}/>} />
 
-				{/* <Route exact path='error' component={ErrorPage}/>
-				<Route exact path='404' component={NotFoundPage}/>*/}
 				<Route exact path='/error' component={ErrorPage}/>
 				<Route exact path='/404' component={NotFoundPage}/>
 				<Route component={NotFoundPage}/>
