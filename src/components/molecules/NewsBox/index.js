@@ -58,6 +58,9 @@ const NameLink = styled(Link)`
   @media (max-width:480px) {
     font-size:15px;
   }
+  &:hover{
+    color:${props=>props.theme.accentColor};
+  }
 `
 
 const BoxText = styled.div`
