@@ -17,6 +17,9 @@ import { port, host, basename } from 'config'
 import AppRoutes from 'components/routes'
 import Html from 'components/Html'
 import Error from 'components/Error'
+if (process.env.NODE_ENV !== 'production'){
+  require('longjohn');
+}
 
 const renderApp = ({ req, context, location }) => {
   return renderToString(

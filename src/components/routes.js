@@ -25,7 +25,7 @@ class AppRoutes extends React.Component {
 		}
 	}
 
-	componentDidMount(){
+	componentWillMount(){
 		//console.log('APPROUTES DIDMOUNT')
 		api.getPublisherSetting()
 		.then(setting => {
@@ -34,6 +34,11 @@ class AppRoutes extends React.Component {
 				setting: setting
 			})
 		})
+	}
+
+	shouldComponentUpdate(nextProps, nextState){
+		if(!this.state.setting) return false
+		return true
 	}
 
 	getChildContext() {

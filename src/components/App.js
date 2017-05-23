@@ -11,6 +11,8 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import LinearProgress from 'material-ui/LinearProgress';
 import { withCookies, Cookies } from 'react-cookie';
+import config from '../config'
+import utils from '../services/utils'
 //import theme from './themes/default'
 
 injectGlobal`
@@ -842,8 +844,15 @@ class App extends React.Component {
   }
 
   render(){
+    let {name, desc, tagline, keywords, analytic, channels, cover, theme} = this.context.setting.publisher
+    //console.log('SETTING', this.context.setting.publisher)
+    if(!analytic) analytic = {}
+    let coverMedium
+    if (cover) coverMedium = cover.medium
+    let title = (name || '') + (tagline ? ' | ' + tagline : '')
+
     let {completed} = this.state
-    let {theme} = this.context.setting.publisher
+    //let {theme} = this.context.setting.publisher
 
     //console.log('AGENT', navigator.userAgent)
     let context = {
@@ -879,18 +888,31 @@ class App extends React.Component {
     return (
       <div>
         <Helmet
-          title="Atomic React"
-          titleTemplate="ARc - %s"
+          title={title}
           meta={[
-            { name: 'description', content: 'React starter kit based on Atomic Design with React Router v4, Webpack, Redux, Server Side Rendering and more.' },
-            { property: 'og:site_name', content: 'ARc' },
-            { property: 'og:image', content: 'https://diegohaz.github.io/arc/thumbnail.png' },
-            { property: 'og:image:type', content: 'image/png' },
-            { property: 'og:image:width', content: '1200' },
-            { property: 'og:image:height', content: '630' },
+            { name: 'title', content: title },
+            { name: 'keywords', content: keywords },
+            { name: 'description', content: desc },
+
+            { property: 'og:site_name', content: name },
+            { property: 'og:url', content: config.FRONTURL+this.props.location.pathname },
+            { property: 'og:title', content: title },
+            { property: 'og:type', content: 'article' },
+            { property: 'og:image', content: coverMedium },
+            { property: 'og:keywords', content: keywords },
+            { property: 'og:description', content: desc },
+            { property: 'twitter:card', content: 'summary_large_image' },
+            { property: 'twitter:image:alt', content: title },
+            { property: 'fb:app_id', content: config.ANALYTIC.FBAPPID },
+            // { property: 'og:image:type', content: 'image/png' },
+            // { property: 'og:image:width', content: '1200' },
+            // { property: 'og:image:height', content: '630' },
           ]}
           link={[
-            //{ rel: 'icon', href: 'https://diegohaz.github.io/arc/icon.png' },
+            { rel: 'shortcut icon', type:'image/ico', href: config.BACKURL+'/publishers/'+config.PID+'/favicon' },
+            (channels && channels.fb ? { rel: 'author', href: utils.getFbUrl(channels.fb) } : {}),
+            { rel: 'canonical', href: config.FRONTURL+this.props.location.pathname },
+
             { rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' },
             { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css'},
             { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Mitr|Nunito|PT+Sans|PT+Serif|Roboto|Roboto+Slab'},
