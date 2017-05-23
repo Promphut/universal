@@ -1,18 +1,17 @@
 import React from 'react'
-import {ErrorAndNotFound} from 'components'
-import {Link} from 'react-router'
+import {ErrorAndNotFound, Status} from 'components'
 
-const NotFoundPage = React.createClass({
-  render() {
-    return (
-    	<ErrorAndNotFound
-				errorNumber="Something went wrong"
+const ErrorPage = () => {
+  return (
+    <Status code={500}>
+      <ErrorAndNotFound
+        title="Something went wrong"
         smallSize={true}
-			>
-				We have an internal server error. <Link to="/">Try again?</Link>
-    	</ErrorAndNotFound>
-		)
-  }
-})
+      >
+        We have an internal server error. <a href="/">Try again?</a>
+      </ErrorAndNotFound>
+    </Status>
+  )
+}
 
-export default NotFoundPage;
+export default ErrorPage;

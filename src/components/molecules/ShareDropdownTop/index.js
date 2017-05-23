@@ -1,20 +1,29 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon'
 import FlatButton from 'material-ui/FlatButton'
 import {Dropdown,TwtShareButton} from 'components'
 import CopyToClipboard from 'react-copy-to-clipboard'
+import config from '../../../config'
+import { withRouter } from 'react-router'
 
-const ShareDropdownTop = React.createClass({
-  getInitialState () {
-    return {
+class ShareDropdownTop extends React.Component {
+  static contextTypes = {
+    setting: PropTypes.object
+  }
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
       open: false,
       copied: false
     }
-  },
+  }
 
   render() {
-    var {theme} = this.context.setting.publisher
+    let {theme} = this.context.setting.publisher
 
     const buttonStyle = {
       color: theme.primaryColor,
@@ -38,7 +47,7 @@ const ShareDropdownTop = React.createClass({
           />
         } />
 
-        <CopyToClipboard text={window.location.href} onCopy={() => this.setState({copied: true})}>
+        <CopyToClipboard text={config.FRONTURL + this.props.location} onCopy={() => this.setState({copied: true})}>
           <FlatButton
             label={buttons[1]}
             labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
@@ -59,10 +68,6 @@ const ShareDropdownTop = React.createClass({
       </Dropdown>
     )
   }
-})
+}
 
-ShareDropdownTop.contextTypes = {
-	setting: React.PropTypes.object
-};
-
-export default ShareDropdownTop
+export default withRouter(ShareDropdownTop)

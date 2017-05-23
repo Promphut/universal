@@ -36,12 +36,14 @@ const HiddenMobile = styled.div`
   }
 `
 
-const AboutPage = React.createClass({
-	getInitialState() {
-		return {
+class AboutPage extends React.Component {
+	constructor(props) {
+		super(props)
+
+		this.state = {
 			aboutUs: ''
 		}
-	},
+	}
 
 	componentDidMount() {
 		api.getPublisherAboutUs().then(aboutUs => {
@@ -49,7 +51,7 @@ const AboutPage = React.createClass({
 				aboutUs: aboutUs
 			})
 		})
-	},
+	}
 
 	render() {
 		return (
@@ -98,6 +100,5 @@ const AboutPage = React.createClass({
 			</ContactAndAboutContainer>
 		)
 	}
-})
-
+}
 export default AboutPage

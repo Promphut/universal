@@ -2,7 +2,6 @@ import React from 'react'
 import {ForgetPassword,LogoLink,BackButton,CloseButton} from 'components'
 import FlatButton from 'material-ui/FlatButton';
 import styled from 'styled-components'
-import {Link,browserHistory} from 'react-router'
 
 const Wrapper = styled.div`
 	width:100%;
@@ -20,6 +19,7 @@ const Wrapper = styled.div`
     background:white;
   }
 `
+
 const Modal = styled.div`
   width:100%;
   height:100%;
@@ -29,80 +29,82 @@ const Modal = styled.div`
 
 const Container = styled.div`
   margin:7% auto 0 auto;
-  width:600px;
+  width:477px;
   @media (max-width:480px){
-    width: 100%;
-		height: 100%;
+    width: 100vw;
+		height: 100vh;
   }
 `
+
 const BoxButton= styled.div`
   overflow:hidden;
   width:100%;
 `
 
-const ForgetPasswordPage = React.createClass({
-	getInitialState(){
-		return {
+class ForgetPasswordPage extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
       statePage:true,
-      visible:this.props.visible
+      visible:props.visible
     }
-	},
+  }
 
-  componentWillReceiveProps(nextProps){
-    if(nextProps.visible!=this.props.visible){
-      this.props.visible=this.props.visible
-      this.setState({
-        visible:nextProps.visible
-      })
-    }
-  },
-
-  changeStatePage(e){
+  changeStatePage = (e) => {
     e.preventDefault()
+
     this.setState({
       statePage:!this.state.statePage
     })
-  },
+  }
 
-  checkBack(e){
+  checkBack = (e) => {
     e.preventDefault()
+
     if(this.state.statePage){
-      window.history.back();
-    }else{
+      this.props.history.goBack()
+    } else {
       this.setState({
         statePage:!this.state.statePage
       })
     }
-  },
+  }
 
-  closeModal(e){
+  closeModal = (e) => {
     this.setState({
       visible:!this.state.visible
     })
-  },
+  }
 
-	render(){
-    var { theme } = this.context.setting.publisher
-    return(
-      <Wrapper >
+  componentWillReceiveProps(nextProps){
+    if(nextProps.visible!=this.props.visible){
+      //this.props.visible=this.props.visible
+      this.setState({
+        visible:nextProps.visible
+      })
+    }
+  }
+
+  render(){
+    return (
+      <Wrapper>
         <Container>
           <div style={{margin:'0 auto 30px auto',width:'146px'}}>
-            <LogoLink src={theme.logo} fill='#E2E2E2' id={'logoSignIn'} to='/'/>
+            <LogoLink fill='#E2E2E2' className='hidden-mob'/><LogoLink fill='' className='hidden-des'/>
             {/*<Logo fill='#E2E2E2' className='hidden-mob'/><Logo fill='#00b2b4' className='hidden-des'/>*/}
           </div>
           <BoxButton>
-            <Link to='#' onClick={this.checkBack} className='hidden-mob'><BackButton style={{float:'left'}}/></Link>
-            <Link to='#' onClick={this.checkBack} className='hidden-des'><BackButton style={{float:'left'}} labelStyle={{color:'#00b2b4'}}/></Link>
+            <a href='#' onClick={this.checkBack} className='hidden-mob'><BackButton style={{float:'left'}}/></a>
+            <a href='#' onClick={this.checkBack} className='hidden-des'><BackButton style={{float:'left'}} labelStyle={{color:'#00b2b4'}}/></a>
           </BoxButton>
+
           <ForgetPassword/>
+          
         </Container>
       </Wrapper>
     )
-	}
-});
-
-ForgetPasswordPage.contextTypes = {
-	setting: React.PropTypes.object
+  }
 }
 
 export default ForgetPasswordPage

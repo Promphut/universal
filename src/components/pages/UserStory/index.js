@@ -1,21 +1,24 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { TopBarWithNavigation,ArticleBox,ArticleBoxLarge,More,TrendingSideBar,BGImg,StoryMenu,EmptyStory } from 'components'
 import {findDOMNode as dom} from 'react-dom'
-import {Link, browserHistory, History} from 'react-router'
+import {Link} from 'react-router-dom'
 import styled from 'styled-components'
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
-//import Request from 'superagent'
 import Avatar from 'material-ui/Avatar'
 import auth from 'components/auth'
 import api from 'components/api'
-import Infinite from 'react-infinite'
+import InfiniteScroll from 'react-infinite-scroller';
 import CircularProgress from 'material-ui/CircularProgress'
 import {Helmet} from 'react-helmet'
+import utils from '../../../services/utils'
+import config from '../../../config'
 
 const Wrapper = styled.div`
 
 `
+
 const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
@@ -196,9 +199,9 @@ const UserDetail = ({style, user, checkBack}) => {
   	return (
 		<User>
 	    <div className='row' style={rowStyle}>
-			<Link to='#' onClick={checkBack}>
+			<a href='#' onClick={checkBack}>
 				<FontIcon className="material-icons hidden-des" style={backStyle}>chevron_left</FontIcon>
-			</Link>
+			</a>
 			<div style={{textAlign: 'center'}}>
       			<UserAvatar src={user.pic.medium} size={95}/>
 			</div>
@@ -210,10 +213,10 @@ const UserDetail = ({style, user, checkBack}) => {
 		    {user.channels && <UserShare>
 		        {/*<div className='row' style={{overflow:'hidden', textAlign: 'right'}}>*/}
 		        <div style={{textAlign:'right'}}>
-		          {user.channels.fb && <A href={getFbUrl(user.channels.fb)} target="_blank"><i className="fa fa-facebook" aria-hidden="true"></i></A>}
-		          {user.channels.twt && <A href={getTwtUrl(user.channels.twt)} target="_blank"><i className="fa fa-twitter" aria-hidden="true" ></i></A>}
-		          {user.channels.yt && <A href={getYtUrl(user.channels.yt)} target="_blank"><i className="fa fa-youtube-play" aria-hidden="true" ></i></A>}
-		          {user.channels.ig && <A href={getIgUrl(user.channels.ig)} target="_blank"><i className="fa fa-instagram" aria-hidden="true" ></i></A>}
+		          {user.channels.fb && <A href={utils.getFbUrl(user.channels.fb)} target="_blank"><i className="fa fa-facebook" aria-hidden="true"></i></A>}
+		          {user.channels.twt && <A href={utils.getTwtUrl(user.channels.twt)} target="_blank"><i className="fa fa-twitter" aria-hidden="true" ></i></A>}
+		          {user.channels.yt && <A href={utils.getYtUrl(user.channels.yt)} target="_blank"><i className="fa fa-youtube-play" aria-hidden="true" ></i></A>}
+		          {user.channels.ig && <A href={utils.getIgUrl(user.channels.ig)} target="_blank"><i className="fa fa-instagram" aria-hidden="true" ></i></A>}
 		        </div>
 		    </UserShare>}
 	    </div>
@@ -221,148 +224,208 @@ const UserDetail = ({style, user, checkBack}) => {
   	)
 }
 
-const UserStory = React.createClass({
-	getInitialState(){
-		this.user = this.props.params.user
-		return {
-			//feed:[],
-			feedCount: 0,
-			latestStories:[],
+class UserStory extends React.Component {
+	state = {
+		//feed:[],
+		//feedCount: 0,
+		//latestStories:[],
+		//page:0,
+		//isInfiniteLoading: true,
+		//loadOffset:300,
+		//feedCount:0,
+		page:0,
+		feedCount:-1,
+		feed: [],
+		hasMoreFeed: true,
+
+		user: {
+			channels: {},
+			pic: {}
+		},
+
+		isMobile:false
+	}
+	static contextTypes = {
+		setting: PropTypes.object
+	}
+	
+	checkBack = (e) => {
+		e.preventDefault()
+		this.props.history.goBack()
+	}
+
+	onload = () => <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>
+	reloadFeed = () => {
+		this.setState({
 			page:0,
-			isInfiniteLoading: false,
-			loadOffset:500,
-			isMobile:false
-		}
-	},
+			feedCount:-1,
+			feed: [],
+			hasMoreFeed: true
+		}, () => {
+			this.loadFeed(this.state.user._id)()
+		})
+	}
+	loadFeed = (uid) => {
+		return () => {
+			if(uid==null) return 
+			// ensure this method is called only once at a time
+			if(this.loading===true) return 
+			this.loading = true
 
-	componentDidMount(){
-		//this.handleInfiniteLoad()
-		//this.getFeed()
-	},
-
-	buildElements() {
-		let page = this.state.page
-		let uid = this.user._id
-		//console.log('load')
-		if(page!=null && uid!=null){
-			api.getFeed('story', {writer:parseInt(uid), status:1}, 'latest', null, page, 10)
+			let page = this.state.page
+			//console.log('page', page)
+			//console.log('UID', uid)
+			api.getFeed('story', {writer:uid, status:1}, 'latest', null, page, 15)
 			.then(result => {
-				//console.log(result)
-				var s = this.state.latestStories.concat(result.feed)
-				if(s.length==result.count[1]){
-					this.setState({
-						feedCount:result.count[1],
-						latestStories:s,
 
-						loadOffset:'undefined',
-						isInfiniteLoading: false
-					})
-				} else {
-					this.setState({
-						feedCount:result.count[1],
-						latestStories:s,
-
-						isInfiniteLoading: false
-					})
-				}
+				let feed = this.state.feed.concat(result.feed)
+				this.setState({
+					page: ++page,
+					feed: feed,
+					feedCount: result.count['1'],
+					hasMoreFeed: feed.length < result.count['1']
+				}, () => {this.loading = false})
 			})
 		}
-	},
+	}
 
-	handleInfiniteLoad() {
-		//console.log('Onload')
-		this.buildElements(this.state.page)
+	getUserFromUsername = (username, done=()=>{}) => {
+		//console.log('PROP', this.props)
+		if(!username) utils.notFound(this.props.history)
+
+		api.getUserFromUsername(username)
+		.then(user => {
+			this.setState({user:user}, done)
+		})
+		.catch(utils.toError(this.props.history))
+	}
+
+	getUserFromUid = (uid, done=()=>{}) => {
+		//console.log('PROP', this.props)
+		if(uid==null) utils.notFound(this.props.history)
+
+		api.getUserFromUserId(uid)
+		.then(user => {
+			this.setState({user:user}, done)
+		})
+		.catch(utils.toError(this.props.history))
+	}
+
+	componentDidMount(){
+		let username, uid 
+		if(username = this.props.match.params.username){
+			this.getUserFromUsername(username)
+		} else if(uid = this.props.match.params.uid){
+			this.getUserFromUid(uid)
+		}
+
 		this.setState({
-				isInfiniteLoading: true,
-				page:this.state.page+1
-		});
-	},
+			isMobile:utils.isMobile()
+		})
+	}
 
-	elementInfiniteLoad() {
-			return <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>;
-	},
-
-	checkBack(e){
-		e.preventDefault()
-		browserHistory.goBack()
-	},
+	componentWillReceiveProps(nextProps) {
+		//console.log('COL', nextProps, this.props)
+		if(nextProps.match.params.username!=this.props.match.params.username){
+			//console.log('RELOAD FEED')
+			this.getUserFromUsername(nextProps.match.params.username, this.reloadFeed)
+			//this.reloadFeed()
+		} else if(nextProps.match.params.uid!=this.props.match.params.uid){
+			//console.log('RELOAD FEED')
+			this.getUserFromUid(nextProps.match.params.uid, this.reloadFeed)
+			//this.reloadFeed()
+		}
+	}
 
 	render(){
-  	let {theme} = this.context.setting.publisher
-		//console.log('user', this.props)
-		//var article = []
-		let {feed, feedCount} = this.state
-		let {count,loadOffset,isInfiniteLoading,latestStories,isMobile} = this.state
-		let user = this.user
-		//console.log('user', user)
+  		let {theme} = this.context.setting.publisher
+		let {user, isMobile} = this.state
+		let {feedCount,feed,hasMoreFeed} = this.state
 
 		return ( 
 			<Wrapper>
-				{/*<Helmet>
+				<Helmet>
 					<title>{user.display}</title>
 					<meta name="title" content={user.display} />
-					<meta name="keywords" content={keywords} />
+					{/*<meta name="keywords" content={keywords} />*/}
 					<meta name="description" content={user.shortDesc} />
 
 					<link rel="shortcut icon" type="image/ico" href={config.BACKURL+'/publishers/'+config.PID+'/favicon'} />
-					{channels && channels.fb ? <link rel="author" href={getFbUrl(channels.fb)} /> : ''}
-					<link rel="canonical" href={window.location.href} />
+					{user.channels && user.channels.fb ? <link rel="author" href={utils.getFbUrl(user.channels.fb)} /> : ''}
+					{/*<link rel="canonical" href={window.location.href} />*/}
 
 					<meta property="og:sitename" content={user.display} />
-					<meta property="og:url" content={window.location.href} />
+					{/*<meta property="og:url" content={window.location.href} />*/}
 					<meta property="og:title" content={user.display} />
 					<meta property="og:type" content="article" />
 					<meta property="og:image" content={user.pic.medium} />
-					<meta property="og:keywords" content={keywords} />
+					{/*<meta property="og:keywords" content={keywords} />*/}
 					<meta property="og:description" content={user.shortDesc} />
 					<meta property="twitter:card" content="summary_large_image" />
 					<meta property="twitter:image:alt" content={user.display} />
 					<meta property="fb:app_id" content={config.ANALYTIC.FBAPPID} />
-				</Helmet>*/}
+				</Helmet>
 
 				<TopBarWithNavigation className="hidden-mob" title={'Title of AomMoney goes here..'} />
 				<UserDetail user={user} checkBack={this.checkBack}/>
 
 				{user.channels && <UserShareMobile className='row'>
-				{user.channels.fb && <LinkMobile href={getFbUrl(user.channels.fb)} target="_blank"><i className="fa fa-facebook" aria-hidden="true"></i></LinkMobile>}
-				{user.channels.twt && <LinkMobile href={getTwtUrl(user.channels.twt)} target="_blank"><i className="fa fa-twitter" aria-hidden="true" ></i></LinkMobile>}
-				{user.channels.yt && <LinkMobile href={getYtUrl(user.channels.yt)} target="_blank"><i className="fa fa-youtube-play" aria-hidden="true" ></i></LinkMobile>}
-				{user.channels.ig && <LinkMobile href={getIgUrl(user.channels.ig)} target="_blank"><i className="fa fa-instagram" aria-hidden="true" ></i></LinkMobile>}
+		          {user.channels.fb && <LinkMobile href={utils.getFbUrl(user.channels.fb)} target="_blank"><i className="fa fa-facebook" aria-hidden="true"></i></LinkMobile>}
+		          {user.channels.twt && <LinkMobile href={utils.getTwtUrl(user.channels.twt)} target="_blank"><i className="fa fa-twitter" aria-hidden="true" ></i></LinkMobile>}
+		          {user.channels.yt && <LinkMobile href={utils.getYtUrl(user.channels.yt)} target="_blank"><i className="fa fa-youtube-play" aria-hidden="true" ></i></LinkMobile>}
+		          {user.channels.ig && <LinkMobile href={utils.getIgUrl(user.channels.ig)} target="_blank"><i className="fa fa-instagram" aria-hidden="true" ></i></LinkMobile>}
 	 			</UserShareMobile>}
-		      <Content>
-						<Main>
-							<TextLine className='sans-font'>
-								<strong style={{color:theme.primaryColor,marginRight:'30px'}}>
-									<span style={{fontSize:'30px'}}>{feedCount}</span> stories
-								</strong>
-								{/*<span style={{fontSize:'30px'}}>101</span> Upvotes*/}
-							</TextLine>
-							<Infinite
-									preloadBatchSize={Infinite.containerHeightScaleFactor(latestStories.length)}
-									elementHeight={!isMobile?309:393.5}
-									infiniteLoadBeginEdgeOffset={loadOffset}
-									onInfiniteLoad={this.handleInfiniteLoad}
-									loadingSpinnerDelegate={this.elementInfiniteLoad()}
-									isInfiniteLoading={isInfiniteLoading}
-									useWindowAsScrollContainer={true}>
 
-								{latestStories.length!=0?latestStories.map((story, index) => (
-									<ArticleBox detail={story} key={index}/>
-								)):''}
-							</Infinite>
-							{latestStories.length!=0&&<More style={{margin:'30px auto 30px auto'}} />}
+		      	<Content>
+			      	{ feedCount===0 ? <Main>
+						<TextLine className='sans-font'>
+							<strong style={{color:theme.primaryColor,marginRight:'30px'}}>
+								<span style={{fontSize:'30px'}}>{feedCount >= 0 ? feedCount : 0}</span> stories
+							</strong>
+							{/*<span style={{fontSize:'30px'}}>101</span> Upvotes*/}
+						</TextLine>
+						<EmptyStory title='No Story, yet' description='There are no stories in this column right now. Wanna back to see other columns?' />
+		      		
+		      		</Main> : <Main>
 
-							{latestStories.length==0&&<EmptyStory title='No Story, yet' description='There are no stories in this column right now. Wanna back to see other columns?' />}
-			      </Main>
-		      </Content>
+						<TextLine className='sans-font'>
+							<strong style={{color:theme.primaryColor,marginRight:'30px'}}>
+								<span style={{fontSize:'30px'}}>{feedCount >= 0 ? feedCount : 0}</span> stories
+							</strong>
+							{/*<span style={{fontSize:'30px'}}>101</span> Upvotes*/}
+						</TextLine>
+
+						<InfiniteScroll
+						    loadMore={this.loadFeed(user._id)}
+						    hasMore={hasMoreFeed}
+						    loader={this.onload()}
+						>
+							<div>
+							    {feed.map((item, index) => (
+									<ArticleBox detail={item} key={index}/>
+								))}
+							</div>
+						</InfiniteScroll>
+						{/*<Infinite
+								containerHeight={!isMobile?(count*210)-100:(count*356)-100}
+								elementHeight={!isMobile?210:356}
+								infiniteLoadBeginEdgeOffset={loadOffset}
+								onInfiniteLoad={this.handleInfiniteLoad}
+								loadingSpinnerDelegate={this.elementInfiniteLoad()}
+								isInfiniteLoading={isInfiniteLoading}
+								useWindowAsScrollContainer={true}>
+
+							{latestStories.length!=0?latestStories.map((story, index) => (
+								<ArticleBox detail={story} key={index}/>
+							)):''}
+						</Infinite>*/}
+
+						<More style={{margin:'30px auto 30px auto'}} />
+			     	</Main> }
+		      	</Content>
 		   </Wrapper>
 		)
 	}
-});
-
-
-UserStory.contextTypes = {
-	setting: React.PropTypes.object
 }
 
 export default UserStory

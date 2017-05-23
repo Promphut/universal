@@ -1,9 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {BGImg} from 'components'
 import styled,{keyframes} from 'styled-components'
-import {Link} from 'react-router'
+import {Link} from 'react-router-dom'
+import truncate from 'lodash/truncate'
 
-const LargeBox =styled(Link)`
+const LargeBox =styled.div`
   display:flex;
 	flex:${props=>props.large?3:2};
 	height:222px;
@@ -17,7 +19,7 @@ const LargeBox =styled(Link)`
 const MiniBox = styled(BGImg)`
 	height:222px;
   transition: all 0.3s;
-  transform: ${props=>props.hover?'scale(1.15)':'scale(1)'};
+  transform: ${props=>props.hover2?'scale(1.15)':'scale(1)'};
   z-index:-1;
   @media (max-width:480px) {
     height:${props=>props.head?props.height:'80'}px;
@@ -86,7 +88,7 @@ const NewsBox = styled.div`
 const SName = styled(Link)`
 	font-size:18px;
   transition: all 0.3s;
-  color:${props=>props.hover?props.theme.accentColor:'#222'};
+  color:${props=>props.hover2?props.theme.accentColor:'#222'};
   &:hover{
     color:${props=>props.theme.accentColor};
   }
@@ -116,63 +118,60 @@ const Inner = styled.div`
   }
 `
 
-const TopStory = React.createClass({
-	getInitialState(){
-		return {
-      hover:false
-		}
-	},
 
-	componentDidMount(){
+class TopStory extends React.Component {
+  static contextTypes = {
+    setting: PropTypes.object
+  }
+  state = {
+    hover:false
+  }
 
-	},
-  hover(){
+  hover = () => {
     this.setState({hover:true})
-  },
-  leave(){
+  }
+  leave = () => {
     this.setState({hover:false})
-  },
+  }
 
-	render(){
+  render(){
     var {style,swift,className,large,head} = this.props
     var {cover,writer,column,votes,comments,updated,url,readTime,contentShort,ptitle} = this.props.detail
     var {hover} = this.state
-    if(swift&&screen.width>480){
+
+    if(swift && screen.width > 480){
       return (
-        <LargeBox to='#' head={head}  large={large} style={{...style}} className={' '+className} onMouseOver={this.hover} onMouseLeave={this.leave}>
+        <LargeBox head={head}  large={large} style={{...style}} className={' '+className} onMouseOver={this.hover} onMouseLeave={this.leave}>
           <MiniBoxLight>
             <ArrowLeft style={{marginLeft:'100%',left:'0px',borderLeft:'15px solid white'}}/>
             <Inner>
               <HName className='sans-font' style={{}}>TOP STORIES</HName>
-              <SName hover={hover} to={this.props.detail&&url} className='nunito-font' >{_.truncate(ptitle?ptitle:'', {'length': 150,'separator': ''})}</SName>
+              <SName hover2={hover} to={this.props.detail&&url} className='nunito-font' >{truncate(ptitle?ptitle:'', {'length': 150,'separator': ''})}</SName>
             </Inner>
           </MiniBoxLight>
           <Box1 large={large}>
-            <MiniBox hover={hover}  head={head} height={(screen.width-16)/2} src={cover&&cover.medium}  opacity={0.7}/>
+            <MiniBox url={url} hover2={hover}  head={head} height={(screen.width-16)/2} src={cover&&cover.medium}  opacity={0.7}/>
           </Box1>
         </LargeBox>    
       )
-    }else{
+      
+    } else {
       return (
-        <LargeBox to='#'  head={head} large={large} style={{...style}} className={' '+className} onMouseOver={this.hover} onMouseLeave={this.leave}>
+        <LargeBox head={head} large={large} style={{...style}} className={' '+className} onMouseOver={this.hover} onMouseLeave={this.leave}>
           <Box1 large={large}>
-            <MiniBox  head={head} height={(screen.width-16)/2} hover={hover} src={cover&&cover.medium}  opacity={0.7}/>
+            <MiniBox url={url} head={head} height={(screen.width-16)/2} hover2={hover} src={cover&&cover.medium}  opacity={0.7}/>
           </Box1>
           <MiniBoxLight>
             <ArrowRight style={{borderRight:'15px solid white',left:'-14px'}}/>
             <Inner>
               <HName className='sans-font' style={{}}>TOP STORIES</HName>
-              <SName hover={hover} to={url} className='nunito-font' >{_.truncate(ptitle?ptitle:'', {'length': 150,'separator': ''})}</SName>
+              <SName hover2={hover} to={url} className='nunito-font' >{truncate(ptitle?ptitle:'', {'length': 150,'separator': ''})}</SName>
             </Inner>
           </MiniBoxLight>
         </LargeBox>    
       )
     }
-	}
-});
-
-TopStory.contextTypes = {
-	setting: React.PropTypes.object
-};
+  }
+}
 
 export default TopStory;

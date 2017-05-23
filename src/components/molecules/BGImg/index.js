@@ -1,14 +1,15 @@
-import React, {PropTypes} from 'react'
-import {Link} from 'react-router'
+import React from 'react'
+import PropTypes from 'prop-types'
+import {Link} from 'react-router-dom'
 import styled, {css} from 'styled-components'
 import {GradientOverlay} from 'components'
 
-const ImgLink = styled(Link)`
-  display:block;
-  background-position:center;
-  background-size:cover;
-  overflow:auto;
-`
+// const ImgLink = styled(Link)`
+//   display:block;
+//   background-position:center;
+//   background-size:cover;
+//   overflow:auto;
+// `
 
 const Filter = styled(GradientOverlay)`
   position:relative;
@@ -20,20 +21,38 @@ const Filter = styled(GradientOverlay)`
   height:100%;
 `
 
-const BGImg = ({style, className, src, url, alt, opacity, hidden, child, children}) => {
-	return (
-  	<ImgLink to={url} style={{...style, backgroundImage:'url('+src+')'}}
-      className={className} title={alt}>
-      {opacity === -1 ? (<div>
-        {child?child:''}
-        {children}
-      </div>) : (<Filter opacity={opacity} hidden={hidden}>
-        {child?child:''}
-        {children}
-      </Filter>)
-      }
-    </ImgLink>
-	)
+const BGImg = ({style, className, src, url, alt, opacity, child, children}) => {
+  //console.log('URL', url, match)
+  //if(!src) console.log('SRC', src)
+  style = {display:'block', backgroundPosition:'center', backgroundSize:'cover', overflow:'auto', ...style}
+  if(src) style.backgroundImage = 'url('+src+')'
+
+  if(url)
+  	return (
+    	<Link to={url || '#'} style={style} className={className} title={alt}>
+        {opacity === -1 ? (<div>
+          {child?child:''}
+          {children}
+        </div>) : (<Filter opacity={opacity}>
+          {child?child:''}
+          {children}
+        </Filter>)
+        }
+      </Link>
+  	)
+  else 
+    return (
+      <div style={style} className={className} title={alt}>
+        {opacity === -1 ? (<div>
+          {child?child:''}
+          {children}
+        </div>) : (<Filter opacity={opacity}>
+          {child?child:''}
+          {children}
+        </Filter>)
+        }
+      </div>
+    )
 }
 
 export default BGImg;

@@ -2,7 +2,7 @@ import React from 'react'
 import {SignIn,SignInFb,LogoLink,BackButton,CloseButton} from 'components'
 import FlatButton from 'material-ui/FlatButton';
 import styled from 'styled-components'
-import {Link,browserHistory} from 'react-router'
+import {Link} from 'react-router-dom'
 
 const Wrapper = styled.div`
 	width:100%;
@@ -21,6 +21,7 @@ const Wrapper = styled.div`
 		height: 100vh;
   }
 `
+
 const Modal = styled.div`
   width:100%;
   height:100%;
@@ -32,22 +33,51 @@ const Container = styled.div`
   margin:7% auto 0 auto;
   width:477px;
   @media (max-width:480px) {
-    width: 100%;
-		height: 100%;
+    width: 100vw;
+		height: 100vh;
   }
 `
+
 const BoxButton= styled.div`
   overflow:hidden;
   width:100%;
 `
 
-const SignInPage = React.createClass({
-	getInitialState(){
-		return {
+class SignInPage extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
       statePage:true,
-      visible:this.props.visible
+      visible:props.visible
     }
-	},
+  }
+
+  changeStatePage = (e) => {
+    e.preventDefault()
+
+    this.setState({
+      statePage:!this.state.statePage
+    })
+  }
+ 
+  checkBack = (e) => {
+    e.preventDefault()
+
+    if(this.state.statePage){
+      this.props.history.goBack()
+    } else {
+      this.setState({
+        statePage:!this.state.statePage
+      })
+    }
+  }
+
+  closeModal= (e) => {
+    this.setState({
+      visible:!this.state.visible
+    })
+  }
 
   componentWillReceiveProps(nextProps){
     if(nextProps.visible!=this.props.visible){
@@ -55,55 +85,47 @@ const SignInPage = React.createClass({
         visible:nextProps.visible
       })
     }
-  },
+  }
 
-  changeStatePage(e){
-    e.preventDefault()
-    this.setState({
-      statePage:!this.state.statePage
-    })
-  },
-
-  checkBack(e){
-    e.preventDefault()
-    if(this.state.statePage){
-      browserHistory.goBack()
-    }else{
-      this.setState({
-        statePage:!this.state.statePage
-      })
-    }
-  },
-
-  closeModal(e){
-    this.setState({
-      visible:!this.state.visible
-    })
-  },
-
-	render(){
-    //console.log('PROP', this.props, this.props.params, this.props.location, this.location, browserHistory.getCurrentLocation())
-    let state = browserHistory.getCurrentLocation().state,
+  render(){
+    let state = this.props.location.state,
         nextPathname = '/'
     if(state && state.nextPathname) nextPathname = state.nextPathname
-    var { theme } = this.context.setting.publisher
 
-    return(
-      <Wrapper style={{display:this.state.visible?'block':'none'}}>
-        <Container>
-          <div  style={{margin:'0 auto 30px auto',width:'146px'}}><LogoLink src={theme.logo} fill='#FFF' id={'logoSignIn'} to='/'/></div>
-          <BoxButton>
-            <Link to='#' onClick={this.checkBack} ><BackButton style={{float:'left'}}/></Link>
-          </BoxButton>
-          <SignInFb emailSignIn={this.changeStatePage} nextPathname={nextPathname}/>
-        </Container>
-      </Wrapper>
-    )
-	}
-});
+    let styles = {}
+    if(!this.state.visible){
+      styles = {display:'none'}
+    }
 
-SignInPage.contextTypes = {
-	setting: React.PropTypes.object
+    if(!this.props.modal){
+      return(
+        <Wrapper style={{...styles}}>
+          <Container>
+            <div  style={{margin:'0 auto 30px auto',width:'146px'}}><LogoLink fill='#E2E2E2'/></div>
+            <BoxButton>
+              <a href='#' onClick={this.checkBack} ><BackButton style={{float:'left'}}/></a>
+            </BoxButton>
+            {this.state.statePage?<SignInFb emailSignIn={this.changeStatePage} nextPathname={nextPathname}/>:<SignIn nextPathname={nextPathname}/>}
+          </Container>
+       </Wrapper>
+      )
+
+    } else {
+      return(
+        <Modal style={{...styles}}>
+          <Container>
+            <div  style={{margin:'0 auto 30px auto',width:'146px'}}><LogoLink fill='#E2E2E2'/></div>
+            <BoxButton>
+              <a href='#' onClick={this.checkBack} ><BackButton style={{float:'left'}}/></a>
+              <CloseButton style={{float:'right',paddingTop:'0px'}}/>
+            </BoxButton>
+            {this.state.statePage?<SignInFb emailSignIn={this.changeStatePage} nextPathname={nextPathname}/>:<SignIn nextPathname={nextPathname}/>}
+          </Container>
+       </Modal>
+      )
+    }
+  }
 }
+
 
 export default SignInPage

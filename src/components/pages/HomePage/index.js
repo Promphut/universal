@@ -1,19 +1,18 @@
 import React from 'react'
-import { PageTemplate, TopBarWithNavigation, OverlayImg, Thumpnail,
-	ThumpnailSmall, ArticleBox, ArticleBoxLarge, ThumpnailRow, TopColumnSidebar,
-	TopWriterSidebar, More, BGImg, StoryDropdown, Footer,StaffPickSideBar,TopHome,
-TopVideoHome,TopNewsHome,LogoLink } from 'components'
+import PropTypes from 'prop-types'
+import { TopBarWithNavigation, ArticleBox, More, BGImg, Footer,StaffPickSideBar,TopHome,TopVideoHome,TopNewsHome,LogoLink } from 'components'
 import styled from 'styled-components'
-//import Request from 'superagent'
 import auth from 'components/auth'
 import api from 'components/api'
 import slider from 'react-slick'
-import Infinite from 'react-infinite'
+import InfiniteScroll from 'react-infinite-scroller';
+//import Infinite from 'react-infinite'
 import CircularProgress from 'material-ui/CircularProgress';
 import LinearProgress from 'material-ui/LinearProgress';
 import FontIcon from 'material-ui/FontIcon';
 import { Tabs, Tab } from 'material-ui/Tabs'
 import SwipeableViews from 'react-swipeable-views';
+import utils from '../../../services/utils'
 
 const Wrapper = styled.div`
 	@media (max-width:480px) {
@@ -122,72 +121,99 @@ const Tagline = styled.div`
 	text-align:center;
 	color:white;
 `
-const HomePage = React.createClass({
-	getInitialState(){
-		this.trendingStories = []
-		this.latestStories = []
+
+const styles = {
+	headline: {
+		fontSize: 24,
+		paddingTop: 16,
+		marginBottom: 12,
+		fontWeight: 400
+	},
+	tabs: {
+		background: 'none',
+		height: '60px',
+		color: '#222222'
+	},
+	tab: {
+		fontFamily: "'Nunito', 'Mitr'",
+		fontSize: '20px',
+		fontWeight: 'bold',
+		textTransform: 'none'
+	}
+}
+
+class HomePage extends React.Component {
+	static contextTypes = {
+		setting: PropTypes.object
+	}
+
+	state = {
+		isMobile:false,
+		completed:0,
+		selectTab:0,
+
+		page:0,
+		feedCount:-1,
+		feed: [],
+		hasMoreFeed: true,
+	}
+
+	constructor(props) {
+    	super(props)
+
+    	this.publisher = {
+    		cover: {}
+    	}
 		this.writer = []
 		this.column = []
-		
-		return {
-			latestStories:[],
-			refresh: 0,
-			page:0,
-			isInfiniteLoading: false,
-			loadOffset:0,
-			feedCount:0,
-			isMobile:false,
-			completed:0,
-			selectTab:0
-		}
-	},
-	componentWillMount(){
-		//this.timer = this.progress(0)
-	},
-	componentDidMount(){
-		this.getPublisher()
-		//this.getFeed()
-		this.getSidebar()
+    }
+
+    onload = () => <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>
+	reloadFeed = () => {
 		this.setState({
-			isMobile:window.isMobile(),
-			completed:100
+			page:0,
+			feedCount:-1,
+			feed: [],
+			hasMoreFeed: true
+		}, () => {
+			this.loadFeed(this.state.tag._id)()
 		})
+	}
+	loadFeed = () => {
+		return () => {
+			//console.log('LOAD FEED0', tagId, this.loading)
+			// ensure this method is called only once at a time
+			if(this.loading===true) return 
+			this.loading = true
+			//console.log('LOAD FEED1')
 
-		// this.progress(100)
-	},
+			let page = this.state.page
+			//console.log('page', page)
 
-	// componentDidUpdate(prevProps, prevState){
-  //   clearTimeout(this.timer);
-	// 	this.progress(100)
-  // },
+			api.getFeed('article', {status:1}, 'latest', null, page, 15)
+			.then(result => {
 
+				let feed = this.state.feed.concat(result.feed)
+				this.setState({
+					page: ++page,
+					feed: feed,
+					feedCount: result.count['1'],
+					hasMoreFeed: feed.length < result.count['1']
+				}, () => {this.loading = false})
+			})
+		}
+	}
 
-	getPublisher(){
+	getPublisher = () => {
 		api.getPublisher()
 		.then(pub => {
 			this.publisher = pub
 
-			this.setState({
-				refresh: Math.random()
-			})
+			this.setState({ })
 		})
-	},
+	}
 
-	// getFeed(){
-	// 	// - Fetching latestStories
-	// 	api.getFeed('article', {status:1}, 'latest', null, 0, 10)
-	// 	.then(result => {
-	// 		if(result) {
-				
-	// 			this.setState({
-	// 				latestStories: result.feed
-					
-	// 			})
-	// 		}
-	// 	})
-	// },
-
-	getSidebar(){
+	getSidebar = () => {
 		// - Fetching top columns
 		// - Fetch top writers
 		Promise.all([
@@ -199,193 +225,147 @@ const HomePage = React.createClass({
 			if(columns) this.column = columns
 			if(writers) this.writer = writers
 
-			this.setState({
-				refresh: Math.random()
-			})
+			this.setState({ })
 		})
-	},
+	}
 
-	buildElements() {
-		let page = this.state.page
-		if(page!=null){
-			api.getFeed('article', {status:1}, 'latest', null, page, 10)
-			.then(result => {
-				console.log(result)
-				var s = this.state.latestStories.concat(result.feed)
-				if(s.length==result.count[1]){
-					this.setState({
-						feedCount:result.count[1],
-						latestStories:s,
-
-						loadOffset:'undefined',
-						isInfiniteLoading: false
-					})
-				} else {
-					this.setState({
-						feedCount:result.count[1],
-						latestStories:s,
-
-						isInfiniteLoading: false
-					})
-				}
-			})
-		}
-	},
-
-	handleInfiniteLoad() {
-		console.log('Onload')
-		this.buildElements(this.state.page)
-		this.setState({
-				isInfiniteLoading: true,
-				page:this.state.page+1
-		});
-	},
-
-	componentWillUnmount() {
-    //clearTimeout(this.timer);
-  },
-
-  // progress(completed) {
-	// 	if(this.state.completed<100){
-	// 		if (completed > 100) {
-  //     	this.setState({completed: 100});
-	// 		} else {
-	// 			this.setState({completed});
-	// 			const diff = Math.random() * 10;
-	// 			this.timer = setTimeout(() => this.progress(completed + diff), 200);
-	// 		}
-	// 	}
-  // },
-
-	elementInfiniteLoad() {
-			return <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>;
-	},
-
-	handleChangeTab(e) {
+	handleChangeTab = (e) => {
 		this.setState({selectTab: e})
-	},
+	}
+
+	componentDidMount(){
+		this.getPublisher()
+		//this.getFeed()
+		this.getSidebar()
+		this.setState({
+			isMobile:utils.isMobile(),
+			completed:100
+		})
+	}
 
 	render(){
-		//console.log('context', this.context.setting)
-		var {count,loadOffset,isInfiniteLoading,latestStories,isMobile,completed,selectTab} = this.state
+		let {isMobile,completed,selectTab} = this.state
+		let {feedCount,feed,hasMoreFeed} = this.state
 		let pub = this.publisher
-		var { theme } = this.context.setting.publisher
-		const styles = {
-			headline: {
-				fontSize: 24,
-				paddingTop: 16,
-				marginBottom: 12,
-				fontWeight: 400
-			},
-			tabs: {
-				background: 'none',
-				height: '60px',
-				color: '#222222'
-			},
-			tab: {
-				fontFamily: "'Nunito', 'Mitr'",
-				fontSize: '20px',
-				fontWeight: 'bold',
-				textTransform: 'none'
-			}
-		}
+		let { theme } = this.context.setting.publisher
+
 		//console.log(this.state.feedCount)
 		return (
 		    <Wrapper>
-					{/*{completed<100&&<LinearProgress mode="determinate" value={completed} />}*/}
-		    	{pub && <BG src={pub.cover.medium} opacity={-1} 
+				{pub && <BG src={pub.cover.medium} opacity={-1} 
 					className="hidden-mob" alt={pub.name} >
-						<div>
-							<LogoLink 							
-							to="/"
-							src={theme.llogo}
-							id={'Largelogo'}/>
-							<Tagline className='nunito-font'>{pub.tagline}</Tagline>
-						</div>
-					</BG>}
+					<div>
+						<LogoLink 							
+						to="/"
+						src={theme.llogo}
+						id={'Largelogo'}/>
+						<Tagline className='nunito-font'>{pub.tagline}</Tagline>
+					</div>
+				</BG>}
 
-	      	<TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={this.props.onLoading}/>
+	      		<TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={this.props.onLoading}/>
 					
-					<TopHome></TopHome>
-		      {/*<TopVideoHome className='hidden-mob'></TopVideoHome>*/}
-					<Content>
-			      <Main>
-							<TextLine className='sans-font hidden-mob'>LATEST STORIES</TextLine>
-							<Dash className='hidden-mob' style={{margin:'5px 0 10px 0'}}></Dash>
-							<Infinite
-									preloadBatchSize={Infinite.containerHeightScaleFactor(latestStories.length)}
-									elementHeight={309}
-									infiniteLoadBeginEdgeOffset={loadOffset}
-									onInfiniteLoad={this.handleInfiniteLoad}
-									loadingSpinnerDelegate={this.elementInfiniteLoad()}
-									isInfiniteLoading={isInfiniteLoading}
-									useWindowAsScrollContainer={true}>
+				<TopHome></TopHome>
 
-								{latestStories.length!=0&&screen.width>480?latestStories.map((story, index) => (
+	     		{/*<TopVideoHome className='hidden-mob'></TopVideoHome>*/}
+				<Content>
+		      		<Main>
+						<TextLine className='sans-font hidden-mob'>LATEST STORIES</TextLine>
+						<Dash className='hidden-mob' style={{margin:'5px 0 10px 0'}}></Dash>
+						<InfiniteScroll
+						    loadMore={this.loadFeed()}
+						    hasMore={hasMoreFeed}
+						    loader={this.onload()}
+						>
+							<div>
+							    {feed.map((item, index) => (
+									<ArticleBox detail={item} key={index}/>
+								))}
+							</div>
+						</InfiniteScroll>
+						{/*<Infinite
+								preloadBatchSize={Infinite.containerHeightScaleFactor(latestStories.length)}
+								elementHeight={309}
+								infiniteLoadBeginEdgeOffset={loadOffset}
+								onInfiniteLoad={this.handleInfiniteLoad}
+								loadingSpinnerDelegate={this.elementInfiniteLoad()}
+								isInfiniteLoading={isInfiniteLoading}
+								useWindowAsScrollContainer={true}>
+
+							{latestStories.length!=0&&screen.width>480?latestStories.map((story, index) => (
+								<ArticleBox detail={story} key={index}/>
+							)):''}
+						</Infinite>  */}
+
+						<Tabs
+			                style={{ width:'100%'}}
+			                tabItemContainerStyle={{ ...styles.tabs }}
+			                inkBarStyle={{ background: theme.accentColor, height: 3 }}
+			                onChange={this.handleChangeTab}
+			                value={selectTab}
+											className='hidden-des'>
+			                <Tab
+			                  buttonStyle={{...styles.tab,color: selectTab == 0 ? '#222' : '#c4c4c4'}}
+			                  label="Stories"
+			                  value={0}
+			                />
+			                <Tab
+			                  buttonStyle={{...styles.tab,color: selectTab == 1 ? '#222' : '#c4c4c4'}}
+			                  label="News"
+			                  value={1}
+			                />
+							{/*<Tab
+			                  buttonStyle={{...styles.tab,color: selectTab == 2 ? '#222' : '#c4c4c4'}}
+			                  label="Video"
+			                  value={2}
+			                />*/}
+			            </Tabs>
+
+						<Line/>
+
+			            {utils.isMobile() && <SwipeableViews
+			                index={selectTab}
+			                onChangeIndex={this.handleChangeTab}
+							className='hidden-des'
+			              >
+			                {/*<div className='story'>
+								{feed && utils.isMobile() && feed.map((story, index) => (
 									<ArticleBox detail={story} key={index}/>
-								)):''}
-							</Infinite>  
-
-							<Tabs
-                style={{ width:'100%'}}
-                tabItemContainerStyle={{ ...styles.tabs }}
-                inkBarStyle={{ background: theme.accentColor, height: 3 }}
-                onChange={this.handleChangeTab}
-                value={selectTab}
-								className='hidden-des'>
-                <Tab
-                  buttonStyle={{...styles.tab,color: selectTab == 0 ? '#222' : '#c4c4c4'}}
-                  label="Stories"
-                  value={0}
-                />
-                <Tab
-                  buttonStyle={{...styles.tab,color: selectTab == 1 ? '#222' : '#c4c4c4'}}
-                  label="News"
-                  value={1}
-                />
-								{/*<Tab
-                  buttonStyle={{...styles.tab,color: selectTab == 2 ? '#222' : '#c4c4c4'}}
-                  label="Video"
-                  value={2}
-                />*/}
-              </Tabs>
-							<Line/>
-              <SwipeableViews
-                index={selectTab}
-                onChangeIndex={this.handleChangeTab}
-								className='hidden-des'
-              >
-                <div className='story'>
-									{latestStories.length!=0&&screen.width<480?latestStories.map((story, index) => (
-										<ArticleBox detail={story} key={index}/>
-									)):''}
+								))}
+							</div>*/}
+							<InfiniteScroll
+							    loadMore={this.loadFeed()}
+							    hasMore={hasMoreFeed}
+							    loader={this.onload()}
+							>
+								<div>
+								    {feed.map((item, index) => (
+										<ArticleBox detail={item} key={index}/>
+									))}
 								</div>
+							</InfiniteScroll>
 
-								<div className='news'>
-									<TopNewsHome></TopNewsHome>
-								</div>
+							<div className='news'>
+								<TopNewsHome></TopNewsHome>
+							</div>
 
-								{/*<div className='video'>
+							{/*<div className='video'>
 
-								</div>*/}
-              </SwipeableViews>
+							</div>*/}
+			            </SwipeableViews>}
 
-							<More className='hidden-mob' style={{margin:'30px auto 30px auto'}}/>
+						<More className='hidden-mob' style={{margin:'30px auto 30px auto'}}/>
 
-			      </Main>
-			      {/*<Aside>
-							<StaffPickSideBar></StaffPickSideBar>
-						</Aside>*/}
-		      </Content>
+		      		</Main>
+		      		{/*<Aside>
+						<StaffPickSideBar></StaffPickSideBar>
+					</Aside>*/}
+	      		</Content>
 					
-					<Footer/>
+				<Footer/>
 		   </Wrapper>
-		  )
+		)
 	}
-});
-
-HomePage.contextTypes = {
-	setting: React.PropTypes.object
-};
+}
 
 export default HomePage;

@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router';
+import React from 'react';
+import {Link} from 'react-router-dom';
 import styled from 'styled-components'
 import {TagBox} from 'components'
 import {findDOMNode as dom} from 'react-dom'
@@ -39,35 +39,32 @@ const Divider =styled.div`
   position:relative;
 `
 
-const TagSideBar = React.createClass({
-  getInitialState(){
+class TagSideBar extends React.Component {
+  constructor(props) {
+    super(props)
 
-    return{
+    this.state = {
       popular:[],
       tags:[]
     }
-  },
+  }
 
-  componentWillMount(){
-    this.getTags()
-  },
-
-  getTags(){
+  getTags = () => {
     api.getTags().then((tags)=>{
       this.setState({tags})
       //console.log(tags)
     })
-  },
+  }
 
-  componentDidMount(){
-
-	},
+  componentWillMount(){
+    this.getTags()
+  }
 
   render(){
     let {style} = this.props
-    var {tags} = this.state
+    let {tags} = this.state
 
-    return(
+    return (
       <Container style={{...style}} >
         <Divider/>
         <Head>SUGGESTED TAGS</Head>
@@ -80,8 +77,7 @@ const TagSideBar = React.createClass({
         </div>
       </Container>
     )
-  },
-})
-
+  }
+}
 
 export default TagSideBar;

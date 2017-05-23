@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { OverlayImg, Pagination,Alert,EditMenu,BoxMenu,MenuList,DropdownWithIcon,StoriesTable,Filter} from 'components'
 import FontIcon from 'material-ui/FontIcon'
 import styled from 'styled-components'
@@ -6,8 +7,7 @@ import Popover from 'material-ui/Popover'
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import DropDownMenu from 'material-ui/DropDownMenu';
-import {Link,browserHistory} from 'react-router'
-import Request from 'superagent'
+//import {Link} from 'react-router-dom'
 import auth from 'components/auth'
 import Snackbar from 'material-ui/Snackbar';
 import Dialog from 'material-ui/Dialog';
@@ -17,10 +17,11 @@ import TextField from 'material-ui/TextField'
 import CircularProgress from 'material-ui/CircularProgress';
 import moment from 'moment'
 import api from 'components/api'
-import utils from 'components/utils'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import SwipeableViews from 'react-swipeable-views';
 import AutoComplete from 'material-ui/AutoComplete';
+import utils from '../../../services/utils'
+import config from '../../../config'
 
 const Container = styled.div`
   width:100%;
@@ -81,36 +82,36 @@ const Cont = styled.div`
   width:100%;
 `
 
-const TitleLink = styled(Link)`
-  color:#222;
-  font-size:15px;
-  font-weight:bold;
-  float:left;
-  height:52px;
-  word-wrap: break-word;
-  white-space: pre-wrap;      /* Webkit */
-  white-space: -moz-pre-wrap; /* Firefox */
-  white-space: -pre-wrap;     /* Opera <7 */
-  white-space: -o-pre-wrap;   /* Opera 7 */
-  word-wrap: break-word;      /* IE */
-  padding-right:5px;
-  overflow: hidden;
-  max-width:220px;
-  margin:0 0 0 15px;
-`
+// const TitleLink = styled(Link)`
+//   color:#222;
+//   font-size:15px;
+//   font-weight:bold;
+//   float:left;
+//   height:52px;
+//   word-wrap: break-word;
+//   white-space: pre-wrap;      /* Webkit */
+//   white-space: -moz-pre-wrap; /* Firefox */
+//   white-space: -pre-wrap;     /* Opera <7 */
+//   white-space: -o-pre-wrap;   /* Opera 7 */
+//   word-wrap: break-word;      /* IE */
+//   padding-right:5px;
+//   overflow: hidden;
+//   max-width:220px;
+//   margin:0 0 0 15px;
+// `
 
-const IconEdit = styled(Link)`
-  background-color:${props=> props.theme.primaryColor};
-  color:white;
-  border-radius:12px;
-  padding:5px 8px 5px 8px;
-  height: 35px;
-  width:40px;
-  margin:8px 12px 0 0;
-  &:hover{
-    cursor:pointer;
-  }
-`
+// const IconEdit = styled(Link)`
+//   background-color:${props=> props.theme.primaryColor};
+//   color:white;
+//   border-radius:12px;
+//   padding:5px 8px 5px 8px;
+//   height: 35px;
+//   width:40px;
+//   margin:8px 12px 0 0;
+//   &:hover{
+//     cursor:pointer;
+//   }
+// `
 
 const Page = styled.div`
   display: flex;
@@ -163,27 +164,24 @@ const dataSource = [{text: 'text0', value: 0, id:0},
                     {text: 'text1', value: 1, id:1},
                     {text: 'text2', value: 2, id:2}]
 
-const PublisherStoryPage = React.createClass({
-  FEED_LIMIT: config.FEED_LIMIT,
+class PublisherStoryPage extends React.Component {
+  state = {
+    selectColumn:'all',
+    selectStatus: STATUS.PUBLISHED,
 
-	getInitialState(){
-		return {
-      selectColumn:'all',
-      selectStatus: STATUS.PUBLISHED,
+    stories: [],
+    storiesCount: 0,
+    selectStoryId:0,
 
-      stories: [],
-      storiesCount: 0,
-      selectStoryId:0,
+    columns:[],
+    columnArray:[],
 
-      columns:[],
-      columnArray:[],
+    currentPage: 0,
+    totalPages: 0,
 
-      currentPage: 0,
-      totalPages: 0,
+    sort:'latest',
 
-      sort:'latest',
-
-      alert:false,
+    alert:false,
       alertConfirm:function(){},
       alertLoading:false,
       onLoad:false,
@@ -194,23 +192,15 @@ const PublisherStoryPage = React.createClass({
       searchText:'',
       sortBy:'',
       sortByState:0
-    }
-	},
+  }
 
-  // getColumns(){
-  //   return api.getColumns()
-  //   .then(cols => {
-  //     let a = cols.map((col,index) => ({value:col.id, text:col.name}))
-  //     a.unshift({value:'all', text:'All Stories'})
+  FEED_LIMIT =  config.FEED_LIMIT
 
-  //     this.setState({
-  //       columns:cols,
-  //       columnArray:a
-  //     })
-  //   })
-  // },
+  static contextTypes = {
+    setting: PropTypes.object
+  }
 
-  removeColumn(){
+  removeColumn = () => {
     let cid = this.state.selectColumn
 
     api.removeColumn(cid)
@@ -231,9 +221,9 @@ const PublisherStoryPage = React.createClass({
       }
       )
     })
-  },
+  }
 
-  getCurrentFilter(){
+  getCurrentFilter = () => {
     var {id,value,searchText} = this.refs.filter.state
     if(!searchText){
       value = ''
@@ -243,9 +233,9 @@ const PublisherStoryPage = React.createClass({
       column: value=='Column' ? parseInt(id) : null, 
       status: this.state.selectStatus
     }
-  },
+  }
 
-  getStories(){
+  getStories = () => {
     this.setState({onLoad:true})
     let {currentPage, sort,sortBy,sortByState} = this.state
     var {id,value,searchText} = this.refs.filter.state
@@ -257,7 +247,7 @@ const PublisherStoryPage = React.createClass({
     var sb = sortBy ? [sortBy,parseInt(sortByState)] : null
     if(value=='Title'&&searchText){
       api.filterStoryByTitle(searchText,sb).then((s)=>{
-        console.log(s)
+        //console.log('HAHAHA', s, utils.getTotalPages(this.FEED_LIMIT, s.length))
         this.setState({
           stories: s,
           storiesCount: s.length,
@@ -276,105 +266,100 @@ const PublisherStoryPage = React.createClass({
         })
       })
     }
-  },
+  }
 
-  filterPublished(){
+  filterPublished = () => {
     this.setState(
-      {
-        selectStatus:STATUS.PUBLISHED
-      },
-      () => {this.getStories()}
+      { selectStatus:STATUS.PUBLISHED },
+      () => {
+        this.getStories()
+      }
     )
-  },
+  }
 
-  filterDrafted(){
+  filterDrafted = () => {
     this.setState(
-      {
-        selectStatus:STATUS.DRAFTED
-      },
-      ()=>{this.getStories()}
+      { selectStatus:STATUS.DRAFTED },
+      () => {
+        this.getStories()
+      }
     )
-  },
+  }
 
-  recent(){
+  recent = () => {
     this.setState(
-      {sort:'latest'},
-      ()=>{this.getStories()}
+      { sort:'latest' },
+      () => {
+        this.getStories()
+      }
     )
-  },
+  }
 
-  popular(){
+  popular = () => {
     this.setState(
-      {sort:'popular'},
-      ()=>{this.getStories()}
+      { sort:'popular' },
+      () => {
+        this.getStories()
+      }
     )
-  },
+  }
 
-  changePage(e){
+  changePage = (e) => {
     this.setState(
-      {currentPage:e-1},
-      ()=>{this.getStories()}
+      { currentPage: e-1 },
+      () => {
+        this.getStories()
+      }
     )
-  },
+  }
 
-  componentDidMount(){
-    //this.getColumns()
-    this.getStories()
-  },
-
-  handleTouchTap(e){
+  handleTouchTap = (e) => {
     e.preventDefault();
+
     this.setState({
       alert: true,
       alertWhere: e.currentTarget,
     });
-  },
+  }
 
-  handleRequestClose(){
+  handleRequestClose = () => {
     this.setState({
       alert: false,
       alertDesc:''
     });
-  },
+  }
 
-  // changeColumn(e, selectColumn){
-  //   this.setState({
-  //     selectColumn:selectColumn
-  //   }, () => {
-  //     this.getStories()
-  //   })
-  // },
+  goEditPage = () => {
+    this.props.history.push('/editor/columns/'+this.state.selectColumn+'/settings')
+  }
 
-  goEditPage(){
-    browserHistory.push('/editor/columns/'+this.state.selectColumn+'/settings')
-  },
-
-  alertDelete(e){
+  alertDelete = (e) => {
     this.setState({
-      alert:true,
-      alertWhere:e.currentTarget,
+      alert: true,
+      alertWhere: e.currentTarget,
       alertChild: '',
-      alertDesc:'Delete is permanent. Are you sure?',
-      alertConfirm:this.removeColumn
+      alertDesc: 'Delete is permanent. Are you sure?',
+      alertConfirm: this.removeColumn
     })
-  },
+  }
 
-  alertNew(e){
+  alertNew = (e) => {
     this.setState({
-      alert:true,
-      alertWhere:e.currentTarget,
-      alertChild:<div className='row'><TextField hintText="Column Name" id='newColName' style={{width:'170px',margin:'10px 15px 0 15px'}}/></div>,
-      alertConfirm:this.newColumn
+      alert: true,
+      alertWhere: e.currentTarget,
+      alertChild: <div className='row'><TextField hintText="Column Name" id='newColName' style={{width:'170px',margin:'10px 15px 0 15px'}}/></div>,
+      alertConfirm: this.newColumn
     })
-  },
+  }
 
-  newColumn(){
+  newColumn = () => {
     this.setState({alertLoading:true})
 
     let column = {
       name:document.getElementById('newColName').value,
       shortDesc:''
     }
+
     api.newColumn(column)
     .then(col => {
 
@@ -394,26 +379,26 @@ const PublisherStoryPage = React.createClass({
       })
 
     })
-  },
+  }
 
-  closeSnackbar(){
+  closeSnackbar = () => {
     this.setState({snackbar:false})
-  },
+  }
 
-  closeEditStory(){
+  closeEditStory = () => {
     this.setState({editStory:false})
-  },
+  }
 
-  editStory(e,data){
+  editStory = (e,data) => {
     //console.log(data)
     this.setState({
       editStory:true,
       editStoryWhere:e.currentTarget,
       selectStoryId:data
     })
-  },
+  }
 
-  alertDeleteStory(e){
+  alertDeleteStory = (e) => {
     this.setState({
       alert:true,
       alertWhere:e.currentTarget,
@@ -421,9 +406,9 @@ const PublisherStoryPage = React.createClass({
       alertDesc:'Are you sure to delete this story?',
       alertConfirm:this.deleteStory
     })
-  },
+  }
 
-  alertUnpublishStory(e){
+  alertUnpublishStory = (e) => {
     this.setState({
       alert:true,
       alertWhere:e.currentTarget,
@@ -431,9 +416,9 @@ const PublisherStoryPage = React.createClass({
       alertDesc:'Are you sure to unpublish this story?',
       alertConfirm:this.unpublishStory
     })
-  },
+  }
 
-  alertPublishStory(e){
+  alertPublishStory = (e) => {
     this.setState({
       alert:true,
       alertWhere:e.currentTarget,
@@ -441,40 +426,40 @@ const PublisherStoryPage = React.createClass({
       alertDesc:'Are you sure to publish this story?',
       alertConfirm:this.publishStory
     })
-  },
+  }
 
-  deleteStory(){
+  deleteStory = () => {
     this.setState({editStory:false,alert:false})
 
     api.deleteStory(this.state.selectStoryId)
     .then(res => {
       this.getStories()
     })
-  },
+  }
 
-  unpublishStory(){
+  unpublishStory = () => {
     this.setState({editStory:false,alert:false})
 
     api.setStoryStatus(this.state.selectStoryId, 0)
     .then(res => {
       this.getStories()
     })
-  },
+  }
 
-  publishStory(){
+  publishStory = () => {
     this.setState({editStory:false,alert:false})
 
     api.setStoryStatus(this.state.selectStoryId, 1)
     .then(res => {
       this.getStories()
     })
-  },
+  }
 
-  goEditStory(){
-    browserHistory.push('/me/stories/'+this.state.selectStoryId+'/edit')
-  },
+  goEditStory = () => {
+    this.props.history.push('/me/stories/'+this.state.selectStoryId+'/edit')
+  }
 
-  handleChangeTab(e) {
+  handleChangeTab = (e) => {
 		this.setState({selectTab: e},()=>{
       if(!e){
         this.filterPublished()
@@ -482,9 +467,9 @@ const PublisherStoryPage = React.createClass({
         this.filterDrafted()
       }
     })
-	},
+	}
 
-  sortBy(e,val){
+  sortBy = (e,val) => {
     e.preventDefault()
     var {sortBy,sortByState}  = this.state
     if(sortByState==0){
@@ -511,10 +496,11 @@ const PublisherStoryPage = React.createClass({
         sortByState:1
       },()=>{this.getStories()})
     }
-  },
-  // filterData(){
-  //   console.log(this.refs.filter.state.value)
-  // },
+  }
+
+ componentDidMount(){
+    this.getStories()
+  }
 
   render(){
 
@@ -525,7 +511,8 @@ const PublisherStoryPage = React.createClass({
       ,alertWhere,alertLoading,alertChild,alertConfirm,columnArray,
       onLoad,selectTab,searchText,sortBy,sortByState} = this.state
     //console.log('storiesCount',storiesCount)
-    var {theme} = this.context.setting.publisher
+    let {theme} = this.context.setting.publisher
+
     const styles = {
       label:{
         fontSize:'30px'
@@ -551,23 +538,24 @@ const PublisherStoryPage = React.createClass({
         color:'#8F8F8F'
       },
       headline: {
-				fontSize: 24,
-				paddingTop: 16,
-				marginBottom: 12,
-				fontWeight: 400
-			},
-			tabs: {
-				background: 'none',
-				height: '50px',
-				color: '#222222'
-			},
-			tab: {
-				fontFamily: "'Nunito', 'Mitr'",
-				fontSize: '16px',
-				fontWeight: 'bold',
-				textTransform: 'none'
-			}
+		fontSize: 24,
+		paddingTop: 16,
+		marginBottom: 12,
+		fontWeight: 400
+	},
+	tabs: {
+		background: 'none',
+		height: '50px',
+		color: '#222222'
+	},
+	tab: {
+		fontFamily: "'Nunito', 'Mitr'",
+		fontSize: '16px',
+		fontWeight: 'bold',
+		textTransform: 'none'
+	}
     }
+
     const dataSourceConfig = {text: 'text', value: 'value', id:'id'};
     return (
       <Container>
@@ -680,10 +668,8 @@ const PublisherStoryPage = React.createClass({
           />
         </Page>}
       </Container>
-		  )
-	}
-});
-PublisherStoryPage.contextTypes = {
-	setting: React.PropTypes.object
-};
+    )
+  }
+}
+
 export default PublisherStoryPage;

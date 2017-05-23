@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router';
+import React from 'react';
+import {Link} from 'react-router-dom';
 import styled from 'styled-components'
 import {BGImg} from 'components'
 import {findDOMNode as dom} from 'react-dom'
@@ -79,64 +79,39 @@ const Vote = styled.div`
 `
 
 const TrendingSideBarInner = ({style, detail, index}) => {
+  if(!detail) return (<div></div>)
   let {ptitle,comments,votes,cover} = detail
+
   return(
     <Con style={{...style}}>
       <BGImg url={detail.url} src={cover.small || cover.medium} style={{width:'127px',height:'75px',float:'right'}}/>
-      <Name to={detail.url} className="sans-font">{index+'.'+ptitle}</Name>
+      <Name to={detail.url} className="sans-font">{index+'. '+ptitle}</Name>
       <Vote className="sans-font">{votes.total} Votes {''+ comments.count} Comments</Vote>
     </Con>
   )
 }
 
-const TrendingSideBar = React.createClass({
-  getInitialState(){
-    return{
+class TrendingSideBar extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
       popular:[]
     }
-  },
+  }
 
-  componentDidMount(){
-    this.getPopular()
-    //this.Slider()
-	},
-
-  getPopular(){
+  getPopular = () => {
     // sort will be changed to 'trending' later when implemented
     api.getFeed('story', {status:1}, 'latest')
     .then(result => {
       this.setState({popular:result.feed})
     })
-  },
+  }
 
-  // Slider(){
-  //   var self = this
-  //   var item = dom(self.refs.contain)
-  //   var startPos = item.getBoundingClientRect().top
-  //   var height = item.scrollHeight;
-  //   var direction = 0
-	// 	window.addEventListener("scroll", function(event) {
-	// 		var top = this.scrollY
-  //     var stopPos = self.state.stopPos
-  //     //console.log(height +' : '+startPos+' : '+top +' : '+stopPos)
-  //     if(top>direction){
-  //       if(top>=startPos-60&&top<=stopPos-height){
-  //         item.style.top = top-startPos+'px';
-  //       }
-  //     }else{
-  //       if(top>=startPos&&top<=stopPos-height){
-  //         item.style.top =  top-startPos+'px';
-  //       }
-  //     }
-  //     direction = top
-	// 	});
-  // },
-
-  // componentWillReceiveProps(nextProps){
-  //   if(nextProps.stop != this.props.stop){
-  //     this.setState({stopPos:nextProps.stop})
-  //   }
-  // },
+  componentDidMount(){
+    this.getPopular()
+    //this.Slider()
+  }
 
   render(){
     let {popular} = this.state
@@ -144,14 +119,14 @@ const TrendingSideBar = React.createClass({
     let {style} = this.props
     let tn = []
     if(popular.length > 0){
-      for(let i=0;i<6;i++){
+      for(let i=0;i<Math.min(6, popular.length);i++){
         tn.push(
           <TrendingSideBarInner key={i} detail={popular[i]} index={i+1}/>
         )
       }
     }
 
-    return(
+    return (
       <Container style={{...style}} ref='contain'>
         <Divider/>
         <Head>NOW TRENDING</Head>
@@ -160,8 +135,7 @@ const TrendingSideBar = React.createClass({
         <Divider/>
       </Container>
     )
-  },
-})
-
+  }
+}
 
 export default TrendingSideBar;

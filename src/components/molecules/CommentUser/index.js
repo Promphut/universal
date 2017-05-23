@@ -1,5 +1,6 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router';
+import React from 'react';
+import PropTypes from 'prop-types'
+import {Link} from 'react-router-dom';
 import styled from 'styled-components'
 import Avatar from 'material-ui/Avatar'
 import {UserTag} from 'components'
@@ -22,6 +23,7 @@ const Container = styled.div`
     }
   }
 ` 
+
 const Name = styled.div`
   color:#222222;
   font-weight:bold;
@@ -30,6 +32,7 @@ const Name = styled.div`
     font-size:14px
   }
 `
+
 const Time = styled.span`
   color:#8F8F8F;
   font-size:15px;
@@ -67,7 +70,8 @@ const TextBtn2 = styled.div`
     display:none;
   }
 `
-var Tag = styled(Link)`
+
+const Tag = styled(Link)`
   color:${props=> props.theme.primaryColor};
   font-weight:bold;
   font-style: italic;
@@ -88,15 +92,18 @@ const ReplyBox = styled.textarea`
   border: 1px solid #C1C1C1;
   float:left;
 `
+
 const DetBox = styled.div`
   float:left;
 ` 
+
 const BtnBox = styled.div`
   @media(max-width:480px){
     display:none;
   }
 `
-var styles = {
+
+let styles = {
   button:{
     borderRadius:'20px',
     margin:'15px 0 0 0px',
@@ -123,38 +130,43 @@ var styles = {
   },
 }
 
-
-var replyBox = ''
+let replyBox = ''
 const test = []
 
-const CommentBox = React.createClass({
-  getInitialState(){
-    return{
-      a:false
-    }
-  },
-  showReplyBox(){
-    replyBox=<div style={{...styles.cont,margin:'15px 0 15px 60px'}}>
-          <ReplyBox/>
-          <RaisedButton 
-            onClick={this.reply}
-            label="Reply" 
-            target="_blank"
-            labelColor="#fff"
-            style={styles.button2}
-            buttonStyle={styles.btnStyle2}
-            backgroundColor={theme.primaryColor}/>
-        </div>
-    this.setState({a:true})
-  },
-  reply(){
-    replyBox=''
-    this.setState({a:true})
-  },
-  render(){
-    var {theme} = this.context.setting.publisher
+class CommentUser extends React.Component {
+  constructor(props) {
+    super(props)
+  }
 
-    return(
+  static contextTypes = {
+    setting: PropTypes.object
+  }
+
+  showReplyBox = () => {
+    replyBox = (<div style={{...styles.cont,margin:'15px 0 15px 60px'}}>
+        <ReplyBox/>
+        <RaisedButton 
+          onClick={this.reply}
+          label="Reply" 
+          target="_blank"
+          labelColor="#fff"
+          style={styles.button2}
+          buttonStyle={styles.btnStyle2}
+          backgroundColor={theme.primaryColor}/>
+      </div>)
+
+    this.setState({})
+  }
+
+  reply = () => {
+    replyBox=''
+    this.setState({})
+  }
+
+  render(){
+    let {theme} = this.context.setting.publisher
+
+    return (
       <Container>
         <div><Link to="#"><Avatar src='/tmp/avatar.png' size={49} style={{float:'left',marginRight:'15px',display:'block'}}/></Link></div>
         <DetBox>
@@ -178,11 +190,7 @@ const CommentBox = React.createClass({
       </Container>
     )
   }
-}) 
-
-CommentBox.contextTypes = {
-	setting: React.PropTypes.object
-};
+}
 
 
-export default CommentBox;
+export default CommentUser;

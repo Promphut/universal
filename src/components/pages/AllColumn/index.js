@@ -2,9 +2,9 @@ import React from 'react'
 import { TopBarWithNavigation, BGImg, StoryMenu, Footer } from 'components'
 import { findDOMNode as dom } from 'react-dom'
 import styled from 'styled-components'
-import { Link } from 'react-router'
-import FlatButton from 'material-ui/FlatButton'
-import FontIcon from 'material-ui/FontIcon'
+import {Link} from 'react-router-dom';
+import FlatButton from 'material-ui/FlatButton';
+import FontIcon from 'material-ui/FontIcon';
 import Slider from 'react-slick'
 //import Request from 'superagent'
 import api from 'components/api'
@@ -128,120 +128,82 @@ const Desc = styled.div`
   padding:15px;
 `
 
-// const ColumnTN = ()=>{
-//   return(
+class AllColumn extends React.Component {
+  constructor(props) {
+    super(props)
 
-//   )
-// }
+    this.state = {
+      columns:[],
+      //popular:[]
+    }
+  }
 
-const AllColumn = React.createClass({
-	getInitialState() {
-		return {
-			stopPos: 0,
-			columns: []
-			//popular:[]
-		}
-	},
+  getColumn = () => {
+    // var filter = JSON.stringify({status:1})
+    // Request
+    //  .get(config.BACKURL+'/publishers/'+config.PID+'/columns')
+    //  .set('Accept','application/json')
+    //  .end((err,res)=>{
+    //    if(err) throw err
+    //    else{
+    //      this.setState({column:res.body.columns})
+    //    }
+    //  })
 
-	componentDidMount() {
-		this.getColumn()
-	},
+    api.getColumns()
+    .then(cols => {
+      this.setState({columns:cols})
+    })
+  }
 
-	getColumn() {
-		// var filter = JSON.stringify({status:1})
-		// Request
-		// 	.get(config.BACKURL+'/publishers/'+config.PID+'/columns')
-		// 	.set('Accept','application/json')
-		// 	.end((err,res)=>{
-		// 		if(err) throw err
-		// 		else{
-		// 			this.setState({column:res.body.columns})
-		// 		}
-		// 	})
+  componentDidMount(){
+    this.getColumn()
+  }
 
-		api
-			.getColumns()
-			.then(cols => {
-				this.setState({ columns: cols })
-
-				return api.getColumns(0)
-			})
-			.then(cols => {
-				let columns = this.state.columns
-				cols.forEach(col => {
-					columns.push(col)
-				})
-				console.log(column)
-			})
-	},
-
-	render() {
-		let { columns } = this.state
-		//console.log('column', column)
-		return (
-			<Wrapper>
-				<TopBarWithNavigation
-					title={'Title of AomMoney goes here..'}
-					onLoading={this.props.onLoading}
-				/>
-				<Content>
-					<Feed>
-						<div className="row" style={{ width: '100%' }}>
-							<StoryMenu
-								style={{
-									padding: '15px 0 15px 0',
-									marginTop: '20px',
-									float: 'left'
-								}}
-								page="allcolumn"
-							/>
-						</div>
-						<div className="row" style={{ overflow: 'hidden' }}>
-							{columns &&
-								columns.map((data, index) => (
-									<div
-										className="col-lg-3 col-md-4 col-sm-12"
-										key={index}
-										style={{ margin: '20px 0 20px 0' }}>
-										<Link to={'/stories/' + data.slug}>
-											<Box>
-												<BGImg
-													src={data.cover.small || data.cover.medium}
-													opacity={0.6}
-													className="imgWidth"
-													style={{ margin: '0 auto 0 auto' }}
-													alt={data.name}
-													hidden={'hidden'}>
-													<div
-														style={{
-															position: 'absolute',
-															bottom: '15px',
-															left: '15px'
-														}}>
-														<ColumnName className="serif-font">
-															{data.name}
-														</ColumnName>
-														{/*
+  render(){
+    let {columns} = this.state
+    //console.log('column', column)
+    return (
+        <Wrapper>
+          <TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={this.props.onLoading}/>
+          <Content>
+            <Feed>
+              <div className='row' style={{width: '100%'}}>
+                <StoryMenu
+                  style={{padding: '15px 0 15px 0', marginTop: '20px', float: 'left'}}
+                  page="allcolumn"
+                />
+              </div>
+              <div className='row' style={{overflow:'hidden'}}>
+                {columns && columns.map((data, index) => (
+                  <div className='col-lg-3 col-md-4 col-sm-12' key={index} style={{margin:'20px 0 20px 0'}}>
+                    <Link to={'/stories/' + data.slug} >
+                    <Box>
+                      <BGImg src={data.cover.small || data.cover.medium} opacity={0.6}
+                        className='imgWidth' style={{margin:'0 auto 0 auto'}} alt={data.name}>
+                        <div style={{margin:'80px 0 0 15px'}}>
+                          <ColumnName className='serif-font'>{data.name}</ColumnName>
+                          {/*
                             FOR THE NEXT VERSION
                           <Column className='sans-font' >131 Stories</Column>
                           */}
-													</div>
-												</BGImg>
-												<Desc className="sans-font">
-													{data.shortDesc}
-												</Desc>
-												<Blur style={{ top: '-120px' }} />
-											</Box>
-										</Link>
-									</div>
-								))}
-						</div>
-					</Feed>
-				</Content>
-				<Footer />
-			</Wrapper>
-		)
-	}
-})
+                        </div>
+                      </BGImg>
+                        <Desc className='sans-font' >
+                          {data.shortDesc}
+                        </Desc>
+                      <Blur style={{top:'-120px'}}></Blur>
+                    </Box>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </Feed>
+          </Content>
+          <Footer/>
+      </Wrapper>
+    )
+  }
+}
 
 export default AllColumn

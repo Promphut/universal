@@ -1,8 +1,9 @@
 import React from 'react'
-// import {browserHistory} from 'react-router'
+import {Route} from 'react-router-dom'
 import { TopBarWithNavigation, TopBarWithBack, UserSettingMenu, Footer} from 'components'
 import styled from 'styled-components'
 import auth from 'components/auth'
+import utils from '../../../services/utils'
 
 const Wrapper = styled.div`
   width:100%;
@@ -24,6 +25,7 @@ const Container = styled.div`
     padding:0 0 0 0;
   }
 `
+
 const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
@@ -34,6 +36,7 @@ const Content = styled.div`
     max-width: 100%;
   }
 `
+
 const Main = styled.div`
 	background: white;
 	flex: 3 855px;
@@ -41,6 +44,7 @@ const Main = styled.div`
     max-width: 100%;
   }
 `
+
 const Aside = styled.div`
 	background: rgba(255,255,255,0.5);
 	flex: 1 255px;
@@ -50,56 +54,52 @@ const Aside = styled.div`
   }
 `
 
-const UserSetting = React.createClass({
-	getInitialState(){
+class UserSetting extends React.Component {
+  constructor(props) {
+    super(props)
+
     this.user = {}
-		return {}
-	},
+  }
 
   componentWillMount(){
     this.user = auth.getUser()
-  },
-
-  componentDidMount(){
-    // api.getUser()
-    // .then(user => {
-    //   this.user = user
-    // })
-    // .catch(err => {
-    //   browserHistory.push('/signin');
-    // })
-  },
+  }
 
   render(){
-    const isMobile = window.isMobile()
+    const isMobile = utils.isMobile()
+    let {match, location, onLoading, children} = this.props
 
     let title = ''
-    if (this.props.location.pathname == '/me/settings') {
+    if (location.pathname == '/me/settings') {
       title = 'Edit Profile'
-    } else if (this.props.location.pathname == '/me/settings/account') {
+    } else if (location.pathname == '/me/settings/account') {
       title = 'Setting'
     }
 
-		return (
-		    <Wrapper>
+    return (
+        <Wrapper>
           {isMobile ? <TopBarWithBack title={title}/> :
-            <TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={this.props.onLoading} />
+            <TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={onLoading} />
           }
 
           <Container>
             <Content>
               <Aside>
-                <UserSettingMenu pathname={this.props.location.pathname} user={this.user}/>
+                <UserSettingMenu pathname={location.pathname} user={this.user}/>
               </Aside>
               <Main>
-                {this.props.children}
+                {children}
+                {/*<Route exact path={`${match.url}/settings`} component={UserSettingProfile}/>
+                <Route exact path={`${match.url}/settings/account`} component={UserSettingAccount} {...this.props}/>
+                <PrivateRoute exact path={`${match.url}/stories/new`} component={NewStory} hasRoles={['ADMIN', 'WRITER', 'EDITOR']} {...this.props} />
+                <Route exact path={`${match.url}/stories`} component={UserSettingStory} {...this.props}/>*/}
               </Main>
             </Content>
           </Container>
-  				<Footer/>
-		   </Wrapper>
-		  )
-	}
-});
+          <Footer/>
+       </Wrapper>
+    )
+  }
+}
 
 export default UserSetting

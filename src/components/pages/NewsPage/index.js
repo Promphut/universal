@@ -1,16 +1,16 @@
 import React from 'react'
-import {  TopBarWithNavigation,TopWriterSidebar, More, BGImg, StoryDropdown, 
-        NewsBox,Footer,TopNews,TopNewsSmall} from 'components'
+import PropTypes from 'prop-types'
+import {  TopBarWithNavigation,TopWriterSidebar, More, BGImg, NewsBox,Footer,TopNews,TopNewsSmall} from 'components'
 import styled from 'styled-components'
-//import Request from 'superagent'
 import auth from 'components/auth'
 import api from 'components/api'
 import slider from 'react-slick'
-import Infinite from 'react-infinite'
+import InfiniteScroll from 'react-infinite-scroller';
 import CircularProgress from 'material-ui/CircularProgress';
 import LinearProgress from 'material-ui/LinearProgress';
 import { Tabs, Tab } from 'material-ui/Tabs'
 import SwipeableViews from 'react-swipeable-views';
+import utils from '../../../services/utils'
 
 const Wrapper = styled.div`
 	@media (max-width:480px) {
@@ -101,6 +101,7 @@ const Onload = styled.div`
 	height:70px;
 	margin:50px 0 50px 0;
 `
+
 const Line = styled.div`
   position:relative;
   top:-2px;
@@ -109,12 +110,15 @@ const Line = styled.div`
   height:1px;
   background-color:#C4C4C4;
 `
+
 const Latest = styled.div`
   margin:30px 0 0 0;
 `
+
 const Trending = styled.div`
 	margin:30px 0 0 0;
 `
+
 const Head = styled.h1`
 	font-size:64px;
 	font-weight:bold;
@@ -124,6 +128,7 @@ const Head = styled.h1`
 	background:white;
 	width:280px;
 `
+
 const News = styled.div`
 	font-size:18px;
 	color:white;
@@ -140,123 +145,155 @@ const News = styled.div`
 // 	overflow-y:visible !important;
 // `
 
-const NewsPage = React.createClass({
-	getInitialState(){
-		this.trendingStories = []
-		this.latestStories = []
+class NewsPage extends React.Component {
+	static contextTypes = {
+		setting: PropTypes.object
+	}
+
+	constructor(props) {
+		super(props)
+
+		//this.trendingStories = []
+		//this.latestStories = []
 		this.writer = []
 		this.column = []
-		
-		return {
-			latestStories:[],
-			refresh: 0,
-			page:0,
-			isInfiniteLoading: false,
-			loadOffset:300,
-			feedCount:0,
-			isMobile:false,
-			completed:0,
-      selectTab:0,
-			newsTrending:[],
-		}
-	},
-	componentWillMount(){
-		this.getPublisher()
-		this.getFeed()
-		this.getNewsTrending()
-	},
-	componentDidMount(){
-		this.setState({
-			isMobile:window.isMobile(),
-			completed:100
-		})
 
-		// this.progress(100)
-	},
+		this.state = {
+			//latestStories:[],
+			//refresh: 0,
+			//isInfiniteLoading: false,
+			//loadOffset:300,
+			page:0,
+			feedCount:-1,
+			feed: [],
+			hasMoreFeed: true,
+
+			trendingNews:[],
+			
+			isMobile:false,
+      		selectTab:0,
+			
+		}
+	}
 
 	// componentDidUpdate(prevProps, prevState){
   //   clearTimeout(this.timer);
 	// 	this.progress(100)
   // },
-  getFeed(){
-		// - Fetching latestStories
-		api.getFeed('news', {status:1}, 'latest', null, 0, 15)
-		.then(result => {
-			if(result) {
-				this.trendingStories = result.feed
-				this.setState({
-					refresh: Math.random()
-				})
-			}
-		})
-	},
+ //  	getFeed(){
+	// 	// - Fetching latestStories
+	// 	api.getFeed('news', {status:1}, 'latest', null, 0, 15)
+	// 	.then(result => {
+	// 		if(result) {
+	// 			this.trendingStories = result.feed
+	// 			this.setState({
+	// 				refresh: Math.random()
+	// 			})
+	// 		}
+	// 	})
+	// },
 
-	getNewsTrending(){
+	getTrendingNews = () => {
 		api.getFeed('news', {status:1}, 'trending', null, 0, 14)
 		.then(result => {
 			if(result) {
-				this.setState({newsTrending:result.feed})
+				this.setState({
+					trendingNews:result.feed
+				})
 			}
 		})
-	},
+	}
 
-	buildElements() {
-		let page = this.state.page
-		api.getFeed('news', {status:1}, 'latest', null, page, 10)
-		.then(result => {
-			var s = this.state.latestStories.concat(result.feed)
-			this.setState({
-				feedCount:result.count[1],
-				latestStories:s,
-			},()=>{
-				if(s.length==result.count[1]){
-					this.setState({
-						loadOffset:'undefined',
-						isInfiniteLoading: false,
-					})
-				}else{
-					this.setState({
-						isInfiniteLoading: false
-					})
-				}
+	onload = () => <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>
+	loadFeed = () => {
+		return () => {
+			// ensure this method is called only once at a time
+			if(this.loading===true) return 
+			this.loading = true
+
+			let page = this.state.page
+			//console.log('page', page)
+
+			api.getFeed('news', {status:1}, 'latest', null, page, 15)
+			.then(result => {
+
+				let feed = this.state.feed.concat(result.feed)
+				this.setState({
+					page: ++page,
+					feed: feed,
+					feedCount: result.count['1'],
+					hasMoreFeed: feed.length < result.count['1']
+				}, () => {this.loading = false})
 			})
-		})
-	},
+		}
+	}
 
-	handleInfiniteLoad() {
-		//console.log('Onload')
-		this.buildElements(this.state.page)
-		this.setState({
-				isInfiniteLoading: true,
-				page:this.state.page+1
-		});
-	},
+	// buildElements() {
+	// 	let page = this.state.page
+	// 	api.getFeed('news', {status:1}, 'latest', null, page, 10)
+	// 	.then(result => {
+	// 		var s = this.state.latestStories.concat(result.feed)
+	// 		this.setState({
+	// 			feedCount:result.count['1'],
+	// 			latestStories:s,
+	// 		},()=>{
+	// 			if(s.length==result.count['1']){
+	// 				this.setState({
+	// 					loadOffset:undefined,
+	// 					isInfiniteLoading: false,
+	// 				})
+	// 			}else{
+	// 				this.setState({
+	// 					isInfiniteLoading: false
+	// 				})
+	// 			}
+	// 		})
+	// 	})
+	// }
 
+	// handleInfiniteLoad() {
+	// 	//console.log('Onload')
+	// 	this.buildElements(this.state.page)
+	// 	this.setState({
+	// 		isInfiniteLoading: true,
+	// 		page:this.state.page+1
+	// 	});
+	// }
 
-	getPublisher(){
+	getPublisher = () => {
 		api.getPublisher()
 		.then(pub => {
 			this.publisher = pub
 			this.setState({
-				refresh: Math.random()
+				//refresh: Math.random()
 			})
 		})
-	},
+	}
 
-
-	handleChangeTab(e) {
+	handleChangeTab = (e) => {
 		this.setState({selectTab: e})
-	},
+	}
 
-	elementInfiniteLoad() {
-			return <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>;
-	},
+	// elementInfiniteLoad() {
+	// 		return <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>;
+	// }
+	
+	componentDidMount(){
+		this.getPublisher()
+		//this.getFeed()
+		this.getTrendingNews()
+
+		this.setState({
+			isMobile:utils.isMobile()
+		})
+		// this.progress(100)
+	}
 
 	render(){
-		var {count,loadOffset,isInfiniteLoading,latestStories,isMobile,completed
-      ,latestStories,selectTab,newsTrending} = this.state
+		//let {count,loadOffset,isInfiniteLoading,latestStories,isMobile,completed,selectTab,trendingNews} = this.state
+		let {feedCount,feed,hasMoreFeed,trendingNews,isMobile,selectTab} = this.state
 		let pub = this.publisher
-    var { theme } = this.context.setting.publisher
+    	let { theme } = this.context.setting.publisher
 		const styles = {
 			headline: {
 				fontSize: 24,
@@ -276,107 +313,101 @@ const NewsPage = React.createClass({
 				textTransform: 'none'
 			}
 		}
-		var trend = []
-		for(var i=4;i<newsTrending.length;i++){
+		let trend = []
+		for(let i=4;i<trendingNews.length;i++){
 			trend.push(
-				<NewsBox detail={newsTrending[i]} key={i} style={{margin:'0 auto 0 auto'}}/>
+				<NewsBox detail={trendingNews[i]} key={i} style={{margin:'0 auto 0 auto'}}/>
 			)
 		}
-    //console.log(latestStories)
+    	//console.log(latestStories)
 		return (
 		    <Wrapper>
-	      	<TopBarWithNavigation onLoading={this.props.onLoading}/>
-					<News>News</News>
-					<Content >
-						<Feed>	
-							<Head className='serif-font hidden-mob'>NEWS</Head>
-							<Line className='hidden-mob' style={{top:'-41px'}}/>
-							<Text className='center'>โมหจริต ละตินฮิปฮอปด็อกเตอร์โมหจริตแอดมิสชัน บร็อคโคลีคีตปฏิภาณเมจิค โอเวอร์คลิปโปรโมชั่นแบล็คสงบสุข ยังไงอึ้มไรเฟิลบร็อกโคลี ฮ็อตมั้ย แอ็กชั่นแอ็กชั่น อุปสงค์ฟลุกซีนีเพล็กซ์เลกเชอร์อิเหนา บัลลาสต์โรแมนติก</Text>
-            </Feed>
-					</Content>
-					<Content style={{paddingTop:'0px'}}  className='hidden-mob'>
-						<Main>
-							<TopNews detail={newsTrending[0]}/>
-						</Main>
-						<Aside >
-							<TopNewsSmall detail={newsTrending[1]} />
-							<TopNewsSmall detail={newsTrending[2]} />
-							<TopNewsSmall detail={newsTrending[3]} style={{borderBottom:'1px solid #000'}}/>
-						</Aside>
-					</Content>
-		      <Content>
-						<Feed>
-							<Tabs
-                style={{ width:'100%'}}
-                tabItemContainerStyle={{ ...styles.tabs }}
-                inkBarStyle={{ background: theme.accentColor, height: 3 }}
-                onChange={this.handleChangeTab}
-                value={selectTab}
-								className='hidden-des'>
-                <Tab
-                  buttonStyle={{...styles.tab,color: selectTab == 0 ? '#222' : '#c4c4c4'}}
-                  label="Latest"
-                  value={0}
-                />
-                <Tab
-                  buttonStyle={{...styles.tab,color: selectTab == 1 ? '#222' : '#c4c4c4'}}
-                  label="Trending"
-                  value={1}
-                />
-              </Tabs>	  
-							<Tabs
-                style={{ width: 360 }}
-                tabItemContainerStyle={{ ...styles.tabs }}
-                inkBarStyle={{ background: theme.accentColor, height: 3 }}
-                onChange={this.handleChangeTab}
-                value={selectTab}
-								className='hidden-mob'>
-                <Tab
-                  buttonStyle={{...styles.tab,color: selectTab == 0 ? '#222' : '#c4c4c4'}}
-                  label="LATEST NEWS"
-                  value={0}
-                />
-                <Tab
-                  buttonStyle={{...styles.tab,color: selectTab == 1 ? '#222' : '#c4c4c4'}}
-                  label="TRENDING"
-                  value={1}
-                />
-              </Tabs>
-              <Line/>
-              <SwipeableViews
-                index={selectTab}
-                onChangeIndex={this.handleChangeTab}
-              >
-                <Latest>
-                  <Infinite
-                    containerHeight={!isMobile?(count*210)-100:(count*356)-100}
-                    elementHeight={!isMobile?210:356}
-                    infiniteLoadBeginEdgeOffset={loadOffset}
-                    onInfiniteLoad={this.handleInfiniteLoad}
-                    loadingSpinnerDelegate={this.elementInfiniteLoad()}
-                    isInfiniteLoading={isInfiniteLoading}
-                    useWindowAsScrollContainer={true}>
+	      		<TopBarWithNavigation onLoading={this.props.onLoading}/>
+				<News>News</News>
+				<Content>
+					<Feed>	
+						<Head className='serif-font hidden-mob'>NEWS</Head>
+						<Line className='hidden-mob' style={{top:'-41px'}}/>
+						<Text className='center'>โมหจริต ละตินฮิปฮอปด็อกเตอร์โมหจริตแอดมิสชัน บร็อคโคลีคีตปฏิภาณเมจิค โอเวอร์คลิปโปรโมชั่นแบล็คสงบสุข ยังไงอึ้มไรเฟิลบร็อกโคลี ฮ็อตมั้ย แอ็กชั่นแอ็กชั่น อุปสงค์ฟลุกซีนีเพล็กซ์เลกเชอร์อิเหนา บัลลาสต์โรแมนติก</Text>
+        			</Feed>
+				</Content>
+				<Content style={{paddingTop:'0px'}} className='hidden-mob'>
+					<Main>
+						<TopNews detail={trendingNews[0]}/>
+					</Main>
+					<Aside>
+						<TopNewsSmall detail={trendingNews[1]} />
+						<TopNewsSmall detail={trendingNews[2]} />
+						<TopNewsSmall detail={trendingNews[3]} style={{borderBottom:'1px solid #000'}}/>
+					</Aside>
+				</Content>
+	      		<Content>
+					<Feed>
+						<Tabs
+		                style={{ width:'100%'}}
+		                tabItemContainerStyle={{ ...styles.tabs }}
+		                inkBarStyle={{ background: theme.accentColor, height: 3 }}
+		                onChange={this.handleChangeTab}
+		                value={selectTab}
+						className='hidden-des'>
+			                <Tab
+			                  buttonStyle={{...styles.tab,color: selectTab == 0 ? '#222' : '#c4c4c4'}}
+			                  label="Latest"
+			                  value={0}
+			                />
+			                <Tab
+			                  buttonStyle={{...styles.tab,color: selectTab == 1 ? '#222' : '#c4c4c4'}}
+			                  label="Trending"
+			                  value={1}
+			                />
+		              	</Tabs>	  
+						<Tabs
+		                style={{ width: 360 }}
+		                tabItemContainerStyle={{ ...styles.tabs }}
+		                inkBarStyle={{ background: theme.accentColor, height: 3 }}
+		                onChange={this.handleChangeTab}
+		                value={selectTab}
+						className='hidden-mob'>
+			                <Tab
+			                  buttonStyle={{...styles.tab,color: selectTab == 0 ? '#222' : '#c4c4c4'}}
+			                  label="LATEST NEWS"
+			                  value={0}
+			                />
+			                <Tab
+			                  buttonStyle={{...styles.tab,color: selectTab == 1 ? '#222' : '#c4c4c4'}}
+			                  label="TRENDING"
+			                  value={1}
+			                />
+		              	</Tabs>
+          				<Line/>
 
-                    {latestStories.length!=0?latestStories.map((story, index) => (
-                      <NewsBox detail={story} key={index} timeline={true}/>
-                    )):''}
-                  </Infinite>
-                </Latest>
-                <Trending>
-									{trend}
-                </Trending>
-              </SwipeableViews>
-            </Feed>
-
-		      </Content>
-					<Footer/>
-		   </Wrapper>
-		  )
+			              <SwipeableViews
+			                index={selectTab}
+			                onChangeIndex={this.handleChangeTab}
+			              >
+			                <Latest>
+			                	<InfiniteScroll
+								    loadMore={this.loadFeed()}
+								    hasMore={hasMoreFeed}
+								    loader={this.onload()}
+								>
+									<div>
+									    {feed.map((item, index) => (
+											<NewsBox detail={item} key={index} timeline={true}/>
+										))}
+									</div>
+								</InfiniteScroll>
+			                </Latest>
+			                <Trending>
+								{trend}
+			                </Trending>
+			              </SwipeableViews>
+        			</Feed>
+	      		</Content>
+				<Footer/>
+		   	</Wrapper>
+		)
 	}
-});
-
-NewsPage.contextTypes = {
-	setting: React.PropTypes.object
-};
+}
 
 export default NewsPage;

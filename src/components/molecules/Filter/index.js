@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import DropDownMenu from 'material-ui/DropDownMenu'
 import MenuItem from 'material-ui/MenuItem'
@@ -33,40 +34,39 @@ const AutoCompleteBox = styled.div`
   padding:5px 5px 5px 20px;
 `
 
-const Filter = React.createClass({
-  getDefaultProps() {
-    return{
-      menuItem:[]
-    }
-  },
-  getInitialState(){
-    return{
-      value:'Title',
-      editState:false,
-      editWhere:{},
-      open:false,
-      searchText:'',
-      dataSource:[],
-      id:''
-    }
-  },
+class Filter extends React.Component {
+  static contextTypes = {
+    setting: PropTypes.object
+  }
+  static defaultProps = {
+    menuItem:[]
+  }
+  state = {
+    value:'Title',
+    editState:false,
+    editWhere:{},
+    open:false,
+    searchText:'',
+    dataSource:[],
+    id:''
+  }
 
-  handleChange(e,int,val){
+  handleChange = (e,int,val) => {
     this.setState({value:val})
-  },
+  }
 
-  handleRequestClose(){
+  handleRequestClose = () => {
     this.setState({
       open:false
     })
-  },
+  }
 
-  togglePopover(e){
+  togglePopover = (e) => {
     this.setState({
       open:true,
       anchorEl:e.currentTarget
     })
-  },
+  }
 
   // selected(e,val){
   //   //console.log(val)
@@ -74,29 +74,30 @@ const Filter = React.createClass({
   //   //this.setState({value})
   // },
 
-  onFocus(e,item,ind){
+  onFocus = (e,item,ind) => {
     this.setState({open:false})
-  },
+  }
 
-  closeEdit(){
+  closeEdit = () => {
     this.setState({editState:false})
-  },
+  }
 
-  openEdit(e){
+  openEdit = (e) => {
     this.setState({editState:true,editWhere:e.currentTarget})
-  },
+  }
 
-  handleUpdateInput(searchText){
+  handleUpdateInput = (searchText) => {
     this.setState({
       searchText: searchText,
     });
-  },
+  }
 
-  selectRequest(sel,index){
+  selectRequest = (sel,index) => {
     //console.log(sel)
     this.setState({id:sel.id})
-  },
-  onChangeFilter(e, selected){
+  }
+
+  onChangeFilter = (e, selected) => {
     //console.log(selected)
     this.setState({value:selected,searchText:''},()=>{
       if(selected=='Title'){
@@ -124,7 +125,7 @@ const Filter = React.createClass({
       }
     })
 
-  },
+  }
 
   render(){
     var {style,className,children,labelStyle,editMenu,value,onChange,menuItem} = this.props
@@ -156,6 +157,7 @@ const Filter = React.createClass({
       }
     }
     const dataSourceConfig = {text: 'text', value: 'value', id:'id'};
+
     return(
       <AutoCompleteBox style={{...style}} className={className}>
         <AutoComplete
@@ -210,10 +212,6 @@ const Filter = React.createClass({
       </AutoCompleteBox>
     )
   }
-})
-
-Filter.contextTypes = {
-	setting: React.PropTypes.object
-};
+}
 
 export default Filter

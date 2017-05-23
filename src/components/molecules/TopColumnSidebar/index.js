@@ -1,8 +1,6 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router';
+import React from 'react';
+import {Link} from 'react-router-dom';
 import styled from 'styled-components'
-import {TrendingSideBarInner} from 'components'
-import {findDOMNode as dom} from 'react-dom'
 
 const Container = styled.div`
   width:324px;
@@ -26,6 +24,7 @@ const Container = styled.div`
     background-color:${props=> props.theme.primaryColor} ;
   }
 `
+
 const Head = styled.div`
   color:#8F8F8F;
   font-size:20px;
@@ -44,6 +43,7 @@ const Head = styled.div`
 	user-select: none;
 	cursor: default;
 `
+
 const Divider =styled.div`
   height:1px;
   width:100%;
@@ -52,12 +52,14 @@ const Divider =styled.div`
   z-index:-5;
   position:relative;
 `
+
 const Column = styled.div`
   font-weight:bold;
   font-size:36px;
   color:${props=> props.theme.primaryColor};
   text-align:center;
 `
+
 const Div = styled.div`
   width:100%;
   padding:12px 0px;
@@ -65,6 +67,7 @@ const Div = styled.div`
   cursor: pointer;
   color: initial;
 `
+
 const Number = styled.div`
   color: #FFF;
   width:60px;
@@ -82,69 +85,38 @@ const Number = styled.div`
 	user-select: none;
 	cursor: default;
 `
+
 const Name = styled.div`
   color:#222;
   font-size:19px;
   font-weight:bold;
 `
+
 const Sty = styled.div`
   color:#8F8F8F;
   font-size:16px;
 `
 //if height less than 900px remove last item
 
-const TopColumnSidebar = React.createClass({
-  getInitialState(){
-    return{
-      stopPos:''
-    }
-  },
-
-  componentDidMount(){
-
-	},
-
-  componentWillReceiveProps(nextProps){
-    if(nextProps.stop != this.props.stop){
-      this.setState({stopPos:nextProps.stop})
-    }
-  },
-
-  render(){
-    var {column} = this.props
-    //console.log(column)
-    /*var Sort = []
-    for(let i=0;i<6;i++){
-      Sort.push(
-        <Div className='serif-font' key={i}>
-          <Number className={'bg'+(1+i)}>{i+1}</Number>
-          <div style={{padding:'10px 30px 0 30px'}}>
-            <Name>Money Ideas</Name>
-            <Sty className='sans-font'>31 Stories</Sty>
-          </div>
-        </Div>
-      )
-    }*/
-    return(
-      <Container style={{...this.props.style}} ref='contain'>
-        <Divider/>
-        <Head>TOP COLUMNS</Head>
-          {column && column.map((data, index) => (
-            <Link to={data.url} key={index}>
-              <Div className='serif-font'>
-                <Number className={'bg'+(1+index)}>{index+1}</Number>
-                <div style={{padding:'14px 30px 0 30px'}}>
-                  <Name>{data.name}</Name>
-                  {/*<Sty className='sans-font'>{data.shortDesc}</Sty>*/}
-                </div>
-              </Div>
-            </Link>
-          ))}
-        <Divider/>
-      </Container>
-    )
-  },
-})
-
+const TopColumnSidebar = ({column, style}) => {
+  return (
+    <Container style={{...style}}>
+      <Divider/>
+      <Head>TOP COLUMNS</Head>
+        {column && column.map((data, index) => (
+          <a href={data.url} key={index}>
+            <Div className='serif-font'>
+              <Number className={'bg'+(1+index)}>{index+1}</Number>
+              <div style={{padding:'14px 30px 0 30px'}}>
+                <Name>{data.name}</Name>
+                {/*<Sty className='sans-font'>{data.shortDesc}</Sty>*/}
+              </div>
+            </Div>
+          </a>
+        ))}
+      <Divider/>
+    </Container>
+  )
+}
 
 export default TopColumnSidebar;

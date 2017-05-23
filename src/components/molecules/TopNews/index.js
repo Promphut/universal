@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router';
-import styled,{keyframes} from 'styled-components'
+import React from 'react';
+import {Link} from 'react-router-dom';
+import styled, {keyframes} from 'styled-components'
 import {BGImg, ShareDropdown} from 'components'
 import Avatar from 'material-ui/Avatar';
 import FontIcon from 'material-ui/FontIcon'
@@ -8,7 +8,8 @@ import Popover from 'material-ui/Popover'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import moment from 'moment'
-import _ from 'lodash'
+import truncate from 'lodash/truncate'
+
 const Container = styled.div`
   width:100%;
   z-index:100;
@@ -66,29 +67,21 @@ const BoxText = styled.div`
 
 `
 
-
-
-
-const TopNews = React.createClass({
-  render(){
-    let {detail,style} = this.props
-    return (
-      <Container style={{...style}}>
-        <BGImg url={detail&&detail.url} src={detail&&detail.cover.medium} className='imgWidth mob-hidden' >
-          <BoxText>
-            <NameLink>
-            {_.truncate(detail&&detail.ptitle, {
-              'length': 133,
-              'separator': ''
-            })}
-            </NameLink>
-          </BoxText>
-        </BGImg>    
-      </Container>
-    )
-  }
-})
-
-
+const TopNews = ({detail, style}) => {
+  return (
+    <Container style={{...style}}>
+      <BGImg url={detail&&detail.url} src={detail&&detail.cover.medium} className='imgWidth mob-hidden' >
+        <BoxText>
+          <span>
+          {truncate(detail&&detail.ptitle, {
+            'length': 133,
+            'separator': ''
+          })}
+          </span>
+        </BoxText>
+      </BGImg>    
+    </Container>
+  )
+}
 
 export default TopNews;

@@ -22,7 +22,7 @@ const Tag = styled.div`
 `
 
 const TagBox = ({children,style}) => {
-  var stl = style 
+  let stl = style 
   return(
     <Tag style={{...stl}}>{children}</Tag>
   )

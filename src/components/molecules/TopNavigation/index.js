@@ -1,6 +1,7 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Link } from 'react-router'
+import { NavLink } from 'react-router-dom'
 
 const Container = styled.div`
 	display:flex;
@@ -9,7 +10,22 @@ const Container = styled.div`
 		color:${props => props.theme.accentColor};
 	}
 `
-const NavLink = styled(Link)`
+
+const NavSpan = styled.span`
+	padding: 18px 20px 20px 20px;
+	font-size:17px;
+	color: ${props => (props.theme.barTone == 'light' ? '#222' : '#FFF')};
+	height:60px;
+	cursor: pointer;
+	&:hover{
+		font-weight:bold;
+		color:${props => props.theme.accentColor};
+		>div{
+			display:block;
+		}
+	}
+`
+const NavLink2 = styled(NavLink)`
 	padding: 18px 20px 20px 20px;
 	font-size:17px;
 	text-decoration: none;
@@ -33,7 +49,7 @@ const DropdownBox = styled.div`
 		background-color:#E5E5E5;
 		padding:18px 28px 18px 28px;
 `
-const DropdownList = styled(Link)`
+const DropdownList = styled(NavLink)`
 		background-color:#E5E5E5;
 		width: 100%;
 		padding: 10px 0 10px 0;
@@ -55,30 +71,30 @@ const TopNavigation = ({ menu }) => {
 	let items = []
 	for (let i = 0; i < cols.length; i++) {
 		items.push(
-			<DropdownList key={i} to={'/stories/' + cols[i].slug} activeClassName="active" className='nunito-font'>
-					{cols[i].name}
+			<DropdownList key={i} exact to={'/stories/' + cols[i].slug} activeClassName="active" className='nunito-font'>
+				{cols[i].name}
 			</DropdownList>
 		)
 	}
 
 	return (
 		<Container>
-			<NavLink to="/stories/news" activeClassName="active" className='nunito-font'>News</NavLink>
-			<NavLink to="/stories/columns" activeClassName="active" className='nunito-font'>
-			Stories ▾
-			<DropdownBox>
-				{items}
-				<Line></Line>
-				<DropdownList to={'/stories/columns'} 
-				activeClassName="active" 
-				className='nunito-font'>
-					All Columns
-				</DropdownList>
-			</DropdownBox>
-			</NavLink>
-			<NavLink to="/about" activeClassName="active" className='nunito-font'>About Us</NavLink>
-			<NavLink to="/contact" activeClassName="active" className='nunito-font'>Contact</NavLink>
-		</Container>			
+			<NavLink2 exact to="/stories/news" activeClassName="active" className='nunito-font'>News</NavLink2>
+			<NavSpan className='nunito-font'>
+				Stories ▾
+				<DropdownBox>
+					{items}
+					<Line></Line>
+					<DropdownList to={'/stories/columns'} 
+					activeClassName="active" 
+					className='nunito-font'>
+						All Columns
+					</DropdownList>
+				</DropdownBox>
+			</NavSpan>
+			<NavLink2 exact to="/about" activeClassName="active" className='nunito-font'>About Us</NavLink2>
+			<NavLink2 exact to="/contact" activeClassName="active" className='nunito-font'>Contact</NavLink2>
+		</Container>
 	)
 }
 

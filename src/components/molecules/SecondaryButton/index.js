@@ -1,14 +1,12 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 
-const SecondaryButton = React.createClass({
-
-render(){
-	var {props} = this
+const SecondaryButton = (props, context) => {
 	let opt, defaultStyle;
-	var {theme} = this.context.setting.publisher
+	let {theme} = context.setting.publisher
 	
 	if(props.size==='large'){
 		// default is medium size
@@ -105,11 +103,9 @@ render(){
 
 	return React.createElement(RaisedButton, opt, null)
 }
-})
 
 SecondaryButton.contextTypes = {
-	setting: React.PropTypes.object
-};
-
+	setting: PropTypes.object
+}
 
 export default SecondaryButton

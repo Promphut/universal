@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types'
 import styled from "styled-components";
 import {
   PrimaryButton,
@@ -8,13 +9,15 @@ import {
 import TextField from "material-ui/TextField";
 import Chip from "material-ui/Chip";
 import auth from "components/auth";
-//import Request from 'superagent'
 import AutoComplete from "material-ui/AutoComplete";
 import Dialog from "material-ui/Dialog";
 import FlatButton from "material-ui/FlatButton";
 import { findDOMNode as dom } from "react-dom";
+import cloneDeep from 'lodash/cloneDeep'
+import reject from 'lodash/reject'
 import api from "components/api";
-import utils from 'components/utils'
+import utils from '../../../services/utils'
+import config from '../../../config'
 
 const Container = styled.form`
   width:100%;
@@ -98,60 +101,48 @@ const Divider = styled.div`
 ];
 */
 
-const ColumnSettingPage = React.createClass({
-  getInitialState() {
-    return {
-      user: {},
-      column: {
-        name: "",
-        url: "",
-        desc: "",
-        cover: {
-          medium: ""
-        }
-      },
-
+class ColumnSettingPage extends React.Component {
+  state = {
+    user: {},
+    column: {
+      name: "",
+      url: "",
+      desc: "",
       cover: {
         medium: ""
-      },
-      dialogText: "",
+      }
+    },
 
-      writers: [],
-      writersAutoComplete: [],
-      writerToRemove: {},
-      writerSearchText: "",
+    cover: {
+      medium: ""
+    },
+    dialogText: "",
 
-      editors: [],
-      editorsAutoComplete: [],
-      editorToRemove: {},
-      editorSearchText: "",
+    writers: [],
+    writersAutoComplete: [],
+    writerToRemove: {},
+    writerSearchText: "",
 
-      switchTo: "",
+    editors: [],
+    editorsAutoComplete: [],
+    editorToRemove: {},
+    editorSearchText: "",
 
-      textStatus: "Unsave",
-      error: false,
-      dialog: false,
-      errText: "",
-      descText: ""
-    };
-  },
+    switchTo: "",
 
-  componentDidMount() {
-    this.getWriters();
-    this.getEditors();
-    this.getColumn();
-  },
+    textStatus: "Unsave",
+    error: false,
+    dialog: false,
+    errText: "",
+    descText: ""
+  }
 
-  // setData(){
-  //   var {name,shortDesc,slug,cover} = this.state.column
-  //   document.getElementById('name').value = !name?'':name
-  //   document.getElementById('shortDesc').value = !shortDesc?'':shortDesc
-  //   document.getElementById('slug').value = !slug?'':"/"+slug
-  // 	this.setState({cover:cover})
-  // },
+  static contextTypes = {
+    setting: PropTypes.object
+  }
 
-  getEditors() {
-    let cid = this.props.params.cid;
+  getEditors = () => {
+    let cid = this.props.match.params.cid;
     if (cid == null) return;
 
     api.getEditors(cid).then(editors => {
@@ -161,10 +152,10 @@ const ColumnSettingPage = React.createClass({
 
       this.setState({ editors: editors });
     });
-  },
+  }
 
-  getWriters() {
-    let cid = this.props.params.cid;
+  getWriters = () => {
+    let cid = this.props.match.params.cid;
     if (cid == null) return;
 
     api.getColumnWriters(cid).then(writers => {
@@ -174,10 +165,10 @@ const ColumnSettingPage = React.createClass({
 
       this.setState({ writers: writers });
     });
-  },
+  }
 
-  getColumn() {
-    let cid = this.props.params.cid;
+  getColumn = () => {
+    let cid = this.props.match.params.cid;
     if (cid == null) return;
 
     api.getColumn(cid).then(col => {
@@ -185,14 +176,14 @@ const ColumnSettingPage = React.createClass({
       this.column = col
       this.setState({ column: col });
     });
-  },
+  }
 
-  deleteWriter() {
-    let cid = this.props.params.cid;
+  deleteWriter = () => {
+    let cid = this.props.match.params.cid;
     if (cid == null) return;
 
     let { writers, writerToRemove } = this.state;
-    writers = _.reject(writers, { value: writerToRemove.value });
+    writers = reject(writers, { value: writerToRemove.value });
 
     api.removeWriter(writerToRemove.value, cid).then(result => {
       this.setState({
@@ -201,14 +192,14 @@ const ColumnSettingPage = React.createClass({
         writers
       });
     });
-  },
+  }
 
-  deleteEditor() {
-    let cid = this.props.params.cid;
+  deleteEditor = () => {
+    let cid = this.props.match.params.cid;
     if (cid == null) return;
 
     let { editors, editorToRemove } = this.state;
-    editors = _.reject(editors, { value: editorToRemove.value });
+    editors = reject(editors, { value: editorToRemove.value });
 
     api.removeEditor(editorToRemove.value, cid).then(result => {
       this.setState({
@@ -217,34 +208,34 @@ const ColumnSettingPage = React.createClass({
         editors
       });
     });
-  },
+  }
 
-  handleClose(e) {
+  handleClose = (e) => {
     this.setState({ dialog: false });
-  },
+  }
 
-  confirmDeleteEditor(editorToRemove) {
+  confirmDeleteEditor = (editorToRemove) => {
     this.setState({
       dialog: true,
       dialogText: "Are you sure to delete " + editorToRemove.text + " ?",
       switchTo: "editor",
       editorToRemove
     });
-  },
+  }
 
-  confirmDeleteWriter(writerToRemove) {
+  confirmDeleteWriter = (writerToRemove) => {
     this.setState({
       dialog: true,
       dialogText: "Are you sure to delete " + writerToRemove.text + " ?",
       switchTo: "writer",
       writerToRemove
     });
-  },
+  }
 
-  updateColumn(e) {
+  updateColumn = (e) => {
     e.preventDefault();
 
-    let cid = this.props.params.cid;
+    let cid = this.props.match.params.cid;
     if (cid == null) return;
 
     let data = {};
@@ -257,22 +248,22 @@ const ColumnSettingPage = React.createClass({
 
     let column = this.state.column
     api
-      .updateColumn(cid, column)
-      .then(col => {
-        this.setState({
-          textStatus: "Saved successfully",
-          error: false
-        });
-      })
-      .catch(err => {
-        this.setState({
-          textStatus: err.message,
-          error: true
-        });
+    .updateColumn(cid, column)
+    .then(col => {
+      this.setState({
+        textStatus: "Saved successfully",
+        error: false
       });
-  },
+    })
+    .catch(err => {
+      this.setState({
+        textStatus: err.message,
+        error: true
+      });
+    });
+  }
 
-  fetchEditorsAutoComplete(keyword) {
+  fetchEditorsAutoComplete = (keyword) => {
     this.setState({ editorSearchText: keyword });
 
     let inp = keyword.split("").length, a = [];
@@ -288,9 +279,9 @@ const ColumnSettingPage = React.createClass({
         });
       });
     }
-  },
+  }
 
-  fetchWritersAutoComplete(keyword) {
+  fetchWritersAutoComplete = (keyword) => {
     this.setState({ writerSearchText: keyword });
 
     let inp = keyword.split("").length, a = [];
@@ -306,49 +297,49 @@ const ColumnSettingPage = React.createClass({
         });
       });
     }
-  },
+  }
 
-  addEditor(item, index) {
+  addEditor = (item, index) => {
     let cid = this.state.column._id;
     if (cid == null) return;
 
     if (typeof item === "object") {
       api
-        .addEditorToColumn(parseInt(item.value), cid)
-        .then(result => {
-          let editors = this.state.editors.slice();
-          editors.push(item);
+      .addEditorToColumn(parseInt(item.value), cid)
+      .then(result => {
+        let editors = this.state.editors.slice();
+        editors.push(item);
 
-          this.setState({
-            editors: editors,
-            editorSearchText: ""
-          });
-        })
-        .catch(err => {});
+        this.setState({
+          editors: editors,
+          editorSearchText: ""
+        });
+      })
+      .catch(err => {});
     }
-  },
+  }
 
-  addWriter(item, index) {
+  addWriter = (item, index) => {
     let cid = this.state.column._id;
     if (cid == null) return;
 
     if (typeof item === "object") {
       api
-        .addWriterToColumn(parseInt(item.value), cid)
-        .then(result => {
-          let writers = this.state.writers.slice();
-          writers.push(item);
+      .addWriterToColumn(parseInt(item.value), cid)
+      .then(result => {
+        let writers = this.state.writers.slice();
+        writers.push(item);
 
-          this.setState({
-            writers: writers,
-            writerSearchText: ""
-          });
-        })
-        .catch(err => {});
+        this.setState({
+          writers: writers,
+          writerSearchText: ""
+        });
+      })
+      .catch(err => {});
     }
-  },
+  }
 
-  editDesc(e) {
+  editDesc = (e) => {
     var val = e.target.value.split("");
     if (val.length >= 140) {
       this.setState({
@@ -361,17 +352,17 @@ const ColumnSettingPage = React.createClass({
         errText: ""
       });
     }
-  },
+  }
 
-  resetDate(e) {
+  resetDate = (e) => {
     if (e) e.preventDefault();
 
     this.setState({
       column: this.column
     });
-  },
+  }
 
-  columnChanged(e){
+  columnChanged = (e) => {
     const name = e.target.name
     if(name=='shortDesc'){
       var val = e.target.value.split('')
@@ -386,19 +377,24 @@ const ColumnSettingPage = React.createClass({
         })
       }
     }
-    let col = _.cloneDeep(this.state.column)
-    utils.set(col, name, e.target.value)
+    let col = cloneDeep(this.state.column)
+    utils.dotToObj(col, name, e.target.value)
     this.setState({
       column: col
     })
-  },
+  }
 
+  componentDidMount() {
+    this.getWriters();
+    this.getEditors();
+    this.getColumn();
+  }
 
   render() {
     let col = this.state.column;
     //console.log(col);
-    var { theme } = this.context.setting.publisher;
-    var {
+    let { theme } = this.context.setting.publisher;
+    let {
       descText,
       errText,
       dialog,
@@ -414,6 +410,7 @@ const ColumnSettingPage = React.createClass({
       writerSearchText,
       editorSearchText
     } = this.state;
+
     const actions = [
       <FlatButton
         label="Cancel"
@@ -428,6 +425,7 @@ const ColumnSettingPage = React.createClass({
         }
       />
     ];
+
     return (
       <Container onSubmit={this.updateColumn} ref="columnForm">
         <Dialog
@@ -503,7 +501,7 @@ const ColumnSettingPage = React.createClass({
                 "/publishers/" +
                   config.PID +
                   "/columns/" +
-                  this.props.params.cid +
+                  this.props.match.params.cid +
                   "/cover"
               }
               ratio={1920/340}
@@ -593,9 +591,6 @@ const ColumnSettingPage = React.createClass({
       </Container>
     );
   }
-});
-ColumnSettingPage.contextTypes = {
-  setting: React.PropTypes.object
-};
+}
 
 export default ColumnSettingPage;

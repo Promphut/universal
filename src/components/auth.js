@@ -1,27 +1,31 @@
-import Request from 'superagent'
-import cookies from './cookies'
-import _ from 'lodash'
+const Request = require('superagent'),
+  cookieService = require('./cookieService'),
+  toUpper = require('lodash/toUpper'),
+  filter = require('lodash/filter'),
+  config = require('../config')
 
 let auth = {}
 auth = {
   setCookieAndToken(cookieAndToken){
    // //console.log('setCookieAndToken', cookieAndToken)
-    if(cookieAndToken.token) cookies.set('token', cookieAndToken.token)
-    if(cookieAndToken.user) cookies.setJSON('user', cookieAndToken.user)
-    if(cookieAndToken.roles) cookies.setJSON('roles', cookieAndToken.roles)
-    //if(cookieAndToken.menu) cookies.setJSON('menu', cookieAndToken.menu)
+    if(cookieAndToken.token) cookieService.set('token', cookieAndToken.token)
+    if(cookieAndToken.user) cookieService.set('user', cookieAndToken.user) //cookieService.setJSON('user', cookieAndToken.user)
+    if(cookieAndToken.roles) cookieService.set('roles', cookieAndToken.roles) //cookieService.setJSON('roles', cookieAndToken.roles)
+    //if(cookieAndToken.menu) cookieService.setJSON('menu', cookieAndToken.menu)
   },
 
   getToken() {
-    return cookies.get('token')
+    return cookieService.get('token')
   },
 
   getUser(){
-    return cookies.getJSON('user')
+    //return cookieService.getJSON('user')
+    return cookieService.get('user')
   },
 
   getRoles(){
-    return cookies.getJSON('roles')
+    //return cookieService.getJSON('roles')
+    return cookieService.get('roles')
   },
 
   // hasRoleOf(roleName, ofId){
@@ -35,8 +39,8 @@ auth = {
   //   pid = parseInt(pid)
   //   if(_.isNaN(pid)) throw new Error('pid must be specified.')
 
-  //   let user = cookies.getUser(), 
-  //       roles = cookies.getRoles()
+  //   let user = cookieService.getUser(), 
+  //       roles = cookieService.getRoles()
   //   if(!user || !roles) return false // this user hasn't logged in, authorization will be false.
 
   //   return _.filter(roles, {type:ROLES.ADMIN, user:user._id, publisher:pid}).length > 0 
@@ -46,8 +50,8 @@ auth = {
   //   cid = parseInt(cid)
   //   if(_.isNaN(cid)) throw new Error('cid must be specified.')
 
-  //   let user = cookies.getUser(), 
-  //       roles = cookies.getRoles()
+  //   let user = cookieService.getUser(), 
+  //       roles = cookieService.getRoles()
   //   if(!user || !roles) return false // this user hasn't logged in, authorization will be false.
 
   //   return _.filter(roles, {type:ROLES.WRITER, user:user._id, column:cid}).length > 0 
@@ -57,8 +61,8 @@ auth = {
   //   cid = parseInt(cid)
   //   if(_.isNaN(cid)) throw new Error('cid must be specified.')
     
-  //   let user = cookies.getUser(), 
-  //       roles = cookies.getRoles()
+  //   let user = cookieService.getUser(), 
+  //       roles = cookieService.getRoles()
   //   if(!user || !roles) return false // this user hasn't logged in, authorization will be false.
 
   //   return _.filter(roles, {type:ROLES.EDITOR, user:user._id, column:cid}).length > 0 
@@ -73,7 +77,7 @@ auth = {
     if(!user) return false
     //console.log('getRoles', auth.getRoles())
     roles.forEach(role => {
-      role = _.toUpper(role)
+      role = toUpper(role)
       let compare
       //console.log('CID', cid, cid!=null)
       if(role==='ADMIN') compare = {type:config.ROLES.ADMIN, user:user._id, publisher:pid}
@@ -88,8 +92,8 @@ auth = {
       // Optimistic check
       else if(role==='WRITER') compare = {type:config.ROLES.WRITER, user:user._id}
       
-      //console.log('role compare', role, compare, _.filter(cookieRoles, compare), cookieRoles)
-      if(compare) authorized = authorized || (_.filter(cookieRoles, compare).length > 0)
+      //console.log('role compare', role, compare, filter(cookieRoles, compare), cookieRoles)
+      if(compare) authorized = authorized || (filter(cookieRoles, compare).length > 0)
     })
 
     //console.log('authorized', authorized)
@@ -97,9 +101,9 @@ auth = {
   },
 
   logout(cb) {
-    cookies.remove('token')
-    cookies.remove('user')
-    cookies.remove('roles')
+    cookieService.remove('token')
+    cookieService.remove('user')
+    cookieService.remove('roles')
     // except menu
 
     if (cb) cb()

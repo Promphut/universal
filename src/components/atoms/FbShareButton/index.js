@@ -1,26 +1,36 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import api from 'components/api'
+import utils from '../../../services/utils'
+import config from '../../../config'
+import { withRouter } from 'react-router'
 
-const FbShareButton = React.createClass({
-	getInitialState(){
-		return { }
-	},
+class FbShareButton extends React.Component {
+	static propTypes = {
+		button: PropTypes.node.isRequired,
+		hashtag: PropTypes.string, // optional, default is publisher name
+		sid: PropTypes.number, // optional, default will try to pick sid from url, unless storyinsight won't be saved.
+		url: PropTypes.string // optional, default is this window.location url. If url presented with /:sid, no need to input sid, it will auto get from the url.
+	}
 
-	getUrl(done){
+	constructor(props) {
+		super(props)
+	}
+
+	getUrl = (done) => {
 		// Get url
 		let url = this.props.url
 		if(!url){
-			let loc = window.location
-			url = [loc.protocol, '//', loc.host, loc.pathname].join('')
+			url = config.FRONTURL + this.props.location.pathname
 		}
 		api.shorten(url, {medium:'social', source:'facebook'})
 		.then(done)
-	},
+	}
 
-	handleFbShare(){
+	handleFbShare = () => {
 		// Get sid
 		let sid = this.props.sid
-		if(sid==null) sid = getTrailingSid(this.props.url)
+		if(sid==null) sid = utils.getTrailingSid(this.props.url)
 
 		this.getUrl(res => {
 			//console.log('URL', res)
@@ -38,18 +48,11 @@ const FbShareButton = React.createClass({
 				if(sid!=null) api.incStoryInsight(sid, 'share', 'share_fb')
 			})
 		})
-	},
+	}
 
 	render(){
 		return <div onClick={this.handleFbShare} style={{...this.props.style}}>{this.props.button}</div>
 	}
-})
+}
 
-FbShareButton.propTypes = {
-  button: PropTypes.node.isRequired,
-  hashtag: PropTypes.string, // optional, default is publisher name
-  sid: PropTypes.number, // optional, default will try to pick sid from url, unless storyinsight won't be saved.
-  url: PropTypes.string // optional, default is this window.location url. If url presented with /:sid, no need to input sid, it will auto get from the url.
-};
-
-export default FbShareButton
+export default withRouter(FbShareButton)

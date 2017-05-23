@@ -1,8 +1,9 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Avatar from 'material-ui/Avatar'
 import FontIcon from 'material-ui/FontIcon';
-import {Link} from 'react-router'
+import {Link} from 'react-router-dom'
 import moment from 'moment'
 
 const Container = styled.div`
@@ -43,15 +44,16 @@ const Span1 = styled.span`
 const WritedBy = ({style, writer, /*column,*/ published}) => {
   //let {name,date,column,url} = detail
   //console.log('WritedBy', writer, published)
+  //writer = writer || { pic: {} }
   return (
     <Container style={{...style}}>
 
       <div>
-        <Link to={writer.url}><Avatar src={writer.pic && writer.pic.small} size={54} className='imgWidth' style={{float:'left',marginTop:'8px'}}/></Link>
+        <a href={writer.url || '#'}><Avatar src={writer.pic && writer.pic.small} size={54} className='imgWidth' style={{float:'left',marginTop:'8px'}}/></a>
       </div>
 
       <Contain className="content-font">
-        by <Span1><Link to={writer.url} style={{color:'#222'}}>{writer.display}</Link></Span1>,
+        by <Span1><a href={writer.url || '#'} style={{color:'#222'}}>{writer.display}</a></Span1>,
         {/*{moment(published).format('lll')} */}
         <br/>
         {/*writer of <Link to={column.url}><strong>{column.name}</strong></Link>*/}
@@ -65,8 +67,8 @@ const WritedBy = ({style, writer, /*column,*/ published}) => {
 
 WritedBy.propTypes = {
   writer: PropTypes.object.isRequired,
-  //column: PropTypes.object.isRequired,
-  published: PropTypes.string.isRequired
+  column: PropTypes.object,
+  published: PropTypes.string
 }
 
 

@@ -1,8 +1,10 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {BGImg} from 'components'
 import styled,{keyframes} from 'styled-components'
-import {Link} from 'react-router'
+import {Link} from 'react-router-dom'
 import FontIcon from 'material-ui/FontIcon';
+
 const LargeBox =styled(Link)`
   display:flex;
 	flex:${props=>props.large?3:2};
@@ -102,26 +104,26 @@ const fadeOut = keyframes`
   }
 `
 
-const TopVideo = React.createClass({
-	getInitialState(){
-		return {
-      hover:false
-		}
-	},
+class TopVideo extends React.Component {
+  static contextTypes = {
+    setting: PropTypes.object
+  }
 
-	componentDidMount(){
+  state = {
+    hover:false
+  }
 
-	},
-  hover(){
+  hover = () => {
     this.setState({hover:true})
-  },
-  leave(){
+  }
+  leave = () => {
     this.setState({hover:false})
-  },
+  }
 
-	render(){
+  render(){
     var {style,swift,className,large} = this.props
     var {hover} = this.state
+
     if(swift){
       return (
         <LargeBox to='#' large={large} style={{...style}} className={' '+className} onMouseOver={this.hover} onMouseLeave={this.leave}>
@@ -161,11 +163,7 @@ const TopVideo = React.createClass({
         </LargeBox>    
       )
     }
-	}
-});
-
-TopVideo.contextTypes = {
-	setting: React.PropTypes.object
-};
+  }
+}
 
 export default TopVideo;

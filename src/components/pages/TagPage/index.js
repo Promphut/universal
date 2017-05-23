@@ -6,8 +6,10 @@ import styled from 'styled-components'
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import api from 'components/api'
-import Infinite from 'react-infinite'
+import InfiniteScroll from 'react-infinite-scroller';
 import CircularProgress from 'material-ui/CircularProgress';
+import utils from '../../../services/utils'
+
 const Wrapper = styled.div`
 
 `
@@ -83,6 +85,7 @@ const ColumnName = styled.div`
   	font-size: 16px;
   }
 `
+
 const TagName = styled.h1`
   font-size:32px;
   font-weight:bold;
@@ -106,142 +109,137 @@ const Onload = styled.div`
 	height:70px;
 	margin:50px 0 50px 0;
 `
-const TagPage = React.createClass({
-	getInitialState(){
-		return {
-			feed: [],
-			latestStories:[],
+
+class TagPage extends React.Component {
+	state = {
+		isMobile:false,
+		tag: {},
+
+		page:0,
+		feedCount:-1,
+		feed: [],
+		hasMoreFeed: true,
+	}
+
+	constructor(props) {
+		super(props)
+	}
+
+	onload = () => <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>
+	reloadFeed = () => {
+		this.setState({
 			page:0,
-			isInfiniteLoading: true,
-			loadOffset:300,
-			feedCount:0,
-			isMobile:false
+			feedCount:-1,
+			feed: [],
+			hasMoreFeed: true
+		}, () => {
+			this.loadFeed(this.state.tag._id)()
+		})
+	}
+	loadFeed = (tagId) => {
+		return () => {
+			//console.log('LOAD FEED0', tagId, this.loading)
+			if(tagId==null) return 
+			// ensure this method is called only once at a time
+			if(this.loading===true) return 
+			this.loading = true
+			//console.log('LOAD FEED1')
+
+			let page = this.state.page
+			//console.log('page', page)
+
+			api.getFeed('story', {status:1, tags:tagId}, 'latest', null, page, 15)
+			.then(result => {
+
+				let feed = this.state.feed.concat(result.feed)
+				this.setState({
+					page: ++page,
+					feed: feed,
+					feedCount: result.count['1'],
+					hasMoreFeed: feed.length < result.count['1']
+				}, () => {this.loading = false})
+			})
 		}
-	},
+	}
+
+	getTagFromSlug = (tagSlug, done=()=>{}) => {
+		//console.log('PROP', this.props)
+		if(!tagSlug) utils.notFound(this.props.history)
+
+		api.getTagFromTagSlug(tagSlug)
+		.then(tag => {
+			this.setState({tag:tag}, done)
+		})
+		.catch(utils.toError(this.props.history))
+	}
 
 	componentDidMount() {
-		this.handleInfiniteLoad()
+		this.getTagFromSlug(this.props.match.params.tagSlug)
+
 		this.setState({
-			isMobile:window.isMobile()
+			isMobile:utils.isMobile()
 		})
-	},
+	}
 
 	componentWillReceiveProps(nextProps) {
-		if(nextProps.params.tag!=this.props.params.tag){
-			this.setState({
-				page:0,
-				latestStories:[],
-				loadOffset:300
-			},()=>{
-				this.handleInfiniteLoad()
-			})
+		//console.log('COL', nextProps, this.props)
+		if(nextProps.match.params.tagSlug!=this.props.match.params.tagSlug){
+			//console.log('RELOAD FEED')
+			this.getTagFromSlug(nextProps.match.params.tagSlug, this.reloadFeed)
+			//this.reloadFeed()
 		}
-	},
-
-	// getColumnFeed(col){
-	// 	let {id, name, shortDesc, cover} = col
-
-	// 	api.getFeed('story', {column: id, status: 1})
-	// 	.then(result => {
-	// 		this.setState({
-	// 			column: {id, name, shortDesc, cover},
-	// 			feed: result.feed,
-	// 		})
-	// 	})
-
-	// },
-
-	buildElements() {
-		let page = this.state.page
-		var {tag} = this.props.params
-
-		api.getFeed('story', {status:1,tags:tag._id}, 'latest', null, page, 10)
-		.then(result => {
-			var s = this.state.latestStories.concat(result.feed)
-			this.setState({
-				feedCount:result.count[1],
-				latestStories:s,
-			},()=>{
-				if(s.length==result.count[1]){
-					this.setState({
-						loadOffset:'undefined',
-						isInfiniteLoading: false,
-					})
-				}else{
-					this.setState({
-						isInfiniteLoading: false
-					})
-				}
-			})
-		})
-	},
-
-	handleInfiniteLoad() {
-		//console.log('Onload')
-		this.buildElements(this.state.page)
-		this.setState({
-				isInfiniteLoading: true,
-				page:this.state.page+1
-		});
-	},
-
-	elementInfiniteLoad() {
-			return <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>;
-	},
+	}
 
 	render(){
-		//console.log(this.props.params.tag)
-		var {tag} = this.props.params
-    const BGImgSize = (window.isMobile() ? 100 : 280) + 60
-		let {column, feed} = this.state
-		//console.log('column', column)
-		var {count,loadOffset,isInfiniteLoading,latestStories,isMobile} = this.state
+    	//const BGImgSize = (utils.isMobile() ? 100 : 280) + 60
+		let {column, isMobile, tag} = this.state
+		let {feedCount,feed,hasMoreFeed} = this.state
 
 		return (
 		    <Wrapper>
 				<TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={this.props.onLoading}/>
 
 		      	<Content>
-              {latestStories.length!=0?<Main>
-                <TextLine className='sans-font' style={{border:'none',marginTop:'60px'}}>tag</TextLine>
-                <TagName className='nunito-font' style={{margin:'10px 0 50px 0'}}>{tag.name}</TagName>
 
-                	<TextLine className='sans-font'>Latest</TextLine>
+		      		{feedCount===0 ? <Main>
+		                <TextLine className='sans-font' style={{border:'none',marginTop:'60px'}}>tag</TextLine>
+		                <TagName className='nunito-font' style={{margin:'10px 0 50px 0'}}>{tag.name}</TagName>
+						
+						<EmptyStory title='No Story, yet' description='There are no stories in this column right now. Wanna back to see other columns?' />
+	              	</Main> : <Main>
+		                <TextLine className='sans-font' style={{border:'none',marginTop:'60px'}}>tag</TextLine>
+		                <TagName className='nunito-font' style={{margin:'10px 0 50px 0'}}>{tag.name}</TagName>
 
-                  <Infinite
-                      containerHeight={!isMobile?(count*210)-100:(count*356)-100}
-                      elementHeight={!isMobile?210:356}
-                      infiniteLoadBeginEdgeOffset={loadOffset}
-                      onInfiniteLoad={this.handleInfiniteLoad}
-                      loadingSpinnerDelegate={this.elementInfiniteLoad()}
-                      isInfiniteLoading={isInfiniteLoading}
-                      useWindowAsScrollContainer={true}>
+	                	<TextLine className='sans-font'>Latest</TextLine>
 
-                    {latestStories.length!=0?latestStories.map((story, index) => (
-                      <ArticleBox detail={story} key={index}/>
-                    )):''}
-                  </Infinite>
+	                	<InfiniteScroll
+						    loadMore={this.loadFeed(tag._id)}
+						    hasMore={hasMoreFeed}
+						    loader={this.onload()}
+						>
+							<div>
+							    {feed.map((item, index) => (
+									<ArticleBox detail={item} key={index}/>
+								))}
+							</div>
+						</InfiniteScroll>
 
-                <More style={{margin:'30px auto 30px auto'}} />
-              </Main>:
-							<Main>
-                <TextLine className='sans-font' style={{border:'none',marginTop:'60px'}}>tag</TextLine>
-                <TagName className='nunito-font' style={{margin:'10px 0 50px 0'}}>{'Tag'}</TagName>
-								 {isInfiniteLoading?<Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>:
-							<EmptyStory title='No Story, yet' description='There are no stories in this column right now. Wanna back to see other columns?' />}											
-              </Main>}
+		                <More style={{margin:'30px auto 30px auto'}} />
+	              	</Main>}
 
-			      <Aside>
-              <TagSideBar style={{marginTop:'4 0px'}}/>
-							<Stick topOffset={70} style={{zIndex: '0'}}>
-								<TrendingSideBar/>
-							</Stick>
-						</Aside>
-	      	</Content>
-					<Footer/>
+				    <Aside>
+	              		<TagSideBar style={{marginTop:'4 0px'}}/>
+						<Stick topOffset={70} style={{zIndex: '0'}}>
+							<TrendingSideBar/>
+						</Stick>
+					</Aside>
+
+	      		</Content>
+
+				<Footer/>
 		   </Wrapper>
 		)
 	}
-});
+}
 
 export default TagPage;

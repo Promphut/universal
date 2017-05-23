@@ -1,10 +1,10 @@
 import React from 'react'
-import {SignUp,SignUpFb,LogoLink,BackButton,CloseButton,EmailSignUp,SignIn2} from 'components'
+import PropTypes from 'prop-types'
+import {SignUp,SignUpFb,LogoLink,BackButton,CloseButton,SignIn2} from 'components'
 import FlatButton from 'material-ui/FlatButton';
 import styled from 'styled-components'
-import {Link,browserHistory} from 'react-router'
-import Request from 'superagent';
 import api from 'components/api'
+import {Link} from 'react-router-dom'
 
 const Wrapper = styled.div`
 	width:100%;
@@ -23,6 +23,7 @@ const Wrapper = styled.div`
     height: 100vh;
   }
 `
+
 const Modal = styled.div`
   width:100%;
   height:100%;
@@ -38,55 +39,56 @@ const Container = styled.div`
 		height: 100vh;
   }
 `
+
 const BoxButton= styled.div`
   overflow:hidden;
   width:100%;
 
 `
 
-const SignUpPage = React.createClass({
-	getInitialState(){
-		return {
+class SignUpPage extends React.Component {
+  static contextTypes = {
+	setting: PropTypes.object
+  }
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
       statePage:1,
-      visible:this.props.visible,
+      visible:props.visible,
       user:{}
     }
-	},
+  }
 
-  componentWillReceiveProps(nextProps){
-    if(nextProps.visible!=this.props.visible){
-      this.setState({
-        visible:nextProps.visible
-      })
-    }
-  },
-
-  changeStatePage(e){
+  changeStatePage = (e) => {
     e.preventDefault()
+
     this.setState({
       statePage:!this.state.statePage
     })
-  },
+  }
 
-  checkBack(e){
+  checkBack = (e) => {
     e.preventDefault()
-    var {statePage} = this.state
-    if(statePage==1){
-      browserHistory.goBack()
+
+    if(this.state.statePage){
+      this.props.history.goBack()
+
     }else{
       this.setState({
-        statePage:1
+        statePage:!this.state.statePage
       })
     }
-  },
+  }
 
-  closeModal(e){
+  closeModal = (e) => {
     this.setState({
       visible:!this.state.visible
     })
-  },
+  }
 
-  checkEmail(e,email){
+  checkEmail = (e,email) => {
     e.preventDefault()
     api.checkSignUp(email).then((u)=>{
       if(u){
@@ -98,7 +100,15 @@ const SignUpPage = React.createClass({
         this.setState({statePage:2,user:email})
       }
     })
-  },
+  }
+
+componentWillReceiveProps(nextProps){
+    if(nextProps.visible!=this.props.visible){
+      this.setState({
+        visible:nextProps.visible
+      })
+    }
+  }
 
 	render(){
     var {statePage,user} = this.state
@@ -125,10 +135,6 @@ const SignUpPage = React.createClass({
       </Wrapper>
     )
 	}
-});
-
-SignUpPage.contextTypes = {
-	setting: React.PropTypes.object
 }
 
 export default SignUpPage

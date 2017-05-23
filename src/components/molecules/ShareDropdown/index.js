@@ -1,45 +1,51 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon'
 import FlatButton from 'material-ui/FlatButton'
 import {Dropdown,TwtShareButton, FbShareButton} from 'components'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import api from 'components/api' 
+import config from '../../../config'
+import utils from '../../../services/utils'
 
-const Hover = styled.div`
-`
+class ShareDropdown extends React.Component {
+  static contextTypes = {
+    setting: PropTypes.object
+  }
 
-const ShareDropdown = React.createClass({
-  getInitialState () {
-    return {
+  constructor(props) {
+    super(props)
+
+    this.state = {
       open: false,
       //copied: false,
       hover: -1
     }
-  },
+  }
 
-  onHover(selected) {
+  onHover = (selected) => {
     this.setState({
       hover: selected
     })
-  },
+  }
 
-  onNotHover() {
+  onNotHover = () => {
     this.setState({
       hover: -1
     })
-  },
+  }
 
-  onStoryCopied(val){
+  onStoryCopied = (val) => {
     //console.log('onStoryCopied', val)
     // get sid
-    val = getTrailingSid(val)
+    val = utils.getTrailingSid(val)
     //this.setState({copied: true})
     if(val!=null) api.incStoryInsight(val, 'share', 'share_dark')
-  },
+  }
 
   render() {
-    var {theme} = this.context.setting.publisher
+    let {theme} = this.context.setting.publisher
     const buttonStyle = {
       color: theme.primaryColor,
       fontSize: '18px',
@@ -69,7 +75,7 @@ const ShareDropdown = React.createClass({
 
     const button = (
       <div onMouseLeave={this.onNotHover}>
-        <Hover onMouseEnter={() => this.onHover(0)}>
+        <div onMouseEnter={() => this.onHover(0)}>
           <FbShareButton url={config.FRONTURL+this.props.url} button={
             <FlatButton
               label={buttons[0]}
@@ -83,8 +89,8 @@ const ShareDropdown = React.createClass({
               style={{width: '180px', textAlign: 'left', display: 'inline-block'}}
               onTouchTap={() => this.select('facebook')}
             />*/}
-        </Hover>
-        <Hover onMouseEnter={() => this.onHover(1)}>
+        </div>
+        <div onMouseEnter={() => this.onHover(1)}>
           <TwtShareButton url={config.FRONTURL+this.props.url} button={
             <FlatButton
               label={buttons[1]}
@@ -92,8 +98,8 @@ const ShareDropdown = React.createClass({
               style={{width: '180px', textAlign: 'left', display: 'inline-block'}}
             />
           } />
-        </Hover>
-        <Hover onMouseEnter={() => this.onHover(2)}>
+        </div>
+        <div onMouseEnter={() => this.onHover(2)}>
           <CopyToClipboard text={config.FRONTURL+this.props.url} onCopy={this.onStoryCopied}>
             <FlatButton
               label={buttons[2]}
@@ -101,7 +107,7 @@ const ShareDropdown = React.createClass({
               style={{width: '180px', textAlign: 'left', display: 'inline-block'}}
             />
           </CopyToClipboard>
-        </Hover>
+        </div>
       </div>
     )
 
@@ -117,10 +123,6 @@ const ShareDropdown = React.createClass({
       </Dropdown>
     )
   }
-})
-
-ShareDropdown.contextTypes = {
-	setting: React.PropTypes.object
-};
+}
 
 export default ShareDropdown

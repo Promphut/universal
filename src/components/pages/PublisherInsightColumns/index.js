@@ -6,14 +6,12 @@ const Container = styled.div`
   width: 100%;
 `
 
-const PublisherInsightColumns = React.createClass({
-  render() {
-    return (
+const PublisherInsightColumns = () => {
+	return (
       <Container>
         <PublisherInsight title='Column Analytic' insigth='topcolumns'/>
       </Container>
     )
-  }
-})
+}
 
 export default PublisherInsightColumns

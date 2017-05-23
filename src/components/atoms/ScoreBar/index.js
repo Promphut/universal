@@ -24,23 +24,16 @@ const VerticalLine = styled.div`
   opacity: .7;
 `
 
-const ScoreBar = React.createClass({
-  getInitialState() {
-    return {
-    }
-  },
-
-  render() {
-    return (
-      <Container className="sans-font" style={this.props.style}>
-        <Item style={{color: '#EB5757'}}>0-2 %</Item>
-        <VerticalLine/>
-        <Item style={{color: '#8E8E8E'}}>3-9 %</Item>
-        <VerticalLine/>
-        <Item style={{color: '#27AE60'}}>10% +</Item>
-      </Container>
-    )
-  }
-})
+const ScoreBar = ({style}) => {
+  return (
+    <Container className="sans-font" style={style}>
+      <Item style={{color: '#EB5757'}}>0-2 %</Item>
+      <VerticalLine/>
+      <Item style={{color: '#8E8E8E'}}>3-9 %</Item>
+      <VerticalLine/>
+      <Item style={{color: '#27AE60'}}>10% +</Item>
+    </Container>
+  )
+}
 
 export default ScoreBar

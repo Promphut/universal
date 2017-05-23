@@ -1,8 +1,8 @@
 import React from 'react'
-import {Link} from 'react-router'
+import {Link} from 'react-router-dom'
 import styled from 'styled-components'
 
-var Tag = styled(Link)`
+const Tag = styled(Link)`
   color:${props=> props.theme.primaryColor};
   font-weight:bold;
   font-style: italic;

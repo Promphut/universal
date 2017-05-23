@@ -1,16 +1,14 @@
 import React from 'react'
-import {ErrorAndNotFound} from 'components'
+import {ErrorAndNotFound, Status} from 'components'
 
-const NotFoundPage = React.createClass({
-  render() {
-    return (
-    	<ErrorAndNotFound
-				errorNumber="404"
-			>
+const NotFoundPage = () => {
+	return (
+		<Status code={404}>
+	    	<ErrorAndNotFound title="404">
 				Sorry, we couldn’t find the page you’re looking for.
-    	</ErrorAndNotFound>
-		)
-  }
-})
+	    	</ErrorAndNotFound>
+	    </Status>
+	)
+}
 
 export default NotFoundPage;

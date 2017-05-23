@@ -1,8 +1,8 @@
-import React, {Component, PropTypes} from 'react';
-import {Link} from 'react-router';
+import React from 'react';
+import PropTypes from 'prop-types'
+import {Link} from 'react-router-dom';
 import styled from 'styled-components'
 import {findDOMNode as dom} from 'react-dom'
-//import Request from 'superagent'
 import api from 'components/api'
 import auth from 'components/auth'
 import Cropper from 'react-cropper';
@@ -10,8 +10,13 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import {PrimaryButton} from 'components'
-import 'cropperjs/dist/cropper.css';
-const Container = styled.form`
+import config from '../../../config'
+
+if (process.env.BROWSER) {
+  require('cropperjs/dist/cropper.css')
+}
+
+const Container = styled.div`
   min-width:50px;
   min-height:50px;
 `
@@ -86,72 +91,81 @@ const Label = styled.span`
   color:${props=> props.theme.accentColor};
 `
 
-const UploadPicture = React.createClass({
-  getDefaultProps() {
-      return {
-          width: 120,
-          height:120,
-          size:'',
-          ratio:1,
-          crop:true
-      };
-  },
-  getInitialState(){
-    this.maxMB = this.props.maxMB ? parseFloat(this.props.maxMB) : 5
-		this.allowTypes = this.props.allowTypes || '|jpg|png|jpeg|gif|svg+xml|'
-    
-    return {
-      statePreview:this.props.src==null?false:true,
+class UploadPicture extends React.Component {
+  static defaultProps = {
+    width: 120,
+    height:120,
+    size:'',
+    ratio:1,
+    crop:true
+  }
+  static propTypes = {
+    style: PropTypes.object,
+    labelStyle: PropTypes.object,
+    width: PropTypes.number,
+    height: PropTypes.number,
+    label: PropTypes.string,
+    type: PropTypes.string,
+    src: PropTypes.string,
+    path: PropTypes.string,
+    size:PropTypes.string,
+    ratio:PropTypes.number,
+    crop: PropTypes.bool
+  }
+  static contextTypes = {
+    setting: PropTypes.object
+  }
+  constructor(props) {
+    super(props)
+
+    this.maxMB = props.maxMB ? parseFloat(props.maxMB) : 5
+    this.allowTypes = props.allowTypes || '|jpg|png|jpeg|gif|svg+xml|'
+
+    this.state = {
+      statePreview: props.src==null?false:true,
       preview: null, 
       //file: '', 
-			msg: this.props.size,
+      msg: props.size,
       err:false,
       open:false,
       data:{},
       previewUrl:''
     }
-  },
+  }
 
-  componentWillReceiveProps(nextProps){
-    if(nextProps.src!=this.props.src && nextProps.src!=null){
-      this.setState({
-        statePreview:true
-      })
-    }
-  },
+  isFiletypeValid = (file) => {
+    let type = '|' + file.type.slice(file.type.lastIndexOf('/') + 1) + '|';
+    var fileTypeValid = this.allowTypes.indexOf(type) !== -1
+    return fileTypeValid
+  }
 
-  isFiletypeValid(file){
-		let type = '|' + file.type.slice(file.type.lastIndexOf('/') + 1) + '|';
-		var fileTypeValid = this.allowTypes.indexOf(type) !== -1
-		return fileTypeValid
-	},
+  isFilesizeValid = (file) => {
+    return file.size <= this.maxMB*1000000
+  }
 
-	isFilesizeValid(file){
-		return file.size <= this.maxMB*1000000
-	},
-
-  upload(e){
+  upload = (e) => {
+    
     var reader = new FileReader();
     var file = e.target.files[0]
     this.file = file
     if(!file) return
     if(!this.isFiletypeValid(file)){
-			this.setState({
-				msg: 'File type invalid.',
-				//file: file,
+      this.setState({
+        msg: 'File type invalid.',
+        //file: file,
         err:true
-			})
-			return
-		}
-		
-		if(!this.isFilesizeValid(file)) {
-			this.setState({
-				msg: 'File size couldn\'t allowed exceed '+this.maxMB+' MB',
-				//file: file,
+      })
+      return
+    }
+    
+    if(!this.isFilesizeValid(file)) {
+      this.setState({
+        msg: 'File size couldn\'t allowed exceed '+this.maxMB+' MB',
+        //file: file,
         err:true
-			})
-			return
-		}
+      })
+      return
+    }
 
     reader.onload = (event)=>{
 
@@ -164,7 +178,8 @@ const UploadPicture = React.createClass({
           preview: reader.result,
           open:true
         })
-      }else{
+
+      } else {
         this.setState({
           statePreview:true,
           preview: reader.result,
@@ -183,27 +198,29 @@ const UploadPicture = React.createClass({
           })
         })
       }
-    }   
-    reader.readAsDataURL(file);     
-  },
+    }
 
-  _crop(){
-		// image in dataUrl
-		this.setState({data:this.refs.cropper.getData()})
-		//console.log(this.refs.cropper.getCroppedCanvas().toDataURL());
-	},
+    reader.readAsDataURL(file);
 
-  handleOpen(){
+  }
+
+  _crop = () => {
+    // image in dataUrl
+    this.setState({data:this.refs.cropper.getData()})
+    //console.log(this.refs.cropper.getCroppedCanvas().toDataURL());
+  }
+
+  handleOpen = () => {
     this.setState({open: true});
-  },
+  }
 
-  handleClose(){
+  handleClose = () => {
     this.setState({open: false});
-  },
+  }
 
-  uploadToServer(){
+  uploadToServer = () => {
     //console.log(this.state.data)
-    api.uploadFile(this.file, this.props.type, config.BACKURL + this.props.path,this.state.data)
+    api.uploadFile(this.file, this.props.type, config.BACKURL + this.props.path, this.state.data)
     .then(res => {
       this.setState({
         open: false,
@@ -218,8 +235,15 @@ const UploadPicture = React.createClass({
         err: true
       })
     })
-  },
+  }
 
+  componentWillReceiveProps(nextProps){
+    if(nextProps.src!=this.props.src && nextProps.src!=null){
+      this.setState({
+        statePreview:true
+      })
+    }
+  }
 
   render(){
     
@@ -243,8 +267,9 @@ const UploadPicture = React.createClass({
         onClick={this.uploadToServer}
       />,
     ];
-    return(
-      <Container encType="multipart/form-data" style={{...style,width:width,height:height+20+'px'}}>
+
+    return (
+      <Container style={{...style,width:width,height:height+20+'px'}}>
         <Dialog
           actions={actions}
           modal={true}
@@ -254,14 +279,14 @@ const UploadPicture = React.createClass({
           onRequestClose={this.handleClose}
         >
           <Cropper
-						ref='cropper'
-						src={preview}
-						style={{height: 400, width:574,margin:'30px auto 30px auto'}}
-						// Cropper.js options
-						aspectRatio={this.props.ratio}
-						guides={false}
+            ref='cropper'
+            src={preview}
+            style={{height: 400, width:574,margin:'30px auto 30px auto'}}
+            // Cropper.js options
+            aspectRatio={this.props.ratio}
+            guides={false}
             viewMode={1}
-						crop={this._crop} />
+            crop={this._crop} />
         </Dialog>
         {!statePreview&&<Box width={width} height={height} className="menu-font" id={id} onClick={()=>(dom(this.refs.imageLoader).click())}><Label style={{...labelStyle}}>{label?label:"Upload Picture"}</Label></Box>}
         <Preview width={width} height={height} ref='preview' style={{display:statePreview?'block':'none',backgroundImage:'url('+(preview || src)+')'}}>
@@ -272,21 +297,6 @@ const UploadPicture = React.createClass({
       </Container>
     )
   }
-})
-
-UploadPicture.propTypes = {
-  style: PropTypes.object,
-  labelStyle: PropTypes.object,
-  width: PropTypes.number,
-  height: PropTypes.number,
-  label: PropTypes.string,
-  type: PropTypes.string,
-  src: PropTypes.string,
-  path: PropTypes.string,
-  size:PropTypes.string,
-  ratio:PropTypes.number
 }
-UploadPicture.contextTypes = {
-	setting: React.PropTypes.object
-};
+
 export default UploadPicture;

@@ -1,10 +1,6 @@
 import React from 'react'
-import { TopBarWithNavigation, OverlayImg, PublisherProfileSetting,
-   PublisherPublishingSetting, PublisherAnalyticSetting, PublisherThemeSetting,
-   PublisherSettingMenu, Footer } from 'components'
-
+import { TopBarWithNavigation, PublisherSettingMenu, Footer, PrivateRoute, PublisherDashboardPage, PublisherSettingPage, PublisherContactAndAboutPage, PublisherStoryPage, ColumnSettingPage, PublisherInsightStories, PublisherInsightColumns, PublisherInsightWriters } from 'components'
 import styled from 'styled-components'
-
 
 const Wrapper = styled.div`
   width:100%;
@@ -22,6 +18,7 @@ const Container = styled.div`
   width:100%;
   padding:10% 0 5% 0;
 `
+
 const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
@@ -29,46 +26,43 @@ const Content = styled.div`
   width:1110px;
   margin:0 auto 0 auto;
 `
+
 const Main = styled.div`
 	background: white;
 	flex: 3 855px;
 	max-width: 855px;
 `
+
 const Aside = styled.div`
 	background: rgba(255,255,255,0.5);
 	flex: 1 255px;
 	max-width: 255px;
 `
 
-const PublisherEditor = React.createClass({
-	getInitialState(){
-		return {}
-	},
-
-  componentDidMount(){
-
-  },
-
-  render(){
-		return (
-		    <Wrapper>
-		      <TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={this.props.onLoading}/>
-          <Container>
-            <Content>
-              <Aside>
-                <PublisherSettingMenu pathname={this.props.location.pathname}/>
-              </Aside>
-              <Main>
-                {this.props.children}
-              </Main>
-            </Content>
-          </Container>
-  				<Footer/>
-		   </Wrapper>
-		  )
-	}
-});
-
-
+const PublisherEditor = ({onLoading, location, children, match}) => {
+  return (
+    <Wrapper>
+      <TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={onLoading}/>
+      <Container>
+        <Content>
+          <Aside>
+            <PublisherSettingMenu pathname={location.pathname}/>
+          </Aside>
+          <Main>
+              <PrivateRoute exact path={`${match.url}/`} roles={['ADMIN', 'EDITOR']} component={PublisherDashboardPage} />
+              <PrivateRoute exact path={`${match.url}/settings`} roles={['ADMIN']} component={PublisherSettingPage} />
+              <PrivateRoute exact path={`${match.url}/contact`} roles={['ADMIN']} component={PublisherContactAndAboutPage} />
+              <PrivateRoute exact path={`${match.url}/manage`} roles={['ADMIN', 'EDITOR']} component={PublisherStoryPage} />
+              <PrivateRoute exact path={`${match.url}/columns/:cid/settings`} roles={['ADMIN', 'EDITOR']} bypassCidCheck={false} component={ColumnSettingPage} />
+              <PrivateRoute exact path={`${match.url}/stories`} roles={['ADMIN', 'EDITOR']} component={PublisherInsightStories} />
+              <PrivateRoute exact path={`${match.url}/columns`} roles={['ADMIN', 'EDITOR']} component={PublisherInsightColumns} />
+              <PrivateRoute exact path={`${match.url}/writers`} roles={['ADMIN', 'EDITOR']} component={PublisherInsightWriters} />
+          </Main>
+        </Content>
+      </Container>
+      <Footer/>
+   </Wrapper>
+  )
+}
 
 export default PublisherEditor

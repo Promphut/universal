@@ -1,12 +1,13 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import TextField from 'material-ui/TextField'
 import FontIcon from 'material-ui/FontIcon'
 import FlatButton from 'material-ui/FlatButton'
 import auth from 'components/auth'
 import api from 'components/api'
-import RichTextEditor from 'react-rte'
 import {ContactAndAboutContainer, PrimaryButton, SecondaryButton} from 'components'
+import utils from '../../../services/utils'
 
 const Wrapper = styled.div`
 `
@@ -89,9 +90,15 @@ const SuccessMessageMobile = styled.em`
   }
 `
 
-const ContactPage = React.createClass({
-  getInitialState() {
-    return {
+class ContactPage extends React.Component {
+  static contextTypes = {
+    setting: PropTypes.object
+  }
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
       user: {},
       head: "Hi there!",
       message: {},
@@ -101,7 +108,151 @@ const ContactPage = React.createClass({
       error: {}
       // ,textarea: RichTextEditor.createEmptyValue()
     }
-  },
+  }
+
+  sendMessage = () => {
+    const {username, email, tel, problem, textarea} = this.state.message
+    const contactCat = problem
+    const contact = {
+      name: username,
+      email,
+      tel,
+      detail: textarea
+    }
+
+    // if (username && email && problem) {
+      api.sendContactEmail(contactCat, contact)
+      .then(contact => {
+        this.setState({
+          saved: true
+        })
+      })
+      .catch(err => {
+        this.setState({
+          saved: false,
+          error: {
+            username: err.errors.name ? err.errors.name.message : '',
+            email: err.errors.email ? err.errors.email.message : '',
+            textarea: err.errors.detail
+          }
+        })
+      })
+    // } else {
+    //   //console.log('Please enter require value')
+    //
+    //   this.setState({
+    //     saved: false
+    //   })
+    // }
+  }
+
+  resestMessage = () => {
+    const problem = this.state.message.problem
+
+    this.setState({
+      message: {
+        username: '',
+        email: '',
+        tel: '',
+        problem,
+        textarea: ''
+      },
+      error: {
+        username: '',
+        email: '',
+        tel: '',
+        textarea: ''
+      },
+      saved: false
+    })
+  }
+
+  selectProblem = (problem) => {
+    const message = this.state.message
+
+    this.setState({
+      message: {
+        ...message,
+        problem
+      },
+      dropdown: false
+    })
+  }
+
+  openDropdown = () => {
+    this.setState({
+      dropdown: true
+    })
+  }
+  closeDropdown = () => {
+    this.setState({
+      dropdown: false
+    })
+  }
+
+  handleChangeUsername = () => {
+    const username = this.refs.username.getValue()
+    const message = this.state.message
+    const error = this.state.error
+
+    this.setState({
+      message: {
+        ...message,
+        username
+      },
+      error: {
+        ...error,
+        username: ''
+      }
+    })
+  }
+  handleChangeEmail = () => {
+    const email = this.refs.email.getValue()
+    const message = this.state.message
+    const error = this.state.error
+
+    this.setState({
+      message: {
+        ...message,
+        email
+      },
+      error: {
+        ...error,
+        email: ''
+      }
+    })
+  }
+  handleChangeTel = () => {
+    const tel = this.refs.tel.getValue()
+    const message = this.state.message
+
+    this.setState({
+      message: {
+        ...message,
+        tel
+      }
+    })
+  }
+  handleChangeTextarea = (event) => {
+    const message = this.state.message
+    const error = this.state.error
+
+    this.setState({
+      message: {
+        ...message,
+        textarea: event.target.value
+      },
+      error: {
+        ...error,
+        textarea: ''
+      }
+    })
+  }
+
+  // onChange(value) {
+  //   //console.log(value)
+  //   this.setState({textarea : value});
+  // },
 
   componentDidMount(){
     api.getPublisherContactCats()
@@ -141,154 +292,10 @@ const ContactPage = React.createClass({
         })
       })
     })
-  },
-
-  sendMessage() {
-    const {username, email, tel, problem, textarea} = this.state.message
-    const contactCat = problem
-    const contact = {
-      name: username,
-		  email,
-		  tel,
-		  detail: textarea
-    }
-
-    // if (username && email && problem) {
-      api.sendContactEmail(contactCat, contact)
-      .then(contact => {
-        this.setState({
-          saved: true
-        })
-      })
-      .catch(err => {
-        this.setState({
-          saved: false,
-          error: {
-            username: err.errors.name ? err.errors.name.message : '',
-            email: err.errors.email ? err.errors.email.message : '',
-            textarea: err.errors.detail
-          }
-        })
-      })
-    // } else {
-    //   //console.log('Please enter require value')
-    //
-    //   this.setState({
-    //     saved: false
-    //   })
-    // }
-  },
-
-  resestMessage() {
-    const problem = this.state.message.problem
-
-    this.setState({
-      message: {
-        username: '',
-        email: '',
-        tel: '',
-        problem,
-        textarea: ''
-      },
-      error: {
-        username: '',
-        email: '',
-        tel: '',
-        textarea: ''
-      },
-      saved: false
-    })
-  },
-
-  selectProblem(problem) {
-    const message = this.state.message
-
-    this.setState({
-      message: {
-        ...message,
-        problem
-      },
-      dropdown: false
-    })
-  },
-
-  openDropdown() {
-    this.setState({
-      dropdown: true
-    })
-  },
-  closeDropdown() {
-    this.setState({
-      dropdown: false
-    })
-  },
-
-  handleChangeUsername() {
-    const username = this.refs.username.getValue()
-    const message = this.state.message
-    const error = this.state.error
-
-    this.setState({
-      message: {
-        ...message,
-        username
-      },
-      error: {
-        ...error,
-        username: ''
-      }
-    })
-  },
-  handleChangeEmail() {
-    const email = this.refs.email.getValue()
-    const message = this.state.message
-    const error = this.state.error
-
-    this.setState({
-      message: {
-        ...message,
-        email
-      },
-      error: {
-        ...error,
-        email: ''
-      }
-    })
-  },
-  handleChangeTel() {
-    const tel = this.refs.tel.getValue()
-    const message = this.state.message
-
-    this.setState({
-      message: {
-        ...message,
-        tel
-      }
-    })
-  },
-  handleChangeTextarea(event) {
-    const message = this.state.message
-    const error = this.state.error
-
-    this.setState({
-      message: {
-        ...message,
-        textarea: event.target.value
-      },
-      error: {
-        ...error,
-        textarea: ''
-      }
-    })
-  },
-
-  // onChange(value) {
-  //   //console.log(value)
-  //   this.setState({textarea : value});
-  // },
+  }
 
   render() {
-  	const {theme} = this.context.setting.publisher
+    const {theme} = this.context.setting.publisher
 
     let {user, head, message, problems, saved, dropdown, error} = this.state
     let {username, email, tel, problem, textarea} = this.state.message
@@ -312,7 +319,7 @@ const ContactPage = React.createClass({
     let dropdownProblem
     let textArea
     let fullWidth
-    if (window.isMobile()) {
+    if (utils.isMobile()) {
       dropdownProblem = {
         width: '90vw'
       }
@@ -385,7 +392,7 @@ const ContactPage = React.createClass({
           />*/}
           <TextField
             ref='username'
-            value={username ? username : ''}
+            value={username || ''}
             onChange={this.handleChangeUsername}
             className='content-font'
             hintText={username ? '' : 'Your name'}
@@ -394,13 +401,13 @@ const ContactPage = React.createClass({
             floatingLabelStyle={textStyle}
             floatingLabelFixed={true}
             inputStyle={textStyle}
-            errorText={error.username ? error.username : ''}
+            errorText={error.username || ''}
             fullWidth={fullWidth}
           /><br />
           <TextField
             ref='email'
             type="email"
-            value={email ? email : ''}
+            value={email || ''}
             onChange={this.handleChangeEmail}
             className='content-font'
             hintText={email ? '' : 'Email'}
@@ -409,13 +416,12 @@ const ContactPage = React.createClass({
             floatingLabelStyle={textStyle}
             floatingLabelFixed={true}
             inputStyle={textStyle}
-            errorText={error.email ? error.email : ''}
+            errorText={error.email || ''}
             fullWidth={fullWidth}
           /><br />
           <TextField
             ref='tel'
-            value={tel ? tel : ''}
-            onKeydown={()=>{console.log(e)}}
+            value={tel || ''}
             onChange={this.handleChangeTel}
             className='content-font'
             hintText={tel ? '' : 'Mobile Number'}
@@ -436,12 +442,7 @@ const ContactPage = React.createClass({
       </ContactAndAboutContainer>
     )
   }
-})
-
-
-ContactPage.contextTypes = {
-	setting: React.PropTypes.object
-};
+}
 
 
 export default ContactPage;

@@ -1,9 +1,8 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router';
+import React from 'react';
+import {Link} from 'react-router-dom';
 import styled from 'styled-components'
-import {TrendingSideBarInner} from 'components'
-import {findDOMNode as dom} from 'react-dom'
 import Avatar from 'material-ui/Avatar'
+
 const Container = styled.div`
   width:324px;
   position:relative;
@@ -26,6 +25,7 @@ const Container = styled.div`
     background-color:#DAF8F9;
   }
 `
+
 const Head = styled.div`
   color:#8F8F8F;
   font-size:20px;
@@ -44,6 +44,7 @@ const Head = styled.div`
 	user-select: none;
 	cursor: default;
 `
+
 const Divider =styled.div`
   height:1px;
   width:100%;
@@ -52,18 +53,21 @@ const Divider =styled.div`
   z-index:-5;
   position:relative;
 `
+
 const Column = styled.div`
   font-weight:bold;
   font-size:36px;
   color:${props=> props.theme.primaryColor};
   text-align:center;
 `
+
 const Div = styled.div`
   width:100%;
   padding:12px 0px;
   display:flex;
   cursor: pointer;
 `
+
 const Number = styled.div`
   width:60px;
   height:60px;
@@ -73,70 +77,52 @@ const Number = styled.div`
   font-weight:bold;
   float:left;
 `
+
 const Name = styled.div`
   color:#222;
   font-size:19px;
   font-weight:bold;
 `
+
 const Sty = styled.div`
   color:#8F8F8F;
   font-size:13px;
 `
+
 //if height less than 900px remove last item
 const defaultPic = '/tmp/avatar.png'
 
-const TopWriterSidebar = React.createClass({
-  getInitialState(){
-    return{
-      stopPos:''
-    }
-  },
-
-  componentDidMount(){
-
-	},
-
-  componentWillReceiveProps(nextProps){
-    if(nextProps.stop != this.props.stop){
-      this.setState({stopPos:nextProps.stop})
-    }
-  },
-
-  render(){
-    //console.log(this.props.writer)
-    var {writer} = this.props
-    /*var Sort = []
-    for(let i=0;i<writer.length;i++){
-      Sort.push(
-        <Div className='serif-font' key={i}>
-          <Avatar src='/tmp/avatar.png' size={50} />
-          <div style={{padding:'0 30px 0 35px'}}>
-            <Name>{writer[i].display}</Name>
-            <Sty className='sans-font'>{writer[i].intro}</Sty>
-          </div>
-        </Div>
-      )
-    }*/
-    return (
-      <Container style={{...this.props.style}} ref='contain'>
-        <Divider/>
-        <Head>TOP WRITERS</Head>
-          {writer && writer.map((data, index) => (
-            <Link to={data.url} key={index}>
-              <Div className='serif-font'>
-                <Avatar src={data.pic && data.pic.medium || defaultPic} size={55} />
-                <div style={{padding:'0 30px 0 35px'}}>
-                  <Name>{data.display}</Name>
-                  <Sty className='sans-font'>{data.intro}</Sty>
-                </div>
-              </Div>
-            </Link>
-          ))}
-        <Divider/>
-      </Container>
+const TopWriterSidebar = ({writer, style}) => {
+  /*var Sort = []
+  for(let i=0;i<writer.length;i++){
+    Sort.push(
+      <Div className='serif-font' key={i}>
+        <Avatar src='/tmp/avatar.png' size={50} />
+        <div style={{padding:'0 30px 0 35px'}}>
+          <Name>{writer[i].display}</Name>
+          <Sty className='sans-font'>{writer[i].intro}</Sty>
+        </div>
+      </Div>
     )
-  },
-})
-
+  }*/
+  return (
+    <Container style={{...style}}>
+      <Divider/>
+      <Head>TOP WRITERS</Head>
+        {writer && writer.map((data, index) => (
+          <a href={data.url} key={index}>
+            <Div className='serif-font'>
+              <Avatar src={data.pic && data.pic.medium || defaultPic} size={55} />
+              <div style={{padding:'0 30px 0 35px'}}>
+                <Name>{data.display}</Name>
+                <Sty className='sans-font'>{data.intro}</Sty>
+              </div>
+            </Div>
+          </a>
+        ))}
+      <Divider/>
+    </Container>
+  )
+}
 
 export default TopWriterSidebar;

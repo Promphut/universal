@@ -1,6 +1,5 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router';
-import styled,{keyframes} from 'styled-components'
+import React from 'react';
+import styled, {keyframes} from 'styled-components'
 import {BGImg, ShareDropdown} from 'components'
 import Avatar from 'material-ui/Avatar';
 import FontIcon from 'material-ui/FontIcon'
@@ -8,7 +7,8 @@ import Popover from 'material-ui/Popover'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import moment from 'moment'
-import _ from 'lodash'
+import truncate from 'lodash/truncate'
+
 const Container = styled.div`
   width:100%;
   z-index:100;
@@ -40,23 +40,6 @@ const BG = styled(BGImg)`
   width:100%;
   animation: ${props=> props.hover?slideOut:slideIn} ${props=> props.hover?0.4:0.2}s forwards;
   &:hover{
-    cursor:pointer;
-  }
-`
-const NameLink = styled(Link)`
-  display: block;
-  color:white;
-  font-weight:bold;
-  font-size:20px;
-  height:50px;
-  text-overflow: ellipsis;
-  white-space: wrap;
-  overflow: hidden;
-  @media (max-width:480px) {
-    font-size:15px;
-  }
-  &:hover{
-    color:${props=>props.theme.accentColor}
     cursor:pointer;
   }
 `
@@ -93,31 +76,37 @@ const slideIn = keyframes`
   }
 `
 
-const TopNewsSmall = React.createClass({
-  getInitialState(){
-    return{
+class TopNewsSmall extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
       hover:false
     }
-  },
-  hoverOff(){
+  }
+
+  hoverOff = () => {
     this.setState({
       hover:false
     })
-  },
-  hoverOn(){
+  }
+
+  hoverOn = () => {
     this.setState({
       hover:true
     })
-  },
+  }
+
   render(){
     let {detail,style} = this.props
+
     return (
-      <Container className="row" style={{...style}} onMouseOver={this.hoverOn} onMouseLeave={this.hoverOff} >
+      <Container className="row" style={{...style}} onMouseOver={this.hoverOn} onMouseLeave={this.hoverOff}>
         <BG hover={this.state.hover} url={detail&&detail.url} src={detail&&detail.cover.medium} className='imgWidth mob-hidden' style={{backgroundPosition:'right'}}>
           <Cover>
             <BoxText className='nunito-font showText' hover={this.state.hover}>
               <span>
-                {_.truncate(detail&&detail.ptitle, {
+                {truncate(detail&&detail.ptitle, {
                   'length': 70,
                   'separator': ''
                 })}
@@ -127,7 +116,7 @@ const TopNewsSmall = React.createClass({
         </BG>
         <BoxText className='nunito-font hideText'>
           <span>
-            {_.truncate(detail&&detail.ptitle, {
+            {truncate(detail&&detail.ptitle, {
               'length': 70,
               'separator': ''
             })}
@@ -136,8 +125,6 @@ const TopNewsSmall = React.createClass({
       </Container>
     )
   }
-})
-
-
+}
 
 export default TopNewsSmall;

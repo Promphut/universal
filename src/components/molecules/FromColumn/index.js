@@ -1,8 +1,8 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import Avatar from 'material-ui/Avatar'
 import FontIcon from 'material-ui/FontIcon';
-import {Link} from 'react-router'
+import {Link} from 'react-router-dom'
 import moment from 'moment'
 
 const Container = styled.div`
@@ -56,7 +56,7 @@ const FromColumn = ({style, column}) => {
   return (
     <Container style={{...style}}>
       <div className='row'>
-        <Cir/><Span1><Link to={column.url} style={{color:'#222',marginBottom:'5px'}}>{column.name}</Link></Span1>
+        <Cir/><Span1><a href={column.url || '#'} style={{color:'#222',marginBottom:'5px'}}>{column.name}</a></Span1>
       </div>
       <Contain className="content-font">
         {column.shortDesc}

@@ -1,7 +1,8 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {BGImg} from 'components'
 import styled,{keyframes} from 'styled-components'
-import {Link} from 'react-router'
+import {Link} from 'react-router-dom'
 import api from 'components/api' 
 import moment from 'moment'
 
@@ -89,37 +90,40 @@ background: -ms-linear-gradient(top, rgba(255,255,255,0) 48%, rgba(255,255,255,1
 background: linear-gradient(to bottom, rgba(255,255,255,0) 48%, rgba(255,255,255,1) 100%);
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff', GradientType=0 );
 `
-const TopNewsHome = React.createClass({
-	getInitialState(){
-		return {
-      hover:false,
-      news:[],
-		}
-	},
 
-	componentDidMount(){
-    this.getFeed()
-	},
+class TopNewsHome extends React.Component {
+  static contextTypes = {
+    setting: PropTypes.object
+  }
 
-  getFeed(){
-		// - Fetching latestStories
-		api.getFeed('news', {status:1}, 'latest', null, 0, 10)
-		.then(result => {
-			if(result) {
-				this.setState({
-					news:result.feed
-				})
-			}
-		})
-	},
-  hover(){
+  state = {
+    hover:false,
+    news:[],
+  }
+
+  getFeed = () => {
+    // - Fetching latestStories
+    api.getFeed('news', {status:1}, 'latest', null, 0, 10)
+    .then(result => {
+      if(result) {
+        this.setState({
+          news:result.feed
+        })
+      }
+    })
+  }
+  hover = () => {
     this.setState({hover:true})
-  },
-  leave(){
+  }
+  leave = () => {
     this.setState({hover:false})
-  },
+  }
 
-	render(){
+  componentDidMount(){
+    this.getFeed()
+  }
+
+  render(){
     var {theme} = this.context.setting.publisher
     var {style,swift,className,large} = this.props
     var {hover,news} = this.state
@@ -129,7 +133,7 @@ const TopNewsHome = React.createClass({
         <News className='hidden-mob'>NEWS</News>
         <Dash className='hidden-mob'/>
         <BoxInner>
-          {news.length!=0&&news.map((val,ind)=>(
+          {news && news.map((val,ind)=>(
             <Box key={ind}>
               <div  style={{float:'left',marginRight:'10px',overflow:'hidden'}}>
                 <Doughnut/>
@@ -143,11 +147,7 @@ const TopNewsHome = React.createClass({
 
       </NewsBox>
     )
-	}
-});
-
-TopNewsHome.contextTypes = {
-	setting: React.PropTypes.object
-};
+  }
+}
 
 export default TopNewsHome;

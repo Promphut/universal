@@ -1,12 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { OverlayImg, PublisherProfileSetting,
-   PublisherPublishingSetting,PublisherAnalyticSetting,PublisherThemeSetting } from 'components'
+import { OverlayImg, PublisherProfileSetting, PublisherPublishingSetting, PublisherThemeSetting } from 'components'
 import auth from 'components/auth'
 import api from 'components/api'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import SwipeableViews from 'react-swipeable-views';
-//import Request from 'superagent'
 
 const Container = styled.div`
   width:100%;
@@ -38,24 +37,26 @@ const Title = styled.div`
   font-weight: bold;
   padding-left: 32px;
 `
-const PublisherSettingPage = React.createClass({
-	getInitialState(){
-		return {
-      publisher: {},
-      selectTab:0
-    }
-	},
+
+class PublisherSettingPage extends React.Component {
+  static contextTypes = {
+	setting: PropTypes.object
+  }
+  state = {
+    publisher: {},
+    selectTab:0
+  }
 
   componentDidMount(){
     api.getPublisher(auth.getToken())
     .then(pub => {
       this.setState({publisher:pub})
     })
-  },
+  }
 
-  handleChangeTab(e) {
+  handleChangeTab = (e) => {
 		this.setState({selectTab: e})
-	},
+	}
 
   render(){
     let {publisher,selectTab} = this.state
@@ -125,8 +126,6 @@ const PublisherSettingPage = React.createClass({
       </Container>
 	  )
 	}
-});
-PublisherSettingPage.contextTypes = {
-	setting: React.PropTypes.object
-};
+}
+
 export default PublisherSettingPage;

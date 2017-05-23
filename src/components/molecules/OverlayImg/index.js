@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import styled, {css} from 'styled-components'
 import {GradientOverlay} from 'components'
 
@@ -8,6 +9,7 @@ const Img = styled.div`
   background-size:cover;
   overflow:auto;
 `
+
 const Filter = styled(GradientOverlay)`
   position:relative;
   display:block;

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { GraphDashboard, TopRank } from 'components'
 import Divider from 'material-ui/Divider'
 import FlatButton from 'material-ui/FlatButton'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import api from 'components/api'
 
 const Container = styled.div`
@@ -48,7 +48,7 @@ const ButtonWrapper = styled.div`
   width: 100%;
 `
 
-const styles = {
+let styles = {
 	button: {
 		display: 'block',
 		width: '309px',
@@ -63,32 +63,17 @@ const styles = {
 	}
 }
 
-const PublisherDashboardPage = React.createClass({
-	getInitialState() {
-		return {
-			topstories: {},
-			topcolumns: {},
-			topwriters: {}
-		}
-	},
+class PublisherDashboardPage extends React.Component {
+	state = {
+		topstories: {},
+		topcolumns: {},
+		topwriters: {}
+	}
+	constructor(props) {
+		super(props)
+	}
 
-	getInsight(insigth, limit, subaction, filter, sort, current) {
-		api
-			.getViewInsight(insigth, subaction, filter, sort, limit, current)
-			.then(data => {
-				this.setState({ [insigth]: data })
-			})
-	},
-
-	componentDidMount() {
-		const limit = 5
-
-		this.getInsight('topstories', limit)
-		this.getInsight('topcolumns', limit)
-		this.getInsight('topwriters', limit)
-	},
-
-	ShowAllButton(label, to) {
+	showAllButton = (label, to) => {
 		return (
 			<Link to={to} style={{ width: '100px' }}>
 				<FlatButton
@@ -100,7 +85,23 @@ const PublisherDashboardPage = React.createClass({
 				/>
 			</Link>
 		)
-	},
+	}
+
+	getInsight = (insigth, limit, subaction, filter, sort, current) => {
+		api
+		.getViewInsight(insigth, subaction, filter, sort, limit, current)
+		.then(data => {
+			this.setState({ [insigth]: data })
+		})
+	}
+
+	componentDidMount() {
+		const limit = 5
+
+		this.getInsight('topstories', limit)
+		this.getInsight('topcolumns', limit)
+		this.getInsight('topwriters', limit)
+	}
 
 	render() {
 		const { topstories, topcolumns, topwriters } = this.state
@@ -118,25 +119,25 @@ const PublisherDashboardPage = React.createClass({
 				<SubContainer>
 					<TopHeader className="sans-font">Top Stories</TopHeader>
 					<TopRank insigth={'topstories'} data={topstories} />
-					{this.ShowAllButton('Show All Top Stories', '/editor/stories')}
+					{this.showAllButton('Show All Top Stories', '/editor/stories')}
 				</SubContainer>
 				<Divider />
 
 				<SubContainer>
 					<TopHeader className="sans-font">Top Columns</TopHeader>
 					<TopRank insigth={'topcolumns'} data={topcolumns} />
-					{this.ShowAllButton('Show All Top Columns', '/editor/columns')}
+					{this.showAllButton('Show All Top Columns', '/editor/columns')}
 				</SubContainer>
 				<Divider />
 
 				<SubContainer>
 					<TopHeader className="sans-font">Top Writers</TopHeader>
 					<TopRank insigth={'topwriters'} data={topwriters} />
-					{this.ShowAllButton('Show All Top Columns', '/editor/writers')}
+					{this.showAllButton('Show All Top Columns', '/editor/writers')}
 				</SubContainer>
 			</Container>
 		)
 	}
-})
+}
 
 export default PublisherDashboardPage

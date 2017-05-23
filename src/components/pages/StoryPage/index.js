@@ -1,12 +1,16 @@
 import React from 'react'
-import { PageTemplate, TopBarWithNavigation, StoryDetail, RecommendArticle, TrendingSideBar,
+import PropTypes from 'prop-types'
+import { TopBarWithNavigation, StoryDetail, RecommendArticle, TrendingSideBar,
 	 Stick,ShareSideBar, BGImg,RecommendContainer, Footer} from 'components'
-import {Link} from 'react-router'
+import {Link} from 'react-router-dom'
 import styled from 'styled-components'
 import {findDOMNode as dom} from 'react-dom'
 import api from 'components/api'
 import  { StickyContainer, Sticky }  from 'react-sticky'
 import {Helmet} from 'react-helmet'
+import config from '../../../config'
+import utils from '../../../services/utils'
+import auth from 'components/auth'
 
 const Wrapper = styled.div`
 	 .hidden-des{
@@ -101,49 +105,26 @@ background: linear-gradient(to bottom, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#222222', endColorstr='#000000', GradientType=0 );
 `
 
-// const rec = {
-// 	name:'Donald Trump’s First, Alarming Week',
-// 	column:'Money Ideas',
-// 	writer:'RYAN LIZZA',
-// 	vote:'18',
-// 	comment:'3'
-// }
+class StoryPage extends React.Component {
+	state = {
+		recommends: [], 	// trending stories
+		description: ''
+	}
+	static contextTypes = {
+		setting: PropTypes.object
+	}
+	constructor(props) {
+		super(props)
 
+		this.story = {
+			cover: {},
+			coverMobile: {}
+		} //default
+	}
 
-
-const StoryPage = React.createClass({
-	getInitialState(){
-		this.story = this.props.params.story
-		//console.log('canEditStory', this.props.params.canEditStory)
-	  let image = document.createElement('img')
-
-		return {
-			refresh: 0,
-
-			stopPos:'',
-			recommends: [], 	// trending stories
-			description: ''
-		}
-	},
-
-	componentWillReceiveProps(nextProps){
-		//console.log('componentWillReceiveProps', nextProps)
-		if(nextProps.params.story){
-			this.story = nextProps.params.story
-
-			this.setState({refresh: Math.random()})
-		}
-	},
-
-	componentDidMount(){
-		this.getRecommendStories()
-
-		this.findDescription()
-	},
-
-	findDescription(maxLength = 140){
-		if (document.getElementsByTagName('p')) {
-			const story = document.getElementsByTagName('p')
+	findDescription = (maxLength = 140) => {
+		let story = document.getElementsByTagName('p')
+		if (story) {
 			let description = ''
 
 			for (let i = 0; i < story.length; i++) {
@@ -158,9 +139,9 @@ const StoryPage = React.createClass({
 
 			this.setState({description})
 		}
-	},
+	}
 
-	getRecommendStories(){
+	getRecommendStories = () => {
 		if(this.story.column){
 			// Get recommend from column
 			let cid = this.story.column._id
@@ -184,48 +165,63 @@ const StoryPage = React.createClass({
 				})
 			})
 		}
+	}
 
-	},
+	getStoryFromSid = (sid, done=()=>{}) => {
+		if(sid==null) utils.notFound(this.props.history)
+		
+		api.getStoryFromSid(sid, auth.getToken(), this.props.countView)
+	    .then(result => {
+	    	this.story = result.story
+	    })
+	    .catch(utils.toError(this.props.history))
+	}
 
+	componentDidMount(){
+		this.getStoryFromSid(this.props.match.params.sid, () => {
+			this.getRecommendStories()
+			this.findDescription()
+		})
+	}
 
 	render(){
-    let {keywords, channels} = this.context.setting.publisher
-		let {stopPos, recommends, description} = this.state
+    	let {keywords, channels} = this.context.setting.publisher
+		let {recommends, description} = this.state
 
 		let hasCover = false
-		if (window.isMobile() && this.story.coverMobile.medium != config.BACKURL+'/imgs/article_cover_portrait.png') {
+		if (utils.isMobile() && this.story.coverMobile.medium != config.BACKURL+'/imgs/article_cover_portrait.png') {
 			hasCover = true
 		} else if (this.story.cover.medium != config.BACKURL+'/imgs/article_cover_landscape.png') {
 			hasCover = true
 		}
 
-		//console.log('render', this.story)
+		//console.log('render', this.story)w.
 		return (
 			<div>
 				<Helmet>
 					<title>{this.story.title}</title>
-          <meta name="title" content={this.story.title} />
-          <meta name="keywords" content={keywords} />
-          <meta name="description" content={description} />
+					<meta name="title" content={this.story.title} />
+					<meta name="keywords" content={keywords} />
+					<meta name="description" content={description} />
 
-          <link rel="shortcut icon" type="image/ico" href={config.BACKURL+'/publishers/'+config.PID+'/favicon'} />
-          {channels && channels.fb ? <link rel="author" href={getFbUrl(channels.fb)} /> : ''}
-          <link rel="canonical" href={window.location.href} />
+					<link rel="shortcut icon" type="image/ico" href={config.BACKURL+'/publishers/'+config.PID+'/favicon'} />
+					{channels && channels.fb ? <link rel="author" href={utils.getFbUrl(channels.fb)} /> : ''}
+					{/*<link rel="canonical" href={window.location.href} />*/}
 
-          <meta property="og:sitename" content={this.story.title} />
-          <meta property="og:url" content={window.location.href} />
-          <meta property="og:title" content={this.story.title} />
-          <meta property="og:type" content="article" />
+					<meta property="og:sitename" content={this.story.title} />
+					{/*<meta property="og:url" content={window.location.href} />*/}
+					<meta property="og:title" content={this.story.title} />
+					<meta property="og:type" content="article" />
 					<meta property="og:image" content={this.story.cover.medium} />
-          <meta property="og:keywords" content={keywords} />
-          <meta property="og:description" content={description} />
-          <meta property="twitter:card" content="summary_large_image" />
-          <meta property="twitter:image:alt" content={this.story.title} />
-          <meta property="fb:app_id" content={config.ANALYTIC.FBAPPID} />
+					<meta property="og:keywords" content={keywords} />
+					<meta property="og:description" content={description} />
+					<meta property="twitter:card" content="summary_large_image" />
+					<meta property="twitter:image:alt" content={this.story.title} />
+					<meta property="fb:app_id" content={config.ANALYTIC.FBAPPID} />
 
 					<link rel="stylesheet" href="/css/medium-editor.css" type="text/css"/>
-          <link rel="stylesheet" href="/css/tim.css" type="text/css"/>
-          <link rel="stylesheet" href="/css/medium-editor-insert-plugin.css" type="text/css"/>
+					<link rel="stylesheet" href="/css/tim.css" type="text/css"/>
+					<link rel="stylesheet" href="/css/medium-editor-insert-plugin.css" type="text/css"/>
 				</Helmet>
 
 				<Wrapper>
@@ -237,15 +233,14 @@ const StoryPage = React.createClass({
 						<Cover/>
 					</BGImg>}
 					{this.story.coverMobile.medium!=config.BACKURL+'/imgs/article_cover_portrait.png' &&
-					<BGImg style={{width:'100%',height:'85vh'}} src={this.story.coverMobile.large ||
-							this.story.coverMobile.medium} className='hidden-des' alt={this.story.title}>
+					<BGImg style={{width:'100%',height:'85vh'}} src={this.story.coverMobile.large || this.story.coverMobile.medium} className='hidden-des' alt={this.story.title}>
 						<Cover/>
 					</BGImg>}
 
 					<Content paddingTop={hasCover ? '0px' : '60px'}>
 						<Share ref='share' style={{zIndex:'50'}}>
 							<Stick topOffset={100}>
-								<ShareSideBar detail={this.story}/>
+								<ShareSideBar shareCount={this.story.shares ? this.story.shares.total : 0}/>
 							</Stick>
 						</Share>
 
@@ -253,7 +248,7 @@ const StoryPage = React.createClass({
 							<StoryDetail story={this.story} />
 						</Main>
 
-						<Aside  id='trendingBar' ref='trendingBar'>
+						<Aside id='trendingBar' ref='trendingBar'>
 							<Stick topOffset={80} style={{zIndex:'50'}} marginBottom={60}>
 								<TrendingSideBar />
 							</Stick>
@@ -266,12 +261,8 @@ const StoryPage = React.createClass({
 					<Footer/>
 				</Wrapper>
 			</div>
-	  )
+		)
 	}
-})
-
-StoryPage.contextTypes = {
-	setting: React.PropTypes.object
 }
 
 export default StoryPage

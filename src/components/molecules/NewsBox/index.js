@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router';
+import React from 'react';
+import {Link} from 'react-router-dom';
 import styled from 'styled-components'
 import {BGImg, ShareDropdown} from 'components'
 import Avatar from 'material-ui/Avatar';
@@ -8,6 +8,7 @@ import Popover from 'material-ui/Popover'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import moment from 'moment'
+import truncate from 'lodash/truncate'
 
 const Container = styled.div`
   width:100%;
@@ -74,12 +75,14 @@ const BoxText = styled.div`
     margin-top:10px;
   }
 `
+
 const Desc = styled.div`
   color:#8E8E8E;
   font-size:14px;
 
   margin:10px 0 10px 0;
 `
+
 const Time = styled.div`
   float:left;
   color:#8F8F8F;
@@ -90,6 +93,7 @@ const Time = styled.div`
     margin-bottom:10px;
   }
 `
+
 const VerticalTimeline = styled.div`
   width:10px;
   height:200px;
@@ -99,6 +103,7 @@ const VerticalTimeline = styled.div`
   position:relative;
   z-index:-5;
 `
+
 const Doughnut = styled.div`
   margin:0 10px 0 10px;
   border: 3px solid ${props=>props.theme.accentColor};
@@ -106,6 +111,7 @@ const Doughnut = styled.div`
   height:10px;
   width:10px;
 `
+
 const Box = styled.div`
   float:left;
   border-bottom:1px solid #C4C4C4;
@@ -115,10 +121,7 @@ const Box = styled.div`
   }
 `
 
-
-const NewsBox = React.createClass({
-  render(){
-    let {detail,style,timeline} = this.props
+const NewsBox = ({detail, style, timeline}) => {
     let {ptitle,cover,writer,column,votes,comments,updated,url,readTime,contentShort} = detail
     //console.log('URL', url)
     return (
@@ -135,7 +138,7 @@ const NewsBox = React.createClass({
           <BoxText>
             <ShareDropdown url={url} className='hidden-mob'/>
             <NameLink to={url} className='nunito-font' >{ptitle}</NameLink>
-            <Desc className='nunito-font'>{_.truncate(contentShort, {
+            <Desc className='nunito-font'>{truncate(contentShort, {
                 'length': 200,
                 'separator': ''
               })}</Desc>
@@ -144,11 +147,6 @@ const NewsBox = React.createClass({
         </Box>
       </Container>
     )
-  }
-})
-
-
-
-
+}
 
 export default NewsBox;

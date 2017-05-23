@@ -8,20 +8,12 @@ const Box = styled.div`
   padding:0 !important;
 `
 
-const BoxMenu = React.createClass({
-  getInitialState(){
-    return{
-    
-    }
-  },
-  render(){
-    var {style,className,children} = this.props
-    return(
-      <Box style={{...style}} className={className}>
-        {this.props.children}
-      </Box>
-    )
-  }
-})
+const BoxMenu = ({style,className,children}) => {
+  return (
+    <Box style={{...style}} className={className}>
+      {children}
+    </Box>
+  )
+}
 
 export default BoxMenu

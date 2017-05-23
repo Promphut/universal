@@ -6,14 +6,12 @@ const Container = styled.div`
   width: 100%;
 `
 
-const PublisherInsightWriters = React.createClass({
-  render() {
-    return (
+const PublisherInsightWriters = () => {
+	return (
       <Container>
         <PublisherInsight title='Writer Analytic' insigth='topwriters'/>
       </Container>
     )
-  }
-})
+}
 
 export default PublisherInsightWriters

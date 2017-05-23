@@ -1,11 +1,12 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
 import styled, {css} from 'styled-components'
 import Popover from 'material-ui/Popover'
-import {PrimaryButton } from 'components'
+import { PrimaryButton } from 'components'
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon'
 import Menu from 'material-ui/Menu'
 import CircularProgress from 'material-ui/CircularProgress';
+
 const Box = styled.div`
   width:224px;
   border:1px solid ${props=>props.theme.primaryColor};
@@ -20,15 +21,15 @@ const Desc = styled.div`
 `
 
 const Inner = ({description,child,confirm,close,loading})=>{
-  return(
+  return (
     <Box>
       <IconButton onClick={close}>
         <FontIcon className='material-icons'>close</FontIcon> 
       </IconButton>
-      {description?<Desc className='sans-font'>{description}</Desc>:''}
-      {child?child:''}
+      {description && <Desc className='sans-font'>{description}</Desc>}
+      {child || ''}
       <PrimaryButton label={!loading?'Confirm':''} onClick={confirm} style={{margin:'15px 0 15px 0'}}>
-        {loading?<CircularProgress />:''}
+        {loading && <CircularProgress />}
       </PrimaryButton>
     </Box>
   )

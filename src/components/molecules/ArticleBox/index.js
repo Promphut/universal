@@ -1,5 +1,6 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router';
+import React from 'react';
+import PropTypes from 'prop-types';
+import {Link} from 'react-router-dom';
 import styled from 'styled-components'
 import {BGImg, ShareDropdown} from 'components'
 import Avatar from 'material-ui/Avatar';
@@ -8,6 +9,7 @@ import Popover from 'material-ui/Popover'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import moment from 'moment'
+import truncate from 'lodash/truncate'
 
 const Container = styled.div`
   width:100%;
@@ -27,7 +29,7 @@ const Container = styled.div`
   }
   @media (min-width:481px) {
     .des-hidden{
-      display:none;
+      display:none !important;
     }
   }
   @media (max-width:480px) {
@@ -37,7 +39,7 @@ const Container = styled.div`
     margin-left:auto;
     margin-right:auto;
     .mob-hidden{
-      display:none;
+      display:none !important;
     }
     .imgWidth{
       width:100%;
@@ -103,17 +105,15 @@ const Box1 = styled.div`
   }
 `
 
-const ArticleBox = React.createClass({
-  render(){
-    let {detail,style} = this.props
+const ArticleBox = ({detail, style}, context) => {
     let {ptitle,cover,writer,column,votes,comments,updated,url,readTime,contentShort,created,published} = detail
-    var {theme} = this.context.setting.publisher
-    //console.log('URL', url)
+    var {theme} = context.setting.publisher
 
     let writherDisplay = ''
     if (writer && writer.display) {
       writherDisplay = writer.display ? writer.display : ''
     }
+
     return (
       <Container style={{...style}} height={(screen.width-32)/2}>
         <Box1 style={{flex:'1'}} >
@@ -127,7 +127,7 @@ const ArticleBox = React.createClass({
           </div>
           <NameLink to={url} className='nunito-font' style={{marginTop:'5px'}}>{ptitle}</NameLink>
 
-          <Div className='nunito-font' style={{marginTop:'10px'}}>{_.truncate(contentShort, {
+          <Div className='nunito-font' style={{marginTop:'10px'}}>{truncate(contentShort, {
                 'length': 200,
                 'separator': ''
               })}</Div>
@@ -135,12 +135,10 @@ const ArticleBox = React.createClass({
         </Box>
       </Container>
     )
-  }
-})
+}
 
 ArticleBox.contextTypes = {
-	setting: React.PropTypes.object
+	setting: PropTypes.object
 };
-
 
 export default ArticleBox;

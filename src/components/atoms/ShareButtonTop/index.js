@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import FlatButton from 'material-ui/FlatButton';
 
@@ -59,7 +60,7 @@ const ShareButtonTop = ({className, number, barTone, scrolling, style, onClick, 
 }
 
 ShareButtonTop.contextTypes = {
-	setting: React.PropTypes.object
+	setting: PropTypes.object
 };
 
 export default ShareButtonTop

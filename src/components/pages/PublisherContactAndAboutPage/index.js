@@ -1,5 +1,5 @@
 import React from 'react'
-import { OverlayImg, PublisherContact,PublisherAbout} from 'components'
+import { OverlayImg, PublisherContact, PublisherAbout} from 'components'
 import styled from 'styled-components'
 import api from 'components/api'
 import auth from 'components/auth'
@@ -8,15 +8,12 @@ const Container = styled.div`
   width:100%;
 `
 
-const PublisherContactAndAboutPage = React.createClass({
-  
-	getInitialState(){
-		return {
-			publisher:{
-				contactCats: []
-			}
+class PublisherContactAndAboutPage extends React.Component {
+  	state = {
+		publisher:{
+			contactCats: []
 		}
-	},
+	}
 
 	componentDidMount(){
 		// we need private publisher object
@@ -24,7 +21,7 @@ const PublisherContactAndAboutPage = React.createClass({
 	    .then(pub => {
 			this.setState({publisher:pub})
 	    })
-	},
+	}
 
   	render(){
   		let pub = this.state.publisher
@@ -36,6 +33,6 @@ const PublisherContactAndAboutPage = React.createClass({
 	      </Container>
 	  	)
 	}
-});
+}
 
 export default PublisherContactAndAboutPage;

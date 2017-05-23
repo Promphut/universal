@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router';
+import React from 'react';
+import {Link} from 'react-router-dom';
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon';
 import Avatar from 'material-ui/Avatar'
@@ -10,21 +10,12 @@ const Container = styled.div`
   margin:50px 0 30px 0;
 ` 
 
-const CommentBox = React.createClass({
-  getInitialState(){
-    return{
-
-    }
-  },
-
-  render(){
-    var {style,className} = this.props
-    return(
+const CommentBox = ({style, className}) => {
+  return(
       <Container style={{...style}} className={className}>
         <CommentInput/>
       </Container>
     )
-  }
-})
+}
 
 export default CommentBox;
