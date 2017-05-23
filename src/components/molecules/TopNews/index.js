@@ -52,7 +52,7 @@ const NameLink = styled(Link)`
     font-size:15px;
   }
   &:hover{
-    color:${props=>props.theme.accentColor}
+    color:${props=>props.theme.accentColor};
     cursor:pointer;
   }
 `
@@ -64,7 +64,6 @@ const BoxText = styled.div`
   background:rgba(0,0,0,0.7);
   position:absolute;
   bottom:0;
-
 `
 
 const TopNews = ({detail, style}) => {
@@ -72,12 +71,12 @@ const TopNews = ({detail, style}) => {
     <Container style={{...style}}>
       <BGImg url={detail&&detail.url} src={detail&&detail.cover.medium} className='imgWidth mob-hidden' >
         <BoxText>
-          <span>
+          <NameLink to={detail?detail.url:'/'}>
           {truncate(detail&&detail.ptitle, {
             'length': 133,
             'separator': ''
           })}
-          </span>
+          </NameLink>
         </BoxText>
       </BGImg>    
     </Container>

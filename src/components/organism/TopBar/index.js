@@ -151,6 +151,7 @@ const LogoGif = styled(BGImg)`
 	width:60px;
 	height:60px;
 	margin-right:12px;
+	animation:${props=>props.onLoading?fadeOut:fadeIn} 1.25s linear;
 `
 const ContainerCenter = styled.div`
 	position:absolute;
@@ -158,6 +159,22 @@ const ContainerCenter = styled.div`
 	height:100%;
 	display:flex;
 	justify-content: center;
+`
+const fadeOut = keyframes`
+  0% {
+    opacity:1;
+  }
+	100%{
+		opacity:0;
+	}
+`
+const fadeIn = keyframes`
+	0% {
+    opacity:0;
+  }
+	100%{
+		opacity:1;
+	}
 `
 
 let logoStyleBase = {
@@ -285,7 +302,7 @@ class TopBar extends React.Component {
 				}
 		
 		//console.log(this.props.onLoading)
-		//console.log(theme, theme.barTone, theme.primaryColor)
+		//console.log(theme, theme.slogoGif)
 		return (
 			<Wrapper scroll={scroll}>
 				<Container
@@ -306,15 +323,8 @@ class TopBar extends React.Component {
 							</Hamburger>
 						</HamburgerWrapper>
 						<LogoWrapper>
-							{this.props.onLoading?<LogoGif src={theme.slogoGif} opacity={-1}></LogoGif>:
-							<LogoLink
-								to="/"
-								src={theme.slogo}
-								title={this.props.title}
-								style={logoStyleMobile}
-								id={'slogo'}
-							/>}
-							
+							<Link to='/'><LogoGif onLoading={this.props.onLoading} src={this.props.onLoading?theme.slogoGif:theme.slogo} opacity={-1}></LogoGif></Link>
+
 							<LogoLink
 								to="/"
 								src={theme.logo}

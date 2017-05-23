@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
-
+import {Link} from 'react-router-dom'
 class LogoLink extends React.Component {
 	static contextTypes = {
 		setting: PropTypes.object
@@ -68,9 +68,9 @@ class LogoLink extends React.Component {
 		let {style, title, to} = this.props
 		//let id = 'svg_'+Math.round(Math.random()*10000)
 
-		return (<a href={to || '#'} title={title} style={{...style}}>
+		return (<Link to={to || '/'} title={title} style={{...style}}>
 			<object data={this.props.src} type="image/svg+xml" ref={(input) => {this.svgObject = input}} style={{pointerEvents:'none'}}></object>
-		</a>)
+		</Link>)
 		// return (<Link to={to} title={title} style={{...style}}>
 		// 	<object id={id} data={this.props.src} type="image/svg+xml" ref={(input) => {this.svgObject = input}} style={{pointerEvents:'none'}}></object>
 		// </Link>)

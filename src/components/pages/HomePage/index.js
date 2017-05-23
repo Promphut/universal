@@ -111,13 +111,14 @@ const Line = styled.div`
 const BG = styled(BGImg)`
 	width:100%;
 	height:350px;
-	display:flex;
-	align-items:center;
-	justify-content:center;
+	display:flex !important;
+	align-items:center !important;
+	justify-content:center !important;
 `
 const Tagline = styled.div`
 	font-size:20px;
 	margin:30px auto 0 auto;
+	width:600px;
 	text-align:center;
 	color:white;
 `
