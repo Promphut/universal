@@ -12,7 +12,7 @@ const config = {
     isBrowser: typeof window !== 'undefined',
     isServer: typeof window === 'undefined',
     host: process.env.HOST || 'localhost',
-    port: process.env.PORT || 4000,
+    port: process.env.PORT || 5000,
 
     PID:'11',
     NAME: 'NextEmpire', // one word, no space
