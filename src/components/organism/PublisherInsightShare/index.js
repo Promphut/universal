@@ -340,18 +340,18 @@ class PublisherInsightShare extends React.Component {
 							&& <TableRow className="sans-font" key={index}>
 								{insigth == 'topstories'
 									&& <TableRowColumn style={styles.tableTextBodyName}>
-										<Bold to={entry.story.url}>{index + 1}. {entry.story.title}</Bold>
-										{entry.story.writer && entry.story.writer.username}
+										<Bold to={entry.story?entry.story.url:'/'}>{index + 1}. {entry.story.title}</Bold>
+										{entry.story.writer && entry.story.writer.display}
 									</TableRowColumn>
 								}
 								{insigth == 'topcolumns'
 									&& <TableRowColumn style={styles.tableTextBodyName}>
-										<Bold to={entry.column.url}>{index + 1}. {entry.column.name}</Bold>
+										<Bold to={entry.column?entry.column.url:'/'}>{index + 1}. {entry.column.name}</Bold>
 									</TableRowColumn>
 								}
 								{insigth == 'topwriters'
 									&& <TableRowColumn style={styles.tableTextBodyName}>
-										<Bold to={entry.writer.url}>{index + 1}. {entry.writer.username}</Bold>
+										<Bold to={entry.writer?entry.writer.url:'/'}>{index + 1}. {entry.writer.display}</Bold>
 									</TableRowColumn>
 								}
 

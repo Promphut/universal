@@ -4,7 +4,7 @@ import Avatar from 'material-ui/Avatar'
 import FontIcon from 'material-ui/FontIcon';
 import {Link} from 'react-router-dom'
 import moment from 'moment'
-
+import truncate from 'lodash/truncate'
 const Container = styled.div`
   width:100%;
   padding:8px;
@@ -59,7 +59,10 @@ const FromColumn = ({style, column}) => {
         <Cir/><Span1><a href={column.url || '#'} style={{color:'#222',marginBottom:'5px'}}>{column.name}</a></Span1>
       </div>
       <Contain className="content-font">
-        {column.shortDesc}
+        {truncate(column.shortDesc, {
+                'length': 95,
+                'separator': ''
+              })}
       </Contain>
 
     </Container>

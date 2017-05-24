@@ -297,6 +297,7 @@ class GraphDashboard extends React.Component {
 		var to = moment(startDate2).format('YYYYMMDD')
 		//console.log(from,to)
 		api.getPublisherInsight(pid, action, null, null, from, to).then(ins => {
+			console.log(ins)
 			var data = []
 			ins.insights.map((value, index) => {
 				data[index] = {

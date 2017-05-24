@@ -5,6 +5,7 @@ import {BGImg} from 'components'
 import {findDOMNode as dom} from 'react-dom'
 //import Request from 'superagent'
 import api from 'components/api'
+import truncate from 'lodash/truncate'
 
 const Container = styled.div`
   width:324px;
@@ -12,22 +13,9 @@ const Container = styled.div`
 `
 
 const Head = styled.div`
-  color:#8F8F8F;
-  font-size:20px;
-  width:171px;
-  text-align:center;
-  margin:20px auto 15px auto;
-  border:1px solid #E2E2E2;
-  background:white;
-  padding:2px;
-  font-family:'Nunito'
-
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-	cursor: default;
+  color:#22222;
+  font-size:24px;
+  font-weight:bold;
 `
 
 const Divider =styled.div`
@@ -49,19 +37,16 @@ const Column = styled.div`
 //if height less than 900px remove last item
 const Con = styled.div`
   width:100%;
-  margin:40px 0 0 0;
+  display:flex;
+  margin:20px 0 0 0;
 `
 
 const Name = styled(Link)`
+  flex:1;
   color:#222;
-  font-size:17px;
-  width:190px;
+  font-size:14px;
   font-weight:bold;
-  white-space: pre-wrap;      /* Webkit */
-  white-space: -moz-pre-wrap; /* Firefox */
-  white-space: -pre-wrap;     /* Opera <7 */
-  white-space: -o-pre-wrap;   /* Opera 7 */
-  word-wrap: break-word;      /* IE */
+  padding:0 0 0 10px;
 `
 
 const Img = styled.div`
@@ -72,22 +57,32 @@ const Img = styled.div`
   background-size:cover;
 `
 
-const Vote = styled.div`
-  color:#8F8F8F;
-  font-size:13px;
-  margin-top:15px;
+const Line = styled.div`
+  width:150px;
+  height:1px;
+  background-color:#c4c4c4;
+  margin:20px auto 0 auto;
+`
+const Dash = styled.div`
+  width:30px;
+  height:4px;
+  background-color:${props=>props.theme.accentColor};
+  margin:5px 0 20px 0;
 `
 
 const TrendingSideBarInner = ({style, detail, index}) => {
   if(!detail) return (<div></div>)
   let {ptitle,comments,votes,cover} = detail
-
   return(
-    <Con style={{...style}}>
-      <BGImg url={detail.url} src={cover.small || cover.medium} style={{width:'127px',height:'75px',float:'right'}}/>
-      <Name to={detail.url} className="sans-font">{index+'. '+ptitle}</Name>
-      <Vote className="sans-font">{votes.total} Votes {''+ comments.count} Comments</Vote>
-    </Con>
+    <div>  
+      <Con style={{...style}}>
+        <BGImg url={detail.url} src={cover.small || cover.medium} style={{maxWidth:'124px',width:'124px',height:'62px',flex:'1 124px'}}/>
+        <Name to={detail.url} className="nunito-font">
+          {truncate(ptitle,{'length': 90,'separator': ''})}
+        </Name>
+      </Con>
+      <Line/>
+    </div>
   )
 }
 
@@ -102,7 +97,7 @@ class TrendingSideBar extends React.Component {
 
   getPopular = () => {
     // sort will be changed to 'trending' later when implemented
-    api.getFeed('story', {status:1}, 'latest')
+    api.getFeed('story', {status:1}, 'tranding', null, 0, 5)
     .then(result => {
       this.setState({popular:result.feed})
     })
@@ -128,11 +123,11 @@ class TrendingSideBar extends React.Component {
 
     return (
       <Container style={{...style}} ref='contain'>
-        <Divider/>
-        <Head>NOW TRENDING</Head>
+        <Head className='sans-font'>TRENDING</Head>
+        <Dash></Dash>
         {popular.length!=0?tn:[]}
         {/*{detail.map((data,index)=><Link to='#' key={index}><TrendingSideBarInner detail={data}/></Link>)}*/}
-        <Divider/>
+        {/*<Divider/>*/}
       </Container>
     )
   }

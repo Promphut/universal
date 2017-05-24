@@ -88,6 +88,12 @@ const Aside = styled.div`
 		display:none;
 	}
 `
+const TopbarTitle = styled.h3`
+	text-align:center;
+	z-index:10;
+	position:stick;
+	color:white;
+`
 
 const Cover = styled.div`
 	position:relative;
@@ -108,7 +114,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#222222', end
 class StoryPage extends React.Component {
 	state = {
 		recommends: [], 	// trending stories
-		description: ''
+		description: '',
+		showTopbarTitle:false
 	}
 	static contextTypes = {
 		setting: PropTypes.object
@@ -182,11 +189,25 @@ class StoryPage extends React.Component {
 			this.getRecommendStories()
 			this.findDescription()
 		})
+		window.addEventListener('scroll', this.handleScroll);
+	}
+
+	componentWillUnmount() {
+			window.removeEventListener('scroll', this.handleScroll);
+	}
+
+	handleScroll = (event) => {
+			let scrollTop = event.srcElement.body.scrollTop,
+					itemTranslate = Math.min(0, scrollTop/3 - 60);
+			//console.log(screenTop)
+			// this.setState({
+			// 	showTopbarTitle:true
+			// });
 	}
 
 	render(){
     	let {keywords, channels} = this.context.setting.publisher
-		let {recommends, description} = this.state
+		let {recommends, description, showTopbarTitle} = this.state
 
 		let hasCover = false
 		if (utils.isMobile() && this.story.coverMobile.medium != config.BACKURL+'/imgs/article_cover_portrait.png') {
@@ -225,7 +246,7 @@ class StoryPage extends React.Component {
 				</Helmet>
 
 				<Wrapper>
-					<TopBarWithNavigation onLoading={this.props.onLoading} title={'Title of AomMoney goes here..'} article={this.story.title} editButton={'/me/stories/'+this.story.id+'/edit'} hasCover={hasCover} />
+					<TopBarWithNavigation onLoading={this.props.onLoading} title={'Title of AomMoney goes here..'}  editButton={'/me/stories/'+this.story.id+'/edit'} hasCover={hasCover} />
 
 					{this.story.cover.medium!=config.BACKURL+'/imgs/article_cover_landscape.png' &&
 					<BGImg style={{width:'100%',height:'85vh'}} src={this.story.cover.large ||
@@ -236,7 +257,7 @@ class StoryPage extends React.Component {
 					<BGImg style={{width:'100%',height:'85vh'}} src={this.story.coverMobile.large || this.story.coverMobile.medium} className='hidden-des' alt={this.story.title}>
 						<Cover/>
 					</BGImg>}
-
+					{showTopbarTitle&&<TopbarTitle ref='TopbarTitle' className='nunito-font'>{this.story.title}</TopbarTitle>}
 					<Content paddingTop={hasCover ? '0px' : '60px'}>
 						<Share ref='share' style={{zIndex:'50'}}>
 							<Stick topOffset={100}>
@@ -256,7 +277,7 @@ class StoryPage extends React.Component {
 					</Content>
 
 					<Content>
-						<RecommendContainer recommend={recommends}/>
+						{recommends.length!=0&&<RecommendContainer recommend={recommends}/>}
 					</Content>
 					<Footer/>
 				</Wrapper>
