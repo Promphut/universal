@@ -76,7 +76,7 @@ const AddTag = styled.div`
 const Paper = styled.div`
   position:relative;
   width:100%;
-  min-height:500px;
+  min-height:200px;
   &:focus{
     outline: none;
   }
@@ -98,7 +98,7 @@ class PublisherAbout extends React.Component {
 
 	setAboutUs = (aboutUs) => {
 		this.aboutUs = aboutUs
-		this.editor.setContent(aboutUs)
+		if( aboutUs ) this.editor.setContent(aboutUs)
 	}
 
 	resetData = () => {
@@ -197,7 +197,7 @@ class PublisherAbout extends React.Component {
 			},
 			targetBlank: true,
 			placeholder: {
-				text: 'Write a story ...'
+				text: 'Describe yourself'
 			}
 		})
 
@@ -234,7 +234,13 @@ class PublisherAbout extends React.Component {
 					/>
 				</Helmet>
 				<div className="head sans-font">About Us</div>
-				<div className="sans-font" style={{ marginTop: -30, float: 'right' }}>
+				<br />
+				<Flex>
+					<Edit>
+						<Paper id="paper" />
+					</Edit>
+				</Flex>
+				<div className="sans-font" style={{float: 'right' }}>
 					<TextStatus style={{ color: error ? '#D8000C' : theme.accentColor }}>
 						{textStatus}
 					</TextStatus>
@@ -249,12 +255,6 @@ class PublisherAbout extends React.Component {
 						style={{ float: 'left', margin: '0 0 0 20px' }}
 					/>
 				</div>
-				<br />
-				<Flex>
-					<Edit>
-						<Paper id="paper" />
-					</Edit>
-				</Flex>
 			</Container>
 		)
 	}

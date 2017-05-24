@@ -5,21 +5,22 @@ import NavigationFirstPage from 'material-ui/svg-icons/navigation/first-page';
 import NavigationLastPage from 'material-ui/svg-icons/navigation/last-page';
 import NavigationChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
 import NavigationChevronRight from 'material-ui/svg-icons/navigation/chevron-right';
+import PropTypes from 'prop-types';
 
 const flatButtonStyle = {
   minWidth: 36,
   color:'#8F8F8F',
 };
 const active = {
-  color:'#00B2B4',
   textDecoration:'underline',
   fontWeight:'bold'
 }
 
-const Page = ({value, isActive, onClick}) => {
+const Page = ({value, isActive, onClick},context) => {
   //console.log('Page', value, isActive)
+  var acc = context.setting.publisher.theme.accentColor
   return (
-    <FlatButton style={!isActive?{...flatButtonStyle}:{...flatButtonStyle,...active}} labelStyle={!isActive?{fontSize:'20px'}:{fontSize:'20px',fontWeight:'bold'}}  label={value.toString()} primary={isActive} onClick={onClick}/>
+    <FlatButton style={!isActive?{...flatButtonStyle}:{...flatButtonStyle,...active,color:acc}} labelStyle={!isActive?{fontSize:'20px'}:{fontSize:'20px',fontWeight:'bold'}}  label={value.toString()} primary={isActive} onClick={onClick}/>
   )
 };
 
@@ -53,5 +54,9 @@ const itemTypeToComponent = {
 };
 
 const Pagination = createUltimatePagination({itemTypeToComponent});
+
+Page.contextTypes = {
+	setting: PropTypes.object
+};
 
 export default Pagination;

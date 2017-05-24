@@ -927,7 +927,7 @@ class App extends React.Component {
         <ThemeProvider theme={theme}>
           <MuiThemeProvider muiTheme={muiTheme}>
             <div>
-              {completed<100&&<LinearProgress mode="determinate" value={completed} style={{position:'absolute'}}/>}
+              {completed<100&&<LinearProgress mode="determinate" value={completed} color={theme.accentColor} style={{position:'absolute'}}/>}
               {React.cloneElement(this.props.children, { onLoading: completed<100?true:false })}
             </div> 
           </MuiThemeProvider>
