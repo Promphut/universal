@@ -24,6 +24,7 @@ import FontIcon from 'material-ui/FontIcon'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import SwipeableViews from 'react-swipeable-views'
 import utils from '../../../services/utils'
+import isEmpty from 'lodash/isEmpty'
 
 const Wrapper = styled.div`
 	@media (max-width:480px) {
@@ -219,6 +220,7 @@ class HomePage extends React.Component {
 				.getFeed('article', { status: 1 }, 'latest', null, page, 15)
 				.then(result => {
 					let feed = this.state.feed.concat(result.feed)
+					console.log(result)
 					this.setState(
 						{
 							page: ++page,
@@ -234,37 +236,19 @@ class HomePage extends React.Component {
 		}
 	}
 
-	getPublisher = () => {
-		api.getPublisher().then(pub => {
-			this.publisher = pub
+	// getPublisher = () => {
+	// 	api.getPublisher().then(pub => {
+	// 		this.publisher = pub
 
-			this.setState({})
-		})
-	}
-
-	getSidebar = () => {
-		// - Fetching top columns
-		// - Fetch top writers
-		Promise.all([
-			api.getColumns(),
-			api.getPublisherWriters()
-		]).then(([columns, writers]) => {
-			//console.log('GET FEED', result, columns, writers)
-			if (columns) this.column = columns
-			if (writers) this.writer = writers
-
-			this.setState({})
-		})
-	}
+	// 		this.setState({})
+	// 	})
+	// }
 
 	handleChangeTab = e => {
 		this.setState({ selectTab: e })
 	}
 
 	componentDidMount() {
-		this.getPublisher()
-		//this.getFeed()
-		this.getSidebar()
 		this.setState({
 			isMobile: utils.isMobile(),
 			completed: 100
@@ -274,21 +258,22 @@ class HomePage extends React.Component {
 	render() {
 		let { isMobile, completed, selectTab } = this.state
 		let { feedCount, feed, hasMoreFeed } = this.state
-		let pub = this.publisher
+		let pub = this.context.setting.publisher
 		let { theme } = this.context.setting.publisher
 
 		//console.log(this.state.feedCount)
+		//if(feed.length==0) return <div></div>	
 		return (
 			<Wrapper>
-				{pub &&
+				{!isEmpty(pub) &&
 					<BG
-						src={pub.cover.medium}
+						src={pub.cover&&pub.cover.medium}
 						opacity={-1}
 						className="hidden-mob"
-						alt={pub.name}>
+						alt={pub&&pub.name}>
 						<div>
-							<LogoLink to="/" src={theme.llogo} id={'Largelogo'} />
-							<Tagline className="nunito-font">{pub.tagline}</Tagline>
+							<LogoLink to="/" src={theme&&theme.llogo} id={'Largelogo'} />
+							<Tagline className="nunito-font">{pub&&pub.tagline}</Tagline>
 						</div>
 					</BG>}
 
@@ -309,24 +294,12 @@ class HomePage extends React.Component {
 							hasMore={hasMoreFeed}
 							loader={this.onload()}>
 							<div>
-								{feed.map((item, index) => (
+								{feed.length!=0&&feed.map((item, index) => (
 									<ArticleBox detail={item} key={index} />
 								))}
 							</div>
 						</InfiniteScroll>
-						{/*<Infinite
-								preloadBatchSize={Infinite.containerHeightScaleFactor(latestStories.length)}
-								elementHeight={309}
-								infiniteLoadBeginEdgeOffset={loadOffset}
-								onInfiniteLoad={this.handleInfiniteLoad}
-								loadingSpinnerDelegate={this.elementInfiniteLoad()}
-								isInfiniteLoading={isInfiniteLoading}
-								useWindowAsScrollContainer={true}>
 
-							{latestStories.length!=0&&screen.width>480?latestStories.map((story, index) => (
-								<ArticleBox detail={story} key={index}/>
-							)):''}
-						</Infinite>  */}
 
 						<Tabs
 							style={{ width: '100%' }}
@@ -375,7 +348,7 @@ class HomePage extends React.Component {
 									hasMore={hasMoreFeed}
 									loader={this.onload()}>
 									<div>
-										{feed.map((item, index) => (
+										{feed.length!=0&&feed.map((item, index) => (
 											<ArticleBox detail={item} key={index} />
 										))}
 									</div>

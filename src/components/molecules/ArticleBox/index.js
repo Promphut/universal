@@ -166,7 +166,10 @@ const ArticleBox = ({ detail, style }, context) => {
 					</Div>
 				</div>
 				<NameLink to={url} className="nunito-font" style={{ marginTop: '5px' }}>
-					{ptitle}
+					{truncate(ptitle, {
+						length: 90,
+						separator: ''
+					})}
 				</NameLink>
 
 				<Div className="nunito-font" style={{ marginTop: '10px' }}>
@@ -179,16 +182,16 @@ const ArticleBox = ({ detail, style }, context) => {
 					by
 					{' '}
 					<strong>
-						<ByLink to={writer && writer.url} color="#8E8E8E">
-							{' '}{writer.display}{' '}
-						</ByLink>
+						<Link to={writer && writer.url}> {writer.display} </Link>
 					</strong>
 					{' '}
 					in
 					{' '}
-					<ByLink to={column && column.url} color={theme.accentColor}>
+					<Link
+						to={column && column.url}
+						style={{ color: theme.accentColor, fontWeight: 'bold' }}>
 						{column.name}
-					</ByLink>
+					</Link>
 				</Div>
 			</Box>
 		</Container>

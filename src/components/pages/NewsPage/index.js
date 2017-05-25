@@ -162,16 +162,10 @@ class NewsPage extends React.Component {
 	constructor(props) {
 		super(props)
 
-		//this.trendingStories = []
-		//this.latestStories = []
 		this.writer = []
 		this.column = []
 
 		this.state = {
-			//latestStories:[],
-			//refresh: 0,
-			//isInfiniteLoading: false,
-			//loadOffset:300,
 			page: 0,
 			feedCount: -1,
 			feed: [],
@@ -184,25 +178,8 @@ class NewsPage extends React.Component {
 		}
 	}
 
-	// componentDidUpdate(prevProps, prevState){
-	//   clearTimeout(this.timer);
-	// 	this.progress(100)
-	// },
-	//  	getFeed(){
-	// 	// - Fetching latestStories
-	// 	api.getFeed('news', {status:1}, 'latest', null, 0, 15)
-	// 	.then(result => {
-	// 		if(result) {
-	// 			this.trendingStories = result.feed
-	// 			this.setState({
-	// 				refresh: Math.random()
-	// 			})
-	// 		}
-	// 	})
-	// },
-
 	getTrendingNews = () => {
-		api.getFeed('news', { status: 1 }, 'trending', null, 0, 14).then(result => {
+		api.getFeed('news', { status: 1 }, 'trending', null, 0, 4).then(result => {
 			if (result) {
 				this.setState({
 					trendingNews: result.feed
@@ -230,9 +207,9 @@ class NewsPage extends React.Component {
 
 			let page = this.state.page
 			//console.log('page', page)
-
+			var sort = this.state.selectTab?'trending':'latest'
 			api
-				.getFeed('news', { status: 1 }, 'latest', null, page, 15)
+				.getFeed('news', { status: 1 }, sort, null, page, 15)
 				.then(result => {
 					let feed = this.state.feed.concat(result.feed)
 					this.setState(
@@ -250,62 +227,12 @@ class NewsPage extends React.Component {
 		}
 	}
 
-	// buildElements() {
-	// 	let page = this.state.page
-	// 	api.getFeed('news', {status:1}, 'latest', null, page, 10)
-	// 	.then(result => {
-	// 		var s = this.state.latestStories.concat(result.feed)
-	// 		this.setState({
-	// 			feedCount:result.count['1'],
-	// 			latestStories:s,
-	// 		},()=>{
-	// 			if(s.length==result.count['1']){
-	// 				this.setState({
-	// 					loadOffset:undefined,
-	// 					isInfiniteLoading: false,
-	// 				})
-	// 			}else{
-	// 				this.setState({
-	// 					isInfiniteLoading: false
-	// 				})
-	// 			}
-	// 		})
-	// 	})
-	// }
-
-	// handleInfiniteLoad() {
-	// 	//console.log('Onload')
-	// 	this.buildElements(this.state.page)
-	// 	this.setState({
-	// 		isInfiniteLoading: true,
-	// 		page:this.state.page+1
-	// 	});
-	// }
-
-	getPublisher = () => {
-		api.getPublisher().then(pub => {
-			this.publisher = pub
-			this.setState(
-				{
-					//refresh: Math.random()
-				}
-			)
-		})
-	}
-
 	handleChangeTab = e => {
 		this.setState({ selectTab: e })
 	}
 
-	// elementInfiniteLoad() {
-	// 		return <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>;
-	// }
-
 	componentDidMount() {
-		this.getPublisher()
-		//this.getFeed()
 		this.getTrendingNews()
-
 		this.setState({
 			isMobile: utils.isMobile()
 		})
@@ -313,7 +240,6 @@ class NewsPage extends React.Component {
 	}
 
 	render() {
-		//let {count,loadOffset,isInfiniteLoading,latestStories,isMobile,completed,selectTab,trendingNews} = this.state
 		let {
 			feedCount,
 			feed,
@@ -322,7 +248,7 @@ class NewsPage extends React.Component {
 			isMobile,
 			selectTab
 		} = this.state
-		let pub = this.publisher
+		let pub = this.context.setting.publisher
 		let { theme } = this.context.setting.publisher
 		const styles = {
 			headline: {
@@ -343,17 +269,7 @@ class NewsPage extends React.Component {
 				textTransform: 'none'
 			}
 		}
-		let trend = []
-		for (let i = 4; i < trendingNews.length; i++) {
-			trend.push(
-				<NewsBox
-					detail={trendingNews[i]}
-					key={i}
-					style={{ margin: '0 auto 0 auto' }}
-				/>
-			)
-		}
-		//console.log(latestStories)
+
 		return (
 			<Wrapper>
 				<TopBarWithNavigation onLoading={this.props.onLoading} />
@@ -448,7 +364,16 @@ class NewsPage extends React.Component {
 								</InfiniteScroll>
 							</Latest>
 							<Trending>
-								{trend}
+								<InfiniteScroll
+									loadMore={this.loadFeed()}
+									hasMore={hasMoreFeed}
+									loader={this.onload()}>
+									<div>
+										{feed.map((item, index) => (
+											<NewsBox detail={item} key={index} timeline={true} />
+										))}
+									</div>
+								</InfiniteScroll>
 							</Trending>
 						</SwipeableViews>
 					</Feed>

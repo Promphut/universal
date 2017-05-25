@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {SignUp,SignUpFb,LogoLink,BackButton,CloseButton,SignIn2} from 'components'
+import {SignUp,SignUpFb,LogoLink,BackButton,CloseButton,SignIn2,EmailSignUp} from 'components'
 import FlatButton from 'material-ui/FlatButton';
 import styled from 'styled-components'
 import api from 'components/api'
