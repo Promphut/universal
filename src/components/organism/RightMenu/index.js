@@ -133,7 +133,7 @@ const Nav = styled.nav`
     transition: .2s;
 
     &:hover {
-  		color: ${props => props.accentColor};
+  		color: ${props => props.theme.accentColor};
     }
 	}
 
@@ -155,7 +155,7 @@ const CloseBtn = styled(IconButton)`
 		height: 30px;
 
     &:hover {
-      color: ${props => props.accentColor} !important;
+      color: ${props => props.theme.accentColor} !important;
     }
 	}
 
@@ -183,7 +183,7 @@ const Profile = styled.div`
     transition: .2s;
 
     &:hover {
-      color: ${props => props.accentColor};
+      color: ${props => props.theme.accentColor};
     }
 	}
   @media (max-width:480px){
@@ -207,6 +207,11 @@ const EditMode = styled.div`
   height:60px;
   padding:12px;
   font-size:20px;
+  transition: .2s;
+
+  &:hover {
+    background-color: ${props => props.theme.accentColor}
+  }
 
   @media(max-width:480px){
     font-size: 18px;
@@ -278,7 +283,7 @@ class RightMenu extends React.Component {
 		return (
 			<Container open={open}>
 				<Container2 onClick={close} />
-				<Nav open={open} accentColor={theme.accentColor}>
+				<Nav open={open}>
 					<div className="menu menu-font">
 						{auth.hasRoles(['ADMIN', 'EDITOR']) &&
 							<Link style={hiddenMobile} to={'/editor'}>
@@ -295,7 +300,7 @@ class RightMenu extends React.Component {
 									Editor Mode
 								</EditMode>
 							</Link>}
-						<CloseBtn onClick={close} accentColor={theme.accentColor}>
+						<CloseBtn onClick={close}>
 							<FontIcon
 								className="material-icons"
 								style={{ color: '#222', fill: '#222' }}>
@@ -303,7 +308,7 @@ class RightMenu extends React.Component {
 							</FontIcon>
 						</CloseBtn>
 
-						<Profile className="content-font" accentColor={theme.accentColor}>
+						<Profile className="content-font">
 							<Link to={user.url}>
 								<Avatar
 									style={AvatarStyle}

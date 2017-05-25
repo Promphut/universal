@@ -1,8 +1,8 @@
-import React from 'react';
-import {Link} from 'react-router-dom';
+import React from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import {BGImg} from 'components'
-import {findDOMNode as dom} from 'react-dom'
+import { BGImg } from 'components'
+import { findDOMNode as dom } from 'react-dom'
 //import Request from 'superagent'
 import api from 'components/api'
 import truncate from 'lodash/truncate'
@@ -18,7 +18,7 @@ const Head = styled.div`
   font-weight:bold;
 `
 
-const Divider =styled.div`
+const Divider = styled.div`
   height:1px;
   width:100%;
   background-color:#E2E2E2;
@@ -30,7 +30,7 @@ const Divider =styled.div`
 const Column = styled.div`
   font-weight:bold;
   font-size:36px;
-  color:${props=> props.theme.primaryColor};
+  color:${props => props.theme.primaryColor};
   text-align:center;
 `
 
@@ -47,6 +47,11 @@ const Name = styled(Link)`
   font-size:14px;
   font-weight:bold;
   padding:0 0 0 10px;
+  transition: .1s;
+
+  &:hover {
+    color: ${props => props.theme.accentColor}
+  }
 `
 
 const Img = styled.div`
@@ -66,71 +71,79 @@ const Line = styled.div`
 const Dash = styled.div`
   width:30px;
   height:4px;
-  background-color:${props=>props.theme.accentColor};
+  background-color:${props => props.theme.accentColor};
   margin:5px 0 20px 0;
 `
 
-const TrendingSideBarInner = ({style, detail, index}) => {
-  if(!detail) return (<div></div>)
-  let {ptitle,comments,votes,cover} = detail
-  return(
-    <div>  
-      <Con style={{...style}}>
-        <BGImg url={detail.url} src={cover.small || cover.medium} style={{maxWidth:'124px',width:'124px',height:'62px',flex:'1 124px'}}/>
-        <Name to={detail.url} className="nunito-font">
-          {truncate(ptitle,{'length': 90,'separator': ''})}
-        </Name>
-      </Con>
-      <Line/>
-    </div>
-  )
+const TrendingSideBarInner = ({ style, detail, index }) => {
+	if (!detail) return <div />
+	let { ptitle, comments, votes, cover } = detail
+	return (
+		<div>
+			<Con style={{ ...style }}>
+				<BGImg
+					url={detail.url}
+					src={cover.small || cover.medium}
+					style={{
+						maxWidth: '124px',
+						width: '124px',
+						height: '62px',
+						flex: '1 124px'
+					}}
+				/>
+				<Name to={detail.url} className="nunito-font">
+					{truncate(ptitle, { length: 90, separator: '' })}
+				</Name>
+			</Con>
+			<Line />
+		</div>
+	)
 }
 
 class TrendingSideBar extends React.Component {
-  constructor(props) {
-    super(props)
+	constructor(props) {
+		super(props)
 
-    this.state = {
-      popular:[]
-    }
-  }
+		this.state = {
+			popular: []
+		}
+	}
 
-  getPopular = () => {
-    // sort will be changed to 'trending' later when implemented
-    api.getFeed('story', {status:1}, 'tranding', null, 0, 5)
-    .then(result => {
-      this.setState({popular:result.feed})
-    })
-  }
+	getPopular = () => {
+		// sort will be changed to 'trending' later when implemented
+		api.getFeed('story', { status: 1 }, 'tranding', null, 0, 5).then(result => {
+			this.setState({ popular: result.feed })
+		})
+	}
 
-  componentDidMount(){
-    this.getPopular()
-    //this.Slider()
-  }
+	componentDidMount() {
+		this.getPopular()
+		//this.Slider()
+	}
 
-  render(){
-    let {popular} = this.state
-    //console.log('popular', popular)
-    let {style} = this.props
-    let tn = []
-    if(popular.length > 0){
-      for(let i=0;i<Math.min(6, popular.length);i++){
-        tn.push(
-          <TrendingSideBarInner key={i} detail={popular[i]} index={i+1}/>
-        )
-      }
-    }
+	render() {
+		let { popular } = this.state
+		//console.log('popular', popular)
+		let { style } = this.props
+		let tn = []
+		if (popular.length > 0) {
+			for (let i = 0; i < Math.min(6, popular.length); i++) {
+				tn.push(
+					<TrendingSideBarInner key={i} detail={popular[i]} index={i + 1} />
+				)
+			}
+		}
 
-    return (
-      <Container style={{...style}} ref='contain'>
-        <Head className='sans-font'>TRENDING</Head>
-        <Dash></Dash>
-        {popular.length!=0?tn:[]}
-        {/*{detail.map((data,index)=><Link to='#' key={index}><TrendingSideBarInner detail={data}/></Link>)}*/}
-        {/*<Divider/>*/}
-      </Container>
-    )
-  }
+		return (
+			<Container style={{ ...style }} ref="contain">
+				<Head className="sans-font">TRENDING</Head>
+				<Dash />
+				{popular.length != 0 ? tn : []}
+				{/*{detail.map((data,index)=><Link to='#' key={index}><TrendingSideBarInner detail={data}/></Link>)}*/}
+				{/*<Divider/>*/}
+			</Container>
+		)
+	}
 }
 
-export default TrendingSideBar;
+export default TrendingSideBar

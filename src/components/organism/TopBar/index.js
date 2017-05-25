@@ -88,7 +88,7 @@ const Hamburger = styled.i`
 	transition: .2s;
 
 	&:hover {
-		color: ${props => props.hoverColor}
+		color: ${props => props.theme.accentColor}
 	}
 `
 
@@ -325,8 +325,7 @@ class TopBar extends React.Component {
 									!scrolling && transparent && hasCover
 										? { color: 'white' }
 										: {}
-								}
-								hoverColor={theme.accentColor}>
+								}>
 								menu
 							</Hamburger>
 						</HamburgerWrapper>

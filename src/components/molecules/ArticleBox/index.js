@@ -64,14 +64,36 @@ const NameLink = styled(Link)`
   color:#222;
   font-weight:bold;
   font-size:18px;
+  transition: .1s;
+  
   &:hover{
-    color:${props => props.theme.accentColor};
+    color: ${props => props.theme.accentColor};
   }
   @media (max-width:480px) {
     font-size:15px;
   }
 `
+const WriterLink = styled(Link)`
+  color: #8E8E8E;
+  opacity: .8;
+  transition: .1s;
 
+  &:hover {
+    color: #8E8E8E;
+    opacity: 1;
+  }
+
+`
+const ColumnLink = styled(Link)`
+  color: ${props => props.theme.accentColor};
+  opacity: .8;
+  transition: .1s;
+
+  &:hover {
+    color: ${props => props.theme.accentColor};
+    opacity: 1;
+  }
+`
 const ByLink = styled(Link)`
   color: ${props => props.color};
   opacity: .8;
@@ -182,16 +204,18 @@ const ArticleBox = ({ detail, style }, context) => {
 					by
 					{' '}
 					<strong>
-						<Link to={writer && writer.url}> {writer.display} </Link>
+						<WriterLink to={writer && writer.url}>
+							{' '}{writer.display}{' '}
+						</WriterLink>
 					</strong>
 					{' '}
 					in
 					{' '}
-					<Link
-						to={column && column.url}
-						style={{ color: theme.accentColor, fontWeight: 'bold' }}>
-						{column.name}
-					</Link>
+					<strong>
+						<ColumnLink to={column && column.url}>
+							{column.name}
+						</ColumnLink>
+					</strong>
 				</Div>
 			</Box>
 		</Container>

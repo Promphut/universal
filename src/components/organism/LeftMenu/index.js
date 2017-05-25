@@ -113,8 +113,6 @@ const Nav = styled.nav`
 	background: linear-gradient(135deg,  ${props => props.theme.primaryColor} 0%, ${props => props.theme.secondaryColor} 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\#bf00b2b4\, endColorstr=\#bfcef1b7\,GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 
-
-
 	& ul {
 		// margin: 70px 60px 0 60px;
 		margin: 70px 40px;
@@ -139,7 +137,7 @@ const Nav = styled.nav`
     transition: .2s;
 
     &:hover {
-      color: ${props => props.accentColor} !important;
+      color: ${props => props.theme.accentColor} !important;
     }
 	}
 
@@ -153,7 +151,6 @@ const Nav = styled.nav`
 		line-height: 40px;
 		vertical-align: middle;
 		margin-left: 125px !important;
-    color: #FFF !important;
 	}
 
   & ul li .arrow.toggleUp {
@@ -173,7 +170,6 @@ const Nav = styled.nav`
       line-height: 40px;
       vertical-align: middle;
       margin-left: 70px !important;
-      color: #FFF !important;
     }
     & ul {
       font-size: 20px;
@@ -193,7 +189,7 @@ const CloseBtn = styled(IconButton)`
 		color: #e2e2e2 !important;
 
     &:hover {
-      color: ${props => props.accentColor} !important;
+      color: ${props => props.theme.accentColor} !important;
     }
 	}
 `
@@ -230,6 +226,16 @@ const DropDownListLink = styled.a`
   font-size:40px;
   @media (max-width:480px){
     font-size:32px;
+  }
+
+  > span {
+    color: white !important;
+    transition: .2s;
+  }
+  &:hover {
+    > span {
+      color: ${props => props.theme.accentColor} !important;
+    }
   }
 `
 
@@ -315,9 +321,9 @@ class LeftMenu extends React.Component {
 		return (
 			<Container open={open}>
 				<Container2 onClick={close} />
-				<Nav open={open} accentColor={theme.accentColor}>
+				<Nav open={open}>
 					<div className="menu menu-font">
-						<CloseBtn onClick={close} accentColor={theme.accentColor}>
+						<CloseBtn onClick={close}>
 							<FontIcon className="material-icons">close</FontIcon>
 						</CloseBtn>
 						{/* <SearchBtn onTouchTap={this.onSearch}><FontIcon className="material-icons">search</FontIcon></SearchBtn>*/}
