@@ -11,6 +11,7 @@ import {Helmet} from 'react-helmet'
 import config from '../../../config'
 import utils from '../../../services/utils'
 import auth from 'components/auth'
+import isEmpty from 'lodash/isEmpty'
 
 const Wrapper = styled.div`
 	 .hidden-des{
@@ -110,7 +111,8 @@ class StoryPage extends React.Component {
 	state = {
 		recommends: [], 	// trending stories
 		description: '',
-		showTopbarTitle:false
+		showTopbarTitle:false,
+		story:{}
 	}
 	static contextTypes = {
 		setting: PropTypes.object
@@ -118,35 +120,36 @@ class StoryPage extends React.Component {
 	constructor(props) {
 		super(props)
 
-		this.story = {
-			cover: {},
-			coverMobile: {}
-		} //default
+		// story = {
+		// 	cover: {},
+		// 	coverMobile: {}
+		// } //default
 	}
 
-	findDescription = (maxLength = 140) => {
-		let story = document.getElementsByTagName('p')
-		if (story) {
-			let description = ''
+	// findDescription = (maxLength = 140) => {
+	// 	let story = document.getElementsByTagName('p')
+	// 	if (story) {
+	// 		let description = ''
 
-			for (let i = 0; i < story.length; i++) {
-		    let item = story[i].innerHTML
-				description += item + ' '
+	// 		for (let i = 0; i < story.length; i++) {
+	// 	    let item = story[i].innerHTML
+	// 			description += item + ' '
 
-				if (description.length > maxLength) {
-					description = description.substring(0, maxLength) + '...'
-					break
-				}
-			}
+	// 			if (description.length > maxLength) {
+	// 				description = description.substring(0, maxLength) + '...'
+	// 				break
+	// 			}
+	// 		}
 
-			this.setState({description})
-		}
-	}
+	// 		this.setState({description})
+	// 	}
+	// }
 
 	getRecommendStories = () => {
-		if(this.story.column){
+		var {story} = this.state
+		if(story.column){
 			// Get recommend from column
-			let cid = this.story.column._id
+			let cid = story.column._id
 
 			api.getFeed('story', {status:1, column:cid}, 'latest', null, 0, 4)
 			.then(result => {
@@ -157,7 +160,7 @@ class StoryPage extends React.Component {
 			})
 		} else {
 			// If no column presented, use writer instead
-			let uid = this.story.writer._id
+			let uid = story.writer._id
 
 			api.getFeed('story', {status:1, writer:uid}, 'latest', null, 0, 4)
 			.then(result => {
@@ -174,23 +177,13 @@ class StoryPage extends React.Component {
 		
 		api.getStoryFromSid(sid, auth.getToken(), this.props.countView)
 	    .then(result => {
-	    	this.story = result.story
+				this.setState({
+					story:result.story
+				})
 	    })
 	    .catch(utils.toError(this.props.history))
 	}
-
-	componentDidMount(){
-		this.getStoryFromSid(this.props.match.params.sid, () => {
-			this.getRecommendStories()
-			this.findDescription()
-		})
-		window.addEventListener('scroll', this.handleScroll);
-	}
-
-	componentWillUnmount() {
-			window.removeEventListener('scroll', this.handleScroll);
-	}
-
+	
 	handleScroll = (event) => {
 		var top = dom(this.refs.TT).getBoundingClientRect().top
 		if(top<-110){
@@ -208,82 +201,106 @@ class StoryPage extends React.Component {
 		}
 	}
 
+	componentDidMount(){
+		this.getStoryFromSid(this.props.match.params.sid, () => {
+			this.getRecommendStories()
+			//this.findDescription()
+		})
+		window.addEventListener('scroll', this.handleScroll);
+	}
+
+	componentWillUnmount() {
+			window.removeEventListener('scroll', this.handleScroll);
+	}
+
+	componentWillReceiveProps(nextProps){
+    if(nextProps.location.pathname != this.props.location.pathname){
+      this.getStoryFromSid(nextProps.match.params.sid, () => {
+				this.getRecommendStories()
+				//this.findDescription()
+			})
+    }
+  }
+
 	render(){
-    	let {keywords, channels} = this.context.setting.publisher
-		let {recommends, description, showTopbarTitle} = this.state
+    let {keywords, channels} = this.context.setting.publisher
+		let {recommends, description, showTopbarTitle,story} = this.state
 
 		let hasCover = false
-		if (utils.isMobile() && this.story.coverMobile.medium != config.BACKURL+'/imgs/article_cover_portrait.png') {
-			hasCover = true
-		} else if (this.story.cover.medium != config.BACKURL+'/imgs/article_cover_landscape.png') {
-			hasCover = true
+		if(!isEmpty(story)){
+			if (utils.isMobile() && story.coverMobile.medium != config.BACKURL+'/imgs/article_cover_portrait.png') {
+				hasCover = true
+			} else if (story.cover.medium != config.BACKURL+'/imgs/article_cover_landscape.png') {
+				hasCover = true
+			}
 		}
 
-		//console.log('render', this.story)w.
-		return (
-			<div>
-				<Helmet>
-					<title>{this.story.title}</title>
-					<meta name="title" content={this.story.title} />
-					<meta name="keywords" content={keywords} />
-					<meta name="description" content={description} />
+		//console.log('render', story)w.
+		if(isEmpty(story))return <div ref='TT'></div>	
+		else return (
+		<div>
+			<Helmet>
+				<title>{story.title}</title>
+				<meta name="title" content={story.title} />
+				<meta name="keywords" content={keywords} />
+				<meta name="description" content={story.shortDesc} />
 
-					<link rel="shortcut icon" type="image/ico" href={config.BACKURL+'/publishers/'+config.PID+'/favicon'} />
-					{channels && channels.fb ? <link rel="author" href={utils.getFbUrl(channels.fb)} /> : ''}
-					{/*<link rel="canonical" href={window.location.href} />*/}
+				<link rel="shortcut icon" type="image/ico" href={config.BACKURL+'/publishers/'+config.PID+'/favicon'} />
+				{channels && channels.fb ? <link rel="author" href={utils.getFbUrl(channels.fb)} /> : ''}
+				{/*<link rel="canonical" href={window.location.href} />*/}
 
-					<meta property="og:sitename" content={this.story.title} />
-					{/*<meta property="og:url" content={window.location.href} />*/}
-					<meta property="og:title" content={this.story.title} />
-					<meta property="og:type" content="article" />
-					<meta property="og:image" content={this.story.cover.medium} />
-					<meta property="og:keywords" content={keywords} />
-					<meta property="og:description" content={description} />
-					<meta property="twitter:card" content="summary_large_image" />
-					<meta property="twitter:image:alt" content={this.story.title} />
-					<meta property="fb:app_id" content={config.ANALYTIC.FBAPPID} />
+				<meta property="og:sitename" content={story.title} />
+				{/*<meta property="og:url" content={window.location.href} />*/}
+				<meta property="og:title" content={story.title} />
+				<meta property="og:type" content="article" />
+				<meta property="og:image" content={story.cover.medium} />
+				<meta property="og:keywords" content={keywords} />
+				<meta property="og:description" content={description} />
+				<meta property="twitter:card" content="summary_large_image" />
+				<meta property="twitter:image:alt" content={story.title} />
+				<meta property="fb:app_id" content={config.ANALYTIC.FBAPPID} />
 
-					<link rel="stylesheet" href="/css/medium-editor.css" type="text/css"/>
-					<link rel="stylesheet" href="/css/tim.css" type="text/css"/>
-					<link rel="stylesheet" href="/css/medium-editor-insert-plugin.css" type="text/css"/>
-				</Helmet>
+				<link rel="stylesheet" href="/css/medium-editor.css" type="text/css"/>
+				<link rel="stylesheet" href="/css/tim.css" type="text/css"/>
+				<link rel="stylesheet" href="/css/medium-editor-insert-plugin.css" type="text/css"/>
+			</Helmet>
 
-				<Wrapper>
-					<TopBarWithNavigation onLoading={this.props.onLoading} title={'Title of AomMoney goes here..'} article={this.story.title} showTitle={showTopbarTitle}  editButton={'/me/stories/'+this.story.id+'/edit'} hasCover={hasCover} />
+			<Wrapper>
+				<TopBarWithNavigation onLoading={this.props.onLoading} title={'Title of AomMoney goes here..'} article={story.title} showTitle={showTopbarTitle}  editButton={'/me/stories/'+story.id+'/edit'} hasCover={hasCover} />
 
-					{this.story.cover.medium!=config.BACKURL+'/imgs/article_cover_landscape.png' &&
-					<BGImg style={{width:'100%',height:'85vh'}} src={this.story.cover.large ||
-							this.story.cover.medium} className='hidden-mob' alt={this.story.title}>
-						<Cover/>
-					</BGImg>}
-					{this.story.coverMobile.medium!=config.BACKURL+'/imgs/article_cover_portrait.png' &&
-					<BGImg style={{width:'100%',height:'85vh'}} src={this.story.coverMobile.large || this.story.coverMobile.medium} className='hidden-des' alt={this.story.title}>
-						<Cover/>
-					</BGImg>}
-					<Content paddingTop={hasCover ? '0px' : '60px'} >
-						<Share ref='share' style={{zIndex:'50'}}>
-							<Stick topOffset={100}>
-								<ShareSideBar shareCount={this.story.shares ? this.story.shares.total : 0}/>
-							</Stick>
-						</Share>
+				{story.cover.medium!=config.BACKURL+'/imgs/article_cover_landscape.png' &&
+				<BGImg style={{width:'100%',height:'85vh'}} src={story.cover.large ||
+						story.cover.medium} className='hidden-mob' alt={story.title}>
+					<Cover/>
+				</BGImg>}
+				{story.coverMobile.medium!=config.BACKURL+'/imgs/article_cover_portrait.png' &&
+				<BGImg style={{width:'100%',height:'85vh'}} src={story.coverMobile.large || story.coverMobile.medium} className='hidden-des' alt={story.title}>
+					<Cover/>
+				</BGImg>}
+				<Content paddingTop={hasCover ? '0px' : '60px'} >
+					<Share ref='share' style={{zIndex:'50'}}>
+						<Stick topOffset={100}>
+							<ShareSideBar shareCount={story.shares ? story.shares.total : 0}/>
+						</Stick>
+					</Share>
 
-						<Main ref={'TT'}>
-							<StoryDetail story={this.story} />
-						</Main>
+					<Main ref={'TT'}>
+						<StoryDetail story={story} />
+					</Main>
 
-						<Aside id='trendingBar' ref='trendingBar'>
-							<Stick topOffset={80} style={{zIndex:'50'}} marginBottom={60}>
-								<TrendingSideBar />
-							</Stick>
-						</Aside>
-					</Content>
+					<Aside id='trendingBar' ref='trendingBar'>
+						<Stick topOffset={80} style={{zIndex:'50'}} marginBottom={60}>
+							<TrendingSideBar />
+						</Stick>
+					</Aside>
+				</Content>
 
-					<Content>
-						{recommends.length!=0&&<RecommendContainer recommend={recommends}/>}
-					</Content>
-					<Footer/>
-				</Wrapper>
-			</div>
+				<Content>
+					{recommends.length!=0&&<RecommendContainer recommend={recommends}/>}
+				</Content>
+				<Footer/>
+			</Wrapper>
+		</div>
 		)
 	}
 }

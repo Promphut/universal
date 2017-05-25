@@ -167,22 +167,20 @@ class StoryDetail extends React.Component {
   }
   constructor(props) {
     super(props)
-
-    this.story = {
-      writer: {},
-      column: {}
-    }
+    //console.log(props)
+    // this.story = {
+    //   writer: {},
+    //   column: {}
+    // }
   }
 
-  getStoryTags = () => {
-    let sid = this.story._id
-
+  getStoryTags = (sid) => {
     if(sid) 
       api.getStoryTags(sid).then((tags)=>{
+        //console.log(tags)
         this.setState({
           tags
         })
-        //console.log(tags)
       })
   }
 
@@ -195,20 +193,21 @@ class StoryDetail extends React.Component {
     )
   }
 
-  componentWillMount(){
-    this.getStoryTags()
+  componentDidMount(){
+     this.getStoryTags(this.props.story._id)
   }
 
   componentWillReceiveProps(nextProps){
     if(nextProps.story != this.props.story){
-      this.story = nextProps.story
-      //this.setState({refresh: Math.random()})
-      //console.log('componentWillReceiveProps', this.story)
+      this.getStoryTags(nextProps.story._id)
+      //console.log(nextProps.story)
     }
   }
 
   render(){
-    let s = this.story 
+    var {story} = this.props
+    var s = story
+    //console.log(s)
     const isMobile = utils.isMobile()
     let {tags} = this.state
     const columnStyle = isMobile ? {
@@ -232,14 +231,14 @@ class StoryDetail extends React.Component {
 
         <Divider/>
 
-        <div className='row center'>
+        {(s.writer&&s.column)&&<div className='row center'>
           <div className='col-md-6 col-sm-12'>
             <WritedBy writer={s.writer} column={s.column} published={s.published} />
           </div>
           <div className='col-md-6 col-sm-12'  style={columnStyle}>
             {s.column && <FromColumn column={s.column} />}
           </div>
-        </div>
+        </div>}
 
         <Divider/>
 

@@ -807,6 +807,7 @@ class App extends React.Component {
     //console.log("RECEIVE2", nextProps.location.hash, nextProps.location.action)
     //console.log('componentWillReceiveProps', nextProps.history, nextProps.location, this.props.location)
     //let isFirstTime = !nextProps.location.key && !this.props.location.key
+    //console.log(nextProps.location.pathname)
 
     if(nextProps.history.action==='PUSH') {
       
@@ -830,7 +831,9 @@ class App extends React.Component {
       this.timer = setTimeout(() => this.progress(10), 100);
     } 
     //console.log('UPDATE0', (nextProps.location.action === 'REPLACE' && !!nextProps.location.hash), nextProps.location.hash, this.props.location.hash)
-
+    if(nextProps.location.pathname!=this.props.location.pathname){
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
+    }
     // If intention is to change hash, no need to update component
     if(nextProps.history.action === 'REPLACE' && nextProps.location.hash!==this.props.location.hash) {
       return false

@@ -125,10 +125,15 @@ const ArticleBox = ({detail, style}, context) => {
             <div style={{width:'16px',height:'1px',background:'#8E8E8E',flex:1,margin:'10px 10px 0 0'}}></div>
             <Div className='sans-font' style={{margin:'0 0 7px 0',flex:20}}>{readTime + ' min read'}</Div>
           </div>
-          <NameLink to={url} className='nunito-font' style={{marginTop:'5px'}}>{ptitle}</NameLink>
+          <NameLink to={url} className='nunito-font' style={{marginTop:'5px'}}>
+            {truncate(ptitle, {
+              'length': 100,
+              'separator': ''
+            })}
+          </NameLink>
 
           <Div className='nunito-font' style={{marginTop:'10px'}}>{truncate(contentShort, {
-                'length': 200,
+                'length': 100,
                 'separator': ''
               })}</Div>
           <Div className='nunito-font by' >by <strong><Link to={writer&&writer.url}> {writer.display} </Link></strong> in <Link to={column&&column.url} style={{color:theme.accentColor,fontWeight:'bold'}}>{column.name}</Link></Div>
