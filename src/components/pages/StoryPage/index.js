@@ -88,12 +88,7 @@ const Aside = styled.div`
 		display:none;
 	}
 `
-const TopbarTitle = styled.h3`
-	text-align:center;
-	z-index:10;
-	position:stick;
-	color:white;
-`
+
 
 const Cover = styled.div`
 	position:relative;
@@ -197,12 +192,20 @@ class StoryPage extends React.Component {
 	}
 
 	handleScroll = (event) => {
-			let scrollTop = event.srcElement.body.scrollTop,
-					itemTranslate = Math.min(0, scrollTop/3 - 60);
-			//console.log(screenTop)
-			// this.setState({
-			// 	showTopbarTitle:true
-			// });
+		var top = dom(this.refs.TT).getBoundingClientRect().top
+		if(top<-110){
+			this.setState({
+				showTopbarTitle:true
+			});
+		}else{
+			if(this.state.showTopbarTitle){
+				this.setState({
+					showTopbarTitle:false
+				});
+			}else{
+				return
+			}
+		}
 	}
 
 	render(){
@@ -246,7 +249,7 @@ class StoryPage extends React.Component {
 				</Helmet>
 
 				<Wrapper>
-					<TopBarWithNavigation onLoading={this.props.onLoading} title={'Title of AomMoney goes here..'}  editButton={'/me/stories/'+this.story.id+'/edit'} hasCover={hasCover} />
+					<TopBarWithNavigation onLoading={this.props.onLoading} title={'Title of AomMoney goes here..'} article={this.story.title} showTitle={showTopbarTitle}  editButton={'/me/stories/'+this.story.id+'/edit'} hasCover={hasCover} />
 
 					{this.story.cover.medium!=config.BACKURL+'/imgs/article_cover_landscape.png' &&
 					<BGImg style={{width:'100%',height:'85vh'}} src={this.story.cover.large ||
@@ -257,15 +260,14 @@ class StoryPage extends React.Component {
 					<BGImg style={{width:'100%',height:'85vh'}} src={this.story.coverMobile.large || this.story.coverMobile.medium} className='hidden-des' alt={this.story.title}>
 						<Cover/>
 					</BGImg>}
-					{showTopbarTitle&&<TopbarTitle ref='TopbarTitle' className='nunito-font'>{this.story.title}</TopbarTitle>}
-					<Content paddingTop={hasCover ? '0px' : '60px'}>
+					<Content paddingTop={hasCover ? '0px' : '60px'} >
 						<Share ref='share' style={{zIndex:'50'}}>
 							<Stick topOffset={100}>
 								<ShareSideBar shareCount={this.story.shares ? this.story.shares.total : 0}/>
 							</Stick>
 						</Share>
 
-						<Main>
+						<Main ref={'TT'}>
 							<StoryDetail story={this.story} />
 						</Main>
 

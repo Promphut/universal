@@ -316,10 +316,21 @@ class PublisherContact extends React.Component {
 
           </Edit>
         </Flex>
-        <div className='sans-font' style={{marginTop:'30px'}}>
-          <PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/>
-          <SecondaryButton label='Reset' onClick={this.resetData} style={{float:'left',margin:'0 20px 0 0'}}/>
-          <TextStatus style={{color:error?'#D8000C':theme.accentColor}}>{textStatus}</TextStatus></div>
+        <div className="sans-font" style={{marginTop:'20px',float: 'right',overflow:'hidden'}}>
+					<TextStatus style={{ color: error ? '#D8000C' : theme.accentColor }}>
+						{textStatus}
+					</TextStatus>
+					<SecondaryButton
+						label="Reset"
+						onClick={this.resetData}
+						style={{ float: 'left', margin: '0 0 0 20px' }}
+					/>
+					<PrimaryButton
+						label="Save"
+						type="submit"
+						style={{ float: 'left', margin: '0 0 0 20px' }}
+					/>
+				</div>
       </Container>
     )
   }

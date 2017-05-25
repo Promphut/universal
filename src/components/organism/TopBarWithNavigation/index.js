@@ -5,6 +5,24 @@ import auth from 'components/auth'
 import api from 'components/api'
 import { withRouter } from 'react-router'
 import utils from '../../../services/utils'
+import truncate from 'lodash/truncate'
+import styled,{keyframes} from 'styled-components'
+
+const Title = styled.div`
+	color:white;
+	font-size:18px;
+	font-weight:bold;
+	margin:18px 0 0 0;
+	animation:${props=>props.show?slideIn:slideOut} 0.5s forwards;
+`
+const slideIn = keyframes`
+	from { opacity:0; }
+  to { opacity:1; }
+`
+const slideOut = keyframes`
+	from { opacity:1; }
+  to { opacity:0; }
+`
 
 class TopBarWithNavigation extends React.Component {
 	static contextTypes = {
@@ -80,27 +98,22 @@ class TopBarWithNavigation extends React.Component {
 	render () {
 		let {theme} = this.context.setting.publisher
 		let {scrolling, scroll, status} = this.state
-		let {title, article, notShowNav, editButton, hasCover} = this.props
+		let {title, article, notShowNav, editButton, hasCover,showTitle} = this.props
 		let transparent = false
 		let articleMobile = false
 
 		// titleText = 'Article'
 		let children = ''
 		if (article) {
-			// console.log('article', article)
-			if (article.length > 80) {
-				article = article.substring(0, 80) + '...'
-			}
-			children = <h4 className="menu-font">{article}</h4>
+			children = 	<Title show={showTitle} className="nunito-font">{truncate(article, {'length':80,'separator':''})}</Title>
+	
 			transparent = true
-
 			if (utils.isMobile()) {
 				articleMobile = true
 			}
 		} else if (!notShowNav) {
 			children = <TopNavigation menu={this.menu} />
 		}
-
 	  	return (
 			<Stick className={this.props.className} fixed={(articleMobile && hasCover) ? !scrolling : ''}>
 				{articleMobile ?
