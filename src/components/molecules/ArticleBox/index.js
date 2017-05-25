@@ -118,25 +118,27 @@ const ArticleBox = ({detail, style}, context) => {
       <Container style={{...style}} height={(screen.width-32)/2}>
         <Box1 style={{flex:'1'}} >
           <Div className='sans-font' style={{margin:'0 0 8px 0'}}>{moment(published).fromNow()}</Div>
-          <BGImg url={url} src={cover.medium || cover.small} className='imgWidth'/>
+          <BGImg url={url?url:'/'} src={cover.medium || cover.small} className='imgWidth'/>
         </Box1>
         <Box>
           <div className='row' style={{overflow:'hidden',display:'flex'}}>
             <div style={{width:'16px',height:'1px',background:'#8E8E8E',flex:1,margin:'10px 10px 0 0'}}></div>
             <Div className='sans-font' style={{margin:'0 0 7px 0',flex:20}}>{readTime + ' min read'}</Div>
           </div>
-          <NameLink to={url} className='nunito-font' style={{marginTop:'5px'}}>
-            {truncate(ptitle, {
+          <NameLink to={url?url:'/'} className='nunito-font' style={{marginTop:'5px'}}>
+            {/*{truncate(ptitle, {
               'length': 100,
               'separator': ''
-            })}
+            })}*/}
           </NameLink>
 
-          <Div className='nunito-font' style={{marginTop:'10px'}}>{truncate(contentShort, {
-                'length': 100,
-                'separator': ''
-              })}</Div>
-          <Div className='nunito-font by' >by <strong><Link to={writer&&writer.url}> {writer.display} </Link></strong> in <Link to={column&&column.url} style={{color:theme.accentColor,fontWeight:'bold'}}>{column.name}</Link></Div>
+          <Div className='nunito-font' style={{marginTop:'10px'}}>
+            {/*{truncate(contentShort, {
+              'length': 100,
+              'separator': ''
+            })}*/}
+          </Div>
+          <Div className='nunito-font by' >by <strong><Link to={writer.url?writer.url:'/'}> {writer.display} </Link></strong> in <Link to={column.url?column.url:'/'} style={{color:theme.accentColor,fontWeight:'bold'}}>{column.name}</Link></Div>
         </Box>
       </Container>
     )
