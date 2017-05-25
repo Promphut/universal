@@ -34,6 +34,7 @@ const Content = styled.div`
 	flex-flow: row wrap;
 	justify-content: center;
 	padding: 25px 0 50px 0;
+	min-height: calc(100vh - 421px);
 `
 
 const Main = styled.div`
