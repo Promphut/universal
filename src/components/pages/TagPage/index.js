@@ -1,5 +1,5 @@
 import React from 'react'
-import {TopBarWithNavigation, ArticleBox, ArticleBoxLarge, More, TrendingSideBar,
+import {TopBarWithNavigation, ArticleBox, ArticleBoxLarge, TrendingSideBar,
 	BGImg, StoryMenu, Stick, Footer,TagSideBar,EmptyStory} from 'components'
 import {findDOMNode as dom} from 'react-dom'
 import styled from 'styled-components'
@@ -139,9 +139,9 @@ class TagPage extends React.Component {
 	loadFeed = (tagId) => {
 		return () => {
 			//console.log('LOAD FEED0', tagId, this.loading)
-			if(tagId==null) return 
+			if(tagId==null) return
 			// ensure this method is called only once at a time
-			if(this.loading===true) return 
+			if(this.loading===true) return
 			this.loading = true
 			//console.log('LOAD FEED1')
 
@@ -204,7 +204,7 @@ class TagPage extends React.Component {
 		      		{feedCount===0 ? <Main>
 		                <TextLine className='sans-font' style={{border:'none',marginTop:'60px'}}>tag</TextLine>
 		                <TagName className='nunito-font' style={{margin:'10px 0 50px 0'}}>{tag.name}</TagName>
-						
+
 						<EmptyStory title='No Story, yet' description='There are no stories in this column right now. Wanna back to see other columns?' />
 	              	</Main> : <Main>
 		                <TextLine className='sans-font' style={{border:'none',marginTop:'60px'}}>tag</TextLine>
@@ -223,8 +223,6 @@ class TagPage extends React.Component {
 								))}
 							</div>
 						</InfiniteScroll>
-
-		                <More style={{margin:'30px auto 30px auto'}} />
 	              	</Main>}
 
 				    <Aside>
