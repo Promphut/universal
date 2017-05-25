@@ -17,6 +17,7 @@ const NavSpan = styled.span`
 	color: ${props => (props.theme.barTone == 'light' ? '#222' : '#FFF')};
 	height:60px;
 	cursor: pointer;
+	transition: .2s;
 	&:hover{
 		font-weight:bold;
 		color:${props => props.theme.accentColor};
@@ -32,6 +33,7 @@ const NavLink2 = styled(NavLink)`
 	color: ${props => (props.theme.barTone == 'light' ? '#222' : '#FFF')};
 	height:60px;
 	cursor: pointer;
+	transition: .2s;
 	&:hover{
 		font-weight:bold;
 		color:${props => props.theme.accentColor};
@@ -54,6 +56,7 @@ const DropdownList = styled(NavLink)`
 		width: 100%;
 		padding: 10px 0 10px 0;
 		color: #222;
+		transition: .2s;
 		display:block;&:hover{
 			color:${props => props.theme.accentColor};
 		}

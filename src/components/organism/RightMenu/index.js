@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled, {keyframes} from 'styled-components'
-import {Link} from 'react-router-dom';
-import FontIcon from 'material-ui/FontIcon';
-import IconButton from 'material-ui/IconButton';
+import styled, { keyframes } from 'styled-components'
+import { Link } from 'react-router-dom'
+import FontIcon from 'material-ui/FontIcon'
+import IconButton from 'material-ui/IconButton'
 import Divider from 'material-ui/Divider'
-import {findDOMNode as dom} from 'react-dom'
-import Avatar from 'material-ui/Avatar';
+import { findDOMNode as dom } from 'react-dom'
+import Avatar from 'material-ui/Avatar'
 import auth from 'components/auth'
 import utils from '../../../services/utils'
 
@@ -18,8 +18,8 @@ const Container = styled.div`
   top:0;
   left:0;
   z-index:10;
-  display:${props=> props.open?'block':'none'};
-  animation: ${props=> props.open?displayNone:displayBlock} 0.5s forwards;
+  display:${props => (props.open ? 'block' : 'none')};
+  animation: ${props => (props.open ? displayNone : displayBlock)} 0.5s forwards;
   @media (max-width:480px){
     width: 100vw;
     .mobile{
@@ -36,7 +36,7 @@ const Container2 = styled.div`
   left:0;
   z-index:10;
   background:rgba(0,0,0,0.8);
-  animation: ${props=> props.open?fadeOut:fadeIn} 0.5s forwards;
+  animation: ${props => (props.open ? fadeOut : fadeIn)} 0.5s forwards;
   @media (max-width:480px){
     width: 100vw;
   }
@@ -109,7 +109,7 @@ const Nav = styled.nav`
 	// padding: 40px;
 	-webkit-overflow-scrolling: touch;
 	z-index:11;
-  animation: ${props=> props.open?slideOut:slideIn} 0.6s forwards;
+  animation: ${props => (props.open ? slideOut : slideIn)} 0.6s forwards;
   background: rgba(255, 255, 255, 0.85);
 
 	& hr {
@@ -130,11 +130,13 @@ const Nav = styled.nav`
 		display: block;
     padding: 15px 10px;
 		color: #222;
+    transition: .2s;
+
+    &:hover {
+  		color: ${props => props.accentColor};
+    }
 	}
 
-	& ul li a:hover {
-		text-decoration: underline;
-	}
   @media(max-width:480px){
     width: 100vw;
     & ul {
@@ -151,6 +153,10 @@ const CloseBtn = styled(IconButton)`
 	& .material-icons {
 		width: 30px;
 		height: 30px;
+
+    &:hover {
+      color: ${props => props.accentColor} !important;
+    }
 	}
 
   @media(max-width: 480px){
@@ -170,6 +176,15 @@ const Profile = styled.div`
 		font-size: 15px;
 		color: #8f8f8f;
 		padding-left: 20px;
+	}
+
+	& > div a h3 {
+    color: #222;
+    transition: .2s;
+
+    &:hover {
+      color: ${props => props.accentColor};
+    }
 	}
   @media (max-width:480px){
     & > div {
@@ -199,99 +214,168 @@ const EditMode = styled.div`
 `
 
 class RightMenu extends React.Component {
-  constructor(props) {
-    super(props)
+	static contextTypes = {
+		setting: PropTypes.object
+	}
 
-    this.state = {
-      open:this.props.open
-    }
-  }
+	constructor(props) {
+		super(props)
 
-  render(){
-    let isMobile = false
-    let {open, close} = this.props,
-        user = this.props.user
-        //console.log(user)
+		this.state = {
+			open: this.props.open
+		}
+	}
 
-    let displayStyle, AvatarSize, introStyle
-    let hiddenMobile = {}
-    let AvatarStyle = {}
-    let linkStyle = {}
+	render() {
+		let { theme } = this.context.setting.publisher
+		let isMobile = false
+		let { open, close } = this.props, user = this.props.user
+		//console.log(user)
 
-    if (utils.isMobile()) {
-      isMobile = true
-      hiddenMobile = {
-        display: 'none'
-      }
-      AvatarStyle = {
-        border: '1px solid #FFF',
-        marginTop: '70px'
-      }
-      AvatarSize = 55
-      displayStyle = {
-       fontSize: '18px',
-       margin: '0px',
-       color: '#222',
-       fontWeight: 'bold',
-       position: 'absolute',
-       top: '70px',
-       left: '115px'
-     }
-     introStyle = {
-       position: 'absolute',
-       top: '95px',
-       left: '115px',
-       maxWidth: '225px'
-     }
-     linkStyle = {
-        display: 'inline-flex'
-     }
-    } else {
-      displayStyle = {
-        fontSize: '22px',
-        margin: '0px',
-        color: '#222',
-        fontWeight: 'bold'
-      }
-      introStyle = {}
-      AvatarSize = 70
-    }
-    //console.log('USER', user)
-    return (
-      <Container open={open}>
-        <Container2 onClick={close} />
-        <Nav open={open}>
-          <div className="menu menu-font">
-            {auth.hasRoles(['ADMIN','EDITOR'])&&<Link style={hiddenMobile} to={'/editor'}><EditMode className="nunito-font"><FontIcon className="material-icons" style={{color:'#fff',margin:'0 25px 0 20px',top:'4px'}}>edit</FontIcon>Editor Mode</EditMode></Link>}
-            <CloseBtn onClick={close}><FontIcon className="material-icons" style={{color:'#222',fill:'#222'}}>close</FontIcon></CloseBtn>
+		let displayStyle, AvatarSize, introStyle
+		let hiddenMobile = {}
+		let AvatarStyle = {}
+		let linkStyle = {}
 
-            <Profile className="content-font">
-              <Link to={user.url}><Avatar style={AvatarStyle} src={user.pic.medium} size={AvatarSize} className="mobile"/></Link>
-              <div style={{marginTop: '-15px'}}>
-                <Link to={user.url}>
-                  <h3 style={displayStyle}>{user.display}</h3>
-                </Link>
-                <div style={introStyle}>
-                  {user.intro}
-                </div>
-              </div>
-            </Profile>
-            <ul>
-              <Divider />
-              <li><Link style={hiddenMobile} to='/me/stories' onClick={close}>My Stories</Link></li>
-              <li><Link style={linkStyle} to='/me/settings' onClick={close}>{isMobile ? <FontIcon style={{paddingRight: '25px'}} className="material-icons">account_circle</FontIcon> : ''}Edit Profile</Link></li>
-            </ul>
-            <Divider style={hiddenMobile} />
-            <ul>
-              <li><Link style={linkStyle} to='/me/settings/account' onClick={close}>{isMobile ? <FontIcon style={{paddingRight: '25px'}} className="material-icons">settings</FontIcon> : ''}Settings</Link></li>
-              <li><Link style={linkStyle} to='/logout'>{isMobile ? <FontIcon style={{paddingRight: '25px'}} className="material-icons">exit_to_app</FontIcon> : ''}Log Out</Link></li>
-            </ul>
-          </div>
-        </Nav>
-      </Container>
-    )
-  }
+		if (utils.isMobile()) {
+			isMobile = true
+			hiddenMobile = {
+				display: 'none'
+			}
+			AvatarStyle = {
+				border: '1px solid #FFF',
+				marginTop: '70px'
+			}
+			AvatarSize = 55
+			displayStyle = {
+				fontSize: '18px',
+				margin: '0px',
+				color: '#222',
+				fontWeight: 'bold',
+				position: 'absolute',
+				top: '70px',
+				left: '115px'
+			}
+			introStyle = {
+				position: 'absolute',
+				top: '95px',
+				left: '115px',
+				maxWidth: '225px'
+			}
+			linkStyle = {
+				display: 'inline-flex'
+			}
+		} else {
+			displayStyle = {
+				fontSize: '22px',
+				margin: '0px',
+				fontWeight: 'bold'
+			}
+			introStyle = {}
+			AvatarSize = 70
+		}
+		//console.log('USER', user)
+		return (
+			<Container open={open}>
+				<Container2 onClick={close} />
+				<Nav open={open} accentColor={theme.accentColor}>
+					<div className="menu menu-font">
+						{auth.hasRoles(['ADMIN', 'EDITOR']) &&
+							<Link style={hiddenMobile} to={'/editor'}>
+								<EditMode className="nunito-font">
+									<FontIcon
+										className="material-icons"
+										style={{
+											color: '#fff',
+											margin: '0 25px 0 20px',
+											top: '4px'
+										}}>
+										edit
+									</FontIcon>
+									Editor Mode
+								</EditMode>
+							</Link>}
+						<CloseBtn onClick={close} accentColor={theme.accentColor}>
+							<FontIcon
+								className="material-icons"
+								style={{ color: '#222', fill: '#222' }}>
+								close
+							</FontIcon>
+						</CloseBtn>
+
+						<Profile className="content-font" accentColor={theme.accentColor}>
+							<Link to={user.url}>
+								<Avatar
+									style={AvatarStyle}
+									src={user.pic.medium}
+									size={AvatarSize}
+									className="mobile"
+								/>
+							</Link>
+							<div style={{ marginTop: '-15px' }}>
+								<Link to={user.url}>
+									<h3 style={displayStyle}>{user.display}</h3>
+								</Link>
+								<div style={introStyle}>
+									{user.intro}
+								</div>
+							</div>
+						</Profile>
+						<Divider />
+						<ul>
+							<li>
+								<Link style={hiddenMobile} to="/me/stories" onClick={close}>
+									My Stories
+								</Link>
+							</li>
+							<li>
+								<Link style={linkStyle} to="/me/settings" onClick={close}>
+									{isMobile
+										? <FontIcon
+												style={{ paddingRight: '25px' }}
+												className="material-icons">
+												account_circle
+											</FontIcon>
+										: ''}
+									Edit Profile
+								</Link>
+							</li>
+						</ul>
+						<Divider style={hiddenMobile} />
+						<ul>
+							<li>
+								<Link
+									style={linkStyle}
+									to="/me/settings/account"
+									onClick={close}>
+									{isMobile
+										? <FontIcon
+												style={{ paddingRight: '25px' }}
+												className="material-icons">
+												settings
+											</FontIcon>
+										: ''}
+									Settings
+								</Link>
+							</li>
+							<li>
+								<Link style={linkStyle} to="/logout">
+									{isMobile
+										? <FontIcon
+												style={{ paddingRight: '25px' }}
+												className="material-icons">
+												exit_to_app
+											</FontIcon>
+										: ''}
+									Log Out
+								</Link>
+							</li>
+						</ul>
+					</div>
+				</Nav>
+			</Container>
+		)
+	}
 }
-
 
 export default RightMenu

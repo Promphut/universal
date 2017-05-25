@@ -1,9 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import {Link} from 'react-router-dom';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import {BGImg, ShareDropdown} from 'components'
-import Avatar from 'material-ui/Avatar';
+import { BGImg, ShareDropdown } from 'components'
+import Avatar from 'material-ui/Avatar'
 import FontIcon from 'material-ui/FontIcon'
 import Popover from 'material-ui/Popover'
 import Menu from 'material-ui/Menu'
@@ -43,7 +43,7 @@ const Container = styled.div`
     }
     .imgWidth{
       width:100%;
-      height:${props=>props.height}px;
+      height:${props => props.height}px;
     }
     .by{
       margin-top:12px;
@@ -65,10 +65,21 @@ const NameLink = styled(Link)`
   font-weight:bold;
   font-size:18px;
   &:hover{
-    color:${props=>props.theme.accentColor};
+    color:${props => props.theme.accentColor};
   }
   @media (max-width:480px) {
     font-size:15px;
+  }
+`
+
+const ByLink = styled(Link)`
+  color: ${props => props.color};
+  opacity: .8;
+  font-weight: bold;
+
+  &:hover{
+    color: ${props => props.color};
+    opacity: 1;
   }
 `
 
@@ -105,40 +116,87 @@ const Box1 = styled.div`
   }
 `
 
-const ArticleBox = ({detail, style}, context) => {
-    let {ptitle,cover,writer,column,votes,comments,updated,url,readTime,contentShort,created,published} = detail
-    var {theme} = context.setting.publisher
+const ArticleBox = ({ detail, style }, context) => {
+	let {
+		ptitle,
+		cover,
+		writer,
+		column,
+		votes,
+		comments,
+		updated,
+		url,
+		readTime,
+		contentShort,
+		created,
+		published
+	} = detail
+	var { theme } = context.setting.publisher
 
-    let writherDisplay = ''
-    if (writer && writer.display) {
-      writherDisplay = writer.display ? writer.display : ''
-    }
+	let writherDisplay = ''
+	if (writer && writer.display) {
+		writherDisplay = writer.display ? writer.display : ''
+	}
 
-    return (
-      <Container style={{...style}} height={(screen.width-32)/2}>
-        <Box1 style={{flex:'1'}} >
-          <Div className='sans-font' style={{margin:'0 0 8px 0'}}>{moment(published).fromNow()}</Div>
-          <BGImg url={url} src={cover.medium || cover.small} className='imgWidth'/>
-        </Box1>
-        <Box>
-          <div className='row' style={{overflow:'hidden',display:'flex'}}>
-            <div style={{width:'16px',height:'1px',background:'#8E8E8E',flex:1,margin:'10px 10px 0 0'}}></div>
-            <Div className='sans-font' style={{margin:'0 0 7px 0',flex:20}}>{readTime + ' min read'}</Div>
-          </div>
-          <NameLink to={url} className='nunito-font' style={{marginTop:'5px'}}>{ptitle}</NameLink>
+	return (
+		<Container style={{ ...style }} height={(screen.width - 32) / 2}>
+			<Box1 style={{ flex: '1' }}>
+				<Div className="sans-font" style={{ margin: '0 0 8px 0' }}>
+					{moment(published).fromNow()}
+				</Div>
+				<BGImg
+					url={url}
+					src={cover.medium || cover.small}
+					className="imgWidth"
+				/>
+			</Box1>
+			<Box>
+				<div className="row" style={{ overflow: 'hidden', display: 'flex' }}>
+					<div
+						style={{
+							width: '16px',
+							height: '1px',
+							background: '#8E8E8E',
+							flex: 1,
+							margin: '10px 10px 0 0'
+						}}
+					/>
+					<Div className="sans-font" style={{ margin: '0 0 7px 0', flex: 20 }}>
+						{readTime + ' min read'}
+					</Div>
+				</div>
+				<NameLink to={url} className="nunito-font" style={{ marginTop: '5px' }}>
+					{ptitle}
+				</NameLink>
 
-          <Div className='nunito-font' style={{marginTop:'10px'}}>{truncate(contentShort, {
-                'length': 200,
-                'separator': ''
-              })}</Div>
-          <Div className='nunito-font by' >by <strong><Link to={writer&&writer.url}> {writer.display} </Link></strong> in <Link to={column&&column.url} style={{color:theme.accentColor,fontWeight:'bold'}}>{column.name}</Link></Div>
-        </Box>
-      </Container>
-    )
+				<Div className="nunito-font" style={{ marginTop: '10px' }}>
+					{truncate(contentShort, {
+						length: 200,
+						separator: ''
+					})}
+				</Div>
+				<Div className="nunito-font by">
+					by
+					{' '}
+					<strong>
+						<ByLink to={writer && writer.url} color="#8E8E8E">
+							{' '}{writer.display}{' '}
+						</ByLink>
+					</strong>
+					{' '}
+					in
+					{' '}
+					<ByLink to={column && column.url} color={theme.accentColor}>
+						{column.name}
+					</ByLink>
+				</Div>
+			</Box>
+		</Container>
+	)
 }
 
 ArticleBox.contextTypes = {
 	setting: PropTypes.object
-};
+}
 
-export default ArticleBox;
+export default ArticleBox

@@ -85,6 +85,11 @@ const HamburgerWrapper = styled.a`
 const Hamburger = styled.i`
 	color: ${props => (props.theme.barTone == 'light' ? '#222' : 'white')};
 	padding-top:5px;
+	transition: .2s;
+
+	&:hover {
+		color: ${props => props.hoverColor}
+	}
 `
 
 const LogoWrapper = styled.div`
@@ -320,7 +325,8 @@ class TopBar extends React.Component {
 									!scrolling && transparent && hasCover
 										? { color: 'white' }
 										: {}
-								}>
+								}
+								hoverColor={theme.accentColor}>
 								menu
 							</Hamburger>
 						</HamburgerWrapper>

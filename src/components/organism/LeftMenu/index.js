@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled,{keyframes} from 'styled-components'
-import {Link} from 'react-router-dom';
-import FontIcon from 'material-ui/FontIcon';
-import IconButton from 'material-ui/IconButton';
+import styled, { keyframes } from 'styled-components'
+import { Link } from 'react-router-dom'
+import FontIcon from 'material-ui/FontIcon'
+import IconButton from 'material-ui/IconButton'
 import Divider from 'material-ui/Divider'
-import {findDOMNode as dom} from 'react-dom'
+import { findDOMNode as dom } from 'react-dom'
 import utils from '../../../services/utils'
 
 const Container = styled.div`
@@ -15,8 +15,8 @@ const Container = styled.div`
   top:0;
   left:0;
   z-index:10;
-  display:${props=> props.open?'block':'none'};
-  animation: ${props=> props.open?displayNone:displayBlock} 0.5s forwards;
+  display:${props => (props.open ? 'block' : 'none')};
+  animation: ${props => (props.open ? displayNone : displayBlock)} 0.5s forwards;
   transform: translateZ(100px);
   @media (max-width:480px){
     width: 100vw;
@@ -31,7 +31,7 @@ const Container2 = styled.div`
   left:0;
   z-index:10;
   background:rgba(0,0,0,0.8);
-  animation: ${props=> props.open?fadeOut:fadeIn} 0.5s forwards;
+  animation: ${props => (props.open ? fadeOut : fadeIn)} 0.5s forwards;
   transform: translateZ(100px);
   @media (max-width:480px){
     width: 100vw;
@@ -106,11 +106,11 @@ const Nav = styled.nav`
 	// padding: 40px;
 	-webkit-overflow-scrolling: touch;
 	z-index:11;
-  animation: ${props=> props.open?slideOut:slideIn} 0.6s forwards;
+  animation: ${props => (props.open ? slideOut : slideIn)} 0.6s forwards;
 
-	background: -moz-linear-gradient(-45deg,  ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%); /* FF3.6-15 */
-	background: -webkit-linear-gradient(-45deg,  ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%); /* Chrome10-25,Safari5.1-6 */
-	background: linear-gradient(135deg,  ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	background: -moz-linear-gradient(-45deg,  ${props => props.theme.primaryColor} 0%, ${props => props.theme.secondaryColor} 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(-45deg,  ${props => props.theme.primaryColor} 0%, ${props => props.theme.secondaryColor} 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(135deg,  ${props => props.theme.primaryColor} 0%, ${props => props.theme.secondaryColor} 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\#bf00b2b4\, endColorstr=\#bfcef1b7\,GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 
 
@@ -136,10 +136,11 @@ const Nav = styled.nav`
 	& ul li a {
 		text-decoration:none
 		color:#FFF;
-	}
+    transition: .2s;
 
-	& ul li a:hover {
-		text-decoration: underline;
+    &:hover {
+      color: ${props => props.accentColor} !important;
+    }
 	}
 
 	& ul hr {
@@ -190,6 +191,10 @@ const CloseBtn = styled(IconButton)`
 		width: 30px;
 		height: 30px;
 		color: #e2e2e2 !important;
+
+    &:hover {
+      color: ${props => props.accentColor} !important;
+    }
 	}
 `
 
@@ -229,129 +234,162 @@ const DropDownListLink = styled.a`
 `
 
 class LeftMenu extends React.Component {
-  static contextTypes = {
-    setting: PropTypes.object
-  }
-  
-  constructor(props) {
-    super(props)
+	static contextTypes = {
+		setting: PropTypes.object
+	}
 
-    this.state = {
-      open: props.open,
-      miniMenu: false,
-      toggleArrow: 'toggleUp',
-      height: 0
-    }
-    //console.log('STATE0', this.state)
-  }
+	constructor(props) {
+		super(props)
 
-  shrinkDrawer = (e) => {
-    e.preventDefault()
+		this.state = {
+			open: props.open,
+			miniMenu: false,
+			toggleArrow: 'toggleUp',
+			height: 0
+		}
+		//console.log('STATE0', this.state)
+	}
 
-    //console.log('STATE', this.state)
+	shrinkDrawer = e => {
+		e.preventDefault()
 
-    this.setState({
-      miniMenu:!this.state.miniMenu
-    })
+		//console.log('STATE', this.state)
 
-    let {toggleArrow} = this.state
-    if (this.state.toggleArrow === 'toggleUp') {
-      this.state.toggleArrow = 'toggleDown'
-    } else {
-      this.state.toggleArrow = 'toggleUp'
-    }
+		this.setState({
+			miniMenu: !this.state.miniMenu
+		})
 
-    let menu = this.props.menu
-    let height = ((menu && menu.column ? menu.column : []).length+1) * 55
-    this.state.height = (this.state.miniMenu) ? 0 : height
-  }
+		let { toggleArrow } = this.state
+		if (this.state.toggleArrow === 'toggleUp') {
+			this.state.toggleArrow = 'toggleDown'
+		} else {
+			this.state.toggleArrow = 'toggleUp'
+		}
 
-  componentWillReceiveProps() {
-    if (utils.isMobile()) {
-      let menu = this.props.menu
-      let height = ((menu && menu.column ? menu.column : []).length + 1) * 55
-      this.state.height = (this.state.miniMenu) ? 0 : height
+		let menu = this.props.menu
+		let height = ((menu && menu.column ? menu.column : []).length + 1) * 55
+		this.state.height = this.state.miniMenu ? 0 : height
+	}
 
-      this.setState({
-        miniMenu: true,
-        toggleArrow: 'toggleDown',
-        height: height
-      })
-    }
-  }
+	componentWillReceiveProps() {
+		if (utils.isMobile()) {
+			let menu = this.props.menu
+			let height = ((menu && menu.column ? menu.column : []).length + 1) * 55
+			this.state.height = this.state.miniMenu ? 0 : height
 
-  render(){
-    let isMobile = false
+			this.setState({
+				miniMenu: true,
+				toggleArrow: 'toggleDown',
+				height: height
+			})
+		}
+	}
 
-    let {miniMenu, toggleArrow, height} = this.state
-    let {open, close, menu} = this.props
-    let cols = menu && menu.column ? menu.column : []
+	render() {
+		let isMobile = false
 
-    // Menu items from menu props
-    let items = []
-    for (let i = 0; i < cols.length; i++) {
-      items.push(<li key={i}><Link to='#' onClick={(e) => this.props.closeAndLink(e,'/stories/'+cols[i].slug)}>{cols[i].name}</Link></li>)
-    }
+		let { theme } = this.context.setting.publisher
+		let { miniMenu, toggleArrow, height } = this.state
+		let { open, close, menu } = this.props
+		let cols = menu && menu.column ? menu.column : []
 
-    if (utils.isMobile()) {
-      isMobile = true
-    }
+		// Menu items from menu props
+		let items = []
+		for (let i = 0; i < cols.length; i++) {
+			items.push(
+				<li key={i}>
+					<Link
+						to="#"
+						onClick={e =>
+							this.props.closeAndLink(e, '/stories/' + cols[i].slug)}>
+						{cols[i].name}
+					</Link>
+				</li>
+			)
+		}
 
-    return (
-      <Container open={open} >
-        <Container2 onClick={close} />
-        <Nav open={open}>
-          <div className="menu menu-font">
-            <CloseBtn onClick={close}><FontIcon className="material-icons">close</FontIcon></CloseBtn>
-            {/* <SearchBtn onTouchTap={this.onSearch}><FontIcon className="material-icons">search</FontIcon></SearchBtn>*/}
-            <ul>
-              {isMobile &&
-                <div>
-                  <li><DropDownListLink href="#" onClick={this.shrinkDrawer}>Stories
-                    <FontIcon className={'material-icons arrow ' + toggleArrow}>keyboard_arrow_down</FontIcon>
-                  </DropDownListLink></li>
-                  <MiniMenu height={height+'px'}>
-                    {items}
-                    {/*The last one is 'all columns'*/}
-                    <li key={999}><Link to={'/stories/columns'}>All Columns</Link></li>
-                  </MiniMenu>
-                  <Divider />
-                </div>
-              }
-              <li><Link to="/" onClick={close}>Home</Link></li>
-              <li><Link to="/about" onClick={close} >About Us</Link></li>
-              {!isMobile &&
-                <div>
-                  <Divider />
-                  <li><DropDownListLink href="#" onClick={this.shrinkDrawer}>Stories
-                    <FontIcon className={'material-icons arrow ' + toggleArrow}>keyboard_arrow_down</FontIcon>
-                  </DropDownListLink></li>
-                  <MiniMenu height={height+'px'}>
-                    {items}
-                    {/*The last one is 'all columns'*/}
-                    <li key={999}><Link to={'/stories/columns'}>All Columns</Link></li>
-                  </MiniMenu>
-                  <Divider />
-                </div>
-              }
-              <li><Link to="/contact" onClick={close}>Contact</Link></li>
-              {/*<Divider />
+		if (utils.isMobile()) {
+			isMobile = true
+		}
+
+		return (
+			<Container open={open}>
+				<Container2 onClick={close} />
+				<Nav open={open} accentColor={theme.accentColor}>
+					<div className="menu menu-font">
+						<CloseBtn onClick={close} accentColor={theme.accentColor}>
+							<FontIcon className="material-icons">close</FontIcon>
+						</CloseBtn>
+						{/* <SearchBtn onTouchTap={this.onSearch}><FontIcon className="material-icons">search</FontIcon></SearchBtn>*/}
+						<ul>
+							{isMobile &&
+								<div>
+									<li>
+										<DropDownListLink href="#" onClick={this.shrinkDrawer}>
+											Stories
+											<FontIcon
+												className={'material-icons arrow ' + toggleArrow}>
+												keyboard_arrow_down
+											</FontIcon>
+										</DropDownListLink>
+									</li>
+									<MiniMenu height={height + 'px'}>
+										{items}
+										{/*The last one is 'all columns'*/}
+										<li key={999}>
+											<Link to={'/stories/columns'}>All Columns</Link>
+										</li>
+									</MiniMenu>
+									<Divider />
+								</div>}
+							<li><Link to="/" onClick={close}>Home</Link></li>
+							<li><Link to="/about" onClick={close}>About Us</Link></li>
+							{!isMobile &&
+								<div>
+									<Divider />
+									<li>
+										<DropDownListLink href="#" onClick={this.shrinkDrawer}>
+											Stories
+											<FontIcon
+												className={'material-icons arrow ' + toggleArrow}>
+												keyboard_arrow_down
+											</FontIcon>
+										</DropDownListLink>
+									</li>
+									<MiniMenu height={height + 'px'}>
+										{items}
+										{/*The last one is 'all columns'*/}
+										<li key={999}>
+											<Link to={'/stories/columns'}>All Columns</Link>
+										</li>
+									</MiniMenu>
+									<Divider />
+								</div>}
+							<li><Link to="/contact" onClick={close}>Contact</Link></li>
+							{/*<Divider />
               <li><em style={{color:'#e2e2e2', fontSize:'18px'}}>Other Channels</em></li>
               <li><Link to="/">Infographic Thailand</Link></li>*/}
-            </ul>
-          </div>
-        </Nav>
-        <svg>
-          <filter id="blur" width="110%" height="110%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="1.7" result="blur"/>
-            <g id="rect">
-              <rect x="10" y="30" width="40" height="40" stroke="black" strokeWidth="2"/>
-            </g>
-          </filter>
-        </svg>
-      </Container>
-    )
-  }
+						</ul>
+					</div>
+				</Nav>
+				<svg>
+					<filter id="blur" width="110%" height="110%">
+						<feGaussianBlur in="SourceAlpha" stdDeviation="1.7" result="blur" />
+						<g id="rect">
+							<rect
+								x="10"
+								y="30"
+								width="40"
+								height="40"
+								stroke="black"
+								strokeWidth="2"
+							/>
+						</g>
+					</filter>
+				</svg>
+			</Container>
+		)
+	}
 }
 
 export default LeftMenu
