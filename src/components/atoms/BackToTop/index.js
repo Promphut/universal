@@ -45,6 +45,10 @@ class BackToTop extends React.Component {
 		window.addEventListener('scroll', this.handleScroll)
 	}
 
+  componentWillUnmount() {
+		window.removeEventListener('scroll', this.handleScroll)
+	}
+
 	handleScroll = e => {
 		if (!utils.isMobile()) {
 			const scrollToTop = e.srcElement.body.scrollTop >

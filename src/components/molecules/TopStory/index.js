@@ -150,7 +150,7 @@ class TopStory extends React.Component {
             </Inner>
           </MiniBoxLight>
           <Box1 large={large}>
-            <MiniBox url={url} hover2={hover}  head={head} height={(screen.width-16)/2} src={cover&&cover.medium}  opacity={0.7}/>
+            <MiniBox url={url} hover2={hover}  head={head} height={(screen.width-16)/2} src={cover&&cover.medium}  opacity={0.2}/>
           </Box1>
         </LargeBox>    
       )
@@ -159,7 +159,7 @@ class TopStory extends React.Component {
       return (
         <LargeBox head={head} large={large} style={{...style}} className={' '+className} onMouseOver={this.hover} onMouseLeave={this.leave}>
           <Box1 large={large}>
-            <MiniBox url={url} head={head} height={(screen.width-16)/2} hover2={hover} src={cover&&cover.medium}  opacity={0.7}/>
+            <MiniBox url={url} head={head} height={(screen.width-16)/2} hover2={hover} src={cover&&cover.medium}  opacity={0.2}/>
           </Box1>
           <MiniBoxLight>
             <ArrowRight style={{borderRight:'15px solid white',left:'-14px'}}/>

@@ -244,29 +244,11 @@ class HomePage extends React.Component {
 	// 	})
 	// }
 
-	getSidebar = () => {
-		// - Fetching top columns
-		// - Fetch top writers
-		Promise.all([
-			api.getColumns(),
-			api.getPublisherWriters()
-		]).then(([columns, writers]) => {
-			//console.log('GET FEED', result, columns, writers)
-			if (columns) this.column = columns
-			if (writers) this.writer = writers
-
-			this.setState({})
-		})
-	}
-
 	handleChangeTab = e => {
 		this.setState({ selectTab: e })
 	}
 
 	componentDidMount() {
-		//this.getPublisher()
-		//this.getFeed()
-		this.getSidebar()
 		this.setState({
 			isMobile: utils.isMobile(),
 			completed: 100

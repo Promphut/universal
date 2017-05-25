@@ -269,7 +269,7 @@ class StoryPage extends React.Component {
 				<TopBarWithNavigation onLoading={this.props.onLoading} title={'Title of AomMoney goes here..'} article={story.title} showTitle={showTopbarTitle}  editButton={'/me/stories/'+story.id+'/edit'} hasCover={hasCover} />
 
 				{story.cover.medium!=config.BACKURL+'/imgs/article_cover_landscape.png' &&
-				<BGImg style={{width:'100%',height:'85vh'}} src={story.cover.large ||
+				<BGImg style={{width:'100%',height:'85vh',backgroundPositionY:'bottom'}} src={story.cover.large ||
 						story.cover.medium} className='hidden-mob' alt={story.title}>
 					<Cover/>
 				</BGImg>}
