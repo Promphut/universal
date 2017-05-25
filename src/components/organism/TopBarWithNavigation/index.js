@@ -9,7 +9,7 @@ import truncate from 'lodash/truncate'
 import styled,{keyframes} from 'styled-components'
 
 const Title = styled.div`
-	color:white;
+	color: ${props => (props.theme.barTone == 'light' ? '#222' : '#FFF')};
 	font-size:18px;
 	font-weight:bold;
 	margin:18px 0 0 0;
@@ -106,7 +106,7 @@ class TopBarWithNavigation extends React.Component {
 		let children = ''
 		if (article) {
 			children = 	<Title show={showTitle} className="nunito-font">{truncate(article, {'length':80,'separator':''})}</Title>
-	
+
 			transparent = true
 			if (utils.isMobile()) {
 				articleMobile = true
