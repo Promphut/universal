@@ -1,17 +1,28 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { TopBarWithNavigation, ArticleBox, More, BGImg, Footer,StaffPickSideBar,TopHome,TopVideoHome,TopNewsHome,LogoLink } from 'components'
+import {
+	TopBarWithNavigation,
+	ArticleBox,
+	BGImg,
+	Footer,
+	StaffPickSideBar,
+	TopHome,
+	TopVideoHome,
+	TopNewsHome,
+	LogoLink,
+	BackToTop
+} from 'components'
 import styled from 'styled-components'
 import auth from 'components/auth'
 import api from 'components/api'
 import slider from 'react-slick'
-import InfiniteScroll from 'react-infinite-scroller';
+import InfiniteScroll from 'react-infinite-scroller'
 //import Infinite from 'react-infinite'
-import CircularProgress from 'material-ui/CircularProgress';
-import LinearProgress from 'material-ui/LinearProgress';
-import FontIcon from 'material-ui/FontIcon';
+import CircularProgress from 'material-ui/CircularProgress'
+import LinearProgress from 'material-ui/LinearProgress'
+import FontIcon from 'material-ui/FontIcon'
 import { Tabs, Tab } from 'material-ui/Tabs'
-import SwipeableViews from 'react-swipeable-views';
+import SwipeableViews from 'react-swipeable-views'
 import utils from '../../../services/utils'
 
 const Wrapper = styled.div`
@@ -78,11 +89,11 @@ const Dash = styled.div`
   margin:5px 0 0 0;
   width:30px;
   height:4px;
-  background-color:${props=>props.theme.accentColor};
+  background-color:${props => props.theme.accentColor};
 `
 
 const TextLine = styled.div`
-  color:${props=>props.theme.primaryColor};
+  color:${props => props.theme.primaryColor};
   font-size:28px;
   font-weight:bold;
 `
@@ -95,7 +106,7 @@ const Onload = styled.div`
 const MiniBoxDark = styled.div`
 	flex:1;
 	height:222px;
-	background-color:${props=>props.theme.primaryColor};
+	background-color:${props => props.theme.primaryColor};
 	display:flex;
   align-items: center;
   justify-content: center;
@@ -149,68 +160,85 @@ class HomePage extends React.Component {
 	}
 
 	state = {
-		isMobile:false,
-		completed:0,
-		selectTab:0,
+		isMobile: false,
+		completed: 0,
+		selectTab: 0,
 
-		page:0,
-		feedCount:-1,
+		page: 0,
+		feedCount: -1,
 		feed: [],
-		hasMoreFeed: true,
+		hasMoreFeed: true
 	}
 
 	constructor(props) {
-    	super(props)
+		super(props)
 
-    	this.publisher = {
-    		cover: {}
-    	}
+		this.publisher = {
+			cover: {}
+		}
 		this.writer = []
 		this.column = []
-    }
+	}
 
-    onload = () => <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>
+	onload = () => (
+		<Onload>
+			<div className="row">
+				<CircularProgress
+					size={60}
+					thickness={6}
+					style={{ width: '60px', margin: '0 auto 0 auto' }}
+				/>
+			</div>
+		</Onload>
+	)
 	reloadFeed = () => {
-		this.setState({
-			page:0,
-			feedCount:-1,
-			feed: [],
-			hasMoreFeed: true
-		}, () => {
-			this.loadFeed(this.state.tag._id)()
-		})
+		this.setState(
+			{
+				page: 0,
+				feedCount: -1,
+				feed: [],
+				hasMoreFeed: true
+			},
+			() => {
+				this.loadFeed(this.state.tag._id)()
+			}
+		)
 	}
 	loadFeed = () => {
 		return () => {
 			//console.log('LOAD FEED0', tagId, this.loading)
 			// ensure this method is called only once at a time
-			if(this.loading===true) return 
+			if (this.loading === true) return
 			this.loading = true
 			//console.log('LOAD FEED1')
 
 			let page = this.state.page
 			//console.log('page', page)
 
-			api.getFeed('article', {status:1}, 'latest', null, page, 15)
-			.then(result => {
-
-				let feed = this.state.feed.concat(result.feed)
-				this.setState({
-					page: ++page,
-					feed: feed,
-					feedCount: result.count['1'],
-					hasMoreFeed: feed.length < result.count['1']
-				}, () => {this.loading = false})
-			})
+			api
+				.getFeed('article', { status: 1 }, 'latest', null, page, 15)
+				.then(result => {
+					let feed = this.state.feed.concat(result.feed)
+					this.setState(
+						{
+							page: ++page,
+							feed: feed,
+							feedCount: result.count['1'],
+							hasMoreFeed: feed.length < result.count['1']
+						},
+						() => {
+							this.loading = false
+						}
+					)
+				})
 		}
 	}
 
 	getPublisher = () => {
-		api.getPublisher()
-		.then(pub => {
+		api.getPublisher().then(pub => {
 			this.publisher = pub
 
-			this.setState({ })
+			this.setState({})
 		})
 	}
 
@@ -219,68 +247,70 @@ class HomePage extends React.Component {
 		// - Fetch top writers
 		Promise.all([
 			api.getColumns(),
-			api.getPublisherWriters(),
-		])
-		.then(([columns, writers]) => {
+			api.getPublisherWriters()
+		]).then(([columns, writers]) => {
 			//console.log('GET FEED', result, columns, writers)
-			if(columns) this.column = columns
-			if(writers) this.writer = writers
+			if (columns) this.column = columns
+			if (writers) this.writer = writers
 
-			this.setState({ })
+			this.setState({})
 		})
 	}
 
-	handleChangeTab = (e) => {
-		this.setState({selectTab: e})
+	handleChangeTab = e => {
+		this.setState({ selectTab: e })
 	}
 
-	componentDidMount(){
+	componentDidMount() {
 		this.getPublisher()
 		//this.getFeed()
 		this.getSidebar()
 		this.setState({
-			isMobile:utils.isMobile(),
-			completed:100
+			isMobile: utils.isMobile(),
+			completed: 100
 		})
 	}
 
-	render(){
-		let {isMobile,completed,selectTab} = this.state
-		let {feedCount,feed,hasMoreFeed} = this.state
+	render() {
+		let { isMobile, completed, selectTab } = this.state
+		let { feedCount, feed, hasMoreFeed } = this.state
 		let pub = this.publisher
 		let { theme } = this.context.setting.publisher
 
 		//console.log(this.state.feedCount)
 		return (
-		    <Wrapper>
-				{pub && <BG src={pub.cover.medium} opacity={-1} 
-					className="hidden-mob" alt={pub.name} >
-					<div>
-						<LogoLink 							
-						to="/"
-						src={theme.llogo}
-						id={'Largelogo'}/>
-						<Tagline className='nunito-font'>{pub.tagline}</Tagline>
-					</div>
-				</BG>}
+			<Wrapper>
+				{pub &&
+					<BG
+						src={pub.cover.medium}
+						opacity={-1}
+						className="hidden-mob"
+						alt={pub.name}>
+						<div>
+							<LogoLink to="/" src={theme.llogo} id={'Largelogo'} />
+							<Tagline className="nunito-font">{pub.tagline}</Tagline>
+						</div>
+					</BG>}
 
-	      		<TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={this.props.onLoading}/>
-					
-				<TopHome></TopHome>
+				<TopBarWithNavigation
+					title={'Title of AomMoney goes here..'}
+					onLoading={this.props.onLoading}
+				/>
 
-	     		{/*<TopVideoHome className='hidden-mob'></TopVideoHome>*/}
+				<TopHome />
+
+				{/*<TopVideoHome className='hidden-mob'></TopVideoHome>*/}
 				<Content>
-		      		<Main>
-						<TextLine className='sans-font hidden-mob'>LATEST STORIES</TextLine>
-						<Dash className='hidden-mob' style={{margin:'5px 0 10px 0'}}></Dash>
+					<Main>
+						<TextLine className="sans-font hidden-mob">LATEST STORIES</TextLine>
+						<Dash className="hidden-mob" style={{ margin: '5px 0 10px 0' }} />
 						<InfiniteScroll
-						    loadMore={this.loadFeed()}
-						    hasMore={hasMoreFeed}
-						    loader={this.onload()}
-						>
+							loadMore={this.loadFeed()}
+							hasMore={hasMoreFeed}
+							loader={this.onload()}>
 							<div>
-							    {feed.map((item, index) => (
-									<ArticleBox detail={item} key={index}/>
+								{feed.map((item, index) => (
+									<ArticleBox detail={item} key={index} />
 								))}
 							</div>
 						</InfiniteScroll>
@@ -299,74 +329,77 @@ class HomePage extends React.Component {
 						</Infinite>  */}
 
 						<Tabs
-			                style={{ width:'100%'}}
-			                tabItemContainerStyle={{ ...styles.tabs }}
-			                inkBarStyle={{ background: theme.accentColor, height: 3 }}
-			                onChange={this.handleChangeTab}
-			                value={selectTab}
-											className='hidden-des'>
-			                <Tab
-			                  buttonStyle={{...styles.tab,color: selectTab == 0 ? '#222' : '#c4c4c4'}}
-			                  label="Stories"
-			                  value={0}
-			                />
-			                <Tab
-			                  buttonStyle={{...styles.tab,color: selectTab == 1 ? '#222' : '#c4c4c4'}}
-			                  label="News"
-			                  value={1}
-			                />
+							style={{ width: '100%' }}
+							tabItemContainerStyle={{ ...styles.tabs }}
+							inkBarStyle={{ background: theme.accentColor, height: 3 }}
+							onChange={this.handleChangeTab}
+							value={selectTab}
+							className="hidden-des">
+							<Tab
+								buttonStyle={{
+									...styles.tab,
+									color: selectTab == 0 ? '#222' : '#c4c4c4'
+								}}
+								label="Stories"
+								value={0}
+							/>
+							<Tab
+								buttonStyle={{
+									...styles.tab,
+									color: selectTab == 1 ? '#222' : '#c4c4c4'
+								}}
+								label="News"
+								value={1}
+							/>
 							{/*<Tab
 			                  buttonStyle={{...styles.tab,color: selectTab == 2 ? '#222' : '#c4c4c4'}}
 			                  label="Video"
 			                  value={2}
 			                />*/}
-			            </Tabs>
+						</Tabs>
 
-						<Line/>
+						<Line />
 
-			            {utils.isMobile() && <SwipeableViews
-			                index={selectTab}
-			                onChangeIndex={this.handleChangeTab}
-							className='hidden-des'
-			              >
-			                {/*<div className='story'>
+						{utils.isMobile() &&
+							<SwipeableViews
+								index={selectTab}
+								onChangeIndex={this.handleChangeTab}
+								className="hidden-des">
+								{/*<div className='story'>
 								{feed && utils.isMobile() && feed.map((story, index) => (
 									<ArticleBox detail={story} key={index}/>
 								))}
 							</div>*/}
-							<InfiniteScroll
-							    loadMore={this.loadFeed()}
-							    hasMore={hasMoreFeed}
-							    loader={this.onload()}
-							>
-								<div>
-								    {feed.map((item, index) => (
-										<ArticleBox detail={item} key={index}/>
-									))}
+								<InfiniteScroll
+									loadMore={this.loadFeed()}
+									hasMore={hasMoreFeed}
+									loader={this.onload()}>
+									<div>
+										{feed.map((item, index) => (
+											<ArticleBox detail={item} key={index} />
+										))}
+									</div>
+								</InfiniteScroll>
+
+								<div className="news">
+									<TopNewsHome />
 								</div>
-							</InfiniteScroll>
 
-							<div className='news'>
-								<TopNewsHome></TopNewsHome>
-							</div>
-
-							{/*<div className='video'>
+								{/*<div className='video'>
 
 							</div>*/}
-			            </SwipeableViews>}
-
-						<More className='hidden-mob' style={{margin:'30px auto 30px auto'}}/>
-
-		      		</Main>
-		      		{/*<Aside>
+							</SwipeableViews>}
+					</Main>
+					{/*<Aside>
 						<StaffPickSideBar></StaffPickSideBar>
 					</Aside>*/}
-	      		</Content>
-					
-				<Footer/>
-		   </Wrapper>
+				</Content>
+
+				<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800"/>
+				<Footer />
+			</Wrapper>
 		)
 	}
 }
 
-export default HomePage;
+export default HomePage

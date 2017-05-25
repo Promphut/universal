@@ -1,17 +1,27 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { TopBarWithNavigation,ArticleBox,ArticleBoxLarge,More,TrendingSideBar,BGImg,StoryMenu,EmptyStory } from 'components'
-import {findDOMNode as dom} from 'react-dom'
-import {Link} from 'react-router-dom'
+import {
+	TopBarWithNavigation,
+	ArticleBox,
+	ArticleBoxLarge,
+	TrendingSideBar,
+	BGImg,
+	StoryMenu,
+	EmptyStory,
+	Footer,
+	BackToTop
+} from 'components'
+import { findDOMNode as dom } from 'react-dom'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import FlatButton from 'material-ui/FlatButton';
-import FontIcon from 'material-ui/FontIcon';
+import FlatButton from 'material-ui/FlatButton'
+import FontIcon from 'material-ui/FontIcon'
 import Avatar from 'material-ui/Avatar'
 import auth from 'components/auth'
 import api from 'components/api'
-import InfiniteScroll from 'react-infinite-scroller';
+import InfiniteScroll from 'react-infinite-scroller'
 import CircularProgress from 'material-ui/CircularProgress'
-import {Helmet} from 'react-helmet'
+import { Helmet } from 'react-helmet'
 import utils from '../../../services/utils'
 import config from '../../../config'
 
@@ -76,9 +86,9 @@ const User = styled.div`
 	padding: 80px 0px 15px 0px;
 
 	@media (max-width: 480px) {
-		background: -moz-linear-gradient(-45deg,  ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%); /* FF3.6-15 */
-		background: -webkit-linear-gradient(-45deg,  ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%); /* Chrome10-25,Safari5.1-6 */
-		background: linear-gradient(135deg,  ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+		background: -moz-linear-gradient(-45deg,  ${props => props.theme.primaryColor} 0%, ${props => props.theme.secondaryColor} 100%); /* FF3.6-15 */
+		background: -webkit-linear-gradient(-45deg,  ${props => props.theme.primaryColor} 0%, ${props => props.theme.secondaryColor} 100%); /* Chrome10-25,Safari5.1-6 */
+		background: linear-gradient(135deg,  ${props => props.theme.primaryColor} 0%, ${props => props.theme.secondaryColor} 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\#bf00b2b4\, endColorstr=\#bfcef1b7\,GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 
 		padding-top: 60px;
@@ -178,7 +188,7 @@ const LinkMobile = styled.a`
 	font-size: 20px;
 `
 
-const UserDetail = ({style, user, checkBack}) => {
+const UserDetail = ({ style, user, checkBack }) => {
 	const backStyle = {
 		color: '#FFF',
 		fontSize: '40px',
@@ -196,32 +206,47 @@ const UserDetail = ({style, user, checkBack}) => {
 		flex: '8 730px'
 	}
 	//console.log('user', user)
-  	return (
+	return (
 		<User>
-	    <div className='row' style={rowStyle}>
-			<a href='#' onClick={checkBack}>
-				<FontIcon className="material-icons hidden-des" style={backStyle}>chevron_left</FontIcon>
-			</a>
-			<div style={{textAlign: 'center'}}>
-      			<UserAvatar src={user.pic.medium} size={95}/>
-			</div>
-			<UserData>
-	        	<UserName className='serif-font'>{user.display}</UserName>
-	      	  	<UserDesc className='sans-font'>{user.intro}</UserDesc>
-	      	</UserData>
+			<div className="row" style={rowStyle}>
+				<a href="#" onClick={checkBack}>
+					<FontIcon className="material-icons hidden-des" style={backStyle}>
+						chevron_left
+					</FontIcon>
+				</a>
+				<div style={{ textAlign: 'center' }}>
+					<UserAvatar src={user.pic.medium} size={95} />
+				</div>
+				<UserData>
+					<UserName className="serif-font">{user.display}</UserName>
+					<UserDesc className="sans-font">{user.intro}</UserDesc>
+				</UserData>
 
-		    {user.channels && <UserShare>
-		        {/*<div className='row' style={{overflow:'hidden', textAlign: 'right'}}>*/}
-		        <div style={{textAlign:'right'}}>
-		          {user.channels.fb && <A href={utils.getFbUrl(user.channels.fb)} target="_blank"><i className="fa fa-facebook" aria-hidden="true"></i></A>}
-		          {user.channels.twt && <A href={utils.getTwtUrl(user.channels.twt)} target="_blank"><i className="fa fa-twitter" aria-hidden="true" ></i></A>}
-		          {user.channels.yt && <A href={utils.getYtUrl(user.channels.yt)} target="_blank"><i className="fa fa-youtube-play" aria-hidden="true" ></i></A>}
-		          {user.channels.ig && <A href={utils.getIgUrl(user.channels.ig)} target="_blank"><i className="fa fa-instagram" aria-hidden="true" ></i></A>}
-		        </div>
-		    </UserShare>}
-	    </div>
+				{user.channels &&
+					<UserShare>
+						{/*<div className='row' style={{overflow:'hidden', textAlign: 'right'}}>*/}
+						<div style={{ textAlign: 'right' }}>
+							{user.channels.fb &&
+								<A href={utils.getFbUrl(user.channels.fb)} target="_blank">
+									<i className="fa fa-facebook" aria-hidden="true" />
+								</A>}
+							{user.channels.twt &&
+								<A href={utils.getTwtUrl(user.channels.twt)} target="_blank">
+									<i className="fa fa-twitter" aria-hidden="true" />
+								</A>}
+							{user.channels.yt &&
+								<A href={utils.getYtUrl(user.channels.yt)} target="_blank">
+									<i className="fa fa-youtube-play" aria-hidden="true" />
+								</A>}
+							{user.channels.ig &&
+								<A href={utils.getIgUrl(user.channels.ig)} target="_blank">
+									<i className="fa fa-instagram" aria-hidden="true" />
+								</A>}
+						</div>
+					</UserShare>}
+			</div>
 		</User>
-  	)
+	)
 }
 
 class UserStory extends React.Component {
@@ -233,8 +258,8 @@ class UserStory extends React.Component {
 		//isInfiniteLoading: true,
 		//loadOffset:300,
 		//feedCount:0,
-		page:0,
-		feedCount:-1,
+		page: 0,
+		feedCount: -1,
 		feed: [],
 		hasMoreFeed: true,
 
@@ -243,106 +268,126 @@ class UserStory extends React.Component {
 			pic: {}
 		},
 
-		isMobile:false
+		isMobile: false
 	}
 	static contextTypes = {
 		setting: PropTypes.object
 	}
-	
-	checkBack = (e) => {
+
+	checkBack = e => {
 		e.preventDefault()
 		this.props.history.goBack()
 	}
 
-	onload = () => <Onload><div className='row'><CircularProgress size={60} thickness={6} style={{width:'60px',margin:'0 auto 0 auto'}}/></div></Onload>
+	onload = () => (
+		<Onload>
+			<div className="row">
+				<CircularProgress
+					size={60}
+					thickness={6}
+					style={{ width: '60px', margin: '0 auto 0 auto' }}
+				/>
+			</div>
+		</Onload>
+	)
 	reloadFeed = () => {
-		this.setState({
-			page:0,
-			feedCount:-1,
-			feed: [],
-			hasMoreFeed: true
-		}, () => {
-			this.loadFeed(this.state.user._id)()
-		})
+		this.setState(
+			{
+				page: 0,
+				feedCount: -1,
+				feed: [],
+				hasMoreFeed: true
+			},
+			() => {
+				this.loadFeed(this.state.user._id)()
+			}
+		)
 	}
-	loadFeed = (uid) => {
+	loadFeed = uid => {
 		return () => {
-			if(uid==null) return 
+			if (uid == null) return
 			// ensure this method is called only once at a time
-			if(this.loading===true) return 
+			if (this.loading === true) return
 			this.loading = true
 
 			let page = this.state.page
 			//console.log('page', page)
 			//console.log('UID', uid)
-			api.getFeed('story', {writer:uid, status:1}, 'latest', null, page, 15)
-			.then(result => {
-
-				let feed = this.state.feed.concat(result.feed)
-				this.setState({
-					page: ++page,
-					feed: feed,
-					feedCount: result.count['1'],
-					hasMoreFeed: feed.length < result.count['1']
-				}, () => {this.loading = false})
-			})
+			api
+				.getFeed('story', { writer: uid, status: 1 }, 'latest', null, page, 15)
+				.then(result => {
+					let feed = this.state.feed.concat(result.feed)
+					this.setState(
+						{
+							page: ++page,
+							feed: feed,
+							feedCount: result.count['1'],
+							hasMoreFeed: feed.length < result.count['1']
+						},
+						() => {
+							this.loading = false
+						}
+					)
+				})
 		}
 	}
 
-	getUserFromUsername = (username, done=()=>{}) => {
+	getUserFromUsername = (username, done = () => {}) => {
 		//console.log('PROP', this.props)
-		if(!username) utils.notFound(this.props.history)
+		if (!username) utils.notFound(this.props.history)
 
-		api.getUserFromUsername(username)
-		.then(user => {
-			this.setState({user:user}, done)
-		})
-		.catch(utils.toError(this.props.history))
+		api
+			.getUserFromUsername(username)
+			.then(user => {
+				this.setState({ user: user }, done)
+			})
+			.catch(utils.toError(this.props.history))
 	}
 
-	getUserFromUid = (uid, done=()=>{}) => {
+	getUserFromUid = (uid, done = () => {}) => {
 		//console.log('PROP', this.props)
-		if(uid==null) utils.notFound(this.props.history)
+		if (uid == null) utils.notFound(this.props.history)
 
-		api.getUserFromUserId(uid)
-		.then(user => {
-			this.setState({user:user}, done)
-		})
-		.catch(utils.toError(this.props.history))
+		api
+			.getUserFromUserId(uid)
+			.then(user => {
+				this.setState({ user: user }, done)
+			})
+			.catch(utils.toError(this.props.history))
 	}
 
-	componentDidMount(){
-		let username, uid 
-		if(username = this.props.match.params.username){
+	componentDidMount() {
+		let username, uid
+		if ((username = this.props.match.params.username)) {
 			this.getUserFromUsername(username)
-		} else if(uid = this.props.match.params.uid){
+		} else if ((uid = this.props.match.params.uid)) {
 			this.getUserFromUid(uid)
 		}
 
 		this.setState({
-			isMobile:utils.isMobile()
+			isMobile: utils.isMobile()
 		})
 	}
 
 	componentWillReceiveProps(nextProps) {
 		//console.log('COL', nextProps, this.props)
-		if(nextProps.match.params.username!=this.props.match.params.username){
+		if (nextProps.match.params.username != this.props.match.params.username) {
 			//console.log('RELOAD FEED')
 			this.getUserFromUsername(nextProps.match.params.username, this.reloadFeed)
 			//this.reloadFeed()
-		} else if(nextProps.match.params.uid!=this.props.match.params.uid){
+		} else if (nextProps.match.params.uid != this.props.match.params.uid) {
 			//console.log('RELOAD FEED')
 			this.getUserFromUid(nextProps.match.params.uid, this.reloadFeed)
 			//this.reloadFeed()
 		}
 	}
 
-	render(){
-  		let {theme} = this.context.setting.publisher
-		let {user, isMobile} = this.state
-		let {feedCount,feed,hasMoreFeed} = this.state
+	render() {
+		let { theme } = this.context.setting.publisher
+		let { user, isMobile } = this.state
+		let { feedCount, feed, hasMoreFeed } = this.state
 
-		return ( 
+		return (
 			<Wrapper>
 				<Helmet>
 					<title>{user.display}</title>
@@ -350,8 +395,14 @@ class UserStory extends React.Component {
 					{/*<meta name="keywords" content={keywords} />*/}
 					<meta name="description" content={user.shortDesc} />
 
-					<link rel="shortcut icon" type="image/ico" href={config.BACKURL+'/publishers/'+config.PID+'/favicon'} />
-					{user.channels && user.channels.fb ? <link rel="author" href={utils.getFbUrl(user.channels.fb)} /> : ''}
+					<link
+						rel="shortcut icon"
+						type="image/ico"
+						href={config.BACKURL + '/publishers/' + config.PID + '/favicon'}
+					/>
+					{user.channels && user.channels.fb
+						? <link rel="author" href={utils.getFbUrl(user.channels.fb)} />
+						: ''}
 					{/*<link rel="canonical" href={window.location.href} />*/}
 
 					<meta property="og:sitename" content={user.display} />
@@ -366,47 +417,85 @@ class UserStory extends React.Component {
 					<meta property="fb:app_id" content={config.ANALYTIC.FBAPPID} />
 				</Helmet>
 
-				<TopBarWithNavigation className="hidden-mob" title={'Title of AomMoney goes here..'} />
-				<UserDetail user={user} checkBack={this.checkBack}/>
+				<TopBarWithNavigation
+					className="hidden-mob"
+					title={'Title of AomMoney goes here..'}
+				/>
+				<UserDetail user={user} checkBack={this.checkBack} />
 
-				{user.channels && <UserShareMobile className='row'>
-		          {user.channels.fb && <LinkMobile href={utils.getFbUrl(user.channels.fb)} target="_blank"><i className="fa fa-facebook" aria-hidden="true"></i></LinkMobile>}
-		          {user.channels.twt && <LinkMobile href={utils.getTwtUrl(user.channels.twt)} target="_blank"><i className="fa fa-twitter" aria-hidden="true" ></i></LinkMobile>}
-		          {user.channels.yt && <LinkMobile href={utils.getYtUrl(user.channels.yt)} target="_blank"><i className="fa fa-youtube-play" aria-hidden="true" ></i></LinkMobile>}
-		          {user.channels.ig && <LinkMobile href={utils.getIgUrl(user.channels.ig)} target="_blank"><i className="fa fa-instagram" aria-hidden="true" ></i></LinkMobile>}
-	 			</UserShareMobile>}
+				{user.channels &&
+					<UserShareMobile className="row">
+						{user.channels.fb &&
+							<LinkMobile
+								href={utils.getFbUrl(user.channels.fb)}
+								target="_blank">
+								<i className="fa fa-facebook" aria-hidden="true" />
+							</LinkMobile>}
+						{user.channels.twt &&
+							<LinkMobile
+								href={utils.getTwtUrl(user.channels.twt)}
+								target="_blank">
+								<i className="fa fa-twitter" aria-hidden="true" />
+							</LinkMobile>}
+						{user.channels.yt &&
+							<LinkMobile
+								href={utils.getYtUrl(user.channels.yt)}
+								target="_blank">
+								<i className="fa fa-youtube-play" aria-hidden="true" />
+							</LinkMobile>}
+						{user.channels.ig &&
+							<LinkMobile
+								href={utils.getIgUrl(user.channels.ig)}
+								target="_blank">
+								<i className="fa fa-instagram" aria-hidden="true" />
+							</LinkMobile>}
+					</UserShareMobile>}
 
-		      	<Content>
-			      	{ feedCount===0 ? <Main>
-						<TextLine className='sans-font'>
-							<strong style={{color:theme.primaryColor,marginRight:'30px'}}>
-								<span style={{fontSize:'30px'}}>{feedCount >= 0 ? feedCount : 0}</span> stories
-							</strong>
-							{/*<span style={{fontSize:'30px'}}>101</span> Upvotes*/}
-						</TextLine>
-						<EmptyStory title='No Story, yet' description='There are no stories in this column right now. Wanna back to see other columns?' />
-		      		
-		      		</Main> : <Main>
+				<Content>
+					{feedCount === 0
+						? <Main>
+								<TextLine className="sans-font">
+									<strong
+										style={{ color: theme.primaryColor, marginRight: '30px' }}>
+										<span style={{ fontSize: '30px' }}>
+											{feedCount >= 0 ? feedCount : 0}
+										</span>
+										{' '}
+										stories
+									</strong>
+									{/*<span style={{fontSize:'30px'}}>101</span> Upvotes*/}
+								</TextLine>
+								<EmptyStory
+									title="No Story, yet"
+									description="There are no stories in this column right now. Wanna back to see other columns?"
+								/>
 
-						<TextLine className='sans-font'>
-							<strong style={{color:theme.primaryColor,marginRight:'30px'}}>
-								<span style={{fontSize:'30px'}}>{feedCount >= 0 ? feedCount : 0}</span> stories
-							</strong>
-							{/*<span style={{fontSize:'30px'}}>101</span> Upvotes*/}
-						</TextLine>
+							</Main>
+						: <Main>
 
-						<InfiniteScroll
-						    loadMore={this.loadFeed(user._id)}
-						    hasMore={hasMoreFeed}
-						    loader={this.onload()}
-						>
-							<div>
-							    {feed.map((item, index) => (
-									<ArticleBox detail={item} key={index}/>
-								))}
-							</div>
-						</InfiniteScroll>
-						{/*<Infinite
+								<TextLine className="sans-font">
+									<strong
+										style={{ color: theme.primaryColor, marginRight: '30px' }}>
+										<span style={{ fontSize: '30px' }}>
+											{feedCount >= 0 ? feedCount : 0}
+										</span>
+										{' '}
+										stories
+									</strong>
+									{/*<span style={{fontSize:'30px'}}>101</span> Upvotes*/}
+								</TextLine>
+
+								<InfiniteScroll
+									loadMore={this.loadFeed(user._id)}
+									hasMore={hasMoreFeed}
+									loader={this.onload()}>
+									<div>
+										{feed.map((item, index) => (
+											<ArticleBox detail={item} key={index} />
+										))}
+									</div>
+								</InfiniteScroll>
+								{/*<Infinite
 								containerHeight={!isMobile?(count*210)-100:(count*356)-100}
 								elementHeight={!isMobile?210:356}
 								infiniteLoadBeginEdgeOffset={loadOffset}
@@ -419,11 +508,11 @@ class UserStory extends React.Component {
 								<ArticleBox detail={story} key={index}/>
 							)):''}
 						</Infinite>*/}
-
-						<More style={{margin:'30px auto 30px auto'}} />
-			     	</Main> }
-		      	</Content>
-		   </Wrapper>
+							</Main>}
+				</Content>
+				<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="600" />
+				<Footer />
+			</Wrapper>
 		)
 	}
 }

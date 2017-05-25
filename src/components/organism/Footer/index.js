@@ -10,7 +10,7 @@ import utils from '../../../services/utils'
 import { withRouter } from 'react-router'
 
 const Container = styled.div`
-	margin: 30px 0px 0px;
+	margin: 65px 0px 0px;
 	padding: 0px;
   background: ${props => props.theme.barTone == 'light' ? '#F4F4F4' : props.theme.primaryColor};
 	color: ${props => props.theme.barTone == 'light' ? '#8E8E8E' : '#FFF'};

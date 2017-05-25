@@ -71,7 +71,12 @@ const TopNavigation = ({ menu }) => {
 	let items = []
 	for (let i = 0; i < cols.length; i++) {
 		items.push(
-			<DropdownList key={i} exact to={'/stories/' + cols[i].slug} activeClassName="active" className='nunito-font'>
+			<DropdownList
+				key={i}
+				exact
+				to={'/stories/' + cols[i].slug}
+				activeClassName="active"
+				className="nunito-font">
 				{cols[i].name}
 			</DropdownList>
 		)
@@ -79,21 +84,40 @@ const TopNavigation = ({ menu }) => {
 
 	return (
 		<Container>
-			<NavLink2 exact to="/stories/news" activeClassName="active" className='nunito-font'>News</NavLink2>
-			<NavSpan className='nunito-font'>
+			<NavLink2
+				exact
+				to="/stories/news"
+				activeClassName="active"
+				className="nunito-font">
+				News
+			</NavLink2>
+			<NavSpan className="nunito-font">
 				Stories ▾
 				<DropdownBox>
 					{items}
-					<Line></Line>
-					<DropdownList to={'/stories/columns'} 
-					activeClassName="active" 
-					className='nunito-font'>
+					<Line />
+					<DropdownList
+						to={'/stories/columns'}
+						activeClassName="active"
+						className="nunito-font">
 						All Columns
 					</DropdownList>
 				</DropdownBox>
 			</NavSpan>
-			<NavLink2 exact to="/about" activeClassName="active" className='nunito-font'>About Us</NavLink2>
-			<NavLink2 exact to="/contact" activeClassName="active" className='nunito-font'>Contact</NavLink2>
+			<NavLink2
+				exact
+				to="/about"
+				activeClassName="active"
+				className="nunito-font">
+				About Us
+			</NavLink2>
+			<NavLink2
+				exact
+				to="/contact"
+				activeClassName="active"
+				className="nunito-font">
+				Contact
+			</NavLink2>
 		</Container>
 	)
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled, {keyframes} from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import { Link } from 'react-router-dom'
 import Avatar from 'material-ui/Avatar'
 import {
@@ -42,7 +42,7 @@ const Rotate = styled.div`
 	width:50px;
 	height:50px;
 	background:red;
-	animation: ${props=> props.open?rot:rot2}  1s forwards;
+	animation: ${props => (props.open ? rot : rot2)}  1s forwards;
 `
 
 const Container = styled.div`
@@ -151,7 +151,7 @@ const LogoGif = styled(BGImg)`
 	width:60px;
 	height:60px;
 	margin-right:12px;
-	animation:${props=>props.onLoading?fadeOut:fadeIn} 1.25s linear;
+	animation:${props => (props.onLoading ? fadeOut : fadeIn)} 1.25s linear;
 `
 const ContainerCenter = styled.div`
 	position:absolute;
@@ -187,7 +187,9 @@ let buttonStyle = {
 	float: 'left',
 	boxShadow: 'none',
 	verticalAlign: 'middle',
-	marginTop: '9px'
+	marginTop: '14px',
+	height: '30px',
+	lineHeight: '30px'
 }
 let avatarStyle = {
 	display: 'inline-block',
@@ -240,14 +242,14 @@ class TopBar extends React.Component {
 		//console.log(this.role)
 	}
 
-	handleScroll = (e) => {
+	handleScroll = e => {
 		this.props.onScroll(e)
 
 		let top = e.srcElement.body.scrollTop / 500
 		this.setState({ scroll: top })
 	}
 
-	openPop = (side) => {
+	openPop = side => {
 		if (side === 'left') {
 			this.setState({ alertLeft: true })
 		} else if (side === 'right') {
@@ -255,7 +257,7 @@ class TopBar extends React.Component {
 		}
 	}
 
-	handleRequestClose = (side) => {
+	handleRequestClose = side => {
 		if (side === 'left') {
 			this.setState({ alertLeft: false })
 		} else if (side === 'right') {
@@ -300,7 +302,7 @@ class TopBar extends React.Component {
 					...logoStyleBase,
 					margin: 'auto 12px auto auto'
 				}
-		
+
 		//console.log(this.props.onLoading)
 		//console.log(theme, theme.slogoGif)
 		return (
@@ -323,7 +325,13 @@ class TopBar extends React.Component {
 							</Hamburger>
 						</HamburgerWrapper>
 						<LogoWrapper>
-							<Link to='/'><LogoGif onLoading={this.props.onLoading} src={this.props.onLoading?theme.slogoGif:theme.slogo} opacity={-1}></LogoGif></Link>
+							<Link to="/">
+								<LogoGif
+									onLoading={this.props.onLoading}
+									src={this.props.onLoading ? theme.slogoGif : theme.slogo}
+									opacity={-1}
+								/>
+							</Link>
 
 							<LogoLink
 								to="/"
@@ -337,7 +345,7 @@ class TopBar extends React.Component {
 					</Left>
 
 					<ContainerCenter>
-					  <Center className={transparent ? 'hide' : ''}>
+						<Center className={transparent ? 'hide' : ''}>
 							{this.props.children}
 						</Center>
 					</ContainerCenter>
@@ -363,6 +371,7 @@ class TopBar extends React.Component {
 									<Link to="/me/stories/new">
 										<PrimaryButton
 											label="Story"
+											labelStyle={{ textTransform: 'none' }}
 											iconName="add"
 											style={buttonStyle}
 										/>
