@@ -267,14 +267,14 @@ class LeftMenu extends React.Component {
 		}
 
 		let menu = this.props.menu
-		let height = ((menu && menu.column ? menu.column : []).length + 1) * 55
+		let height = ((menu && menu.column ? menu.column : []).length + 1) * 60
 		this.state.height = this.state.miniMenu ? 0 : height
 	}
 
 	componentWillReceiveProps() {
 		if (utils.isMobile()) {
 			let menu = this.props.menu
-			let height = ((menu && menu.column ? menu.column : []).length + 1) * 55
+			let height = ((menu && menu.column ? menu.column : []).length + 1) * 60
 			this.state.height = this.state.miniMenu ? 0 : height
 
 			this.setState({

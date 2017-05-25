@@ -59,7 +59,7 @@ const ArrowLeft = styled.div`
 	top:96px;
 	width:0;
 	height:0;
-	z-index:10; 
+	z-index:10;
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent;
   border-left:15px solid ${props=>props.theme.primaryColor};
@@ -73,7 +73,7 @@ const ArrowRight = styled.div`
 	top:96px;
 	width:0;
 	height:0;
-	z-index:10; 
+	z-index:10;
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent;
   border-right:15px solid ${props=>props.theme.primaryColor};
@@ -150,16 +150,16 @@ class TopStory extends React.Component {
             </Inner>
           </MiniBoxLight>
           <Box1 large={large}>
-            <MiniBox url={url} hover2={hover}  head={head} height={(screen.width-16)/2} src={cover&&cover.medium}  opacity={0.7}/>
+            <MiniBox url={url} hover2={hover}  head={head} height={(screen.width-16)/2} src={cover&&cover.medium}  opacity={0.2}/>
           </Box1>
-        </LargeBox>    
+        </LargeBox>
       )
-      
+
     } else {
       return (
         <LargeBox head={head} large={large} style={{...style}} className={' '+className} onMouseOver={this.hover} onMouseLeave={this.leave}>
           <Box1 large={large}>
-            <MiniBox url={url} head={head} height={(screen.width-16)/2} hover2={hover} src={cover&&cover.medium}  opacity={0.7}/>
+            <MiniBox url={url} head={head} height={(screen.width-16)/2} hover2={hover} src={cover&&cover.medium}  opacity={0.2}/>
           </Box1>
           <MiniBoxLight>
             <ArrowRight style={{borderRight:'15px solid white',left:'-14px'}}/>
@@ -168,7 +168,7 @@ class TopStory extends React.Component {
               <SName hover2={hover} to={url} className='nunito-font' >{truncate(ptitle?ptitle:'', {'length': 150,'separator': ''})}</SName>
             </Inner>
           </MiniBoxLight>
-        </LargeBox>    
+        </LargeBox>
       )
     }
   }

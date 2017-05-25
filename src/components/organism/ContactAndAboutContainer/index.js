@@ -34,6 +34,7 @@ const Main = styled.div`
 	margin-top: 80px;
 	flex: 8 730px;
 	max-width: 730px;
+	min-height: calc(100vh - 591px);
 
 	@media (max-width: 768px) {
 		flex: 0 100%;
@@ -41,9 +42,6 @@ const Main = styled.div`
 		padding: 0 15px 0 15px;
 	}
 
-	@media (min-width: 481px) {
-		min-height: 480px;
-	}
 `
 
 const Aside = styled.div`
@@ -115,7 +113,7 @@ class ContactAndAboutContainer extends React.Component {
 			{pub.cover && <BGImg src={pub.cover.medium} opacity={-1} style={{width:'100%',height:'350px'}} className="hidden-mob" />}
 
 			<TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={this.props.onLoading}/>
-			
+
 	        <Content>
 	          <Main>
 	            {this.props.children}

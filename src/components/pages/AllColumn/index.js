@@ -1,10 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { TopBarWithNavigation, BGImg, StoryMenu, Footer } from 'components'
 import { findDOMNode as dom } from 'react-dom'
 import styled from 'styled-components'
-import {Link} from 'react-router-dom';
-import FlatButton from 'material-ui/FlatButton';
-import FontIcon from 'material-ui/FontIcon';
+import { Link } from 'react-router-dom'
+import FlatButton from 'material-ui/FlatButton'
+import FontIcon from 'material-ui/FontIcon'
 import Slider from 'react-slick'
 //import Request from 'superagent'
 import api from 'components/api'
@@ -31,10 +32,7 @@ const Content = styled.div`
 	flex-flow: row wrap;
 	justify-content: center;
 	padding:50px 0 0 0;
-
-	@media (min-width: 481px) {
-		min-height: 768px;
-	}
+  min-height: calc(100vh - 161px);
 `
 
 const Main = styled.div`
@@ -94,8 +92,15 @@ const Box = styled.div`
   height:257px;
   margin:0px auto 15px auto;
   cursor: pointer;
-  @media (max-width:480px){
+  transition: .2s;
+  > div > div  > div > div {
+    transition: .2s;
+  }
 
+  &:hover {
+    > div > div > div > div {
+      color: ${props => props.accentColor};
+    }
   }
 `
 const Blur = styled.div`
@@ -129,81 +134,117 @@ const Desc = styled.div`
 `
 
 class AllColumn extends React.Component {
-  constructor(props) {
-    super(props)
+	static contextTypes = {
+		setting: PropTypes.object
+	}
 
-    this.state = {
-      columns:[],
-      //popular:[]
-    }
-  }
+	constructor(props) {
+		super(props)
 
-  getColumn = () => {
-    // var filter = JSON.stringify({status:1})
-    // Request
-    //  .get(config.BACKURL+'/publishers/'+config.PID+'/columns')
-    //  .set('Accept','application/json')
-    //  .end((err,res)=>{
-    //    if(err) throw err
-    //    else{
-    //      this.setState({column:res.body.columns})
-    //    }
-    //  })
+		this.state = {
+			columns: [],
+			hover: -1
+			//popular:[]
+		}
+	}
 
-    api.getColumns()
-    .then(cols => {
-      this.setState({columns:cols})
-    })
-  }
+	getColumn = () => {
+		// var filter = JSON.stringify({status:1})
+		// Request
+		//  .get(config.BACKURL+'/publishers/'+config.PID+'/columns')
+		//  .set('Accept','application/json')
+		//  .end((err,res)=>{
+		//    if(err) throw err
+		//    else{
+		//      this.setState({column:res.body.columns})
+		//    }
+		//  })
 
-  componentDidMount(){
-    this.getColumn()
-  }
+		api.getColumns().then(cols => {
+			this.setState({ columns: cols })
+		})
+	}
 
-  render(){
-    let {columns} = this.state
-    //console.log('column', column)
-    return (
-        <Wrapper>
-          <TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={this.props.onLoading}/>
-          <Content>
-            <Feed>
-              <div className='row' style={{width: '100%'}}>
-                <StoryMenu
-                  style={{padding: '15px 0 15px 0', marginTop: '20px', float: 'left'}}
-                  page="allcolumn"
-                />
-              </div>
-              <div className='row' style={{overflow:'hidden'}}>
-                {columns && columns.map((data, index) => (
-                  <div className='col-lg-3 col-md-4 col-sm-12' key={index} style={{margin:'20px 0 20px 0'}}>
-                    <Link to={'/stories/' + data.slug} >
-                    <Box>
-                      <BGImg src={data.cover.small || data.cover.medium} opacity={0.6}
-                        className='imgWidth' style={{margin:'0 auto 0 auto'}} alt={data.name}>
-                        <div style={{margin:'80px 0 0 15px'}}>
-                          <ColumnName className='serif-font'>{data.name}</ColumnName>
-                          {/*
+	onHover = index => {
+		this.setState({ hover: index })
+		// console.log(index)
+	}
+
+	componentDidMount() {
+		this.getColumn()
+	}
+
+	render() {
+		let { theme } = this.context.setting.publisher
+		let { columns, hover } = this.state
+		//console.log('column', column)
+		return (
+			<Wrapper>
+				<TopBarWithNavigation
+					title={'Title of AomMoney goes here..'}
+					onLoading={this.props.onLoading}
+				/>
+				<Content>
+					<Feed>
+						<div className="row" style={{ width: '100%' }}>
+							<StoryMenu
+								style={{
+									padding: '15px 0 15px 0',
+									marginTop: '20px',
+									float: 'left'
+								}}
+								page="allcolumn"
+							/>
+						</div>
+						<div className="row" style={{ overflow: 'hidden' }}>
+							{columns &&
+								columns.map((data, index) => (
+									<div
+										className="col-lg-3 col-md-4 col-sm-12"
+										key={index}
+										style={{ margin: '20px 0 20px 0' }}>
+										<Link to={'/stories/' + data.slug}>
+											<Box
+												accentColor={theme.accentColor}
+												onMouseOver={() => this.onHover(index)}
+                        onMouseLeave={() => this.onHover(-1)}>
+												<BGImg
+													src={data.cover.small || data.cover.medium}
+													className="imgWidth"
+													opacity={hover == index ? 0.7 : 0.5}
+													style={{ margin: '0 auto 0 auto' }}
+													alt={data.name}
+                          gradient="black">
+													<div
+														style={{
+															position: 'absolute',
+															left: '15px',
+															bottom: '20px'
+														}}>
+														<ColumnName className="serif-font">
+															{data.name}
+														</ColumnName>
+														{/*
                             FOR THE NEXT VERSION
                           <Column className='sans-font' >131 Stories</Column>
                           */}
-                        </div>
-                      </BGImg>
-                        <Desc className='sans-font' >
-                          {data.shortDesc}
-                        </Desc>
-                      <Blur style={{top:'-120px'}}></Blur>
-                    </Box>
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            </Feed>
-          </Content>
-          <Footer/>
-      </Wrapper>
-    )
-  }
+													</div>
+												</BGImg>
+												<Desc className="sans-font">
+													{data.shortDesc}
+												</Desc>
+												<Blur style={{ top: '-120px' }} />
+											</Box>
+										</Link>
+									</div>
+								))}
+						</div>
+					</Feed>
+				</Content>
+				<Footer />
+			</Wrapper>
+		)
+	}
 }
 
 export default AllColumn
