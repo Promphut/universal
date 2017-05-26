@@ -69,7 +69,6 @@ const Label = styled.div`
 const Num = styled.div`
     font-size:24px;
     font-weight:bold;
-
 `
 
 class Axis extends React.Component {
@@ -200,8 +199,10 @@ class LineChart extends React.Component {
 				])
 				.range([h, 0])
 
-		let xAxis = d3.axisBottom(x).tickSize(-h - 30).ticks(8),
-			yAxis = d3.axisLeft(y).tickSize(-w - 30).ticks(6)
+		let xAxis = d3.axisBottom(x).tickSize(-h - 20).ticks(8),
+			  yAxis = d3.axisLeft(y).tickSize(-w - 20).ticks(6).tickFormat(function(tickVal) {
+        return tickVal >= 1000 ? tickVal/1000 + "K" : tickVal;
+    });
 
 		function zoomed() {
 			let t = d3.event.transform, xt = t.rescaleX(x)
@@ -296,7 +297,7 @@ class GraphDashboard extends React.Component {
 		var to = moment(startDate2).format('YYYYMMDD')
 		//console.log(from,to)
 		api.getPublisherInsight(pid, action, null, null, from, to).then(ins => {
-			console.log(ins)
+			//console.log(ins)
 			var data = []
 			ins.insights.map((value, index) => {
 				data[index] = {
@@ -305,7 +306,6 @@ class GraphDashboard extends React.Component {
 				}
 			})
 			this.setState({ data: data, sum: ins.summary })
-
 			//console.log(ins)
 		})
 	}
