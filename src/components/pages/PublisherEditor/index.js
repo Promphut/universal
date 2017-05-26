@@ -53,7 +53,7 @@ const PublisherEditor = ({onLoading, location, children, match}) => {
               <PrivateRoute exact path={`${match.url}/settings`} roles={['ADMIN']} component={PublisherSettingPage} />
               <PrivateRoute exact path={`${match.url}/contact`} roles={['ADMIN']} component={PublisherContactAndAboutPage} />
               <PrivateRoute exact path={`${match.url}/manage`} roles={['ADMIN', 'EDITOR']} component={PublisherStoryPage} />
-              <PrivateRoute exact path={`${match.url}/columns/:cid/settings`} roles={['ADMIN', 'EDITOR']} bypassCidCheck={false} component={ColumnSettingPage} />
+              <PrivateRoute exact path={`${match.url}/columns/settings`} roles={['ADMIN', 'EDITOR']} bypassCidCheck={false} component={ColumnSettingPage} />
               <PrivateRoute exact path={`${match.url}/stories`} roles={['ADMIN', 'EDITOR']} component={PublisherInsightStories} />
               <PrivateRoute exact path={`${match.url}/columns`} roles={['ADMIN', 'EDITOR']} component={PublisherInsightColumns} />
               <PrivateRoute exact path={`${match.url}/writers`} roles={['ADMIN', 'EDITOR']} component={PublisherInsightWriters} />

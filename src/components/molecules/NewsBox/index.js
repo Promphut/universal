@@ -71,6 +71,7 @@ const BoxText = styled.div`
   padding-left:38px;
   border-bottom:1px solid ##C4C4C4;
   @media (max-width:480px) {
+    float:none;
     width:100%;
     padding-left:0px;
     margin-top:10px;
@@ -118,6 +119,8 @@ const Box = styled.div`
   border-bottom:1px solid #C4C4C4;
   padding-bottom:30px;
   @media (max-width:480px) {
+    float:none;
+    width:100%;
     padding-bottom:10px;
   }
 `
