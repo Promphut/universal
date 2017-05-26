@@ -7,6 +7,7 @@ import IconButton from 'material-ui/IconButton'
 import Divider from 'material-ui/Divider'
 import { findDOMNode as dom } from 'react-dom'
 import utils from '../../../services/utils'
+import find from 'lodash/find'
 
 const Container = styled.div`
   position:fixed;
@@ -276,7 +277,9 @@ class LeftMenu extends React.Component {
 		}
 
 		let menu = this.props.menu
-		let height = ((menu && menu.column ? menu.column : []).length + 1) * 60
+		let height =
+			((menu && menu.column ? menu.column : []).length + 1) *
+			(utils.isMobile() ? 50 : 55)
 		this.state.height = this.state.miniMenu ? 0 : height
 	}
 
@@ -293,7 +296,9 @@ class LeftMenu extends React.Component {
 		}
 		if (utils.isMobile()) {
 			let menu = this.props.menu
-			let height = ((menu && menu.column ? menu.column : []).length + 1) * 60
+			let height =
+				((menu && menu.column ? menu.column : []).length + 1) *
+				(utils.isMobile() ? 50 : 55)
 			this.state.height = this.state.miniMenu ? 0 : height
 
 			this.setState({
@@ -302,6 +307,19 @@ class LeftMenu extends React.Component {
 				height: height
 			})
 		}
+	}
+
+	pushItem = (items, index, item) => {
+		items.push(
+			<li key={index}>
+				<Link
+					to="#"
+					onClick={e => this.props.closeAndLink(e, '/stories/' + item.slug)}>
+					{item.name}
+				</Link>
+			</li>
+		)
+		return items
 	}
 
 	render() {
@@ -314,18 +332,10 @@ class LeftMenu extends React.Component {
 
 		// Menu items from menu props
 		let items = []
-		for (let i = 0; i < cols.length; i++) {
-			items.push(
-				<li key={i}>
-					<Link
-						to="#"
-						onClick={e =>
-							this.props.closeAndLink(e, '/stories/' + cols[i].slug)}>
-						{cols[i].name}
-					</Link>
-				</li>
-			)
-		}
+		const news = find(cols, { slug: 'news' })
+		if (news) this.pushItem(items, 0, news)
+		for (let i = 0; i < cols.length; i++)
+			if (cols[i].slug != 'news') this.pushItem(items, i + 1, cols[i])
 
 		if (utils.isMobile()) {
 			isMobile = true

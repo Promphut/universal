@@ -262,18 +262,19 @@ class HomePage extends React.Component {
 		let { theme } = this.context.setting.publisher
 
 		//console.log(this.state.feedCount)
-		//if(feed.length==0) return <div></div>	
+		//if(feed.length==0) return <div></div>
 		return (
 			<Wrapper>
 				{!isEmpty(pub) &&
+					!isMobile &&
 					<BG
-						src={pub.cover&&pub.cover.medium}
+						src={pub.cover && pub.cover.medium}
 						opacity={-1}
 						className="hidden-mob"
-						alt={pub&&pub.name}>
+						alt={pub && pub.name}>
 						<div>
-							<LogoLink to="/" src={theme&&theme.llogo} id={'Largelogo'} />
-							<Tagline className="nunito-font">{pub&&pub.tagline}</Tagline>
+							<LogoLink to="/" src={theme && theme.llogo} id={'Largelogo'} />
+							<Tagline className="nunito-font">{pub && pub.tagline}</Tagline>
 						</div>
 					</BG>}
 
@@ -294,12 +295,12 @@ class HomePage extends React.Component {
 							hasMore={hasMoreFeed}
 							loader={this.onload()}>
 							<div>
-								{feed.length!=0&&feed.map((item, index) => (
-									<ArticleBox detail={item} key={index} />
-								))}
+								{feed.length != 0 &&
+									feed.map((item, index) => (
+										<ArticleBox detail={item} key={index} />
+									))}
 							</div>
 						</InfiniteScroll>
-
 
 						<Tabs
 							style={{ width: '100%' }}
@@ -348,9 +349,10 @@ class HomePage extends React.Component {
 									hasMore={hasMoreFeed}
 									loader={this.onload()}>
 									<div>
-										{feed.length!=0&&feed.map((item, index) => (
-											<ArticleBox detail={item} key={index} />
-										))}
+										{feed.length != 0 &&
+											feed.map((item, index) => (
+												<ArticleBox detail={item} key={index} />
+											))}
 									</div>
 								</InfiniteScroll>
 
@@ -368,7 +370,7 @@ class HomePage extends React.Component {
 					</Aside>*/}
 				</Content>
 
-				<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800"/>
+				<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800" />
 				<Footer />
 			</Wrapper>
 		)

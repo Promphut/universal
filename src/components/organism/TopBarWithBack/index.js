@@ -1,16 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import {Stick} from 'components'
-import FontIcon from 'material-ui/FontIcon';
+import { Stick } from 'components'
+import FontIcon from 'material-ui/FontIcon'
 
 const Container = styled.div`
 	margin: 0;
 	padding: 0;
-	background: ${props => props.theme.barTone=='light'?'white':props.theme.primaryColor};
-	color: ${props => props.theme.barTone=='light'?'#222':'white'};
+	background: ${props => (props.theme.barTone == 'light' ? 'white' : props.theme.primaryColor)};
+	color: ${props => (props.theme.barTone == 'light' ? '#222' : 'white')};
 	height: 60px;
-	border-bottom: ${props => props.theme.barTone=='light'?'1px solid #e2e2e2':'none'};
+	border-bottom: ${props => (props.theme.barTone == 'light' ? '1px solid #e2e2e2' : 'none')};
 	width: 100%;
 	transition: .1s;
 	position: absolute;
@@ -36,46 +36,48 @@ const Title = styled.div`
 `
 
 class TopBarWithBack extends React.Component {
-  	static contextTypes = {
+	static contextTypes = {
 		setting: PropTypes.object
 	}
 
-	checkBack = (e) => {
+	checkBack = e => {
 		e.preventDefault()
 
-		if(window.history.length<=2){
+		if (window.history.length <= 2) {
 			this.props.history.push('/')
 		} else {
 			this.props.history.goBack()
 		}
 	}
 
-	render () {
-	  	let {theme} = this.context.setting.publisher
+	render() {
+		let { theme } = this.context.setting.publisher
 		const backStyle = {
-			color: '#FFF',
+			color: theme.barTone == 'light' ? '#222' : '#FFF',
 			fontSize: '40px',
 			position: 'absolute',
 			top: '10px',
 			left: '5px'
 		}
 
-	  	return (
+		return (
 			<Stick>
-        		<Container>
+				<Container>
 					<Left>
-						<a href='#' onClick={this.checkBack}>
-							<FontIcon className="material-icons" style={backStyle}>chevron_left</FontIcon>
+						<a href="#" onClick={this.checkBack}>
+							<FontIcon className="material-icons" style={backStyle}>
+								chevron_left
+							</FontIcon>
 						</a>
 					</Left>
 
 					<Center>
 						<Title>{this.props.title}</Title>
 					</Center>
-        		</Container>
+				</Container>
 			</Stick>
-	 	)
+		)
 	}
 }
 
-export default TopBarWithBack;
+export default TopBarWithBack
