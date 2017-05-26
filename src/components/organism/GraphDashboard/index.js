@@ -15,7 +15,7 @@ import Popover from 'material-ui/Popover'
 import config from '../../../config'
 
 if (process.env.BROWSER) {
-  require('react-datepicker/dist/react-datepicker.css');
+	require('react-datepicker/dist/react-datepicker.css')
 }
 
 const Wrapper = styled.div`
@@ -263,7 +263,6 @@ class LineChart extends React.Component {
 	}
 }
 
-
 class GraphDashboard extends React.Component {
 	static propTypes = {
 		width: PropTypes.number,
@@ -305,20 +304,20 @@ class GraphDashboard extends React.Component {
 					value: value.value
 				}
 			})
-			this.setState({ data: data,sum:ins.summary })
+			this.setState({ data: data, sum: ins.summary })
 
 			//console.log(ins)
 		})
 	}
 
-	handleChangeDate = (e) => {
+	handleChangeDate = e => {
 		//console.log(e)
-		if(e>new Date()){
+		if (e > new Date()) {
 			this.setState({
 				open: false
 			})
 			return false
-		}else{
+		} else {
 			this.setState(
 				{
 					startDate1: e,
@@ -337,7 +336,7 @@ class GraphDashboard extends React.Component {
 		})
 	}
 
-	openDatePicker = (e) => {
+	openDatePicker = e => {
 		this.setState({
 			open: true,
 			swipPicker: true,
@@ -345,14 +344,14 @@ class GraphDashboard extends React.Component {
 		})
 	}
 
-	handleChangeDate2 = (e) => {
+	handleChangeDate2 = e => {
 		//console.log(e)
-		if(e<=this.state.startDate1){
+		if (e <= this.state.startDate1) {
 			this.setState({
 				open: false
 			})
 			return false
-		}else{
+		} else {
 			this.setState(
 				{
 					startDate2: e,
@@ -365,7 +364,7 @@ class GraphDashboard extends React.Component {
 		}
 	}
 
-	openDatePicker2 = (e) => {
+	openDatePicker2 = e => {
 		this.setState({
 			open: true,
 			swipPicker: false,
@@ -373,7 +372,7 @@ class GraphDashboard extends React.Component {
 		})
 	}
 
-	handleChangeTab = (e) => {
+	handleChangeTab = e => {
 		this.setState(
 			{
 				selectTab: e
@@ -386,6 +385,10 @@ class GraphDashboard extends React.Component {
 
 	componentDidMount() {
 		this.getPublisherInsight()
+	}
+
+	numberWithCommas = number => {
+		return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 	}
 
 	render() {
@@ -427,7 +430,11 @@ class GraphDashboard extends React.Component {
 					open={open}
 					anchorEl={anchorEl}
 					onRequestClose={this.handleRequestClose}
-					style={{ background: 'none', boxShadow: 'none',margin:'0 5px 0 5px' }}>
+					style={{
+						background: 'none',
+						boxShadow: 'none',
+						margin: '0 5px 0 5px'
+					}}>
 					{swipPicker
 						? <DatePicker
 								selected={startDate1}
@@ -477,12 +484,12 @@ class GraphDashboard extends React.Component {
 						<FlatButton
 							onClick={this.openDatePicker}
 							style={{
-  							border: '1px solid #C4C4C4',
-  							borderRadius: '20px',
-  							padding: '0px 10px 0px 12px',
-  							fontSize: '14px',
-  							height: '28px',
-  							lineHeight: '28px'
+								border: '1px solid #C4C4C4',
+								borderRadius: '20px',
+								padding: '0px 10px 0px 12px',
+								fontSize: '14px',
+								height: '28px',
+								lineHeight: '28px'
 							}}
 							icon={
 								<FontIcon
@@ -518,16 +525,20 @@ class GraphDashboard extends React.Component {
 					</FlatButton>
 					<div className="total">
 						<Label style={{ color: '#8e8e8e' }}>Number of Stories</Label>
-						<Num className="serif-font">{sum&&sum.count}</Num>
+						<Num className="serif-font">
+							{sum && this.numberWithCommas(sum.count)}
+						</Num>
 					</div>
 					<div className="total">
 						<Label style={{ color: '#8e8e8e' }}>Average per story</Label>
-						<Num className="serif-font">{sum&&sum.avg}</Num>
+						<Num className="serif-font">
+							{sum && this.numberWithCommas(sum.avg)}
+						</Num>
 					</div>
 					<div className="total">
 						<Label style={{ color: '#8e8e8e' }}>Total</Label>
 						<Num className="serif-font" style={{ color: theme.accentColor }}>
-							{sum&&sum.total}
+							{sum && this.numberWithCommas(sum.total)}
 						</Num>
 					</div>
 				</div>
