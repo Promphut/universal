@@ -56,6 +56,7 @@ const NameLink = styled(Link)`
   color:#222;
   font-weight:bold;
   font-size:18px;
+  transition: .1s;
   @media (max-width:480px) {
     font-size:15px;
   }
@@ -121,6 +122,10 @@ const Box = styled.div`
   }
 `
 
+const WriterLink = styled(Link)`
+  transition: .1s;
+`
+
 const NewsBox = ({detail, style, timeline}) => {
     let {ptitle,cover,writer,column,votes,comments,updated,url,readTime,contentShort} = detail
     //console.log('URL', url)
@@ -142,7 +147,7 @@ const NewsBox = ({detail, style, timeline}) => {
                 'length': 200,
                 'separator': ''
               })}</Desc>
-            <Desc className='nunito-font'>by <strong><Link to={writer&&writer.url}>{writer&&writer.display}</Link></strong></Desc>
+            <Desc className='nunito-font'>by <strong><WriterLink to={writer&&writer.url}>{writer&&writer.display}</WriterLink></strong></Desc>
           </BoxText>
         </Box>
       </Container>

@@ -48,6 +48,7 @@ const NameLink = styled(Link)`
   font-weight:bold;
   font-size:20px;
   height:50px;
+  transition: .1s;
   @media (max-width:480px) {
     font-size:15px;
   }
@@ -71,14 +72,14 @@ const TopNews = ({detail, style}) => {
     <Container style={{...style}}>
       <BGImg url={detail&&detail.url} src={detail&&detail.cover.medium} className='imgWidth mob-hidden' >
         <BoxText>
-          <NameLink to={detail?detail.url:'/'}>
+          <NameLink className='nunito-font' to={detail?detail.url:'/'}>
           {truncate(detail&&detail.ptitle, {
             'length': 133,
             'separator': ''
           })}
           </NameLink>
         </BoxText>
-      </BGImg>    
+      </BGImg>
     </Container>
   )
 }
