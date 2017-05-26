@@ -17,9 +17,7 @@ const Container = styled.div`
   height:100%;
   top:0;
   left:0;
-  z-index:10;
-  display:${props => (props.open ? 'block' : 'none')};
-  animation: ${props => (props.open ? displayNone : displayBlock)} 0.5s forwards;
+	animation: ${props => (props.open ? displayBlock : displayNone)} 0.5s forwards;
   @media (max-width:480px){
     width: 100vw;
     .mobile{
@@ -44,22 +42,24 @@ const Container2 = styled.div`
 
 const displayNone = keyframes`
   from {
-    display:block;
+    opacity:1;
+		z-index:20;
   }
   to {
-    display:none;
+    opacity:0;
+		z-index:-20;
   }
 `
-
 const displayBlock = keyframes`
   from {
-    display:none;
+    opacity:0;
+		z-index:-20;
   }
   to {
-    display:block;
+    opacity:1;
+		z-index:20;
   }
 `
-
 const slideOut = keyframes`
 	from {
     transform: translateX(100%);
@@ -72,11 +72,11 @@ const slideOut = keyframes`
 `
 const slideIn = keyframes`
 	from {
-    transform: translateX(100%);
+    transform: translateX(0%);
     opacity:1;
   }
   to {
-    transform: translateX(0%);
+    transform: translateX(100%);
     opacity:0;
   }
 `
@@ -227,7 +227,21 @@ class RightMenu extends React.Component {
 		super(props)
 
 		this.state = {
-			open: this.props.open
+			open: this.props.open,
+			display:'none'
+		}
+	}
+
+	componentWillReceiveProps(nextProps) {
+		var self = this
+		if(nextProps.open!=this.props.open){
+			if(!nextProps.open){
+				setTimeout(function() {
+					self.setState({display:'none'})
+				}, 500);
+			}else{
+					this.setState({display:'block'})
+			}
 		}
 	}
 
@@ -236,6 +250,7 @@ class RightMenu extends React.Component {
 		let isMobile = false
 		let { open, close } = this.props, user = this.props.user
 		//console.log(user)
+		var {display} = this.state
 
 		let displayStyle, AvatarSize, introStyle
 		let hiddenMobile = {}
@@ -281,7 +296,7 @@ class RightMenu extends React.Component {
 		}
 		//console.log('USER', user)
 		return (
-			<Container open={open}>
+			<Container open={open} style={{display:display}}>
 				<Container2 onClick={close} />
 				<Nav open={open}>
 					<div className="menu menu-font">
