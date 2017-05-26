@@ -1,7 +1,7 @@
-import React from 'react';
-import styled, {keyframes} from 'styled-components'
-import {BGImg, ShareDropdown} from 'components'
-import Avatar from 'material-ui/Avatar';
+import React from 'react'
+import styled, { keyframes } from 'styled-components'
+import { BGImg, ShareDropdown } from 'components'
+import Avatar from 'material-ui/Avatar'
 import FontIcon from 'material-ui/FontIcon'
 import Popover from 'material-ui/Popover'
 import Menu from 'material-ui/Menu'
@@ -31,6 +31,8 @@ const Container = styled.div`
     margin:0 0 0 13%;
   }
   &:hover{
+    cursor:pointer;
+
     .hideText{
       z-index:-10;
     }
@@ -38,14 +40,11 @@ const Container = styled.div`
 `
 const BG = styled(BGImg)`
   width:100%;
-  animation: ${props=> props.hover?slideOut:slideIn} ${props=> props.hover?0.4:0.2}s forwards;
-  &:hover{
-    cursor:pointer;
-  }
+  animation: ${props => (props.hover ? slideOut : slideIn)} ${props => (props.hover ? 0.4 : 0.2)}s forwards;
 `
 const BoxText = styled.div`
   width:100%;
-  color:${props=> props.hover?props.theme.accentColor:'#222'};
+  color:${props => (props.hover ? props.theme.accentColor : '#222')};
   font-size:16px;
   height:141px;
   display:flex;
@@ -56,7 +55,8 @@ const BoxText = styled.div`
 
 `
 const Cover = styled.div`
-  background:rgba(0,0,0,0.6);
+  background:rgba(0,0,0, ${props => props.hover ? 0.7 : 0.4});
+  transition: .5s;
 `
 
 const slideOut = keyframes`
@@ -77,54 +77,63 @@ const slideIn = keyframes`
 `
 
 class TopNewsSmall extends React.Component {
-  constructor(props) {
-    super(props)
+	constructor(props) {
+		super(props)
 
-    this.state = {
-      hover:false
-    }
-  }
+		this.state = {
+			hover: false
+		}
+	}
 
-  hoverOff = () => {
-    this.setState({
-      hover:false
-    })
-  }
+	hoverOff = () => {
+		this.setState({
+			hover: false
+		})
+	}
 
-  hoverOn = () => {
-    this.setState({
-      hover:true
-    })
-  }
+	hoverOn = () => {
+		this.setState({
+			hover: true
+		})
+	}
 
-  render(){
-    let {detail,style} = this.props
+	render() {
+		let { detail, style } = this.props
 
-    return (
-      <Container className="row" style={{...style}} onMouseOver={this.hoverOn} onMouseLeave={this.hoverOff}>
-        <BG hover={this.state.hover} url={detail&&detail.url} src={detail&&detail.cover.medium} className='imgWidth mob-hidden' style={{backgroundPosition:'right'}}>
-          <Cover>
-            <BoxText className='nunito-font showText' hover={this.state.hover}>
-              <span>
-                {truncate(detail&&detail.ptitle, {
-                  'length': 70,
-                  'separator': ''
-                })}
-              </span>       
-            </BoxText> 
-          </Cover>
-        </BG>
-        <BoxText className='nunito-font hideText'>
-          <span>
-            {truncate(detail&&detail.ptitle, {
-              'length': 70,
-              'separator': ''
-            })}
-          </span>       
-        </BoxText> 
-      </Container>
-    )
-  }
+		return (
+			<Container
+				className="row"
+				style={{ ...style }}
+				onMouseOver={this.hoverOn}
+				onMouseLeave={this.hoverOff}>
+				<BG
+					hover={this.state.hover}
+					url={detail && detail.url}
+					src={detail && detail.cover.medium}
+					className="imgWidth mob-hidden"
+					style={{ backgroundPosition: 'right' }}>
+					<Cover hover={this.state.hover}>
+						<BoxText className="nunito-font showText" hover={this.state.hover}>
+							<span>
+								{truncate(detail && detail.ptitle, {
+									length: 70,
+									separator: ''
+								})}
+							</span>
+						</BoxText>
+					</Cover>
+				</BG>
+				<BoxText className="nunito-font hideText">
+					<span>
+						{truncate(detail && detail.ptitle, {
+							length: 70,
+							separator: ''
+						})}
+					</span>
+				</BoxText>
+			</Container>
+		)
+	}
 }
 
-export default TopNewsSmall;
+export default TopNewsSmall

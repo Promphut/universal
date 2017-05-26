@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {BGImg} from 'components'
 import styled,{keyframes} from 'styled-components'
 import {Link} from 'react-router-dom'
-import api from 'components/api' 
+import api from 'components/api'
 import moment from 'moment'
 
 const NewsBox = styled.div`
@@ -39,7 +39,7 @@ const VerticalTimeline = styled.div`
 `
 const Doughnut = styled.div`
   margin:0 5px 0 0px;
-  border: 1px solid ${props=>props.theme.accentColor};
+  border: 2px solid ${props=>props.theme.accentColor};
   border-radius: 50%;
   height:8px;
   width:8px;
@@ -49,6 +49,7 @@ const NameLink = styled(Link)`
   color:#222;
   font-weight:bold;
   font-size:14px;
+	transition: .1s;
   &:hover{
     color:${props=>props.theme.accentColor}
   }

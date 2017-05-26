@@ -174,7 +174,8 @@ class NewsPage extends React.Component {
 			trendingNews: [],
 
 			isMobile: false,
-			selectTab: 0
+			selectTab: 0,
+			shortDesc: ''
 		}
 	}
 
@@ -207,23 +208,21 @@ class NewsPage extends React.Component {
 
 			let page = this.state.page
 			//console.log('page', page)
-			var sort = this.state.selectTab?'trending':'latest'
-			api
-				.getFeed('news', { status: 1 }, sort, null, page, 15)
-				.then(result => {
-					let feed = this.state.feed.concat(result.feed)
-					this.setState(
-						{
-							page: ++page,
-							feed: feed,
-							feedCount: result.count['1'],
-							hasMoreFeed: feed.length < result.count['1']
-						},
-						() => {
-							this.loading = false
-						}
-					)
-				})
+			var sort = this.state.selectTab ? 'trending' : 'latest'
+			api.getFeed('news', { status: 1 }, sort, null, page, 15).then(result => {
+				let feed = this.state.feed.concat(result.feed)
+				this.setState(
+					{
+						page: ++page,
+						feed: feed,
+						feedCount: result.count['1'],
+						hasMoreFeed: feed.length < result.count['1']
+					},
+					() => {
+						this.loading = false
+					}
+				)
+			})
 		}
 	}
 
@@ -236,7 +235,9 @@ class NewsPage extends React.Component {
 		this.setState({
 			isMobile: utils.isMobile()
 		})
-		// this.progress(100)
+		api.getColumnFromSlug('news').then(col => {
+			this.setState({ shortDesc: col.shortDesc })
+		})
 	}
 
 	render() {
@@ -246,7 +247,8 @@ class NewsPage extends React.Component {
 			hasMoreFeed,
 			trendingNews,
 			isMobile,
-			selectTab
+			selectTab,
+			shortDesc
 		} = this.state
 		let pub = this.context.setting.publisher
 		let { theme } = this.context.setting.publisher
@@ -278,9 +280,7 @@ class NewsPage extends React.Component {
 					<Feed>
 						<Head className="serif-font hidden-mob">NEWS</Head>
 						<Line className="hidden-mob" style={{ top: '-41px' }} />
-						<Text className="center">
-							โมหจริต ละตินฮิปฮอปด็อกเตอร์โมหจริตแอดมิสชัน บร็อคโคลีคีตปฏิภาณเมจิค โอเวอร์คลิปโปรโมชั่นแบล็คสงบสุข ยังไงอึ้มไรเฟิลบร็อกโคลี ฮ็อตมั้ย แอ็กชั่นแอ็กชั่น อุปสงค์ฟลุกซีนีเพล็กซ์เลกเชอร์อิเหนา บัลลาสต์โรแมนติก
-						</Text>
+						<Text className="center">{shortDesc}</Text>
 					</Feed>
 				</Content>
 				<Content style={{ paddingTop: '0px' }} className="hidden-mob">
