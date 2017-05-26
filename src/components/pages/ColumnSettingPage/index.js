@@ -4,7 +4,10 @@ import styled from "styled-components";
 import {
   PrimaryButton,
   SecondaryButton,
-  UploadPicture
+  UploadPicture,
+  DropdownWithIcon,
+  MenuList,
+  Alert
 } from "components";
 import TextField from "material-ui/TextField";
 import Chip from "material-ui/Chip";
@@ -18,11 +21,10 @@ import reject from 'lodash/reject'
 import api from "components/api";
 import utils from '../../../services/utils'
 import config from '../../../config'
+import Snackbar from 'material-ui/Snackbar';
 
-const Container = styled.form`
+const Div = styled.div`
   width:100%;
-  padding:80px;
-  border-bottom:1px solid #E2E2E2;
   .textTitle{
     color:#C2C2C2;
     font-family:'PT Sas';
@@ -33,7 +35,13 @@ const Container = styled.form`
     font-family:'Nunito';
     font-size:18px;
   }
+`
+const Container = styled.form`
+  width:100%;
+  padding:40px;
+  border-bottom:1px solid #E2E2E2;
 `;
+
 
 const Flex = styled.div`
   display:flex;
@@ -100,6 +108,24 @@ const Divider = styled.div`
   {textKey: 'Some Text', valueKey: 'someSecondValue'},
 ];
 */
+const Header = styled.div`
+	margin: 0;
+	padding: 0;
+  height: 80px;
+	width: 100%;
+  background: #F4F4F4;
+  display: flex;
+`
+
+const Title2 = styled.div`
+  display: flex;
+  flex: 1;
+  align-items: center;
+  font-family: 'Nunito', 'Mitr';
+  font-size: 22px;
+  font-weight: bold;
+  padding-left: 32px;
+`
 
 class ColumnSettingPage extends React.Component {
   state = {
@@ -134,7 +160,13 @@ class ColumnSettingPage extends React.Component {
     error: false,
     dialog: false,
     errText: "",
-    descText: ""
+    descText: "",
+    alert:false,
+    alertConfirm:function(){},
+    columnArray:[],
+    snackbar:false,
+    snackbarMS:'',
+    selectColumn:null
   }
 
   static contextTypes = {
@@ -142,7 +174,7 @@ class ColumnSettingPage extends React.Component {
   }
 
   getEditors = () => {
-    let cid = this.props.match.params.cid;
+    let cid = this.state.selectColumn
     if (cid == null) return;
 
     api.getEditors(cid).then(editors => {
@@ -155,7 +187,7 @@ class ColumnSettingPage extends React.Component {
   }
 
   getWriters = () => {
-    let cid = this.props.match.params.cid;
+    let cid = this.state.selectColumn
     if (cid == null) return;
 
     api.getColumnWriters(cid).then(writers => {
@@ -168,7 +200,7 @@ class ColumnSettingPage extends React.Component {
   }
 
   getColumn = () => {
-    let cid = this.props.match.params.cid;
+    let cid = this.state.selectColumn
     if (cid == null) return;
 
     api.getColumn(cid).then(col => {
@@ -179,7 +211,7 @@ class ColumnSettingPage extends React.Component {
   }
 
   deleteWriter = () => {
-    let cid = this.props.match.params.cid;
+    let cid = this.state.selectColumn
     if (cid == null) return;
 
     let { writers, writerToRemove } = this.state;
@@ -195,7 +227,7 @@ class ColumnSettingPage extends React.Component {
   }
 
   deleteEditor = () => {
-    let cid = this.props.match.params.cid;
+    let cid = this.state.selectColumn
     if (cid == null) return;
 
     let { editors, editorToRemove } = this.state;
@@ -235,7 +267,7 @@ class ColumnSettingPage extends React.Component {
   updateColumn = (e) => {
     e.preventDefault();
 
-    let cid = this.props.match.params.cid;
+    let cid = this.state.selectColumn
     if (cid == null) return;
 
     let data = {};
@@ -384,10 +416,92 @@ class ColumnSettingPage extends React.Component {
     })
   }
 
+  removeColumn = () => {
+    let cid = this.state.selectColumn
+
+    api.removeColumn(cid)
+    .then(res => {
+      this.getPublisherColumns()
+      this.setState({
+        alert:false,
+        alertDesc:'',
+        snackbar:true,
+        snackbarMS:'Delete Column Complete !',
+      })
+    })
+  }
+  
+  alertDelete = (e) => {
+    this.setState({
+      alert: true,
+      alertWhere: e.currentTarget,
+      alertChild: '',
+      alertDesc: 'Delete is permanent. Are you sure?',
+      alertConfirm: this.removeColumn
+    })
+  }
+
+  alertNew = (e) => {
+    this.setState({
+      alert: true,
+      alertWhere: e.currentTarget,
+      alertChild: <div className='row'><TextField hintText="Column Name" id='newColName' style={{width:'170px',margin:'10px 15px 0 15px'}}/></div>,
+      alertConfirm: this.newColumn
+    })
+  }
+
+  newColumn = () => {
+    this.setState({alertLoading:true})
+
+    let column = {
+      name:document.getElementById('newColName').value,
+      shortDesc:''
+    }
+
+    api.newColumn(column)
+    .then(col => {
+      this.getPublisherColumns()
+      this.setState({
+        alert:false,
+        alertDesc:'',
+        snackbar:true,
+        snackbarMS:'Added New Column Complete !',
+      })
+    })
+  }
+  
+  handleRequestClose = () => {
+    this.setState({
+      alert: false,
+      alertDesc:''
+    });
+  }
+
+  changeColumn = (e,val) =>{
+    //console.log(val)
+    this.setState({selectColumn:val},()=>{
+      this.getWriters();
+      this.getEditors();
+      this.getColumn();
+    })
+  }
+
+  getPublisherColumns = () =>{
+    api.getPublisherColumns().then((col)=>{
+      var c = []
+      col.map((val,ind)=>{
+        c[ind] = {text:val.name,value:val._id}
+      })
+      this.setState({columnArray:c})
+    })
+  }
+
+  closeSnackbar = () => {
+    this.setState({snackbar:false})
+  }
+
   componentDidMount() {
-    this.getWriters();
-    this.getEditors();
-    this.getColumn();
+    this.getPublisherColumns();
   }
 
   render() {
@@ -408,7 +522,13 @@ class ColumnSettingPage extends React.Component {
       editorsAutoComplete,
       writersAutoComplete,
       writerSearchText,
-      editorSearchText
+      editorSearchText,
+      alert,alertDesc,
+      alertWhere,alertChild,alertConfirm,
+      selectColumn,
+      columnArray,
+      snackbar,
+      snackbarMS
     } = this.state;
 
     const actions = [
@@ -426,7 +546,12 @@ class ColumnSettingPage extends React.Component {
       />
     ];
 
+
     return (
+      <Div>
+        <Header>
+          <Title2>Columns</Title2>
+        </Header>
       <Container onSubmit={this.updateColumn} ref="columnForm">
         <Dialog
           actions={actions}
@@ -437,7 +562,30 @@ class ColumnSettingPage extends React.Component {
         >
           <p style={{ fontSize: "20px" }}>{dialogText}</p>
         </Dialog>
-        <div className="head sans-font">PROFILE</div>
+        <Snackbar
+          open={snackbar}
+          message={snackbarMS}
+          autoHideDuration={2000}
+          onRequestClose={this.closeSnackbar}
+          style={{backgroundColor:theme.primaryColor}}
+          bodyStyle={{backgroundColor:theme.primaryColor,textAlign:'center'}}
+          className="nunito-font"
+        />
+        <Alert
+          open={alert}
+          anchorEl={alertWhere}
+          onRequestClose={this.handleRequestClose}
+          description={alertDesc}
+          child={alertChild}
+          confirm={alertConfirm}/>
+        <DropdownWithIcon
+          onChange={this.changeColumn}
+          menuItem={!columnArray ? null : columnArray}
+          value={selectColumn}
+          editMenu={ 
+            [<MenuList onClick={this.alertDelete} key='delete'>Delete</MenuList>,
+              <MenuList onClick={this.alertNew} key='new'>+ New Column</MenuList>]}
+          />
         <Flex>
           <Title>
             <div className="sans-font">Name</div>
@@ -507,15 +655,12 @@ class ColumnSettingPage extends React.Component {
               ratio={1920/340}
               size="1920x340"
               height={90}
-              width={200}
-              labelStyle={{ top: "40px" }}
+              width={480}
               type="cover"
             />
           </Edit>
         </Flex>
         {/*<Divider/>*/}
-        <br /><br /><br />
-        <div className="head sans-font">TEAM</div>
         <Flex>
           <Title>
             <div className="sans-font">Writers</div>
@@ -588,7 +733,8 @@ class ColumnSettingPage extends React.Component {
             {textStatus}
           </TextStatus>
         </div>
-      </Container>
+      </Container>   
+      </Div>
     );
   }
 }

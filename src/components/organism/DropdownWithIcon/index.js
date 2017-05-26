@@ -100,8 +100,8 @@ class DropdownWithIcon extends React.Component {
       },
       selected:{
         backgroundColor:theme.accentColor,
-        color:'white',
-        fill:'white'
+        color:'#ffffff',
+        fill:'#ffffff'
       },
       menuItem:{
         fontSize:'22px',
