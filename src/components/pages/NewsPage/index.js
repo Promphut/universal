@@ -276,13 +276,15 @@ class NewsPage extends React.Component {
 			<Wrapper>
 				<TopBarWithNavigation onLoading={this.props.onLoading} />
 				<News>News</News>
-				<Content>
-					<Feed>
-						<Head className="serif-font hidden-mob">NEWS</Head>
-						<Line className="hidden-mob" style={{ top: '-41px' }} />
-						<Text className="center">{shortDesc}</Text>
-					</Feed>
-				</Content>
+				{!isMobile
+					? <Content>
+							<Feed>
+								<Head className="serif-font hidden-mob">NEWS</Head>
+								<Line className="hidden-mob" style={{ top: '-41px' }} />
+								<Text className="center">{shortDesc}</Text>
+							</Feed>
+						</Content>
+					: ''}
 				<Content style={{ paddingTop: '0px' }} className="hidden-mob">
 					<Main>
 						<TopNews detail={trendingNews[0]} />
