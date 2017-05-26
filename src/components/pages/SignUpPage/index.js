@@ -20,7 +20,8 @@ const Wrapper = styled.div`
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00b2b4', endColorstr='#cef1b7', GradientType=1 );
   @media (max-width:480px) {
     background:${props=>props.page?'':'white'};
-    height: 100vh;
+    max-width: 100vw;
+		max-height: 100vh;
   }
 `
 
@@ -35,8 +36,8 @@ const Container = styled.div`
   margin:7% auto 0 auto;
   width:600px;
   @media (max-width:480px) {
-    width: 100vw;
-		height: 100vh;
+		max-width: 100vw;
+		max-height: 100vh;
   }
 `
 
@@ -116,9 +117,6 @@ componentWillReceiveProps(nextProps){
     return (
       <Wrapper style={{display:this.state.visible?'block':'none'}} page={statePage}>
         <Container>
-          <div  style={{margin:'0 auto 15px auto',width:'146px'}}>
-            <LogoLink src={theme.logo} fill='#E2E2E2' id={'logoSignIn'} to='/'/>
-          </div>
           <BoxButton>
             <Link to='#' onClick={this.checkBack} className='hidden-mob'>
               <BackButton style={{float:'left'}} />

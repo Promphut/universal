@@ -266,7 +266,7 @@ class HomePage extends React.Component {
 		return (
 			<Wrapper>
 				{!isEmpty(pub) &&
-					!isMobile &&
+					!utils.isMobile() &&
 					<BG
 						src={pub.cover && pub.cover.medium}
 						opacity={-1}
