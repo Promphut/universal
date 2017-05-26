@@ -1,9 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
-import {Link} from 'react-router-dom'
-import {BGImg, TopBarWithNavigation, TrendingSideBar, RecommendArticle,
-	Navbar, RecommendContainer, Footer} from 'components'
+import { Link } from 'react-router-dom'
+import {
+	BGImg,
+	TopBarWithNavigation,
+	TrendingSideBar,
+	RecommendArticle,
+	Navbar,
+	RecommendContainer,
+	Footer
+} from 'components'
 import api from 'components/api'
+import utils from '../../../services/utils'
 
 const Wrapper = styled.div`
 	.recommends {
@@ -34,7 +42,7 @@ const Main = styled.div`
 	margin-top: 80px;
 	flex: 8 730px;
 	max-width: 730px;
-	min-height: calc(100vh - 591px);
+	min-height: calc(100vh - ${props => (props.isMobile ? '241px' : '591px')});
 
 	@media (max-width: 768px) {
 		flex: 0 100%;
@@ -61,19 +69,20 @@ class ContactAndAboutContainer extends React.Component {
 
 		this.recommends = []
 		this.publisher = {}
-
+		this.state = {
+			isMobile: false
+		}
 		//this.state = {
-			//refresh: 0
-			//recommends: []
+		//refresh: 0
+		//recommends: []
 		//}
 	}
 
 	getRecommendStories = () => {
-		api.getFeed('story', {status:1}, 'latest', null, 0, 4)
-		.then(result => {
+		api.getFeed('story', { status: 1 }, 'latest', null, 0, 4).then(result => {
 			this.recommends = result.feed
 
-			this.setState({ })
+			this.setState({})
 			//console.log('feed', result.feed.length)
 			// this.setState({
 			// 	recommends: result.feed,
@@ -82,53 +91,65 @@ class ContactAndAboutContainer extends React.Component {
 	}
 
 	getPublisher = () => {
-		api.getPublisher()
-		.then(pub => {
+		api.getPublisher().then(pub => {
 			this.publisher = pub
 
-			this.setState({ })
+			this.setState({})
 		})
 	}
 
-	componentDidMount(){
+	componentDidMount() {
 		this.getPublisher()
 		this.getRecommendStories()
+		this.setState({
+			isMobile: utils.isMobile()
+		})
 	}
 
-  	render(){
-  		//let {recommends} = this.state
-  		let pub = this.publisher
+	render() {
+		//let {recommends} = this.state
+		let pub = this.publisher
+		let { isMobile } = this.state
 
-  		let list = []
-			for(let i=0; i<this.recommends.length; i++){
-				list.push(
-					<div key={i} className='col-lg-6 col-md-6 col-sm-12'>
-						<RecommendArticle detail={this.recommends[i]}/>
-					</div>
-				)
-			}
+		let list = []
+		for (let i = 0; i < this.recommends.length; i++) {
+			list.push(
+				<div key={i} className="col-lg-6 col-md-6 col-sm-12">
+					<RecommendArticle detail={this.recommends[i]} />
+				</div>
+			)
+		}
 
-	    return (
-	      <Wrapper>
-			{pub.cover && <BGImg src={pub.cover.medium} opacity={-1} style={{width:'100%',height:'350px'}} className="hidden-mob" />}
+		return (
+			<Wrapper>
+				{pub.cover &&
+					<BGImg
+						src={pub.cover.medium}
+						opacity={-1}
+						style={{ width: '100%', height: '350px' }}
+						className="hidden-mob"
+					/>}
 
-			<TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={this.props.onLoading}/>
+				<TopBarWithNavigation
+					title={'Title of AomMoney goes here..'}
+					onLoading={this.props.onLoading}
+				/>
 
-	        <Content>
-	          <Main>
-	            {this.props.children}
-	          </Main>
-	          {/*<Aside>
+				<Content>
+					<Main isMobile={isMobile}>
+						{this.props.children}
+					</Main>
+					{/*<Aside>
 	            <TrendingSideBar/>
 	          </Aside>*/}
-	        </Content>
-			<Content>
-				<RecommendContainer recommend={this.recommends}/>
-			</Content>
-			<Footer/>
-	     </Wrapper>
-	    )
-  	}
+				</Content>
+				<Content>
+					<RecommendContainer recommend={this.recommends} />
+				</Content>
+				<Footer />
+			</Wrapper>
+		)
+	}
 }
 
-export default ContactAndAboutContainer;
+export default ContactAndAboutContainer

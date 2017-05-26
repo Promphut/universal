@@ -1,13 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { TopBarWithNavigation, StoryDetail, RecommendArticle, TrendingSideBar,
-	 Stick,ShareSideBar, BGImg,RecommendContainer, Footer} from 'components'
-import {Link} from 'react-router-dom'
+import {
+	TopBarWithNavigation,
+	StoryDetail,
+	RecommendArticle,
+	TrendingSideBar,
+	Stick,
+	ShareSideBar,
+	BGImg,
+	RecommendContainer,
+	Footer
+} from 'components'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import {findDOMNode as dom} from 'react-dom'
+import { findDOMNode as dom } from 'react-dom'
 import api from 'components/api'
-import  { StickyContainer, Sticky }  from 'react-sticky'
-import {Helmet} from 'react-helmet'
+import { StickyContainer, Sticky } from 'react-sticky'
+import { Helmet } from 'react-helmet'
 import config from '../../../config'
 import utils from '../../../services/utils'
 import auth from 'components/auth'
@@ -67,15 +76,13 @@ const Share = styled.div`
 const Main = styled.div`
 	flex: 8 730px;
 	max-width: 730px;
-	marginTop: 40px;
+	margin-top: 40px;
+	min-height: calc(100vh - ${props => (props.isMobile ? '261px' : '261px')});
+
 	@media (max-width: 480px) {
 		flex:0 100%;
 		max-width: 100%;
 		padding:0 15px 0 15px;
-	}
-
-	@media (min-width: 481px) {
-		min-height: 768px;
 	}
 `
 
@@ -89,7 +96,6 @@ const Aside = styled.div`
 		display:none;
 	}
 `
-
 
 const Cover = styled.div`
 	position:relative;
@@ -109,10 +115,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#222222', end
 
 class StoryPage extends React.Component {
 	state = {
-		recommends: [], 	// trending stories
+		recommends: [], // trending stories
 		description: '',
-		showTopbarTitle:false,
-		story:{}
+		showTopbarTitle: false,
+		story: {}
 	}
 	static contextTypes = {
 		setting: PropTypes.object
@@ -146,162 +152,214 @@ class StoryPage extends React.Component {
 	// }
 
 	getRecommendStories = () => {
-		var {story} = this.state
-		if(story.column){
+		var { story } = this.state
+		if (story.column) {
 			// Get recommend from column
 			let cid = story.column._id
 
-			api.getFeed('story', {status:1, column:cid}, 'latest', null, 0, 4)
-			.then(result => {
-				//console.log('feed', result.feed.length)
-				this.setState({
-					recommends: result.feed,
+			api
+				.getFeed('story', { status: 1, column: cid }, 'latest', null, 0, 4)
+				.then(result => {
+					//console.log('feed', result.feed.length)
+					this.setState({
+						recommends: result.feed
+					})
 				})
-			})
 		} else {
 			// If no column presented, use writer instead
 			let uid = story.writer._id
 
-			api.getFeed('story', {status:1, writer:uid}, 'latest', null, 0, 4)
-			.then(result => {
-				//console.log('feed', result.feed.length)
-				this.setState({
-					recommends: result.feed,
+			api
+				.getFeed('story', { status: 1, writer: uid }, 'latest', null, 0, 4)
+				.then(result => {
+					//console.log('feed', result.feed.length)
+					this.setState({
+						recommends: result.feed
+					})
 				})
-			})
 		}
 	}
 
-	getStoryFromSid = (sid, done=()=>{}) => {
-		if(sid==null) utils.notFound(this.props.history)
-		
-		api.getStoryFromSid(sid, auth.getToken(), this.props.countView)
-	    .then(result => {
+	getStoryFromSid = (sid, done = () => {}) => {
+		if (sid == null) utils.notFound(this.props.history)
+
+		api
+			.getStoryFromSid(sid, auth.getToken(), this.props.countView)
+			.then(result => {
 				this.setState({
-					story:result.story
+					story: result.story
 				})
-	    })
-	    .catch(utils.toError(this.props.history))
+			})
+			.catch(utils.toError(this.props.history))
 	}
-	
-	handleScroll = (event) => {
+
+	handleScroll = event => {
 		var top = dom(this.refs.TT).getBoundingClientRect().top
-		if(top<-110){
+		if (top < -110) {
 			this.setState({
-				showTopbarTitle:true
-			});
-		}else{
-			if(this.state.showTopbarTitle){
+				showTopbarTitle: true
+			})
+		} else {
+			if (this.state.showTopbarTitle) {
 				this.setState({
-					showTopbarTitle:false
-				});
-			}else{
+					showTopbarTitle: false
+				})
+			} else {
 				return
 			}
 		}
 	}
 
-	componentDidMount(){
+	componentDidMount() {
 		this.getStoryFromSid(this.props.match.params.sid, () => {
 			this.getRecommendStories()
 			//this.findDescription()
 		})
-		window.addEventListener('scroll', this.handleScroll);
+		window.addEventListener('scroll', this.handleScroll)
 	}
 
 	componentWillUnmount() {
-		window.removeEventListener('scroll', this.handleScroll);
+		window.removeEventListener('scroll', this.handleScroll)
 	}
 
-	componentWillReceiveProps(nextProps){
-    if(nextProps.location.pathname != this.props.location.pathname){
-      this.getStoryFromSid(nextProps.match.params.sid, () => {
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.location.pathname != this.props.location.pathname) {
+			this.getStoryFromSid(nextProps.match.params.sid, () => {
 				this.getRecommendStories()
 				//this.findDescription()
 			})
-    }
-  }
+		}
+	}
 
-	render(){
-    let {keywords, channels} = this.context.setting.publisher
-		let {recommends, description, showTopbarTitle,story} = this.state
+	render() {
+		const isMobile = utils.isMobile()
+		let { keywords, channels } = this.context.setting.publisher
+		let { recommends, description, showTopbarTitle, story } = this.state
 
 		let hasCover = false
-		if(!isEmpty(story)){
-			if (utils.isMobile() && story.coverMobile.medium != config.BACKURL+'/imgs/article_cover_portrait.png') {
+		if (!isEmpty(story)) {
+			if (
+				isMobile &&
+				story.coverMobile.medium !=
+					config.BACKURL + '/imgs/article_cover_portrait.png'
+			) {
 				hasCover = true
-			} else if (story.cover.medium != config.BACKURL+'/imgs/article_cover_landscape.png') {
+			} else if (
+				story.cover.medium !=
+				config.BACKURL + '/imgs/article_cover_landscape.png'
+			) {
 				hasCover = true
 			}
 		}
 
 		//console.log('render', story)w.
-		if(isEmpty(story))return <div ref='TT'></div>	
-		else return (
-		<div>
-			<Helmet>
-				<title>{story.title}</title>
-				<meta name="title" content={story.title} />
-				<meta name="keywords" content={keywords} />
-				<meta name="description" content={story.shortDesc} />
+		if (isEmpty(story)) return <div ref="TT" />
+		else
+			return (
+				<div>
+					<Helmet>
+						<title>{story.title}</title>
+						<meta name="title" content={story.title} />
+						<meta name="keywords" content={keywords} />
+						<meta name="description" content={story.shortDesc} />
 
-				<link rel="shortcut icon" type="image/ico" href={config.BACKURL+'/publishers/'+config.PID+'/favicon'} />
-				{channels && channels.fb ? <link rel="author" href={utils.getFbUrl(channels.fb)} /> : ''}
-				{/*<link rel="canonical" href={window.location.href} />*/}
+						<link
+							rel="shortcut icon"
+							type="image/ico"
+							href={config.BACKURL + '/publishers/' + config.PID + '/favicon'}
+						/>
+						{channels && channels.fb
+							? <link rel="author" href={utils.getFbUrl(channels.fb)} />
+							: ''}
+						{/*<link rel="canonical" href={window.location.href} />*/}
 
-				<meta property="og:sitename" content={story.title} />
-				{/*<meta property="og:url" content={window.location.href} />*/}
-				<meta property="og:title" content={story.title} />
-				<meta property="og:type" content="article" />
-				<meta property="og:image" content={story.cover.medium} />
-				<meta property="og:keywords" content={keywords} />
-				<meta property="og:description" content={description} />
-				<meta property="twitter:card" content="summary_large_image" />
-				<meta property="twitter:image:alt" content={story.title} />
-				<meta property="fb:app_id" content={config.ANALYTIC.FBAPPID} />
+						<meta property="og:sitename" content={story.title} />
+						{/*<meta property="og:url" content={window.location.href} />*/}
+						<meta property="og:title" content={story.title} />
+						<meta property="og:type" content="article" />
+						<meta property="og:image" content={story.cover.medium} />
+						<meta property="og:keywords" content={keywords} />
+						<meta property="og:description" content={description} />
+						<meta property="twitter:card" content="summary_large_image" />
+						<meta property="twitter:image:alt" content={story.title} />
+						<meta property="fb:app_id" content={config.ANALYTIC.FBAPPID} />
 
-				<link rel="stylesheet" href="/css/medium-editor.css" type="text/css"/>
-				<link rel="stylesheet" href="/css/tim.css" type="text/css"/>
-				<link rel="stylesheet" href="/css/medium-editor-insert-plugin.css" type="text/css"/>
-			</Helmet>
+						<link
+							rel="stylesheet"
+							href="/css/medium-editor.css"
+							type="text/css"
+						/>
+						<link rel="stylesheet" href="/css/tim.css" type="text/css" />
+						<link
+							rel="stylesheet"
+							href="/css/medium-editor-insert-plugin.css"
+							type="text/css"
+						/>
+					</Helmet>
 
-			<Wrapper>
-				<TopBarWithNavigation onLoading={this.props.onLoading} title={'Title of AomMoney goes here..'} article={story.title} showTitle={showTopbarTitle}  editButton={'/me/stories/'+story.id+'/edit'} hasCover={hasCover} />
+					<Wrapper>
+						<TopBarWithNavigation
+							onLoading={this.props.onLoading}
+							title={'Title of AomMoney goes here..'}
+							article={story.title}
+							showTitle={showTopbarTitle}
+							editButton={'/me/stories/' + story.id + '/edit'}
+							hasCover={hasCover}
+						/>
 
-				{story.cover.medium!=config.BACKURL+'/imgs/article_cover_landscape.png' &&
-				<BGImg style={{width:'100%',height:'85vh',backgroundPositionY:'bottom'}} src={story.cover.large ||
-						story.cover.medium} className='hidden-mob' alt={story.title}>
-					<Cover/>
-				</BGImg>}
-				{story.coverMobile.medium!=config.BACKURL+'/imgs/article_cover_portrait.png' &&
-				<BGImg style={{width:'100%',height:'85vh'}} src={story.coverMobile.large || story.coverMobile.medium} className='hidden-des' alt={story.title}>
-					<Cover/>
-				</BGImg>}
-				<Content paddingTop={hasCover ? '0px' : '60px'} >
-					<Share ref='share' style={{zIndex:'50'}}>
-						<Stick topOffset={100}>
-							<ShareSideBar shareCount={story.shares ? story.shares.total : 0}/>
-						</Stick>
-					</Share>
+						{story.cover.medium !=
+							config.BACKURL + '/imgs/article_cover_landscape.png' &&
+							<BGImg
+								style={{
+									width: '100%',
+									height: '85vh',
+									backgroundPositionY: 'bottom'
+								}}
+								src={story.cover.large || story.cover.medium}
+								className="hidden-mob"
+								alt={story.title}>
+								<Cover />
+							</BGImg>}
+						{story.coverMobile.medium !=
+							config.BACKURL + '/imgs/article_cover_portrait.png' &&
+							<BGImg
+								style={{ width: '100%', height: '85vh' }}
+								src={story.coverMobile.large || story.coverMobile.medium}
+								className="hidden-des"
+								alt={story.title}>
+								<Cover />
+							</BGImg>}
+						<Content paddingTop={hasCover ? '0px' : '60px'}>
+							<Share ref="share" style={{ zIndex: '50' }}>
+								<Stick topOffset={100}>
+									<ShareSideBar
+										shareCount={story.shares ? story.shares.total : 0}
+									/>
+								</Stick>
+							</Share>
 
-					<Main ref={'TT'}>
-						<StoryDetail story={story} />
-					</Main>
+							<Main ref={'TT'} isMobile={isMobile}>
+								<StoryDetail story={story} />
+							</Main>
 
-					<Aside id='trendingBar' ref='trendingBar'>
-						<Stick topOffset={80} style={{zIndex:'50'}} marginBottom={60}>
-							<TrendingSideBar />
-						</Stick>
-					</Aside>
-				</Content>
+							<Aside id="trendingBar" ref="trendingBar">
+								<Stick
+									topOffset={80}
+									style={{ zIndex: '50' }}
+									marginBottom={60}>
+									<TrendingSideBar />
+								</Stick>
+							</Aside>
+						</Content>
 
-				<Content>
-					{recommends.length!=0&&<RecommendContainer recommend={recommends}/>}
-				</Content>
-				<Footer/>
-			</Wrapper>
-		</div>
-		)
+						<Content>
+							{recommends.length != 0 &&
+								<RecommendContainer recommend={recommends} />}
+						</Content>
+						<Footer />
+					</Wrapper>
+				</div>
+			)
 	}
 }
 

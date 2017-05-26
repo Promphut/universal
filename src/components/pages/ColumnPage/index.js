@@ -32,10 +32,7 @@ const Content = styled.div`
 	flex-flow: row wrap;
 	justify-content: center;
 	padding:50px 0 20px 0;
-
-	@media (min-width: 481px) {
-		min-height: 480px;
-	}
+	min-height: calc(100vh - ${props => (props.isMobile ? '321px' : '501px')});
 `
 
 const Main = styled.div`
@@ -289,7 +286,7 @@ class ColumnPage extends React.Component {
 					alt={column.name}
 					child={ChildCover}
 				/>
-				<Content>
+				<Content isMobile={isMobile}>
 					{feedCount === 0
 						? <Main>
 								<StoryMenu
@@ -336,7 +333,7 @@ class ColumnPage extends React.Component {
 					</Aside>
 				</Content>
 
-				<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="600"/>
+				<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="600" />
 				<Footer />
 			</Wrapper>
 		)
