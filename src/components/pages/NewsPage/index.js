@@ -174,7 +174,8 @@ class NewsPage extends React.Component {
 			trendingNews: [],
 
 			isMobile: false,
-			selectTab: 0
+			selectTab: 0,
+			shortDesc: ''
 		}
 	}
 
@@ -234,7 +235,9 @@ class NewsPage extends React.Component {
 		this.setState({
 			isMobile: utils.isMobile()
 		})
-		// this.progress(100)
+		api.getColumnFromSlug('news').then(col => {
+			this.setState({ shortDesc: col.shortDesc })
+		})
 	}
 
 	render() {
@@ -244,7 +247,8 @@ class NewsPage extends React.Component {
 			hasMoreFeed,
 			trendingNews,
 			isMobile,
-			selectTab
+			selectTab,
+			shortDesc
 		} = this.state
 		let pub = this.context.setting.publisher
 		let { theme } = this.context.setting.publisher
@@ -276,10 +280,7 @@ class NewsPage extends React.Component {
 					<Feed>
 						<Head className="serif-font hidden-mob">NEWS</Head>
 						<Line className="hidden-mob" style={{ top: '-41px' }} />
-						<Text className="center">
-							"Don't Be Left Behind" เกาะติดเทรนด์ปัจจุบัน
-							อัพเดททุกข่าวสารในวงการธุรกิจและเทคโนโลยี
-						</Text>
+						<Text className="center">{shortDesc}</Text>
 					</Feed>
 				</Content>
 				<Content style={{ paddingTop: '0px' }} className="hidden-mob">
