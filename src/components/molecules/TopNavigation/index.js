@@ -73,6 +73,7 @@ const TopNavigation = ({ menu }) => {
 
 	let items = []
 	for (let i = 0; i < cols.length; i++) {
+		if (cols[i].slug == 'news') continue
 		items.push(
 			<DropdownList
 				key={i}
