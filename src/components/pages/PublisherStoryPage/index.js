@@ -1,25 +1,35 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { OverlayImg, Pagination,Alert,EditMenu,BoxMenu,MenuList,DropdownWithIcon,StoriesTable,Filter} from 'components'
+import {
+	OverlayImg,
+	Pagination,
+	Alert,
+	EditMenu,
+	BoxMenu,
+	MenuList,
+	DropdownWithIcon,
+	StoriesTable,
+	Filter
+} from 'components'
 import FontIcon from 'material-ui/FontIcon'
 import styled from 'styled-components'
 import Popover from 'material-ui/Popover'
-import Menu from 'material-ui/Menu';
-import MenuItem from 'material-ui/MenuItem';
-import DropDownMenu from 'material-ui/DropDownMenu';
+import Menu from 'material-ui/Menu'
+import MenuItem from 'material-ui/MenuItem'
+import DropDownMenu from 'material-ui/DropDownMenu'
 //import {Link} from 'react-router-dom'
 import auth from 'components/auth'
-import Snackbar from 'material-ui/Snackbar';
-import Dialog from 'material-ui/Dialog';
+import Snackbar from 'material-ui/Snackbar'
+import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 import IconButton from 'material-ui/IconButton'
 import TextField from 'material-ui/TextField'
-import CircularProgress from 'material-ui/CircularProgress';
+import CircularProgress from 'material-ui/CircularProgress'
 import moment from 'moment'
 import api from 'components/api'
 import { Tabs, Tab } from 'material-ui/Tabs'
-import SwipeableViews from 'react-swipeable-views';
-import AutoComplete from 'material-ui/AutoComplete';
+import SwipeableViews from 'react-swipeable-views'
+import AutoComplete from 'material-ui/AutoComplete'
 import utils from '../../../services/utils'
 import config from '../../../config'
 
@@ -27,7 +37,7 @@ const Container = styled.div`
   width:100%;
 `
 
-const Section1  = styled.div`
+const Section1 = styled.div`
   display:flex;
 `
 
@@ -61,21 +71,21 @@ const Icon = styled.div`
 `
 
 const Primary = styled.div`
-  background-color:${props=> props.theme.primaryColor};
+  background-color:${props => props.theme.primaryColor};
   color:white;
   text-align:center;
   padding:15px 5px 15px 5px;
   font-size:16px;
-  border:2px solid ${props=> props.theme.primaryColor};
+  border:2px solid ${props => props.theme.primaryColor};
 `
 
 const Second = styled.div`
   background-color:white;
-  color:${props=> props.theme.primaryColor};
+  color:${props => props.theme.primaryColor};
   text-align:center;
   padding:15px 5px 15px 5px;
   font-size:16px;
-  border:2px solid ${props=> props.theme.primaryColor};
+  border:2px solid ${props => props.theme.primaryColor};
 `
 
 const Cont = styled.div`
@@ -156,491 +166,621 @@ const AutoCompleteBox = styled.div`
 `
 
 const STATUS = {
-  'DRAFTED': 0,
-  'PUBLISHED': 1
+	DRAFTED: 0,
+	PUBLISHED: 1
 }
 
-const dataSource = [{text: 'text0', value: 0, id:0},
-                    {text: 'text1', value: 1, id:1},
-                    {text: 'text2', value: 2, id:2}]
+const dataSource = [
+	{ text: 'text0', value: 0, id: 0 },
+	{ text: 'text1', value: 1, id: 1 },
+	{ text: 'text2', value: 2, id: 2 }
+]
 
 class PublisherStoryPage extends React.Component {
-  state = {
-    selectColumn:'all',
-    selectStatus: STATUS.PUBLISHED,
+	state = {
+		selectColumn: 'all',
+		selectStatus: STATUS.PUBLISHED,
 
-    stories: [],
-    storiesCount: 0,
-    selectStoryId:0,
+		stories: [],
+		storiesCount: 0,
+		selectStoryId: 0,
 
-    columns:[],
-    columnArray:[],
+		columns: [],
+		columnArray: [],
 
-    currentPage: 0,
-    totalPages: 0,
+		currentPage: 0,
+		totalPages: 0,
 
-    sort:'latest',
+		sort: 'latest',
 
-    alert:false,
-      alertConfirm:function(){},
-      alertLoading:false,
-      onLoad:false,
-      snackbar:false,
-      snackbarMS:'',
-      editStory:false,
-      selectTab: 0,
-      searchText:'',
-      sortBy:'',
-      sortByState:0
-  }
-
-  FEED_LIMIT =  config.FEED_LIMIT
-
-  static contextTypes = {
-    setting: PropTypes.object
-  }
-
-  removeColumn = () => {
-    let cid = this.state.selectColumn
-
-    api.removeColumn(cid)
-    .then(res => {
-      this.setState({
-        alert:false,
-        alertDesc:'',
-        snackbar:true,
-        snackbarMS:'Delete Column Complete !',
-
-        // when col removed, select the default 'all' columns
-        selectColumn: 'all',
-        selectStatus: STATUS.PUBLISHED
-      },
-      () => {
-        this.getColumns()
-        this.getStories()
-      }
-      )
-    })
-  }
-
-  getCurrentFilter = () => {
-    var {id,value,searchText} = this.refs.filter.state
-    if(!searchText){
-      value = ''
-    }
-    return {
-      writer: value=='Writer' ? parseInt(id) : null, 
-      column: value=='Column' ? parseInt(id) : null, 
-      status: this.state.selectStatus
-    }
-  }
-
-  getStories = () => {
-    this.setState({onLoad:true})
-    let {currentPage, sort,sortBy,sortByState} = this.state
-    var {id,value,searchText} = this.refs.filter.state
-    if(sortBy=="stats"){
-      sortBy='popular'
-    }else if(sortBy=='drafted'){
-      sortBy='published'
-    }
-    var sb = sortBy ? [sortBy,parseInt(sortByState)] : null
-    if(value=='Title'&&searchText){
-      api.filterStoryByTitle(searchText,sb).then((s)=>{
-        //console.log('HAHAHA', s, utils.getTotalPages(this.FEED_LIMIT, s.length))
-        this.setState({
-          stories: s,
-          storiesCount: s.length,
-          onLoad: false,
-          totalPages: utils.getTotalPages(this.FEED_LIMIT, s.length)
-        })
-      })
-    }else{
-      api.getFeed('story', this.getCurrentFilter(), null, [sb], currentPage, this.FEED_LIMIT, {onlyAuthorized: true})
-      .then(result => {
-        this.setState({
-          stories: result.feed,
-          storiesCount: result.count,
-          onLoad: false,
-          totalPages: utils.getTotalPages(this.FEED_LIMIT, result.count[this.state.selectStatus])
-        })
-      })
-    }
-  }
-
-  filterPublished = () => {
-    this.setState(
-      { selectStatus:STATUS.PUBLISHED },
-      () => {
-        this.getStories()
-      }
-    )
-  }
-
-  filterDrafted = () => {
-    this.setState(
-      { selectStatus:STATUS.DRAFTED },
-      () => {
-        this.getStories()
-      }
-    )
-  }
-
-  recent = () => {
-    this.setState(
-      { sort:'latest' },
-      () => {
-        this.getStories()
-      }
-    )
-  }
-
-  popular = () => {
-    this.setState(
-      { sort:'popular' },
-      () => {
-        this.getStories()
-      }
-    )
-  }
-
-  changePage = (e) => {
-    this.setState(
-      { currentPage: e-1 },
-      () => {
-        this.getStories()
-      }
-    )
-  }
-
-  handleTouchTap = (e) => {
-    e.preventDefault();
-
-    this.setState({
-      alert: true,
-      alertWhere: e.currentTarget,
-    });
-  }
-
-  handleRequestClose = () => {
-    this.setState({
-      alert: false,
-      alertDesc:''
-    });
-  }
-
-  goEditPage = () => {
-    this.props.history.push('/editor/columns/'+this.state.selectColumn+'/settings')
-  }
-
-  alertDelete = (e) => {
-    this.setState({
-      alert: true,
-      alertWhere: e.currentTarget,
-      alertChild: '',
-      alertDesc: 'Delete is permanent. Are you sure?',
-      alertConfirm: this.removeColumn
-    })
-  }
-
-  alertNew = (e) => {
-    this.setState({
-      alert: true,
-      alertWhere: e.currentTarget,
-      alertChild: <div className='row'><TextField hintText="Column Name" id='newColName' style={{width:'170px',margin:'10px 15px 0 15px'}}/></div>,
-      alertConfirm: this.newColumn
-    })
-  }
-
-  newColumn = () => {
-    this.setState({alertLoading:true})
-
-    let column = {
-      name:document.getElementById('newColName').value,
-      shortDesc:''
-    }
-
-    api.newColumn(column)
-    .then(col => {
-
-      this.getColumns()
-      .then(() => {
-        this.setState({
-          alertLoading:false,
-          alert:false,
-          snackbar:true,
-          snackbarMS:'Create New Column Complete!',
-
-          selectColumn:col.id,
-          selectStatus: STATUS.PUBLISHED
-        })
-
-        this.getStories()
-      })
-
-    })
-  }
-
-  closeSnackbar = () => {
-    this.setState({snackbar:false})
-  }
-
-  closeEditStory = () => {
-    this.setState({editStory:false})
-  }
-
-  editStory = (e,data) => {
-    //console.log(data)
-    this.setState({
-      editStory:true,
-      editStoryWhere:e.currentTarget,
-      selectStoryId:data
-    })
-  }
-
-  alertDeleteStory = (e) => {
-    this.setState({
-      alert:true,
-      alertWhere:e.currentTarget,
-      alertChild: '',
-      alertDesc:'Are you sure to delete this story?',
-      alertConfirm:this.deleteStory
-    })
-  }
-
-  alertUnpublishStory = (e) => {
-    this.setState({
-      alert:true,
-      alertWhere:e.currentTarget,
-      alertChild: '',
-      alertDesc:'Are you sure to unpublish this story?',
-      alertConfirm:this.unpublishStory
-    })
-  }
-
-  alertPublishStory = (e) => {
-    this.setState({
-      alert:true,
-      alertWhere:e.currentTarget,
-      alertChild: '',
-      alertDesc:'Are you sure to publish this story?',
-      alertConfirm:this.publishStory
-    })
-  }
-
-  deleteStory = () => {
-    this.setState({editStory:false,alert:false})
-
-    api.deleteStory(this.state.selectStoryId)
-    .then(res => {
-      this.getStories()
-    })
-  }
-
-  unpublishStory = () => {
-    this.setState({editStory:false,alert:false})
-
-    api.setStoryStatus(this.state.selectStoryId, 0)
-    .then(res => {
-      this.getStories()
-    })
-  }
-
-  publishStory = () => {
-    this.setState({editStory:false,alert:false})
-
-    api.setStoryStatus(this.state.selectStoryId, 1)
-    .then(res => {
-      this.getStories()
-    })
-  }
-
-  goEditStory = () => {
-    this.props.history.push('/me/stories/'+this.state.selectStoryId+'/edit')
-  }
-
-  handleChangeTab = (e) => {
-		this.setState({selectTab: e},()=>{
-      if(!e){
-        this.filterPublished()
-      }else{
-        this.filterDrafted()
-      }
-    })
+		alert: false,
+		alertConfirm: function() {},
+		alertLoading: false,
+		onLoad: false,
+		snackbar: false,
+		snackbarMS: '',
+		editStory: false,
+		selectTab: 0,
+		searchText: '',
+		sortBy: '',
+		sortByState: 0
 	}
 
-  sortBy = (e,val) => {
-    e.preventDefault()
-    var {sortBy,sortByState}  = this.state
-    if(sortByState==0){
-      this.setState({
-        sortBy:val,
-        sortByState:1
-      },()=>{this.getStories()})
-    }else if(sortByState==1&&sortBy==val){
-      this.setState({
-        sortByState:(-1)
-      },()=>{this.getStories()})
-    }else if(sortByState==1&&sortBy!=val){
-      this.setState({
-        sortBy:val,
-        sortByState:1
-      },()=>{this.getStories()})
-    }else if(sortByState==(-1)&&sortBy==val){
-      this.setState({
-        sortByState:1
-      },()=>{this.getStories()})
-    }else if(sortByState==(-1)&&sortBy!=val){
-      this.setState({
-        sortBy:val,
-        sortByState:1
-      },()=>{this.getStories()})
-    }
-  }
+	FEED_LIMIT = config.FEED_LIMIT
 
- componentDidMount(){
-    this.getStories()
-  }
-
-  render(){
-
-    //console.log('theme',theme)
-    let { sort,totalPages,storiesCount,editStory,
-      editStoryWhere,selectStatus,snackbar,snackbarMS,
-      currentPage,stories,columns,selectColumn,alert,alertDesc
-      ,alertWhere,alertLoading,alertChild,alertConfirm,columnArray,
-      onLoad,selectTab,searchText,sortBy,sortByState} = this.state
-    //console.log('storiesCount',storiesCount)
-    let {theme} = this.context.setting.publisher
-
-    const styles = {
-      label:{
-        fontSize:'30px'
-      },
-      underline:{
-        background:'none',
-        border:'none'
-      },
-      selected:{
-        backgroundColor:theme.primaryColor,
-        color:'white',
-        fill:'white'
-      },
-      menuItem:{
-        padding:'15px 40px 15px 15px',
-      },
-      newColumn:{
-        color:theme.primaryColor,
-        fontWeight:'bold'
-      },
-      showInactive:{
-        textDecoration:'underline',
-        color:'#8F8F8F'
-      },
-      headline: {
-		fontSize: 24,
-		paddingTop: 16,
-		marginBottom: 12,
-		fontWeight: 400
-	},
-	tabs: {
-		background: 'none',
-		height: '50px',
-		color: '#222222'
-	},
-	tab: {
-		fontFamily: "'Nunito', 'Mitr'",
-		fontSize: '16px',
-		fontWeight: 'bold',
-		textTransform: 'none'
+	static contextTypes = {
+		setting: PropTypes.object
 	}
-    }
 
-    const dataSourceConfig = {text: 'text', value: 'value', id:'id'};
-    return (
-      <Container>
-        <Snackbar
-          open={snackbar}
-          message={snackbarMS}
-          autoHideDuration={4000}
-          onRequestClose={this.closeSnackbar}
-          style={{backgroundColor:theme.primaryColor}}
-          bodyStyle={{backgroundColor:theme.primaryColor,textAlign:'center'}}
-          className="nunito-font"
-        />
-        <Popover
-          open={editStory}
-          anchorEl={editStoryWhere}
-          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-          targetOrigin={{horizontal: 'left', vertical: 'top'}}
-          style={{border:'2px solid '+theme.primaryColor}}
-          onRequestClose={this.closeEditStory}
-        >
-          <MenuItem onClick={this.goEditStory} style={{color:theme.primaryColor,fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:theme.primaryColor}}>edit</FontIcon>}>Edit Story</MenuItem>
-          <MenuItem onClick={this.alertDeleteStory} style={{color:theme.primaryColor,fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:theme.primaryColor}}>delete</FontIcon>}>Delete</MenuItem>
-          {selectStatus===STATUS.PUBLISHED ? <MenuItem onClick={this.alertUnpublishStory} style={{color:theme.primaryColor,fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:theme.primaryColor}}>drafts</FontIcon>}>Unpublish</MenuItem>
-          : <MenuItem onClick={this.alertPublishStory} style={{color:theme.primaryColor,fontSize:'17px'}} className='nunito-font' leftIcon={<FontIcon className="material-icons" style={{color:theme.primaryColor}}>assignment_turned_in</FontIcon>}>Publish</MenuItem>}
-        </Popover>
-        <Alert
-          open={alert}
-          anchorEl={alertWhere}
-          onRequestClose={this.handleRequestClose}
-          description={alertDesc}
-          child={alertChild}
-          loading={alertLoading}
-          confirm={alertConfirm}/>
-        
-        <Header>
-          <Title>Manage Stories</Title>
-        </Header>
-        <Section1>
-          <div style={{flex:1}}>
-            <Tabs
-              style={{ width: 320,margin:'20px',marginBottom:'0'}}
-              tabItemContainerStyle={{ ...styles.tabs }}
-              inkBarStyle={{ background: theme.accentColor, height: 3,zIndex:2 }}
-              onChange={this.handleChangeTab}
-              value={selectTab}>
-              <Tab
-                buttonStyle={{...styles.tab,color: selectTab == 0 ? theme.accentColor : '#C4C4C4'}}
-                label={(storiesCount[STATUS.PUBLISHED] || ' 0 ') +' Published'}
-                value={0}
-              />
-              <Tab
-                buttonStyle={{...styles.tab,color: selectTab == 1 ? theme.accentColor : '#C4C4C4'}}
-                label={(storiesCount[STATUS.DRAFTED] || ' 0 ') + ' Draft'}
-                value={1}
-              />
-            </Tabs>
-            <Line/>
-          </div>
-          <div style={{flex:1,overflow:'hidden'}}>
-            <Filter
-              ref='filter'
-              search={this.getStories}
-            />
-          </div>
-        </Section1>
+	removeColumn = () => {
+		let cid = this.state.selectColumn
 
-        <Section2>
-          <SwipeableViews
-            index={selectTab}
-            onChangeIndex={this.handleChangeTab}
-          >
-            <div>
-              <StoriesTable stories={stories} selectStatus={selectStatus} onload={onLoad} editStory={this.editStory} sortBy={this.sortBy} sort={sortBy} sortState={sortByState}/>
-            </div>
-            <div>
-              <StoriesTable stories={stories} selectStatus={selectStatus} editStory={this.editStory} sortBy={this.sortBy} sort={sortBy} sortState={sortByState}/>
-            </div>
-          </SwipeableViews>
-        </Section2>
-        {/*<div className='row' style={{padding:'30px 15px 20px 30px'}}>
+		api.removeColumn(cid).then(res => {
+			this.setState(
+				{
+					alert: false,
+					alertDesc: '',
+					snackbar: true,
+					snackbarMS: 'Delete Column Complete !',
+
+					// when col removed, select the default 'all' columns
+					selectColumn: 'all',
+					selectStatus: STATUS.PUBLISHED
+				},
+				() => {
+					this.getColumns()
+					this.getStories()
+				}
+			)
+		})
+	}
+
+	getCurrentFilter = () => {
+		var { id, value, searchText } = this.refs.filter.state
+		if (!searchText) {
+			value = ''
+		}
+		return {
+			writer: value == 'Writer' ? parseInt(id) : null,
+			column: value == 'Column' ? parseInt(id) : null,
+			status: this.state.selectStatus
+		}
+	}
+
+	getStories = () => {
+		this.setState({ onLoad: true })
+		let { currentPage, sort, sortBy, sortByState } = this.state
+		var { id, value, searchText } = this.refs.filter.state
+		if (sortBy == 'stats') {
+			sortBy = 'popular'
+		} else if (sortBy == 'drafted') {
+			sortBy = 'published'
+		}
+		var sb = sortBy ? [sortBy, parseInt(sortByState)] : null
+		if (value == 'Title' && searchText) {
+			api.filterStoryByTitle(searchText, sb).then(s => {
+				//console.log('HAHAHA', s, utils.getTotalPages(this.FEED_LIMIT, s.length))
+				this.setState({
+					stories: s,
+					storiesCount: s.length,
+					onLoad: false,
+					totalPages: utils.getTotalPages(this.FEED_LIMIT, s.length)
+				})
+			})
+		} else {
+			let type
+
+			if (this.props.match.path == '/editor/manage/news') {
+				type = 'news'
+			} else if (this.props.match.path == '/editor/manage/stories') {
+				type = 'article'
+			}
+
+			api
+				.getFeed(
+					type,
+					this.getCurrentFilter(),
+					null,
+					[sb],
+					currentPage,
+					this.FEED_LIMIT,
+					{ onlyAuthorized: true }
+				)
+				.then(result => {
+					console.log(result)
+
+					this.setState({
+						stories: result.feed,
+						storiesCount: result.count,
+						onLoad: false,
+						totalPages: utils.getTotalPages(
+							this.FEED_LIMIT,
+							result.count[this.state.selectStatus]
+						)
+					})
+				})
+		}
+	}
+
+	filterPublished = () => {
+		this.setState({ selectStatus: STATUS.PUBLISHED }, () => {
+			this.getStories()
+		})
+	}
+
+	filterDrafted = () => {
+		this.setState({ selectStatus: STATUS.DRAFTED }, () => {
+			this.getStories()
+		})
+	}
+
+	recent = () => {
+		this.setState({ sort: 'latest' }, () => {
+			this.getStories()
+		})
+	}
+
+	popular = () => {
+		this.setState({ sort: 'popular' }, () => {
+			this.getStories()
+		})
+	}
+
+	changePage = e => {
+		this.setState({ currentPage: e - 1 }, () => {
+			this.getStories()
+		})
+	}
+
+	handleTouchTap = e => {
+		e.preventDefault()
+
+		this.setState({
+			alert: true,
+			alertWhere: e.currentTarget
+		})
+	}
+
+	handleRequestClose = () => {
+		this.setState({
+			alert: false,
+			alertDesc: ''
+		})
+	}
+
+	goEditPage = () => {
+		this.props.history.push(
+			'/editor/columns/' + this.state.selectColumn + '/settings'
+		)
+	}
+
+	alertDelete = e => {
+		this.setState({
+			alert: true,
+			alertWhere: e.currentTarget,
+			alertChild: '',
+			alertDesc: 'Delete is permanent. Are you sure?',
+			alertConfirm: this.removeColumn
+		})
+	}
+
+	alertNew = e => {
+		this.setState({
+			alert: true,
+			alertWhere: e.currentTarget,
+			alertChild: (
+				<div className="row">
+					<TextField
+						hintText="Column Name"
+						id="newColName"
+						style={{ width: '170px', margin: '10px 15px 0 15px' }}
+					/>
+				</div>
+			),
+			alertConfirm: this.newColumn
+		})
+	}
+
+	newColumn = () => {
+		this.setState({ alertLoading: true })
+
+		let column = {
+			name: document.getElementById('newColName').value,
+			shortDesc: ''
+		}
+
+		api.newColumn(column).then(col => {
+			this.getColumns().then(() => {
+				this.setState({
+					alertLoading: false,
+					alert: false,
+					snackbar: true,
+					snackbarMS: 'Create New Column Complete!',
+
+					selectColumn: col.id,
+					selectStatus: STATUS.PUBLISHED
+				})
+
+				this.getStories()
+			})
+		})
+	}
+
+	closeSnackbar = () => {
+		this.setState({ snackbar: false })
+	}
+
+	closeEditStory = () => {
+		this.setState({ editStory: false })
+	}
+
+	editStory = (e, data) => {
+		//console.log(data)
+		this.setState({
+			editStory: true,
+			editStoryWhere: e.currentTarget,
+			selectStoryId: data
+		})
+	}
+
+	alertDeleteStory = e => {
+		this.setState({
+			alert: true,
+			alertWhere: e.currentTarget,
+			alertChild: '',
+			alertDesc: 'Are you sure to delete this story?',
+			alertConfirm: this.deleteStory
+		})
+	}
+
+	alertUnpublishStory = e => {
+		this.setState({
+			alert: true,
+			alertWhere: e.currentTarget,
+			alertChild: '',
+			alertDesc: 'Are you sure to unpublish this story?',
+			alertConfirm: this.unpublishStory
+		})
+	}
+
+	alertPublishStory = e => {
+		this.setState({
+			alert: true,
+			alertWhere: e.currentTarget,
+			alertChild: '',
+			alertDesc: 'Are you sure to publish this story?',
+			alertConfirm: this.publishStory
+		})
+	}
+
+	deleteStory = () => {
+		this.setState({ editStory: false, alert: false })
+
+		api.deleteStory(this.state.selectStoryId).then(res => {
+			this.getStories()
+		})
+	}
+
+	unpublishStory = () => {
+		this.setState({ editStory: false, alert: false })
+
+		api.setStoryStatus(this.state.selectStoryId, 0).then(res => {
+			this.getStories()
+		})
+	}
+
+	publishStory = () => {
+		this.setState({ editStory: false, alert: false })
+
+		api.setStoryStatus(this.state.selectStoryId, 1).then(res => {
+			this.getStories()
+		})
+	}
+
+	goEditStory = () => {
+		this.props.history.push('/me/stories/' + this.state.selectStoryId + '/edit')
+	}
+
+	handleChangeTab = e => {
+		this.setState({ selectTab: e }, () => {
+			if (!e) {
+				this.filterPublished()
+			} else {
+				this.filterDrafted()
+			}
+		})
+	}
+
+	sortBy = (e, val) => {
+		e.preventDefault()
+		var { sortBy, sortByState } = this.state
+		if (sortByState == 0) {
+			this.setState(
+				{
+					sortBy: val,
+					sortByState: 1
+				},
+				() => {
+					this.getStories()
+				}
+			)
+		} else if (sortByState == 1 && sortBy == val) {
+			this.setState(
+				{
+					sortByState: -1
+				},
+				() => {
+					this.getStories()
+				}
+			)
+		} else if (sortByState == 1 && sortBy != val) {
+			this.setState(
+				{
+					sortBy: val,
+					sortByState: 1
+				},
+				() => {
+					this.getStories()
+				}
+			)
+		} else if (sortByState == -1 && sortBy == val) {
+			this.setState(
+				{
+					sortByState: 1
+				},
+				() => {
+					this.getStories()
+				}
+			)
+		} else if (sortByState == -1 && sortBy != val) {
+			this.setState(
+				{
+					sortBy: val,
+					sortByState: 1
+				},
+				() => {
+					this.getStories()
+				}
+			)
+		}
+	}
+
+	componentDidMount() {
+		this.getStories()
+	}
+
+	render() {
+		//console.log('theme',theme)
+		let {
+			sort,
+			totalPages,
+			storiesCount,
+			editStory,
+			editStoryWhere,
+			selectStatus,
+			snackbar,
+			snackbarMS,
+			currentPage,
+			stories,
+			columns,
+			selectColumn,
+			alert,
+			alertDesc,
+			alertWhere,
+			alertLoading,
+			alertChild,
+			alertConfirm,
+			columnArray,
+			onLoad,
+			selectTab,
+			searchText,
+			sortBy,
+			sortByState
+		} = this.state
+		//console.log('storiesCount',storiesCount)
+		let { theme } = this.context.setting.publisher
+
+		const styles = {
+			label: {
+				fontSize: '30px'
+			},
+			underline: {
+				background: 'none',
+				border: 'none'
+			},
+			selected: {
+				backgroundColor: theme.primaryColor,
+				color: 'white',
+				fill: 'white'
+			},
+			menuItem: {
+				padding: '15px 40px 15px 15px'
+			},
+			newColumn: {
+				color: theme.primaryColor,
+				fontWeight: 'bold'
+			},
+			showInactive: {
+				textDecoration: 'underline',
+				color: '#8F8F8F'
+			},
+			headline: {
+				fontSize: 24,
+				paddingTop: 16,
+				marginBottom: 12,
+				fontWeight: 400
+			},
+			tabs: {
+				background: 'none',
+				height: '50px',
+				color: '#222222'
+			},
+			tab: {
+				fontFamily: "'Nunito', 'Mitr'",
+				fontSize: '16px',
+				fontWeight: 'bold',
+				textTransform: 'none'
+			}
+		}
+
+		const dataSourceConfig = { text: 'text', value: 'value', id: 'id' }
+		return (
+			<Container>
+				<Snackbar
+					open={snackbar}
+					message={snackbarMS}
+					autoHideDuration={4000}
+					onRequestClose={this.closeSnackbar}
+					style={{ backgroundColor: theme.primaryColor }}
+					bodyStyle={{
+						backgroundColor: theme.primaryColor,
+						textAlign: 'center'
+					}}
+					className="nunito-font"
+				/>
+				<Popover
+					open={editStory}
+					anchorEl={editStoryWhere}
+					anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+					targetOrigin={{ horizontal: 'left', vertical: 'top' }}
+					style={{ border: '2px solid ' + theme.primaryColor }}
+					onRequestClose={this.closeEditStory}>
+					<MenuItem
+						onClick={this.goEditStory}
+						style={{ color: theme.primaryColor, fontSize: '17px' }}
+						className="nunito-font"
+						leftIcon={
+							<FontIcon
+								className="material-icons"
+								style={{ color: theme.primaryColor }}>
+								edit
+							</FontIcon>
+						}>
+						Edit Story
+					</MenuItem>
+					<MenuItem
+						onClick={this.alertDeleteStory}
+						style={{ color: theme.primaryColor, fontSize: '17px' }}
+						className="nunito-font"
+						leftIcon={
+							<FontIcon
+								className="material-icons"
+								style={{ color: theme.primaryColor }}>
+								delete
+							</FontIcon>
+						}>
+						Delete
+					</MenuItem>
+					{selectStatus === STATUS.PUBLISHED
+						? <MenuItem
+								onClick={this.alertUnpublishStory}
+								style={{ color: theme.primaryColor, fontSize: '17px' }}
+								className="nunito-font"
+								leftIcon={
+									<FontIcon
+										className="material-icons"
+										style={{ color: theme.primaryColor }}>
+										drafts
+									</FontIcon>
+								}>
+								Unpublish
+							</MenuItem>
+						: <MenuItem
+								onClick={this.alertPublishStory}
+								style={{ color: theme.primaryColor, fontSize: '17px' }}
+								className="nunito-font"
+								leftIcon={
+									<FontIcon
+										className="material-icons"
+										style={{ color: theme.primaryColor }}>
+										assignment_turned_in
+									</FontIcon>
+								}>
+								Publish
+							</MenuItem>}
+				</Popover>
+				<Alert
+					open={alert}
+					anchorEl={alertWhere}
+					onRequestClose={this.handleRequestClose}
+					description={alertDesc}
+					child={alertChild}
+					loading={alertLoading}
+					confirm={alertConfirm}
+				/>
+
+				<Header>
+					<Title>Manage Stories</Title>
+				</Header>
+				<Section1>
+					<div style={{ flex: 1 }}>
+						<Tabs
+							style={{ width: 320, margin: '20px', marginBottom: '0' }}
+							tabItemContainerStyle={{ ...styles.tabs }}
+							inkBarStyle={{
+								background: theme.accentColor,
+								height: 3,
+								zIndex: 2
+							}}
+							onChange={this.handleChangeTab}
+							value={selectTab}>
+							<Tab
+								buttonStyle={{
+									...styles.tab,
+									color: selectTab == 0 ? theme.accentColor : '#C4C4C4'
+								}}
+								label={(storiesCount[STATUS.PUBLISHED] || ' 0 ') + ' Published'}
+								value={0}
+							/>
+							<Tab
+								buttonStyle={{
+									...styles.tab,
+									color: selectTab == 1 ? theme.accentColor : '#C4C4C4'
+								}}
+								label={(storiesCount[STATUS.DRAFTED] || ' 0 ') + ' Draft'}
+								value={1}
+							/>
+						</Tabs>
+						<Line />
+					</div>
+					<div style={{ flex: 1, overflow: 'hidden' }}>
+						<Filter ref="filter" search={this.getStories} />
+					</div>
+				</Section1>
+
+				<Section2>
+					<SwipeableViews
+						index={selectTab}
+						onChangeIndex={this.handleChangeTab}>
+						<div>
+							<StoriesTable
+								stories={stories}
+								selectStatus={selectStatus}
+								onload={onLoad}
+								editStory={this.editStory}
+								sortBy={this.sortBy}
+								sort={sortBy}
+								sortState={sortByState}
+							/>
+						</div>
+						<div>
+							<StoriesTable
+								stories={stories}
+								selectStatus={selectStatus}
+								editStory={this.editStory}
+								sortBy={this.sortBy}
+								sort={sortBy}
+								sortState={sortByState}
+							/>
+						</div>
+					</SwipeableViews>
+				</Section2>
+				{/*<div className='row' style={{padding:'30px 15px 20px 30px'}}>
           <DropdownWithIcon
             onChange={this.changeColumn}
             menuItem={!columnArray ? null : columnArray}
             value={selectColumn}
-            editMenu={ 
+            editMenu={
               [<MenuList onClick={this.goEditPage} key="edit">Edit</MenuList>,
                <MenuList onClick={this.alertDelete} key='delete'>Delete</MenuList>,
                <MenuList onClick={this.alertNew} key='new'>+ New Column</MenuList>]}
@@ -660,16 +800,17 @@ class PublisherStoryPage extends React.Component {
             </Section1>
           </div>
         </div>*/}
-        {totalPages > 0 && <Page>
-          <Pagination
-            currentPage={currentPage+1}
-            totalPages={totalPages}
-            onChange={this.changePage}
-          />
-        </Page>}
-      </Container>
-    )
-  }
+				{totalPages > 0 &&
+					<Page>
+						<Pagination
+							currentPage={currentPage + 1}
+							totalPages={totalPages}
+							onChange={this.changePage}
+						/>
+					</Page>}
+			</Container>
+		)
+	}
 }
 
-export default PublisherStoryPage;
+export default PublisherStoryPage

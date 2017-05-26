@@ -1,16 +1,29 @@
 import React from 'react'
-import { TopBarWithNavigation, PublisherSettingMenu, Footer, PrivateRoute, PublisherDashboardPage, PublisherSettingPage, PublisherContactAndAboutPage, PublisherStoryPage, ColumnSettingPage, PublisherInsightStories, PublisherInsightColumns, PublisherInsightWriters } from 'components'
+import {
+	TopBarWithNavigation,
+	PublisherSettingMenu,
+	Footer,
+	PrivateRoute,
+	PublisherDashboardPage,
+	PublisherSettingPage,
+	PublisherContactAndAboutPage,
+	PublisherStoryPage,
+	ColumnSettingPage,
+	PublisherInsightStories,
+	PublisherInsightColumns,
+	PublisherInsightWriters
+} from 'components'
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
   width:100%;
-	background: ${props=> props.theme.primaryColor};
-  background: -moz-linear-gradient(-45deg, ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%);
-  background: -webkit-gradient(left top, right bottom, color-stop(0%, ${props=> props.theme.primaryColor}), color-stop(100%, ${props=> props.theme.secondaryColor}));
-  background: -webkit-linear-gradient(-45deg, ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%);
-  background: -o-linear-gradient(-45deg, ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%);
-  background: -ms-linear-gradient(-45deg, ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%);
-  background: linear-gradient(135deg, ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%);
+	background: ${props => props.theme.primaryColor};
+  background: -moz-linear-gradient(-45deg, ${props => props.theme.primaryColor} 0%, ${props => props.theme.secondaryColor} 100%);
+  background: -webkit-gradient(left top, right bottom, color-stop(0%, ${props => props.theme.primaryColor}), color-stop(100%, ${props => props.theme.secondaryColor}));
+  background: -webkit-linear-gradient(-45deg, ${props => props.theme.primaryColor} 0%, ${props => props.theme.secondaryColor} 100%);
+  background: -o-linear-gradient(-45deg, ${props => props.theme.primaryColor} 0%, ${props => props.theme.secondaryColor} 100%);
+  background: -ms-linear-gradient(-45deg, ${props => props.theme.primaryColor} 0%, ${props => props.theme.secondaryColor} 100%);
+  background: linear-gradient(135deg, ${props => props.theme.primaryColor} 0%, ${props => props.theme.secondaryColor} 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00b2b4', endColorstr='#cef1b7', GradientType=1 );
 `
 
@@ -39,30 +52,80 @@ const Aside = styled.div`
 	max-width: 255px;
 `
 
-const PublisherEditor = ({onLoading, location, children, match}) => {
-  return (
-    <Wrapper>
-      <TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={onLoading}/>
-      <Container>
-        <Content>
-          <Aside>
-            <PublisherSettingMenu pathname={location.pathname}/>
-          </Aside>
-          <Main>
-              <PrivateRoute exact path={`${match.url}/`} roles={['ADMIN', 'EDITOR']} component={PublisherDashboardPage} />
-              <PrivateRoute exact path={`${match.url}/settings`} roles={['ADMIN']} component={PublisherSettingPage} />
-              <PrivateRoute exact path={`${match.url}/contact`} roles={['ADMIN']} component={PublisherContactAndAboutPage} />
-              <PrivateRoute exact path={`${match.url}/manage`} roles={['ADMIN', 'EDITOR']} component={PublisherStoryPage} />
-              <PrivateRoute exact path={`${match.url}/columns/settings`} roles={['ADMIN', 'EDITOR']} bypassCidCheck={false} component={ColumnSettingPage} />
-              <PrivateRoute exact path={`${match.url}/stories`} roles={['ADMIN', 'EDITOR']} component={PublisherInsightStories} />
-              <PrivateRoute exact path={`${match.url}/columns`} roles={['ADMIN', 'EDITOR']} component={PublisherInsightColumns} />
-              <PrivateRoute exact path={`${match.url}/writers`} roles={['ADMIN', 'EDITOR']} component={PublisherInsightWriters} />
-          </Main>
-        </Content>
-      </Container>
-      <Footer/>
-   </Wrapper>
-  )
+const PublisherEditor = ({ onLoading, location, children, match }) => {
+	return (
+		<Wrapper>
+			<TopBarWithNavigation
+				title={'Title of AomMoney goes here..'}
+				onLoading={onLoading}
+			/>
+			<Container>
+				<Content>
+					<Aside>
+						<PublisherSettingMenu pathname={location.pathname} />
+					</Aside>
+					<Main>
+						<PrivateRoute
+							exact
+							path={`${match.url}/`}
+							roles={['ADMIN', 'EDITOR']}
+							component={PublisherDashboardPage}
+						/>
+						<PrivateRoute
+							exact
+							path={`${match.url}/stories`}
+							roles={['ADMIN', 'EDITOR']}
+							component={PublisherInsightStories}
+						/>
+						<PrivateRoute
+							exact
+							path={`${match.url}/columns`}
+							roles={['ADMIN', 'EDITOR']}
+							component={PublisherInsightColumns}
+						/>
+						<PrivateRoute
+							exact
+							path={`${match.url}/writers`}
+							roles={['ADMIN', 'EDITOR']}
+							component={PublisherInsightWriters}
+						/>
+						<PrivateRoute
+							exact
+							path={`${match.url}/manage/news`}
+							roles={['ADMIN', 'EDITOR']}
+							component={PublisherStoryPage}
+						/>
+						<PrivateRoute
+							exact
+							path={`${match.url}/manage/stories`}
+							roles={['ADMIN', 'EDITOR']}
+							component={PublisherStoryPage}
+						/>
+						<PrivateRoute
+							exact
+							path={`${match.url}/settings`}
+							roles={['ADMIN']}
+							component={PublisherSettingPage}
+						/>
+						<PrivateRoute
+							exact
+							path={`${match.url}/settings/columns`}
+							roles={['ADMIN', 'EDITOR']}
+							bypassCidCheck={false}
+							component={ColumnSettingPage}
+						/>
+						<PrivateRoute
+							exact
+							path={`${match.url}/settings/contact`}
+							roles={['ADMIN']}
+							component={PublisherContactAndAboutPage}
+						/>
+					</Main>
+				</Content>
+			</Container>
+			<Footer />
+		</Wrapper>
+	)
 }
 
 export default PublisherEditor
