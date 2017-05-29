@@ -46,7 +46,7 @@ class PublisherSettingMenu extends React.Component {
 
 		this.state = {
 			selectedIndex: props.pathname,
-			openInsights: true,
+			openInsights: false,
 			openManage: false,
 			openSettings: false
 		}
@@ -56,31 +56,14 @@ class PublisherSettingMenu extends React.Component {
 		this.props.history.push(path)
 	}
 
-	toggleNestedInsights = path => {
-		this.setState({
-			openInsights: true,
-			openManage: false,
-			openSettings: false
-		})
-		this.changePath(path)
-	}
-
-	toggleNestedColumns = path => {
-		this.setState({
-			openInsights: false,
-			openManage: true,
-			openSettings: false
-		})
-		this.changePath(path)
-	}
-
-	toggleNestedSettings = path => {
-		this.setState({
-			openInsights: false,
-			openManage: false,
-			openSettings: true
-		})
-		this.changePath(path)
+	toggleNested = menu => {
+		if (menu == 'insight') {
+			this.setState({ openInsights: !this.state.openInsights })
+		} else if (menu == 'manage') {
+			this.setState({ openManage: !this.state.openManage })
+		} else if (menu == 'setting') {
+			this.setState({ openSettings: !this.state.openSettings })
+		}
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -93,6 +76,47 @@ class PublisherSettingMenu extends React.Component {
 
 	componentDidMount() {
 		this.setState({ selectedIndex: this.props.pathname })
+
+		const openInsights = [
+			'/editor',
+			'/editor/',
+			'/editor/stories',
+			'/editor/stories/',
+			'/editor/columns',
+			'/editor/columns/',
+			'/editor/writers',
+			'/editor/writers/'
+		]
+		const openManage = [
+			'/editor/manage/news',
+			'/editor/manage/news/',
+			'/editor/manage/stories',
+			'/editor/manage/stories/'
+		]
+		const openSettings = [
+			'/editor/settings',
+			'/editor/settings/',
+			'/editor/settings/contact',
+			'/editor/settings/contact/',
+			'/editor/settings/publishing',
+			'/editor/settings/publishing/',
+			'/editor/settings/columns',
+			'/editor/settings/columns/'
+		]
+
+		if (openInsights.indexOf(this.props.pathname) != -1) {
+			this.setState({
+				openInsights: true
+			})
+		} else if (openManage.indexOf(this.props.pathname) != -1) {
+			this.setState({
+				openManage: true
+			})
+		} else if (openSettings.indexOf(this.props.pathname) != -1) {
+			this.setState({
+				openSettings: true
+			})
+		}
 	}
 
 	componentWillMount() {
@@ -118,7 +142,7 @@ class PublisherSettingMenu extends React.Component {
 									theme.accentColor) ||
 								(this.props.pathname == '/editor/writers' && theme.accentColor)
 						}}
-						onClick={() => this.toggleNestedInsights('/editor/')}
+						onClick={() => this.toggleNested('insight')}
 						value={
 							(this.props.pathname == '/editor/' && this.props.pathname) ||
 								(this.props.pathname == '/editor/stories' &&
@@ -201,7 +225,7 @@ class PublisherSettingMenu extends React.Component {
 								(this.props.pathname == '/editor/manage/stories' &&
 									theme.accentColor)
 						}}
-						onClick={() => this.toggleNestedColumns('/editor/manage/news')}
+						onClick={() => this.toggleNested('manage')}
 						value={
 							(this.props.pathname == '/editor/manage/news' &&
 								this.props.pathname) ||
@@ -251,38 +275,42 @@ class PublisherSettingMenu extends React.Component {
 						}}
 					/>
 
-					{this.isAdmin &&
-						<ListItem
-							style={{
-								...styles.listItem,
-								backgroundColor: (selectedIndex == '/editor/settings/' &&
+					<ListItem
+						style={{
+							...styles.listItem,
+							backgroundColor: (selectedIndex == '/editor/settings/' &&
+								theme.accentColor) ||
+								(this.props.pathname == '/editor/settings/columns' &&
 									theme.accentColor) ||
-									(this.props.pathname == '/editor/settings/stories' &&
-										theme.accentColor) ||
-									(this.props.pathname == '/editor/settings/contact' &&
-										theme.accentColor)
-							}}
-							onClick={() => this.toggleNestedSettings('/editor/settings/')}
-							value={
-								(this.props.pathname == '/editor/settings/' &&
+								(this.props.pathname == '/editor/settings/contact' &&
+									theme.accentColor) ||
+								(this.props.pathname == '/editor/settings/publishing' &&
+									theme.accentColor)
+						}}
+						onClick={() => this.toggleNested('setting')}
+						value={
+							(this.props.pathname == '/editor/settings/' &&
+								this.props.pathname) ||
+								(this.props.pathname == '/editor/settings/columns' &&
 									this.props.pathname) ||
-									(this.props.pathname == '/editor/settings/columns' &&
-										this.props.pathname) ||
-									(this.props.pathname == '/editor/settings/contact' &&
-										this.props.pathname)
-							}
-							primaryTogglesNestedList={true}
-							className="nunito-font"
-							primaryText="Settings"
-							open={openSettings}
-							rightIcon={
-								<FontIcon
-									className={'material-icons ' + (openSettings ? 'open' : '')}
-									style={{ color: 'white' }}>
-									keyboard_arrow_up
-								</FontIcon>
-							}
-							nestedItems={[
+								(this.props.pathname == '/editor/settings/contact' &&
+									this.props.pathname) ||
+								(this.props.pathname == '/editor/settings/publishing' &&
+									this.props.pathname)
+						}
+						primaryTogglesNestedList={true}
+						className="nunito-font"
+						primaryText="Settings"
+						open={openSettings}
+						rightIcon={
+							<FontIcon
+								className={'material-icons ' + (openSettings ? 'open' : '')}
+								style={{ color: 'white' }}>
+								keyboard_arrow_up
+							</FontIcon>
+						}
+						nestedItems={[
+							this.isAdmin &&
 								<ListItem
 									onClick={() => this.changePath('/editor/settings/')}
 									value="/editor/settings"
@@ -294,17 +322,7 @@ class PublisherSettingMenu extends React.Component {
 									}}
 									primaryText="Profile & Theme"
 								/>,
-								<ListItem
-									onClick={() => this.changePath('/editor/settings/columns')}
-									value="/editor/settings/columns"
-									style={{
-										...styles.listNestedItem,
-										color: selectedIndex == '/editor/settings/columns'
-											? theme.accentColor
-											: 'white'
-									}}
-									primaryText="Column"
-								/>,
+							this.isAdmin &&
 								<ListItem
 									onClick={() => this.changePath('/editor/settings/contact')}
 									value="/editor/settings/contact"
@@ -315,13 +333,36 @@ class PublisherSettingMenu extends React.Component {
 											: 'white'
 									}}
 									primaryText="Contact & About"
-								/>
-							]}
-							nestedListStyle={{
-								background: 'rgba(255,255,255,0.2)',
-								padding: '0px'
-							}}
-						/>}
+								/>,
+							this.isAdmin &&
+								<ListItem
+									onClick={() => this.changePath('/editor/settings/publishing')}
+									value="/editor/settings/publishing"
+									style={{
+										...styles.listNestedItem,
+										color: selectedIndex == '/editor/settings/publishing'
+											? theme.accentColor
+											: 'white'
+									}}
+									primaryText="Publishing"
+								/>,
+							<ListItem
+								onClick={() => this.changePath('/editor/settings/columns')}
+								value="/editor/settings/columns"
+								style={{
+									...styles.listNestedItem,
+									color: selectedIndex == '/editor/settings/columns'
+										? theme.accentColor
+										: 'white'
+								}}
+								primaryText="Column"
+							/>
+						]}
+						nestedListStyle={{
+							background: 'rgba(255,255,255,0.2)',
+							padding: '0px'
+						}}
+					/>
 				</SelectableList>
 			</Wrapper>
 		)
