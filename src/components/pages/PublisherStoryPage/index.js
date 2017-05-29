@@ -235,7 +235,8 @@ class PublisherStoryPage extends React.Component {
 		sortByState: 0,
 		desc: '',
 		descErr: '',
-		descStatus: 'Unsave'
+		descStatus: 'Unsave',
+		newsPage: false
 	}
 
 	FEED_LIMIT = config.FEED_LIMIT
@@ -579,6 +580,13 @@ class PublisherStoryPage extends React.Component {
 
 	componentDidMount() {
 		this.getStories()
+
+		const newsPath = ['/editor/manage/news', '/editor/manage/news/']
+		if (newsPath.indexOf(this.props.location.pathname) != -1) {
+			this.setState({
+				newsPage: true
+			})
+		}
 	}
 
 	saveDesc = () => {
@@ -653,7 +661,8 @@ class PublisherStoryPage extends React.Component {
 			sortByState,
 			desc,
 			descErr,
-			descStatus
+			descStatus,
+			newsPage
 		} = this.state
 		//console.log('storiesCount',storiesCount)
 		let { theme } = this.context.setting.publisher
@@ -788,50 +797,51 @@ class PublisherStoryPage extends React.Component {
 				/>
 
 				<Header>
-					<Title>Manage Stories</Title>
+					<Title>{newsPage ? 'Manage News' : 'Manage Stories'}</Title>
 				</Header>
-
-				<DescEditor>
-					<Desc>
-						<div className="sans-font">Description</div>
-					</Desc>
-					<Edit>
-						<TextField
-							multiLine={true}
-							fullWidth={true}
-							floatingLabelText="140 characters"
-							floatingLabelFixed={true}
-							rows={1}
-							rowsMax={6}
-							errorText={descErr}
-							id="shortDesc"
-							name="shortDesc"
-							value={desc}
-							onChange={this.changeDesc}
+				{newsPage &&
+					<DescEditor>
+						<Desc>
+							<div className="sans-font">Description</div>
+						</Desc>
+						<Edit>
+							<TextField
+								multiLine={true}
+								fullWidth={true}
+								floatingLabelText="140 characters"
+								floatingLabelFixed={true}
+								rows={1}
+								rowsMax={6}
+								errorText={descErr}
+								id="shortDesc"
+								name="shortDesc"
+								value={desc}
+								onChange={this.changeDesc}
+							/>
+						</Edit>
+					</DescEditor>}
+				{newsPage &&
+					<div
+						className="sans-font"
+						style={{ marginTop: '35px', overflow: 'hidden' }}>
+						<PrimaryButton
+							label="Save"
+							style={{ float: 'right', margin: '0 40px 0 0' }}
+							onClick={this.saveDesc}
 						/>
-					</Edit>
-				</DescEditor>
-				<div
-					className="sans-font"
-					style={{ marginTop: '35px', overflow: 'hidden' }}>
-					<PrimaryButton
-						label="Save"
-						style={{ float: 'right', margin: '0 40px 0 0' }}
-						onClick={this.saveDesc}
-					/>
-					<SecondaryButton
-						label="Reset"
-						style={{ float: 'right', margin: '0 20px 0 0' }}
-						onClick={this.resetDesc}
-					/>
-					<TextStatus
-						style={{
-							color: descErr ? '#D8000C' : theme.accentColor,
-							float: 'right'
-						}}>
-						{descStatus}
-					</TextStatus>
-				</div>
+						<SecondaryButton
+							label="Reset"
+							style={{ float: 'right', margin: '0 20px 0 0' }}
+							onClick={this.resetDesc}
+						/>
+						<TextStatus
+							style={{
+								color: descErr ? '#D8000C' : theme.accentColor,
+								float: 'right'
+							}}>
+							{descStatus}
+						</TextStatus>
+					</div>}
 
 				<Section1>
 					<div style={{ flex: 1 }}>

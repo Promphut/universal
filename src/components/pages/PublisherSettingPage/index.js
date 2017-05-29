@@ -1,11 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { OverlayImg, PublisherProfileSetting, PublisherPublishingSetting, PublisherThemeSetting } from 'components'
+import {
+	OverlayImg,
+	PublisherProfileSetting,
+	PublisherPublishingSetting,
+	PublisherThemeSetting
+} from 'components'
 import auth from 'components/auth'
 import api from 'components/api'
 import { Tabs, Tab } from 'material-ui/Tabs'
-import SwipeableViews from 'react-swipeable-views';
+import SwipeableViews from 'react-swipeable-views'
 
 const Container = styled.div`
   width:100%;
@@ -39,30 +44,29 @@ const Title = styled.div`
 `
 
 class PublisherSettingPage extends React.Component {
-  static contextTypes = {
-	setting: PropTypes.object
-  }
-  state = {
-    publisher: {},
-    selectTab:0
-  }
-
-  componentDidMount(){
-    api.getPublisher(auth.getToken())
-    .then(pub => {
-      this.setState({publisher:pub})
-    })
-  }
-
-  handleChangeTab = (e) => {
-		this.setState({selectTab: e})
+	static contextTypes = {
+		setting: PropTypes.object
+	}
+	state = {
+		publisher: {},
+		selectTab: 0
 	}
 
-  render(){
-    let {publisher,selectTab} = this.state
-    var {theme} = this.context.setting.publisher
-    const styles = {
-      headline: {
+	componentDidMount() {
+		api.getPublisher(auth.getToken()).then(pub => {
+			this.setState({ publisher: pub })
+		})
+	}
+
+	handleChangeTab = e => {
+		this.setState({ selectTab: e })
+	}
+
+	render() {
+		let { publisher, selectTab } = this.state
+		var { theme } = this.context.setting.publisher
+		const styles = {
+			headline: {
 				fontSize: 24,
 				paddingTop: 16,
 				marginBottom: 12,
@@ -79,53 +83,48 @@ class PublisherSettingPage extends React.Component {
 				fontWeight: 'bold',
 				textTransform: 'none'
 			}
-    }
+		}
 		return (
-      <Container>
-        <Header>
-          <Title>Settings</Title>
-        </Header>
-        <Tabs
-          style={{ width: 390,margin:'20px',marginBottom:'0'}}
-          tabItemContainerStyle={{ ...styles.tabs }}
-          inkBarStyle={{ background: theme.accentColor, height: 3,zIndex:2 }}
-          onChange={this.handleChangeTab}
-          value={selectTab}>
-          <Tab
-            buttonStyle={{...styles.tab,color: selectTab == 0 ? theme.accentColor : '#C4C4C4'}}
-            label={'Profile'}
-            value={0}
-          />
-          <Tab
-            buttonStyle={{...styles.tab,color: selectTab == 1 ? theme.accentColor : '#C4C4C4'}}
-            label={'Publishing'}
-            value={1}
-          />
-          <Tab
-            buttonStyle={{...styles.tab,color: selectTab == 2 ? theme.accentColor : '#C4C4C4'}}
-            label={'Theme'}
-            value={2}
-          />
-        </Tabs>
-        <Line/>
-        <SwipeableViews
-          index={selectTab}
-          onChangeIndex={this.handleChangeTab}
-        >
-          <div>
-            <PublisherProfileSetting publisher={publisher} />
-          </div>
-          <div>
-            <PublisherPublishingSetting />
-          </div>
-          <div>
-            <PublisherThemeSetting />
-          </div>
-        </SwipeableViews>
-        {/*<PublisherAnalyticSetting analytic={publisher.analytic} />*/}
-      </Container>
-	  )
+			<Container>
+				<Header>
+					<Title>Profile & Theme</Title>
+				</Header>
+				<Tabs
+					style={{ width: 390, margin: '20px', marginBottom: '0' }}
+					tabItemContainerStyle={{ ...styles.tabs }}
+					inkBarStyle={{ background: theme.accentColor, height: 3, zIndex: 2 }}
+					onChange={this.handleChangeTab}
+					value={selectTab}>
+					<Tab
+						buttonStyle={{
+							...styles.tab,
+							color: selectTab == 0 ? theme.accentColor : '#C4C4C4'
+						}}
+						label={'Profile'}
+						value={0}
+					/>
+					<Tab
+						buttonStyle={{
+							...styles.tab,
+							color: selectTab == 1 ? theme.accentColor : '#C4C4C4'
+						}}
+						label={'Theme'}
+						value={1}
+					/>
+				</Tabs>
+				<Line />
+				<SwipeableViews index={selectTab} onChangeIndex={this.handleChangeTab}>
+					<div>
+						<PublisherProfileSetting publisher={publisher} />
+					</div>
+					<div>
+						<PublisherThemeSetting />
+					</div>
+				</SwipeableViews>
+				{/*<PublisherAnalyticSetting analytic={publisher.analytic} />*/}
+			</Container>
+		)
 	}
 }
 
-export default PublisherSettingPage;
+export default PublisherSettingPage

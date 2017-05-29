@@ -11,7 +11,8 @@ import {
 	ColumnSettingPage,
 	PublisherInsightStories,
 	PublisherInsightColumns,
-	PublisherInsightWriters
+	PublisherInsightWriters,
+	PublisherPublishingSetting
 } from 'components'
 import styled from 'styled-components'
 
@@ -109,16 +110,22 @@ const PublisherEditor = ({ onLoading, location, children, match }) => {
 						/>
 						<PrivateRoute
 							exact
+							path={`${match.url}/settings/contact`}
+							roles={['ADMIN']}
+							component={PublisherContactAndAboutPage}
+						/>
+						<PrivateRoute
+							exact
+							path={`${match.url}/settings/publishing`}
+							roles={['ADMIN']}
+							component={PublisherPublishingSetting}
+						/>
+						<PrivateRoute
+							exact
 							path={`${match.url}/settings/columns`}
 							roles={['ADMIN', 'EDITOR']}
 							bypassCidCheck={false}
 							component={ColumnSettingPage}
-						/>
-						<PrivateRoute
-							exact
-							path={`${match.url}/settings/contact`}
-							roles={['ADMIN']}
-							component={PublisherContactAndAboutPage}
 						/>
 					</Main>
 				</Content>
