@@ -38,13 +38,12 @@ const Content = styled.div`
 	flex-flow: row wrap;
 	justify-content: center;
 	padding: 40px 0 0 0;
+	min-height: calc(100vh - ${props => (props.isMobile ? '248px' : '248px')});
+
 	@media (max-width:480px) {
 		padding: 0;
   }
 
-	@media (min-width: 481px) {
-		min-height: 480px;
-	}
 `
 
 const Main = styled.div`
@@ -220,7 +219,7 @@ class HomePage extends React.Component {
 				.getFeed('article', { status: 1 }, 'latest', null, page, 15)
 				.then(result => {
 					let feed = this.state.feed.concat(result.feed)
-					console.log(result)
+					// console.log(result)
 					this.setState(
 						{
 							page: ++page,
@@ -286,7 +285,7 @@ class HomePage extends React.Component {
 				<TopHome />
 
 				{/*<TopVideoHome className='hidden-mob'></TopVideoHome>*/}
-				<Content>
+				<Content isMobile={isMobile}>
 					<Main>
 						<TextLine className="sans-font hidden-mob">LATEST STORIES</TextLine>
 						<Dash className="hidden-mob" style={{ margin: '5px 0 10px 0' }} />

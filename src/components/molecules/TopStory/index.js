@@ -1,33 +1,33 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {BGImg} from 'components'
-import styled,{keyframes} from 'styled-components'
-import {Link} from 'react-router-dom'
+import { BGImg } from 'components'
+import styled, { keyframes } from 'styled-components'
+import { Link } from 'react-router-dom'
 import truncate from 'lodash/truncate'
 
-const LargeBox =styled.div`
+const LargeBox = styled.div`
   display:flex;
-	flex:${props=>props.large?3:2};
+	flex:${props => (props.large ? 3 : 2)};
 	height:222px;
   @media (max-width:480px) {
     height:auto;
     padding:16px 0 16px 0;
     border-bottom:1px solid #E2E2E2;
-    display:${props=>props.head?'block':'flex'};
+    display:${props => (props.head ? 'block' : 'flex')};
   }
 `
 const MiniBox = styled(BGImg)`
 	height:222px;
   transition: all 0.3s;
-  transform: ${props=>props.hover2?'scale(1.15)':'scale(1)'};
+  transform: ${props => (props.hover2 ? 'scale(1.15)' : 'scale(1)')};
   z-index:-1;
   @media (max-width:480px) {
-    height:${props=>props.head?props.height:'80'}px;
-    margin-bottom:${props=>props.head?'10':'0'}px;
+    height:${props => (props.head ? props.height : '80')}px;
+    margin-bottom:${props => (props.head ? '10' : '0')}px;
   }
 `
 const Box1 = styled.div`
-  flex:${props=>props.large?2:1};
+  flex:${props => (props.large ? 2 : 1)};
 	height:222px;
   overflow: hidden;
   -moz-box-sizing: border-box;
@@ -41,7 +41,7 @@ const Box1 = styled.div`
 const MiniBoxDark = styled.div`
 	flex:1;
 	height:222px;
-	background-color:${props=>props.theme.primaryColor};
+	background-color:${props => props.theme.primaryColor};
 `
 const MiniBoxLight = styled.div`
 	flex:1;
@@ -62,7 +62,7 @@ const ArrowLeft = styled.div`
 	z-index:10;
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent;
-  border-left:15px solid ${props=>props.theme.primaryColor};
+  border-left:15px solid ${props => props.theme.primaryColor};
   @media (max-width:480px) {
     display:none;
   }
@@ -76,7 +76,7 @@ const ArrowRight = styled.div`
 	z-index:10;
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent;
-  border-right:15px solid ${props=>props.theme.primaryColor};
+  border-right:15px solid ${props => props.theme.primaryColor};
   @media (max-width:480px) {
     display:none;
   }
@@ -88,9 +88,9 @@ const NewsBox = styled.div`
 const SName = styled(Link)`
 	font-size:18px;
   transition: all 0.3s;
-  color:${props=>props.hover2?props.theme.accentColor:'#222'};
+  color:${props => (props.hover2 ? props.theme.accentColor : '#222')};
   &:hover{
-    color:${props=>props.theme.accentColor};
+    color:${props => props.theme.accentColor};
   }
   @media (max-width:480px) {
     color:white;
@@ -106,7 +106,7 @@ const HName = styled.div`
   @media (max-width:480px) {
     font-size:10px;
     margin-bottom:4px;
-    color:${props=>props.theme.accentColor};
+    color:${props => props.theme.accentColor};
   }
 `
 const Inner = styled.div`
@@ -118,60 +118,115 @@ const Inner = styled.div`
   }
 `
 
-
 class TopStory extends React.Component {
-  static contextTypes = {
-    setting: PropTypes.object
-  }
-  state = {
-    hover:false
-  }
+	static contextTypes = {
+		setting: PropTypes.object
+	}
 
-  hover = () => {
-    this.setState({hover:true})
-  }
-  leave = () => {
-    this.setState({hover:false})
-  }
+	constructor(props) {
+		super(props)
 
-  render(){
-    var {style,swift,className,large,head} = this.props
-    var {cover,writer,column,votes,comments,updated,url,readTime,contentShort,ptitle} = this.props.detail
-    var {hover} = this.state
+		this.state = {
+			hover: false
+		}
+	}
 
-    if(swift && screen.width > 480){
-      return (
-        <LargeBox head={head}  large={large} style={{...style}} className={' '+className} onMouseOver={this.hover} onMouseLeave={this.leave}>
-          <MiniBoxLight>
-            <ArrowLeft style={{marginLeft:'100%',left:'0px',borderLeft:'15px solid white'}}/>
-            <Inner>
-              <HName className='sans-font' style={{}}>TOP STORIES</HName>
-              <SName hover2={hover} to={this.props.detail&&url} className='nunito-font' >{truncate(ptitle?ptitle:'', {'length': 150,'separator': ''})}</SName>
-            </Inner>
-          </MiniBoxLight>
-          <Box1 large={large}>
-            <MiniBox url={url} hover2={hover}  head={head} height={(screen.width-16)/2} src={cover&&cover.medium}  opacity={0.2}/>
-          </Box1>
-        </LargeBox>
-      )
+	hover = () => {
+		this.setState({ hover: true })
+	}
+	leave = () => {
+		this.setState({ hover: false })
+	}
 
-    } else {
-      return (
-        <LargeBox head={head} large={large} style={{...style}} className={' '+className} onMouseOver={this.hover} onMouseLeave={this.leave}>
-          <Box1 large={large}>
-            <MiniBox url={url} head={head} height={(screen.width-16)/2} hover2={hover} src={cover&&cover.medium}  opacity={0.2}/>
-          </Box1>
-          <MiniBoxLight>
-            <ArrowRight style={{borderRight:'15px solid white',left:'-14px'}}/>
-            <Inner>
-              <HName className='sans-font' style={{}}>TOP STORIES</HName>
-              <SName hover2={hover} to={url} className='nunito-font' >{truncate(ptitle?ptitle:'', {'length': 150,'separator': ''})}</SName>
-            </Inner>
-          </MiniBoxLight>
-        </LargeBox>
-      )
-    }
-  }
+	render() {
+		var { style, swift, className, large, head } = this.props
+		var {
+			cover,
+			writer,
+			column,
+			votes,
+			comments,
+			updated,
+			url,
+			readTime,
+			contentShort,
+			ptitle
+		} = this.props.detail
+		var { hover } = this.state
+
+		if (swift && screen.width > 480) {
+			return (
+				<LargeBox
+					head={head}
+					large={large}
+					style={{ ...style }}
+					className={' ' + className}
+					onMouseOver={this.hover}
+					onMouseLeave={this.leave}>
+					<MiniBoxLight>
+						<ArrowLeft
+							style={{
+								marginLeft: '100%',
+								left: '0px',
+								borderLeft: '15px solid white'
+							}}
+						/>
+						<Inner>
+							<HName className="sans-font" style={{}}>TOP STORIES</HName>
+							<SName
+								hover2={hover}
+								to={this.props.detail && url}
+								className="nunito-font">
+								{truncate(ptitle ? ptitle : '', { length: 150, separator: '' })}
+							</SName>
+						</Inner>
+					</MiniBoxLight>
+					<Box1 large={large}>
+						<MiniBox
+							url={url}
+							hover2={hover}
+							head={head}
+							height={(screen.width - 16) / 2}
+							src={cover && cover.medium}
+							opacity={0.2}
+						/>
+					</Box1>
+				</LargeBox>
+			)
+		} else {
+			return (
+				<LargeBox
+					head={head}
+					large={large}
+					style={{ ...style }}
+					className={' ' + className}
+					onMouseOver={this.hover}
+					onMouseLeave={this.leave}>
+					<Box1 large={large}>
+						<MiniBox
+							url={url}
+							head={head}
+							height={(screen.width - 16) / 2}
+							hover2={hover}
+							src={cover && cover.medium}
+							opacity={0.2}
+						/>
+					</Box1>
+					<MiniBoxLight>
+						<ArrowRight
+							style={{ borderRight: '15px solid white', left: '-14px' }}
+						/>
+						<Inner>
+							<HName className="sans-font" style={{}}>TOP STORIES</HName>
+							<SName hover2={hover} to={url} className="nunito-font">
+								{truncate(ptitle ? ptitle : '', { length: 150, separator: '' })}
+							</SName>
+						</Inner>
+					</MiniBoxLight>
+				</LargeBox>
+			)
+		}
+	}
 }
 
-export default TopStory;
+export default TopStory

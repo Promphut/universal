@@ -9,6 +9,7 @@ import FontIcon from 'material-ui/FontIcon'
 import Slider from 'react-slick'
 //import Request from 'superagent'
 import api from 'components/api'
+import _ from 'lodash'
 
 const Wrapper = styled.div`
   background-color: #F4F4F4;
@@ -161,6 +162,12 @@ class AllColumn extends React.Component {
 		//  })
 
 		api.getColumns().then(cols => {
+			console.log(cols)
+			_.remove(cols, col => {
+				return col.slug == 'news'
+			})
+			console.log(cols)
+
 			this.setState({ columns: cols })
 		})
 	}
@@ -207,14 +214,14 @@ class AllColumn extends React.Component {
 											<Box
 												accentColor={theme.accentColor}
 												onMouseOver={() => this.onHover(index)}
-                        onMouseLeave={() => this.onHover(-1)}>
+												onMouseLeave={() => this.onHover(-1)}>
 												<BGImg
 													src={data.cover.small || data.cover.medium}
 													className="imgWidth"
 													opacity={hover == index ? 0.7 : 0.5}
 													style={{ margin: '0 auto 0 auto' }}
 													alt={data.name}
-                          gradient="black">
+													gradient="black">
 													<div
 														style={{
 															position: 'absolute',
