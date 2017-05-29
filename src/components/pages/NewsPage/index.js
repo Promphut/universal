@@ -237,6 +237,8 @@ class NewsPage extends React.Component {
 		})
 		api.getColumnFromSlug('news').then(col => {
 			this.setState({ shortDesc: col.shortDesc })
+		}).catch((er)=>{
+			this.setState({ shortDesc: '' })
 		})
 	}
 

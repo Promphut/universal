@@ -126,6 +126,9 @@ const Right = styled.div`
 	z-index:10;
 	display:flex;
 	align-items:center;
+	@media (max-width: 480px) {
+		padding:0 15px;
+	}
 `
 
 const HideOnTablet = styled.div`
@@ -198,7 +201,7 @@ let avatarStyle = {
 	display: 'inline-block',
 	float: 'left',
 	textAlign: 'center',
-	margin: '0 20px 0 13px',
+	margin: '0 0 0 13px',
 	cursor: 'pointer'
 }
 
