@@ -85,6 +85,8 @@ class SignInFb extends React.Component {
   state = {
     errText0:'',
     errText1:'',
+    email:'',
+    password:''
   }
   static propTypes = {
     nextPathname: PropTypes.string.isRequired
@@ -98,7 +100,6 @@ class SignInFb extends React.Component {
 
   signin = (e) => {
     e.preventDefault()
-
     let self = this,
         data = {},
         i = 0,
@@ -140,9 +141,16 @@ class SignInFb extends React.Component {
     }
   }
 
+  onChangeEmail = (e)=>{
+    this.setState({email:e.target.value})
+  }
+  onChangePass = (e)=>{
+    this.setState({password:e.target.value})
+  }
+
   render(){
     let {onClick, style} = this.props,
-        {errText0, errText1, errText2} = this.state
+        {errText0, errText1, errText2,email,password} = this.state
 
     var {theme} = this.context.setting.publisher
     
@@ -165,22 +173,26 @@ class SignInFb extends React.Component {
         {/*<Text style={{marginTop:'20px',fontFamily:'Nunito'}}>Or <LinkUnderLine to="#" className='hidden-mob' onClick={this.props.emailSignIn}>Sign In with an E-mail</LinkUnderLine></Text>*/}
         <InputBox onSubmit={this.signin} ref='signinForm' >
           <TextField
-            hintText="Email"
             floatingLabelText="Email"
             type="email"
+            value={email}
+            onChange={this.onChangeEmail}
             fullWidth={true}
             name='username'
             errorText={errText0}
-            inputStyle={{color:'#222'}}
+            inputStyle={{color:'white'}}
+            hintStyle={{color:'white'}}
           /><br />
           <TextField
-            hintText="Password Field"
             floatingLabelText="Password"
             type="password"
+            value={password}
+            onChange={this.onChangePass}
             fullWidth={true}
             name='password'
             errorText={errText1}
-            inputStyle={{color:'#222'}}
+            inputStyle={{color:'white'}}
+            hintStyle={{color:'white'}}
           /><br />
           <div style={{width:307,margin:'57px auto 0 auto'}}>
             <RaisedButton
