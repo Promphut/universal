@@ -23,7 +23,7 @@ let styles = {
 
 const User = styled(Link)`
   padding-left: 20px;
-  &:hover { color: White; }
+  &:hover { color: white; }
 `
 
 const Card = styled.div`
@@ -35,14 +35,14 @@ const Card = styled.div`
   & > * {
     vertical-align: top;
     display: inline-block;
-    color: White;
+    color: white;
     margin: 0;
   }
 `
 
 const Item = styled(ListItem)`
   padding: 20px;
-  color: White;
+  color: white;
 
   & div div {
     font-family: 'Nunito', 'Mitr', sans-serif;

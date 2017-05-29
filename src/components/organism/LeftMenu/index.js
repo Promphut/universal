@@ -126,7 +126,7 @@ const Nav = styled.nav`
 
 	& ul li {
 		padding: 10px;
-		color: White;
+		color: white;
 	}
 
 	& ul li > * {
