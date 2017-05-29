@@ -320,7 +320,7 @@ class PublisherStoryPage extends React.Component {
 					{ onlyAuthorized: true }
 				)
 				.then(result => {
-					console.log(result)
+					// console.log(result)
 
 					this.setState({
 						stories: result.feed,

@@ -220,7 +220,7 @@ class HomePage extends React.Component {
 				.getFeed('article', { status: 1 }, 'latest', null, page, 15)
 				.then(result => {
 					let feed = this.state.feed.concat(result.feed)
-					console.log(result)
+					// console.log(result)
 					this.setState(
 						{
 							page: ++page,
