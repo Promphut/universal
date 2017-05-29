@@ -19,7 +19,7 @@ const Wrapper = styled.div`
   background: linear-gradient(135deg, ${props=> props.theme.primaryColor} 0%, ${props=> props.theme.secondaryColor} 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00b2b4', endColorstr='#cef1b7', GradientType=1 );
   @media (max-width:480px) {
-    background:${props=>props.page?'':'white'};
+    background:white;
     max-width: 100vw;
 		max-height: 100vh;
   }

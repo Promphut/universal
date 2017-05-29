@@ -34,9 +34,7 @@ const Text = styled.div`
   font-size:18px;
   text-align:center;
   font-family:'Mitr';
-  @media (max-width:480px){
-    color:white;
-  }
+
 `
 const LinkUnderLine = styled(Link)`
   text-decoration:underline;
@@ -51,9 +49,6 @@ const NewLink = styled(Link)`
   color:#C2C2C2;
   font-size:14px;
   font-family:'Nunito';
-  @media (max-width:480px){
-    color:white;
-  }
 `
 const InputBox = styled.form`
   width:308px;
@@ -180,8 +175,8 @@ class SignInFb extends React.Component {
             fullWidth={true}
             name='username'
             errorText={errText0}
-            inputStyle={{color:'white'}}
-            hintStyle={{color:'white'}}
+            inputStyle={{color:'#222'}}
+            hintStyle={{color:'#222'}}
           /><br />
           <TextField
             floatingLabelText="Password"
@@ -191,8 +186,8 @@ class SignInFb extends React.Component {
             fullWidth={true}
             name='password'
             errorText={errText1}
-            inputStyle={{color:'white'}}
-            hintStyle={{color:'white'}}
+            inputStyle={{color:'#222'}}
+            hintStyle={{color:'#222'}}
           /><br />
           <div style={{width:307,margin:'57px auto 0 auto'}}>
             <RaisedButton

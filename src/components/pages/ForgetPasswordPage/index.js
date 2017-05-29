@@ -90,10 +90,6 @@ class ForgetPasswordPage extends React.Component {
     return (
       <Wrapper>
         <Container>
-          <div style={{margin:'0 auto 30px auto',width:'146px'}}>
-            <LogoLink fill='#E2E2E2' className='hidden-mob'/><LogoLink fill='' className='hidden-des'/>
-            {/*<Logo fill='#E2E2E2' className='hidden-mob'/><Logo fill='#00b2b4' className='hidden-des'/>*/}
-          </div>
           <BoxButton>
             <a href='#' onClick={this.checkBack} className='hidden-mob'><BackButton style={{float:'left'}}/></a>
             <a href='#' onClick={this.checkBack} className='hidden-des'><BackButton style={{float:'left'}} labelStyle={{color:'#00b2b4'}}/></a>

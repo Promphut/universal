@@ -13,6 +13,7 @@ import {
 } from 'components'
 import auth from 'components/auth'
 import FontIcon from 'material-ui/FontIcon'
+import RaisedButton from 'material-ui/RaisedButton'
 import utils from '../../../services/utils'
 import { withRouter } from 'react-router'
 
@@ -26,6 +27,12 @@ const Wrapper = styled.div`
 		opacity: ${props => props.scroll};
 		overflow: hidden;
 	}
+	@media (max-width: 480px) {
+		.signin{
+			font-size:12px;
+		}
+	}
+
 `
 const rot = keyframes`
 	from {
@@ -115,8 +122,10 @@ const Center = styled.div`
 
 const Right = styled.div`
 	justify-content: flex-end;
-	display: inline-block;
+	padding:0 20px;
 	z-index:10;
+	display:flex;
+	align-items:center;
 `
 
 const HideOnTablet = styled.div`
@@ -128,18 +137,8 @@ const HideOnTablet = styled.div`
 `
 
 const NotLogin = styled.div`
-	width: 180px;
-	display: inline-block;
-	font-size: 15px;
-	margin: 9px 20px;
+	width: 96px;
 
-	& * {
-		color: ${props => (props.theme.barTone == 'light' ? '#222' : 'white')};
-	}
-
-	& a:hover {
-		text-decoration: underline;
-	}
 `
 
 const Edit = styled(Link)`
@@ -282,7 +281,7 @@ class TopBar extends React.Component {
 	}
 
 	signup = () => {
-		this.props.history.push('/signup')
+		this.props.history.push('/signin')
 	}
 
 	render() {
@@ -342,7 +341,7 @@ class TopBar extends React.Component {
 								to="/"
 								src={theme.logo}
 								title={this.props.title}
-								style={logoStyle}
+								style={{...logoStyle}}
 								id={'logo'}
 								fill={!scrolling && hasCover ? '#FFF' : ''}
 							/>
@@ -393,15 +392,14 @@ class TopBar extends React.Component {
 					{status == 'UNLOGGEDIN' &&
 						<Right>
 							<NotLogin>
-								<SecondaryButton
-									label="Sign Up"
+								<RaisedButton
+									label=" Sign In"
+									labelColor={'#fff'}
+									labelStyle={{top:'-2px'}}
 									onClick={this.signup}
-									style={{ verticalAlign: 'middle' }}
+									style={{display:'block',borderRadius:'20px',boxShadow:'none',background:'none'}}
+									buttonStyle={{background:'none',border:'2px solid white',borderRadius:'20px'}}
 								/>
-								<span>&nbsp; or </span>
-								<Link to="/signin" style={{ fontWeight: 'bold' }}>
-									Sign In
-								</Link>
 							</NotLogin>
 						</Right>}
 				</Container>

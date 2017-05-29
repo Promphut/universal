@@ -29,7 +29,7 @@ const Head = styled.div`
   @media (max-width:480px) {
     margin:0px auto 10px auto;
     font-weight:bold;
-    color:#fff;
+
   } 
 `
 const Text = styled.div`

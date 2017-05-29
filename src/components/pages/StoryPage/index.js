@@ -238,17 +238,19 @@ class StoryPage extends React.Component {
 
 		let hasCover = false
 		if (!isEmpty(story)) {
-			if (
-				isMobile &&
-				story.coverMobile.medium !=
-					config.BACKURL + '/imgs/article_cover_portrait.png'
-			) {
-				hasCover = true
-			} else if (
-				story.cover.medium !=
-				config.BACKURL + '/imgs/article_cover_landscape.png'
-			) {
-				hasCover = true
+			if (isMobile){
+				if (story.coverMobile.medium !=
+						config.BACKURL + '/imgs/article_cover_portrait.png'
+				) {
+					hasCover = true
+				}
+			}else{
+				if (
+					story.cover.medium !=
+					config.BACKURL + '/imgs/article_cover_landscape.png'
+				) {
+					hasCover = true
+				}
 			}
 		}
 
