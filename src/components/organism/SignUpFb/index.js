@@ -12,8 +12,8 @@ const Box = styled.div`
   padding:10px 0 20px 0;
   @media (max-width:480px) {
     background:none;
-    width:100vw;
-    padding:80px 0 80px 0;
+    width:100%;
+    padding:40px 0 0 0;
     height:auto;
   } 
 `
@@ -26,7 +26,6 @@ const Head = styled.div`
   @media (max-width:480px) {
     margin:0px auto 10px auto;
     font-weight:bold;
-    color:#fff;
   } 
 `
 const Text = styled.div`

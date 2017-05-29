@@ -11,7 +11,8 @@ const Box = styled.div`
   background-color:#fff;
   padding:10px 0 10px 0;
   @media (max-width:480px){
-    width:100vw;
+    margin:50px 0 20px 0;
+    width:100%;
   }
   .centerMob{
     width:100px;
@@ -26,7 +27,6 @@ const Head = styled.div`
   @media (max-width:480px) {
     margin:0px auto 10px auto;
     font-weight:bold;
-    color:#fff;
   } 
 `
 const Text = styled.div`

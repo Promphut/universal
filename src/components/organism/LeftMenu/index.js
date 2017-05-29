@@ -108,7 +108,7 @@ const Nav = styled.nav`
 	overflow-y: auto;
 	// padding: 40px;
 	-webkit-overflow-scrolling: touch;
-	z-index:11;
+	z-index:30;
   animation: ${props => (props.open ? slideOut : slideIn)} 0.6s forwards;
 
 	background: -moz-linear-gradient(-45deg,  ${props => props.theme.primaryColor} 0%, ${props => props.theme.secondaryColor} 100%); /* FF3.6-15 */
@@ -225,7 +225,7 @@ const SearchBtn = styled(IconButton)`
 	}
 `
 
-const DropDownListLink = styled.a`
+const DropDownListLink = styled.div`
   font-size:40px;
   @media (max-width:480px){
     font-size:32px;
@@ -236,6 +236,8 @@ const DropDownListLink = styled.a`
     transition: .2s;
   }
   &:hover {
+		cursor:pointer;
+		color: ${props => props.theme.accentColor} !important;
     > span {
       color: ${props => props.theme.accentColor} !important;
     }
@@ -369,6 +371,11 @@ class LeftMenu extends React.Component {
 											<Link to={'/stories/columns'}>All Columns</Link>
 										</li>
 									</MiniMenu>
+									<li>
+										<DropDownListLink>
+											<Link to="/stories/news" onClick={close}>News</Link>
+										</DropDownListLink>
+									</li>
 									<Divider />
 								</div>}
 							<li><Link to="/" onClick={close}>Home</Link></li>
@@ -392,6 +399,11 @@ class LeftMenu extends React.Component {
 											<Link to={'/stories/columns'}>All Columns</Link>
 										</li>
 									</MiniMenu>
+									<li>
+										<DropDownListLink>
+											<Link to="/stories/news" onClick={close}>News</Link>
+										</DropDownListLink>
+									</li>
 									<Divider />
 								</div>}
 							<li><Link to="/contact" onClick={close}>Contact</Link></li>

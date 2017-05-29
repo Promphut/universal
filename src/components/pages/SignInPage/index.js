@@ -20,6 +20,7 @@ const Wrapper = styled.div`
   @media (max-width:480px) {
     max-width: 100vw;
 		max-height: 100vh;
+		background:white;
   }
 `
 
