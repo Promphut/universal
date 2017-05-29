@@ -9,7 +9,9 @@ import {
 	MenuList,
 	DropdownWithIcon,
 	StoriesTable,
-	Filter
+	Filter,
+	PrimaryButton,
+	SecondaryButton
 } from 'components'
 import FontIcon from 'material-ui/FontIcon'
 import styled from 'styled-components'
@@ -165,6 +167,33 @@ const AutoCompleteBox = styled.div`
   padding:5px 20px;
 `
 
+const DescEditor = styled.div`
+  display:flex;
+  flex-flow: row wrap;
+  margin:20px 30px;
+	width:100%;
+`
+
+const Desc = styled.div`
+  flex:2 150px;
+  max-width:150px;
+  color:#C2C2C2;
+  font-size:17px;
+  padding-top:15px;
+`
+
+const Edit = styled.div`
+  flex:6 450px;
+  max-width:450px;
+`
+
+const TextStatus = styled.div`
+  color:${props => props.theme.primaryColor};
+  font-size:15px;
+  font-style:italic;
+  margin:10px 20px 0 15px;
+`
+
 const STATUS = {
 	DRAFTED: 0,
 	PUBLISHED: 1
@@ -203,7 +232,10 @@ class PublisherStoryPage extends React.Component {
 		selectTab: 0,
 		searchText: '',
 		sortBy: '',
-		sortByState: 0
+		sortByState: 0,
+		desc: '',
+		descErr: '',
+		descStatus: 'Unsave'
 	}
 
 	FEED_LIMIT = config.FEED_LIMIT
@@ -549,6 +581,49 @@ class PublisherStoryPage extends React.Component {
 		this.getStories()
 	}
 
+	saveDesc = () => {
+		api
+			.getColumnFromSlug('news')
+			.then(res => {
+				api.updateColumn(res.id, { shortDesc: this.state.desc })
+			})
+			.then(() => {
+				this.setState({
+					descStatus: 'Saved successfully'
+				})
+			})
+			.catch(err => {
+				this.setState({
+					descStatus: res.body.error.message
+				})
+			})
+	}
+
+	resetDesc = () => {
+		this.setState({
+			desc: '',
+			descStatus: 'Unsave'
+		})
+	}
+
+	changeDesc = e => {
+		const value = e.target.value
+		if (value == 'shortDesc') {
+			var val = e.target.value.split('')
+			if (val.length >= 140) {
+				this.setState({
+					descErr: 'Maximun characters'
+				})
+			}
+			return
+		} else {
+			this.setState({
+				desc: value,
+				descErr: ''
+			})
+		}
+	}
+
 	render() {
 		//console.log('theme',theme)
 		let {
@@ -575,7 +650,10 @@ class PublisherStoryPage extends React.Component {
 			selectTab,
 			searchText,
 			sortBy,
-			sortByState
+			sortByState,
+			desc,
+			descErr,
+			descStatus
 		} = this.state
 		//console.log('storiesCount',storiesCount)
 		let { theme } = this.context.setting.publisher
@@ -712,6 +790,49 @@ class PublisherStoryPage extends React.Component {
 				<Header>
 					<Title>Manage Stories</Title>
 				</Header>
+
+				<DescEditor>
+					<Desc>
+						<div className="sans-font">Description</div>
+					</Desc>
+					<Edit>
+						<TextField
+							multiLine={true}
+							fullWidth={true}
+							floatingLabelText="140 characters"
+							floatingLabelFixed={true}
+							rows={1}
+							rowsMax={6}
+							errorText={descErr}
+							id="shortDesc"
+							name="shortDesc"
+							value={desc}
+							onChange={this.changeDesc}
+						/>
+					</Edit>
+				</DescEditor>
+				<div
+					className="sans-font"
+					style={{ marginTop: '35px', overflow: 'hidden' }}>
+					<PrimaryButton
+						label="Save"
+						style={{ float: 'right', margin: '0 40px 0 0' }}
+						onClick={this.saveDesc}
+					/>
+					<SecondaryButton
+						label="Reset"
+						style={{ float: 'right', margin: '0 20px 0 0' }}
+						onClick={this.resetDesc}
+					/>
+					<TextStatus
+						style={{
+							color: descErr ? '#D8000C' : theme.accentColor,
+							float: 'right'
+						}}>
+						{descStatus}
+					</TextStatus>
+				</div>
+
 				<Section1>
 					<div style={{ flex: 1 }}>
 						<Tabs
