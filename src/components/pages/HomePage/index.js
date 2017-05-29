@@ -38,7 +38,7 @@ const Content = styled.div`
 	flex-flow: row wrap;
 	justify-content: center;
 	padding: 40px 0 0 0;
-	min-height: calc(100vh - ${props => (props.isMobile ? '248px' : '248px')});
+	min-height: calc(100vh - ${props => (props.isMobile ? '261px' : '261px')});
 
 	@media (max-width:480px) {
 		padding: 0;
