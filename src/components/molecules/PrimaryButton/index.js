@@ -21,7 +21,7 @@ const PrimaryButton = (props, context) => {
 				fontWeight: 'bold',
 				fontSize: 18,
 				fontFamily: "'Nunito', 'Mitr'",
-				color: 'White',
+				color: 'white',
 				...props.labelStyle
 			},
 			style: {
@@ -37,7 +37,7 @@ const PrimaryButton = (props, context) => {
 		if (props.buttonStyle === 'Flat') {
 			opt['hoverColor'] = theme.accentColor
 		} else {
-			opt['labelColor'] = 'White'
+			opt['labelColor'] = 'white'
 			opt['buttonStyle'] = {
 				borderRadius: '24px',
 				backgroundColor: theme.accentColor,
@@ -47,7 +47,7 @@ const PrimaryButton = (props, context) => {
 
 		defaultStyle = {
 			icon: {
-				color: 'White',
+				color: 'white',
 				margin: '-4px 0px 0 18px',
 				fontSize: '18px',
 				width: 18
@@ -68,7 +68,7 @@ const PrimaryButton = (props, context) => {
 				fontWeight: 'bold',
 				fontSize: 13,
 				fontFamily: "'Nunito', 'Mitr'",
-				color: 'White',
+				color: 'white',
 				...props.labelStyle
 			},
 			style: {
@@ -84,7 +84,7 @@ const PrimaryButton = (props, context) => {
 		if (props.buttonStyle === 'Flat') {
 			opt['hoverColor'] = theme.primaryColor
 		} else {
-			opt['labelColor'] = 'White'
+			opt['labelColor'] = 'white'
 			opt['buttonStyle'] = {
 				borderRadius: '17px',
 				backgroundColor: theme.primaryColor,
@@ -94,7 +94,7 @@ const PrimaryButton = (props, context) => {
 
 		defaultStyle = {
 			icon: {
-				color: 'White',
+				color: 'white',
 				margin: '-1px 0 0 14px',
 				fontSize: '13px',
 				width: 13
@@ -116,7 +116,7 @@ const PrimaryButton = (props, context) => {
 				fontWeight: 'bold',
 				fontSize: 15,
 				fontFamily: "'Nunito', 'Mitr'",
-				color: 'White',
+				color: 'white',
 				...props.labelStyle
 			},
 			style: {
@@ -132,7 +132,7 @@ const PrimaryButton = (props, context) => {
 		if (props.buttonStyle === 'Flat') {
 			opt['hoverColor'] = theme.accentColor
 		} else {
-			opt['labelColor'] = 'White'
+			opt['labelColor'] = 'white'
 			opt['buttonStyle'] = {
 				borderRadius: '20px',
 				backgroundColor: theme.accentColor,
@@ -142,7 +142,7 @@ const PrimaryButton = (props, context) => {
 
 		defaultStyle = {
 			icon: {
-				color: 'White',
+				color: 'white',
 				margin: '-2px 0px 0 15px',
 				fontSize: '15px',
 				width: 15
