@@ -191,7 +191,6 @@ let buttonStyle = {
 	float: 'left',
 	boxShadow: 'none',
 	verticalAlign: 'middle',
-	marginTop: '14px',
 	height: '30px',
 	lineHeight: '30px'
 }
@@ -199,7 +198,7 @@ let avatarStyle = {
 	display: 'inline-block',
 	float: 'left',
 	textAlign: 'center',
-	margin: '13px 20px 13px 13px',
+	margin: '0 20px 0 13px',
 	cursor: 'pointer'
 }
 
