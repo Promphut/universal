@@ -126,6 +126,9 @@ const Right = styled.div`
 	z-index:10;
 	display:flex;
 	align-items:center;
+	@media (max-width: 480px) {
+		padding:0 15px;
+	}
 `
 
 const HideOnTablet = styled.div`
@@ -198,7 +201,7 @@ let avatarStyle = {
 	display: 'inline-block',
 	float: 'left',
 	textAlign: 'center',
-	margin: '0 20px 0 13px',
+	margin: '0 0 0 13px',
 	cursor: 'pointer'
 }
 
@@ -393,11 +396,11 @@ class TopBar extends React.Component {
 							<NotLogin>
 								<RaisedButton
 									label=" Sign In"
-									labelColor={'#fff'}
+									labelColor={theme.accentColor}
 									labelStyle={{top:'-2px'}}
 									onClick={this.signup}
 									style={{display:'block',borderRadius:'20px',boxShadow:'none',background:'none'}}
-									buttonStyle={{background:'none',border:'2px solid white',borderRadius:'20px'}}
+									buttonStyle={{background:'none',border:'2px solid '+theme.accentColor,borderRadius:'20px'}}
 								/>
 							</NotLogin>
 						</Right>}

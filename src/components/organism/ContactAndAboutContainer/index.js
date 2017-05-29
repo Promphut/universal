@@ -144,7 +144,7 @@ class ContactAndAboutContainer extends React.Component {
 	          </Aside>*/}
 				</Content>
 				<Content>
-					<RecommendContainer recommend={this.recommends} />
+					{this.recommends.length!=0&&<RecommendContainer recommend={this.recommends} />}
 				</Content>
 				<Footer />
 			</Wrapper>
