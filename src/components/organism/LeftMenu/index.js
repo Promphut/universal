@@ -17,7 +17,6 @@ const Container = styled.div`
   left:0;
 	z-index:100;
 	animation: ${props => (props.open ? displayBlock : displayNone)} 0.5s forwards;
-  transform: translateZ(100px);
   @media (max-width:480px){
     width: 100vw;
   }
@@ -32,7 +31,6 @@ const Container2 = styled.div`
   z-index:101;
   background:rgba(0,0,0,0.8);
   animation: ${props => (props.open ? fadeOut : fadeIn)} 0.5s forwards;
-  transform: translateZ(100px);
   @media (max-width:480px){
     width: 100vw;
   }
@@ -107,7 +105,6 @@ const Nav = styled.nav`
   animation: ${props => (props.open ? slideOut : slideIn)} 0.6s forwards;
 	background: linear-gradient(135deg,  ${props => props.theme.primaryColor} 0%, ${props => props.theme.secondaryColor} 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 	& ul {
-		// margin: 70px 60px 0 60px;
 		margin: 70px 40px;
     padding: 0px;
 		list-style-type:none;
