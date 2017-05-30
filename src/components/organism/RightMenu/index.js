@@ -103,8 +103,6 @@ const Nav = styled.nav`
 	width: 400px;
 	overflow-x: hidden;
 	overflow-y: auto;
-	// padding: 40px;
-	-webkit-overflow-scrolling: touch;
 	z-index:102;
   animation: ${props => (props.open ? slideOut : slideIn)} 0.6s forwards;
   background: rgba(255, 255, 255, 0.85);
