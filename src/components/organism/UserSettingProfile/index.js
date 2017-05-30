@@ -208,7 +208,7 @@ class UserSettingProfile extends React.Component {
             <div className="sans-font">Profile picture</div>
           </Title>
           <Edit>
-            <UploadPicture src={user.pic.medium} ratio={1} path={'/users/'+user._id+'/photo'} size='500x500' type='photo' width={140} height={140} labelStyle={{top:'63px'}}/>
+            <UploadPicture src={user&&user.pic.medium} ratio={1} path={'/users/'+user._id+'/photo'} size='500x500' type='photo' width={140} height={140}/>
           </Edit>
         </Flex>
         <Flex>

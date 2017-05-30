@@ -665,7 +665,7 @@ class ColumnSettingPage extends React.Component {
 									'/publishers/' +
 										config.PID +
 										'/columns/' +
-										this.props.match.params.cid +
+										this.state.selectColumn +
 										'/cover'
 								}
 								ratio={1920 / 340}

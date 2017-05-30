@@ -43,9 +43,9 @@ class PublisherSettingMenu extends React.Component {
 	}
 	constructor(props) {
 		super(props)
-
+		console.log(props.pathname+'/')
 		this.state = {
-			selectedIndex: props.pathname,
+			selectedIndex: props.pathname+'/',
 			openInsights: false,
 			openManage: false,
 			openSettings: false
@@ -124,7 +124,8 @@ class PublisherSettingMenu extends React.Component {
 	}
 
 	render() {
-		//console.log(this.props.pathname.split('/'))
+		//console.log(this.props.match)
+
 		let { theme } = this.context.setting.publisher
 		let { selectedIndex, openInsights, openManage, openSettings } = this.state
 
@@ -134,7 +135,9 @@ class PublisherSettingMenu extends React.Component {
 					<ListItem
 						style={{
 							...styles.listItem,
-							backgroundColor: (selectedIndex == '/editor/' &&
+							backgroundColor: (selectedIndex == '/editor' &&
+								theme.accentColor) ||
+								(this.props.pathname == '/editor/' &&
 								theme.accentColor) ||
 								(this.props.pathname == '/editor/stories' &&
 									theme.accentColor) ||
@@ -169,7 +172,7 @@ class PublisherSettingMenu extends React.Component {
 								value="/editor/"
 								style={{
 									...styles.listNestedItem,
-									color: selectedIndex == '/editor/'
+									color: selectedIndex == '/editor/'||selectedIndex == '/editor'
 										? theme.accentColor
 										: 'white'
 								}}
@@ -310,7 +313,7 @@ class PublisherSettingMenu extends React.Component {
 							</FontIcon>
 						}
 						nestedItems={[
-							this.isAdmin &&
+							
 								<ListItem
 									onClick={() => this.changePath('/editor/settings/')}
 									value="/editor/settings"
@@ -318,11 +321,12 @@ class PublisherSettingMenu extends React.Component {
 										...styles.listNestedItem,
 										color: selectedIndex == '/editor/settings/'
 											? theme.accentColor
-											: 'white'
+											: 'white',
+											display:this.isAdmin?'block':'none'
 									}}
 									primaryText="Profile & Theme"
 								/>,
-							this.isAdmin &&
+							
 								<ListItem
 									onClick={() => this.changePath('/editor/settings/contact')}
 									value="/editor/settings/contact"
@@ -330,11 +334,12 @@ class PublisherSettingMenu extends React.Component {
 										...styles.listNestedItem,
 										color: selectedIndex == '/editor/settings/contact'
 											? theme.accentColor
-											: 'white'
+											: 'white',
+											display:this.isAdmin?'block':'none'
 									}}
 									primaryText="Contact & About"
 								/>,
-							this.isAdmin &&
+							
 								<ListItem
 									onClick={() => this.changePath('/editor/settings/publishing')}
 									value="/editor/settings/publishing"
@@ -342,7 +347,8 @@ class PublisherSettingMenu extends React.Component {
 										...styles.listNestedItem,
 										color: selectedIndex == '/editor/settings/publishing'
 											? theme.accentColor
-											: 'white'
+											: 'white',
+											display:this.isAdmin?'block':'none'
 									}}
 									primaryText="Publishing"
 								/>,

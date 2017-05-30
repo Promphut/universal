@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import {Link} from 'react-router-dom'
 import styled, {css} from 'styled-components'
 import {PrimaryButton} from 'components'
+import auth from 'components/auth'
 
 const Container = styled.div`
   display:block;
@@ -43,7 +44,9 @@ const Img = styled.div`
 `
 
 const EmptyStory = ({style, className, title,description,hideButton}) => {
-	return (
+	var hasRoles = auth.hasRoles(['ADMIN','EDITOR','WRITER'])
+  if(!hideButton&&!hasRoles) hideButton = true
+  return (
   	<Container style={{...style}} className={className}>
       <Img style={{backgroundImage:'url(/pic/pic.png)'}}/>
       <Title>{title}</Title>
