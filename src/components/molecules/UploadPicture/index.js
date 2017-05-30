@@ -240,7 +240,8 @@ class UploadPicture extends React.Component {
   componentWillReceiveProps(nextProps){
     if(nextProps.src!=this.props.src && nextProps.src!=null){
       this.setState({
-        statePreview:true
+        statePreview:true,
+        preview:nextProps.src
       })
     }
   }

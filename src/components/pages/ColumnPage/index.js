@@ -94,7 +94,8 @@ const ColumnName = styled.div`
   color:#fff;
   font-size:48px;
   font-weight:bold;
-
+	display:inline;
+	margin-left:30px;
 	@media (max-width:480px) {
   	font-size: 16px;
   }
@@ -185,6 +186,7 @@ class ColumnPage extends React.Component {
 					15
 				)
 				.then(result => {
+					console.log(result)
 					let feed = this.state.feed.concat(result.feed)
 					this.setState(
 						{
@@ -239,12 +241,6 @@ class ColumnPage extends React.Component {
 		let { feedCount, feed, hasMoreFeed } = this.state
 		//let {count, loadOffset, isInfiniteLoading, latestStories, isMobile} = this.state
 		//console.log(feedCount)
-		let ChildCover = (
-			<Head>
-				<ColumnName className="serif-font">{column.name}</ColumnName>
-				<ColumnDetail>{column.shortDesc}</ColumnDetail>
-			</Head>
-		)
 
 		return (
 			<Wrapper>
@@ -284,10 +280,17 @@ class ColumnPage extends React.Component {
 					src={column.cover.medium || column.cover.small}
 					style={{ width: '100%', height: BGImgSize + 'px' }}
 					alt={column.name}
-					child={ChildCover}
-				/>
+				>
+					<Head>
+						<div className='row'>
+							<img src={column.icon} style={{width:'80px',height:'80px',display:'inline'}} />
+							<ColumnName className="serif-font">{column.name}</ColumnName>
+						</div>
+						<ColumnDetail>{column.shortDesc}</ColumnDetail>
+					</Head>
+				</BGImg>
 				<Content isMobile={isMobile}>
-					{feed.length == 0
+					{feedCount == 0
 						? <Main>
 								<StoryMenu
 									style={{ padding: '15px 0 15px 0', margin: '0 0 50px 0' }}

@@ -539,7 +539,7 @@ class ColumnSettingPage extends React.Component {
 			snackbar,
 			snackbarMS
 		} = this.state
-
+		//console.log(col)
 		const actions = [
 			<FlatButton
 				label="Cancel"
@@ -673,6 +673,28 @@ class ColumnSettingPage extends React.Component {
 								height={90}
 								width={480}
 								type="cover"
+							/>
+						</Edit>
+					</Flex>
+					<Flex>
+						<Title>
+							<div className="sans-font">Icon</div>
+						</Title>
+						<Edit>
+							<UploadPicture
+								src={col.icon}
+								path={
+									'/publishers/' +
+										config.PID +
+										'/columns/' +
+										this.state.selectColumn +
+										'/icon'
+								}
+								ratio={120 / 120}
+								size="120x120"
+								height={120}
+								width={120}
+								type="icon"
 							/>
 						</Edit>
 					</Flex>

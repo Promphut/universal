@@ -88,7 +88,7 @@ const TopNavigation = ({ menu }) => {
 	})
 
 	let stories_cols = []
-		const s_colsNumber = Math.round(cols.length / 7)
+		const s_colsNumber = Math.ceil(cols.length / 7)
 		for (let i = 0; i < s_colsNumber; i++) {
 			let stories_rows = []
 			for (let j = i * 7; j < i * 7 + 7; j++) {

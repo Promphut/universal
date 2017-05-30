@@ -453,7 +453,7 @@ class UserStory extends React.Component {
 					</UserShareMobile>}
 
 				<Content>
-					{feed.length == 0
+					{feedCount == 0
 						? <Main>
 								<TextLine className="sans-font">
 									<strong
