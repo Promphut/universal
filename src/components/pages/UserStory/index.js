@@ -387,7 +387,7 @@ class UserStory extends React.Component {
 		let { theme } = this.context.setting.publisher
 		let { user, isMobile } = this.state
 		let { feedCount, feed, hasMoreFeed } = this.state
-
+		//console.log(feed)
 		return (
 			<Wrapper>
 				<Helmet>
@@ -453,7 +453,7 @@ class UserStory extends React.Component {
 					</UserShareMobile>}
 
 				<Content>
-					{feedCount === 0
+					{feed.length == 0
 						? <Main>
 								<TextLine className="sans-font">
 									<strong
@@ -467,10 +467,9 @@ class UserStory extends React.Component {
 									{/*<span style={{fontSize:'30px'}}>101</span> Upvotes*/}
 								</TextLine>
 								<EmptyStory
-									title="No Story, yet"
-									description="There are no stories in this column right now. Wanna back to see other columns?"
+									title="Start your first story!"
+									description="You haven’t write any stories right now."
 								/>
-
 							</Main>
 						: <Main>
 
@@ -496,19 +495,6 @@ class UserStory extends React.Component {
 										))}
 									</div>
 								</InfiniteScroll>
-								{/*<Infinite
-								containerHeight={!isMobile?(count*210)-100:(count*356)-100}
-								elementHeight={!isMobile?210:356}
-								infiniteLoadBeginEdgeOffset={loadOffset}
-								onInfiniteLoad={this.handleInfiniteLoad}
-								loadingSpinnerDelegate={this.elementInfiniteLoad()}
-								isInfiniteLoading={isInfiniteLoading}
-								useWindowAsScrollContainer={true}>
-
-							{latestStories.length!=0?latestStories.map((story, index) => (
-								<ArticleBox detail={story} key={index}/>
-							)):''}
-						</Infinite>*/}
 							</Main>}
 				</Content>
 				<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="600" />

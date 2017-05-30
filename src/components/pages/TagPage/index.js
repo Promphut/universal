@@ -234,7 +234,7 @@ class TagPage extends React.Component {
 
 				<Content>
 
-					{feedCount === 0
+					{feed.length == 0
 						? <Main>
 								<TextLine
 									className="sans-font"
@@ -249,7 +249,7 @@ class TagPage extends React.Component {
 
 								<EmptyStory
 									title="No Story, yet"
-									description="There are no stories in this column right now. Wanna back to see other columns?"
+									hideButton={true}
 								/>
 							</Main>
 						: <Main>

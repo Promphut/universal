@@ -17,6 +17,7 @@ const Container = styled.div`
   height:100%;
   top:0;
   left:0;
+	z-index:100;
 	animation: ${props => (props.open ? displayBlock : displayNone)} 0.5s forwards;
   @media (max-width:480px){
     width: 100vw;
@@ -32,7 +33,7 @@ const Container2 = styled.div`
   height:100%;
   top:0;
   left:0;
-  z-index:10;
+	z-index:101;
   background:rgba(0,0,0,0.8);
   animation: ${props => (props.open ? fadeOut : fadeIn)} 0.5s forwards;
   @media (max-width:480px){
@@ -43,21 +44,17 @@ const Container2 = styled.div`
 const displayNone = keyframes`
   from {
     opacity:1;
-		z-index:20;
   }
   to {
     opacity:0;
-		z-index:-20;
   }
 `
 const displayBlock = keyframes`
   from {
     opacity:0;
-		z-index:-20;
   }
   to {
     opacity:1;
-		z-index:20;
   }
 `
 const slideOut = keyframes`
@@ -106,9 +103,7 @@ const Nav = styled.nav`
 	width: 400px;
 	overflow-x: hidden;
 	overflow-y: auto;
-	// padding: 40px;
-	-webkit-overflow-scrolling: touch;
-	z-index:30;
+	z-index:102;
   animation: ${props => (props.open ? slideOut : slideIn)} 0.6s forwards;
   background: rgba(255, 255, 255, 0.85);
 

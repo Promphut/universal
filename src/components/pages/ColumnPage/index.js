@@ -238,7 +238,7 @@ class ColumnPage extends React.Component {
 		let { column, isMobile } = this.state
 		let { feedCount, feed, hasMoreFeed } = this.state
 		//let {count, loadOffset, isInfiniteLoading, latestStories, isMobile} = this.state
-		//console.log('COL', column)
+		//console.log(feedCount)
 		let ChildCover = (
 			<Head>
 				<ColumnName className="serif-font">{column.name}</ColumnName>
@@ -287,7 +287,7 @@ class ColumnPage extends React.Component {
 					child={ChildCover}
 				/>
 				<Content isMobile={isMobile}>
-					{feedCount === 0
+					{feed.length == 0
 						? <Main>
 								<StoryMenu
 									style={{ padding: '15px 0 15px 0', margin: '0 0 50px 0' }}
@@ -297,11 +297,11 @@ class ColumnPage extends React.Component {
 									title="No Story, yet"
 									description={
 										<div>
-											There are no stories in this column right now. Wanna back to see
+											There are no stories in this column right now. Wanna back to see 
 											<Link
 												to="/stories/columns"
-												style={{ color: theme.accentColor }}>
-												other columns
+												style={{ color: theme.accentColor,padding:'0 0.5em 0 0.5em' }}>
+												 other columns
 											</Link>
 											?
 										</div>
