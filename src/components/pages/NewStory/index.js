@@ -221,7 +221,7 @@ class NewStory extends React.Component {
     //story:'Write a story ...',
     story: {},
     chooseLayout:null,
-    layout:'news',
+    layout:'',
     open:false,
     column:'no',
     contentType:'NEWS',
@@ -495,8 +495,10 @@ class NewStory extends React.Component {
           title:title,
           publisher:parseInt(config.PID),
           html:el,
-          highlight
+          highlight,
+          format:this.state.layout
         }
+        //console.log(s)
         if(column!='no') s.column = column
         s.contentType = contentType
 
@@ -734,11 +736,11 @@ class NewStory extends React.Component {
         <div className='row' style={{marginTop:'60px',padding:'10px'}}>
           <div className='col-6'>
             <Label2 className="nunito-font" >News</Label2>
-            <Layout style={{backgroundImage:'url(/pic/news.png)',boxShadow:layout=="news"?'0 0 10px '+theme.primaryColor:''}} onClick={() => this.chooseLayout('news')} />
+            <Layout style={{backgroundImage:'url(/pic/news.png)',boxShadow:layout=="NEWS"?'0 0 10px '+theme.primaryColor:''}} onClick={() => this.chooseLayout('NEWS')} />
           </div>
           <div className='col-6'>
             <Label2 className="nunito-font" >Article</Label2>
-            <Layout style={{backgroundImage:'url(/pic/article.png)',boxShadow:layout=="article"?'0 0 10px '+theme.primaryColor:''}} onClick={() => this.chooseLayout('article')} />
+            <Layout style={{backgroundImage:'url(/pic/article.png)',boxShadow:layout=="ARTICLE"?'0 0 10px '+theme.primaryColor:''}} onClick={() => this.chooseLayout('ARTICLE')} />
           </div>
         </div>
         <div className='row' style={{display:'block',overflow:'hidden',marginTop:'50px'}}>
