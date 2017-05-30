@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
+import _ from 'lodash'
 
 const Container = styled.div`
 	display:flex;
@@ -43,49 +44,73 @@ const NavLink2 = styled(NavLink)`
 	}
 `
 const DropdownBox = styled.div`
-		min-width: 230px;
-    display: none;
-    position: absolute;
-    z-index: 3;
-    top: 60px;
-		background-color:#E5E5E5;
-		padding:18px 28px 18px 28px;
-`
-const DropdownList = styled(NavLink)`
-		background-color:#E5E5E5;
-		width: 100%;
-		padding: 10px 0 10px 0;
-		color: #222;
-		transition: .2s;
-		display:block;&:hover{
-			color:${props => props.theme.accentColor};
-		}
-`
-const Line = styled.div`
-	background-color:#C4C4C4;
-	height:1px;
-	width:100%;
-	margin:10px 0 10px 0;
+	display: none;
+	position: absolute;
+	top: 60px;
+	padding: 5px 15px;
+	background-color:#E5E5E5;
+	z-index: 3;
 `
 
+const DropdownFlex = styled.div`
+	display: flex;
+  flex-flow: row wrap;
+`
+
+const DropdownCol = styled.div`
+	flex: 1 auto;
+	padding: 8px;
+	max-width: 240px;
+`
+
+const DropdownRow = styled(NavLink)`
+	display: block;
+	color: #222;
+	padding: 7px;
+	max-width: 225px;
+	white-space: initial;
+
+	&:hover {
+		color: ${props => props.theme.accentColor};
+	}
+`
+
+const Line = styled.div`
+	background-color: #C4C4C4;
+	height: 1px;
+	margin: 0px 15px;
+`
 const TopNavigation = ({ menu }) => {
 	let cols = menu && menu.column ? menu.column : []
 
-	let items = []
-	for (let i = 0; i < cols.length; i++) {
-		if (cols[i].slug == 'news') continue
-		items.push(
-			<DropdownList
-				key={i}
-				exact
-				to={'/stories/' + cols[i].slug}
-				activeClassName="active"
-				className="nunito-font">
-				{cols[i].name}
-			</DropdownList>
-		)
-	}
+	_.remove(cols, col => {
+		return col.slug == 'news'
+	})
 
+	let stories_cols = []
+		const s_colsNumber = Math.round(cols.length / 7)
+		for (let i = 0; i < s_colsNumber; i++) {
+			let stories_rows = []
+			for (let j = i * 7; j < i * 7 + 7; j++) {
+				if (cols[j]) {
+					stories_rows.push(
+						<DropdownRow
+							key={j}
+							exact
+							to={'/stories/' + cols[j].slug}
+							activeClassName="active"
+							className="nunito-font">
+							{cols[j].name}
+						</DropdownRow>
+					)
+				}
+			}
+			stories_cols.push(
+				<DropdownCol key={i}>
+					{stories_rows}
+				</DropdownCol>
+			)
+		}
 	return (
 		<Container>
 			<NavLink2
@@ -98,14 +123,20 @@ const TopNavigation = ({ menu }) => {
 			<NavSpan className="nunito-font">
 				Stories ▾
 				<DropdownBox>
-					{items}
+					<DropdownFlex>
+						{stories_cols}
+					</DropdownFlex>
 					<Line />
-					<DropdownList
-						to={'/stories/columns'}
-						activeClassName="active"
-						className="nunito-font">
-						All Columns
-					</DropdownList>
+					<DropdownCol key={999}>
+						<DropdownRow
+							key={999}
+							exact
+							to={'/stories/columns'}
+							activeClassName="active"
+							className="nunito-font">
+							All Columns
+						</DropdownRow>
+					</DropdownCol>
 				</DropdownBox>
 			</NavSpan>
 			<NavLink2
