@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
+import _ from 'lodash'
 
 const Container = styled.div`
 	display:flex;
@@ -81,6 +82,10 @@ const Line = styled.div`
 `
 const TopNavigation = ({ menu }) => {
 	let cols = menu && menu.column ? menu.column : []
+
+	_.remove(cols, col => {
+		return col.slug == 'news'
+	})
 
 	let stories_cols = []
 		const s_colsNumber = Math.round(cols.length / 7)
