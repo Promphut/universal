@@ -275,7 +275,7 @@ class PublisherThemeSetting extends React.Component {
     let pub = this.state.publisher
     var {theme} = this.context.setting.publisher
     var {primaryColor,secondaryColor,accentColor,colorTheme,anchorEl1,anchorEl2,anchorEl3,open1,open2,open3,textStatus,uploadFavicon,uploadLogo,uploadSLogo,error} = this.state
-    
+
     var styles={
       example2:{
         color:'#222',
@@ -461,8 +461,8 @@ class PublisherThemeSetting extends React.Component {
             <div className='row sans-font' style={{border:'1px solid #e2e2e2',padding:'10px',margin:'20px 0 0 0'}}>
               <Topbar style={{backgroundColor:colorTheme=='light'?'white':primaryColor,marginBottom:'20px'}}>
                 <i className="material-icons" style={{margin:'9px',color:colorTheme=='light'?'#222':'white',float:'left'}}>menu</i>
-                {theme.primaryColor&&<LogoLink id='priview'  src={theme.logo} style={{float:'left',width:'100%',margin:'12px'}} fill={colorTheme=='light'?primaryColor:'#ffffff'} title='logo'/>}
-                <div className='nunito-font' style={{fontWeight:'bold',color:colorTheme=='light'?'#222':'white',padding:'8px'}}>About</div>
+                {/*{theme.primaryColor&&<LogoLink id='priview'  src={theme.logo} style={{float:'left',width:'100%',margin:'12px'}} fill={colorTheme=='light'?primaryColor:'#ffffff'} title='logo'/>}*/}
+                <div className='nunito-font' style={{fontWeight:'bold',color:colorTheme=='light'?'#222':'white',padding:'8px', marginLeft:'20px'}}>About</div>
                 <div className='nunito-font' style={{fontWeight:'bold',color:colorTheme=='light'?'#222':'white',padding:'8px'}}>Contact</div>
                 <RaisedButton
                   label="button"

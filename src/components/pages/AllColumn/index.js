@@ -162,12 +162,9 @@ class AllColumn extends React.Component {
 		//  })
 
 		api.getColumns().then(cols => {
-			console.log(cols)
 			_.remove(cols, col => {
 				return col.slug == 'news'
 			})
-			console.log(cols)
-
 			this.setState({ columns: cols })
 		})
 	}
