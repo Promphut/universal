@@ -16,7 +16,7 @@ import reject from 'lodash/reject'
 
 const Container = styled.form`
   width:100%;
-  padding:80px;
+  padding:40px;
   border-bottom:1px solid #E2E2E2;
   .textTitle{
     color:#C2C2C2;
@@ -316,21 +316,23 @@ class PublisherContact extends React.Component {
 
           </Edit>
         </Flex>
-        <div className="sans-font" style={{marginTop:'20px',float: 'right',overflow:'hidden'}}>
-					<TextStatus style={{ color: error ? '#D8000C' : theme.accentColor }}>
-						{textStatus}
-					</TextStatus>
-					<SecondaryButton
-						label="Reset"
-						onClick={this.resetData}
-						style={{ float: 'left', margin: '0 0 0 20px' }}
-					/>
-					<PrimaryButton
-						label="Save"
-						type="submit"
-						style={{ float: 'left', margin: '0 0 0 20px' }}
-					/>
-				</div>
+        <div style={{clear:'both',overflow:'hidden'}}>
+          <div className="sans-font" style={{marginTop:'20px',float: 'right',overflow:'hidden'}}>
+            <TextStatus style={{ color: error ? '#D8000C' : theme.accentColor }}>
+              {textStatus}
+            </TextStatus>
+            <SecondaryButton
+              label="Reset"
+              onClick={this.resetData}
+              style={{ float: 'left', margin: '0 0 0 20px' }}
+            />
+            <PrimaryButton
+              label="Save"
+              type="submit"
+              style={{ float: 'left', margin: '0 0 0 20px' }}
+            />
+          </div>
+        </div>
       </Container>
     )
   }

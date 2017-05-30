@@ -23,7 +23,7 @@ if (process.env.BROWSER) {
 
 const Container = styled.form`
   width:100%;
-  padding:80px;
+  padding:40px;
   border-bottom:1px solid #E2E2E2;
   .textTitle{
     color:#C2C2C2;
@@ -76,7 +76,8 @@ const AddTag = styled.div`
 const Paper = styled.div`
   position:relative;
   width:100%;
-  min-height:200px;
+	border:1px solid #e2e2e2;
+  min-height:400px;
   &:focus{
     outline: none;
   }
@@ -237,23 +238,27 @@ class PublisherAbout extends React.Component {
 				<br />
 				<Flex>
 					<Edit>
-						<Paper id="paper" />
+						<div style={{margin:'10px 0 20px 40px'}}>
+							<Paper id="paper" />
+						</div>
 					</Edit>
 				</Flex>
-				<div className="sans-font" style={{float: 'right' }}>
-					<TextStatus style={{ color: error ? '#D8000C' : theme.accentColor }}>
-						{textStatus}
-					</TextStatus>
-					<SecondaryButton
-						label="Reset"
-						onClick={this.resetData}
-						style={{ float: 'left', margin: '0 0 0 20px' }}
-					/>
-					<PrimaryButton
-						label="Save"
-						type="submit"
-						style={{ float: 'left', margin: '0 0 0 20px' }}
-					/>
+				<div style={{overflow:'hidden',clear:'both'}}>
+					<div className="sans-font" style={{float: 'right' }}>
+						<TextStatus style={{ color: error ? '#D8000C' : theme.accentColor }}>
+							{textStatus}
+						</TextStatus>
+						<SecondaryButton
+							label="Reset"
+							onClick={this.resetData}
+							style={{ float: 'left', margin: '0 0 0 20px' }}
+						/>
+						<PrimaryButton
+							label="Save"
+							type="submit"
+							style={{ float: 'left', margin: '0 0 0 20px' }}
+						/>
+					</div>
 				</div>
 			</Container>
 		)
