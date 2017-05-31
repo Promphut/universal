@@ -290,7 +290,7 @@ class ColumnPage extends React.Component {
 					</Head>
 				</BGImg>
 				<Content isMobile={isMobile}>
-					{feedCount == 0
+					{feedCount <= 0
 						? <Main>
 								<StoryMenu
 									style={{ padding: '15px 0 15px 0', margin: '0 0 50px 0' }}

@@ -234,7 +234,7 @@ class TagPage extends React.Component {
 
 				<Content>
 
-					{feedCount == 0
+					{feedCount <= 0
 						? <Main>
 								<TextLine
 									className="sans-font"
