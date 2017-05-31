@@ -167,7 +167,7 @@ class NewsPage extends React.Component {
 
 		this.state = {
 			page: 0,
-			feedCount: -1,
+			feedCount: 1,
 			feed: [],
 			hasMoreFeed: true,
 

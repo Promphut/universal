@@ -260,7 +260,7 @@ class UserStory extends React.Component {
 		//loadOffset:300,
 		//feedCount:0,
 		page: 0,
-		feedCount: -1,
+		feedCount: 1,
 		feed: [],
 		hasMoreFeed: true,
 
@@ -295,7 +295,7 @@ class UserStory extends React.Component {
 		this.setState(
 			{
 				page: 0,
-				feedCount: -1,
+				feedCount: 1,
 				feed: [],
 				hasMoreFeed: true
 			},

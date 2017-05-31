@@ -165,7 +165,7 @@ class HomePage extends React.Component {
 		selectTab: 0,
 
 		page: 0,
-		feedCount: -1,
+		feedCount: 1,
 		feed: [],
 		hasMoreFeed: true
 	}
@@ -195,7 +195,7 @@ class HomePage extends React.Component {
 		this.setState(
 			{
 				page: 0,
-				feedCount: -1,
+				feedCount: 1,
 				feed: [],
 				hasMoreFeed: true
 			},

@@ -127,7 +127,7 @@ class ColumnPage extends React.Component {
 		isMobile: false,
 
 		page: 0,
-		feedCount: -1,
+		feedCount: 1,
 		feed: [],
 		hasMoreFeed: true
 	}
@@ -155,7 +155,7 @@ class ColumnPage extends React.Component {
 		this.setState(
 			{
 				page: 0,
-				feedCount: -1,
+				feedCount: 1,
 				feed: [],
 				hasMoreFeed: true
 			},
@@ -186,7 +186,7 @@ class ColumnPage extends React.Component {
 					15
 				)
 				.then(result => {
-					console.log(result)
+					//console.log(result.count['1'])
 					let feed = this.state.feed.concat(result.feed)
 					this.setState(
 						{
@@ -283,7 +283,7 @@ class ColumnPage extends React.Component {
 				>
 					<Head>
 						<div className='row'>
-							<img src={column.icon} style={{width:'80px',height:'80px',display:'inline'}} />
+							{column.icon!=config.BACKURL + '/imgs/brand_display.png'&&<img src={column.icon} style={{width:'80px',height:'80px',display:'inline'}} />}
 							<ColumnName className="serif-font">{column.name}</ColumnName>
 						</div>
 						<ColumnDetail>{column.shortDesc}</ColumnDetail>

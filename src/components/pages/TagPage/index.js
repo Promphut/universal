@@ -127,7 +127,7 @@ class TagPage extends React.Component {
 		tag: {},
 
 		page: 0,
-		feedCount: -1,
+		feedCount: 1,
 		feed: [],
 		hasMoreFeed: true
 	}
@@ -151,7 +151,7 @@ class TagPage extends React.Component {
 		this.setState(
 			{
 				page: 0,
-				feedCount: -1,
+				feedCount: 1,
 				feed: [],
 				hasMoreFeed: true
 			},
