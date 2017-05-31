@@ -95,7 +95,6 @@ const ColumnName = styled.div`
   font-size:48px;
   font-weight:bold;
 	display:inline;
-	margin-left:30px;
 	@media (max-width:480px) {
   	font-size: 16px;
   }
@@ -283,7 +282,7 @@ class ColumnPage extends React.Component {
 				>
 					<Head>
 						<div className='row'>
-							{column.icon!=config.BACKURL + '/imgs/brand_display.png'&&<img src={column.icon} style={{width:'80px',height:'80px',display:'inline'}} />}
+							{column.icon!=config.BACKURL + '/imgs/brand_display.png'&&<img src={column.icon} style={{width:'80px',height:'80px',display:'inline',marginRight:'30px'}} />}
 							<ColumnName className="serif-font">{column.name}</ColumnName>
 						</div>
 						<ColumnDetail>{column.shortDesc}</ColumnDetail>
