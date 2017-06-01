@@ -28,7 +28,6 @@ const BGImg = ({
 	url,
 	alt,
 	opacity,
-	child,
 	children,
 	gradient
 }) => {
@@ -48,11 +47,9 @@ const BGImg = ({
 			<Link to={url || '#'} style={style} className={className} title={alt}>
 				{opacity === -1
 					? <div>
-							{child ? child : ''}
 							{children}
 						</div>
 					: <Filter opacity={opacity} gradient={gradient}>
-							{child ? child : ''}
 							{children}
 						</Filter>}
 			</Link>
@@ -62,11 +59,9 @@ const BGImg = ({
 			<div style={style} className={className} title={alt}>
 				{opacity === -1
 					? <div>
-							{child ? child : ''}
 							{children}
 						</div>
 					: <Filter opacity={opacity} gradient={gradient}>
-							{child ? child : ''}
 							{children}
 						</Filter>}
 			</div>

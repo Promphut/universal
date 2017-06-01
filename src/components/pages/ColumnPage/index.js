@@ -147,7 +147,21 @@ const Onload = styled.div`
 	height:70px;
 	margin:50px 0 50px 0;
 `
-
+const Gra = styled.div`
+	 width: 100%;
+	 height: 340px;
+	 position:relative;
+	 top:60px;
+	 display: flex;
+	 align-items:center;
+	 @media (max-width:480px) {
+			height: 160px;
+	 }
+	background: -moz-linear-gradient(-45deg,  ${props => props.theme.primaryColor} 0%, ${props => props.theme.secondaryColor} 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(-45deg,  ${props => props.theme.primaryColor} 0%, ${props => props.theme.secondaryColor} 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(135deg,  ${props => props.theme.primaryColor} 0%, ${props => props.theme.secondaryColor} 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\#bf00b2b4\, endColorstr=\#bfcef1b7\,GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+`
 
 class ColumnPage extends React.Component {
 	state = {
@@ -271,7 +285,13 @@ class ColumnPage extends React.Component {
 		let { feedCount, feed, hasMoreFeed } = this.state
 		//let {count, loadOffset, isInfiniteLoading, latestStories, isMobile} = this.state
 		//console.log(feedCount)
-
+		var head = 	<Head>
+									<div className='row'>
+										{column.icon!=config.BACKURL + '/imgs/brand_display.png'&&<Icon src={column.icon}  />}
+										<ColumnName className="serif-font">{column.name}</ColumnName>
+									</div>
+									<ColumnDetail>{column.shortDesc}</ColumnDetail>
+								</Head>
 		return (
 			<Wrapper>
 				<Helmet>
@@ -308,19 +328,13 @@ class ColumnPage extends React.Component {
 					/>
 				</div>
 
+				{column.cover.medium!=config.BACKURL +'/imgs/column_cover.png'?
 				<Cover
 					style={{display:'flex',alignItems:'center'}}
-					src={column.cover.medium || column.cover.small}
+					src={column.cover.medium}
 					alt={column.name}
-				>
-					<Head>
-						<div className='row'>
-							{column.icon!=config.BACKURL + '/imgs/brand_display.png'&&<Icon src={column.icon}  />}
-							<ColumnName className="serif-font">{column.name}</ColumnName>
-						</div>
-						<ColumnDetail>{column.shortDesc}</ColumnDetail>
-					</Head>
-				</Cover>
+				>{head}</Cover>:
+				<Gra>{head}</Gra>	}
 				
 				<Content isMobile={isMobile}>
 					{feedCount <= 0
