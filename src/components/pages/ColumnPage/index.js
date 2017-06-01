@@ -31,7 +31,7 @@ const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
-	padding:50px 0 20px 0;
+	padding:110px 0 20px 0;
 	min-height: calc(100vh - ${props => (props.isMobile ? '321px' : '501px')});
 `
 
@@ -46,14 +46,21 @@ const Main = styled.div`
 `
 
 const Head = styled.div`
-	margin: 120px 0 0 20%;
-
+	 position:relative;
+	 width:100%;
+	 height:100%;
+	 top:0px;
+	 left:0px;
+	 display: flex;
+	 justify-content:center;
+	 padding:0 20% 0 20%;
+	 flex-direction:column;
 	@media (max-width: 768px) {
-		margin: 120px 5% 0 5%;
+		padding:0 5% 0 5%;
   }
 
 	@media (max-width: 480px) {
-		margin: 72px 5% 0 5%;
+		padding:0 5% 0 5%;
 	}
 `
 
@@ -111,12 +118,36 @@ const ColumnDetail = styled.div`
 		margin-top: 8px;
   }
 `
+const Cover =styled(BGImg)`
+	 width: 100%;
+	 height: 340px;
+	 position:relative;
+	 top:60px;
+	 display: flex;
+	 align-items:center;
+	 @media (max-width:480px) {
+			height: 160px;
+	 }
+`
+
+const Icon = styled.img`
+	width:80px;
+	height:80px;
+	display:inline;
+	margin-right:30px;
+	@media (max-width:480px) {
+  	width:30px;
+		height:30px;
+		margin-right:10px;
+  }
+`
 
 const Onload = styled.div`
 	width:100%;
 	height:70px;
 	margin:50px 0 50px 0;
 `
+
 
 class ColumnPage extends React.Component {
 	state = {
@@ -270,24 +301,27 @@ class ColumnPage extends React.Component {
 					<meta property="twitter:image:alt" content={column.name} />
 					<meta property="fb:app_id" content={config.ANALYTIC.FBAPPID} />
 				</Helmet>
+				<div style={{}}>
+					<TopBarWithNavigation
+						title={'Title of AomMoney goes here..'}
+						onLoading={this.props.onLoading}
+					/>
+				</div>
 
-				<TopBarWithNavigation
-					title={'Title of AomMoney goes here..'}
-					onLoading={this.props.onLoading}
-				/>
-				<BGImg
+				<Cover
+					style={{display:'flex',alignItems:'center'}}
 					src={column.cover.medium || column.cover.small}
-					style={{ width: '100%', height: BGImgSize + 'px' }}
 					alt={column.name}
 				>
 					<Head>
 						<div className='row'>
-							{column.icon!=config.BACKURL + '/imgs/brand_display.png'&&<img src={column.icon} style={{width:'80px',height:'80px',display:'inline',marginRight:'30px'}} />}
+							{column.icon!=config.BACKURL + '/imgs/brand_display.png'&&<Icon src={column.icon}  />}
 							<ColumnName className="serif-font">{column.name}</ColumnName>
 						</div>
 						<ColumnDetail>{column.shortDesc}</ColumnDetail>
 					</Head>
-				</BGImg>
+				</Cover>
+				
 				<Content isMobile={isMobile}>
 					{feedCount <= 0
 						? <Main>
