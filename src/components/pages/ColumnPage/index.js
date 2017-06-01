@@ -99,7 +99,7 @@ const TextLine = styled.div`
 
 const ColumnName = styled.div`
   color:#fff;
-  font-size:48px;
+  font-size:72px;
   font-weight:bold;
 	display:inline;
 	@media (max-width:480px) {
@@ -131,8 +131,8 @@ const Cover =styled(BGImg)`
 `
 
 const Icon = styled.img`
-	width:80px;
-	height:80px;
+	width:72px;
+	height:72px;
 	display:inline;
 	margin-right:30px;
 	@media (max-width:480px) {
@@ -230,13 +230,13 @@ class ColumnPage extends React.Component {
 					15
 				)
 				.then(result => {
-					//console.log(result.count['1'])
+					console.log(result)
 					let feed = this.state.feed.concat(result.feed)
 					this.setState(
 						{
 							page: ++page,
 							feed: feed,
-							feedCount: result.count['1'],
+							feedCount: result.count['1']?result.count['1']:0?result.count['1']:0,
 							hasMoreFeed: feed.length < result.count['1']
 						},
 						() => {
@@ -288,7 +288,7 @@ class ColumnPage extends React.Component {
 		var head = 	<Head>
 									<div className='row'>
 										{column.icon!=config.BACKURL + '/imgs/brand_display.png'&&<Icon src={column.icon}  />}
-										<ColumnName className="serif-font">{column.name}</ColumnName>
+										<ColumnName className="sans-font">{column.name}</ColumnName>
 									</div>
 									<ColumnDetail>{column.shortDesc}</ColumnDetail>
 								</Head>

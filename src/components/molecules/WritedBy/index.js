@@ -45,7 +45,7 @@ const WritedBy = ({style, writer, /*column,*/ published}) => {
   //let {name,date,column,url} = detail
   //console.log('WritedBy', writer, published)
   //writer = writer || { pic: {} }
-  console.log(writer)
+  //console.log(writer)
   return (
     <Container style={{...style}}>
 

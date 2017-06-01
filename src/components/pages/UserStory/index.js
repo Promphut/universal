@@ -322,7 +322,7 @@ class UserStory extends React.Component {
 						{
 							page: ++page,
 							feed: feed,
-							feedCount: result.count['1'],
+							feedCount: result.count['1']?result.count['1']:0,
 							hasMoreFeed: feed.length < result.count['1']
 						},
 						() => {
