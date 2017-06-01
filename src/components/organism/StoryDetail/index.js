@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom'
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon';
-import {WritedBy,TagBox,CommentBox,CommentUser,RecommendArticle,FromColumn} from 'components'
+import {WriterAndDate,WritedBy,TagBox,CommentBox,CommentUser,RecommendArticle,FromColumn} from 'components'
 import RaisedButton from 'material-ui/RaisedButton';
 import api from 'components/api'
 import utils from '../../../services/utils'
@@ -213,11 +213,12 @@ class StoryDetail extends React.Component {
     const columnStyle = isMobile ? {
       marginTop: '22px'
     } : {}
-    //console.log(s.ptitle)
+    //console.log(s)
 
     return (
       <Wraper>
         <Head className='title-font'>{s.ptitle}</Head>
+        <WriterAndDate readTime={s.readTime} writer={s.writer} column={s.column} published={s.published}/>
         {s.phighlight && <Highlight className='content-font'  dangerouslySetInnerHTML={{__html:s.phighlight}}></Highlight>} 
         <Story ref="detail" className='content-font' dangerouslySetInnerHTML={{__html:s.phtml}}></Story>
         {/*<WritedBy writer={s.writer} column={s.column} published={s.published} />*/}
