@@ -17,7 +17,6 @@ import auth from 'components/auth'
 import api from 'components/api'
 import slider from 'react-slick'
 import InfiniteScroll from 'react-infinite-scroller'
-//import Infinite from 'react-infinite'
 import CircularProgress from 'material-ui/CircularProgress'
 import LinearProgress from 'material-ui/LinearProgress'
 import FontIcon from 'material-ui/FontIcon'
@@ -25,6 +24,7 @@ import { Tabs, Tab } from 'material-ui/Tabs'
 import SwipeableViews from 'react-swipeable-views'
 import utils from '../../../services/utils'
 import isEmpty from 'lodash/isEmpty'
+import config from '../../../config'
 
 const Wrapper = styled.div`
 	@media (max-width:480px) {
@@ -272,7 +272,7 @@ class HomePage extends React.Component {
 						className="hidden-mob"
 						alt={pub && pub.name}>
 						<div>
-							<LogoLink to="/" src={theme && theme.llogo} id={'Largelogo'} />
+							{theme.llogo!=config.BACKURL + '/imgs/brand_display.png'&&<img src={theme && theme.llogo} id='Largelogo'/>}
 							<Tagline className="nunito-font">{pub && pub.tagline}</Tagline>
 						</div>
 					</BG>}

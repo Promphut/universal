@@ -149,7 +149,7 @@ const Edit = styled(Link)`
 	float:left;
 	text-decoration:underline;
 	padding:7px;
-	margin:10px 20px 0 0;
+	margin:0 20px 0 0;
 	&:hover{
 		cursor:pointer;
 	}
