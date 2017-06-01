@@ -64,9 +64,13 @@ class SignUp extends React.Component {
     errText0:'',
     errText1:'',
     errText2:'',
+    email:'',
+    password:'',
+    password2:''
   }
   constructor(props) {
     super(props)
+    this.state = {email:props.user}
   }
 
   signup = (e) => {
@@ -128,9 +132,25 @@ class SignUp extends React.Component {
     else this.setState({errText2:''})
   }
 
+  handleChange = (e)=>{
+    if(e.target.name=='email'){
+      this.setState({
+        email:e.target.value
+      })
+    }else if(e.target.name=='password1'){
+      this.setState({
+        password:e.target.value
+      })
+    }else if(e.target.name=='password2'){
+      this.setState({
+        password2:e.target.value
+      })
+    } 
+  }
+
   render(){
-    let {onClick,style} = this.props
-    let {errText0,errText1,errText2} = this.state
+    let {onClick,style,user} = this.props
+    let {errText0,errText1,errText2,email,password,password2} = this.state
 
     return (
       <Box style={{...style}}>
@@ -138,7 +158,7 @@ class SignUp extends React.Component {
         <Text >ไม่พลาดทุกเรื่องราวการเงินดีๆ สมัครสมาชิค</Text>
         <InputBox onSubmit={this.signup} ref='signupForm'>
           <TextField
-            autoFocus
+            
             hintText="Email"
             floatingLabelText="Email"
             type="email"
@@ -146,8 +166,11 @@ class SignUp extends React.Component {
             style={{marginTop:'15px'}}
             name='email'
             errorText={errText0}
+            value={email}
+            onChange={this.handleChange}
           /><br />
           <TextField
+            autoFocus
             hintText="Password must be at least 6 characters"
             floatingLabelText="Password"
             type="password"
@@ -155,6 +178,8 @@ class SignUp extends React.Component {
             style={{marginTop:'15px'}}
             name='password1'
             errorText={errText1}
+            value={password}
+            onChange={this.handleChange}
           /><br />
           <TextField
             hintText="Password Again"
@@ -165,6 +190,8 @@ class SignUp extends React.Component {
             name='password2'
             errorText={errText2}
             onBlur={this.checkPWD}
+            value={password2}
+            onChange={this.handleChange}
           /><br />
           <div style={{...styles.btnCon,width:'120px'}}><PrimaryButton label='Sign Up' type='submit' style={{width:'120px'}}/></div>
         </InputBox>
