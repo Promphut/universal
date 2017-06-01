@@ -349,6 +349,11 @@ class LeftMenu extends React.Component {
 							{isMobile &&
 								<div>
 									<li>
+										<DropDownListLink>
+											<Link to="/stories/news" onClick={close}>News</Link>
+										</DropDownListLink>
+									</li>
+									<li>
 										<DropDownListLink href="#" onClick={this.shrinkDrawer}>
 											Stories
 											<FontIcon
@@ -364,11 +369,6 @@ class LeftMenu extends React.Component {
 											<Link to={'/stories/columns'}>All Columns</Link>
 										</li>
 									</MiniMenu>
-									<li>
-										<DropDownListLink>
-											<Link to="/stories/news" onClick={close}>News</Link>
-										</DropDownListLink>
-									</li>
 									<Divider />
 								</div>}
 							<li><Link to="/" onClick={close}>Home</Link></li>
@@ -377,6 +377,11 @@ class LeftMenu extends React.Component {
 								<div>
 									<Divider />
 									<li>
+										<DropDownListLink>
+											<Link to="/stories/news" onClick={close}>News</Link>
+										</DropDownListLink>
+									</li>
+									<li>
 										<DropDownListLink href="#" onClick={this.shrinkDrawer}>
 											Stories
 											<FontIcon
@@ -392,11 +397,6 @@ class LeftMenu extends React.Component {
 											<Link to={'/stories/columns'}>All Columns</Link>
 										</li>
 									</MiniMenu>
-									<li>
-										<DropDownListLink>
-											<Link to="/stories/news" onClick={close}>News</Link>
-										</DropDownListLink>
-									</li>
 									<Divider />
 								</div>}
 							<li><Link to="/contact" onClick={close}>Contact</Link></li>

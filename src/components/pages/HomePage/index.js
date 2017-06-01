@@ -128,10 +128,18 @@ const BG = styled(BGImg)`
 `
 const Tagline = styled.div`
 	font-size:20px;
-	margin:30px auto 0 auto;
+	margin:0 auto 0 auto;
 	width:600px;
 	text-align:center;
 	color:white;
+`
+const Img = styled.img`
+	width:749px;
+	height:100px;
+`
+const ImgGif = styled.img`
+	width:849px;
+	height:200px;
 `
 
 const styles = {
@@ -167,7 +175,8 @@ class HomePage extends React.Component {
 		page: 0,
 		feedCount: 1,
 		feed: [],
-		hasMoreFeed: true
+		hasMoreFeed: true,
+		animate:false
 	}
 
 	constructor(props) {
@@ -252,11 +261,19 @@ class HomePage extends React.Component {
 			isMobile: utils.isMobile(),
 			completed: 100
 		})
+		// this.interval = setInterval(()=>{
+		// 	this.setState({
+		// 		animate:!this.state.animate
+		// 	})
+		// },10000)
+	}
+	componentWillUnmount(){
+		//clearInterval(this.interval)
 	}
 
 	render() {
 		let { isMobile, completed, selectTab } = this.state
-		let { feedCount, feed, hasMoreFeed } = this.state
+		let { feedCount, feed, hasMoreFeed,animate } = this.state
 		let pub = this.context.setting.publisher
 		let { theme } = this.context.setting.publisher
 
@@ -272,7 +289,7 @@ class HomePage extends React.Component {
 						className="hidden-mob"
 						alt={pub && pub.name}>
 						<div>
-							{theme.llogo!=config.BACKURL + '/imgs/brand_display.png'&&<img src={theme && theme.llogo} id='Largelogo'/>}
+							{theme.llogo!=config.BACKURL + '/imgs/brand_display.png'&&<Img src={theme.llogo} id='Largelogo'/>}
 							<Tagline className="nunito-font">{pub && pub.tagline}</Tagline>
 						</div>
 					</BG>}

@@ -230,7 +230,7 @@ class ColumnPage extends React.Component {
 					15
 				)
 				.then(result => {
-					console.log(result)
+					//console.log(result)
 					let feed = this.state.feed.concat(result.feed)
 					this.setState(
 						{

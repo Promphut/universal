@@ -168,7 +168,7 @@ const ArticleBox = ({ detail, style }, context) => {
 				</Div>
 				<BGImg
 					url={url}
-					src={cover.medium || cover.small}
+					src={cover.medium&&cover.medium||cover.small}
 					className="imgWidth"
 				/>
 			</Box1>

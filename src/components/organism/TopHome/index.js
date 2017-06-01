@@ -165,6 +165,8 @@ class TopHome extends React.Component {
 		var { style, swift, className, large } = this.props
 		var { hover, trendingStories } = this.state
 		//console.log(trendingStories)
+		if(trendingStories.length < 6){return(<div></div>)	}
+		else{
 		return (
 			<Content>
 				<Feed>
@@ -233,6 +235,7 @@ class TopHome extends React.Component {
 				</Feed>
 			</Content>
 		)
+		}
 	}
 }
 

@@ -319,7 +319,7 @@ class PublisherThemeSetting extends React.Component {
           <Edit>
             <div className='row'>
               <UploadPicture crop={false} src={theme.llogo} path={'/publishers/'+config.PID+'/llogo'} size='.svg' type='llogo' allowTypes='|svg+xml|' width={200} height={23}  style={{flex:1}}/>
-              <UploadPicture src={theme.llogoGif} path={'/publishers/'+config.PID+'/llogo/gif'} size='.gif' type='llogoGif' allowTypes='|gif|' width={200} height={23}  style={{flex:1}}/>
+              <UploadPicture crop={false} src={theme.llogoGif} path={'/publishers/'+config.PID+'/llogo/gif'} size='.gif' type='llogoGif' allowTypes='|gif|' width={200} height={23}  style={{flex:1}}/>
             </div>
           </Edit>
         </Flex>
