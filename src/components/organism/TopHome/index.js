@@ -165,7 +165,7 @@ class TopHome extends React.Component {
 		var { style, swift, className, large } = this.props
 		var { hover, trendingStories } = this.state
 		//console.log(trendingStories)
-		if(1){return(<div style={{height:70}}></div>)	}
+		if(trendingStories.length < 6){return(<div style={{height:70}}></div>)	}
 		else{
 		return (
 			<Content>
