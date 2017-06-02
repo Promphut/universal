@@ -20,6 +20,13 @@ const Filter = styled(GradientOverlay)`
   width:100%;
   height:100%;
 `
+const Gra = styled.div`
+	display: block;
+	overflow: auto;
+	background: linear-gradient(135deg,  ${props => props.theme.primaryColor} 0%, ${props => props.theme.secondaryColor} 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	background-position: center;
+	background-size: cover;
+`
 
 const BGImg = ({
 	style,
@@ -34,10 +41,6 @@ const BGImg = ({
 	//console.log('URL', url, match)
 	//if(!src) console.log('SRC', src)
 	style = {
-		display: 'block',
-		backgroundPosition: 'center',
-		backgroundSize: 'cover',
-		overflow: 'auto',
 		...style
 	}
 	if (src) style.backgroundImage = 'url(' + src + ')'
@@ -56,7 +59,7 @@ const BGImg = ({
 		)
 	else
 		return (
-			<div style={style} className={className} title={alt}>
+			<Gra style={{...style}} className={className} title={alt}>
 				{opacity === -1
 					? <div>
 							{children}
@@ -64,7 +67,7 @@ const BGImg = ({
 					: <Filter opacity={opacity} gradient={gradient}>
 							{children}
 						</Filter>}
-			</div>
+			</Gra>
 		)
 }
 

@@ -38,13 +38,16 @@ const Story = styled.div`
   clear:both;
 	overflow:hidden;
   ul > li {
-    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    font-family: 'CS PraJad','PT Sans', sans-serif;
     font-size: 18px;
     margin:10px 0 10px 0;
   }
   p {
-    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    font-family: 'CS PraJad','PT Sans', sans-serif;
     font-size: 18px;
+    margin:8px 0 8px 0;
+    line-height:1.5;
+    font-weight:normal;
     white-space: pre-wrap;      /* Webkit */
     white-space: -moz-pre-wrap; /* Firefox */
     white-space: -pre-wrap;     /* Opera <7 */
@@ -133,18 +136,21 @@ const Highlight = styled.div`
   width:100%;
   padding:20px;
   ul > li {
-    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    font-family: 'CS PraJad','PT Sans', sans-serif;
     font-size: 18px;
-    margin:10px 0 10px 0;
+    margin:8px 0 8px 0;
+    line-height:1.5;
   }
   ol > li {
-    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    font-family: 'CS PraJad','PT Sans', sans-serif;
     font-size: 18px;
-    margin:10px 0 10px 0;
+    margin:8px 0 8px 0;
+    line-height:1.5;
   }
   p {
-    font-family: 'PT Sans', 'cs_prajad', sans-serif;
-    font-size: 18px;
+    font-family: 'CS PraJad','PT Sans', sans-serif;
+    margin:8px 0 8px 0;
+    line-height:1.5;;
   }
 `
 
@@ -219,8 +225,8 @@ class StoryDetail extends React.Component {
       <Wraper>
         <Head className='title-font'>{s.ptitle}</Head>
         <WriterAndDate readTime={s.readTime} writer={s.writer} column={s.column} published={s.published}/>
-        {s.phighlight && <Highlight className='content-font'  dangerouslySetInnerHTML={{__html:s.phighlight}}></Highlight>} 
-        <Story ref="detail" className='content-font' dangerouslySetInnerHTML={{__html:s.phtml}}></Story>
+        {s.phighlight && <Highlight   dangerouslySetInnerHTML={{__html:s.phighlight}}></Highlight>} 
+        <Story ref="detail"  dangerouslySetInnerHTML={{__html:s.phtml}}></Story>
         {/*<WritedBy writer={s.writer} column={s.column} published={s.published} />*/}
 
 

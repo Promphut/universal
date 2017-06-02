@@ -1,28 +1,26 @@
 .medium-toolbar-arrow-under:after {
-  border-color: #00b2b4 transparent transparent transparent;
+  border-color: #EA0993 transparent transparent transparent;
   top: 60px; }
 
 .medium-toolbar-arrow-over:before {
-  border-color: transparent transparent #00b2b4 transparent; }
+  border-color: transparent transparent #EA0993 transparent; }
 
 .medium-editor-toolbar {
   background-color: #fff;
-  border: 2px solid #00b2b4;
+  border: 2px solid #EA0993;
   border-radius: 0px; }
   .medium-editor-toolbar li button {
-    font-size:20px;
     background-color: transparent;
     border: none;
-    border-right: 1px solid #00b2b4;
+    border-right: 1px solid #EA0993;
     box-sizing: border-box;
-    color: #00b2b4;
-    height: 60px;
-    min-width: 60px;
+    color: #EA0993;
+    height: 45px;
+    min-width: 45px;
     -webkit-transition: background-color .2s ease-in, color .2s ease-in;
             transition: background-color .2s ease-in, color .2s ease-in; }
     .medium-editor-toolbar li button:hover {
-      font-size:20px;
-      background-color: #00b2b4;
+      background-color: #EA0993;
       color: #fff; }
   .medium-editor-toolbar li .medium-editor-button-first {
     border-bottom-left-radius: 0px;
@@ -32,15 +30,15 @@
     border-right: none;
     border-top-right-radius: 0px; }
   .medium-editor-toolbar li .medium-editor-button-active {
-    background-color: #00b2b4;
+    background-color: #EA0993;
     color: #fff; }
 
 .medium-editor-toolbar-form {
-  background: #00b2b4;
+  background: #EA0993;
   border-radius: 0px;
   color: #fff; }
   .medium-editor-toolbar-form .medium-editor-toolbar-input {
-    background: #00b2b4;
+    background: #EA0993;
     color: fff;
     height: 60px; }
     .medium-editor-toolbar-form .medium-editor-toolbar-input::-webkit-input-placeholder {
@@ -61,9 +59,9 @@
     color: #fff; }
 
 .medium-editor-toolbar-anchor-preview {
-  background: #00b2b4;
+  background: #EA0993;
   border-radius: 0px;
   color: #fff; }
 
 .medium-editor-placeholder:after {
-  color: #00b2b4; }
+  color: #EA0993; }

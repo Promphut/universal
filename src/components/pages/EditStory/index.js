@@ -8,7 +8,8 @@ import {
 	UploadPicture,
 	DropdownWithIcon,
 	Alert,
-	MenuList
+	MenuList,
+  EditorCss
 } from 'components'
 import { findDOMNode as dom } from 'react-dom'
 import TextField from 'material-ui/TextField'
@@ -40,49 +41,51 @@ if (process.env.BROWSER) {
   require('blueimp-file-upload/js/jquery.iframe-transport.js')
   require('blueimp-file-upload/js/jquery.fileupload.js')
   require('blueimp-file-upload/js/jquery.fileupload-image.js')
-
   MediumEditor = require('medium-editor')
   window.MediumInsert = require('medium-editor-insert-plugin').MediumInsert
 }
 
-const Container = styled.form`
+const Container = styled(EditorCss)`
   width:100%;
   padding:60px;
   border-bottom:1px solid #E2E2E2;
-  .medium-editor-insert-plugin ul > li {
-    font-family: 'PT Sans', 'cs_prajad', sans-serif;
-    font-size: 18px;
-    margin:10px 0 10px 0;
-  }
+
   #highlight ul > li {
-    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    font-family: 'CS PraJad','PT Sans', sans-serif;
     font-size: 18px;
     margin:10px 0 10px 0;
   }
   #highlight ol > li {
-    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    font-family: 'CS PraJad','PT Sans', sans-serif;
     font-size: 18px;
     margin:10px 0 10px 0;
   }
   #highlight p {
-    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    font-family: 'CS PraJad','PT Sans', sans-serif;
     font-size: 18px;
   }
-  .medium-editor-insert-plugin p {
-    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+  #paper p {
+    font-family: 'CS PraJad','PT Sans', sans-serif;
     font-size: 18px;
+    margin:8px 0 8px 0;
+    line-height:1.5;
   }
-  .medium-editor-insert-plugin h2 {
+  #paper h2 {
     font-size: 28px;
     font-weight:bold;
     color:#222;
   }
-  .medium-editor-insert-plugin h3 {
+  #paper h3 {
     font-size: 20px;
     font-weight:normal;
     color:#bfbfbf;
   }
-  .medium-editor-insert-plugin blockquote {
+  #paper ul > li {
+    font-family: 'CS PraJad','PT Sans', sans-serif;
+    font-size: 18px;
+    margin:10px 0 10px 0;
+  }
+  #paper blockquote {
     font-size: 20px;
     font-family: 'PT Serif', 'Mitr';
     font-weight:normal;
@@ -99,6 +102,7 @@ const Container = styled.form`
 const Paper = styled.div`
   position:relative;
   width:100%;
+  margin-top:60px;
   min-height:500px;
   &:focus{
     outline: none;
@@ -106,6 +110,7 @@ const Paper = styled.div`
 `
 const Highlight = styled.div`
   background-color:#F4F4F4;
+  padding:20px;
   border:1px dashed ${props => props.theme.accentColor};
   width:100%;
   &:focus{
@@ -743,9 +748,8 @@ class EditStory extends React.Component {
     return (
       <Container onSubmit={this.updateData}>
         <Helmet>
-          <link rel="stylesheet" href="/css/medium-editor.css" type="text/css"/>
           <link rel="stylesheet" href="/css/tim.css" type="text/css"/>
-          <link rel="stylesheet" href="/css/medium-editor-insert-plugin.css" type="text/css"/>
+          <link rel="stylesheet" href="/css/medium-editor.css" type="text/css"/>
         </Helmet>
         <Alert
           open={alert}
@@ -772,7 +776,7 @@ class EditStory extends React.Component {
           anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
           targetOrigin={{horizontal: 'right', vertical: 'top'}}
           onRequestClose={this.handleRequestClose}
-          style={{border:'3px solid '+theme.accentColor,width:'482px',padding:'30px',marginTop:8,boxShadow:'none',overflow:'hidden'}}
+          style={{border:'3px solid '+theme.accentColor,width:'490px',padding:'30px',marginTop:8,boxShadow:'none',overflow:'hidden'}}
         >
         <SwipeableViews
           index={this.state.settingSlideIndex}
@@ -780,8 +784,8 @@ class EditStory extends React.Component {
         >
           <BasicSetting>
             <AdvancedEdit onClick={() => this.settingHandleChange(1)}>Advanced Edit</AdvancedEdit>
-            <div className='row' style={{display:'block',overflow:'hidden'}}>
-              <Label className="nunito-font or" style={{float:'left',marginTop:'22px'}}>Column : </Label>
+            <div className='' style={{display:'block',clear:'both'}}>
+              <Label className="nunito-font or" style={{float:'left',marginTop:'22px',minWidth:'57px'}}>Column : </Label>
               <DropDownMenu
                 value={column}
                 onChange={this.chooseColumn}
@@ -799,7 +803,7 @@ class EditStory extends React.Component {
                   <MenuItem value={data._id} primaryText={data.name} key={index} />
                 ))}
               </DropDownMenu>
-              <Label className="nunito-font or" style={{float:'left',marginTop:'22px',minWidth:'60px'}}>Type : </Label>
+              <Label className="nunito-font or" style={{float:'left',marginTop:'22px',minWidth:'57px'}}>Type : </Label>
               <DropDownMenu
                 value={contentTypeId}
                 onChange={this.chooseContentType}
@@ -818,7 +822,7 @@ class EditStory extends React.Component {
                 ))}
               </DropDownMenu>
             </div>
-            <div className='row' style={{display:'block',overflow:'hidden'}}>
+            <div className='' style={{display:'block',clear:'both',overflow:'hidden'}}>
               <Label className="nunito-font" style={{float:'left',marginTop:'26px'}}>Add up to 5 tags : </Label>
               <div className='row' style={{marginTop:'15px'}}>
                 {addTag.length!=0?addTag.map((data,index)=>(
@@ -843,7 +847,7 @@ class EditStory extends React.Component {
               </div>
             </div>
             <Divider/>
-	    <div className='row' style={{overflow:'hidden',display:'block'}}>
+	    <div className='' style={{overflow:'hidden',display:'block'}}>
               <TextStatus className='sans-font' style={{color:'#DC143C',float:'right',marginTop:'30px'}}>{publishStatus}</TextStatus>
             </div>
             <div className='row' style={{display:'block',overflow:'hidden',marginTop:'0px'}}>

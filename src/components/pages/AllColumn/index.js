@@ -10,6 +10,7 @@ import Slider from 'react-slick'
 //import Request from 'superagent'
 import api from 'components/api'
 import _ from 'lodash'
+import config from '../../../config'
 
 const Wrapper = styled.div`
   background-color: #F4F4F4;
@@ -69,6 +70,9 @@ const ColumnName = styled.div`
   font-size:24px;
   font-weight:bold;
   color:white;
+	&:hover{
+		color:${props=>props.theme.accentColor};
+	}
 `
 const Column = styled.div`
 	color:#8F8F8F;
@@ -133,6 +137,16 @@ const Desc = styled.div`
   height:120px;
   padding:15px;
 `
+const Div= styled.div`
+	display:flex;
+	flex-wrap: wrap;
+	justify-content:flex-start;
+`
+
+const Div2 = styled.div`
+		flex:1;
+`
+
 
 class AllColumn extends React.Component {
 	static contextTypes = {
@@ -200,22 +214,21 @@ class AllColumn extends React.Component {
 								page="allcolumn"
 							/>
 						</div>
-						<div className="row" style={{ overflow: 'hidden' }}>
+						<Div >
 							{columns &&
 								columns.map((data, index) => (
-									<div
-										className="col-lg-3 col-md-4 col-sm-12"
+									<Div2
 										key={index}
 										style={{ margin: '20px 0 20px 0' }}>
-										<Link to={'/stories/' + data.slug}>
+
 											<Box
 												accentColor={theme.accentColor}
 												onMouseOver={() => this.onHover(index)}
 												onMouseLeave={() => this.onHover(-1)}>
 												<BGImg
-													src={data.cover.small || data.cover.medium}
+													src={data.cover.medium!=config.BACKURL+'/imgs/column_cover.png'?data.cover.medium:null}
 													className="imgWidth"
-													opacity={hover == index ? 0.7 : 0.5}
+													opacity={hover == index ? 0.5 : 0.4}
 													style={{ margin: '0 auto 0 auto' }}
 													alt={data.name}
 													gradient="black">
@@ -225,9 +238,11 @@ class AllColumn extends React.Component {
 															left: '15px',
 															bottom: '20px'
 														}}>
-														<ColumnName className="serif-font">
-															{data.name}
-														</ColumnName>
+														<Link to={'/stories/' + data.slug}>
+															<ColumnName className="serif-font">
+																{data.name}
+															</ColumnName>
+														</Link>
 														{/*
                             FOR THE NEXT VERSION
                           <Column className='sans-font' >131 Stories</Column>
@@ -239,10 +254,9 @@ class AllColumn extends React.Component {
 												</Desc>
 												<Blur style={{ top: '-120px' }} />
 											</Box>
-										</Link>
-									</div>
+									</Div2>
 								))}
-						</div>
+						</Div>
 					</Feed>
 				</Content>
 				<Footer />
