@@ -660,7 +660,7 @@ class ColumnSettingPage extends React.Component {
 						</Title>
 						<Edit>
 							<UploadPicture
-								src={col.cover.medium}
+								src={col.cover&&col.cover.medium}
 								path={
 									'/publishers/' +
 										config.PID +
@@ -757,15 +757,15 @@ class ColumnSettingPage extends React.Component {
 						<PrimaryButton
 							label="Save"
 							type="submit"
-							style={{ float: 'left', margin: '0 20px 0 0' }}
+							style={{ float: 'right', margin: '0 20px 0 0' }}
 						/>
 						<SecondaryButton
 							label="Reset"
 							onClick={this.resetDate}
-							style={{ float: 'left', margin: '0 20px 0 0' }}
+							style={{ float: 'right', margin: '0 20px 0 0' }}
 						/>
 						<TextStatus
-							style={{ color: error ? '#D8000C' : theme.accentColor }}>
+							style={{ color: error ? '#D8000C' : theme.accentColor,float:'right',marginRight:'30px' }}>
 							{textStatus}
 						</TextStatus>
 					</div>

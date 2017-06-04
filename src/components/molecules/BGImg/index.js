@@ -27,6 +27,13 @@ const Gra = styled.div`
 	background-position: center;
 	background-size: cover;
 `
+const GraLink = styled(Link)`
+  display: block;
+	overflow: auto;
+	background: linear-gradient(135deg,  ${props => props.theme.primaryColor} 0%, ${props => props.theme.secondaryColor} 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	background-position: center;
+	background-size: cover;
+`
 
 const BGImg = ({
 	style,
@@ -47,7 +54,7 @@ const BGImg = ({
 
 	if (url)
 		return (
-			<Link to={url || '#'} style={style} className={className} title={alt}>
+			<GraLink to={url || '#'} style={style} className={className} title={alt}>
 				{opacity === -1
 					? <div>
 							{children}
@@ -55,7 +62,7 @@ const BGImg = ({
 					: <Filter opacity={opacity} gradient={gradient}>
 							{children}
 						</Filter>}
-			</Link>
+			</GraLink>
 		)
 	else
 		return (

@@ -790,7 +790,7 @@ class NewStory extends React.Component {
           anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
           targetOrigin={{horizontal: 'right', vertical: 'top'}}
           onRequestClose={this.handleRequestClose}
-          style={{border:'3px solid '+theme.accentColor,width:'482px',padding:'30px',marginTop:8,boxShadow:'none',overflow:'hidden'}}
+          style={{border:'3px solid '+theme.accentColor,width:'490px',padding:'30px',marginTop:8,boxShadow:'none',overflow:'hidden'}}
         >
         <SwipeableViews
           index={this.state.settingSlideIndex}
@@ -798,7 +798,7 @@ class NewStory extends React.Component {
         >
           <BasicSetting>
             <AdvancedEdit onClick={() => this.settingHandleChange(1)}>Advanced Edit</AdvancedEdit>
-            <div className='row' style={{display:'block',overflow:'hidden', clear:'both'}}>
+            <div className='' style={{display:'block', clear:'both'}}>
               <Label className="nunito-font or" style={{float:'left',marginTop:'22px',minWidth:'60px'}}>Column: </Label>
               <DropDownMenu
                 value={column}
@@ -836,7 +836,7 @@ class NewStory extends React.Component {
                 ))}
               </DropDownMenu>
             </div>
-            <div className='row' style={{display:'block',overflow:'hidden'}}>
+            <div className='' style={{display:'block',overflow:'hidden', clear:'both'}}>
               <Label className="nunito-font" style={{float:'left',marginTop:'26px'}}>Add up to 5 tags: </Label>
               <div className='row' style={{marginTop:'15px'}}>
                 {addTag.length!=0?addTag.map((data,index)=>(
@@ -875,7 +875,7 @@ class NewStory extends React.Component {
                 </div>
               </div>
             </div>*/}
-            <div className='row' style={{overflow:'hidden',display:'block'}}>
+            <div className='' style={{overflow:'hidden',display:'block'}}>
               <TextStatus className='sans-font' style={{color:'#DC143C',float:'right',marginTop:'30px'}}>{publishStatus}</TextStatus>
             </div>
             <div className='row' style={{display:'block',overflow:'hidden',marginTop:'0px'}}>

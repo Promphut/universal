@@ -351,7 +351,7 @@ class PublisherThemeSetting extends React.Component {
           </Edit>
         </Flex>
 
-        <Title style={{marginTop:'50px'}}>
+        {/*<Title style={{marginTop:'50px'}}>
           <div className="sans-font">Example</div>
         </Title>
         <BGImg src={pub.cover&&pub.cover.medium} opacity={-1} style={{width:'100%',height:'160px',margin:'15px 0'}} alt={pub.name} >
@@ -360,7 +360,7 @@ class PublisherThemeSetting extends React.Component {
           </div>
           <TextStatus className='nunito-font' style={{textAlign:'center',color:'white',float:'none',margin:'0'}}>{pub&&pub.tagline}</TextStatus>
         </BGImg>
-        <BreakLine/>
+        <BreakLine/>*/}
 
         <Flex>
           <Title>

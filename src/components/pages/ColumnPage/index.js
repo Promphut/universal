@@ -103,6 +103,7 @@ const ColumnName = styled.div`
   font-weight:bold;
 	display:inline;
 	@media (max-width:480px) {
+		padding-top:13px;
   	font-size: 16px;
   }
 `
@@ -134,11 +135,11 @@ const Icon = styled.img`
 	width:72px;
 	height:72px;
 	display:inline;
-	margin-right:30px;
+	margin:10px 30px 0 0;
 	@media (max-width:480px) {
   	width:30px;
 		height:30px;
-		margin-right:10px;
+		margin:0 10px 0 0;
   }
 `
 
@@ -147,21 +148,7 @@ const Onload = styled.div`
 	height:70px;
 	margin:50px 0 50px 0;
 `
-const Gra = styled.div`
-	 width: 100%;
-	 height: 340px;
-	 position:relative;
-	 top:60px;
-	 display: flex;
-	 align-items:center;
-	 @media (max-width:480px) {
-			height: 160px;
-	 }
-	background: -moz-linear-gradient(-45deg,  ${props => props.theme.primaryColor} 0%, ${props => props.theme.secondaryColor} 100%); /* FF3.6-15 */
-	background: -webkit-linear-gradient(-45deg,  ${props => props.theme.primaryColor} 0%, ${props => props.theme.secondaryColor} 100%); /* Chrome10-25,Safari5.1-6 */
-	background: linear-gradient(135deg,  ${props => props.theme.primaryColor} 0%, ${props => props.theme.secondaryColor} 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\#bf00b2b4\, endColorstr=\#bfcef1b7\,GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-`
+
 
 class ColumnPage extends React.Component {
 	state = {
@@ -328,13 +315,11 @@ class ColumnPage extends React.Component {
 					/>
 				</div>
 
-				{column.cover.medium!=config.BACKURL +'/imgs/column_cover.png'?
 				<Cover
 					style={{display:'flex',alignItems:'center'}}
-					src={column.cover.medium}
+					src={column.cover.medium!=config.BACKURL +'/imgs/column_cover.png'?column.cover.medium:null}
 					alt={column.name}
-				>{head}</Cover>:
-				<Gra>{head}</Gra>	}
+				>{head}</Cover>
 				
 				<Content isMobile={isMobile}>
 					{feedCount <= 0
