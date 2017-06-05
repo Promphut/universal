@@ -10,6 +10,7 @@ import { Helmet } from 'react-helmet'
 import api from 'components/api'
 
 const Wrapper = styled.div`
+
 `
 
 const Head = styled.h1`
@@ -22,11 +23,64 @@ const Head = styled.h1`
 `
 
 const Article = styled.div`
-  font-size: 20px;
-  margin-top: 40px;
-  @media (max-width: 480px){
-    font-size: 16px;
-    margin-top: 15px;
+  font-size:20px;
+  margin-top:40px;
+  clear:both;
+	overflow:hidden;
+  ul > li {
+    font-family: 'CS PraJad','PT Sans', sans-serif;
+    font-size: 18px;
+    margin:10px 0 10px 0;
+  }
+  p {
+    font-family: 'CS PraJad','PT Sans', sans-serif;
+    font-size: 18px;
+    margin:8px 0 8px 0;
+    line-height:1.5;
+    font-weight:normal;
+    white-space: pre-wrap;      /* Webkit */
+    white-space: -moz-pre-wrap; /* Firefox */
+    white-space: -pre-wrap;     /* Opera <7 */
+    white-space: -o-pre-wrap;   /* Opera 7 */
+    word-wrap: break-word;      /* IE */
+  }
+  h2 {
+    font-size: 28px;
+    font-weight:bold;
+    color:#222;
+    white-space: pre-wrap;      /* Webkit */
+    white-space: -moz-pre-wrap; /* Firefox */
+    white-space: -pre-wrap;     /* Opera <7 */
+    white-space: -o-pre-wrap;   /* Opera 7 */
+    word-wrap: break-word;      /* IE */
+  }
+  h3 {
+    font-size: 20px;
+    font-weight:normal;
+    color:#bfbfbf;
+    white-space: pre-wrap;      /* Webkit */
+    white-space: -moz-pre-wrap; /* Firefox */
+    white-space: -pre-wrap;     /* Opera <7 */
+    white-space: -o-pre-wrap;   /* Opera 7 */
+    word-wrap: break-word;      /* IE */
+  }
+  blockquote {
+    font-size: 20px;
+    font-family: 'PT Serif', 'Mitr';
+    font-weight:normal;
+    color:#222;
+    border-left: 3px solid ${props=>props.theme.accentColor};
+    padding-left:20px;
+    display:inline-block;
+    white-space: pre-wrap;      /* Webkit */
+    white-space: -moz-pre-wrap; /* Firefox */
+    white-space: -pre-wrap;     /* Opera <7 */
+    white-space: -o-pre-wrap;   /* Opera 7 */
+    word-wrap: break-word;      /* IE */
+  }
+  @media (max-width:480px){
+    font-size:16px;
+    margin-top:15px;
   }
 `
 

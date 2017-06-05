@@ -670,26 +670,11 @@ class EditStory extends React.Component {
             actions:  {
             }
           },
-		embeds: {
-			label: '<span class="fa fa-code"></span>',
-			placeholder: 'Paste a YouTube, Vimeo, Facebook, Twitter or Instagram link and press Enter',
-			captions: true,
-			captionPlaceholder: 'Type caption for embed',
-			oembedProxy: 'http://medium.iframe.ly/api/oembed?iframe=1',
-			styles: {
-				wide: {
-					label: '<span class="fa fa-align-justify"></span>',
-					added: function($el) {},
-					removed: function($el) {}
-				},
-				left: {
-					label: '<span class="fa fa-align-left"></span>'
-				},
-				right: {
-					label: '<span class="fa fa-align-right"></span>'
-				}
-			}
-		}
+          embeds: {
+            label: '<span class="fa fa-code"></span>',
+            parseOnPaste:true,
+            oembedProxy:null 
+          }
         }
     });
 
