@@ -221,5 +221,51 @@ const EditorCss = styled.div`
   top: 0;
   left: 0; }
   
+  #highlight ul > li {
+    font-family: 'CS PraJad','PT Sans', sans-serif;
+    font-size: 18px;
+    margin:10px 0 10px 0;
+  }
+  #highlight ol > li {
+    font-family: 'CS PraJad','PT Sans', sans-serif;
+    font-size: 18px;
+    margin:10px 0 10px 0;
+  }
+  #highlight p {
+    font-family: 'CS PraJad','PT Sans', sans-serif;
+    font-size: 18px;
+  }
+  #paper p {
+    font-family: 'CS PraJad','PT Sans', sans-serif;
+    font-size: 18px;
+    margin:8px 0 8px 0;
+    line-height:1.5;
+  }
+  #paper h2 {
+    font-family: 'PT Serif', 'Mitr';
+    font-size: 28px;
+    font-weight:bold;
+    color:#222;
+  }
+  #paper h3 {
+    font-family: 'PT Serif', 'Mitr';
+    font-size: 20px;
+    font-weight:normal;
+    color:#bfbfbf;
+  }
+  #paper ul > li {
+    font-family: 'CS PraJad','PT Sans', sans-serif;
+    font-size: 18px;
+    margin:10px 0 10px 0;
+  }
+  #paper blockquote {
+    font-size: 20px;
+    font-family: 'PT Serif', 'Mitr';
+    font-weight:normal;
+    color:#222;
+    border-left: 3px solid ${props=>props.theme.accentColor};
+    padding-left:20px;
+    display:inline-block;
+  }
 `
 export default EditorCss
