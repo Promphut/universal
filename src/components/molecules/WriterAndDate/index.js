@@ -63,7 +63,7 @@ const WritedAndDate = ({style, writer, column, published,readTime}) => {
     <Container style={{...style}}>
       <Left>
         <div>
-          <a href={writer.url || '#'}><Avatar src={writer.pic && writer.pic.small} size={54} className='imgWidth' style={{float:'left'}}/></a>
+          <a href={writer.url || '#'}><Avatar src={writer.pic && writer.pic.medium} size={54} className='imgWidth' style={{float:'left'}}/></a>
         </div>
         <Contain className="sans-font">
           by <Span1><a href={writer.url || '#'} style={{color:'#222'}}>{writer.display}</a></Span1>,

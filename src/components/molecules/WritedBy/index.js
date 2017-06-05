@@ -50,7 +50,7 @@ const WritedBy = ({style, writer, /*column,*/ published}) => {
     <Container style={{...style}}>
 
       <div>
-        <a href={writer.url || '#'}><Avatar src={writer.pic && writer.pic.small} size={54} className='imgWidth' style={{float:'left',marginTop:'8px'}}/></a>
+        <a href={writer.url || '#'}><Avatar src={writer.pic && writer.pic.medium} size={54} className='imgWidth' style={{float:'left',marginTop:'8px'}}/></a>
       </div>
 
       <Contain className="content-font">

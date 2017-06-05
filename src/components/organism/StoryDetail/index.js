@@ -239,10 +239,10 @@ class StoryDetail extends React.Component {
         <Divider/>
 
         {(s.writer&&s.column)&&<div className='row center'>
-          <div className='col-md-6 col-sm-12'>
+          <div style={{flex:1}}>
             <WritedBy writer={s.writer} column={s.column} published={s.published} />
           </div>
-          <div className='col-md-6 col-sm-12'  style={columnStyle}>
+          <div style={{...columnStyle,flex:1}}>
             {s.column && <FromColumn column={s.column} />}
           </div>
         </div>}
