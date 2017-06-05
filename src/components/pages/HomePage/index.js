@@ -306,7 +306,7 @@ class HomePage extends React.Component {
 					<Main>
 						<TextLine className="sans-font hidden-mob">LATEST STORIES</TextLine>
 						<Dash className="hidden-mob" style={{ margin: '5px 0 10px 0' }} />
-						<InfiniteScroll
+						{!isMobile&&<InfiniteScroll
 							loadMore={this.loadFeed()}
 							hasMore={hasMoreFeed}
 							loader={this.onload()}>
@@ -316,7 +316,7 @@ class HomePage extends React.Component {
 										<ArticleBox detail={item} key={index} />
 									))}
 							</div>
-						</InfiniteScroll>
+						</InfiniteScroll>}
 
 						<Tabs
 							style={{ width: '100%' }}
