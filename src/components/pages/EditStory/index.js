@@ -90,7 +90,7 @@ const Container = styled(EditorCss)`
     font-family: 'PT Serif', 'Mitr';
     font-weight:normal;
     color:#222;
-    border-left: 1px solid #E2E2E2;
+    border-left: 3px solid ${props=>props.theme.accentColor};
     padding-left:20px;
     display:inline-block;
   }

@@ -228,8 +228,8 @@ class AllColumn extends React.Component {
 												<BGImg
 													src={data.cover.medium!=config.BACKURL+'/imgs/column_cover.png'?data.cover.medium:null}
 													className="imgWidth"
-													opacity={hover == index ? 0.5 : 0.4}
-													style={{ margin: '0 auto 0 auto' }}
+													opacity={hover == index ? 0.4 : 0.3}
+													style={{ margin:'0 auto 0 auto',backgroundPosition:'right' }}
 													alt={data.name}
 													gradient="black">
 													<div

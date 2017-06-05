@@ -8,7 +8,8 @@ import {
 	UploadPicture,
 	DropdownWithIcon,
 	Alert,
-	MenuList
+	MenuList,
+  EditorCss
 } from 'components'
 import { findDOMNode as dom } from 'react-dom'
 import TextField from 'material-ui/TextField'
@@ -42,49 +43,51 @@ if (process.env.BROWSER) {
   window.MediumInsert = require('medium-editor-insert-plugin').MediumInsert
 }
 
-const Container = styled.form`
+const Container = styled(EditorCss)`
   width:100%;
   padding:60px;
   border-bottom:1px solid #E2E2E2;
-  #highlight ul > li {
-    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+   #highlight ul > li {
+    font-family: 'CS PraJad','PT Sans', sans-serif;
     font-size: 18px;
     margin:10px 0 10px 0;
   }
   #highlight ol > li {
-    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    font-family: 'CS PraJad','PT Sans', sans-serif;
     font-size: 18px;
     margin:10px 0 10px 0;
   }
   #highlight p {
-    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+    font-family: 'CS PraJad','PT Sans', sans-serif;
     font-size: 18px;
   }
-  .medium-editor-insert-plugin p {
-    font-family: 'PT Sans', 'cs_prajad', sans-serif;
+  #paper p {
+    font-family: 'CS PraJad','PT Sans', sans-serif;
     font-size: 18px;
+    margin:8px 0 8px 0;
+    line-height:1.5;
   }
-  .medium-editor-insert-plugin ul > li {
-    font-family: 'PT Sans', 'cs_prajad', sans-serif;
-    font-size: 18px;
-    margin:10px 0 10px 0;
-  }
-  .medium-editor-insert-plugin h2{
+  #paper h2 {
     font-size: 28px;
     font-weight:bold;
     color:#222;
   }
-  .medium-editor-insert-plugin h3 {
+  #paper h3 {
     font-size: 20px;
     font-weight:normal;
     color:#bfbfbf;
   }
-  .medium-editor-insert-plugin blockquote {
+  #paper ul > li {
+    font-family: 'CS PraJad','PT Sans', sans-serif;
+    font-size: 18px;
+    margin:10px 0 10px 0;
+  }
+  #paper blockquote {
     font-size: 20px;
     font-family: 'PT Serif', 'Mitr';
     font-weight:normal;
     color:#222;
-    border-left: 1px solid #E2E2E2;
+    border-left: 3px solid ${props=>props.theme.accentColor};
     padding-left:20px;
     display:inline-block;
   }
@@ -103,8 +106,10 @@ const Paper = styled.div`
 `
 const Highlight = styled.div`
   background-color:#F4F4F4;
+  padding:20px;
   border:1px dashed ${props => props.theme.accentColor};
   width:100%;
+  margin-bottom:60px;
   &:focus{
     outline: none;
   }
