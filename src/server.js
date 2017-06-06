@@ -34,13 +34,13 @@ const renderApp = ({ req, context, location }) => {
 
 const getMeta = (u) => {
 	return api.getPublisherSetting().then(setting => {
-		let name = setting.publisher.name+' | '+setting.publisher.tagline
-		let keywords = setting.publisher.keywords
-		let desc = setting.publisher.desc
-		let cover = COVER
-		let url = ''
-		let analytic = ANALYTIC.FBAPPID
-		var data = {name,keywords,desc,cover,analytic,url} 
+		let name = setting.publisher.name+' | '+setting.publisher.tagline || ''
+		let keywords = setting.publisher.keywords || ''
+		let desc = setting.publisher.desc || ''
+		let cover = COVER || ''
+		let url = '' || ''
+		let analytic = ANALYTIC.FBAPPID || ''
+		var data = {name,keywords,desc,cover,analytic,url}
 		const path = u.split('/')
 
 		if (path[1] === 'stories' && (path[3] == '' || path[3] == undefined)) {
@@ -84,7 +84,7 @@ const getMeta = (u) => {
 		} else {
 			return data
 		}
-	})
+	}).catch((err)=>{return console.error(err)})
 }
 
 const renderHtml = ({ content, req, meta }) => {

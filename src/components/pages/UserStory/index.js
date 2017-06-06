@@ -397,29 +397,7 @@ class UserStory extends React.Component {
 				<Helmet>
 					<title>{user.display}</title>
 					<meta name="title" content={user.display} />
-					{/*<meta name="keywords" content={keywords} />*/}
 					<meta name="description" content={user.shortDesc} />
-
-					<link
-						rel="shortcut icon"
-						type="image/ico"
-						href={config.BACKURL + '/publishers/' + config.PID + '/favicon'}
-					/>
-					{user.channels && user.channels.fb
-						? <link rel="author" href={utils.getFbUrl(user.channels.fb)} />
-						: ''}
-					{/*<link rel="canonical" href={window.location.href} />*/}
-
-					<meta property="og:sitename" content={user.display} />
-					{/*<meta property="og:url" content={window.location.href} />*/}
-					<meta property="og:title" content={user.display} />
-					<meta property="og:type" content="article" />
-					<meta property="og:image" content={user.pic.medium} />
-					{/*<meta property="og:keywords" content={keywords} />*/}
-					<meta property="og:description" content={user.shortDesc} />
-					<meta property="twitter:card" content="summary_large_image" />
-					<meta property="twitter:image:alt" content={user.display} />
-					<meta property="fb:app_id" content={config.ANALYTIC.FBAPPID} />
 				</Helmet>
 
 				<TopBarWithNavigation
