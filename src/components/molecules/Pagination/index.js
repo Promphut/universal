@@ -1,0 +1,62 @@
+import React from 'react';
+import {createUltimatePagination, ITEM_TYPES} from 'react-ultimate-pagination';
+import FlatButton from 'material-ui/FlatButton';
+import NavigationFirstPage from 'material-ui/svg-icons/navigation/first-page';
+import NavigationLastPage from 'material-ui/svg-icons/navigation/last-page';
+import NavigationChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
+import NavigationChevronRight from 'material-ui/svg-icons/navigation/chevron-right';
+import PropTypes from 'prop-types';
+
+const flatButtonStyle = {
+  minWidth: 36,
+  color:'#8F8F8F',
+};
+const active = {
+  textDecoration:'underline',
+  fontWeight:'bold'
+}
+
+const Page = ({value, isActive, onClick},context) => {
+  //console.log('Page', value, isActive)
+  var acc = context.setting.publisher.theme.accentColor
+  return (
+    <FlatButton style={!isActive?{...flatButtonStyle}:{...flatButtonStyle,...active,color:acc}} labelStyle={!isActive?{fontSize:'20px'}:{fontSize:'20px',fontWeight:'bold'}}  label={value.toString()} primary={isActive} onClick={onClick}/>
+  )
+};
+
+const Ellipsis = ({onClick}) => (
+  <FlatButton style={{...flatButtonStyle}} label="..." onClick={onClick}/>
+);
+
+const FirstPageLink = ({isActive, onClick}) => (
+  <FlatButton style={{...flatButtonStyle}} icon={<NavigationFirstPage/>} onClick={onClick}/>
+);
+
+const PreviousPageLink = ({isActive, onClick}) => (
+  <FlatButton style={{...flatButtonStyle}} icon={<NavigationChevronLeft/>} onClick={onClick}/>
+);
+
+const NextPageLink = ({isActive, onClick}) => (
+  <FlatButton style={{...flatButtonStyle}} icon={<NavigationChevronRight/>} onClick={onClick}/>
+);
+
+const LastPageLink = ({isActive, onClick}) => (
+  <FlatButton style={{...flatButtonStyle}} icon={<NavigationLastPage/>} onClick={onClick}/>
+);
+
+const itemTypeToComponent = {
+  [ITEM_TYPES.PAGE]: Page,
+  [ITEM_TYPES.ELLIPSIS]: Ellipsis,
+  [ITEM_TYPES.FIRST_PAGE_LINK]: FirstPageLink,
+  [ITEM_TYPES.PREVIOUS_PAGE_LINK]: PreviousPageLink,
+  [ITEM_TYPES.NEXT_PAGE_LINK]: NextPageLink,
+  [ITEM_TYPES.LAST_PAGE_LINK]: LastPageLink
+};
+
+const Pagination = createUltimatePagination({itemTypeToComponent});
+
+Page.contextTypes = {
+	setting: PropTypes.object
+};
+
+export default Pagination;

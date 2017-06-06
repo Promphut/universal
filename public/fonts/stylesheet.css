@@ -1,0 +1,44 @@
+@font-face {
+	font-family: 'CS PraJad';
+	src: url('/fonts/fonts/CSPraJad-boldItalic.eot');
+	src: url('/fonts/CSPraJad-boldItalic.eot?#iefix') format('embedded-opentype'),
+		url('/fonts/CSPraJad-boldItalic.woff2') format('woff2'),
+		url('/fonts/CSPraJad-boldItalic.woff') format('woff'),
+		url('/fonts/CSPraJad-boldItalic.ttf') format('truetype');
+	font-weight: bold;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: 'CS PraJad';
+	src: url('/fonts/CSPraJad.eot');
+	src: url('/fonts/CSPraJad.eot?#iefix') format('embedded-opentype'),
+		url('/fonts/CSPraJad.woff2') format('woff2'),
+		url('/fonts/CSPraJad.woff') format('woff'),
+		url('/fonts/CSPraJad.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'CS PraJad';
+	src: url('/fonts/CSPraJad-bold.eot');
+	src: url('/fonts/CSPraJad-bold.eot?#iefix') format('embedded-opentype'),
+		url('/fonts/CSPraJad-bold.woff2') format('woff2'),
+		url('/fonts/CSPraJad-bold.woff') format('woff'),
+		url('/fonts/CSPraJad-bold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'CS PraJad';
+	src: url('/fonts/CSPraJad-Italic.eot');
+	src: url('/fonts/CSPraJad-Italic.eot?#iefix') format('embedded-opentype'),
+		url('/fonts/CSPraJad-Italic.woff2') format('woff2'),
+		url('/fonts/CSPraJad-Italic.woff') format('woff'),
+		url('/fonts/CSPraJad-Italic.ttf') format('truetype');
+	font-weight: normal;
+	font-style: italic;
+}
+
