@@ -32,73 +32,62 @@ const renderApp = ({ req, context, location }) => {
 	)
 }
 
-const getMataTag = (name, keywords, desc, cover, analytic) => {
-	return `<title></title>
-			<meta name="title" content=${name} />
-			<meta name="keywords" content=${keywords} />
-			<meta name="description" content=${desc} />
-			<meta property="og:sitename" content=${name} />
-			<meta property="og:title" content=${name} />
-			<meta property="og:type" content="article" />
-			<meta property="og:image" content=${cover}/>
-			<meta property="og:keywords" content=${keywords} />
-			<meta property="og:description" content=${desc} />
-			<meta property="twitter:card" content="summary_large_image" />
-			<meta property="twitter:image:alt" content=${name} />
-			<meta property="fb:app_id" content=${analytic} />
-		`
-}
-
 const getMeta = url => {
-	api.getPublisherSetting().then(setting => {
+	return api.getPublisherSetting().then(setting => {
 		let name = setting.publisher.name
 		let keywords = setting.publisher.keywords
 		let desc = setting.publisher.desc
 		let cover = setting.publisher.cover.medium
 		let analytic = ANALYTIC.FBAPPID
-
+		var data = {name,keywords,desc,cover,analytic} 
 		const path = url.split('/')
 
 		if (path[1] === 'stories' && (path[3] == '' || path[3] == undefined)) {
 			const slug = decodeURIComponent(path[2])
-			api.getColumnFromSlug(slug).then(res => {
-				console.log(res)
-
-				return getMataTag(name, keywords, desc, cover, analytic)
+			return api.getColumnFromSlug(slug).then(res => {
+				//console.log(res)
+				data.name = res.name && res.name
+				data.desc = res.shortDesc && res.shortDesc
+				data.cover = res.cover.medium && res.cover.medium 
+				return data
 			})
 		} else if (path[1] === 'stories') {
 			const sid = path[4]
-			api.getStoryFromSid(sid).then(res => {
+			return api.getStoryFromSid(sid).then(res => {
 				if (res.story.ptitle) name = res.story.ptitle
 				if (res.story.contentShort) desc = res.story.contentShort
-
-				return getMataTag(name, keywords, desc, cover, analytic)
+				//console.log(res)
+				data.name = res.ptitle && res.ptitle
+				data.desc = res.meta.desc && res.meta.desc
+				data.cover = res.cover.medium && res.cover.medium 
+				return data
 			})
 		} else if (path[1].substring(0, 1) === '@') {
 			const user = decodeURIComponent(path[1].substring(1))
-			api.getUserFromUsername(user).then(res => {
-				console.log(res)
-
-				return getMataTag(name, keywords, desc, cover, analytic)
+			return api.getUserFromUsername(user).then(res => {
+				//console.log(res)
+				data.name = res.display && res.display
+ 				data.desc = res.desc && res.desc
+				return data
 			})
 		} else if (path[1] === 'u') {
 			const uid = path[2]
-			api.getUser(uid).then(res => {
-				console.log(res)
-
-				return getMataTag(name, keywords, desc, cover, analytic)
+			return api.getUser(uid).then(res => {
+				//console.log(res)
+				data.name = res.display && res.display
+ 				data.desc = res.desc && res.desc
+				return data
 			})
 		} else {
-			return getMataTag(name, keywords, desc, cover, analytic)
+			return data
 		}
 	})
 }
 
-const renderHtml = ({ content, req }) => {
+const renderHtml = ({ content, req, meta }) => {
 	const styles = styleSheet.rules().map(rule => rule.cssText).join('\n')
 	const assets = global.assets
-	const meta = getMeta(req.url)
-	const html = <Html {...{ styles, assets, content }} />
+	const html = <Html {...{ styles, assets, content, meta }} />
 	return `<!doctype html>\n${renderToStaticMarkup(html)}`
 }
 
@@ -111,11 +100,12 @@ app.use((req, res, next) => {
 	global.window = global.window || {}
 	global.navigator = global.navigator || {}
 	global.navigator.userAgent = req.headers['user-agent'] || 'all'
-
+	//console.log('req')
 	const location = req.url
 	const context = {}
-
-	renderApp({ req, context, location })
+	getMeta(req.url).then((meta)=>{
+		//console.log('data',meta)
+		renderApp({ req, context, location })
 		.then(({ html: content }) => {
 			if (context.status) {
 				res.status(context.status)
@@ -123,10 +113,11 @@ app.use((req, res, next) => {
 			if (context.url) {
 				res.redirect(context.url)
 			} else {
-				res.send(renderHtml({ content, req }))
+				res.send(renderHtml({ content, req, meta }))
 			}
 		})
 		.catch(next)
+	})
 })
 
 app.use((err, req, res, next) => {
