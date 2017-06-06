@@ -26,7 +26,7 @@ const renderApp = ({ req, context, location }) => {
 	return renderToString(
 		<CookiesProvider cookies={req.universalCookies}>
 			<StaticRouter context={context} location={location}>
-				<AppRoutes />
+				<AppRoutes currentlocation = {req.url}/>
 			</StaticRouter>
 		</CookiesProvider>
 	)
@@ -39,7 +39,7 @@ const getMeta = url => {
 		let desc = setting.publisher.desc
 		let cover = COVER
 		let analytic = ANALYTIC.FBAPPID
-		var data = {name,keywords,desc,cover,analytic} 
+		var data = {name,keywords,desc,cover,analytic}
 		const path = url.split('/')
 
 		if (path[1] === 'stories' && (path[3] == '' || path[3] == undefined)) {
@@ -48,7 +48,7 @@ const getMeta = url => {
 
 				data.name = res.name && res.name
 				data.desc = res.shortDesc && res.shortDesc
-				data.cover = res.cover.medium && res.cover.medium 
+				data.cover = res.cover.medium && res.cover.medium
 				return data
 			})
 		} else if (path[1] === 'stories') {
@@ -57,7 +57,7 @@ const getMeta = url => {
 
 				data.name = res.story.ptitle && res.story.ptitle
 				data.desc = res.story.contentShort && res.story.contentShort
-				data.cover = res.story.cover.medium && res.story.cover.medium 
+				data.cover = res.story.cover.medium && res.story.cover.medium
 				return data
 			})
 		} else if (path[1].substring(0, 1) === '@') {

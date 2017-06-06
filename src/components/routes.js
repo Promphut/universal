@@ -4,8 +4,8 @@ import { Route, Switch, Link, Redirect } from 'react-router-dom'
 import api from 'components/api'
 import auth from 'components/auth'
 import App from 'components/App'
-import { HomePage, NewsPage, AllColumn, AboutPage, ContactPage, TagPage, ColumnPage, 
-	StoryPage, ForgetPasswordPage, SignInPage, SignUpPage, UserStory, 
+import { HomePage, NewsPage, AllColumn, AboutPage, ContactPage, TagPage, ColumnPage,
+	StoryPage, ForgetPasswordPage, SignInPage, SignUpPage, UserStory,
 	PublisherEditor, UserSetting, PrivateRoute, NotFoundPage, ErrorPage,
 	UserSettingProfile, UserSettingAccount, UserSettingStory, NewStory, EditStory } from 'components'
 
@@ -45,9 +45,40 @@ class AppRoutes extends React.Component {
 		return {setting: this.state.setting};
 	}
 
+	// getUrlRediectorObject (url)
+	// {
+	// 	if (this.isOldUrlVersion(url) === true)
+	// 	{
+	// 		// Requested URL has been found in mapper
+	// 		return (
+	// 			<Redirect to = {this.UrlVersioningMapper(url)}/>
+	// 		)
+	// 	}
+	// 	else {
+	// 		// Requested URL has not found and show 404 page
+	// 		return null
+	// 	}
+	//
+	// }
+	//
+	// //URL Mapper (oldVersion -> newVersion)
+	// UrlVersioningMapper (url)
+	// {
+	// 		return url
+	// }
+	//
+	// // Check is url in mapper?
+	// isOldUrlVersion (url)
+	// {
+	// 	return true
+	// }
+
+
+
 	render() {
 		let {publisher} = this.state.setting
-
+		var urlVersioning = null;
+		// var urlVersioning = this.getUrlRediectorObject(this.props.currentlocation)
 		return (
 		  <App>
 			<Switch>
@@ -89,12 +120,13 @@ class AppRoutes extends React.Component {
     			<Route exact path='/u/:uid' render={props => <UserStory {...props} uid={props.match.params.uid}/>} />
 				{/* STORY 4 NO COLUMN AND NO USERNAME */ }
     			<Route exact path='/u/:uid/stories/:storySlug/:sid' render={props => <StoryPage {...props} countView={true}/>} />
-				
+
 				<Route exact path='/@:username' render={props => <UserStory {...props} username={props.match.params.username}/>}/>
 				{/* STORY 3 NO COLUMN */ }
     			<Route exact path='/@:username/stories/:storySlug/:sid' render={props => <StoryPage {...props} countView={true}/>} />
 
 				<Route exact path='/error' component={ErrorPage}/>
+				{urlVersioning}
 				<Route exact path='/404' component={NotFoundPage}/>
 				<Route component={NotFoundPage}/>
 
