@@ -32,15 +32,16 @@ const renderApp = ({ req, context, location }) => {
 	)
 }
 
-const getMeta = url => {
+const getMeta = (u) => {
 	return api.getPublisherSetting().then(setting => {
 		let name = setting.publisher.name
 		let keywords = setting.publisher.keywords
 		let desc = setting.publisher.desc
 		let cover = COVER
+		let url = ''
 		let analytic = ANALYTIC.FBAPPID
-		var data = {name,keywords,desc,cover,analytic}
-		const path = url.split('/')
+		var data = {name,keywords,desc,cover,analytic,url} 
+		const path = u.split('/')
 
 		if (path[1] === 'stories' && (path[3] == '' || path[3] == undefined)) {
 			const slug = decodeURIComponent(path[2])
@@ -48,7 +49,8 @@ const getMeta = url => {
 
 				data.name = res.name && res.name
 				data.desc = res.shortDesc && res.shortDesc
-				data.cover = res.cover.medium && res.cover.medium
+				data.cover = res.cover.medium && res.cover.medium 
+				data.url = res.url && res.url
 				return data
 			})
 		} else if (path[1] === 'stories') {
@@ -57,7 +59,8 @@ const getMeta = url => {
 
 				data.name = res.story.ptitle && res.story.ptitle
 				data.desc = res.story.contentShort && res.story.contentShort
-				data.cover = res.story.cover.medium && res.story.cover.medium
+				data.cover = res.story.cover.large && res.story.cover.large
+				data.url = res.story.url && res.story.url 
 				return data
 			})
 		} else if (path[1].substring(0, 1) === '@') {
@@ -66,6 +69,7 @@ const getMeta = url => {
 
 				data.name = res.display && res.display
  				data.desc = res.desc && res.desc
+				data.url = res.url && res.url
 				return data
 			})
 		} else if (path[1] === 'u') {
@@ -74,6 +78,7 @@ const getMeta = url => {
 
 				data.name = res.display && res.display
  				data.desc = res.desc && res.desc
+				data.url = res.url && res.url
 				return data
 			})
 		} else {
