@@ -237,7 +237,7 @@ class App extends React.Component {
             { rel: 'stylesheet', href: '/fonts/stylesheet.css' },
             { rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' },
             { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css'},
-            { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Mitr|Nunito|PT+Sans|PT+Serif|Roboto|Roboto+Slab'},
+            { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Mitr|Nunito|PT+Sans|PT+Serif:400,700,700i|Roboto|Roboto+Slab'},
           ]}
           script={[
             { src: 'https://use.fontawesome.com/3df470c471.js' },

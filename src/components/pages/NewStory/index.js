@@ -47,50 +47,6 @@ const Container = styled(EditorCss)`
   width:100%;
   padding:60px;
   border-bottom:1px solid #E2E2E2;
-   #highlight ul > li {
-    font-family: 'CS PraJad','PT Sans', sans-serif;
-    font-size: 18px;
-    margin:10px 0 10px 0;
-  }
-  #highlight ol > li {
-    font-family: 'CS PraJad','PT Sans', sans-serif;
-    font-size: 18px;
-    margin:10px 0 10px 0;
-  }
-  #highlight p {
-    font-family: 'CS PraJad','PT Sans', sans-serif;
-    font-size: 18px;
-  }
-  #paper p {
-    font-family: 'CS PraJad','PT Sans', sans-serif;
-    font-size: 18px;
-    margin:8px 0 8px 0;
-    line-height:1.5;
-  }
-  #paper h2 {
-    font-size: 28px;
-    font-weight:bold;
-    color:#222;
-  }
-  #paper h3 {
-    font-size: 20px;
-    font-weight:normal;
-    color:#bfbfbf;
-  }
-  #paper ul > li {
-    font-family: 'CS PraJad','PT Sans', sans-serif;
-    font-size: 18px;
-    margin:10px 0 10px 0;
-  }
-  #paper blockquote {
-    font-size: 20px;
-    font-family: 'PT Serif', 'Mitr';
-    font-weight:normal;
-    color:#222;
-    border-left: 3px solid ${props=>props.theme.accentColor};
-    padding-left:20px;
-    display:inline-block;
-  }
   h1{
     color:${props => props.theme.primaryColor};
     font-size:42px;
@@ -313,28 +269,13 @@ class NewStory extends React.Component {
                       label: this.state.layout=='article'?'<span class="fa fa-window-maximize"></span>':''
                   }
               }
+            },
+            embeds: {
+              label: '<span class="fa fa-code"></span>',
+              parseOnPaste:true,
+              oembedProxy:null 
             }
-          },
-	embeds: {
-		label: '<span class="fa fa-code"></span>',
-		placeholder: 'Paste a YouTube, Vimeo, Facebook, Twitter or Instagram link and press Enter',
-		captions: true,
-		captionPlaceholder: 'Type caption for embed',
-		oembedProxy: 'http://medium.iframe.ly/api/oembed?iframe=1',
-		styles: {
-			wide: {
-				label: '<span class="fa fa-align-justify"></span>',
-				added: function($el) {},
-				removed: function($el) {}
-			},
-			left: {
-				label: '<span class="fa fa-align-left"></span>'
-			},
-			right: {
-				label: '<span class="fa fa-align-right"></span>'
-			}
-		}
-	}
+          }
       });
 
       this.editor2 = new MediumEditor('#highlight', {

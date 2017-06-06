@@ -8,28 +8,16 @@ import {
 	RecommendArticle,
 	Navbar,
 	RecommendContainer,
-	Footer
+	Footer,
+	BgWithLogo
 } from 'components'
 import api from 'components/api'
 import utils from '../../../services/utils'
+import config from '../../../config'
+import isEmpty from 'lodash/isEmpty'
 
 const Wrapper = styled.div`
-	.recommends {
-		font-size: 20px;
-		color: #222;
-		font-weight: bold;
-	}
-	@media (max-width: 480px) {
-		.hidden-mob {
-			// display: none;
-		}
-    .center {
-      justify-content: center;
-    }
-		.recommends {
-			font-size: 16px;
-		}
-  }
+
 `
 
 const Content = styled.div`
@@ -51,7 +39,6 @@ const Main = styled.div`
 	}
 
 `
-
 const Aside = styled.div`
 	flex: 3 325px;
 	position:relative;
@@ -61,6 +48,24 @@ const Aside = styled.div`
 	@media (max-width: 1160px) {
 		display:none;
 	}
+`
+const BG = styled(BGImg)`
+	width:100%;
+	height:350px;
+	display:flex !important;
+	align-items:center !important;
+	justify-content:center !important;
+`
+const Tagline = styled.div`
+	font-size:20px;
+	margin:0 auto 0 auto;
+	width:600px;
+	text-align:center;
+	color:white;
+`
+const Img = styled.img`
+	width:749px;
+	height:100px;
 `
 
 class ContactAndAboutContainer extends React.Component {
@@ -109,6 +114,7 @@ class ContactAndAboutContainer extends React.Component {
 	render() {
 		//let {recommends} = this.state
 		let pub = this.publisher
+		var {theme} = this.publisher 
 		let { isMobile } = this.state
 
 		let list = []
@@ -122,13 +128,7 @@ class ContactAndAboutContainer extends React.Component {
 
 		return (
 			<Wrapper>
-				{pub.cover &&
-					<BGImg
-						src={pub.cover.medium}
-						opacity={-1}
-						style={{ width: '100%', height: '350px' }}
-						className="hidden-mob"
-					/>}
+				{!isEmpty(pub) && !utils.isMobile() && <BgWithLogo data={pub}/>}
 
 				<TopBarWithNavigation
 					title={'Title of AomMoney goes here..'}

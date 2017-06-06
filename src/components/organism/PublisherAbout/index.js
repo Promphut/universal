@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { PrimaryButton, SecondaryButton } from 'components'
+import { PrimaryButton, SecondaryButton, EditorCss } from 'components'
 import TextField from 'material-ui/TextField'
 import SelectField from 'material-ui/SelectField'
 import MenuItem from 'material-ui/MenuItem'
@@ -21,7 +21,7 @@ if (process.env.BROWSER) {
 	window.MediumInsert = require('medium-editor-insert-plugin').MediumInsert
 }
 
-const Container = styled.form`
+const Container = styled(EditorCss)`
   width:100%;
   padding:40px;
   border-bottom:1px solid #E2E2E2;
@@ -77,7 +77,7 @@ const Paper = styled.div`
   position:relative;
   width:100%;
 	border:1px solid #e2e2e2;
-  min-height:400px;
+  min-height:200px;
   &:focus{
     outline: none;
   }
@@ -205,7 +205,12 @@ class PublisherAbout extends React.Component {
 		$('#paper').mediumInsert({
 			editor: this.editor,
 			addons: {
-				images: {}
+				images: {},
+				embeds: {
+					label: '<span class="fa fa-code"></span>',
+					parseOnPaste:true,
+					oembedProxy:null 
+				}
 			}
 		})
 
@@ -228,11 +233,6 @@ class PublisherAbout extends React.Component {
 						type="text/css"
 					/>
 					<link rel="stylesheet" href="/css/tim.css" type="text/css" />
-					<link
-						rel="stylesheet"
-						href="/css/medium-editor-insert-plugin.css"
-						type="text/css"
-					/>
 				</Helmet>
 				<div className="head sans-font">About Us</div>
 				<br />

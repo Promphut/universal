@@ -10,7 +10,8 @@ import {
 	TopVideoHome,
 	TopNewsHome,
 	LogoLink,
-	BackToTop
+	BackToTop,
+	BgWithLogo
 } from 'components'
 import styled from 'styled-components'
 import auth from 'components/auth'
@@ -281,18 +282,7 @@ class HomePage extends React.Component {
 		//if(feed.length==0) return <div></div>
 		return (
 			<Wrapper>
-				{!isEmpty(pub) &&
-					!utils.isMobile() &&
-					<BG
-						src={pub.cover && pub.cover.medium}
-						opacity={-1}
-						className="hidden-mob"
-						alt={pub && pub.name}>
-						<div>
-							{theme.llogo!=config.BACKURL + '/imgs/brand_display.png'&&<Img src={theme.llogo} id='Largelogo'/>}
-							<Tagline className="nunito-font">{pub && pub.tagline}</Tagline>
-						</div>
-					</BG>}
+				{!isEmpty(pub) &&!utils.isMobile() &&<BgWithLogo data={pub}/>}
 
 				<TopBarWithNavigation
 					title={'Title of AomMoney goes here..'}
