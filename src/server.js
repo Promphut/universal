@@ -56,7 +56,7 @@ const getMeta = url => {
 			return api.getStoryFromSid(sid).then(res => {
 
 				data.name = res.story.ptitle && res.story.ptitle
-				data.desc = res.story.meta.desc && res.story.meta.desc
+				data.desc = res.story.contentShort && res.story.contentShort
 				data.cover = res.story.cover.medium && res.story.cover.medium 
 				return data
 			})
