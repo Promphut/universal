@@ -264,11 +264,12 @@ class App extends React.Component {
 									color={theme.accentColor}
 									style={{ position: 'absolute' }}
 								/>}
-							{React.Children.map(this.props.children, child => {
+							{this.props.children}
+							{/*{React.Children.map(this.props.children, child => {
 								return React.cloneElement(child, {
 									onLoading: completed < 100 ? true : false
 								})
-							})}
+							})}*/}
 						</div>
 					</MuiThemeProvider>
 				</ThemeProvider>
