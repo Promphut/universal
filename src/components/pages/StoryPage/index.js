@@ -275,14 +275,6 @@ class StoryPage extends React.Component {
 							: ''}*/}
 						{/*<link rel="canonical" href={window.location.href} />*/}
 
-						<meta property="og:sitename" content={story.ptitle} />
-						{/*<meta property="og:url" content={window.location.href} />*/}
-						<meta property="og:title" content={story.ptitle} />
-						<meta property="og:image" content={story.cover.medium} />
-						<meta property="og:keywords" content={keywords} />
-						<meta property="og:description" content={description} />
-						<meta property="twitter:image:alt" content={story.ptitle} />
-
 						<link
 							rel="stylesheet"
 							href="/css/medium-editor.css"

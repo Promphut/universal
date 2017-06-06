@@ -286,27 +286,6 @@ class ColumnPage extends React.Component {
 					<meta name="title" content={column.name} />
 					<meta name="keywords" content={keywords} />
 					<meta name="description" content={column.shortDesc} />
-
-					<link
-						rel="shortcut icon"
-						type="image/ico"
-						href={config.BACKURL + '/publishers/' + config.PID + '/favicon'}
-					/>
-					{channels && channels.fb
-						? <link rel="author" href={utils.getFbUrl(channels.fb)} />
-						: ''}
-					{/*<link rel="canonical" href={window.location.href} />*/}
-
-					<meta property="og:sitename" content={column.name} />
-					{/*<meta property="og:url" content={window.location.href} />*/}
-					<meta property="og:title" content={column.name} />
-					<meta property="og:type" content="article" />
-					<meta property="og:image" content={column.cover.medium} />
-					<meta property="og:keywords" content={keywords} />
-					<meta property="og:description" content={column.shortDesc} />
-					<meta property="twitter:card" content="summary_large_image" />
-					<meta property="twitter:image:alt" content={column.name} />
-					<meta property="fb:app_id" content={config.ANALYTIC.FBAPPID} />
 				</Helmet>
 				<div style={{}}>
 					<TopBarWithNavigation

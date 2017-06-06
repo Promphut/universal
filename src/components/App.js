@@ -223,23 +223,6 @@ class App extends React.Component {
 						{ name: 'title', content: title },
 						{ name: 'keywords', content: keywords },
 						{ name: 'description', content: desc },
-
-						{ property: 'og:site_name', content: name },
-						{
-							property: 'og:url',
-							content: config.FRONTURL + this.props.location.pathname
-						},
-						{ property: 'og:title', content: title },
-						{ property: 'og:type', content: 'article' },
-						{ property: 'og:image', content: coverMedium },
-						{ property: 'og:keywords', content: keywords },
-						{ property: 'og:description', content: desc },
-						{ property: 'twitter:card', content: 'summary_large_image' },
-						{ property: 'twitter:image:alt', content: title },
-						{ property: 'fb:app_id', content: config.ANALYTIC.FBAPPID }
-						// { property: 'og:image:type', content: 'image/png' },
-						// { property: 'og:image:width', content: '1200' },
-						// { property: 'og:image:height', content: '630' },
 					]}
 					link={[
 						{
