@@ -8,6 +8,8 @@ import {
 } from 'components'
 import { Helmet } from 'react-helmet'
 import api from 'components/api'
+import config from '../../../config'
+import moment from 'moment'
 
 const Wrapper = styled.div`
 
@@ -69,7 +71,7 @@ const Article = styled.div`
     font-family: 'PT Serif', 'Mitr';
     font-weight:normal;
     color:#222;
-    border-left: 3px solid ${props=>props.theme.accentColor};
+    border-left: 3px solid ${props => props.theme.accentColor};
     padding-left:20px;
     display:inline-block;
     white-space: pre-wrap;      /* Webkit */
@@ -95,7 +97,9 @@ class AboutPage extends React.Component {
 		super(props)
 
 		this.state = {
-			aboutUs: ''
+			aboutUs: '',
+			fb: 0,
+			twt: 0
 		}
 	}
 
@@ -105,9 +109,27 @@ class AboutPage extends React.Component {
 				aboutUs: aboutUs
 			})
 		})
+
+		var pid = config.PID
+		const from = config.FROMDATE
+		const to = moment().utcOffset('+07:00').format('YYYYMMDD')
+
+		api
+			.getPublisherInsight(pid, 'share', 'share_fb', null, from, to)
+			.then(ins => {
+				this.setState({ fb: ins.summary.total })
+			})
+
+		api
+			.getPublisherInsight(pid, 'share', 'share_twt', null, from, to)
+			.then(ins => {
+				this.setState({ twt: ins.summary.total })
+			})
 	}
 
 	render() {
+		const { fb, twt } = this.state
+
 		return (
 			<ContactAndAboutContainer onLoading={this.props.onLoading}>
 				<Helmet>
@@ -134,7 +156,7 @@ class AboutPage extends React.Component {
 							button={
 								<ShareButton
 									className="fa fa-facebook"
-									number="112"
+									number={fb}
 									color="58,88,155"
 								/>
 							}
@@ -143,7 +165,7 @@ class AboutPage extends React.Component {
 							button={
 								<ShareButton
 									className="fa fa-twitter"
-									number="118"
+									number={twt}
 									color="96,170,222"
 									style={{ marginLeft: '15px' }}
 								/>
