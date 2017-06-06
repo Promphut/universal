@@ -107,24 +107,6 @@ const facebookSdk =
    }(document, 'script', 'facebook-jssdk'));`
 
 
-// const getMataTag = (name, keywords, desc, cover, analytic) => {
-// 	return `<title></title>
-// 			<meta name="title" content=${name} />
-// 			<meta name="keywords" content=${keywords} />
-// 			<meta name="description" content=${desc} />
-// 			<meta property="og:sitename" content=${name} />
-// 			<meta property="og:title" content=${name} />
-// 			<meta property="og:type" content="article" />
-// 			<meta property="og:image" content=${cover}/>
-// 			<meta property="og:keywords" content=${keywords} />
-// 			<meta property="og:description" content=${desc} />
-// 			<meta property="twitter:card" content="summary_large_image" />
-// 			<meta property="twitter:image:alt" content=${name} />
-// 			<meta property="fb:app_id" content=${analytic} />
-// 		`
-// }
-
-
 const Html = ({ styles, assets, content, meta }) => {
   const helmet = Helmet.rewind()
   const htmlAttrs = helmet.htmlAttributes.toComponent()
@@ -151,7 +133,8 @@ const Html = ({ styles, assets, content, meta }) => {
         <meta property="twitter:card" content={cover} />
         <meta property="twitter:image:alt" content={name} />
         <meta property="fb:app_id" content={analytic} />
-		
+        <meta property="og:image:width" content='1200' />
+        <meta property="og:image:height" content='600' />
         
         {helmet.title.toComponent()}
         {helmet.meta.toComponent()}
