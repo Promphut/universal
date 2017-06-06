@@ -13,7 +13,7 @@ import { renderToString } from 'react-router-server'
 import { CookiesProvider } from 'react-cookie'
 import cookiesMiddleware from 'universal-cookie-express'
 
-import { port, host, basename, ANALYTIC } from 'config'
+import { port, host, basename, ANALYTIC, COVER } from 'config'
 import AppRoutes from 'components/routes'
 import Html from 'components/Html'
 import Error from 'components/Error'
@@ -26,56 +26,59 @@ const renderApp = ({ req, context, location }) => {
 	return renderToString(
 		<CookiesProvider cookies={req.universalCookies}>
 			<StaticRouter context={context} location={location}>
-				<AppRoutes />
+				<AppRoutes currentlocation = {req.url}/>
 			</StaticRouter>
 		</CookiesProvider>
 	)
 }
 
-const getMeta = url => {
+const getMeta = (u) => {
 	return api.getPublisherSetting().then(setting => {
 		let name = setting.publisher.name
 		let keywords = setting.publisher.keywords
 		let desc = setting.publisher.desc
-		let cover = setting.publisher.cover.medium
+		let cover = COVER
+		let url = ''
 		let analytic = ANALYTIC.FBAPPID
-		var data = {name,keywords,desc,cover,analytic} 
-		const path = url.split('/')
+		var data = {name,keywords,desc,cover,analytic,url} 
+		const path = u.split('/')
 
 		if (path[1] === 'stories' && (path[3] == '' || path[3] == undefined)) {
 			const slug = decodeURIComponent(path[2])
 			return api.getColumnFromSlug(slug).then(res => {
-				//console.log(res)
+
 				data.name = res.name && res.name
 				data.desc = res.shortDesc && res.shortDesc
 				data.cover = res.cover.medium && res.cover.medium 
+				data.url = res.url && res.url
 				return data
 			})
 		} else if (path[1] === 'stories') {
 			const sid = path[4]
 			return api.getStoryFromSid(sid).then(res => {
-				if (res.story.ptitle) name = res.story.ptitle
-				if (res.story.contentShort) desc = res.story.contentShort
-				//console.log(res)
-				data.name = res.ptitle && res.ptitle
-				data.desc = res.meta.desc && res.meta.desc
-				data.cover = res.cover.medium && res.cover.medium 
+
+				data.name = res.story.ptitle && res.story.ptitle
+				data.desc = res.story.contentShort && res.story.contentShort
+				data.cover = res.story.cover.large && res.story.cover.large
+				data.url = res.story.url && res.story.url 
 				return data
 			})
 		} else if (path[1].substring(0, 1) === '@') {
 			const user = decodeURIComponent(path[1].substring(1))
 			return api.getUserFromUsername(user).then(res => {
-				//console.log(res)
+
 				data.name = res.display && res.display
  				data.desc = res.desc && res.desc
+				data.url = res.url && res.url
 				return data
 			})
 		} else if (path[1] === 'u') {
 			const uid = path[2]
 			return api.getUser(uid).then(res => {
-				//console.log(res)
+
 				data.name = res.display && res.display
  				data.desc = res.desc && res.desc
+				data.url = res.url && res.url
 				return data
 			})
 		} else {

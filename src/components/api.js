@@ -1,6 +1,6 @@
 const auth = require('./auth'),
 	Request = require('superagent'),
-	{NotFoundError} = require('./error'),
+	{NotFoundError} = require('./Error'),
 	config = require('../config'),
 	utils = require('../services/utils')
 
