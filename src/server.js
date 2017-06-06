@@ -57,7 +57,7 @@ const getMeta = url => {
 
 				data.name = res.story.ptitle && res.story.ptitle
 				data.desc = res.story.contentShort && res.story.contentShort
-				data.cover = res.story.cover.medium && res.story.cover.medium 
+				data.cover = res.story.cover.large && res.story.cover.large 
 				return data
 			})
 		} else if (path[1].substring(0, 1) === '@') {

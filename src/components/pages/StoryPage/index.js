@@ -254,37 +254,34 @@ class StoryPage extends React.Component {
 			}
 		}
 
-		//console.log('render', story)w.
+		//console.log('render', story)
 		if (isEmpty(story)) return <div ref="TT" />
 		else
 			return (
 				<div>
 					<Helmet>
-						<title>{story.title}</title>
-						<meta name="title" content={story.title} />
+						<title>{story.ptitle}</title>
+						<meta name="title" content={story.ptitle} />
 						<meta name="keywords" content={keywords} />
 						<meta name="description" content={story.shortDesc} />
 
-						<link
+						{/*<link
 							rel="shortcut icon"
 							type="image/ico"
 							href={config.BACKURL + '/publishers/' + config.PID + '/favicon'}
 						/>
 						{channels && channels.fb
 							? <link rel="author" href={utils.getFbUrl(channels.fb)} />
-							: ''}
+							: ''}*/}
 						{/*<link rel="canonical" href={window.location.href} />*/}
 
-						<meta property="og:sitename" content={story.title} />
+						<meta property="og:sitename" content={story.ptitle} />
 						{/*<meta property="og:url" content={window.location.href} />*/}
-						<meta property="og:title" content={story.title} />
-						<meta property="og:type" content="article" />
+						<meta property="og:title" content={story.ptitle} />
 						<meta property="og:image" content={story.cover.medium} />
 						<meta property="og:keywords" content={keywords} />
 						<meta property="og:description" content={description} />
-						<meta property="twitter:card" content="summary_large_image" />
-						<meta property="twitter:image:alt" content={story.title} />
-						<meta property="fb:app_id" content={config.ANALYTIC.FBAPPID} />
+						<meta property="twitter:image:alt" content={story.ptitle} />
 
 						<link
 							rel="stylesheet"

@@ -148,7 +148,7 @@ const Html = ({ styles, assets, content, meta }) => {
         <meta property="og:image" content={cover}/>
         <meta property="og:keywords" content={keywords} />
         <meta property="og:description" content={desc} />
-        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:card" content={cover} />
         <meta property="twitter:image:alt" content={name} />
         <meta property="fb:app_id" content={analytic} />
 		
