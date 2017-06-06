@@ -136,7 +136,7 @@ class PublisherThemeSetting extends React.Component {
   state = {
     publisher:{},
     error:false,
-    textStatus:'Unsave',
+    textStatus:'',
     open1: false,
     open2: false,
     open3: false,

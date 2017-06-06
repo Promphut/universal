@@ -235,7 +235,7 @@ class PublisherStoryPage extends React.Component {
 		sortByState: 0,
 		desc: '',
 		descErr: '',
-		descStatus: 'Unsave',
+		descStatus: '',
 		newsPage: false
 	}
 

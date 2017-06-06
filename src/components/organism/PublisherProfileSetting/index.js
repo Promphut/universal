@@ -76,7 +76,7 @@ class PublisherProfileSetting extends React.Component {
     },
 
     error:false,
-    textStatus:'Unsave',
+    textStatus:'',
     errText:''
     //uploadPhoto:null
   }

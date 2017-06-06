@@ -90,7 +90,7 @@ class PublisherContact extends React.Component {
     let cats = props.contactCats || []
 
     this.state = {
-      textStatus:'Unsave',
+      textStatus:'',
       error:false,
       alert:false,
       snackbar:false,
