@@ -155,7 +155,7 @@ class ColumnSettingPage extends React.Component {
 
 		switchTo: '',
 
-		textStatus: 'Unsave',
+		textStatus: '',
 		error: false,
 		dialog: false,
 		errText: '',

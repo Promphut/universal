@@ -84,9 +84,15 @@ const Paper = styled.div`
 `
 
 class PublisherAbout extends React.Component {
+	SAVE_STATUS = {
+    'INITIAL': 0,
+    'DIRTIED': 1,
+    'UNDIRTIED': 2
+  }
 	state = {
-		textStatus: 'Unsave',
-		error: false
+		textStatus: '',
+		error: false,
+		status: this.SAVE_STATUS.INITIAL
 	}
 	static contextTypes = {
 		setting: PropTypes.object
@@ -132,6 +138,20 @@ class PublisherAbout extends React.Component {
 			})
 		}
 	}
+
+	handleEditableInput = (e, editable) => {
+    if(this.state.status === this.SAVE_STATUS.INITIAL)
+      this.setState({
+        status: this.SAVE_STATUS.UNDIRTIED,
+        saveStatus:''
+      })
+    else
+      this.setState({
+        status: this.SAVE_STATUS.DIRTIED,
+        textStatus:'Unsave'
+      })
+  }
+
 
 	componentWillReceiveProps(nextProps) {
 		//this.editor.setContent(nextProps.aboutUs || '')
@@ -214,6 +234,7 @@ class PublisherAbout extends React.Component {
 			}
 		})
 
+		this.editor.subscribe('editableInput', this.handleEditableInput);
 		// initialize editor content
 		this.setAboutUs(this.aboutUs)
 
@@ -225,7 +246,7 @@ class PublisherAbout extends React.Component {
 		let { theme } = this.context.setting.publisher
 
 		return (
-			<Container onSubmit={this.updateAboutUs}>
+			<Container>
 				<Helmet>
 					<link
 						rel="stylesheet"
@@ -255,7 +276,8 @@ class PublisherAbout extends React.Component {
 						/>
 						<PrimaryButton
 							label="Save"
-							type="submit"
+							type="button"
+							onClick={this.updateAboutUs}
 							style={{ float: 'left', margin: '0 0 0 20px' }}
 						/>
 					</div>
