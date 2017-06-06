@@ -106,17 +106,53 @@ const facebookSdk =
      fjs.parentNode.insertBefore(js, fjs);
    }(document, 'script', 'facebook-jssdk'));`
 
-const Html = ({ styles, assets, content }) => {
+
+// const getMataTag = (name, keywords, desc, cover, analytic) => {
+// 	return `<title></title>
+// 			<meta name="title" content=${name} />
+// 			<meta name="keywords" content=${keywords} />
+// 			<meta name="description" content=${desc} />
+// 			<meta property="og:sitename" content=${name} />
+// 			<meta property="og:title" content=${name} />
+// 			<meta property="og:type" content="article" />
+// 			<meta property="og:image" content=${cover}/>
+// 			<meta property="og:keywords" content=${keywords} />
+// 			<meta property="og:description" content=${desc} />
+// 			<meta property="twitter:card" content="summary_large_image" />
+// 			<meta property="twitter:image:alt" content=${name} />
+// 			<meta property="fb:app_id" content=${analytic} />
+// 		`
+// }
+
+
+const Html = ({ styles, assets, content, meta }) => {
   const helmet = Helmet.rewind()
   const htmlAttrs = helmet.htmlAttributes.toComponent()
   const bodyAttrs = helmet.bodyAttributes.toComponent()
-
+  var {name, keywords, desc, cover, analytic} = meta
+  //console.log('meta',meta)
   return (
     <html {...htmlAttrs}>
       <head>
         <meta charSet="UTF-8" />
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+        <title>{name}</title>
+        <meta name="title" content={name} />
+        <meta name="keywords" content={keywords} />
+        <meta name="description" content={desc} />
+        <meta property="og:sitename" content={name} />
+        <meta property="og:title" content={name} />
+        <meta property="og:type" content="article" />
+        <meta property="og:image" content={cover}/>
+        <meta property="og:keywords" content={keywords} />
+        <meta property="og:description" content={desc} />
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:image:alt" content={name} />
+        <meta property="fb:app_id" content={analytic} />
+		
+        
         {helmet.title.toComponent()}
         {helmet.meta.toComponent()}
         {helmet.link.toComponent()}
