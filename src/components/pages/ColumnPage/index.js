@@ -119,7 +119,7 @@ const ColumnDetail = styled.div`
 		margin-top: 8px;
   }
 `
-const Cover =styled(BGImg)`
+const Cover = styled(BGImg)`
 	 width: 100%;
 	 height: 340px;
 	 position:relative;
@@ -148,7 +148,6 @@ const Onload = styled.div`
 	height:70px;
 	margin:50px 0 50px 0;
 `
-
 
 class ColumnPage extends React.Component {
 	state = {
@@ -223,7 +222,9 @@ class ColumnPage extends React.Component {
 						{
 							page: ++page,
 							feed: feed,
-							feedCount: result.count['1']?result.count['1']:0?result.count['1']:0,
+							feedCount: result.count['1']
+								? result.count['1']
+								: 0 ? result.count['1'] : 0,
 							hasMoreFeed: feed.length < result.count['1']
 						},
 						() => {
@@ -242,12 +243,16 @@ class ColumnPage extends React.Component {
 			.then(col => {
 				this.setState({ column: col }, done)
 			})
-			.catch(utils.toError(this.props.history))
+			.catch(err => {
+				utils.toError(this.props.history, err)
+			})
+	}
+
+	componentWillMount() {
+		this.getColumnFromSlug(this.props.match.params.columnSlug)
 	}
 
 	componentDidMount() {
-		this.getColumnFromSlug(this.props.match.params.columnSlug)
-
 		//this.handleInfiniteLoad()
 		this.setState({
 			isMobile: utils.isMobile()
@@ -272,13 +277,16 @@ class ColumnPage extends React.Component {
 		let { feedCount, feed, hasMoreFeed } = this.state
 		//let {count, loadOffset, isInfiniteLoading, latestStories, isMobile} = this.state
 		//console.log(feedCount)
-		var head = 	<Head>
-									<div className='row'>
-										{column.icon!=config.BACKURL + '/imgs/brand_display.png'&&<Icon src={column.icon}  />}
-										<ColumnName className="sans-font">{column.name}</ColumnName>
-									</div>
-									<ColumnDetail>{column.shortDesc}</ColumnDetail>
-								</Head>
+		var head = (
+			<Head>
+				<div className="row">
+					{column.icon != config.BACKURL + '/imgs/brand_display.png' &&
+						<Icon src={column.icon} />}
+					<ColumnName className="sans-font">{column.name}</ColumnName>
+				</div>
+				<ColumnDetail>{column.shortDesc}</ColumnDetail>
+			</Head>
+		)
 		return (
 			<Wrapper>
 				<Helmet>
@@ -295,10 +303,15 @@ class ColumnPage extends React.Component {
 				</div>
 
 				<Cover
-					style={{display:'flex',alignItems:'center'}}
-					src={column.cover.medium!=config.BACKURL +'/imgs/column_cover.png'?column.cover.medium:null}
-					alt={column.name}
-				>{head}</Cover>
+					style={{ display: 'flex', alignItems: 'center' }}
+					src={
+						column.cover.medium != config.BACKURL + '/imgs/column_cover.png'
+							? column.cover.medium
+							: null
+					}
+					alt={column.name}>
+					{head}
+				</Cover>
 
 				<Content isMobile={isMobile}>
 					{feedCount <= 0
@@ -314,8 +327,11 @@ class ColumnPage extends React.Component {
 											There are no stories in this column right now. Wanna back to see
 											<Link
 												to="/stories/columns"
-												style={{ color: theme.accentColor,padding:'0 0.5em 0 0.5em' }}>
-												 other columns
+												style={{
+													color: theme.accentColor,
+													padding: '0 0.5em 0 0.5em'
+												}}>
+												other columns
 											</Link>
 											?
 										</div>
