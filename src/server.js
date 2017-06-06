@@ -13,7 +13,7 @@ import { renderToString } from 'react-router-server'
 import { CookiesProvider } from 'react-cookie'
 import cookiesMiddleware from 'universal-cookie-express'
 
-import { port, host, basename } from 'config'
+import { port, host, basename, ANALYTIC } from 'config'
 import AppRoutes from 'components/routes'
 import Html from 'components/Html'
 import Error from 'components/Error'
@@ -32,30 +32,66 @@ const renderApp = ({ req, context, location }) => {
 	)
 }
 
-const getMeta = url => {
-	const path = url.split('/')
+const getMataTag = (name, keywords, desc, cover, analytic) => {
+	return `<title></title>
+			<meta name="title" content=${name} />
+			<meta name="keywords" content=${keywords} />
+			<meta name="description" content=${desc} />
+			<meta property="og:sitename" content=${name} />
+			<meta property="og:title" content=${name} />
+			<meta property="og:type" content="article" />
+			<meta property="og:image" content=${cover}/>
+			<meta property="og:keywords" content=${keywords} />
+			<meta property="og:description" content=${desc} />
+			<meta property="twitter:card" content="summary_large_image" />
+			<meta property="twitter:image:alt" content=${name} />
+			<meta property="fb:app_id" content=${analytic} />
+		`
+}
 
-	if (path[1] === 'stories' && (path[3] == '' || path[3] == undefined)) {
-		const slug = decodeURIComponent(path[2])
-		api.getColumnFromSlug(slug).then(res => {
-			console.log(res)
-		})
-	} else if (path[1] === 'stories') {
-		const sid = path[4]
-		api.getStoryFromSid(sid).then(res => {
-			console.log(res)
-		})
-	} else if (path[1].substring(0, 1) === '@') {
-		const user = decodeURIComponent(path[1].substring(1))
-		api.getUserFromUsername(user).then(res => {
-			console.log(res)
-		})
-	} else if (path[1] === 'u') {
-		const uid = path[2]
-		api.getUser(uid).then(res => {
-			console.log(res)
-		})
-	}
+const getMeta = url => {
+	api.getPublisherSetting().then(setting => {
+		let name = setting.publisher.name
+		let keywords = setting.publisher.keywords
+		let desc = setting.publisher.desc
+		let cover = setting.publisher.cover.medium
+		let analytic = ANALYTIC.FBAPPID
+
+		const path = url.split('/')
+
+		if (path[1] === 'stories' && (path[3] == '' || path[3] == undefined)) {
+			const slug = decodeURIComponent(path[2])
+			api.getColumnFromSlug(slug).then(res => {
+				console.log(res)
+
+				return getMataTag(name, keywords, desc, cover, analytic)
+			})
+		} else if (path[1] === 'stories') {
+			const sid = path[4]
+			api.getStoryFromSid(sid).then(res => {
+				if (res.story.ptitle) name = res.story.ptitle
+				if (res.story.contentShort) desc = res.story.contentShort
+
+				return getMataTag(name, keywords, desc, cover, analytic)
+			})
+		} else if (path[1].substring(0, 1) === '@') {
+			const user = decodeURIComponent(path[1].substring(1))
+			api.getUserFromUsername(user).then(res => {
+				console.log(res)
+
+				return getMataTag(name, keywords, desc, cover, analytic)
+			})
+		} else if (path[1] === 'u') {
+			const uid = path[2]
+			api.getUser(uid).then(res => {
+				console.log(res)
+
+				return getMataTag(name, keywords, desc, cover, analytic)
+			})
+		} else {
+			return getMataTag(name, keywords, desc, cover, analytic)
+		}
+	})
 }
 
 const renderHtml = ({ content, req }) => {
