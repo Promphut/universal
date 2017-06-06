@@ -36,11 +36,13 @@ const config = {
     DOMAIN:     'localhost',
     FRONTURL:     'http://localhost:3000',
     BACKURL:    'http://localhost:4000',
+    COVER:  'http://localhost:3000/pic/fbthumbnail.jpg'
   },
   production: {
     DOMAIN:     'nextempire.co',
     FRONTURL:     'http://nextempire.co',
     BACKURL:    'http://api.nextempire.co',
+    COVER:  'http://nextempire.co/pic/fbthumbnail.jpg'
   },
 }
 
