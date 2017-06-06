@@ -200,7 +200,9 @@ class TagPage extends React.Component {
 			.then(tag => {
 				this.setState({ tag: tag }, done)
 			})
-			.catch(utils.toError(this.props.history))
+			.catch(err => {
+				utils.toError(this.props.history, err)
+			})
 	}
 
 	componentDidMount() {

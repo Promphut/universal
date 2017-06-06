@@ -342,7 +342,9 @@ class UserStory extends React.Component {
 			.then(user => {
 				this.setState({ user: user }, done)
 			})
-			.catch(utils.toError(this.props.history))
+			.catch(err => {
+				utils.toError(this.props.history, err)
+			})
 	}
 
 	getUserFromUid = (uid, done = () => {}) => {
@@ -354,7 +356,9 @@ class UserStory extends React.Component {
 			.then(user => {
 				this.setState({ user: user }, done)
 			})
-			.catch(utils.toError(this.props.history))
+			.catch(err => {
+				utils.toError(this.props.history, err)
+			})
 	}
 
 	componentDidMount() {

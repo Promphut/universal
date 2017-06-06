@@ -114,15 +114,12 @@ utils.querystring = (field, location) => {
 	return parse(location.search)[field]
 }
 
-utils.toError = history => {
-	return err => {
-		console.error('err', err)
+utils.toError = (history, err) => {
+	history.replace({
+		pathname: '/error'
+	})
 
-		history.replace({
-			pathname: '/error',
-			state: { error: err }
-		})
-	}
+	return err
 }
 utils.notFound = history => {
 	history.replace({

@@ -190,7 +190,9 @@ class StoryPage extends React.Component {
 					story: result.story
 				})
 			})
-			.catch(utils.toError(this.props.history))
+			.catch(err => {
+				utils.toError(this.props.history, err)
+			})
 	}
 
 	handleScroll = event => {

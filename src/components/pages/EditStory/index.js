@@ -554,7 +554,9 @@ class EditStory extends React.Component {
       //console.log('getStoryFromSid', result)
       //next()
     })
-    .catch(utils.toError(this.props.history))
+		.catch(err => {
+			utils.toError(this.props.history, err)
+		})
   }
 
   componentWillReceiveProps(nextProps) {
@@ -628,7 +630,7 @@ class EditStory extends React.Component {
           embeds: {
             label: '<span class="fa fa-code"></span>',
             parseOnPaste:true,
-            oembedProxy:null 
+            oembedProxy:null
           }
         }
     });
