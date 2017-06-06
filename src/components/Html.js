@@ -111,7 +111,7 @@ const Html = ({ styles, assets, content, meta }) => {
   const helmet = Helmet.rewind()
   const htmlAttrs = helmet.htmlAttributes.toComponent()
   const bodyAttrs = helmet.bodyAttributes.toComponent()
-  var {name, keywords, desc, cover, analytic} = meta
+  var {name, keywords, desc, cover, analytic, url} = meta
   //console.log('meta',meta)
   return (
     <html {...htmlAttrs}>
@@ -124,8 +124,9 @@ const Html = ({ styles, assets, content, meta }) => {
         <meta name="title" content={name} />
         <meta name="keywords" content={keywords} />
         <meta name="description" content={desc} />
-        <meta property="og:sitename" content={name} />
+        <meta property="og:site_name" content={config.FRONTURL} />
         <meta property="og:title" content={name} />
+        <meta property="og:url" content={config.FRONTURL+url} />
         <meta property="og:type" content="article" />
         <meta property="og:image" content={cover}/>
         <meta property="og:keywords" content={keywords} />
