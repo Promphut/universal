@@ -5,14 +5,14 @@ const merge = require('lodash/merge')
 //const port = process.env.PORT || 3000
 
 const config = {
-  all: {
-    env: process.env.NODE_ENV || 'development',
-    isDev: process.env.NODE_ENV !== 'production',
-    basename: process.env.PUBLIC_PATH,
-    isBrowser: typeof window !== 'undefined',
-    isServer: typeof window === 'undefined',
-    host: process.env.HOST || 'localhost',
-    port: process.env.PORT || 3000,
+	all: {
+		env: process.env.NODE_ENV || 'development',
+		isDev: process.env.NODE_ENV !== 'production',
+		basename: process.env.PUBLIC_PATH,
+		isBrowser: typeof window !== 'undefined',
+		isServer: typeof window === 'undefined',
+		host: process.env.HOST || 'localhost',
+		port: process.env.PORT || 3000,
 
     PID:'11',
     NAME: 'NextEmpire', // one word, no space
