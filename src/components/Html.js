@@ -116,11 +116,10 @@ const Html = ({ styles, assets, content, meta }) => {
   return (
     <html {...htmlAttrs}>
       <head>
+        <title>{name}</title>
         <meta charSet="UTF-8" />
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        
-        <title>{name}</title>
         <meta name="title" content={name} />
         <meta name="keywords" content={keywords} />
         <meta name="description" content={desc} />

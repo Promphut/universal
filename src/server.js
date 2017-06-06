@@ -34,7 +34,7 @@ const renderApp = ({ req, context, location }) => {
 
 const getMeta = (u) => {
 	return api.getPublisherSetting().then(setting => {
-		let name = setting.publisher.name
+		let name = setting.publisher.name+' | '+setting.publisher.tagline
 		let keywords = setting.publisher.keywords
 		let desc = setting.publisher.desc
 		let cover = COVER
@@ -52,7 +52,7 @@ const getMeta = (u) => {
 				data.cover = res.cover.medium && res.cover.medium 
 				data.url = res.url && res.url
 				return data
-			})
+			}).catch((err)=>{return data})
 		} else if (path[1] === 'stories') {
 			const sid = path[4]
 			return api.getStoryFromSid(sid).then(res => {
@@ -62,7 +62,7 @@ const getMeta = (u) => {
 				data.cover = res.story.cover.large && res.story.cover.large
 				data.url = res.story.url && res.story.url 
 				return data
-			})
+			}).catch((err)=>{return data})
 		} else if (path[1].substring(0, 1) === '@') {
 			const user = decodeURIComponent(path[1].substring(1))
 			return api.getUserFromUsername(user).then(res => {
@@ -71,7 +71,7 @@ const getMeta = (u) => {
  				data.desc = res.desc && res.desc
 				data.url = res.url && res.url
 				return data
-			})
+			}).catch((err)=>{return data})
 		} else if (path[1] === 'u') {
 			const uid = path[2]
 			return api.getUser(uid).then(res => {
@@ -80,7 +80,7 @@ const getMeta = (u) => {
  				data.desc = res.desc && res.desc
 				data.url = res.url && res.url
 				return data
-			})
+			}).catch((err)=>{return data})
 		} else {
 			return data
 		}
