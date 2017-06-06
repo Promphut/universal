@@ -4,8 +4,8 @@ import { Route, Switch, Link, Redirect } from 'react-router-dom'
 import api from 'components/api'
 import auth from 'components/auth'
 import App from 'components/App'
-import { HomePage, NewsPage, AllColumn, AboutPage, ContactPage, TagPage, ColumnPage, 
-	StoryPage, ForgetPasswordPage, SignInPage, SignUpPage, UserStory, 
+import { HomePage, NewsPage, AllColumn, AboutPage, ContactPage, TagPage, ColumnPage,
+	StoryPage, ForgetPasswordPage, SignInPage, SignUpPage, UserStory,
 	PublisherEditor, UserSetting, PrivateRoute, NotFoundPage, ErrorPage,
 	UserSettingProfile, UserSettingAccount, UserSettingStory, NewStory, EditStory } from 'components'
 
@@ -89,7 +89,7 @@ class AppRoutes extends React.Component {
     			<Route exact path='/u/:uid' render={props => <UserStory {...props} uid={props.match.params.uid}/>} />
 				{/* STORY 4 NO COLUMN AND NO USERNAME */ }
     			<Route exact path='/u/:uid/stories/:storySlug/:sid' render={props => <StoryPage {...props} countView={true}/>} />
-				
+
 				<Route exact path='/@:username' render={props => <UserStory {...props} username={props.match.params.username}/>}/>
 				{/* STORY 3 NO COLUMN */ }
     			<Route exact path='/@:username/stories/:storySlug/:sid' render={props => <StoryPage {...props} countView={true}/>} />

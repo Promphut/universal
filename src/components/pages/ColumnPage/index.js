@@ -320,7 +320,7 @@ class ColumnPage extends React.Component {
 					src={column.cover.medium!=config.BACKURL +'/imgs/column_cover.png'?column.cover.medium:null}
 					alt={column.name}
 				>{head}</Cover>
-				
+
 				<Content isMobile={isMobile}>
 					{feedCount <= 0
 						? <Main>
@@ -332,7 +332,7 @@ class ColumnPage extends React.Component {
 									title="No Story, yet"
 									description={
 										<div>
-											There are no stories in this column right now. Wanna back to see 
+											There are no stories in this column right now. Wanna back to see
 											<Link
 												to="/stories/columns"
 												style={{ color: theme.accentColor,padding:'0 0.5em 0 0.5em' }}>
