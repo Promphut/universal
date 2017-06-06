@@ -84,7 +84,7 @@ const getMeta = (u) => {
 		} else {
 			return data
 		}
-	})
+	}).catch((err)=>{return err})
 }
 
 const renderHtml = ({ content, req, meta }) => {
