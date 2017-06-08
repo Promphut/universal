@@ -43,9 +43,9 @@ class PublisherSettingMenu extends React.Component {
 	}
 	constructor(props) {
 		super(props)
-		console.log(props.pathname+'/')
+		//console.log(props.pathname+'/')
 		this.state = {
-			selectedIndex: props.pathname+'/',
+			selectedIndex: props.pathname,
 			openInsights: false,
 			openManage: false,
 			openSettings: false

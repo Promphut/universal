@@ -618,7 +618,10 @@ class EditStory extends React.Component {
         addons: {
           images: {
             captionPlaceholder: 'Type caption for image',
-            fileUploadOptions: {},
+            fileUploadOptions: { // (object) File upload configuration. See https://github.com/blueimp/jQuery-File-Upload/wiki/Options
+                url: 'upload.php', // (string) A relative path to an upload script
+                acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i // (regexp) Regexp of accepted file types
+            },
             styles: {
               full: {
                   label: this.state.layout=='article'?'<span class="fa fa-window-maximize"></span>':''

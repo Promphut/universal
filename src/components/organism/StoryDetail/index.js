@@ -129,11 +129,18 @@ const NoComment = styled.div`
     font-size:16px;
   }
 `
+const HighlightBox = styled.div`
+  width:100%;
+  padding:2px;
+  background: linear-gradient(135deg,  ${props => props.theme.primaryColor} 0%, ${props => props.theme.accentColor} 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+`
 
 const Highlight = styled.div`
-  background-color:#F4F4F4;
-  border:1px dashed ${props=>props.theme.accentColor};
+  position:relative;
+  top:0;
+  left:0;
   width:100%;
+  background-color:white;
   padding:20px;
   ul > li {
     font-family: 'CS PraJad','PT Sans', sans-serif;
@@ -153,6 +160,22 @@ const Highlight = styled.div`
     line-height:1.5;;
   }
 `
+const HighlightText = styled.span`
+  position:relative;
+  top:10px;
+  left:20px;
+  z-index:5;
+  color:${props=>props.theme.primaryColor};
+  text-align:center;
+  padding:0 9px;
+  font-size:14px;
+  font-weight:bold;
+  font-family:'PT Sans';
+  background:white;
+  border-left:2px solid ${props=>props.theme.accentColor};
+  border-right:2px solid ${props=>props.theme.accentColor};
+`
+
 
 const styles ={
   button:{
@@ -225,7 +248,13 @@ class StoryDetail extends React.Component {
       <Wraper>
         <Head className='title-font'>{s.ptitle}</Head>
         <WriterAndDate readTime={s.readTime} writer={s.writer} column={s.column} published={s.published}/>
-        {s.phighlight && <Highlight   dangerouslySetInnerHTML={{__html:s.phighlight}}></Highlight>} 
+        {s.phighlight &&
+        <div>
+          <HighlightText>HIGHLIGHT</HighlightText>
+          <HighlightBox>
+            <Highlight   dangerouslySetInnerHTML={{__html:s.phighlight}}/>
+          </HighlightBox>
+        </div>} 
         <Story ref="detail"  dangerouslySetInnerHTML={{__html:s.phtml}}></Story>
         {/*<WritedBy writer={s.writer} column={s.column} published={s.published} />*/}
 

@@ -13,7 +13,7 @@ import { renderToString } from 'react-router-server'
 import { CookiesProvider } from 'react-cookie'
 import cookiesMiddleware from 'universal-cookie-express'
 
-import { port, host, basename, ANALYTIC, COVER } from 'config'
+import { port, host, basename, ANALYTIC, COVER,amazonAccessKey,secretKey } from 'config'
 import AppRoutes from 'components/routes'
 import Html from 'components/Html'
 import Error from 'components/Error'
@@ -21,6 +21,8 @@ import api from 'components/api'
 if (process.env.NODE_ENV !== 'production') {
 	require('longjohn')
 }
+// var AWS = require('aws-sdk'),
+//     fs = require('fs');
 
 const renderApp = ({ req, context, location }) => {
 	return renderToString(
@@ -42,7 +44,6 @@ const getMeta = (u) => {
 		let analytic = ANALYTIC.FBAPPID || ''
 		var data = {name,keywords,desc,cover,analytic,url}
 		const path = u.split('/')
-
 		if (path[1] === 'stories' && (path[3] == '' || path[3] == undefined)) {
 			const slug = decodeURIComponent(path[2])
 			return api.getColumnFromSlug(slug).then(res => {
@@ -84,7 +85,11 @@ const getMeta = (u) => {
 		} else {
 			return data
 		}
-	}).catch((err)=>{return console.error(err)})
+	}).catch((err)=>{
+		console.error(err)
+		var data = {name:'',keywords:'',desc:'',cover:'',analytic:'',url:''}
+		return data
+	})
 }
 
 const renderHtml = ({ content, req, meta }) => {
@@ -125,7 +130,8 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
 	const content = renderToStaticMarkup(<Error />)
-	res.status(500).send(renderHtml({ content, req }))
+	var meta = {name:'',keywords:'',desc:'',cover:'',analytic:'',url:''}
+	res.status(500).send(renderHtml({ content, req, meta }))
 	console.error(err)
 	next(err)
 })
@@ -140,3 +146,26 @@ var server = app.listen(port, error => {
 		)
 	}
 })
+
+//AMAZON S3
+// For dev purposes only
+// AWS.config.update({ accessKeyId: amazonAccessKey, secretAccessKey: secretKey });
+
+// // Read in the file, convert it to base64, store to S3
+// fs.readFile('del.txt', function (err, data) {
+//   if (err) { throw err; }
+
+//   var base64data = new Buffer(data, 'binary');
+
+//   var s3 = new AWS.S3();
+//   s3.client.putObject({
+//     Bucket: 'thepublisher',
+//     Key: 'del2.txt',
+//     Body: base64data,
+//     ACL: 'public-read'
+//   },function (resp) {
+//     console.log(arguments);
+//     console.log('Successfully uploaded package.');
+//   });
+
+// });
