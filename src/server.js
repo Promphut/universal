@@ -136,6 +136,18 @@ app.use((err, req, res, next) => {
 	next(err)
 })
 
+app.get('/feed',(req,res) => {
+	api.getFeed('story',null,null,null,null,null,{option : [{rss :true}]}).then(result => {
+		res.send(result.xml)
+	})
+})
+
+app.get('/lineFeed',(req,res) => {
+	api.getFeed('story',null,null,null,null,null,{option : [{line :true}]}).then(result => {
+		res.send(result.xml)
+	})
+})
+
 var server = app.listen(port, error => {
 	const boldBlue = text => `\u001b[1m\u001b[34m${text}\u001b[39m\u001b[22m`
 	if (error) {
