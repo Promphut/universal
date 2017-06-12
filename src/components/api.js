@@ -224,9 +224,11 @@ api.getFeed = (type, filter, sort, sortby, page, limit, option) => {
 	let token
 	if(option && option.onlyAuthorized) token = auth.getToken()
 
+	console.log(option);
+	console.log(JSON.stringify(option))
+
 	return Request
 	.get(config.BACKURL+'/publishers/'+config.PID+'/feed?type='+type)
-	.set('x-access-token', token)
 	.query({filter: filter ? JSON.stringify(filter) : null})
 	.query({option: option ? JSON.stringify(option) : null})
 	.query({sort: sort})
@@ -235,7 +237,6 @@ api.getFeed = (type, filter, sort, sortby, page, limit, option) => {
 	.query({limit: limit})
 	.set('Accept','application/json')
 	.then(res => {
-		//console.log('getFeed', res.body)
 		return res.body
 	}, api.err)
 }

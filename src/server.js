@@ -104,6 +104,27 @@ const app = express()
 app.use(basename, express.static(path.resolve(process.cwd(), 'dist/public')))
 app.use(cookiesMiddleware())
 
+app.get('/rssfeed',(req,res) => {
+	api.getFeed('story',null,null,null,null,null,{'rss' :true}).then(result => {
+		res.set('Content-Type', 'text/xml');
+		res.send(result.xml)
+	})
+})
+
+app.get('/atomfeed',(req,res) => {
+	api.getFeed('story',null,null,null,null,null,{'atom' :true}).then(result => {
+		res.set('Content-Type', 'text/xml');
+		res.send(result.xml)
+	})
+})
+
+app.get('/linefeed',(req,res) => {
+	api.getFeed('story',null,null,null,null,null,{'line' :true}).then(result => {
+		res.set('Content-Type', 'text/xml');
+		res.send(result.xml)
+	})
+})
+
 app.use((req, res, next) => {
 	global.window = global.window || {}
 	global.navigator = global.navigator || {}
@@ -134,18 +155,6 @@ app.use((err, req, res, next) => {
 	res.status(500).send(renderHtml({ content, req, meta }))
 	console.error(err)
 	next(err)
-})
-
-app.get('/feed',(req,res) => {
-	api.getFeed('story',null,null,null,null,null,{option : [{rss :true}]}).then(result => {
-		res.send(result.xml)
-	})
-})
-
-app.get('/lineFeed',(req,res) => {
-	api.getFeed('story',null,null,null,null,null,{option : [{line :true}]}).then(result => {
-		res.send(result.xml)
-	})
 })
 
 var server = app.listen(port, error => {
