@@ -3,6 +3,10 @@ import 'babel-polyfill'
 // require.extensions['.css'] = () => {
 //   return null
 // }
+// allow self signed cert for dev mode 
+if (process.env.NODE_ENV == 'development') 
+	process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 import path from 'path'
 import express from 'express'
 import React from 'react'
@@ -12,6 +16,10 @@ import { StaticRouter } from 'react-router'
 import { renderToString } from 'react-router-server'
 import { CookiesProvider } from 'react-cookie'
 import cookiesMiddleware from 'universal-cookie-express'
+//import forceSSL from 'express-force-ssl'
+import http from 'http'
+import https from 'https'
+import fs from 'fs'
 
 import { port, host, basename, ANALYTIC, COVER,amazonAccessKey,secretKey } from 'config'
 import AppRoutes from 'components/routes'
@@ -21,6 +29,7 @@ import api from 'components/api'
 if (process.env.NODE_ENV !== 'production') {
 	require('longjohn')
 }
+
 // var AWS = require('aws-sdk'),
 //     fs = require('fs');
 
@@ -99,8 +108,18 @@ const renderHtml = ({ content, req, meta }) => {
 	return `<!doctype html>\n${renderToStaticMarkup(html)}`
 }
 
+const ssl_options = {
+  key: fs.readFileSync('./private/keys/localhost.key'),
+  cert: fs.readFileSync('./private/keys/localhost.crt'),
+  passphrase: 'thepublisher'
+}
+
 const app = express()
 
+const server = http.createServer(app),
+	secureServer = https.createServer(ssl_options, app)
+
+//app.use(forceSSL)
 app.use(basename, express.static(path.resolve(process.cwd(), 'dist/public')))
 app.use(cookiesMiddleware())
 
@@ -136,16 +155,81 @@ app.use((err, req, res, next) => {
 	next(err)
 })
 
-var server = app.listen(port, error => {
-	const boldBlue = text => `\u001b[1m\u001b[34m${text}\u001b[39m\u001b[22m`
-	if (error) {
-		console.error(error)
-	} else {
+function startListen(_server, _url, _port){
+	_server.listen(_port);
+
+	_server.on('error', err => {
+		if (err.syscall !== 'listen') {
+			throw err;
+		}
+
+		let bind = typeof _port === 'string'
+			? 'Pipe ' + _port
+			: 'Port ' + _port;
+
+		// handle specific listen errors with friendly messages
+		switch (err.code) {
+			case 'EACCES':
+				console.error(bind + ' requires elevated privileges');
+				process.exit(1);
+				break;
+			case 'EADDRINUSE':
+				console.error(bind + ' is already in use');
+				process.exit(1);
+				break;
+			default:
+				throw err;
+		}
+	});
+
+	_server.on('listening', () => {
+		const boldBlue = text => `\u001b[1m\u001b[34m${text}\u001b[39m\u001b[22m`
+
+		let addr = _server.address();
+		let bind = typeof addr === 'string'
+			? 'pipe ' + addr
+			: 'port ' + addr.port;
 		console.info(
-			`Server is running at ${boldBlue(`http://${host}:${port}${basename}/`)}`
+			`Server is running at ${boldBlue(`${_url}:${_port}${basename}/`)}`
 		)
-	}
-})
+	});
+}
+
+startListen(server, 'http://localhost', port)
+startListen(secureServer, 'https://localhost', port+100)
+
+
+// secureServer.listen(3010, error => {
+// 	const boldBlue = text => `\u001b[1m\u001b[34m${text}\u001b[39m\u001b[22m`
+// 	if (error) {
+// 		console.error(error)
+// 	} else {
+// 		console.info(
+// 			`Server is running at ${boldBlue(`https://${host}:3010${basename}/`)}`
+// 		)
+// 	}
+// })
+// server.listen(port, error => {
+// 	const boldBlue = text => `\u001b[1m\u001b[34m${text}\u001b[39m\u001b[22m`
+// 	if (error) {
+// 		console.error(error)
+// 	} else {
+// 		console.info(
+// 			`Server is running at ${boldBlue(`http://${host}:${port}${basename}/`)}`
+// 		)
+// 	}
+// })
+
+// var server = app.listen(port, error => {
+// 	const boldBlue = text => `\u001b[1m\u001b[34m${text}\u001b[39m\u001b[22m`
+// 	if (error) {
+// 		console.error(error)
+// 	} else {
+// 		console.info(
+// 			`Server is running at ${boldBlue(`http://${host}:${port}${basename}/`)}`
+// 		)
+// 	}
+// })
 
 //AMAZON S3
 // For dev purposes only
