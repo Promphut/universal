@@ -32,21 +32,21 @@ utils.isMobile = () => {
 }
 
 utils.getFbUrl = fbid => {
-	return 'http://facebook.com/' + fbid
+	return 'https://facebook.com/' + fbid
 }
 utils.getTwtUrl = username => {
-	return 'http://twitter.com/' + username
+	return 'https://twitter.com/' + username
 }
 utils.getIgUrl = username => {
-	return 'http://instagram.com/' + username
+	return 'https://instagram.com/' + username
 }
 utils.getYtUrl = username => {
 	// channel
 	if (username.startsWith('UC') && username.length === 24)
-		return 'http://youtube.com/channel/' + username
+		return 'https://youtube.com/channel/' + username
 
 	// user
-	return 'http://youtube.com/user/' + username
+	return 'https://youtube.com/user/' + username
 }
 
 // default twt tweet url
