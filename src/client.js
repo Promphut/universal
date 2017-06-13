@@ -1,5 +1,6 @@
 import 'react-hot-loader/patch'
 import 'babel-polyfill'
+import registerServiceWorker from './registerServiceWorker'
 // require.extensions['.css'] = () => {
 //   return null
 // }
@@ -11,6 +12,9 @@ import { CookiesProvider } from 'react-cookie'
 
 import AppRoutes from 'components/routes'
 //import App from 'components/App'
+
+// Service Worker Registeration Goes Here!
+registerServiceWorker();
 
 const renderApp = () => (
 	<CookiesProvider>
