@@ -80,6 +80,7 @@ const Main = styled.div`
 	min-height: calc(100vh - ${props => (props.isMobile ? '261px' : '261px')});
 
 	@media (max-width: 480px) {
+		margin-top: 10px;
 		flex:0 100%;
 		max-width: 100%;
 		padding:0 15px 0 15px;
@@ -115,7 +116,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#222222', end
 
 class StoryPage extends React.Component {
 	state = {
-		recommends: [], // trending stories
+		recommends: [], 
 		description: '',
 		showTopbarTitle: false,
 		story: {}
@@ -125,31 +126,7 @@ class StoryPage extends React.Component {
 	}
 	constructor(props) {
 		super(props)
-
-		// story = {
-		// 	cover: {},
-		// 	coverMobile: {}
-		// } //default
 	}
-
-	// findDescription = (maxLength = 140) => {
-	// 	let story = document.getElementsByTagName('p')
-	// 	if (story) {
-	// 		let description = ''
-
-	// 		for (let i = 0; i < story.length; i++) {
-	// 	    let item = story[i].innerHTML
-	// 			description += item + ' '
-
-	// 			if (description.length > maxLength) {
-	// 				description = description.substring(0, maxLength) + '...'
-	// 				break
-	// 			}
-	// 		}
-
-	// 		this.setState({description})
-	// 	}
-	// }
 
 	getRecommendStories = () => {
 		var { story } = this.state
@@ -237,7 +214,7 @@ class StoryPage extends React.Component {
 		const isMobile = utils.isMobile()
 		let { keywords, channels } = this.context.setting.publisher
 		let { recommends, description, showTopbarTitle, story } = this.state
-
+		//console.log(story.shares)
 		let hasCover = false
 		if (!isEmpty(story)) {
 			if (isMobile){
@@ -298,6 +275,7 @@ class StoryPage extends React.Component {
 							showTitle={showTopbarTitle}
 							editButton={'/me/stories/' + story.id + '/edit'}
 							hasCover={hasCover}
+							share={story.shares && story.shares}
 						/>
 
 						{story.cover.medium !=

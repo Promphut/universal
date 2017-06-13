@@ -6,7 +6,7 @@ const EditorCss = styled.div`
  .medium-insert-images, .mediumInsert {
   text-align: center; }
   .medium-insert-images figure, .mediumInsert figure {
-    margin: 0;
+    margin: 24px 0 24px 0;
     display: block; }
     .medium-insert-images figure img, .mediumInsert figure img {
       max-width: 100%;
@@ -56,6 +56,7 @@ const EditorCss = styled.div`
   text-align: center;
   position: relative; }
   .medium-insert-embeds iframe, .mediumInsert-embeds iframe {
+    width:100% !important;
     margin: 0 auto !important; }
   .medium-insert-embeds div, .mediumInsert-embeds div {
     margin: 0 auto !important; }
@@ -69,6 +70,7 @@ const EditorCss = styled.div`
     margin: 0 0 20px 30px; }
 
 .medium-insert-images figure, .mediumInsert figure, .medium-insert-embeds figure, .mediumInsert-embeds figure {
+
   position: relative; }
   .medium-insert-images figure figcaption, .mediumInsert figure figcaption, .medium-insert-embeds figure figcaption, .mediumInsert-embeds figure figcaption {
     position: relative;
@@ -238,8 +240,9 @@ const EditorCss = styled.div`
   #paper p {
     font-family: 'CS PraJad','PT Sans', sans-serif;
     font-size: 18px;
-    margin:8px 0 8px 0;
+    margin:12px 0 12px 0;
     line-height:1.5;
+    clear:both;
   }
   #paper h2 {
     font-family: 'PT Serif', 'Mitr';
@@ -251,7 +254,13 @@ const EditorCss = styled.div`
     font-family: 'PT Serif', 'Mitr';
     font-size: 20px;
     font-weight:normal;
-    color:#bfbfbf;
+    color:#222;
+  }
+  #paper a {
+    color:${props=>props.theme.accentColor};
+    &:hover{
+      cursor:pointer;
+    }
   }
   #paper ul > li {
     font-family: 'CS PraJad','PT Sans', sans-serif;
@@ -266,6 +275,19 @@ const EditorCss = styled.div`
     border-left: 3px solid ${props=>props.theme.accentColor};
     padding-left:20px;
     display:inline-block;
+  }
+  @media (max-width: 480px) {
+    #paper h2 {
+      font-size: 24px;
+    }
+    .medium-insert-embeds figure{
+      margin:0 !important;
+    }
+    .medium-insert-embeds iframe, .mediumInsert-embeds iframe {
+      width:100% !important;
+      height:auto !important;
+      margin: 0 !important; 
+    }
   }
 `
 export default EditorCss

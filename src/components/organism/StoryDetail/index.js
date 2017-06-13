@@ -2,12 +2,12 @@ import React from 'react';
 import {Link} from 'react-router-dom'
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon';
-import {WriterAndDate,WritedBy,TagBox,CommentBox,CommentUser,RecommendArticle,FromColumn} from 'components'
+import {EditorCss,WriterAndDate,WritedBy,TagBox,CommentBox,CommentUser,RecommendArticle,FromColumn} from 'components'
 import RaisedButton from 'material-ui/RaisedButton';
 import api from 'components/api'
 import utils from '../../../services/utils'
 
-const Wraper = styled.div`
+const Wraper = styled(EditorCss)`
   color:#222;
   width:100%;
   margin:0 auto 0 auto;
@@ -33,7 +33,6 @@ const Head = styled.h1`
 `
 
 const Story = styled.div`
-  font-size:20px;
   margin-top:40px;
   clear:both;
 	overflow:hidden;
@@ -45,7 +44,7 @@ const Story = styled.div`
   p {
     font-family: 'CS PraJad','PT Sans', sans-serif;
     font-size: 18px;
-    margin:8px 0 8px 0;
+    margin:12px 0 12px 0;
     line-height:1.5;
     font-weight:normal;
     white-space: pre-wrap;      /* Webkit */
@@ -67,7 +66,7 @@ const Story = styled.div`
   h3 {
     font-size: 20px;
     font-weight:normal;
-    color:#bfbfbf;
+    color:#222;
     white-space: pre-wrap;      /* Webkit */
     white-space: -moz-pre-wrap; /* Firefox */
     white-space: -pre-wrap;     /* Opera <7 */
@@ -88,9 +87,23 @@ const Story = styled.div`
     white-space: -o-pre-wrap;   /* Opera 7 */
     word-wrap: break-word;      /* IE */
   }
+  a {
+    color:${props=>props.theme.accentColor};
+    &:hover{
+      cursor:pointer;
+    }
+  }
   @media (max-width:480px){
     font-size:16px;
     margin-top:15px;
+    h2 {
+      font-size: 24px;
+    }
+    .medium-insert-embeds iframe, .mediumInsert-embeds iframe {
+      width:100% !important;
+      height:auto !important;
+      margin: 0 !important; 
+    }
   }
 `
 
@@ -100,7 +113,7 @@ const TagContainer = styled.div`
   margin:30px 0 0 0;
   font-family:'PT Sans';
   @media (max-width:480px){
-    margin:20px 0 20px 0;
+    margin:15px 0 15px 0;
   }
 `
 
@@ -109,6 +122,9 @@ const Divider = styled.div`
   width:100%;
   background-color:#E2E2E2;
   margin:20px 0 20px 0;
+  @media (max-width:480px){
+    margin:15px 0 15px 0;
+  }
 `
 
 const CommentUserContainer = styled.div`
@@ -159,6 +175,9 @@ const Highlight = styled.div`
     margin:8px 0 8px 0;
     line-height:1.5;;
   }
+  @media (max-width:480px){
+    padding:5px;
+  }
 `
 const HighlightText = styled.span`
   position:relative;
@@ -174,6 +193,12 @@ const HighlightText = styled.span`
   background:white;
   border-left:2px solid ${props=>props.theme.accentColor};
   border-right:2px solid ${props=>props.theme.accentColor};
+`
+const Flex= styled.div`
+  flex:1;
+  @media (max-width:480px){
+    flex:0;
+  }
 `
 
 
@@ -268,12 +293,12 @@ class StoryDetail extends React.Component {
         <Divider/>
 
         {(s.writer&&s.column)&&<div className='row center'>
-          <div style={{flex:1}}>
+          <Flex >
             <WritedBy writer={s.writer} column={s.column} published={s.published} />
-          </div>
-          <div style={{...columnStyle,flex:1}}>
+          </Flex>
+          <Flex style={{...columnStyle}}>
             {s.column && <FromColumn column={s.column} />}
-          </div>
+          </Flex>
         </div>}
 
         <Divider/>

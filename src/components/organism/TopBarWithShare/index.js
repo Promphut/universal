@@ -252,7 +252,7 @@ class TopBarWithShare extends React.Component {
 		let {theme} = this.context.setting.publisher
 		let {alertLeft, alertRight, topOpacity, open} = this.state
 		let status = this.props.status || 'UNLOGGEDIN',
-			{scrolling, user, menu, transparent, editButton, hasCover}  = this.props
+			{scrolling, user, menu, transparent, editButton, hasCover,share}  = this.props
 
 	  const logoStyleBase = {
 	    display: 'inline-block',
@@ -290,7 +290,7 @@ class TopBarWithShare extends React.Component {
 					</Left>
 
 					<Right className="fade">
-						<FbShareButton style={{float: 'left'}} button={<ShareButtonTop number='112' barTone={theme.barTone} scrolling={scrolling} hasCover={hasCover}/>} />
+						<FbShareButton style={{float: 'left'}} button={<ShareButtonTop number={share&&share.fb} barTone={theme.barTone} scrolling={scrolling} hasCover={hasCover}/>} />
 						<ShareDropdownTop>
 							<FontIcon style={moreStyle} className="material-icons" >more_vert</FontIcon>
 						</ShareDropdownTop>
