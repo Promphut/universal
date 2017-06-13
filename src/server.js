@@ -103,16 +103,7 @@ const renderHtml = ({ content, req, meta }) => {
 	return `<!doctype html>\n${renderToStaticMarkup(html)}`
 }
 
-const ssl_options = {
-  key: fs.readFileSync('./private/keys/localhost.key'),
-  cert: fs.readFileSync('./private/keys/localhost.crt'),
-  passphrase: 'thepublisher'
-}
-
 const app = express()
-
-const server = http.createServer(app),
-	secureServer = https.createServer(ssl_options, app)
 
 //app.use(forceSSL)
 app.use(basename, express.static(path.resolve(process.cwd(), 'dist/public')))
@@ -226,5 +217,17 @@ function startListen(_server, _url, _port){
 	});
 }
 
+const server = http.createServer(app)
 startListen(server, 'http://localhost', port)
-startListen(secureServer, 'https://localhost', port+100)
+
+// Use local cert for development mode,
+// For production, nginx'll handle this
+if (process.env.NODE_ENV == 'development') {
+	const ssl_options = {
+	  key: fs.readFileSync('./private/keys/localhost.key'),
+	  cert: fs.readFileSync('./private/keys/localhost.crt'),
+	  passphrase: 'thepublisher'
+	}
+	const secureServer = https.createServer(ssl_options, app)
+	startListen(secureServer, 'https://localhost', port+100)
+}
