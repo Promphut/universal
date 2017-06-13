@@ -13,7 +13,7 @@ import { renderToString } from 'react-router-server'
 import { CookiesProvider } from 'react-cookie'
 import cookiesMiddleware from 'universal-cookie-express'
 
-import { port, host, basename, ANALYTIC, COVER,amazonAccessKey,secretKey } from 'config'
+import { port, host, basename, ANALYTIC, COVER,amazonAccessKey,secretKey,PID } from 'config'
 import AppRoutes from 'components/routes'
 import Html from 'components/Html'
 import Error from 'components/Error'
@@ -21,8 +21,6 @@ import api from 'components/api'
 if (process.env.NODE_ENV !== 'production') {
 	require('longjohn')
 }
-// var AWS = require('aws-sdk'),
-//     fs = require('fs');
 
 const renderApp = ({ req, context, location }) => {
 	return renderToString(
@@ -104,6 +102,41 @@ const app = express()
 app.use(basename, express.static(path.resolve(process.cwd(), 'dist/public')))
 app.use(cookiesMiddleware())
 
+var options = {
+    tmpDir: './public/uploads/tmp',
+    uploadUrl:  '/thepublisher/publishers/'+PID+'/',
+		imageTypes:  /\.(gif|jpe?g|png)/i,
+		useSSL: true,
+    imageVersions :{
+        maxWidth : 200,
+        maxHeight : 200
+    },
+    accessControl: {
+        allowOrigin: '*',
+        allowMethods: 'OPTIONS, HEAD, GET, POST, PUT, DELETE',
+        allowHeaders: 'Content-Type, Content-Range, Content-Disposition'
+    },
+		storage : {
+			type : 'aws',
+			aws : {
+					accessKeyId :  amazonAccessKey,
+					secretAccessKey : secretKey ,
+					region : 'us-west-2', //make sure you know the region, else leave this option out
+					bucketName : 'thepublisher/publishers/'+PID
+			}
+    }
+};
+
+var uploader = require('blueimp-file-upload-expressjs')(options);
+
+app.post('/upload/img',
+	(req,res)=>{
+		uploader.post(req, res, function (err,obj) {
+				res.send(JSON.stringify(obj));
+		});
+	}
+)
+
 app.use((req, res, next) => {
 	global.window = global.window || {}
 	global.navigator = global.navigator || {}
@@ -146,26 +179,3 @@ var server = app.listen(port, error => {
 		)
 	}
 })
-
-//AMAZON S3
-// For dev purposes only
-// AWS.config.update({ accessKeyId: amazonAccessKey, secretAccessKey: secretKey });
-
-// // Read in the file, convert it to base64, store to S3
-// fs.readFile('del.txt', function (err, data) {
-//   if (err) { throw err; }
-
-//   var base64data = new Buffer(data, 'binary');
-
-//   var s3 = new AWS.S3();
-//   s3.client.putObject({
-//     Bucket: 'thepublisher',
-//     Key: 'del2.txt',
-//     Body: base64data,
-//     ACL: 'public-read'
-//   },function (resp) {
-//     console.log(arguments);
-//     console.log('Successfully uploaded package.');
-//   });
-
-// });

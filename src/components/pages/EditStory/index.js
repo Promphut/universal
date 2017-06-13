@@ -36,11 +36,10 @@ import utils from '../../../services/utils'
 
 var MediumEditor = {}
 if (process.env.BROWSER) {
-  require('jquery-ui-bundle')
-  require('blueimp-file-upload/js/vendor/jquery.ui.widget.js')
-  require('blueimp-file-upload/js/jquery.iframe-transport.js')
-  require('blueimp-file-upload/js/jquery.fileupload.js')
-  require('blueimp-file-upload/js/jquery.fileupload-image.js')
+  // require('jquery-ui-bundle')
+  // require('blueimp-file-upload/js/vendor/jquery.ui.widget.js')
+  // require('blueimp-file-upload/js/jquery.fileupload.js')
+
   MediumEditor = require('medium-editor')
   window.MediumInsert = require('medium-editor-insert-plugin').MediumInsert
 }
@@ -619,7 +618,9 @@ class EditStory extends React.Component {
           images: {
             captionPlaceholder: 'Type caption for image',
             fileUploadOptions: { // (object) File upload configuration. See https://github.com/blueimp/jQuery-File-Upload/wiki/Options
-                url: 'upload.php', // (string) A relative path to an upload script
+                url: '/upload/img', // (string) A relative path to an upload script
+                maxChunkSize:10000000,
+                maxFileSize:10000000,
                 acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i // (regexp) Regexp of accepted file types
             },
             styles: {
