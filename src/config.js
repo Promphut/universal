@@ -44,7 +44,7 @@ const config = {
   production: {
     DOMAIN:     'nextempire.co',
     FRONTURL:     '//nextempire.co',
-    BACKURL:    'https://api.nextempire.co',
+    BACKURL:    'https://api.thesolar.co',
     COVER:  '//nextempire.co/pic/fbthumbnail.jpg'
   },
 }
