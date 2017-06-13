@@ -4,9 +4,10 @@ import 'babel-polyfill'
 //   return null
 // }
 // allow self signed cert for dev mode 
-if (process.env.NODE_ENV == 'development') 
+if (process.env.NODE_ENV == 'development') {
 	process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-
+	require('longjohn')
+}
 import path from 'path'
 import express from 'express'
 import React from 'react'
@@ -21,17 +22,11 @@ import http from 'http'
 import https from 'https'
 import fs from 'fs'
 
-import { port, host, basename, ANALYTIC, COVER,amazonAccessKey,secretKey } from 'config'
+import { port, host, basename, ANALYTIC, COVER,amazonAccessKey,secretKey,PID } from 'config'
 import AppRoutes from 'components/routes'
 import Html from 'components/Html'
 import Error from 'components/Error'
 import api from 'components/api'
-if (process.env.NODE_ENV !== 'production') {
-	require('longjohn')
-}
-
-// var AWS = require('aws-sdk'),
-//     fs = require('fs');
 
 const renderApp = ({ req, context, location }) => {
 	return renderToString(
@@ -123,6 +118,41 @@ const server = http.createServer(app),
 app.use(basename, express.static(path.resolve(process.cwd(), 'dist/public')))
 app.use(cookiesMiddleware())
 
+var options = {
+    tmpDir: './public/uploads/tmp',
+    uploadUrl:  '/thepublisher/publishers/'+PID+'/',
+		imageTypes:  /\.(gif|jpe?g|png)/i,
+		useSSL: true,
+    imageVersions :{
+        maxWidth : 730,
+        maxHeight : 'auto'
+    },
+    accessControl: {
+        allowOrigin: '*',
+        allowMethods: 'OPTIONS, HEAD, GET, POST, PUT, DELETE',
+        allowHeaders: 'Content-Type, Content-Range, Content-Disposition'
+    },
+		storage : {
+			type : 'aws',
+			aws : {
+					accessKeyId :  amazonAccessKey,
+					secretAccessKey : secretKey ,
+					region : 'us-west-2', //make sure you know the region, else leave this option out
+					bucketName : 'thepublisher/publishers/'+PID
+			}
+    }
+};
+
+var uploader = require('blueimp-file-upload-expressjs')(options);
+
+app.post('/upload/img',
+	(req,res)=>{
+		uploader.post(req, res, function (err,obj) {
+				res.send(JSON.stringify(obj));
+		});
+	}
+)
+
 app.use((req, res, next) => {
 	global.window = global.window || {}
 	global.navigator = global.navigator || {}
@@ -197,59 +227,3 @@ function startListen(_server, _url, _port){
 
 startListen(server, 'http://localhost', port)
 startListen(secureServer, 'https://localhost', port+100)
-
-
-// secureServer.listen(3010, error => {
-// 	const boldBlue = text => `\u001b[1m\u001b[34m${text}\u001b[39m\u001b[22m`
-// 	if (error) {
-// 		console.error(error)
-// 	} else {
-// 		console.info(
-// 			`Server is running at ${boldBlue(`https://${host}:3010${basename}/`)}`
-// 		)
-// 	}
-// })
-// server.listen(port, error => {
-// 	const boldBlue = text => `\u001b[1m\u001b[34m${text}\u001b[39m\u001b[22m`
-// 	if (error) {
-// 		console.error(error)
-// 	} else {
-// 		console.info(
-// 			`Server is running at ${boldBlue(`http://${host}:${port}${basename}/`)}`
-// 		)
-// 	}
-// })
-
-// var server = app.listen(port, error => {
-// 	const boldBlue = text => `\u001b[1m\u001b[34m${text}\u001b[39m\u001b[22m`
-// 	if (error) {
-// 		console.error(error)
-// 	} else {
-// 		console.info(
-// 			`Server is running at ${boldBlue(`http://${host}:${port}${basename}/`)}`
-// 		)
-// 	}
-// })
-
-//AMAZON S3
-// For dev purposes only
-// AWS.config.update({ accessKeyId: amazonAccessKey, secretAccessKey: secretKey });
-
-// // Read in the file, convert it to base64, store to S3
-// fs.readFile('del.txt', function (err, data) {
-//   if (err) { throw err; }
-
-//   var base64data = new Buffer(data, 'binary');
-
-//   var s3 = new AWS.S3();
-//   s3.client.putObject({
-//     Bucket: 'thepublisher',
-//     Key: 'del2.txt',
-//     Body: base64data,
-//     ACL: 'public-read'
-//   },function (resp) {
-//     console.log(arguments);
-//     console.log('Successfully uploaded package.');
-//   });
-
-// });
