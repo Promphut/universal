@@ -224,9 +224,6 @@ api.getFeed = (type, filter, sort, sortby, page, limit, option) => {
 	let token
 	if(option && option.onlyAuthorized) token = auth.getToken()
 
-	console.log(option);
-	console.log(JSON.stringify(option))
-
 	return Request
 	.get(config.BACKURL+'/publishers/'+config.PID+'/feed?type='+type)
 	.query({filter: filter ? JSON.stringify(filter) : null})

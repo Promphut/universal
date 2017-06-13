@@ -105,21 +105,24 @@ app.use(basename, express.static(path.resolve(process.cwd(), 'dist/public')))
 app.use(cookiesMiddleware())
 
 app.get('/rssfeed',(req,res) => {
-	api.getFeed('story',null,null,null,null,null,{'rss' :true}).then(result => {
+	let type = req.query.type || 'article'
+	api.getFeed(type.toLowerCase() ,{ status: 1 },'latest',null,null,20,{'rss' :true}).then(result => {
 		res.set('Content-Type', 'text/xml');
 		res.send(result.xml)
 	})
 })
 
 app.get('/atomfeed',(req,res) => {
-	api.getFeed('story',null,null,null,null,null,{'atom' :true}).then(result => {
+	let type = req.query.type || 'article'
+	api.getFeed(type.toLowerCase(),{ status: 1 },'latest',null,null,20,{'atom' :true}).then(result => {
 		res.set('Content-Type', 'text/xml');
 		res.send(result.xml)
 	})
 })
 
 app.get('/linefeed',(req,res) => {
-	api.getFeed('story',null,null,null,null,null,{'line' :true}).then(result => {
+	let type = req.query.type || 'article'
+	api.getFeed(type.toLowerCase(),{ status: 1 },'latest',null,null,20,{'line' :true}).then(result => {
 		res.set('Content-Type', 'text/xml');
 		res.send(result.xml)
 	})
