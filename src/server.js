@@ -108,8 +108,8 @@ var options = {
 		imageTypes:  /\.(gif|jpe?g|png)/i,
 		useSSL: true,
     imageVersions :{
-        maxWidth : 200,
-        maxHeight : 200
+        maxWidth : 730,
+        maxHeight : 'auto'
     },
     accessControl: {
         allowOrigin: '*',
