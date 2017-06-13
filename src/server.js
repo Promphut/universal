@@ -138,7 +138,8 @@ var options = {
 					accessKeyId :  amazonAccessKey,
 					secretAccessKey : secretKey ,
 					region : 'us-west-2', //make sure you know the region, else leave this option out
-					bucketName : 'thepublisher/publishers/'+PID
+					bucketName : 'thepublisher/publishers/'+PID,
+					acl:'public-read'
 			}
     }
 };

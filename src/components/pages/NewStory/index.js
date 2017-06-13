@@ -60,15 +60,33 @@ const Paper = styled.div`
     outline: none;
   }
 `
-const Highlight = styled.div`
-  background-color:#F4F4F4;
-  padding:20px;
-  border:1px dashed ${props => props.theme.accentColor};
+const HighlightBox = styled.div`
   width:100%;
-  margin-bottom:60px;
-  &:focus{
-    outline: none;
-  }
+  padding:2px;
+  background: linear-gradient(135deg,  ${props => props.theme.primaryColor} 0%, ${props => props.theme.accentColor} 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+`
+const Highlight = styled.div`
+  position:relative;
+  top:0;
+  left:0;
+  width:100%;
+  background-color:white;
+  padding:20px;
+`
+const HighlightText = styled.span`
+  position:relative;
+  top:10px;
+  left:20px;
+  z-index:5;
+  color:${props=>props.theme.primaryColor};
+  text-align:center;
+  padding:0 9px;
+  font-size:14px;
+  font-weight:bold;
+  font-family:'PT Sans';
+  background:white;
+  border-left:2px solid ${props=>props.theme.accentColor};
+  border-right:2px solid ${props=>props.theme.accentColor};
 `
 const Title = styled.textarea`
   margin:15px 0 0 0;
@@ -873,7 +891,12 @@ class NewStory extends React.Component {
           </div>
         </div>}
         <Title placeholder='Title' className='serif-font' value={title} onChange={this.titleChanged}/>
-        <Highlight ref='highlight' id='highlight'/>
+        <div>
+          <HighlightText>HIGHLIGHT</HighlightText>
+          <HighlightBox>
+            <Highlight ref='highlight' id='highlight'/>
+          </HighlightBox>
+        </div>
         <Paper ref='paper'  id='paper' />
       </Container>
     )
