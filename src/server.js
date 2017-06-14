@@ -22,11 +22,12 @@ import http from 'http'
 import https from 'https'
 import fs from 'fs'
 
-import { port, host, basename, ANALYTIC, COVER,amazonAccessKey,secretKey,PID } from 'config'
+import { FRONTURL,port, host, basename, ANALYTIC, COVER,amazonAccessKey,secretKey,PID } from 'config'
 import AppRoutes from 'components/routes'
 import Html from 'components/Html'
 import Error from 'components/Error'
 import api from 'components/api'
+import sm from 'sitemap'
 
 const renderApp = ({ req, context, location }) => {
 	return renderToString(
@@ -104,7 +105,16 @@ const renderHtml = ({ content, req, meta }) => {
 }
 
 const app = express()
-
+const sitemap = sm.createSitemap({
+	hostname: 'https:'+FRONTURL,
+	cacheTime: 600000,        // 600 sec - cache purge period
+	urls: [
+		{ url: '/',  changefreq: 'daily', priority: 0.5 ,img: COVER},
+		{ url: '/stories/news',  changefreq: 'daily',  priority: 0.3 },
+		{ url: '/about',   priority: 0.1 },   
+		{ url: '/contact',  priority: 0.1 }
+	]
+})
 //app.use(forceSSL)
 app.use(basename, express.static(path.resolve(process.cwd(), 'dist/public')))
 app.use(cookiesMiddleware())
@@ -128,9 +138,9 @@ var options = {
 			aws : {
 					accessKeyId :  amazonAccessKey,
 					secretAccessKey : secretKey ,
-					//region : 'us-west-2', //make sure you know the region, else leave this option out
 					bucketName : 'thepublisher/publishers/'+PID,
-					acl:'public-read'
+					acl:'public-read',
+					signedUrlExpires:99999999
 			}
     }
 };
@@ -140,11 +150,27 @@ var uploader = require('blueimp-file-upload-expressjs')(options);
 app.post('/upload/img',
 	(req,res)=>{
 		uploader.post(req, res, function (err,obj) {
-			console.log('HELLO', err, obj)
 			res.send(JSON.stringify(obj));
 		});
 	}
 )
+
+// app.delete('/upload/img',
+// 	(req,res)=>{
+// 		uploader.delete(req, res, function (err,obj) {
+// 				res.send(JSON.stringify(obj));
+// 		});
+// 	}
+// )
+app.get('/sitemap.xml', (req, res)=> {
+  sitemap.toXML( function (err, xml) {
+      if (err) {
+        return res.status(500).end();
+      }
+      res.header('Content-Type', 'application/xml');
+      res.send( xml );
+  });
+});
 
 app.use((req, res, next) => {
 	global.window = global.window || {}
