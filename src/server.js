@@ -151,7 +151,7 @@ var uploader = require('blueimp-file-upload-expressjs')(options);
 app.post('/upload/img',
 	(req,res)=>{
 		uploader.post(req, res, function (err,obj) {
-				res.send(JSON.stringify(obj));
+			res.send(JSON.stringify(obj));
 		});
 	}
 )
