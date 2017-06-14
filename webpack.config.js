@@ -9,7 +9,7 @@ const AssetsByTypePlugin = require('webpack-assets-by-type-plugin')
 const ChildConfigPlugin = require('webpack-child-config-plugin')
 const SpawnPlugin = require('webpack-spawn-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
+const OfflinePlugin = require('offline-plugin')
 
 const {
   addPlugins, createConfig, entryPoint, env, setOutput,
@@ -70,16 +70,14 @@ const base = () => group([
   }),
   addPlugins([
     new webpack.ProgressPlugin(),
-    new SWPrecacheWebpackPlugin({
-      cacheId: 'The Publisher',
-      staticFileGlobs: [
-      publicPath + `/rev/js/**/*.js`,
-      publicPath + `/rev/styles/*.css`,
-      publicPath + `/images/**/*`
-      ],
-      filename: 'service-worker.js',
-      minify: true,
-
+    new OfflinePlugin({
+      safeToUseOptionalCaches: true,
+      ServiceWorker: {
+        events: true
+      },
+      AppCache: {
+        events: true
+      }
     }),
   ]),
   happypack([

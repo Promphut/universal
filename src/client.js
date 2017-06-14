@@ -1,6 +1,6 @@
 import 'react-hot-loader/patch'
 import 'babel-polyfill'
-import registerServiceWorker from './registerServiceWorker'
+import * as OfflinePluginRuntime from 'offline-plugin/runtime'
 // require.extensions['.css'] = () => {
 //   return null
 // }
@@ -11,10 +11,9 @@ import { basename } from 'config'
 import { CookiesProvider } from 'react-cookie'
 
 import AppRoutes from 'components/routes'
-//import App from 'components/App'
 
-// Service Worker Registeration Goes Here!
-registerServiceWorker();
+OfflinePluginRuntime.install()
+//import App from 'components/App'
 
 const renderApp = () => (
 	<CookiesProvider>
