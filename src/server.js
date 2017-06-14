@@ -138,10 +138,13 @@ var options = {
 			aws : {
 					accessKeyId :  amazonAccessKey,
 					secretAccessKey : secretKey ,
-					region : 'us-west-2', //make sure you know the region, else leave this option out
-					bucketName : 'thepublisher/publishers/'+PID,
+					//bucketName : 'thepublisher/publishers/'+PID,
+					bucketName : 'thepublisher',
 					acl:'public-read',
-					signedUrlExpires:99999999
+					region: 'ap-southeast-1',
+					path: 'publishers/'+PID+'/',
+					expiresInMilliseconds:99999999,
+					getSignedUrl: false
 			}
     }
 };
@@ -151,6 +154,7 @@ var uploader = require('blueimp-file-upload-expressjs')(options);
 app.post('/upload/img',
 	(req,res)=>{
 		uploader.post(req, res, function (err,obj) {
+			//console.log('HAHA', err, obj)
 			res.send(JSON.stringify(obj));
 		});
 	}
