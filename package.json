@@ -68,7 +68,6 @@
     "rimraf": "^2.6.1",
     "sitemap-webpack-plugin": "^0.3.0",
     "style-loader": "^0.17.0",
-    "sw-precache-webpack-plugin": "^0.11.3",
     "url-loader": "^0.5.7",
     "webpack": "^2.3.3",
     "webpack-assets-by-type-plugin": "^0.1.0",
