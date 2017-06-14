@@ -48,8 +48,11 @@ const Content = styled.div`
 `
 
 const Main = styled.div`
-	flex: 3 825px;
-	max-width: 825px;
+
+	// flex: 3 825px;
+	// max-width: 825px;
+	flex: 3 780px;
+	max-width: 780px;
 	@media (max-width:480px) {
     flex: 0 100%;
 		max-width: 100%;
@@ -75,8 +78,9 @@ const Feed = styled.div`
 `
 
 const Aside = styled.div`
-	flex: 1 255px;
-	max-width: 255px;
+	//max-width: 255px;
+	flex: 1 300px;
+	max-width: 300px;
 	margin-left:60px;
 	@media (max-width: 1160px) {
 		display:none;
@@ -371,9 +375,10 @@ class HomePage extends React.Component {
 							</div>*/}
 							</SwipeableViews>}
 					</Main>
-					{/*<Aside>
-						<StaffPickSideBar></StaffPickSideBar>
-					</Aside>*/}
+					<Aside>
+						{/*<StaffPickSideBar></StaffPickSideBar>*/}
+						<TopNewsHome/>
+					</Aside>
 				</Content>
 
 				<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800" />
