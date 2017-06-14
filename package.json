@@ -118,6 +118,7 @@
     "react-swipeable-views": "^0.11.2",
     "react-tap-event-plugin": "^2.0.1",
     "react-ultimate-pagination": "^1.0.0",
+    "sitemap": "^1.12.0",
     "styled-components": "^1.4.6",
     "styled-theme": "^0.3.3",
     "styled-tools": "^0.1.4",
