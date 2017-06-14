@@ -9,7 +9,7 @@ const AssetsByTypePlugin = require('webpack-assets-by-type-plugin')
 const ChildConfigPlugin = require('webpack-child-config-plugin')
 const SpawnPlugin = require('webpack-spawn-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
-var SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
+const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 
 const {
   addPlugins, createConfig, entryPoint, env, setOutput,
@@ -74,7 +74,7 @@ const base = () => group([
       cacheId: 'The Publisher',
       staticFileGlobs: [
       publicPath + `/rev/js/**/*.js`,
-      publicPath + `/rev/styles/all*.css`,
+      publicPath + `/rev/styles/*.css`,
       publicPath + `/images/**/*`
       ],
       filename: 'service-worker.js',
