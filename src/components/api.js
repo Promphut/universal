@@ -223,9 +223,10 @@ api.getFeed = (type, filter, sort, sortby, page, limit, option) => {
 	//console.log('filter', JSON.stringify(filter))
 	let token
 	if(option && option.onlyAuthorized) token = auth.getToken()
-
+	//console.log(token)
 	return Request
 	.get(config.BACKURL+'/publishers/'+config.PID+'/feed?type='+type)
+	.set('x-access-token', token)
 	.query({filter: filter ? JSON.stringify(filter) : null})
 	.query({option: option ? JSON.stringify(option) : null})
 	.query({sort: sort})
