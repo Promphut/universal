@@ -304,19 +304,6 @@ class LeftMenu extends React.Component {
 		}
 	}
 
-	pushItem = (items, index, item) => {
-		items.push(
-			<li key={index}>
-				<Link
-					to="#"
-					onClick={e => this.props.closeAndLink(e, '/stories/' + item.slug)}>
-					{item.name}
-				</Link>
-			</li>
-		)
-		return items
-	}
-
 	render() {
 		let isMobile = false
 
@@ -325,12 +312,21 @@ class LeftMenu extends React.Component {
 		let { open, close, menu } = this.props
 		let cols = menu && menu.column ? menu.column : []
 
-		// Menu items from menu props
 		let items = []
 		const news = find(cols, { slug: 'news' })
-		if (news) this.pushItem(items, 0, news)
-		for (let i = 0; i < cols.length; i++)
-			if (cols[i].slug != 'news') this.pushItem(items, i + 1, cols[i])
+		//if (news) this.pushItem(items, 0, news)
+		for (let i = 0; i < cols.length; i++){
+			if (cols[i].slug.toLowerCase() !== 'news'|| cols[i].name.toLowerCase() !== 'news'){
+				items.push(
+					<li key={i}>
+						<a href="#" onClick={e => this.props.closeAndLink(e, '/stories/' +  cols[i].slug)}>
+							{ cols[i].name }
+						</a>
+					</li>
+				)
+			}
+	}
+
 
 		if (utils.isMobile()) {
 			isMobile = true

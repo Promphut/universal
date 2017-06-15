@@ -142,14 +142,14 @@ class Footer extends React.Component {
           <Item to="/about">About</Item>
           <VerticalLine/>
           <Item to="/contact">Contact</Item>
-          {isMobile || channels && <VerticalLine/>}
+          {/*{isMobile || channels && <VerticalLine/>}
 
           {channels && <Share>
             {channels.fb && <a href={utils.getFbUrl(channels.fb)} target="_blank" style={{display: 'inline-block'}}><i className="fa fa-facebook fa-2x" aria-hidden="true" style={iconStyle}></i></a>}
             {channels.twt && <a href={utils.getTwtUrl(channels.twt)} target="_blank" style={{display: 'inline-block'}}><i className="fa fa-twitter fa-2x" aria-hidden="true" style={iconStyle}></i></a>}
             {channels.yt && <a href={utils.getYtUrl(channels.yt)} target="_blank" style={{display: 'inline-block'}}><i className="fa fa-youtube-play fa-2x" aria-hidden="true" style={iconStyle}></i></a>}
             {channels.ig && <a href={utils.getIgUrl(channels.ig)} target="_blank" style={{display: 'inline-block'}}><i className="fa fa-instagram fa-2x" aria-hidden="true" style={iconStyle}></i></a>}
-          </Share>}
+          </Share>}*/}
 
         </LinkAndShare>
         <Copyright>&copy; 2017 LikeMe Co., Ltd. All Right Reserved.</Copyright>

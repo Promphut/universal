@@ -33,6 +33,7 @@ import config from '../../../config'
 import pullAllWith from 'lodash/pullAllWith'
 import isEqual from 'lodash/isEqual'
 import utils from '../../../services/utils'
+import $ from 'jquery'
 
 var MediumEditor = {}
 if (process.env.BROWSER) {
@@ -638,13 +639,20 @@ class EditStory extends React.Component {
             captionPlaceholder: 'Type caption for image',
             fileUploadOptions: { // (object) File upload configuration. See https://github.com/blueimp/jQuery-File-Upload/wiki/Options
                 url: '/upload/img', // (string) A relative path to an upload script
-                maxChunkSize:10000000,
-                maxFileSize:10000000,
-                acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i // (regexp) Regexp of accepted file types
+                maxChunkSize: 10000000,
+                maxFileSize: 10000000,
+                preview:false,
+                acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i, // (regexp) Regexp of accepted file types
+                submit:function(e,data){
+                  $('.medium-insert-active').append('<div class="container-loader"><div class="loader"></div></div>')
+                },
+            },
+            uploadCompleted:function ($el, data) {
+              $('.container-loader').remove()
             },
             styles: {
-              full: {
-                  label: this.state.layout=='article'?'<span class="fa fa-window-maximize"></span>':''
+              grid: {
+                label: ''
               }
             },
             actions:  {

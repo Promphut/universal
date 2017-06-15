@@ -195,8 +195,10 @@ const HighlightText = styled.span`
   border-right:2px solid ${props=>props.theme.accentColor};
 `
 const Flex= styled.div`
+  -webkit-flex:1;
   flex:1;
   @media (max-width:480px){
+    -webkit-flex:0;
     flex:0;
   }
 `
