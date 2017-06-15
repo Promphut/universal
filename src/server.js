@@ -177,6 +177,30 @@ app.get('/sitemap.xml', (req, res)=> {
   });
 });
 
+app.get('/rssfeed',(req,res) => {
+	let type = req.query.type || 'article'
+	api.getFeed(type.toLowerCase() ,{ status: 1 },'latest',null,null,20,{'rss' :true}).then(result => {
+		res.set('Content-Type', 'text/xml');
+		res.send(result.xml)
+	})
+})
+
+app.get('/atomfeed',(req,res) => {
+	let type = req.query.type || 'article'
+	api.getFeed(type.toLowerCase(),{ status: 1 },'latest',null,null,20,{'atom' :true}).then(result => {
+		res.set('Content-Type', 'text/xml');
+		res.send(result.xml)
+	})
+})
+
+app.get('/linefeed',(req,res) => {
+	let type = req.query.type || 'article'
+	api.getFeed(type.toLowerCase(),{ status: 1 },'latest',null,null,20,{'line' :true}).then(result => {
+		res.set('Content-Type', 'text/xml');
+		res.send(result.xml)
+	})
+})
+
 app.use((req, res, next) => {
 	global.window = global.window || {}
 	global.navigator = global.navigator || {}
