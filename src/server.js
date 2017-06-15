@@ -177,7 +177,7 @@ app.get('/sitemap.xml', (req, res)=> {
   });
 });
 
-app.get('/rssfeed',(req,res) => {
+app.get(['/feed', '/feed/rss', '/rss'],(req,res) => {
 	let type = req.query.type || 'article'
 	api.getFeed(type.toLowerCase() ,{ status: 1 },'latest',null,null,20,{'rss' :true}).then(result => {
 		res.set('Content-Type', 'text/xml');
@@ -185,7 +185,7 @@ app.get('/rssfeed',(req,res) => {
 	})
 })
 
-app.get('/atomfeed',(req,res) => {
+app.get(['/feed/atom', '/atom'],(req,res) => {
 	let type = req.query.type || 'article'
 	api.getFeed(type.toLowerCase(),{ status: 1 },'latest',null,null,20,{'atom' :true}).then(result => {
 		res.set('Content-Type', 'text/xml');
@@ -193,7 +193,7 @@ app.get('/atomfeed',(req,res) => {
 	})
 })
 
-app.get('/linefeed',(req,res) => {
+app.get(['/linetoday', '/feed/linetoday'],(req,res) => {
 	let type = req.query.type || 'article'
 	api.getFeed(type.toLowerCase(),{ status: 1 },'latest',null,null,20,{'line' :true}).then(result => {
 		res.set('Content-Type', 'text/xml');
