@@ -55,7 +55,7 @@ const getMeta = (u) => {
 
 				data.name = res.name && res.name
 				data.desc = res.shortDesc && res.shortDesc
-				data.cover = res.cover.medium && res.cover.medium 
+				data.cover = res.cover.medium && res.cover.medium
 				data.url = res.url && res.url
 				return data
 			}).catch((err)=>{return data})
@@ -66,7 +66,7 @@ const getMeta = (u) => {
 				data.name = res.story.ptitle && res.story.ptitle
 				data.desc = res.story.contentShort && res.story.contentShort
 				data.cover = res.story.cover.large && res.story.cover.large
-				data.url = res.story.url && res.story.url 
+				data.url = res.story.url && res.story.url
 				return data
 			}).catch((err)=>{return data})
 		} else if (path[1].substring(0, 1) === '@') {
@@ -176,6 +176,30 @@ app.get('/sitemap.xml', (req, res)=> {
       res.send( xml );
   });
 });
+
+app.get(['/feed', '/feed/rss', '/rss'],(req,res) => {
+	let type = req.query.type || 'article'
+	api.getFeed(type.toLowerCase() ,{ status: 1 },'latest',null,null,20,{'rss' :true}).then(result => {
+		res.set('Content-Type', 'text/xml');
+		res.send(result.xml)
+	})
+})
+
+app.get(['/feed/atom', '/atom'],(req,res) => {
+	let type = req.query.type || 'article'
+	api.getFeed(type.toLowerCase(),{ status: 1 },'latest',null,null,20,{'atom' :true}).then(result => {
+		res.set('Content-Type', 'text/xml');
+		res.send(result.xml)
+	})
+})
+
+app.get(['/linetoday', '/feed/linetoday'],(req,res) => {
+	let type = req.query.type || 'article'
+	api.getFeed(type.toLowerCase(),{ status: 1 },'latest',null,null,20,{'line' :true}).then(result => {
+		res.set('Content-Type', 'text/xml');
+		res.send(result.xml)
+	})
+})
 
 app.use((req, res, next) => {
 	global.window = global.window || {}
