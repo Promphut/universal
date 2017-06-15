@@ -120,6 +120,7 @@ const Html = ({ styles, assets, content, meta }) => {
         <meta charSet="UTF-8" />
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="manifest" href="manifest.json" />
         <meta name="title" content={name} />
         <meta name="keywords" content={keywords} />
         <meta name="description" content={desc} />
@@ -135,7 +136,7 @@ const Html = ({ styles, assets, content, meta }) => {
         <meta property="fb:app_id" content={analytic} />
         <meta property="og:image:width" content='1200' />
         <meta property="og:image:height" content='600' />
-        
+
         {helmet.title.toComponent()}
         {helmet.meta.toComponent()}
         {helmet.link.toComponent()}

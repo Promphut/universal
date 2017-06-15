@@ -3,6 +3,11 @@ import 'babel-polyfill'
 // require.extensions['.css'] = () => {
 //   return null
 // }
+// allow self signed cert for dev mode 
+if (process.env.NODE_ENV !== 'production') {
+	process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+	require('longjohn')
+}
 import path from 'path'
 import express from 'express'
 import React from 'react'
@@ -12,15 +17,17 @@ import { StaticRouter } from 'react-router'
 import { renderToString } from 'react-router-server'
 import { CookiesProvider } from 'react-cookie'
 import cookiesMiddleware from 'universal-cookie-express'
+//import forceSSL from 'express-force-ssl'
+import http from 'http'
+import https from 'https'
+import fs from 'fs'
 
-import { port, host, basename, ANALYTIC, COVER } from 'config'
+import { FRONTURL,port, host, basename, ANALYTIC, COVER,amazonAccessKey,secretKey,PID } from 'config'
 import AppRoutes from 'components/routes'
 import Html from 'components/Html'
 import Error from 'components/Error'
 import api from 'components/api'
-if (process.env.NODE_ENV !== 'production') {
-	require('longjohn')
-}
+import sm from 'sitemap'
 
 const renderApp = ({ req, context, location }) => {
 	return renderToString(
@@ -42,14 +49,13 @@ const getMeta = (u) => {
 		let analytic = ANALYTIC.FBAPPID || ''
 		var data = {name,keywords,desc,cover,analytic,url}
 		const path = u.split('/')
-
 		if (path[1] === 'stories' && (path[3] == '' || path[3] == undefined)) {
 			const slug = decodeURIComponent(path[2])
 			return api.getColumnFromSlug(slug).then(res => {
 
 				data.name = res.name && res.name
 				data.desc = res.shortDesc && res.shortDesc
-				data.cover = res.cover.medium && res.cover.medium 
+				data.cover = res.cover.medium && res.cover.medium
 				data.url = res.url && res.url
 				return data
 			}).catch((err)=>{return data})
@@ -60,7 +66,7 @@ const getMeta = (u) => {
 				data.name = res.story.ptitle && res.story.ptitle
 				data.desc = res.story.contentShort && res.story.contentShort
 				data.cover = res.story.cover.large && res.story.cover.large
-				data.url = res.story.url && res.story.url 
+				data.url = res.story.url && res.story.url
 				return data
 			}).catch((err)=>{return data})
 		} else if (path[1].substring(0, 1) === '@') {
@@ -84,7 +90,11 @@ const getMeta = (u) => {
 		} else {
 			return data
 		}
-	}).catch((err)=>{return console.error(err)})
+	}).catch((err)=>{
+		console.error(err)
+		var data = {name:'',keywords:'',desc:'',cover:'',analytic:'',url:''}
+		return data
+	})
 }
 
 const renderHtml = ({ content, req, meta }) => {
@@ -95,9 +105,101 @@ const renderHtml = ({ content, req, meta }) => {
 }
 
 const app = express()
-
+const sitemap = sm.createSitemap({
+	hostname: 'https:'+FRONTURL,
+	cacheTime: 600000,        // 600 sec - cache purge period
+	urls: [
+		{ url: '/',  changefreq: 'daily', priority: 0.5 ,img: COVER},
+		{ url: '/stories/news',  changefreq: 'daily',  priority: 0.3 },
+		{ url: '/about',   priority: 0.1 },   
+		{ url: '/contact',  priority: 0.1 }
+	]
+})
+//app.use(forceSSL)
 app.use(basename, express.static(path.resolve(process.cwd(), 'dist/public')))
 app.use(cookiesMiddleware())
+
+var options = {
+    tmpDir: './public/uploads/tmp',
+    uploadUrl:  '/thepublisher/publishers/'+PID+'/',
+		imageTypes:  /\.(gif|jpe?g|png)/i,
+		useSSL: true,
+    imageVersions :{
+        maxWidth : 730,
+        maxHeight : 'auto'
+    },
+    accessControl: {
+        allowOrigin: '*',
+        allowMethods: 'OPTIONS, HEAD, GET, POST, PUT, DELETE',
+        allowHeaders: 'Content-Type, Content-Range, Content-Disposition'
+    },
+		storage : {
+			type : 'aws',
+			aws : {
+					accessKeyId :  amazonAccessKey,
+					secretAccessKey : secretKey ,
+					//bucketName : 'thepublisher/publishers/'+PID,
+					bucketName : 'thepublisher',
+					acl:'public-read',
+					region: 'ap-southeast-1',
+					path: 'publishers/'+PID+'/',
+					expiresInMilliseconds:99999999,
+					getSignedUrl: false
+			}
+    }
+};
+
+var uploader = require('blueimp-file-upload-expressjs')(options);
+
+app.post('/upload/img',
+	(req,res)=>{
+		uploader.post(req, res, function (err,obj) {
+			//console.log('HAHA', err, obj)
+			res.send(JSON.stringify(obj));
+		});
+	}
+)
+
+// app.delete('/upload/img',
+// 	(req,res)=>{
+// 		uploader.delete(req, res, function (err,obj) {
+// 				res.send(JSON.stringify(obj));
+// 		});
+// 	}
+// )
+app.get('/sitemap.xml', (req, res)=> {
+  sitemap.toXML( function (err, xml) {
+      if (err) {
+        return res.status(500).end();
+      }
+      res.header('Content-Type', 'application/xml');
+      res.send( xml );
+  });
+});
+
+app.get(['/feed', '/feed/rss', '/rss'],(req,res) => {
+	let type = req.query.type || 'article'
+	api.getFeed(type.toLowerCase() ,{ status: 1 },'latest',null,null,20,{'rss' :true}).then(result => {
+		res.set('Content-Type', 'text/xml');
+		res.send(result.xml)
+	})
+})
+
+app.get(['/feed/atom', '/atom'],(req,res) => {
+	let type = req.query.type || 'article'
+	api.getFeed(type.toLowerCase(),{ status: 1 },'latest',null,null,20,{'atom' :true}).then(result => {
+		res.set('Content-Type', 'text/xml');
+		res.send(result.xml)
+	})
+})
+
+app.get(['/linetoday', '/feed/linetoday'],(req,res) => {
+	let type = req.query.type || 'article'
+	api.getFeed(type.toLowerCase(),{ status: 1 },'latest',null,null,20,{'line' :true}).then(result => {
+		res.set('Content-Type', 'text/xml');
+		res.send(result.xml)
+	})
+})
 
 app.use((req, res, next) => {
 	global.window = global.window || {}
@@ -125,18 +227,63 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
 	const content = renderToStaticMarkup(<Error />)
-	res.status(500).send(renderHtml({ content, req }))
+	var meta = {name:'',keywords:'',desc:'',cover:'',analytic:'',url:''}
+	res.status(500).send(renderHtml({ content, req, meta }))
 	console.error(err)
 	next(err)
 })
 
-var server = app.listen(port, error => {
-	const boldBlue = text => `\u001b[1m\u001b[34m${text}\u001b[39m\u001b[22m`
-	if (error) {
-		console.error(error)
-	} else {
+function startListen(_server, _url, _port){
+	_server.listen(_port);
+
+	_server.on('error', err => {
+		if (err.syscall !== 'listen') {
+			throw err;
+		}
+
+		let bind = typeof _port === 'string'
+			? 'Pipe ' + _port
+			: 'Port ' + _port;
+
+		// handle specific listen errors with friendly messages
+		switch (err.code) {
+			case 'EACCES':
+				console.error(bind + ' requires elevated privileges');
+				process.exit(1);
+				break;
+			case 'EADDRINUSE':
+				console.error(bind + ' is already in use');
+				process.exit(1);
+				break;
+			default:
+				throw err;
+		}
+	});
+
+	_server.on('listening', () => {
+		const boldBlue = text => `\u001b[1m\u001b[34m${text}\u001b[39m\u001b[22m`
+
+		let addr = _server.address();
+		let bind = typeof addr === 'string'
+			? 'pipe ' + addr
+			: 'port ' + addr.port;
 		console.info(
-			`Server is running at ${boldBlue(`http://${host}:${port}${basename}/`)}`
+			`Server is running at ${boldBlue(`${_url}:${_port}${basename}/`)}`
 		)
+	});
+}
+
+const server = http.createServer(app)
+startListen(server, 'http://localhost', port)
+
+// Use local cert for development mode,
+// For production, nginx'll handle this
+if (process.env.NODE_ENV !== 'production') {
+	const ssl_options = {
+	  key: fs.readFileSync('./private/keys/localhost.key'),
+	  cert: fs.readFileSync('./private/keys/localhost.crt'),
+	  passphrase: 'thepublisher'
 	}
-})
+	const secureServer = https.createServer(ssl_options, app)
+	startListen(secureServer, 'https://localhost', port+100)
+}

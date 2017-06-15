@@ -9,6 +9,8 @@ const AssetsByTypePlugin = require('webpack-assets-by-type-plugin')
 const ChildConfigPlugin = require('webpack-child-config-plugin')
 const SpawnPlugin = require('webpack-spawn-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const fs = require('fs')
+const OfflinePlugin = require('offline-plugin')
 
 const {
   addPlugins, createConfig, entryPoint, env, setOutput,
@@ -24,7 +26,7 @@ const outputPath = path.join(process.cwd(), 'dist/public')
 const assetsPath = path.join(process.cwd(), 'dist/assets.json')
 const clientEntryPath = path.join(sourcePath, 'client.js')
 const serverEntryPath = path.join(sourcePath, 'server.js')
-const devDomain = `http://${host}:${port}/`
+const devDomain = `https://${host}:${port}/`
 
 const babel = () => () => ({
   module: {
@@ -69,6 +71,15 @@ const base = () => group([
   }),
   addPlugins([
     new webpack.ProgressPlugin(),
+    new OfflinePlugin({
+      safeToUseOptionalCaches: true,
+      ServiceWorker: {
+        events: true
+      },
+      AppCache: {
+        events: true
+      }
+    }),
   ]),
   happypack([
     babel(),
@@ -158,6 +169,11 @@ const client = createConfig([
       headers: { 'Access-Control-Allow-Origin': '*' },
       host,
       port,
+      https: {
+        key: fs.readFileSync('./private/keys/localhost.key'),
+        cert: fs.readFileSync('./private/keys/localhost.crt'),
+        passphrase: 'thepublisher'
+      },
     }),
     sourceMaps(),
     addPlugins([

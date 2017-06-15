@@ -33,14 +33,14 @@ import config from '../../../config'
 import pullAllWith from 'lodash/pullAllWith'
 import isEqual from 'lodash/isEqual'
 import utils from '../../../services/utils'
+import $ from 'jquery'
 
 var MediumEditor = {}
 if (process.env.BROWSER) {
-  require('jquery-ui-bundle')
-  require('blueimp-file-upload/js/vendor/jquery.ui.widget.js')
-  require('blueimp-file-upload/js/jquery.iframe-transport.js')
-  require('blueimp-file-upload/js/jquery.fileupload.js')
-  require('blueimp-file-upload/js/jquery.fileupload-image.js')
+  // require('jquery-ui-bundle')
+  // require('blueimp-file-upload/js/vendor/jquery.ui.widget.js')
+  // require('blueimp-file-upload/js/jquery.fileupload.js')
+
   MediumEditor = require('medium-editor')
   window.MediumInsert = require('medium-editor-insert-plugin').MediumInsert
 }
@@ -63,14 +63,33 @@ const Paper = styled.div`
     outline: none;
   }
 `
-const Highlight = styled.div`
-  background-color:#F4F4F4;
-  padding:20px;
-  border:1px dashed ${props => props.theme.accentColor};
+const HighlightBox = styled.div`
   width:100%;
-  &:focus{
-    outline: none;
-  }
+  padding:2px;
+  background: linear-gradient(135deg,  ${props => props.theme.primaryColor} 0%, ${props => props.theme.accentColor} 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+`
+const Highlight = styled.div`
+  position:relative;
+  top:0;
+  left:0;
+  width:100%;
+  background-color:white;
+  padding:20px;
+`
+const HighlightText = styled.span`
+  position:relative;
+  top:10px;
+  left:20px;
+  z-index:5;
+  color:${props=>props.theme.primaryColor};
+  text-align:center;
+  padding:0 9px;
+  font-size:14px;
+  font-weight:bold;
+  font-family:'PT Sans';
+  background:white;
+  border-left:2px solid ${props=>props.theme.accentColor};
+  border-right:2px solid ${props=>props.theme.accentColor};
 `
 const Title = styled.textarea`
   margin:15px 0 0 0;
@@ -618,10 +637,22 @@ class EditStory extends React.Component {
         addons: {
           images: {
             captionPlaceholder: 'Type caption for image',
-            fileUploadOptions: {},
+            fileUploadOptions: { // (object) File upload configuration. See https://github.com/blueimp/jQuery-File-Upload/wiki/Options
+                url: '/upload/img', // (string) A relative path to an upload script
+                maxChunkSize: 10000000,
+                maxFileSize: 10000000,
+                preview:false,
+                acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i, // (regexp) Regexp of accepted file types
+                submit:function(e,data){
+                  $('.medium-insert-active').append('<div class="container-loader"><div class="loader"></div></div>')
+                },
+            },
+            uploadCompleted:function ($el, data) {
+              $('.container-loader').remove()
+            },
             styles: {
-              full: {
-                  label: this.state.layout=='article'?'<span class="fa fa-window-maximize"></span>':''
+              grid: {
+                label: ''
               }
             },
             actions:  {
@@ -837,7 +868,12 @@ class EditStory extends React.Component {
           </div>
         </div>
         <Title placeholder='Title' className='serif-font' value={title} onChange={this.titleChanged}/>
-        <Highlight ref='highlight' id='highlight'/>
+        <div>
+          <HighlightText>HIGHLIGHT</HighlightText>
+          <HighlightBox>
+            <Highlight ref='highlight' id='highlight'/>
+          </HighlightBox>
+        </div>
         <Paper ref='paper' id='paper'></Paper>
       </Container>
 	)

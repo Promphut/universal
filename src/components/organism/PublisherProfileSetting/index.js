@@ -184,10 +184,10 @@ class PublisherProfileSetting extends React.Component {
         <TextStatus className='sans-font' style={{color:"#C4C4C4",margin:'15px 0 5px 0'}}>Facebook Share</TextStatus>
         <div style={{border:'1px solid #c4c4c4',width:'350px'}}>
           <div style={{background:'#f4f4f4',width:'100%',height:'140px'}}></div>
-          <div style={{background:'white',width:'100%',height:'77px'}}>
-          <div style={{color:"#222",fontSize:'18px',margin:'5px 15px'}} className='sans-font'>{pub.name||'Title'}</div>
-          <div style={{color:"#545454",fontSize:'14px',margin:'5px 15px'}} className='sans-font'>{pub.desc||'This is a description'}</div>
-          <TextStatus className='sans-font' style={{color:"#C4C4C4",margin:'5px 15px'}}>{location.host}</TextStatus>
+          <div style={{background:'white',width:'100%'}}>
+            <div style={{color:"#222",fontSize:'18px',margin:'5px 15px'}} className='sans-font'>{pub.name||'Title'}</div>
+            <div style={{color:"#545454",fontSize:'14px',margin:'5px 15px'}} className='sans-font'>{pub.desc||'This is a description'}</div>
+            <TextStatus className='sans-font' style={{color:"#C4C4C4",margin:'5px 15px',display:'block',clear:'both'}}>{config.FRONTURL}</TextStatus>
           </div>
         </div>
 

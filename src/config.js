@@ -14,6 +14,7 @@ const config = {
 		host: process.env.HOST || 'localhost',
 		port: process.env.PORT || 3000,
 
+    
     PID:'11',
     NAME: 'NextEmpire', // one word, no space
     FEED_LIMIT: 15,
@@ -29,20 +30,22 @@ const config = {
       CHARTBEATUID: 65098,
       QUANTCASTACC: 'p-uSc6wXBs-FJmv',
       BITLY: '45602029bdf37773b3c3887a281ed9b7e13c5622' // infographicthailand
-    }
+    },
+    amazonAccessKey : 'AKIAJP3QZLKUMZXLKBGA',
+    secretKey : "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"
   },
   test: {},
   development: {
     DOMAIN:     'localhost',
-    FRONTURL:     'http://localhost:3000',
-    BACKURL:    'http://localhost:4000',
-    COVER:  'http://localhost:3000/pic/fbthumbnail.jpg'
+    FRONTURL:     '//localhost:3000',
+    BACKURL:    'https://localhost:4000',
+    COVER:  '//localhost:3000/pic/fbthumbnail.jpg'
   },
   production: {
     DOMAIN:     'nextempire.co',
-    FRONTURL:     'http://nextempire.co',
-    BACKURL:    'http://api.nextempire.co',
-    COVER:  'http://nextempire.co/pic/fbthumbnail.jpg'
+    FRONTURL:     '//nextempire.co',
+    BACKURL:    'https://api.thesolar.co',
+    COVER:  '//nextempire.co/pic/fbthumbnail.jpg'
   },
 }
 

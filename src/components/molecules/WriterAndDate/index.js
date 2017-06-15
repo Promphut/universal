@@ -5,6 +5,7 @@ import Avatar from 'material-ui/Avatar'
 import FontIcon from 'material-ui/FontIcon';
 import {Link} from 'react-router-dom'
 import moment from 'moment'
+import utils from '../../../services/utils'
 
 const Container = styled.div`
   display:flex;
@@ -12,8 +13,7 @@ const Container = styled.div`
   padding:8px;
   margin:0 0 30px 0;
   @media (max-width:480px){
-    width:280px;
-    padding:0px;
+    margin:0 0 10px 0;
   }
 `
 
@@ -22,16 +22,9 @@ const Contain = styled.div`
   font-size:17px;
   float:left;
   margin:5px 10px 10px 14px;
-  .imgWidth{
-    width:49px;
-    height:49px;
-  }
   @media (max-width:480px){
+    margin:0;
     font-size:14px;
-    .imgWidth{
-      width:36px;
-      height:36px;
-    }
   }
 `
 const Left = styled.div`
@@ -46,6 +39,9 @@ const Text = styled.span`
   color:#8F8F8F;
   font-size:17px;
   margin-top:5px;
+  @media (max-width:480px){
+    font-size:14px;
+  }
 `
 
 const Span1 = styled.span`
@@ -62,9 +58,9 @@ const WritedAndDate = ({style, writer, column, published,readTime}) => {
   return (
     <Container style={{...style}}>
       <Left>
-        <div>
+        {!utils.isMobile()&&<div>
           <a href={writer.url || '#'}><Avatar src={writer.pic && writer.pic.medium} size={54} className='imgWidth' style={{float:'left'}}/></a>
-        </div>
+        </div>}
         <Contain className="sans-font">
           by <Span1><a href={writer.url || '#'} style={{color:'#222'}}>{writer.display}</a></Span1>,
           {moment(published).format('lll')} 

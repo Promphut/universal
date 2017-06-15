@@ -98,7 +98,7 @@ class TopBarWithNavigation extends React.Component {
 	render () {
 		let {theme} = this.context.setting.publisher
 		let {scrolling, scroll, status} = this.state
-		let {title, article, notShowNav, editButton, hasCover,showTitle} = this.props
+		let {title, article, notShowNav, editButton, hasCover,showTitle,share} = this.props
 		let transparent = false
 		let articleMobile = false
 
@@ -127,6 +127,7 @@ class TopBarWithNavigation extends React.Component {
 						transparent={transparent}
 						editButton={editButton}
 						hasCover={hasCover}
+						share={share}
 					> {children}
 					</TopBarWithShare> :
 					<TopBar

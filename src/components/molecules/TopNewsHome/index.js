@@ -5,7 +5,7 @@ import styled,{keyframes} from 'styled-components'
 import {Link} from 'react-router-dom'
 import api from 'components/api'
 import moment from 'moment'
-
+import truncate from 'lodash/truncate'
 const NewsBox = styled.div`
 	flex:2;
 	height:444px;
@@ -140,7 +140,12 @@ class TopNewsHome extends React.Component {
                 <Doughnut/>
                 <VerticalTimeline/>
               </div>
-              <NameLink to={val.url} className='nunito-font' >{val.ptitle}</NameLink>
+              <NameLink to={val.url} className='nunito-font' >
+                {truncate(val.ptitle&&val.ptitle, {
+                  'length': 70,
+                  'separator': ''
+                })}
+              </NameLink>
               <Time className='sans-font'>{moment(val.published).fromNow()}</Time>
             </Box>
           ))}
