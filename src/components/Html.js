@@ -144,7 +144,8 @@ const Html = ({ styles, assets, content, meta }) => {
         <script dangerouslySetInnerHTML={{ __html: ggTag.headScript }} />
 
         {assets.css.map(path => <link rel="stylesheet" type="text/css" key={path} href={path} />)}
-        <style dangerouslySetInnerHTML={{ __html: styles }} />
+        {styles}
+        {/*<style dangerouslySetInnerHTML={{ __html: styles }} />*/}
 
         <script dangerouslySetInnerHTML={{ __html: quantcast.headScript }} />
       </head>
@@ -165,7 +166,7 @@ const Html = ({ styles, assets, content, meta }) => {
 }
 
 Html.propTypes = {
-  styles: PropTypes.string.isRequired,
+  styles: PropTypes.node.isRequired, //PropTypes.string.isRequired,
   assets: PropTypes.shape({
     css: PropTypes.array.isRequired,
     js: PropTypes.array.isRequired,

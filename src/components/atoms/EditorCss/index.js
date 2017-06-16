@@ -224,21 +224,21 @@ const EditorCss = styled.div`
   left: 0; }
   
   #highlight ul > li {
-    font-family: 'CS PraJad','PT Sans', sans-serif;
+    font-family: 'cs_prajad','PT Sans', sans-serif;
     font-size: 18px;
     margin:10px 0 10px 0;
   }
   #highlight ol > li {
-    font-family: 'CS PraJad','PT Sans', sans-serif;
+    font-family: 'cs_prajad','PT Sans', sans-serif;
     font-size: 18px;
     margin:10px 0 10px 0;
   }
   #highlight p {
-    font-family: 'CS PraJad','PT Sans', sans-serif;
+    font-family: 'cs_prajad','PT Sans', sans-serif;
     font-size: 18px;
   }
   #paper p {
-    font-family: 'CS PraJad','PT Sans', sans-serif;
+    font-family: 'cs_prajad','PT Sans', sans-serif;
     font-size: 18px;
     margin:12px 0 12px 0;
     line-height:1.5;
@@ -263,7 +263,7 @@ const EditorCss = styled.div`
     }
   }
   #paper ul > li {
-    font-family: 'CS PraJad','PT Sans', sans-serif;
+    font-family: 'cs_prajad','PT Sans', sans-serif;
     font-size: 18px;
     margin:10px 0 10px 0;
   }
