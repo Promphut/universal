@@ -3,7 +3,7 @@ import 'babel-polyfill'
 // require.extensions['.css'] = () => {
 //   return null
 // }
-// allow self signed cert for dev mode 
+// allow self signed cert for dev mode
 if (process.env.NODE_ENV !== 'production') {
 	process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 	require('longjohn')
@@ -111,12 +111,12 @@ const sitemap = sm.createSitemap({
 	urls: [
 		{ url: '/',  changefreq: 'daily', priority: 0.5 ,img: COVER},
 		{ url: '/stories/news',  changefreq: 'daily',  priority: 0.3 },
-		{ url: '/about',   priority: 0.1 },   
+		{ url: '/about',   priority: 0.1 },
 		{ url: '/contact',  priority: 0.1 }
 	]
 })
 //app.use(forceSSL)
-app.use(basename, express.static(path.resolve(process.cwd(), 'dist/public')))
+app.use(basename, express.static(path.resolve(process.cwd(), 'dist/public'),{maxAge: "7d"}))
 app.use(cookiesMiddleware())
 
 var options = {
