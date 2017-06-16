@@ -37,13 +37,13 @@ const config = {
   test: {},
   development: {
     DOMAIN:     'localhost',
-    FRONTURL:     '//localhost:3000',
+    FRONTURL:     'http://localhost:3000',
     BACKURL:    'https://localhost:4000',
     COVER:  '//localhost:3000/pic/fbthumbnail.jpg'
   },
   production: {
     DOMAIN:     'nextempire.co',
-    FRONTURL:     '//nextempire.co',
+    FRONTURL:     'https://nextempire.co',
     BACKURL:    'https://api.thesolar.co',
     COVER:  '//nextempire.co/pic/fbthumbnail.jpg'
   },
