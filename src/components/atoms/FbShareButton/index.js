@@ -41,10 +41,10 @@ class FbShareButton extends React.Component {
 
 			FB.ui({
 				method: 'share',
-				display:'iframe',
+				display:'dialog',
 				hashtag: hashtag,
 				mobile_iframe: true,
-				href: res.url
+				href: res.url,
 			}, function(response){
 				if(sid!=null) api.incStoryInsight(sid, 'share', 'share_fb')
 			})
