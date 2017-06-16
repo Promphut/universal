@@ -32,7 +32,7 @@ const BgWithLogo = ({data})=> {
       className="hidden-mob"
       alt={pub && pub.name}>
       <div>
-        {theme.llogo!=config.BACKURL + '/imgs/brand_display.png'&&<Img src={theme.llogo} id='Largelogo'/>}
+        {theme.llogo!=config.BACKURL + '/imgs/brand_display.png'&&<Img alt={(pub+'_logo') && (pub.name+'_logo')}src={theme.llogo} id='Largelogo'/>}
         <Tagline className="nunito-font">{pub && pub.tagline}</Tagline>
       </div>
     </BG>
