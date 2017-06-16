@@ -46,7 +46,7 @@ if (process.env.BROWSER) {
 }
 
 const Container = styled(EditorCss)`
-  width:100%;
+  width:855px;
   padding:60px;
   border-bottom:1px solid #E2E2E2;
   h1{
@@ -663,6 +663,17 @@ class EditStory extends React.Component {
           },
           embeds: {
             label: '<span class="fa fa-code"></span>',
+            styles: {
+              wide: {
+                label: '<span class="fa fa-align-center"></span>'
+              },
+              left: {
+                label: '<span class="fa fa-align-justify"></span>'
+              },
+              right: {
+                label: ''
+              }
+            },
             parseOnPaste:true,
             oembedProxy:null
           }
