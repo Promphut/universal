@@ -74,7 +74,7 @@ api.changePassword = (data) => {
 
 	return Request
     .post(config.BACKURL+'/users/'+uid+'/password')
-    .set('x-access-token', token)
+    .set('x-access-token', token || '')
     .set('Accept','application/json')
     .send(data)
     .then(res => {
@@ -90,7 +90,7 @@ api.updateUser = (user) => {
 
 	return Request
 	.patch(config.BACKURL+'/users/'+user._id)
-	.set('x-access-token', token)
+	.set('x-access-token', token || '')
 	.set('Accept','application/json')
 	.send({user: user})
 	.then(res => {
@@ -139,7 +139,7 @@ api.getColumn = (cid, token) => {
 	return Request
 	.get(config.BACKURL+'/publishers/'+config.PID+'/columns/'+cid)
 	.set('Accept','application/json')
-	.set('x-access-token', token)
+	.set('x-access-token', token || '')
 	.then(res => {
 		return res.body.column
 	})
@@ -148,7 +148,7 @@ api.getColumn = (cid, token) => {
 api.updateColumn = (cid, column) => {
 	return Request
 	.patch(config.BACKURL+'/publishers/'+config.PID+'/columns/'+cid)
-	.set('x-access-token', auth.getToken())
+	.set('x-access-token', auth.getToken() || '')
 	.set('Accept','application/json')
 	.send({column: column})
 	.then(res => {
@@ -226,7 +226,7 @@ api.getFeed = (type, filter, sort, sortby, page, limit, option) => {
 	//console.log(token)
 	return Request
 	.get(config.BACKURL+'/publishers/'+config.PID+'/feed?type='+type)
-	.set('x-access-token', token)
+	.set('x-access-token', token || '')
 	.query({filter: filter ? JSON.stringify(filter) : null})
 	.query({option: option ? JSON.stringify(option) : null})
 	.query({sort: sort})
@@ -252,7 +252,7 @@ api.getColumns = (status = 1) => {
 api.removeColumn = (cid) => {
     return Request
 	.delete(config.BACKURL+'/publishers/'+config.PID+'/columns/'+cid)
-	.set('x-access-token', auth.getToken())
+	.set('x-access-token', auth.getToken() || '')
 	.set('Accept','application/json')
 	.then(res => {
 		return res.body
@@ -262,7 +262,7 @@ api.removeColumn = (cid) => {
 api.newColumn = (col) => {
 	return Request
 	.post(config.BACKURL+'/publishers/'+config.PID+'/columns')
-	.set('x-access-token', auth.getToken())
+	.set('x-access-token', auth.getToken() || '')
 	.set('Accept','application/json')
 	.send({column: col})
 	.then(res => {
@@ -317,7 +317,7 @@ api.getTagFromSlug = (slug) => {
 api.addTag = (name) => {
 	return Request
 	.post(config.BACKURL+'/publishers/'+config.PID+'/tags')
-	.set('x-access-token', auth.getToken())
+	.set('x-access-token', auth.getToken() || '')
 	.send({tag: {  name: name,  } } )
 	.then(res => {
 		return res.body.tag
@@ -327,7 +327,7 @@ api.addTag = (name) => {
 api.removeTag = (tid) => {
 	return Request
 	.delete(config.BACKURL+'/publishers/'+config.PID+'/tags/'+tid)
-	.set('x-access-token', auth.getToken())
+	.set('x-access-token', auth.getToken() || '')
 	.then(res => {
 		return res.body.tag
 	}, api.err)
@@ -348,7 +348,7 @@ api.deleteStory = (sid) => {
 
 	return Request
 	.delete(config.BACKURL+'/stories/'+sid)
-	.set('x-access-token', token)
+	.set('x-access-token', token || '')
 	.then(res => {
 		return res.body
 	}, api.err)
@@ -357,7 +357,7 @@ api.deleteStory = (sid) => {
 api.updateStory = (sid, story) => {
 	return Request
 	.patch(config.BACKURL+'/stories/'+sid)
-	.set('x-access-token', auth.getToken())
+	.set('x-access-token', auth.getToken() || '')
 	.send({story: story})
 	.then(res => {
 		return res.body.story
@@ -366,7 +366,7 @@ api.updateStory = (sid, story) => {
 api.createStory = (story) => {
 	return Request
 	.post(config.BACKURL+'/stories')
-	.set('x-access-token', auth.getToken())
+	.set('x-access-token', auth.getToken() || '')
 	.send({story: story})
 	.then(res => {
 		return res.body.story
@@ -451,7 +451,7 @@ api.getPublisherSetting = () => {
 api.updatePublisher = (publisher) => {
 	return Request
 	.patch(config.BACKURL+'/publishers/'+config.PID)
-	.set('x-access-token', auth.getToken())
+	.set('x-access-token', auth.getToken() || '')
 	.set('Accept','application/json')
 	.send({
 		publisher: publisher
@@ -465,7 +465,7 @@ api.updatePublisher = (publisher) => {
 api.newContactCat = (contactCat) => {
 	return Request
 	.post(config.BACKURL+'/publishers/'+config.PID+'/contactcats')
-	.set('x-access-token', auth.getToken())
+	.set('x-access-token', auth.getToken() || '')
 	.set('Accept','application/json')
 	.send({
 		contactCat: contactCat
@@ -480,7 +480,7 @@ api.updateContactCat = (contactCat) => {
 
 	return Request
 	.patch(config.BACKURL+'/publishers/'+config.PID+'/contactcats/'+contactCat._id)
-	.set('x-access-token', auth.getToken())
+	.set('x-access-token', auth.getToken() || '')
 	.set('Accept','application/json')
 	.send({
 		contactCat: contactCat
@@ -495,7 +495,7 @@ api.deleteContactCat = (conid) => {
 
 	return Request
 	.delete(config.BACKURL+'/publishers/'+config.PID+'/contactcats/'+conid)
-	.set('x-access-token', auth.getToken())
+	.set('x-access-token', auth.getToken() || '')
 	.then(res => {
 		return res.body
 	}, api.err)
@@ -507,7 +507,7 @@ api.getAdmins = () => {
 
 	return Request
 	.get(config.BACKURL+'/publishers/'+config.PID+'/admins')
-	.set('x-access-token', token)
+	.set('x-access-token', token || '')
 	.then(res => {
 		return res.body.admins
 	})
@@ -521,7 +521,7 @@ api.removeAdmin = (adminId) => {
 
 	return Request
 	.delete(config.BACKURL+'/publishers/'+config.PID+'/admins/'+ adminId)
-	.set('x-access-token', token)
+	.set('x-access-token', token || '')
 	.set('Accept','application/json')
 	.then(res => {
 		return res.body
@@ -536,7 +536,7 @@ api.addAdmin = (uid) => {
 
 	return Request
 	.post(config.BACKURL+'/publishers/'+config.PID+'/admins/'+ uid)
-	.set('x-access-token', token)
+	.set('x-access-token', token || '')
 	.set('Accept','application/json')
 	.then(res => {
 		return res.body
@@ -551,7 +551,7 @@ api.addEditorToColumn = (uid, cid) => {
 
 	return Request
 	.post(config.BACKURL+'/publishers/'+config.PID+'/columns/'+cid+'/editors/'+ uid)
-	.set('x-access-token', token)
+	.set('x-access-token', token || '')
 	.set('Accept','application/json')
 	.then(res => {
 		return res.body
@@ -561,7 +561,7 @@ api.addEditorToColumn = (uid, cid) => {
 api.removeEditor = (editorId, cid) => {
 	return Request
 	.delete(config.BACKURL+'/publishers/'+config.PID+'/columns/'+cid+'/editors/'+editorId)
-	.set('x-access-token', auth.getToken())
+	.set('x-access-token', auth.getToken() || '')
 	.set('Accept','application/json')
 	.then(res => {
 		return res.body
@@ -585,7 +585,7 @@ api.addWriterToColumn = (uid, cid) => {
 
 	return Request
 	.post(config.BACKURL+'/publishers/'+config.PID+'/columns/'+cid+'/writers/'+ uid)
-	.set('x-access-token', token)
+	.set('x-access-token', token || '')
 	.set('Accept','application/json')
 	.then(res => {
 		return res.body
@@ -595,7 +595,7 @@ api.addWriterToColumn = (uid, cid) => {
 api.removeWriter = (writerId, cid) => {
 	return Request
 	.delete(config.BACKURL+'/publishers/'+config.PID+'/columns/'+cid+'/writers/'+writerId)
-	.set('x-access-token', auth.getToken())
+	.set('x-access-token', auth.getToken() || '')
 	.set('Accept','application/json')
 	.then(res => {
 		return res.body
@@ -653,7 +653,7 @@ api.getPublisherInsight = (pid, action, subaction, period, from, to) => {
 	return Request
 	.get(url)
 	.set('Accept','application/json')
-	.set('x-access-token', auth.getToken())
+	.set('x-access-token', auth.getToken() || '')
 	.then(res => {
 		//console.log('api.incStoryInsight', res.body)
 		return res.body
@@ -665,7 +665,7 @@ api.uploadFile = (file, type, toUrl, query) => {
 	if(!token) return api.userNotFoundPromise()
 	if(query){
 		return Request.post(toUrl)
-		.set('x-access-token', token)
+		.set('x-access-token', token || '')
 		.query({x:parseInt(query.x) })
 		.query({y:parseInt(query.y)})
 		.query({w:parseInt(query.width)})
@@ -676,7 +676,7 @@ api.uploadFile = (file, type, toUrl, query) => {
 		}, api.err)
 	}else{
 		return Request.post(toUrl)
-		.set('x-access-token', token)
+		.set('x-access-token', token || '')
 		.attach(type, file, file.name)
 		.then(res => {
 			return res.body
@@ -699,7 +699,7 @@ api.getViewInsight = (insight, subaction = '', filter, sort, limit, current) => 
 
 	return Request
 	.get(config.BACKURL+'/insights/'+insight+'/view/'+subaction)
-	.set('x-access-token', token)
+	.set('x-access-token', token || '')
 	.query({filter: filter ? JSON.stringify(filter) : null})
 	.query({sort: sort ? JSON.stringify(sort) : null})
 	.query({limit: limit})
@@ -715,7 +715,7 @@ api.getTrendInsight = (insight, subaction = '', filter, sort, limit, current) =>
 
 	return Request
 	.get(config.BACKURL+'/insights/'+insight+'/trend/'+subaction)
-	.set('x-access-token', token)
+	.set('x-access-token', token || '')
 	.query({filter: filter ? JSON.stringify(filter) : null})
 	.query({sort: sort ? JSON.stringify(sort) : null})
 	.query({limit: limit})
@@ -731,7 +731,7 @@ api.getShareInsight = (insight, subaction = '', filter, sort, limit, current) =>
 
 	return Request
 	.get(config.BACKURL+'/insights/'+insight+'/share/'+subaction)
-	.set('x-access-token', token)
+	.set('x-access-token', token || '')
 	.query({filter: filter ? JSON.stringify(filter) : null})
 	.query({sort: sort ? JSON.stringify(sort) : null})
 	.query({limit: limit})
@@ -747,7 +747,7 @@ api.getGrowthInsight = (insight, subaction = '', filter, sort, limit, current) =
 
 	return Request
 	.get(config.BACKURL+'/insights/'+insight+'/growth/'+subaction)
-	.set('x-access-token', token)
+	.set('x-access-token', token || '')
 	.query({filter: filter ? JSON.stringify(filter) : null})
 	.query({sort: sort ? JSON.stringify(sort) : null})
 	.query({limit: limit})

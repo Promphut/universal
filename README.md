@@ -6,4 +6,4 @@ Development:
 
 Production:
 - NODE_ENV=production npm run build
-- NODE_ENV=production npm start e.g. on nextempire production server: NODE_ENV=production PORT=5000 forever start -c 'npm start' ./
+- NODE_ENV=production npm start e.g. on nextempire production server: NODE_ENV=production PORT=5000 forever start -c 'node .' ./
