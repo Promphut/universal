@@ -374,7 +374,7 @@ class NewsPage extends React.Component {
 									loader={this.onload()}>
 									<div>
 										{feed.map((item, index) => (
-											<NewsBox detail={item} key={index} timeline={true} />
+											<NewsBox detail={item} key={index} timeline={false} />
 										))}
 									</div>
 								</InfiniteScroll>

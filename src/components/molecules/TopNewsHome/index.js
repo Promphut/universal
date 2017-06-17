@@ -50,6 +50,11 @@ const NameLink = styled(Link)`
   font-weight:bold;
   font-size:14px;
 	transition: .1s;
+  white-space: pre-wrap;      /* Webkit */
+  white-space: -moz-pre-wrap; /* Firefox */
+  white-space: -pre-wrap;     /* Opera <7 */
+  white-space: -o-pre-wrap;   /* Opera 7 */
+  word-wrap: break-word;      /* IE */
   &:hover{
     color:${props=>props.theme.accentColor}
   }
@@ -65,10 +70,10 @@ const Time = styled.div`
   }
 `
 const Box = styled.div`
-  display:block;
-  overflow:hidden;
+  display:flex;
   min-height:50px;
   height:auto;
+  padding-bottom:8px;
 `
 const BoxInner = styled.div`
   margin:20px 0 0 0;
@@ -90,6 +95,12 @@ background: -o-linear-gradient(top, rgba(255,255,255,0) 48%, rgba(255,255,255,1)
 background: -ms-linear-gradient(top, rgba(255,255,255,0) 48%, rgba(255,255,255,1) 100%);
 background: linear-gradient(to bottom, rgba(255,255,255,0) 48%, rgba(255,255,255,1) 100%);
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff', GradientType=0 );
+`
+const BoxDiv = styled.div`
+  flex:0 15px;
+`
+const BoxDiv2 = styled.div`
+  flex:0 90%;
 `
 
 class TopNewsHome extends React.Component {
@@ -136,17 +147,19 @@ class TopNewsHome extends React.Component {
         <BoxInner>
           {news && news.map((val,ind)=>(
             <Box key={ind}>
-              <div  style={{float:'left',marginRight:'10px',overflow:'hidden'}}>
+              <BoxDiv  style={{}}>
                 <Doughnut/>
                 <VerticalTimeline/>
-              </div>
-              <NameLink to={val.url} className='nunito-font' >
-                {truncate(val.ptitle&&val.ptitle, {
-                  'length': 70,
-                  'separator': ''
-                })}
-              </NameLink>
-              <Time className='sans-font'>{moment(val.published).fromNow()}</Time>
+              </BoxDiv>
+              <BoxDiv2>
+                <NameLink to={val.url} className='nunito-font' >
+                  {truncate(val.ptitle&&val.ptitle, {
+                    'length': 70,
+                    'separator': ''
+                  })}
+                </NameLink>
+                <Time className='sans-font'>{moment(val.published).fromNow()}</Time>
+              </BoxDiv2>
             </Box>
           ))}
         </BoxInner>
