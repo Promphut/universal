@@ -191,7 +191,8 @@ class TopBarWithShare extends React.Component {
 		//this.setState({topOpacity: topOpacity, scroll: nowTop})
 		//this.setState({scroll: nowTop})
 
-		if (diff > 0) {this.setState({open: true, topOpacity: topOpacity, scroll: nowTop})
+		if (nowTop<120&&!diff > 0) {this.setState({open: true, topOpacity: topOpacity, scroll: nowTop})
+		}else if (diff > 0) {this.setState({open: true, topOpacity: topOpacity, scroll: nowTop})
 		}else this.setState({open: false, topOpacity: topOpacity, scroll: nowTop})
 
 	}
