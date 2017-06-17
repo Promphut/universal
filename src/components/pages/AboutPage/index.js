@@ -113,7 +113,6 @@ class AboutPage extends React.Component {
 		var pid = config.PID
 		const from = config.FROMDATE
 		const to = moment().utcOffset('+07:00').format('YYYYMMDD')
-
 		api
 			.getPublisherInsight(pid, 'share', 'share_fb', null, from, to)
 			.then(ins => {
@@ -129,7 +128,6 @@ class AboutPage extends React.Component {
 
 	render() {
 		const { fb, twt } = this.state
-
 		return (
 			<ContactAndAboutContainer onLoading={this.props.onLoading}>
 				<Helmet>
