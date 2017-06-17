@@ -13,12 +13,10 @@ import utils from '../../../services/utils'
 
 const Wrapper = styled.div`
 	.transparent {
-		background: none;
+		transition: background 0.2s ease;
+		transition: border 0.2s ease;
+  	background: none;
 		border: none;
-	}
-
-	.fade {
-		// opacity: ${props => props.topOpacity};
 	}
 `
 
@@ -33,10 +31,10 @@ const Container = styled.div`
 	transition: .1s;
 	position: absolute;
 
-	// opacity: ${props => props.topOpacity};
-  animation: ${props=> props.open ? slideIn : slideOut} 1s forwards;
+
+  animation: ${props=> props.open ? slideIn : slideOut} 0.2s forwards;
 	display: flex;
-	// display: ${props => props.topOpacity >= 0 ? 'flex' : 'none'};
+
 	flex-flow: row nowrap;
 	justify-content: space-between;
 
@@ -181,9 +179,7 @@ class TopBarWithShare extends React.Component {
 		const prevTop = this.state.scroll
 		const nowTop = e.srcElement.body.scrollTop
 		const diff = nowTop - prevTop
-
 		const speed = 120
-		//
 		// const prevTop = this.state.scroll
 		// const nowTop = e.srcElement.body.scrollTop
 		// const diff = nowTop - prevTop
@@ -195,12 +191,9 @@ class TopBarWithShare extends React.Component {
 		//this.setState({topOpacity: topOpacity, scroll: nowTop})
 		//this.setState({scroll: nowTop})
 
+		if (diff > 0) {this.setState({open: true, topOpacity: topOpacity, scroll: nowTop})
+		}else this.setState({open: false, topOpacity: topOpacity, scroll: nowTop})
 
-		if (nowTop < 120) this.setState({open: false, topOpacity: topOpacity, scroll: nowTop})
-		else if (diff > 0) this.setState({open: true, topOpacity: topOpacity, scroll: nowTop})
-		else this.setState({open: false, topOpacity: topOpacity, scroll: nowTop})
-
-		
 	}
 
 	openPop = (side) => {
@@ -280,7 +273,7 @@ class TopBarWithShare extends React.Component {
 	  return (
 	    <Wrapper topOpacity={topOpacity}>
 				<Container className={'menu-font ' + ((!scrolling && transparent && hasCover) ? 'transparent' : '')} topOpacity={topOpacity} open={open}>
-					<Left className="fade">
+					<Left>
 			      <HamburgerWrapper onClick={() => this.openPop('left')}>
 			        <Hamburger className="material-icons" style={!scrolling && transparent && hasCover ? {color:'#FFF'} : {}}>menu</Hamburger>
 			      </HamburgerWrapper>
@@ -289,7 +282,7 @@ class TopBarWithShare extends React.Component {
 						</LogoWrapper>
 					</Left>
 
-					<Right className="fade">
+					<Right>
 						<FbShareButton style={{float: 'left'}} button={<ShareButtonTop number={share&&share.fb} barTone={theme.barTone} scrolling={scrolling} hasCover={hasCover}/>} />
 						<ShareDropdownTop>
 							<FontIcon style={moreStyle} className="material-icons" >more_vert</FontIcon>

@@ -257,7 +257,7 @@ class App extends React.Component {
 				<ThemeProvider theme={theme}>
 					<MuiThemeProvider muiTheme={muiTheme}>
 						<div>
-							{completed < 100 &&
+							{(!utils.isMobile()&&completed < 100) &&
 								<LinearProgress
 									mode="determinate"
 									value={completed}
