@@ -11,7 +11,8 @@ if (process.env.NODE_ENV !== 'production') {
 import path from 'path'
 import express from 'express'
 import React from 'react'
-import styleSheet from 'styled-components/lib/models/StyleSheet'
+//import styleSheet from 'styled-components/lib/models/StyleSheet'
+import { ServerStyleSheet } from 'styled-components'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { StaticRouter } from 'react-router'
 import { renderToString } from 'react-router-server'
@@ -29,14 +30,17 @@ import Error from 'components/Error'
 import api from 'components/api'
 import sm from 'sitemap'
 
-const renderApp = ({ req, context, location }) => {
-	return renderToString(
-		<CookiesProvider cookies={req.universalCookies}>
+const renderApp = ({ cookies, context, location, sheet }) => {
+	const app = sheet.collectStyles(
+		<CookiesProvider cookies={cookies}>
 			<StaticRouter context={context} location={location}>
-				<AppRoutes currentlocation = {req.url}/>
+				<AppRoutes/>
+				{/*<AppRoutes currentlocation = {req.url}/>*/}
 			</StaticRouter>
 		</CookiesProvider>
 	)
+
+	return renderToString(app)
 }
 
 const getMeta = (u) => {
@@ -97,8 +101,9 @@ const getMeta = (u) => {
 	})
 }
 
-const renderHtml = ({ content, req, meta }) => {
-	const styles = styleSheet.rules().map(rule => rule.cssText).join('\n')
+const renderHtml = ({ content, sheet, meta }) => {
+	//const styles = styleSheet.rules().map(rule => rule.cssText).join('\n')
+	const styles = sheet.getStyleElement()
 	const assets = global.assets
 	const html = <Html {...{ styles, assets, content, meta }} />
 	return `<!doctype html>\n${renderToStaticMarkup(html)}`
@@ -208,9 +213,11 @@ app.use((req, res, next) => {
 	//console.log('req')
 	const location = req.url
 	const context = {}
+	const sheet = new ServerStyleSheet()
+
 	getMeta(req.url).then((meta)=>{
 		//console.log('data',meta)
-		renderApp({ req, context, location })
+		renderApp({ cookies:req.universalCookies, context, location, sheet })
 		.then(({ html: content }) => {
 			if (context.status) {
 				res.status(context.status)
@@ -218,7 +225,7 @@ app.use((req, res, next) => {
 			if (context.url) {
 				res.redirect(context.url)
 			} else {
-				res.send(renderHtml({ content, req, meta }))
+				res.send(renderHtml({ content, sheet, meta }))
 			}
 		})
 		.catch(next)
@@ -226,10 +233,15 @@ app.use((req, res, next) => {
 })
 
 app.use((err, req, res, next) => {
-	const content = renderToStaticMarkup(<Error />)
+	const sheet = new ServerStyleSheet()
+	const content = renderToStaticMarkup(sheet.collectStyles(<Error />))
+
 	var meta = {name:'',keywords:'',desc:'',cover:'',analytic:'',url:''}
-	res.status(500).send(renderHtml({ content, req, meta }))
+
+	res.status(500).send(renderHtml({ content, sheet, meta }))
+
 	console.error(err)
+
 	next(err)
 })
 
