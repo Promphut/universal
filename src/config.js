@@ -14,7 +14,7 @@ const config = {
 		host: process.env.HOST || 'localhost',
 		port: process.env.PORT || 3000,
 
-    
+    FROMDATE:'20170610',
     PID:'11',
     NAME: 'NextEmpire', // one word, no space
     FEED_LIMIT: 15,
