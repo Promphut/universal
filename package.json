@@ -85,7 +85,7 @@
     "@webpack-blocks/extract-text2": "^0.4.0",
     "blueimp-canvas-to-blob": "^3.7.0",
     "blueimp-file-upload": "^9.17.0",
-    "blueimp-file-upload-expressjs": "git+https://github.com/ochawin/blueimp-file-upload-expressjs",
+    "blueimp-file-upload-expressjs": "git+https://github.com/ochawin/blueimp-file-upload-expressjs#fad5d7d",
     "blueimp-load-image": "^2.12.2",
     "d3": "^4.7.4",
     "express": "^4.15.2",
