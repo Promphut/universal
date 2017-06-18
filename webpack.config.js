@@ -187,6 +187,10 @@ const client = createConfig([
       new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }),
     ]),
   ]),
+
+  env('test', [
+    splitVendor(),
+  ]),
 ])
 
 module.exports = client

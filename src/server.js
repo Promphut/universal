@@ -4,7 +4,7 @@ import 'babel-polyfill'
 //   return null
 // }
 // allow self signed cert for dev mode 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV === 'development') {
 	process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 	require('longjohn')
 }
@@ -289,8 +289,8 @@ const server = http.createServer(app)
 startListen(server, 'http://localhost', port)
 
 // Use local cert for development mode,
-// For production, nginx'll handle this
-if (process.env.NODE_ENV !== 'production') {
+// For production / test, nginx'll handle this
+if (process.env.NODE_ENV === 'development') {
 	const ssl_options = {
 	  key: fs.readFileSync('./private/keys/localhost.key'),
 	  cert: fs.readFileSync('./private/keys/localhost.crt'),
