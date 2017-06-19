@@ -10,6 +10,7 @@ import { Helmet } from 'react-helmet'
 import api from 'components/api'
 import config from '../../../config'
 import moment from 'moment'
+import Request from 'superagent'
 
 const Wrapper = styled.div`
 
@@ -109,21 +110,21 @@ class AboutPage extends React.Component {
 				aboutUs: aboutUs
 			})
 		})
-
 		var pid = config.PID
 		const from = config.FROMDATE
 		const to = moment().utcOffset('+07:00').format('YYYYMMDD')
-		api
-			.getPublisherInsight(pid, 'share', 'share_fb', null, from, to)
-			.then(ins => {
-				this.setState({ fb: ins.summary.total })
-			})
+		
+		Request.get('http://graph.facebook.com/?id='+config.FRONTURL+this.props.location.pathname)
+		.end((er,res)=>{
+			//console.log(res.body)
+			this.setState({fb:res.body.share.share_count})
+		})
+		Request.get('https://share.yandex.ru/gpp.xml?url='+config.FRONTURL+this.props.location.pathname)
+		.end((er,res)=>{
+			console.log(res)
+			this.setState({twt:res})
+		})
 
-		api
-			.getPublisherInsight(pid, 'share', 'share_twt', null, from, to)
-			.then(ins => {
-				this.setState({ twt: ins.summary.total })
-			})
 	}
 
 	render() {
@@ -154,7 +155,7 @@ class AboutPage extends React.Component {
 							button={
 								<ShareButton
 									className="fa fa-facebook"
-									number={fb}
+									number={fb||0}
 									color="58,88,155"
 								/>
 							}
@@ -163,7 +164,7 @@ class AboutPage extends React.Component {
 							button={
 								<ShareButton
 									className="fa fa-twitter"
-									number={twt}
+									number={twt||0}
 									color="96,170,222"
 									style={{ marginLeft: '15px' }}
 								/>

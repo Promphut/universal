@@ -10,6 +10,7 @@ import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import moment from 'moment'
 import truncate from 'lodash/truncate'
+import utils from '../../../services/utils'
 
 const Container = styled.div`
   width:100%;
@@ -164,7 +165,7 @@ const ArticleBox = ({ detail, style }, context) => {
 		<Container style={{ ...style }} height={(screen.width - 32) / 2}>
 			<Box1 style={{ flex: '1' }}>
 				<Div className="sans-font" style={{ margin: '0 0 8px 0' }}>
-					{moment(published).fromNow()}
+					{utils.dateFormat(published)}
 				</Div>
 				<BGImg
 					url={url}

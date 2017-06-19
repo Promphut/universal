@@ -1,5 +1,5 @@
 const config = require('../../config'), { parse } = require('query-string')
-
+const moment = require('moment')
 const utils = {}
 
 utils.getWidth = () => {
@@ -128,5 +128,19 @@ utils.notFound = history => {
 	})
 }
 utils.toSignin = history => {}
+
+utils.dateFormat = d => {
+	var spl =  moment(d).fromNow().split(' ')
+  if(spl[1]=='minutes'){
+    return spl[0]+' min '+spl[2]
+  }else if(spl[1]=='days'){
+    if(spl[0]=='1') return 'yesterday'
+    else return moment(d).format('ll');
+  }else if(spl[1]=='mounths'||spl[1]=='years'){
+    return moment(d).format('ll');
+  }else{
+    return moment(d).fromNow()
+  }
+}
 
 module.exports = utils

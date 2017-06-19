@@ -228,6 +228,7 @@ class NewsPage extends React.Component {
 
 	handleChangeTab = e => {
 		this.setState({ selectTab: e })
+		this.loadFeed()
 	}
 
 	componentDidMount() {

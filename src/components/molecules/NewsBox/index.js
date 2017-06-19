@@ -9,37 +9,19 @@ import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import moment from 'moment'
 import truncate from 'lodash/truncate'
+import utils from '../../../services/utils'
 
 const Container = styled.div`
   width:100%;
-  z-index:100;
+  z-index:1;
+  display:flex;
   overflow:hidden;
-  .imgWidth{
-    width:254px;
-    height:149px;
-    float:left;
-  }
-  .des-hidden{
-    display:block;
-  }
-  @media (min-width:481px) {
-    .des-hidden{
-      display:none;
-    }
-  }
   @media (max-width:480px) {
+    display:block;
     width:100%;
     padding:10px 0 10px 0;
     margin-left:auto;
     margin-right:auto;
-    .mob-hidden{
-      display:none;
-    }
-    .imgWidth{
-      float:none;
-      width:100%;
-      height:175px;
-    }
   }
 `
 
@@ -71,8 +53,7 @@ const NameLink = styled(Link)`
 `
 
 const BoxText = styled.div`
-  float:left;
-  width:750px;
+  flex:0 700px;
   padding-left:38px;
   border-bottom:1px solid ##C4C4C4;
   @media (max-width:480px) {
@@ -91,7 +72,7 @@ const Desc = styled.div`
 `
 
 const Time = styled.div`
-  float:left;
+  flex:0 50px;
   color:#8F8F8F;
   font-size:12px;
   width:50px;
@@ -122,11 +103,12 @@ const Doughnut = styled.div`
 `
 
 const Box = styled.div`
-  float:left;
+  flex:0 90%;
+  display:flex;
   border-bottom:1px solid #C4C4C4;
   padding-bottom:30px;
   @media (max-width:480px) {
-    float:none;
+    display:block;
     width:100%;
     padding-bottom:10px;
   }
@@ -135,6 +117,16 @@ const Box = styled.div`
 const WriterLink = styled(Link)`
   transition: .1s;
 `
+const BG = styled(BGImg)`
+  width:300px;
+  height:150px;
+  flex:0 300px;
+  @media (max-width:480px) {
+    width:100%;
+    height:${props => props.height}px;
+    padding-bottom:10px;
+  }
+`
 
 const NewsBox = ({detail, style, timeline}) => {
 
@@ -142,18 +134,21 @@ const NewsBox = ({detail, style, timeline}) => {
     //console.log(detail)
     return (
       <Container style={{...style}}>
-        <Time className='hidden-mob' style={{display:timeline?'block':'none'}}>{moment(published).fromNow()}</Time>
-        <div className='hidden-mob' style={{float:'left',marginRight:'10px',visibility:timeline?'show':'hidden'}}>
+        <Time className='hidden-mob' style={{display:timeline?'block':'none'}}>{utils.dateFormat(published)}</Time>
+        <div className='hidden-mob' style={{flex:0,marginRight:'10px',visibility:timeline?'show':'hidden'}}>
           <Doughnut/>
           <VerticalTimeline/>
         </div>
         <Box>
           <ShareDropdown url={url} className='hidden-des'/>
-          <Time className='hidden-des' style={{display:timeline?'block':'none'}}>{moment(published).fromNow()}</Time>
-          <BGImg url={url} src={cover.small || cover.medium} alt={ptitle || ''} className='imgWidth ' />
+          <Time className='hidden-des' style={{display:timeline?'block':'none'}}>{utils.dateFormat(published)}</Time>
+          <BG height={(screen.width - 32) / 2} url={url} src={cover.small || cover.medium} alt={ptitle || ''} />
           <BoxText>
             <ShareDropdown url={url} className='hidden-mob'/>
-            <NameLink to={url} className='nunito-font' >{ptitle}</NameLink>
+            <NameLink to={url} className='nunito-font' >{truncate(ptitle, {
+                'length': 70,
+                'separator': ''
+              })}</NameLink>
             <Desc className='nunito-font'>{truncate(contentShort, {
                 'length': 200,
                 'separator': ''
