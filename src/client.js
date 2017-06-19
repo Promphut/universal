@@ -12,10 +12,7 @@ import { CookiesProvider } from 'react-cookie'
 
 import AppRoutes from 'components/routes'
 
-import mainStyles from '../public/css/main.css'
-import mediumEditor from '../public/css/medium-editor.css'
-import mediumEditorPlugin from '../public/css/medium-editor-insert-plugin.css'
-import tim from '../public/css/tim.css'
+import mainStyles from '../public/scss/main.scss'
 
 OfflinePluginRuntime.install()
 //import App from 'components/App'

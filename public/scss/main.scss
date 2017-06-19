@@ -1,3 +1,13 @@
+/* Stylesheet Entry Point */
+
+/* Imported Stylesheet Goes Here!*/
+@import "../fonts/stylesheet.css";
+@import "medium-editor.scss";
+@import "medium-editor-insert-plugin.scss";
+@import "tim.scss";
+
+/* Main Stylesheet Goes Here!*/
+
   /* FOR DESKTOP AND TABLET */
   @media (min-width:481px) {
     .menu-font {
@@ -216,4 +226,3 @@ flex: 0 0 25%;
     95% {left: 120%;}
     to {left: 100%;}
 }
-
