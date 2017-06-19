@@ -35,8 +35,6 @@ const clientEntryPath = path.join(sourcePath, 'client.js')
 const serverEntryPath = path.join(sourcePath, 'server.js')
 const devDomain = `https://${host}:${port}/`
 
-let extractCSS = new ExtractTextPlugin({filename: 'css/main.css', allChunks: true})
-
 const babel = () => () => ({
   module: {
     rules: [
@@ -76,7 +74,10 @@ const resolveModules = modules => () => ({
 })
 
 const base = () => group([
-  setOutput({filename: '[name].js', path: outputPath, publicPath}),
+  setOutput({
+    filename: '[name].js', 
+    path: outputPath, publicPath
+  }),
   defineConstants({
     'process.env.NODE_ENV': process.env.NODE_ENV,
     'process.env.PUBLIC_PATH': publicPath.replace(/\/$/, '')
@@ -97,45 +98,41 @@ const base = () => group([
   assets(),
   resolveModules(sourceDir),
 
-  env('development', [setOutput({publicPath: devDomain})])
+  env('development', [
+    setOutput({
+      publicPath: devDomain
+    })
+  ])
 ])
 
 const server = createConfig([
   base(),
-  entryPoint({server: serverEntryPath}),
-  setOutput({filename: '../[name].js', libraryTarget: 'commonjs2'}),
+  entryPoint({
+    server: serverEntryPath
+  }),
+  setOutput({
+    filename: '../[name].js', 
+    libraryTarget: 'commonjs2'
+  }),
 
-  addPlugins([new webpack.BannerPlugin({banner: 'global.assets = require("./assets.json");', raw: true})]),
+  addPlugins([
+    new webpack.BannerPlugin({
+      banner: 'global.assets = require("./assets.json");', 
+      raw: true
+    })
+  ]),
   () => ({
     target: 'node',
-    externals: [nodeExternals()],
+    externals: [
+      nodeExternals()
+    ],
     stats: 'errors-only'
   }),
 
   env('development', [
-    () => {
-      module: {
-        rules: [
-          {
-            test: /\.scss$/,
-            use: ExtractTextPlugin.extract({
-              fallback: 'style-loader',
-              use: ['css-loader', 'sass-loader']
-            })
-          }, {
-            test: /\.css$/,
-            use: ExtractTextPlugin.extract({
-              fallback: "style-loader", 
-              use: 'css-loader'
-            })
-          },
-        ]
-      }
-    },
     serverSourceMap(),
     addPlugins([
       new SpawnPlugin('node', ['.']),
-      extractCSS
     ]),
     () => ({watch: true})
   ])
@@ -155,7 +152,10 @@ const client = createConfig([
           })
         }, {
           test: /\.css$/,
-          use: ExtractTextPlugin.extract({ fallback: "style-loader", use: 'css-loader' })
+          use: ExtractTextPlugin.extract({ 
+            fallback: "style-loader", 
+            use: 'css-loader' 
+          })
         },
       ],
     },
@@ -166,9 +166,17 @@ const client = createConfig([
         BROWSER: JSON.stringify(true)
       }
     }),
-    new webpack.ProvidePlugin({$: "jquery", jQuery: "jquery"}),
-    new ExtractTextPlugin({filename: '[name].[chunkhash].css', allChunks: true}),
-    new AssetsByTypePlugin({path: assetsPath}),
+    new webpack.ProvidePlugin({
+      $: "jquery", 
+      jQuery: "jquery"
+    }),
+    new ExtractTextPlugin({
+      filename: '[name].[chunkhash].css', 
+      allChunks: true
+    }),
+    new AssetsByTypePlugin({
+      path: assetsPath
+    }),
     new ChildConfigPlugin(server)
   ]),
 
@@ -194,17 +202,15 @@ const client = createConfig([
     }),
     addPlugins([
       new webpack.NamedModulesPlugin(),
-      // new ExtractTextPlugin({
-      //   filename: 'main.css',
-      //   allChunks: true,
-      // }),
     ])
   ]),
 
   env('production', [
     splitVendor(),
     addPlugins([
-      new webpack.LoaderOptionsPlugin({ minimize: true }),
+      new webpack.LoaderOptionsPlugin({ 
+        minimize: true 
+      }),
       new webpack.optimize.UglifyJsPlugin({
         compress: {
           warnings: false

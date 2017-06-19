@@ -11,8 +11,7 @@ import { basename } from 'config'
 import { CookiesProvider } from 'react-cookie'
 
 import AppRoutes from 'components/routes'
-
-import mainStyles from '../public/scss/main.scss'
+//import mainStyles from '../public/scss/main.scss'
 
 OfflinePluginRuntime.install()
 //import App from 'components/App'

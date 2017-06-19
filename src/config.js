@@ -38,7 +38,7 @@ const config = {
   development: {
     DOMAIN:     'localhost',
     FRONTURL:     '//localhost:3000',
-    BACKURL:    'http://localhost:4000',
+    BACKURL:    'https://localhost:4000',
     COVER:  '//localhost:3000/pic/fbthumbnail.jpg'
   },
   production: {
