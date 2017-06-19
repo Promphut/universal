@@ -6,6 +6,4 @@ node_modules
 coverage
 webpack/webpack-assets.json
 
-public/uploads/tmp/*
-
 package-lock.json

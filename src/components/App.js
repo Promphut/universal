@@ -15,32 +15,32 @@ import config from '../config'
 import utils from '../services/utils'
 //import theme from './themes/default'
 
-injectGlobal`
-  body {
-    color:#222;
-  }
-  * {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -o-box-sizing: border-box;
-    box-sizing: border-box;
-  }
+// injectGlobal`
+//   body {
+//     color:#222;
+//   }
+//   * {
+//     -webkit-box-sizing: border-box;
+//     -moz-box-sizing: border-box;
+//     -o-box-sizing: border-box;
+//     box-sizing: border-box;
+//   }
 
-  h3{
-    font-size:19px;
-    font-weight:bold;
-    color:#222;
-  }
+//   h3{
+//     font-size:19px;
+//     font-weight:bold;
+//     color:#222;
+//   }
 
-  a {
-    color: #8f8f8f;
-    text-decoration: none;
-  }
-  a:hover{
-    color: #222;
-    text-decoration: none;
-  }
-`
+//   a {
+//     color: #8f8f8f;
+//     text-decoration: none;
+//   }
+//   a:hover{
+//     color: #222;
+//     text-decoration: none;
+//   }
+// `
 
 injectTapEventPlugin()
 
@@ -238,7 +238,7 @@ class App extends React.Component {
 							href: config.FRONTURL + this.props.location.pathname
 						},
 						{ rel: 'stylesheet', href: '/css/main.css' },
-						{ rel: 'stylesheet', href: '/fonts/stylesheet.css' },
+						//{ rel: 'stylesheet', href: '/fonts/stylesheet.css' },
 						{
 							rel: 'stylesheet',
 							href: 'https://fonts.googleapis.com/icon?family=Material+Icons'
@@ -257,7 +257,7 @@ class App extends React.Component {
 				<ThemeProvider theme={theme}>
 					<MuiThemeProvider muiTheme={muiTheme}>
 						<div>
-							{completed < 100 &&
+							{(!utils.isMobile()&&completed < 100) &&
 								<LinearProgress
 									mode="determinate"
 									value={completed}

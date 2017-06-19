@@ -1,12 +1,13 @@
 {
   "name": "ThePublisher",
-  "version": "1.0.0",
+  "version": "1.1.6",
   "private": true,
   "main": "dist/server",
   "scripts": {
     "start": "node .",
     "env:dev": "cross-env NODE_ENV=development",
     "env:prod": "cross-env NODE_ENV=production",
+    "env:test": "cross-env NODE_ENV=test",
     "test": "jest",
     "coverage": "npm test -- --coverage",
     "postcoverage": "opn coverage/lcov-report/index.html",
@@ -17,7 +18,7 @@
     "build:clean": "rimraf \"dist/!(.git*|Procfile)**\"",
     "build:copy": "copyfiles public/* public/**/* dist",
     "prebuild": "npm run build:clean && npm run build:copy",
-    "build": "npm run env:prod -- webpack"
+    "build": "webpack"
   },
   "jest": {
     "moduleDirectories": [
@@ -60,6 +61,7 @@
     "imports-loader": "^0.7.1",
     "jest-cli": "^19.0.0",
     "longjohn": "^0.2.12",
+    "offline-plugin": "^4.8.1",
     "opn-cli": "^3.1.0",
     "postcss-loader": "^2.0.5",
     "raw-loader": "^0.5.1",
@@ -83,7 +85,7 @@
     "@webpack-blocks/extract-text2": "^0.4.0",
     "blueimp-canvas-to-blob": "^3.7.0",
     "blueimp-file-upload": "^9.17.0",
-    "blueimp-file-upload-expressjs": "git://github.com/ochawin/blueimp-file-upload-expressjs",
+    "blueimp-file-upload-expressjs": "git+https://github.com/ochawin/blueimp-file-upload-expressjs#fad5d7d",
     "blueimp-load-image": "^2.12.2",
     "d3": "^4.7.4",
     "express": "^4.15.2",
@@ -119,7 +121,7 @@
     "react-tap-event-plugin": "^2.0.1",
     "react-ultimate-pagination": "^1.0.0",
     "sitemap": "^1.12.0",
-    "styled-components": "^1.4.6",
+    "styled-components": "^2.1.0",
     "styled-theme": "^0.3.3",
     "styled-tools": "^0.1.4",
     "superagent": "^3.5.2",

@@ -1,5 +1,6 @@
 import 'react-hot-loader/patch'
 import 'babel-polyfill'
+import * as OfflinePluginRuntime from 'offline-plugin/runtime'
 // require.extensions['.css'] = () => {
 //   return null
 // }
@@ -10,6 +11,8 @@ import { basename } from 'config'
 import { CookiesProvider } from 'react-cookie'
 
 import AppRoutes from 'components/routes'
+
+OfflinePluginRuntime.install()
 //import App from 'components/App'
 
 const renderApp = () => (

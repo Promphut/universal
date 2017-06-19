@@ -30,12 +30,12 @@ const Article = styled.div`
   clear:both;
 	overflow:hidden;
   ul > li {
-    font-family: 'CS PraJad','PT Sans', sans-serif;
+    font-family: 'cs_prajad','PT Sans', sans-serif;
     font-size: 18px;
     margin:10px 0 10px 0;
   }
   p {
-    font-family: 'CS PraJad','PT Sans', sans-serif;
+    font-family: 'cs_prajad','PT Sans', sans-serif;
     font-size: 18px;
     margin:8px 0 8px 0;
     line-height:1.5;
@@ -113,7 +113,6 @@ class AboutPage extends React.Component {
 		var pid = config.PID
 		const from = config.FROMDATE
 		const to = moment().utcOffset('+07:00').format('YYYYMMDD')
-
 		api
 			.getPublisherInsight(pid, 'share', 'share_fb', null, from, to)
 			.then(ins => {
@@ -129,7 +128,6 @@ class AboutPage extends React.Component {
 
 	render() {
 		const { fb, twt } = this.state
-
 		return (
 			<ContactAndAboutContainer onLoading={this.props.onLoading}>
 				<Helmet>

@@ -105,14 +105,15 @@ class ContactPage extends React.Component {
       problems: [],
       saved: false,
       dropdown: false,
-      error: {}
+      error: {},
+      contactCat:{}
       // ,textarea: RichTextEditor.createEmptyValue()
     }
   }
 
   sendMessage = () => {
     const {username, email, tel, problem, textarea} = this.state.message
-    const contactCat = problem
+    const contactCat = this.state.contactCat
     const contact = {
       name: username,
       email,
@@ -173,9 +174,10 @@ class ContactPage extends React.Component {
     this.setState({
       message: {
         ...message,
-        problem
+        problem:problem.catName
       },
-      dropdown: false
+      dropdown: false,
+      contactCat:problem
     })
   }
 
@@ -257,11 +259,12 @@ class ContactPage extends React.Component {
   componentDidMount(){
     api.getPublisherContactCats()
     .then(contactCats => {
-      if (contactCats.length === 0) {
-        contactCats.push({catName: 'General'})
-      }
+      console.log(contactCats)
+      // if (contactCats.length === 0) {
+      //   contactCats.push({catName: 'General'})
+      // }
       contactCats.forEach((val) => {
-        this.state.problems.push(val.catName);
+        this.state.problems.push(val);
       })
 
       api.getUser(null, auth.getToken())
@@ -273,7 +276,7 @@ class ContactPage extends React.Component {
             username: user.display,
             email: user.email,
             tel: '',
-            problem: this.state.problems[0],
+            problem: '',
             textarea: ''
           }
         })
@@ -286,7 +289,7 @@ class ContactPage extends React.Component {
             username: '',
             email: '',
             tel: '',
-            problem: this.state.problems[0],
+            problem: '',
             textarea: ''
           }
         })
@@ -297,7 +300,7 @@ class ContactPage extends React.Component {
   render() {
     const {theme} = this.context.setting.publisher
 
-    let {user, head, message, problems, saved, dropdown, error} = this.state
+    let {user, head, message, problems, saved, dropdown, error, contactCat} = this.state
     let {username, email, tel, problem, textarea} = this.state.message
 
     const floatingLabelText = (text) => {
@@ -352,10 +355,10 @@ class ContactPage extends React.Component {
       button.push(
         <div key={i}>
           <FlatButton
-            label={problems[i]}
+            label={problems[i].catName}
             labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
             style={{width: '385px', textAlign: 'left', display: 'inline-block'}}
-            onTouchTap={() => this.selectProblem(problems[i])}
+            onClick={() => this.selectProblem(problems[i])}
           /><br/>
         </div>
       )
@@ -378,7 +381,7 @@ class ContactPage extends React.Component {
               {button}
             </DropdownContent>
           </Dropdown>
-          <Article className='content-font' style={{marginTop: '25px'}}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas enim quae atque quo, consectetur? At dolor inventore officia alias sapiente dolores, eum amet esse quisquam eligendi, molestiae quaerat deleniti. Molestiae.</Article>
+          <Article className='content-font' style={{marginTop: '25px'}}>{contactCat.desc}</Article>
           <textarea
             rows="10"
             ref='textarea'

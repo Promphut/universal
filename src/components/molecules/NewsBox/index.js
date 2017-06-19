@@ -57,6 +57,11 @@ const NameLink = styled(Link)`
   font-weight:bold;
   font-size:18px;
   transition: .1s;
+  white-space: pre-wrap;      /* Webkit */
+  white-space: -moz-pre-wrap; /* Firefox */
+  white-space: -pre-wrap;     /* Opera <7 */
+  white-space: -o-pre-wrap;   /* Opera 7 */
+  word-wrap: break-word;      /* IE */
   @media (max-width:480px) {
     font-size:15px;
   }
@@ -92,7 +97,9 @@ const Time = styled.div`
   width:50px;
   text-align:center;
   @media (max-width:480px) {
+    text-align:left;
     margin-bottom:10px;
+    width:50%;
   }
 `
 
@@ -130,18 +137,19 @@ const WriterLink = styled(Link)`
 `
 
 const NewsBox = ({detail, style, timeline}) => {
-    let {ptitle,cover,writer,column,votes,comments,updated,url,readTime,contentShort} = detail
-    //console.log('URL', url)
+
+    let {ptitle,cover,writer,column,votes,comments,updated,url,readTime,contentShort,published} = detail
+    //console.log(detail)
     return (
       <Container style={{...style}}>
-        <Time className='hidden-mob' style={{display:timeline?'block':'none'}}>15 min</Time>
+        <Time className='hidden-mob' style={{display:timeline?'block':'none'}}>{moment(published).fromNow()}</Time>
         <div className='hidden-mob' style={{float:'left',marginRight:'10px',visibility:timeline?'show':'hidden'}}>
           <Doughnut/>
           <VerticalTimeline/>
         </div>
         <Box>
           <ShareDropdown url={url} className='hidden-des'/>
-          <Time className='hidden-des' style={{display:timeline?'block':'none'}}>15 min</Time>
+          <Time className='hidden-des' style={{display:timeline?'block':'none'}}>{moment(published).fromNow()}</Time>
           <BGImg url={url} src={cover.small || cover.medium} alt={ptitle || ''} className='imgWidth ' />
           <BoxText>
             <ShareDropdown url={url} className='hidden-mob'/>

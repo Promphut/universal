@@ -33,6 +33,7 @@ import config from '../../../config'
 import pullAllWith from 'lodash/pullAllWith'
 import isEqual from 'lodash/isEqual'
 import utils from '../../../services/utils'
+import $ from 'jquery'
 
 var MediumEditor = {}
 if (process.env.BROWSER) {
@@ -45,7 +46,7 @@ if (process.env.BROWSER) {
 }
 
 const Container = styled(EditorCss)`
-  width:100%;
+  width:855px;
   padding:60px;
   border-bottom:1px solid #E2E2E2;
   h1{
@@ -637,14 +638,24 @@ class EditStory extends React.Component {
           images: {
             captionPlaceholder: 'Type caption for image',
             fileUploadOptions: { // (object) File upload configuration. See https://github.com/blueimp/jQuery-File-Upload/wiki/Options
-                url: '/upload/img', // (string) A relative path to an upload script
-                maxChunkSize:10000000,
-                maxFileSize:10000000,
-                acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i // (regexp) Regexp of accepted file types
+                url: config.BACKURL+'/publisher/'+config.PID+'/upload/img', // (string) A relative path to an upload script
+                maxChunkSize: 10000000,
+                maxFileSize: 10000000,
+                preview:false,
+                paramName:'image',
+                acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i, // (regexp) Regexp of accepted file types
+                submit:function(e,data){
+                  //console.log("e,",e,'data',data)
+                  $('.medium-insert-active').append('<div class="container-loader"><div class="loader"></div></div>')
+                },
+            },
+            uploadCompleted:function ($el, data) {
+              console.log(data.files)
+              $('.container-loader').remove()
             },
             styles: {
-              full: {
-                  label: this.state.layout=='article'?'<span class="fa fa-window-maximize"></span>':''
+              grid: {
+                label: ''
               }
             },
             actions:  {
@@ -652,6 +663,17 @@ class EditStory extends React.Component {
           },
           embeds: {
             label: '<span class="fa fa-code"></span>',
+            styles: {
+              wide: {
+                label: '<span class="fa fa-align-center"></span>'
+              },
+              left: {
+                label: '<span class="fa fa-align-justify"></span>'
+              },
+              right: {
+                label: ''
+              }
+            },
             parseOnPaste:true,
             oembedProxy:null
           }

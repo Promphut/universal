@@ -37,12 +37,12 @@ const Story = styled.div`
   clear:both;
 	overflow:hidden;
   ul > li {
-    font-family: 'CS PraJad','PT Sans', sans-serif;
+    font-family: 'cs_prajad','PT Sans', sans-serif;
     font-size: 18px;
     margin:10px 0 10px 0;
   }
   p {
-    font-family: 'CS PraJad','PT Sans', sans-serif;
+    font-family: 'cs_prajad','PT Sans', sans-serif;
     font-size: 18px;
     margin:12px 0 12px 0;
     line-height:1.5;
@@ -159,19 +159,19 @@ const Highlight = styled.div`
   background-color:white;
   padding:20px;
   ul > li {
-    font-family: 'CS PraJad','PT Sans', sans-serif;
+    font-family: 'cs_prajad','PT Sans', sans-serif;
     font-size: 18px;
     margin:8px 0 8px 0;
     line-height:1.5;
   }
   ol > li {
-    font-family: 'CS PraJad','PT Sans', sans-serif;
+    font-family: 'cs_prajad','PT Sans', sans-serif;
     font-size: 18px;
     margin:8px 0 8px 0;
     line-height:1.5;
   }
   p {
-    font-family: 'CS PraJad','PT Sans', sans-serif;
+    font-family: 'cs_prajad','PT Sans', sans-serif;
     margin:8px 0 8px 0;
     line-height:1.5;;
   }
@@ -195,8 +195,10 @@ const HighlightText = styled.span`
   border-right:2px solid ${props=>props.theme.accentColor};
 `
 const Flex= styled.div`
+  -webkit-flex:1;
   flex:1;
   @media (max-width:480px){
+    -webkit-flex:0;
     flex:0;
   }
 `

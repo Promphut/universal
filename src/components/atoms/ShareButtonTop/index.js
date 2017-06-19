@@ -28,7 +28,7 @@ const styles = {
       fontSize: '11px',
       color: (barTone == 'light' && (scrolling || !hasCover)) ? '#222' : '#FFF',
       margin: '0px',
-      padding: '3px 8px 0px 0px'
+      padding: '3px 14px 0px 14px'
     }
   }
 }
@@ -38,7 +38,7 @@ const label = (number, barTone, scrolling, hasCover) => {
     <span>
       <span style={{
         borderLeft: (barTone == 'light' && (scrolling || !hasCover)) ? '1px solid #222' : '1px solid #FFF',
-        padding: '5px 0px 4px 10px',
+        padding: '5px 14px 4px 14px',
         fontSize: '12px',
         fontWeight: 'bold'
       }}>{number}</span>

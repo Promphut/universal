@@ -56,14 +56,16 @@ const EditorCss = styled.div`
   text-align: center;
   position: relative; }
   .medium-insert-embeds iframe, .mediumInsert-embeds iframe {
-    width:100% !important;
     margin: 0 auto !important; }
   .medium-insert-embeds div, .mediumInsert-embeds div {
     margin: 0 auto !important; }
   .medium-insert-embeds.medium-insert-embeds-left, .medium-insert-embeds-left.mediumInsert-embeds {
-    width: 33.33%;
-    float: left;
-    margin: 0 30px 20px 0; }
+    width:100%;
+    margin: 0 auto !important; }
+  .medium-insert-embeds.medium-insert-embeds-left iframe, .medium-insert-embeds-left.mediumInsert-embeds iframe{
+    width:100%;
+    min-height:365px;
+    margin: 0 auto !important; }
   .medium-insert-embeds.medium-insert-embeds-right, .medium-insert-embeds-right.mediumInsert-embeds {
     width: 33.33%;
     float: right;
@@ -224,21 +226,21 @@ const EditorCss = styled.div`
   left: 0; }
   
   #highlight ul > li {
-    font-family: 'CS PraJad','PT Sans', sans-serif;
+    font-family: 'cs_prajad','PT Sans', sans-serif;
     font-size: 18px;
     margin:10px 0 10px 0;
   }
   #highlight ol > li {
-    font-family: 'CS PraJad','PT Sans', sans-serif;
+    font-family: 'cs_prajad','PT Sans', sans-serif;
     font-size: 18px;
     margin:10px 0 10px 0;
   }
   #highlight p {
-    font-family: 'CS PraJad','PT Sans', sans-serif;
+    font-family: 'cs_prajad','PT Sans', sans-serif;
     font-size: 18px;
   }
   #paper p {
-    font-family: 'CS PraJad','PT Sans', sans-serif;
+    font-family: 'cs_prajad','PT Sans', sans-serif;
     font-size: 18px;
     margin:12px 0 12px 0;
     line-height:1.5;
@@ -263,7 +265,7 @@ const EditorCss = styled.div`
     }
   }
   #paper ul > li {
-    font-family: 'CS PraJad','PT Sans', sans-serif;
+    font-family: 'cs_prajad','PT Sans', sans-serif;
     font-size: 18px;
     margin:10px 0 10px 0;
   }

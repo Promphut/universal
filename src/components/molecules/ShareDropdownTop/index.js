@@ -7,6 +7,8 @@ import {Dropdown,TwtShareButton} from 'components'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import config from '../../../config'
 import { withRouter } from 'react-router'
+import api from 'components/api' 
+import utils from '../../../services/utils'
 
 class ShareDropdownTop extends React.Component {
   static contextTypes = {
@@ -22,9 +24,18 @@ class ShareDropdownTop extends React.Component {
     }
   }
 
+  onStoryCopied = (val) => {
+    //console.log('onStoryCopied', val)
+    // get sid
+    this.setState({copied: true})
+    val = utils.getTrailingSid(val)
+    //this.setState({copied: true})
+    if(val!=null) api.incStoryInsight(val, 'share', 'share_dark')
+  }
+
   render() {
     let {theme} = this.context.setting.publisher
-
+    
     const buttonStyle = {
       color: theme.primaryColor,
       fontSize: '18px',
@@ -47,7 +58,7 @@ class ShareDropdownTop extends React.Component {
           />
         } />
 
-        <CopyToClipboard text={config.FRONTURL + this.props.location} onCopy={() => this.setState({copied: true})}>
+        <CopyToClipboard text={config.FRONTURL+this.props.location.pathname} onCopy={this.onStoryCopied}>
           <FlatButton
             label={buttons[1]}
             labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}

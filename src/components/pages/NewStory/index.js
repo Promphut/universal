@@ -283,15 +283,25 @@ class NewStory extends React.Component {
                 captionPlaceholder: 'Type caption for image',
                 fileUploadOptions: { // (object) File upload configuration. See https://github.com/blueimp/jQuery-File-Upload/wiki/Options
                     url: '/upload/img', // (string) A relative path to an upload script
+                    preview:false,
                     maxChunkSize:10000000,
                     maxFileSize:10000000,
-                    acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i // (regexp) Regexp of accepted file types
+                    acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i, // (regexp) Regexp of accepted file types
+                    submit:function(e,data){
+                      $('.medium-insert-active').append('<div class="container-loader"><div class="loader"></div></div>')
+                    },
+                },
+                uploadCompleted:function ($el, data) {
+                  $('.container-loader').remove()
                 },
                 styles: {
-                  full: {
-                      label: this.state.layout=='article'?'<span class="fa fa-window-maximize"></span>':''
+                  grid: {
+                    label: ''
                   }
-              }
+                  // full: {
+                  //     label: this.state.layout=='article'?'<span class="fa fa-window-maximize"></span>':''
+                  // }
+                }
             },
             embeds: {
               label: '<span class="fa fa-code"></span>',

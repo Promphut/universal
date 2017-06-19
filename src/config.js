@@ -14,7 +14,7 @@ const config = {
 		host: process.env.HOST || 'localhost',
 		port: process.env.PORT || 3000,
 
-    
+    FROMDATE:'20170610',
     PID:'11',
     NAME: 'NextEmpire', // one word, no space
     FEED_LIMIT: 15,
@@ -37,15 +37,21 @@ const config = {
   test: {},
   development: {
     DOMAIN:     'localhost',
-    FRONTURL:     '//localhost:3000',
+    FRONTURL:     'http://localhost:3000',
     BACKURL:    'https://localhost:4000',
     COVER:  '//localhost:3000/pic/fbthumbnail.jpg'
   },
   production: {
     DOMAIN:     'nextempire.co',
-    FRONTURL:     '//nextempire.co',
+    FRONTURL:     'https://nextempire.co',
     BACKURL:    'https://api.thesolar.co',
     COVER:  '//nextempire.co/pic/fbthumbnail.jpg'
+  },
+  test: {
+    DOMAIN:     'presentationxth.com',
+    FRONTURL:     'https://presentationxth.com',
+    BACKURL:    'https://api.presentationxth.com',
+    COVER:  '//presentationxth.com/pic/fbthumbnail.jpg'
   },
 }
 

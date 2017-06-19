@@ -10,6 +10,7 @@ const ChildConfigPlugin = require('webpack-child-config-plugin')
 const SpawnPlugin = require('webpack-spawn-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const fs = require('fs')
+const OfflinePlugin = require('offline-plugin')
 
 const {
   addPlugins, createConfig, entryPoint, env, setOutput,
@@ -70,6 +71,15 @@ const base = () => group([
   }),
   addPlugins([
     new webpack.ProgressPlugin(),
+    new OfflinePlugin({
+      safeToUseOptionalCaches: true,
+      ServiceWorker: {
+        events: true
+      },
+      AppCache: {
+        events: true
+      }
+    }),
   ]),
   happypack([
     babel(),
@@ -176,6 +186,10 @@ const client = createConfig([
     addPlugins([
       new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }),
     ]),
+  ]),
+
+  env('test', [
+    splitVendor(),
   ]),
 ])
 
