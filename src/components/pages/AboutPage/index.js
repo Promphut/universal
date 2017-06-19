@@ -130,7 +130,7 @@ class AboutPage extends React.Component {
 		const { fb, twt } = this.state
 		return (
 			<ContactAndAboutContainer onLoading={this.props.onLoading}>
-				<Helmet>
+				{/*<Helmet>
 					<link
 						rel="stylesheet"
 						href="/css/medium-editor.css"
@@ -142,7 +142,7 @@ class AboutPage extends React.Component {
 						href="/css/medium-editor-insert-plugin.css"
 						type="text/css"
 					/>
-				</Helmet>
+				</Helmet>*/}
 				<Wrapper>
 					<Head className="title-font">About Us</Head>
 					<Article

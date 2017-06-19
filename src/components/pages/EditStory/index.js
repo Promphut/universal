@@ -734,10 +734,10 @@ class EditStory extends React.Component {
 
     return (
       <Container onSubmit={this.updateData}>
-        <Helmet>
+        {/*<Helmet>
           <link rel="stylesheet" href="/css/tim.css" type="text/css"/>
           <link rel="stylesheet" href="/css/medium-editor.css" type="text/css"/>
-        </Helmet>
+        </Helmet>*/}
         <Alert
           open={alert}
           anchorEl={alertWhere}

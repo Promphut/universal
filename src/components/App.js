@@ -14,6 +14,9 @@ import { withCookies, Cookies } from 'react-cookie'
 import config from '../config'
 import utils from '../services/utils'
 //import theme from './themes/default'
+if (process.env.BROWSER) {
+	require('../../public/scss/main.scss')
+}
 
 // injectGlobal`
 //   body {
@@ -237,8 +240,7 @@ class App extends React.Component {
 							rel: 'canonical',
 							href: config.FRONTURL + this.props.location.pathname
 						},
-						{ rel: 'stylesheet', href: '/css/main.css' },
-						//{ rel: 'stylesheet', href: '/fonts/stylesheet.css' },
+						//{ rel: 'stylesheet', href: '/css/main.css' },
 						{
 							rel: 'stylesheet',
 							href: 'https://fonts.googleapis.com/icon?family=Material+Icons'
