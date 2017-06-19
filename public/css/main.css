@@ -1,269 +1,786 @@
+/* Stylesheet Entry Point */
+/* Imported Stylesheet Goes Here!*/
+/*! 
+ * medium-editor-insert-plugin v2.4.0 - jQuery insert plugin for MediumEditor
+ *
+ * http://linkesch.com/medium-editor-insert-plugin
+ * 
+ * Copyright (c) 2014 Pavel Linkesch (http://linkesch.com)
+ * Released under the MIT license
+ */
+.medium-insert-images, .mediumInsert {
+  text-align: center; }
+
+.medium-insert-images figure, .mediumInsert figure {
+  margin: 0;
+  display: block; }
+
+.medium-insert-images figure img, .mediumInsert figure img {
+  max-width: 100%;
+  margin-top: 1em;
+  vertical-align: top; }
+
+.medium-insert-images figure:first-child img, .mediumInsert figure:first-child img {
+  margin-top: 0; }
+
+.medium-insert-images.medium-insert-images-left, .medium-insert-images-left.mediumInsert, .mediumInsert.small {
+  max-width: 50%;
+  float: left;
+  margin: 0 30px 20px 0; }
+
+.medium-insert-images.medium-insert-images-right, .medium-insert-images-right.mediumInsert {
+  max-width: 50%;
+  float: right;
+  margin: 0 0 20px 30px; }
+
+.medium-insert-images.medium-insert-images-full, .medium-insert-images-full.mediumInsert {
+  position: absolute;
+  width: 100%;
+  height: auto;
+  left: 0px;
+  margin: 0 0 20px 0; }
+
+.medium-insert-images.medium-insert-images-grid, .medium-insert-images-grid.mediumInsert {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-align: start;
+  -webkit-align-items: flex-start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  margin: 0.5em -0.5em; }
+
+.medium-insert-images.medium-insert-images-grid figure, .medium-insert-images-grid.mediumInsert figure {
+  width: 33.33%;
+  display: inline-block; }
+
+.medium-insert-images.medium-insert-images-grid figure img, .medium-insert-images-grid.mediumInsert figure img {
+  max-width: calc(100% - 1em);
+  margin: 0.5em; }
+
+.medium-insert-embeds, .mediumInsert-embeds {
+  text-align: center;
+  margin: 1em 0;
+  position: relative; }
+
+.medium-insert-embeds iframe, .mediumInsert-embeds iframe {
+  margin: 0 auto !important; }
+
+.medium-insert-embeds div, .mediumInsert-embeds div {
+  margin: 0 auto !important; }
+
+.medium-insert-embeds.medium-insert-embeds-left, .medium-insert-embeds-left.mediumInsert-embeds {
+  width: 33.33%;
+  float: left;
+  margin: 0 30px 20px 0; }
+
+.medium-insert-embeds.medium-insert-embeds-right, .medium-insert-embeds-right.mediumInsert-embeds {
+  width: 33.33%;
+  float: right;
+  margin: 0 0 20px 30px; }
+
+.medium-insert-images figure, .mediumInsert figure, .medium-insert-embeds figure, .mediumInsert-embeds figure {
+  position: relative; }
+
+.medium-insert-images figure figcaption, .mediumInsert figure figcaption, .medium-insert-embeds figure figcaption, .mediumInsert-embeds figure figcaption {
+  position: relative;
+  z-index: 1;
+  display: block;
+  text-align: center;
+  margin: 10px 0;
+  color: #ccc;
+  font-size: 0.8em;
+  font-style: italic;
+  outline: 0 solid transparent; }
+
+.medium-insert-images figure figcaption:focus, .mediumInsert figure figcaption:focus, .medium-insert-embeds figure figcaption:focus, .mediumInsert-embeds figure figcaption:focus {
+  outline: 0 solid transparent; }
+
+.medium-editor-insert-plugin {
+  outline: 0 solid transparent; }
+
+.medium-editor-insert-plugin:focus {
+  outline: 0 solid transparent; }
+
+.medium-editor-insert-plugin .clearfix:before, .medium-editor-insert-plugin:before, .medium-editor-insert-plugin .clearfix:after, .medium-editor-insert-plugin:after {
+  content: " ";
+  display: table;
+  clear: both; }
+
+.medium-editor-insert-plugin p {
+  margin: 1em 0; }
+
+.medium-editor-insert-plugin progress {
+  display: block;
+  margin: 1em auto; }
+
+.medium-editor-insert-plugin .hide {
+  display: none; }
+
+.medium-editor-insert-plugin.medium-editor-placeholder:after {
+  padding: 1em 0; }
+
+.medium-editor-insert-plugin .medium-insert-buttons {
+  position: absolute;
+  color: #00b2b4;
+  font-size: 0.9em;
+  left: -50px; }
+
+.medium-editor-insert-plugin .medium-insert-buttons button {
+  position: relative;
+  display: block;
+  cursor: pointer;
+  color: #00b2b4;
+  background: #fff;
+  width: 55px;
+  height: 55px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 2px solid #00b2b4;
+  /*line-height: 30px;*/
+  left: -58px;
+  top: -18px;
+  text-align: center; }
+
+.medium-editor-insert-plugin .medium-insert-buttons .medium-insert-buttons-show {
+  font-size: 30px;
+  -webkit-transform: rotate(0);
+  -ms-transform: rotate(0);
+  transform: rotate(0);
+  -webkit-transition: -webkit-transform 100ms;
+  transition: transform 100ms; }
+
+.medium-editor-insert-plugin .medium-insert-buttons .medium-insert-buttons-show span {
+  display: block;
+  width: 40px;
+  height: 40px;
+  font-size: 40px;
+  margin-top: -5px; }
+
+.medium-editor-insert-plugin .medium-insert-buttons .medium-insert-buttons-show.medium-insert-buttons-rotate {
+  -webkit-transition: -webkit-transform 250ms;
+  transition: transform 250ms;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg); }
+
+.medium-editor-insert-plugin .medium-insert-buttons .medium-insert-buttons-addons {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: none;
+  position: relative;
+  z-index: 2;
+  left: 70px;
+  top: -54px; }
+
+.medium-editor-insert-plugin .medium-insert-buttons .medium-insert-buttons-addons li {
+  display: inline-block;
+  margin: 0; }
+
+.medium-editor-insert-plugin .medium-insert-buttons .medium-insert-buttons-addons li .fa {
+  font-size: 22px; }
+
+.medium-insert-caption-placeholder {
+  position: relative; }
+
+.medium-insert-caption-placeholder:after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  content: attr(data-placeholder); }
+
+.dragging {
+  cursor: move; }
+
+.medium-insert-image-active {
+  outline: 2px solid #00b2b4; }
+
+.medium-insert-images-toolbar {
+  display: none; }
+
+.medium-insert-images, .mediumInsert {
+  margin: 1em 0; }
+
+.medium-insert-images .dragged, .mediumInsert .dragged {
+  position: absolute;
+  top: 0;
+  opacity: .5;
+  z-index: 2000; }
+
+.medium-insert-images .placeholder, .mediumInsert .placeholder {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  border: none; }
+
+.medium-insert-images .medium-insert-images-progress, .mediumInsert .medium-insert-images-progress {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.4); }
+
+.medium-insert-embeds-input {
+  position: relative;
+  color: #00b2b4;
+  z-index: 1;
+  text-align: left; }
+
+.medium-insert-embeds-placeholder {
+  position: relative; }
+
+.medium-insert-embeds-placeholder:after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  content: attr(data-placeholder);
+  color: #ccc; }
+
+.medium-insert-embeds-selected .medium-insert-embed {
+  outline: 2px solid #00b2b4; }
+
+.medium-insert-embeds-toolbar {
+  display: none; }
+
+.medium-insert-embeds .medium-insert-embeds-overlay, .mediumInsert-embeds .medium-insert-embeds-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0; }
+
+/*! 
+ * medium-editor-insert-plugin v2.4.0 - jQuery insert plugin for MediumEditor
+ *
+ * http://linkesch.com/medium-editor-insert-plugin
+ * 
+ * Copyright (c) 2014 Pavel Linkesch (http://linkesch.com)
+ * Released under the MIT license
+ */
+.medium-insert-images, .mediumInsert {
+  text-align: center; }
+
+.medium-insert-images figure, .mediumInsert figure {
+  margin: 0;
+  display: block; }
+
+.medium-insert-images figure img, .mediumInsert figure img {
+  max-width: 100%;
+  margin-top: 1em;
+  vertical-align: top; }
+
+.medium-insert-images figure:first-child img, .mediumInsert figure:first-child img {
+  margin-top: 0; }
+
+.medium-insert-images.medium-insert-images-left, .medium-insert-images-left.mediumInsert, .mediumInsert.small {
+  max-width: 50%;
+  float: left;
+  margin: 0 30px 20px 0; }
+
+.medium-insert-images.medium-insert-images-right, .medium-insert-images-right.mediumInsert {
+  max-width: 50%;
+  float: right;
+  margin: 0 0 20px 30px; }
+
+.medium-insert-images.medium-insert-images-full, .medium-insert-images-full.mediumInsert {
+  position: absolute;
+  width: 100%;
+  height: auto;
+  left: 0px;
+  margin: 0 0 20px 0; }
+
+.medium-insert-images.medium-insert-images-grid, .medium-insert-images-grid.mediumInsert {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-align: start;
+  -webkit-align-items: flex-start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  margin: 0.5em -0.5em; }
+
+.medium-insert-images.medium-insert-images-grid figure, .medium-insert-images-grid.mediumInsert figure {
+  width: 33.33%;
+  display: inline-block; }
+
+.medium-insert-images.medium-insert-images-grid figure img, .medium-insert-images-grid.mediumInsert figure img {
+  max-width: calc(100% - 1em);
+  margin: 0.5em; }
+
+.medium-insert-embeds, .mediumInsert-embeds {
+  text-align: center;
+  margin: 1em 0;
+  position: relative; }
+
+.medium-insert-embeds iframe, .mediumInsert-embeds iframe {
+  margin: 0 auto !important; }
+
+.medium-insert-embeds div, .mediumInsert-embeds div {
+  margin: 0 auto !important; }
+
+.medium-insert-embeds.medium-insert-embeds-left, .medium-insert-embeds-left.mediumInsert-embeds {
+  width: 33.33%;
+  float: left;
+  margin: 0 30px 20px 0; }
+
+.medium-insert-embeds.medium-insert-embeds-right, .medium-insert-embeds-right.mediumInsert-embeds {
+  width: 33.33%;
+  float: right;
+  margin: 0 0 20px 30px; }
+
+.medium-insert-images figure, .mediumInsert figure, .medium-insert-embeds figure, .mediumInsert-embeds figure {
+  position: relative; }
+
+.medium-insert-images figure figcaption, .mediumInsert figure figcaption, .medium-insert-embeds figure figcaption, .mediumInsert-embeds figure figcaption {
+  position: relative;
+  z-index: 1;
+  display: block;
+  text-align: center;
+  margin: 10px 0;
+  color: #ccc;
+  font-size: 0.8em;
+  font-style: italic;
+  outline: 0 solid transparent; }
+
+.medium-insert-images figure figcaption:focus, .mediumInsert figure figcaption:focus, .medium-insert-embeds figure figcaption:focus, .mediumInsert-embeds figure figcaption:focus {
+  outline: 0 solid transparent; }
+
+.medium-editor-insert-plugin {
+  outline: 0 solid transparent; }
+
+.medium-editor-insert-plugin:focus {
+  outline: 0 solid transparent; }
+
+.medium-editor-insert-plugin .clearfix:before, .medium-editor-insert-plugin:before, .medium-editor-insert-plugin .clearfix:after, .medium-editor-insert-plugin:after {
+  content: " ";
+  display: table;
+  clear: both; }
+
+.medium-editor-insert-plugin p {
+  margin: 1em 0; }
+
+.medium-editor-insert-plugin progress {
+  display: block;
+  margin: 1em auto; }
+
+.medium-editor-insert-plugin .hide {
+  display: none; }
+
+.medium-editor-insert-plugin.medium-editor-placeholder:after {
+  padding: 1em 0; }
+
+.medium-editor-insert-plugin .medium-insert-buttons {
+  position: absolute;
+  color: #00b2b4;
+  font-size: 0.9em;
+  left: -50px; }
+
+.medium-editor-insert-plugin .medium-insert-buttons button {
+  position: relative;
+  display: block;
+  cursor: pointer;
+  color: #00b2b4;
+  background: #fff;
+  width: 55px;
+  height: 55px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 2px solid #00b2b4;
+  /*line-height: 30px;*/
+  left: -58px;
+  top: -18px;
+  text-align: center; }
+
+.medium-editor-insert-plugin .medium-insert-buttons .medium-insert-buttons-show {
+  font-size: 30px;
+  -webkit-transform: rotate(0);
+  -ms-transform: rotate(0);
+  transform: rotate(0);
+  -webkit-transition: -webkit-transform 100ms;
+  transition: transform 100ms; }
+
+.medium-editor-insert-plugin .medium-insert-buttons .medium-insert-buttons-show span {
+  display: block;
+  width: 40px;
+  height: 40px;
+  font-size: 40px;
+  margin-top: -5px; }
+
+.medium-editor-insert-plugin .medium-insert-buttons .medium-insert-buttons-show.medium-insert-buttons-rotate {
+  -webkit-transition: -webkit-transform 250ms;
+  transition: transform 250ms;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg); }
+
+.medium-editor-insert-plugin .medium-insert-buttons .medium-insert-buttons-addons {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: none;
+  position: relative;
+  z-index: 2;
+  left: 70px;
+  top: -54px; }
+
+.medium-editor-insert-plugin .medium-insert-buttons .medium-insert-buttons-addons li {
+  display: inline-block;
+  margin: 0; }
+
+.medium-editor-insert-plugin .medium-insert-buttons .medium-insert-buttons-addons li .fa {
+  font-size: 22px; }
+
+.medium-insert-caption-placeholder {
+  position: relative; }
+
+.medium-insert-caption-placeholder:after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  content: attr(data-placeholder); }
+
+.dragging {
+  cursor: move; }
+
+.medium-insert-image-active {
+  outline: 2px solid #00b2b4; }
+
+.medium-insert-images-toolbar {
+  display: none; }
+
+.medium-insert-images, .mediumInsert {
+  margin: 1em 0; }
+
+.medium-insert-images .dragged, .mediumInsert .dragged {
+  position: absolute;
+  top: 0;
+  opacity: .5;
+  z-index: 2000; }
+
+.medium-insert-images .placeholder, .mediumInsert .placeholder {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  border: none; }
+
+.medium-insert-images .medium-insert-images-progress, .mediumInsert .medium-insert-images-progress {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.4); }
+
+.medium-insert-embeds-input {
+  position: relative;
+  color: #00b2b4;
+  z-index: 1;
+  text-align: left; }
+
+.medium-insert-embeds-placeholder {
+  position: relative; }
+
+.medium-insert-embeds-placeholder:after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  content: attr(data-placeholder);
+  color: #ccc; }
+
+.medium-insert-embeds-selected .medium-insert-embed {
+  outline: 2px solid #00b2b4; }
+
+.medium-insert-embeds-toolbar {
+  display: none; }
+
+.medium-insert-embeds .medium-insert-embeds-overlay, .mediumInsert-embeds .medium-insert-embeds-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0; }
+
+.medium-toolbar-arrow-under:after {
+  border-color: #EA0993 transparent transparent transparent;
+  top: 60px; }
+
+.medium-toolbar-arrow-over:before {
+  border-color: transparent transparent #EA0993 transparent; }
+
+.medium-editor-toolbar {
+  background-color: #fff;
+  border: 2px solid #EA0993;
+  border-radius: 0px; }
+
+.medium-editor-toolbar li button {
+  background-color: transparent;
+  border: none;
+  border-right: 1px solid #EA0993;
+  box-sizing: border-box;
+  color: #EA0993;
+  height: 45px;
+  min-width: 45px;
+  -webkit-transition: background-color .2s ease-in, color .2s ease-in;
+  transition: background-color .2s ease-in, color .2s ease-in; }
+
+.medium-editor-toolbar li button:hover {
+  background-color: #EA0993;
+  color: #fff; }
+
+.medium-editor-toolbar li .medium-editor-button-first {
+  border-bottom-left-radius: 0px;
+  border-top-left-radius: 0px; }
+
+.medium-editor-toolbar li .medium-editor-button-last {
+  border-bottom-right-radius: 0px;
+  border-right: none;
+  border-top-right-radius: 0px; }
+
+.medium-editor-toolbar li .medium-editor-button-active {
+  background-color: #EA0993;
+  color: #fff; }
+
+.medium-editor-toolbar-form {
+  background: #EA0993;
+  border-radius: 0px;
+  color: #fff; }
+
+.medium-editor-toolbar-form .medium-editor-toolbar-input {
+  background: #EA0993;
+  color: fff;
+  height: 60px; }
+
+.medium-editor-toolbar-form .medium-editor-toolbar-input::-webkit-input-placeholder {
+  color: #fff;
+  color: rgba(255, 255, 255, 0.8); }
+
+.medium-editor-toolbar-form .medium-editor-toolbar-input:-moz-placeholder {
+  /* Firefox 18- */
+  color: #fff;
+  color: rgba(255, 255, 255, 0.8); }
+
+.medium-editor-toolbar-form .medium-editor-toolbar-input::-moz-placeholder {
+  /* Firefox 19+ */
+  color: #fff;
+  color: rgba(255, 255, 255, 0.8); }
+
+.medium-editor-toolbar-form .medium-editor-toolbar-input:-ms-input-placeholder {
+  color: #fff;
+  color: rgba(255, 255, 255, 0.8); }
+
+.medium-editor-toolbar-form a {
+  color: #fff; }
+
+.medium-editor-toolbar-anchor-preview {
+  background: #EA0993;
+  border-radius: 0px;
+  color: #fff; }
+
+.medium-editor-placeholder:after {
+  color: #EA0993; }
+
+/* Main Stylesheet Goes Here!*/
 body {
-  color:#222;
-}
+  color: #222; }
+
 * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   -o-box-sizing: border-box;
-  box-sizing: border-box;
-}
+  box-sizing: border-box; }
 
-h3{
-  font-size:19px;
-  font-weight:bold;
-  color:#222;
-}
+h3 {
+  font-size: 19px;
+  font-weight: bold;
+  color: #222; }
 
 a {
   color: #8f8f8f;
-  text-decoration: none;
-}
-a:hover{
-  color: #222;
-  text-decoration: none;
-}
+  text-decoration: none; }
 
-@font-face {
-  font-family: 'cs_prajad';
-  src: url('/fonts/fonts/CSPraJad-boldItalic.eot');
-  src: url('/fonts/CSPraJad-boldItalic.eot?#iefix') format('embedded-opentype'),
-    url('/fonts/CSPraJad-boldItalic.woff2') format('woff2'),
-    url('/fonts/CSPraJad-boldItalic.woff') format('woff'),
-    url('/fonts/CSPraJad-boldItalic.ttf') format('truetype');
-  font-weight: bold;
-  font-style: italic;
-}
-@font-face {
-  font-family: 'cs_prajad';
-  src: url('/fonts/CSPraJad.eot');
-  src: url('/fonts/CSPraJad.eot?#iefix') format('embedded-opentype'),
-    url('/fonts/CSPraJad.woff2') format('woff2'),
-    url('/fonts/CSPraJad.woff') format('woff'),
-    url('/fonts/CSPraJad.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'cs_prajad';
-  src: url('/fonts/CSPraJad-bold.eot');
-  src: url('/fonts/CSPraJad-bold.eot?#iefix') format('embedded-opentype'),
-    url('/fonts/CSPraJad-bold.woff2') format('woff2'),
-    url('/fonts/CSPraJad-bold.woff') format('woff'),
-    url('/fonts/CSPraJad-bold.ttf') format('truetype');
-  font-weight: bold;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'cs_prajad';
-  src: url('/fonts/CSPraJad-Italic.eot');
-  src: url('/fonts/CSPraJad-Italic.eot?#iefix') format('embedded-opentype'),
-    url('/fonts/CSPraJad-Italic.woff2') format('woff2'),
-    url('/fonts/CSPraJad-Italic.woff') format('woff'),
-    url('/fonts/CSPraJad-Italic.ttf') format('truetype');
-  font-weight: normal;
-  font-style: italic;
-}
+a:hover {
+  color: #222;
+  text-decoration: none; }
 
 /* FOR DESKTOP AND TABLET */
-@media (min-width:481px) {
+@media (min-width: 481px) {
   .menu-font {
     font-family: 'Nunito', 'Mitr';
     font-size: 16px;
-    font-weight: bold;
-  }
+    font-weight: bold; }
   .title-font {
     font-family: 'PT Serif', 'Mitr';
-    font-size: 36px;
-  }
+    font-size: 36px; }
   .content-font {
     font-family: 'PT Sans', 'Mitr', sans-serif;
-    font-size: 20px;
-  }
-  .sans-font{
-    font-family: 'PT Sans', 'Mitr', sans-serif;
-  }
-  .serif-font{
-     font-family: 'PT Serif', 'Mitr';
-  }
-  .nunito-font{
-    font-family: 'Nunito', 'Mitr';
-  }
-  .hidden-des{
-    display: none !important;
-  }
-}
+    font-size: 20px; }
+  .sans-font {
+    font-family: 'PT Sans', 'Mitr', sans-serif; }
+  .serif-font {
+    font-family: 'PT Serif', 'Mitr'; }
+  .nunito-font {
+    font-family: 'Nunito', 'Mitr'; }
+  .hidden-des {
+    display: none !important; } }
 
 /* FOR MOBILE */
-@media (max-width:480px) {
+@media (max-width: 480px) {
   .menu-font {
     font-family: 'Nunito', 'Mitr';
     font-size: 16px;
-    font-weight: bold;
-  }
+    font-weight: bold; }
   .title-font {
     font-family: 'Roboto Slab', 'Mitr';
-    font-size: 36px;
-  }
+    font-size: 36px; }
   .content-font {
     font-family: 'Roboto', 'cs_prajad', sans-serif;
-    font-size: 20px;
-  }
-  .sans-font{
-    font-family: 'Roboto', 'cs_prajad', sans-serif;
-  }
-  .serif-font{
-     font-family: 'Roboto Slab', 'Mitr';
-  }
-  .hidden-mob{
-    display:none !important;
-  }
-  .hidden-des{
-    display:block !important;
-  }
-  .nunito-font{
-    font-family: 'Nunito', 'Mitr';
-  }
-}
-
+    font-size: 20px; }
+  .sans-font {
+    font-family: 'Roboto', 'cs_prajad', sans-serif; }
+  .serif-font {
+    font-family: 'Roboto Slab', 'Mitr'; }
+  .hidden-mob {
+    display: none !important; }
+  .hidden-des {
+    display: block !important; }
+  .nunito-font {
+    font-family: 'Nunito', 'Mitr'; } }
 
 .container {
   position: relative;
   margin-left: auto;
   margin-right: auto;
   padding-right: 15px;
-  padding-left: 15px;
-}
+  padding-left: 15px; }
 
 @media (min-width: 576px) {
   .container {
     width: 540px;
-    max-width: 100%;
-  }
-}
+    max-width: 100%; } }
 
 @media (min-width: 768px) {
   .container {
     width: 720px;
-    max-width: 100%;
-  }
-}
+    max-width: 100%; } }
 
 @media (min-width: 992px) {
   .container {
     width: 960px;
-    max-width: 100%;
-  }
-}
+    max-width: 100%; } }
 
 @media (min-width: 1200px) {
   .container {
     width: 1140px;
-    max-width: 100%;
-  }
-}
+    max-width: 100%; } }
+
 .row {
   display: -webkit-flex;
   display: flex;
-  overflow:hidden;
-  flex-wrap: wrap;
-}
+  overflow: hidden;
+  flex-wrap: wrap; }
+
 .col {
   -webkit-flex-basis: 0;
-      -ms-flex-preferred-size: 0;
-          flex-basis: 0;
+  -ms-flex-preferred-size: 0;
+  flex-basis: 0;
   -webkit-box-flex: 1;
   -webkit-flex-grow: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
-  max-width: 100%;
-}
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  max-width: 100%; }
 
 .col-auto {
-          flex: 0 0 auto;
-  width: auto;
-}
+  flex: 0 0 auto;
+  width: auto; }
 
 .col-1 {
-          flex: 0 0 8.333333%;
-  max-width: 8.333333%;
-}
+  flex: 0 0 8.333333%;
+  max-width: 8.333333%; }
 
 .col-2 {
-          flex: 0 0 16.666667%;
-  max-width: 16.666667%;
-}
+  flex: 0 0 16.666667%;
+  max-width: 16.666667%; }
 
 .col-3 {
-flex: 0 0 25%;
-  max-width: 25%;
-}
+  flex: 0 0 25%;
+  max-width: 25%; }
 
 .col-4 {
   flex: 0 0 33.333333%;
-  max-width: 33.333333%;
-}
+  max-width: 33.333333%; }
 
 .col-5 {
-          flex: 0 0 41.666667%;
-  max-width: 41.666667%;
-}
+  flex: 0 0 41.666667%;
+  max-width: 41.666667%; }
 
 .col-6 {
-          flex: 0 0 50%;
-  max-width: 50%;
-}
+  flex: 0 0 50%;
+  max-width: 50%; }
 
 .col-7 {
-          flex: 0 0 58.333333%;
-  max-width: 58.333333%;
-}
+  flex: 0 0 58.333333%;
+  max-width: 58.333333%; }
 
 .col-8 {
-          flex: 0 0 66.666667%;
-  max-width: 66.666667%;
-}
+  flex: 0 0 66.666667%;
+  max-width: 66.666667%; }
 
 .col-9 {
-          flex: 0 0 75%;
-  max-width: 75%;
-}
+  flex: 0 0 75%;
+  max-width: 75%; }
 
 .col-10 {
-          flex: 0 0 83.333333%;
-  max-width: 83.333333%;
-}
+  flex: 0 0 83.333333%;
+  max-width: 83.333333%; }
 
 .col-11 {
-          flex: 0 0 91.666667%;
-  max-width: 91.666667%;
-}
+  flex: 0 0 91.666667%;
+  max-width: 91.666667%; }
 
 .col-12 {
-          flex: 0 0 100%;
-  max-width: 100%;
-}
-
-
+  flex: 0 0 100%;
+  max-width: 100%; }
 
 .container-loader {
   position: relative;
-  width:100%;
-  height:100%;
-  top:-20px;
-  left:0;
+  width: 100%;
+  height: 100%;
+  top: -20px;
+  left: 0;
   display: flex;
-  align-items:center;
-  padding: 10px 0 10px 0;
-}
+  align-items: center;
+  padding: 10px 0 10px 0; }
 
 .loader {
   height: 4px;
   width: 100%;
   position: relative;
   overflow: hidden;
-  background-color: #ddd;
-}
-.loader:before{
+  background-color: #ddd; }
+
+.loader:before {
   display: block;
   position: absolute;
   content: "";
@@ -271,85 +788,43 @@ flex: 0 0 25%;
   width: 200px;
   height: 4px;
   background-color: #2980b9;
-  animation: loading 2s linear infinite;
-}
+  animation: loading 2s linear infinite; }
 
 @keyframes loading {
-    from {left: -200px; width: 30%;}
-    50% {width: 30%;}
-    70% {width: 70%;}
-    80% { left: 50%;}
-    95% {left: 120%;}
-    to {left: 100%;}
-}
+  from {
+    left: -200px;
+    width: 30%; }
+  50% {
+    width: 30%; }
+  70% {
+    width: 70%; }
+  80% {
+    left: 50%; }
+  95% {
+    left: 120%; }
+  to {
+    left: 100%; } }
 
-.icon-full .path1:before {
-  content: "\e900";
-  color: #e5e5e5;
-}
-.icon-full .path2:before {
-  content: "\e901";
-  color: #f7f8f9;
-  margin-left: -0.875em;
-}
-.icon-full .path3:before {
-  content: "\e902";
-  color: #000;
-  margin-left: -0.875em;
-}
-.icon-full .path4:before {
-  content: "\e903";
-  color: #fff;
-  margin-left: -0.875em;
-}
-.icon-full .path5:before {
-  content: "\e904";
-  color: #1eb2cf;
-  margin-left: -0.875em;
-}
-.icon-full .path6:before {
-  content: "\e905";
-  color: #1eb2cf;
-  margin-left: -0.875em;
-}
-.icon-full .path7:before {
-  content: "\e906";
-  color: #1eb2cf;
-  margin-left: -0.875em;
-}
+@font-face {
+  font-family: 'cs_prajad';
+  src: url("/fonts/csprajad-bolditalic-webfont.woff2") format("woff2"), url("/fonts/csprajad-bolditalic-webfont.woff") format("woff");
+  font-weight: bold;
+  font-style: italic; }
 
+@font-face {
+  font-family: 'cs_prajad';
+  src: url("/fonts/csprajad-bold-webfont.woff2") format("woff2"), url("/fonts/csprajad-bold-webfont.woff") format("woff");
+  font-weight: bold;
+  font-style: normal; }
 
-.icon-small .path1:before {
-  content: "\e907";
-  color: #e5e5e5;
-}
-.icon-small .path2:before {
-  content: "\e908";
-  color: #f7f8f9;
-  margin-left: -1.25em;
-}
-.icon-small .path3:before {
-  content: "\e909";
-  color: #000;
-  margin-left: -1.25em;
-}
-.icon-small .path4:before {
-  content: "\e90a";
-  color: #fff;
-  margin-left: -1.25em;
-}
-.icon-small .path5:before {
-  content: "\e90b";
-  color: #1eb2cf;
-  margin-left: -1.25em;
-}
-.icon-small .path6:before {
-  content: "\e90c";
-  color: #1eb2cf;
-  margin-left: -1.25em;
-}
-.icon-small .path7:before {
-  content: "\e90d";
-  color: #1eb2cf;
-  margin-left: -1.25em;
-}
+@font-face {
+  font-family: 'cs_prajad';
+  src: url("/fonts/csprajad-italic-webfont.woff2") format("woff2"), url("/fonts/csprajad-italic-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: italic; }
+
+@font-face {
+  font-family: 'cs_prajad';
+  src: url("/fonts/csprajad-webfont.woff2") format("woff2"), url("/fonts/csprajad-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal; }
