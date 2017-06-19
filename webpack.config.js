@@ -112,33 +112,8 @@ const server = createConfig([
     stats: 'errors-only'
   }),
 
-  env('development', [() => {
-      module : {
-        rules: [
-          {
-              test: /\.scss$/,
-              use: extractCSS.extract({
-                fallback: 'style-loader',
-                use: ['css-loader', 'sass-loader']
-              })
-            }, {
-              test: /\.css$/,
-              use: extractCSS.extract({fallback: "style-loader", use: 'css-loader'})
-            },
-          ]
-        }
-      },
-      serverSourceMap(),
-      addPlugins([
-        new SpawnPlugin('node', ['.']),
-        extractCSS
-      ]),
-      () => ({watch: true})])])
-
-  const client = createConfig([
-    base(),
-    entryPoint({ client: clientEntryPath }),
-    () => ({
+  env('development', [
+    () => {
       module: {
         rules: [
           {
@@ -149,63 +124,94 @@ const server = createConfig([
             })
           }, {
             test: /\.css$/,
-            use: ExtractTextPlugin.extract({ fallback: "style-loader", use: 'css-loader' })
+            use: ExtractTextPlugin.extract({
+              fallback: "style-loader", 
+              use: 'css-loader'
+            })
           },
-        ],
+        ]
+      }
+    },
+    serverSourceMap(),
+    addPlugins([
+      new SpawnPlugin('node', ['.']),
+      extractCSS
+    ]),
+    () => ({watch: true})
+  ])
+])
+
+const client = createConfig([
+  base(),
+  entryPoint({ client: clientEntryPath }),
+  () => ({
+    module: {
+      rules: [
+        {
+          test: /\.scss$/,
+          use: ExtractTextPlugin.extract({
+            fallback: 'style-loader',
+            use: ['css-loader', 'sass-loader']
+          })
+        }, {
+          test: /\.css$/,
+          use: ExtractTextPlugin.extract({ fallback: "style-loader", use: 'css-loader' })
+        },
+      ],
+    },
+  }),
+  addPlugins([
+    new webpack.DefinePlugin({
+      "process.env": {
+        BROWSER: JSON.stringify(true)
+      }
+    }),
+    new webpack.ProvidePlugin({$: "jquery", jQuery: "jquery"}),
+    new ExtractTextPlugin({filename: '[name].[chunkhash].css', allChunks: true}),
+    new AssetsByTypePlugin({path: assetsPath}),
+    new ChildConfigPlugin(server)
+  ]),
+
+  //clientCssModules(),
+
+  env('development', [
+    devServer({
+      contentBase: 'public',
+      stats: 'errors-only',
+      historyApiFallback: {
+        index: publicPath
       },
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      },
+      host,
+      port,
+      https: {
+        key: fs.readFileSync('./private/keys/localhost.key'),
+        cert: fs.readFileSync('./private/keys/localhost.crt'),
+        passphrase: 'thepublisher'
+      }
     }),
     addPlugins([
-      new webpack.DefinePlugin({
-        "process.env": {
-          BROWSER: JSON.stringify(true)
+      new webpack.NamedModulesPlugin(),
+      // new ExtractTextPlugin({
+      //   filename: 'main.css',
+      //   allChunks: true,
+      // }),
+    ])
+  ]),
+
+  env('production', [
+    splitVendor(),
+    addPlugins([
+      new webpack.LoaderOptionsPlugin({ minimize: true }),
+      new webpack.optimize.UglifyJsPlugin({
+        compress: {
+          warnings: false
         }
-      }),
-      new webpack.ProvidePlugin({$: "jquery", jQuery: "jquery"}),
-      new ExtractTextPlugin({filename: '[name].[chunkhash].css', allChunks: true}),
-      new AssetsByTypePlugin({path: assetsPath}),
-      new ChildConfigPlugin(server)
-    ]),
-
-    //clientCssModules(),
-
-    env('development', [
-      devServer({
-        contentBase: 'public',
-        stats: 'errors-only',
-        historyApiFallback: {
-          index: publicPath
-        },
-        headers: {
-          'Access-Control-Allow-Origin': '*'
-        },
-        host,
-        port,
-        https: {
-          key: fs.readFileSync('./private/keys/localhost.key'),
-          cert: fs.readFileSync('./private/keys/localhost.crt'),
-          passphrase: 'thepublisher'
-        }
-      }),
-      addPlugins([
-        new webpack.NamedModulesPlugin(),
-        // new ExtractTextPlugin({
-        //   filename: 'main.css',
-        //   allChunks: true,
-        // }),
-      ])
-    ]),
-
-    env('production', [
-      splitVendor(),
-      addPlugins([
-        new webpack.LoaderOptionsPlugin({ minimize: true }),
-        new webpack.optimize.UglifyJsPlugin({
-          compress: {
-            warnings: false
-          }
-        })
-      ])
+      })
     ])
   ])
+])
 
-  module.exports = client
+module.exports = client
