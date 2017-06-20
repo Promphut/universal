@@ -130,6 +130,23 @@ utils.notFound = history => {
 }
 utils.toSignin = history => {}
 
+utils.analytics.hasImg = (html) => {
+  const img = html.match(/<img((?!>).)*/g)
+  if (img.length === 0) return false
+  return true
+}
+
+utils.analytics.hasLink = (html) => {
+  const link = html.match(/<a((?!>).)*/g)
+  if (link.length === 0) return false
+  return true
+}
+
+utils.analytics.densityKeywords = (keyword, content) => {
+  const reg = new RegExp(keyword, 'g')
+  const match = content.match(reg)
+  return ((keyword.length * match.length) * 100) / content.length
+}
 
 // Return the number of char in content
 utils.analytics.charCount = (content) => {
