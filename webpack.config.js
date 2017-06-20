@@ -75,7 +75,7 @@ const resolveModules = modules => () => ({
 
 const base = () => group([
   setOutput({
-    filename: '[name].js', 
+    filename: '[name].js',
     path: outputPath, publicPath
   }),
   defineConstants({
@@ -111,13 +111,13 @@ const server = createConfig([
     server: serverEntryPath
   }),
   setOutput({
-    filename: '../[name].js', 
+    filename: '../[name].js',
     libraryTarget: 'commonjs2'
   }),
 
   addPlugins([
     new webpack.BannerPlugin({
-      banner: 'global.assets = require("./assets.json");', 
+      banner: 'global.assets = require("./assets.json");',
       raw: true
     })
   ]),
@@ -152,9 +152,9 @@ const client = createConfig([
           })
         }, {
           test: /\.css$/,
-          use: ExtractTextPlugin.extract({ 
-            fallback: "style-loader", 
-            use: 'css-loader' 
+          use: ExtractTextPlugin.extract({
+            fallback: "style-loader",
+            use: 'css-loader'
           })
         },
       ],
@@ -167,11 +167,11 @@ const client = createConfig([
       }
     }),
     new webpack.ProvidePlugin({
-      $: "jquery", 
+      $: "jquery",
       jQuery: "jquery"
     }),
     new ExtractTextPlugin({
-      filename: '[name].[chunkhash].css', 
+      filename: '[name].[chunkhash].css',
       allChunks: true
     }),
     new AssetsByTypePlugin({
@@ -202,14 +202,17 @@ const client = createConfig([
     }),
     addPlugins([
       new webpack.NamedModulesPlugin(),
+      new webpack.LoaderOptionsPlugin({
+        minimize: true
+      }),
     ])
   ]),
 
   env('production', [
     splitVendor(),
     addPlugins([
-      new webpack.LoaderOptionsPlugin({ 
-        minimize: true 
+      new webpack.LoaderOptionsPlugin({
+        minimize: true
       }),
       new webpack.optimize.UglifyJsPlugin({
         compress: {
