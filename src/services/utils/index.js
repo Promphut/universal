@@ -130,31 +130,31 @@ utils.notFound = history => {
 }
 utils.toSignin = history => {}
 
-utils.analytics.hasImg = (html) => {
+utils.analyticsHasImg = (html) => {
   const img = html.match(/<img((?!>).)*/g)
   if (img.length === 0) return false
   return true
 }
 
-utils.analytics.hasLink = (html) => {
+utils.analyticsHasLink = (html) => {
   const link = html.match(/<a((?!>).)*/g)
   if (link.length === 0) return false
   return true
 }
 
-utils.analytics.densityKeywords = (keyword, content) => {
+utils.analyticsDensityKeywords = (keyword, content) => {
   const reg = new RegExp(keyword, 'g')
   const match = content.match(reg)
   return ((keyword.length * match.length) * 100) / content.length
 }
 
 // Return the number of char in content
-utils.analytics.charCount = (content) => {
+utils.analyticsCharCount = (content) => {
   return content.length
 }
 
 // Return number of repeated focus word in title
-utils.analytics.hasKeywordInTitle = (title, keyword) => {
+utils.analyticsHasKeywordInTitle = (title, keyword) => {
   const reg = new RegExp(keyword, 'g')
   const match = title.match(reg)
 
@@ -163,7 +163,7 @@ utils.analytics.hasKeywordInTitle = (title, keyword) => {
 }
 
 // Return the status of focus keyword weather true/false
-utils.analytics.isFocusWordIsAvailable = (focusWord) => {
+utils.analyticsisFocusWordIsAvailable = (focusWord) => {
   const wordDetail = api.getFocusWordDetail(focusWord)
 
   if (wordDetail.size === 0) return true
