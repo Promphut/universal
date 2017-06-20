@@ -209,6 +209,7 @@ class EditStory extends React.Component {
       column:'no',
       contentType:'NEWS',
 
+      focusWord: '',
       tag:[],
       addTag:[],
       pureTag:[],
@@ -244,6 +245,10 @@ class EditStory extends React.Component {
 
   selectedLayout = () => {
     this.setState({chooseLayout:1})
+  }
+
+  changeFocusWord = (e) => {
+    this.setState({focusWord:e.target.value})
   }
 
   handleEditableInput = (e, editable) => {
@@ -309,7 +314,7 @@ class EditStory extends React.Component {
   }
 
   autoSave = () => {
-    let {sid,title,column,contentType} = this.state
+    let {sid,title,column,contentType,focusWord} = this.state
 
     if(this.state.status === this.SAVE_STATUS.DIRTIED){
       const images = [].slice.call(dom(this.refs.paper).getElementsByTagName('img'))
@@ -332,6 +337,7 @@ class EditStory extends React.Component {
         title:title,
         publisher:parseInt(config.PID),
         html:el,
+        focusWord:focusWord,
         highlight
       }
       if(column!='no') s.column = column
@@ -539,7 +545,8 @@ class EditStory extends React.Component {
         metaTitle:story.meta&&story.meta.title,
         metaDesc:story.meta&&story.meta.desc,
         column: story.column ? story.column._id : 'no',
-        contentType: story.contentType ? story.contentType : 'NEWS'
+        contentType: story.contentType ? story.contentType : 'NEWS',
+        focusWord: story.focusWord
       })
 
       this.editor.setContent(story.html || '')
@@ -638,7 +645,7 @@ class EditStory extends React.Component {
           images: {
             captionPlaceholder: 'Type caption for image',
             fileUploadOptions: { // (object) File upload configuration. See https://github.com/blueimp/jQuery-File-Upload/wiki/Options
-                url: config.BACKURL+'/publisher/'+config.PID+'/upload/img', // (string) A relative path to an upload script
+                url: '/upload/img', // (string) A relative path to an upload script
                 maxChunkSize: 10000000,
                 maxFileSize: 10000000,
                 preview:false,
@@ -808,6 +815,13 @@ class EditStory extends React.Component {
                   <MenuItem value={index} primaryText={data} key={index} />
                 ))}
               </DropDownMenu>
+              <Label className="nunito-font or" style={{float:'left',marginTop:'22px',minWidth:'60px'}}>Focus Word : </Label>
+              <TextField
+                value = {this.state.focusWord}
+                onChange={this.changeFocusWord}
+                hintText="Enter Keyword"
+                style={{width:'280px',float:'right'}}
+              />
             </div>
             <div className='' style={{display:'block',clear:'both',overflow:'hidden'}}>
               <Label className="nunito-font" style={{float:'left',marginTop:'26px'}}>Add up to 5 tags : </Label>
