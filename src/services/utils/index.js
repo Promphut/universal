@@ -1,5 +1,6 @@
-const config = require('../../config'), { parse } = require('query-string')
+import api from '../../components/api'
 
+const config = require('../../config'), { parse } = require('query-string')
 const utils = {}
 
 utils.getWidth = () => {
@@ -128,5 +129,29 @@ utils.notFound = history => {
 	})
 }
 utils.toSignin = history => {}
+
+
+// Return the number of char in content
+utils.analytics.charCount = (content) => {
+  return content.length
+}
+
+// Return number of repeated focus word in title
+utils.analytics.hasKeywordInTitle = (title, keyword) => {
+  const reg = new RegExp(keyword, 'g')
+  const match = title.match(reg)
+
+  if (match === null) return 0
+  return match.length
+}
+
+// Return the status of focus keyword weather true/false
+utils.analytics.isFocusWordIsAvailable = (focusWord) => {
+  const wordDetail = api.getFocusWordDetail(focusWord)
+
+  if (wordDetail.size === 0) return true
+  return false
+}
+
 
 module.exports = utils
