@@ -143,4 +143,15 @@ utils.dateFormat = d => {
   }
 }
 
+utils.numberFormat = n => {
+	if(n<999) return n
+	else if(n>999&&n<99999){
+		return (n/1000).toFixed(1)+'k'
+	}else if(n>99999&&n<999999){
+		return parseInt(n/1000)+'k'
+	}else if(n>999999){
+		return (n/1000000).toFixed(1)+'m'
+	}
+}
+
 module.exports = utils
