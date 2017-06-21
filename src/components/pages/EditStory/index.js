@@ -917,7 +917,7 @@ class EditStory extends React.Component {
           </HighlightBox>
         </div>
         <Paper ref='paper' id='paper'></Paper>
-				<AnalyticContainer html="<p>hello</p>" focusWord="kuy" title="kuyeiei" />
+				<AnalyticContainer html="<p>hello</p>" focusWord="eiei" title="eiei" />
       </Container>
 	)
     }
