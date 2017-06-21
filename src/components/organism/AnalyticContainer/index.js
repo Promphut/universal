@@ -8,6 +8,15 @@ const AnalyticMainContainer = styled.div `
 
 `
 
+const RuleText = [
+    'Adding at least 1 image in the content.',
+    'The keyword density must be more than 2%.',
+    'The text must contain more than 1,500 characters.',
+    'Consider using unused focus word.',
+    'Adding at least 1 link in the content.',
+    'The focus word should appear in the title.'
+]
+
 // Rule => (status,text)
 
 //Props => content, focusWord, HTML
@@ -27,12 +36,12 @@ export default class AnalyticContainer extends React.Component {
    calculateRule () {
     //  Rules Calculation Goes Here!
       var rules = [
-        { status: this.atLeastImgTag(this.props.html), text: 'Rule 1'},
-        { status: this.focusWordDensityChecker(this.props.html, this.props.focusWord), text: 'Rule 2'},
-        { status: this.numberOfWordsChecker(this.props.html), text: 'Rule 3'},
-        { status: this.focusWordAvailablityChecker(this.props.focusWord), text: 'Rule 4'},
-        { status: this.linkTagChecker(this.props.html), text: 'Rule 5'},
-        { status: this.titleFocusWordChecker(this.props.title,this.props.focusWord), text: 'Rule 6'},
+        { status: this.atLeastImgTag(this.props.html), text: RuleText[0]},
+        { status: this.focusWordDensityChecker(this.props.html, this.props.focusWord), text: RuleText[1]},
+        { status: this.numberOfWordsChecker(this.props.html), text: RuleText[2]},
+        { status: this.focusWordAvailablityChecker(this.props.focusWord), text: RuleText[3]},
+        { status: this.linkTagChecker(this.props.html), text: RuleText[4]},
+        { status: this.titleFocusWordChecker(this.props.title,this.props.focusWord), text: RuleText[5]},
       ]
 
       this.setState({
