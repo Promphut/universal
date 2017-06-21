@@ -402,7 +402,7 @@ class UserStory extends React.Component {
 
 				<TopBarWithNavigation
 					className="hidden-mob"
-					title={'Title of AomMoney goes here..'}
+					 
 				/>
 				<UserDetail user={user} checkBack={this.checkBack} />
 

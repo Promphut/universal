@@ -17,6 +17,7 @@ import utils from '../services/utils'
 
 injectGlobal`
   body {
+		overflow-x:hidden;
     color:#222;
   }
   * {

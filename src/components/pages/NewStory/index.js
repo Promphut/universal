@@ -33,18 +33,12 @@ import config from '../../../config'
 
 var MediumEditor = {}
 if (process.env.BROWSER) {
-  require('jquery-ui-bundle')
-  require('blueimp-file-upload/js/vendor/jquery.ui.widget.js')
-  require('blueimp-file-upload/js/jquery.iframe-transport.js')
-  require('blueimp-file-upload/js/jquery.fileupload.js')
-  require('blueimp-file-upload/js/jquery.fileupload-image.js')
-
   MediumEditor = require('medium-editor')
   window.MediumInsert = require('medium-editor-insert-plugin').MediumInsert
 }
 
 const Container = styled(EditorCss)`
-  width:100%;
+  width:855px;
   padding:60px;
   border-bottom:1px solid #E2E2E2;
   h1{

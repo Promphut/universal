@@ -106,8 +106,9 @@ const Box = styled.div`
   flex:0 90%;
   display:flex;
   border-bottom:1px solid #C4C4C4;
-  padding-bottom:30px;
+  padding-top:30px;
   @media (max-width:480px) {
+    padding-top:0px;
     display:block;
     width:100%;
     padding-bottom:10px;

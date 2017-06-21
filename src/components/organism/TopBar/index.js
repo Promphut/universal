@@ -16,6 +16,7 @@ import FontIcon from 'material-ui/FontIcon'
 import RaisedButton from 'material-ui/RaisedButton'
 import utils from '../../../services/utils'
 import { withRouter } from 'react-router'
+import config from '../../../config'
 
 const Wrapper = styled.div`
 	.transparent {
@@ -342,7 +343,7 @@ class TopBar extends React.Component {
 							<LogoLink
 								to="/"
 								src={theme.logo}
-								title={this.props.title}
+								title={config.DOMAIN}
 								style={{...logoStyle}}
 								id={'logo'}
 								fill={!scrolling && hasCover ? '#FFF' : ''}

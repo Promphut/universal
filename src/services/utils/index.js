@@ -133,10 +133,10 @@ utils.dateFormat = d => {
 	var spl =  moment(d).fromNow().split(' ')
   if(spl[1]=='minutes'){
     return spl[0]+' min '+spl[2]
-  }else if(spl[1]=='days'){
+  }else if(spl[1]=='days'||spl[1]=='day'){
     if(spl[0]=='1') return 'yesterday'
     else return moment(d).format('ll');
-  }else if(spl[1]=='mounths'||spl[1]=='years'){
+  }else if(spl[1]=='months'||spl[1]=='month'||spl[1]=='years'||spl[1]=='year'){
     return moment(d).format('ll');
   }else{
     return moment(d).fromNow()
