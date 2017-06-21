@@ -297,7 +297,7 @@ class ColumnPage extends React.Component {
 				</Helmet>
 				<div style={{}}>
 					<TopBarWithNavigation
-						title={'Title of AomMoney goes here..'}
+						 
 						onLoading={this.props.onLoading}
 					/>
 				</div>

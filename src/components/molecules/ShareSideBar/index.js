@@ -4,6 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import {FbIcon, TwtShareButton, FbShareButton} from 'components';
 import {findDOMNode as dom} from 'react-dom'
+import utils from '../../../services/utils'
 
 const Div = styled.div`
   width:70px;
@@ -31,7 +32,7 @@ const CirButton = styled.div`
 const ShareSideBar = ({style, shareCount}) => {
   return (
     <Div style={{style}}>
-      <No>{shareCount}</No>
+      <No>{utils.numberFormat(shareCount)}</No>
       <div style={{color:'#8F8F8F',fontSize:'16px',fontWeight:'blod',textAlign:'center'}}>shares</div>
       <FbShareButton  button={<CirButton><i className="fa fa-facebook fa-2x" aria-hidden="true" style={{color:'white'}}></i></CirButton>} />
       <TwtShareButton button={<CirButton style={{backgroundColor:'#60AADE',paddingLeft:'18px'}}><i className="fa  fa-twitter fa-2x" aria-hidden="true" style={{color:'white'}}></i></CirButton>} />

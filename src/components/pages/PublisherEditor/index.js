@@ -57,7 +57,7 @@ const PublisherEditor = ({ onLoading, location, children, match }) => {
 	return (
 		<Wrapper>
 			<TopBarWithNavigation
-				title={'Title of AomMoney goes here..'}
+				 
 				onLoading={onLoading}
 			/>
 			<Container>

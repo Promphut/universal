@@ -131,7 +131,7 @@ class ContactAndAboutContainer extends React.Component {
 				{!isEmpty(pub) && !utils.isMobile() && <BgWithLogo data={pub}/>}
 
 				<TopBarWithNavigation
-					title={'Title of AomMoney goes here..'}
+					 
 					onLoading={this.props.onLoading}
 				/>
 

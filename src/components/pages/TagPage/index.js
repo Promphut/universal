@@ -230,7 +230,7 @@ class TagPage extends React.Component {
 		return (
 			<Wrapper>
 				<TopBarWithNavigation
-					title={'Title of AomMoney goes here..'}
+					
 					onLoading={this.props.onLoading}
 				/>
 

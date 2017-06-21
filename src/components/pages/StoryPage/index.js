@@ -9,7 +9,8 @@ import {
 	ShareSideBar,
 	BGImg,
 	RecommendContainer,
-	Footer
+	Footer,
+	BackToTop
 } from 'components'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
@@ -68,7 +69,7 @@ const Share = styled.div`
 	position:relative;
 	max-width: 120px;
 	margin:150px 0 0 0;
-	@media (max-width: 1280px) {
+	@media (max-width: 850px) {
 		display:none;
 	}
 `
@@ -270,7 +271,6 @@ class StoryPage extends React.Component {
 					<Wrapper>
 						<TopBarWithNavigation
 							onLoading={this.props.onLoading}
-							title={'Title of AomMoney goes here..'}
 							article={story.title}
 							showTitle={showTopbarTitle}
 							editButton={'/me/stories/' + story.id + '/edit'}
@@ -327,6 +327,8 @@ class StoryPage extends React.Component {
 							{recommends.length != 0 &&
 								<RecommendContainer recommend={recommends} />}
 						</Content>
+
+						<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800" />
 						<Footer />
 					</Wrapper>
 				</div>

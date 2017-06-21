@@ -133,14 +133,25 @@ utils.dateFormat = d => {
 	var spl =  moment(d).fromNow().split(' ')
   if(spl[1]=='minutes'){
     return spl[0]+' min '+spl[2]
-  }else if(spl[1]=='days'){
+  }else if(spl[1]=='days'||spl[1]=='day'){
     if(spl[0]=='1') return 'yesterday'
     else return moment(d).format('ll');
-  }else if(spl[1]=='mounths'||spl[1]=='years'){
+  }else if(spl[1]=='months'||spl[1]=='month'||spl[1]=='years'||spl[1]=='year'){
     return moment(d).format('ll');
   }else{
     return moment(d).fromNow()
   }
+}
+
+utils.numberFormat = n => {
+	if(n<999) return n
+	else if(n>999&&n<99999){
+		return (n/1000).toFixed(1)+'k'
+	}else if(n>99999&&n<999999){
+		return parseInt(n/1000)+'k'
+	}else if(n>999999){
+		return (n/1000000).toFixed(1)+'m'
+	}
 }
 
 module.exports = utils

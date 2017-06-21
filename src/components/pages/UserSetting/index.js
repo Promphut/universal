@@ -80,7 +80,7 @@ class UserSetting extends React.Component {
     return (
         <Wrapper>
           {isMobile ? <TopBarWithBack title={title} history={this.props.history}/> :
-            <TopBarWithNavigation title={'Title of AomMoney goes here..'} onLoading={onLoading} />
+            <TopBarWithNavigation   onLoading={onLoading} />
           }
 
           <Container>
