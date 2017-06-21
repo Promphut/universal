@@ -8,8 +8,8 @@ const RuleContainer = styled.div `
 
 const RuleIndicator = styled.div `
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
   margin-right: 10px;
   background-color: {$props.status}
 `
