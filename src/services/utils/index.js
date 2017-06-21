@@ -153,6 +153,9 @@ utils.analyticsDensityFocusWord = (focusWord, content) => {
 	const reg = new RegExp(focusWord, 'g')
 	content = htmlToText.fromString(content,{ignoreImage:true,hideLinkHrefIfSameAsText:true})
 	const match = content.match(reg)
+
+	if (match === null) return 0
+
 	return ((focusWord.length * match.length) * 100) / content.length
 }
 
@@ -169,20 +172,23 @@ utils.analyticsHasFocusWordInTitle = (title, focusWord) => {
 	if (title === null || focusWord === null) return 0
 
 	const reg = new RegExp(focusWord, 'g')
-	const match = title.match(reg)
+	const checkedString = title.match(reg)
 
-	if (match === null) return 0
-	return match.length
+	if (checkedString === null || checkedString === undefined) return 0
+	return checkedString.length
 }
 
 // Return the status of focus focus word weather true/false
 utils.analyticsisFocusWordIsAvailable = (focusWord) => {
+	return false
+
 	if (focusWord === null) return false
 
-	const wordDetail = api.getFocusWordDetail(focusWord)
-
-	if (wordDetail.size === 0) return true
-	return false
+	api.getFocusWordDetail(focusWord)
+		.then(result => {
+			if (result.size === 0) return true
+			return false
+		})
 }
 
 

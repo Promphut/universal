@@ -9,7 +9,8 @@ import {
 	DropdownWithIcon,
 	Alert,
 	MenuList,
-  EditorCss
+  EditorCss,
+	AnalyticContainer,
 } from 'components'
 import { findDOMNode as dom } from 'react-dom'
 import TextField from 'material-ui/TextField'
@@ -916,6 +917,7 @@ class EditStory extends React.Component {
           </HighlightBox>
         </div>
         <Paper ref='paper' id='paper'></Paper>
+				<AnalyticContainer html="<p>hello</p>" focusWord="kuy" title="kuyeiei" />
       </Container>
 	)
     }
