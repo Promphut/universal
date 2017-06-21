@@ -5,7 +5,7 @@ import {AnalyticRuleSet} from 'components'
 import utils from '../../../services/utils'
 
 const AnalyticMainContainer = styled.div `
-
+  margin-top:20px;
 `
 
 const RuleText = [
@@ -88,7 +88,7 @@ export default class AnalyticContainer extends React.Component {
    //Rule 6 Focus Title return is focus word is in the title return the score (0 : has no focusWord, 1 : has focusWord in Title)
    titleFocusWordChecker (title, focusWord)
    {
-     return utils.analyticsHasFocusWordInTitle(title, focusWord) === 0 ? 1 : 0
+     return utils.analyticsHasFocusWordInTitle(title, focusWord)
    }
 
    componentDidMount () {
