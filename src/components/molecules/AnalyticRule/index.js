@@ -4,6 +4,8 @@ import styled from 'styled-components'
 const RuleContainer = styled.div `
   margin-top: 10px;
   margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
 `
 
 const RuleIndicator = styled.div `
@@ -11,7 +13,7 @@ const RuleIndicator = styled.div `
   width: 20px;
   height: 20px;
   margin-right: 10px;
-  background-color: {$props.status}
+  background-color: ${props => props.status}
 `
 
 const RuleText = styled.span `

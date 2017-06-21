@@ -248,7 +248,17 @@ class EditStory extends React.Component {
   }
 
   changeFocusWord = (e) => {
-    this.setState({focusWord:e.target.value})
+    if(this.state.status===this.SAVE_STATUS.DIRTIED)
+      this.setState({
+        focusWord:e.target.value,
+        saveStatus:'Unsave'
+      })
+    else
+      this.setState({
+        focusWord:e.target.value,
+        status:this.SAVE_STATUS.DIRTIED,
+        saveStatus:'Unsave'
+      })
   }
 
   handleEditableInput = (e, editable) => {
@@ -354,7 +364,7 @@ class EditStory extends React.Component {
   }
 
   publishStory = () => {
-    let {sid,column,contentType,title} = this.state
+    let {sid,column,contentType,title,focusWord} = this.state
     let allContents = this.editor.serialize()
     let highlight = this.editor2.serialize().highlight.value
 
@@ -362,6 +372,7 @@ class EditStory extends React.Component {
       title:title,
       publisher:parseInt(config.PID),
       status:1,
+      focusWord:focusWord,
       html:allContents.paper.value,
       highlight
     }
