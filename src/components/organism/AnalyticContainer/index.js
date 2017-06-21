@@ -59,7 +59,7 @@ export default class AnalyticContainer extends React.Component {
       var density = utils.analyticsDensityFocusWord(focusWord,content)
 
       if (density < 1) return 0
-      else if (density => 1 && density < 2) return 2
+      else if (density >= 1 && density < 2) return 2
       return 1
    }
 
