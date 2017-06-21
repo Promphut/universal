@@ -11,7 +11,7 @@ const RuleIndicator = styled.div `
   width: 15px;
   height: 15px;
   margin-right: 10px;
-  background-color: {$props.status}
+  background-color: ${props => props.status};
 `
 
 const RuleText = styled.span `
