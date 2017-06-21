@@ -41,6 +41,8 @@ export default class AnalyticContainer extends React.Component {
         { status: this.titleFocusWordChecker(this.props.title,this.props.focusWord), text: RuleText[5]},
       ]
 
+      rules.sort(function(a, b){return a.status-b.status})
+
       this.setState({
           ruleSet: rules
         })
@@ -50,7 +52,7 @@ export default class AnalyticContainer extends React.Component {
    // Rule 1 : Check for Img Tag in the post return the score (0: no img , 1: has img)
    atLeastImgTag (html)
    {
-     return utils.analyticsHasImg(html)? 1 : 0
+     return utils.analyticsHasImg(html)? 2 : 0
    }
 
    // Rule 2 : Check for focus word density at least 2% return the score (0: < 1%, 1 >2%, 2 > 1%)
@@ -59,8 +61,8 @@ export default class AnalyticContainer extends React.Component {
       var density = utils.analyticsDensityFocusWord(focusWord,content)
 
       if (density < 1) return 0
-      else if (density >= 1 && density < 2) return 2
-      return 1
+      else if (density >= 1 && density < 2) return 1
+      return 2
    }
 
    // Rule 3 : Check for number of char must greater than 1500 return the score (0: < 1000, 1 >= 1500, 2 > 1000)
@@ -69,26 +71,26 @@ export default class AnalyticContainer extends React.Component {
      var noOfWord = utils.analyticsCharCount(content)
 
      if (noOfWord < 1000) return 0
-     else if (noOfWord >= 1000 && noOfWord < 1500) return 2
-     return 1
+     else if (noOfWord >= 1000 && noOfWord < 1500) return 1
+     return 2
    }
 
    //Rule 4 Used focus word return the score (0 : used focusWord , 1 : focusWord is available)
    focusWordAvailablityChecker (focusWord)
    {
-     return utils.analyticsisFocusWordIsAvailable (focusWord)? 1 : 0
+     return utils.analyticsisFocusWordIsAvailable (focusWord)? 2 : 0
    }
 
    //Rule 5 Is Link Tag is in the article return the score (0 : has no link, 1 : has link)
    linkTagChecker (html)
    {
-     return utils.analyticsHasLink(html) ? 1 : 0
+     return utils.analyticsHasLink(html) ? 2 : 0
    }
 
    //Rule 6 Focus Title return is focus word is in the title return the score (0 : has no focusWord, 1 : has focusWord in Title)
    titleFocusWordChecker (title, focusWord)
    {
-     return utils.analyticsHasFocusWordInTitle(title, focusWord)
+     return utils.analyticsHasFocusWordInTitle(title, focusWord) ? 2 : 0
    }
 
    componentDidMount () {

@@ -29,8 +29,8 @@ export default class AnalyticRule extends React.Component {
     // Status = 2 => Warning : rgb(242,153,74)
 
     if (status === 0) return 'rgb(235,87,87)'
-    else if (status === 1) return 'rgb(39,174,96)'
-    return 'rgb(242,153,74)'
+    else if (status === 1) return 'rgb(242,153,74)'
+    return 'rgb(39,174,96)'
   }
 
   render() {
