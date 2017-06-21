@@ -28,10 +28,7 @@ export default class AnalyticContainer extends React.Component {
        this.state = {
          ruleSet: []
        }
-
-         console.log("THE HTML : " + this.props.html)
-         console.log("THE FOCUS WORD" + this.props.focusWord)
-	 }
+  }
 
    calculateRule () {
     //  Rules Calculation Goes Here!
