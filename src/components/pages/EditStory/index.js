@@ -208,6 +208,7 @@ class EditStory extends React.Component {
       open:false,
       column:'no',
       contentType:'NEWS',
+      html: '',
 
       focusWord: '',
       tag:[],
@@ -340,7 +341,8 @@ class EditStory extends React.Component {
       let highlight = this.editor2.serialize().highlight.value
       //console.log(allContents.paper.value)
       this.setState({
-        saveStatus:'Saving...'
+        saveStatus:'Saving...',
+        html:el
       })
 
       let s = {

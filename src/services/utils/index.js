@@ -1,4 +1,5 @@
 import api from '../../components/api'
+import htmlToText from 'html-to-text'
 
 const config = require('../../config'), { parse } = require('query-string')
 const utils = {}
@@ -131,43 +132,45 @@ utils.notFound = history => {
 utils.toSignin = history => {}
 
 utils.analyticsHasImg = (html) => {
-  const img = html.match(/<img((?!>).)*/g)
-  if (img.length === 0) return false
-  return true
+	const img = html.match(/<img((?!>).)*/g)
+	if (img.length === 0) return false
+	return true
 }
 
 utils.analyticsHasLink = (html) => {
-  const link = html.match(/<a((?!>).)*/g)
-  if (link.length === 0) return false
-  return true
+	const link = html.match(/<a((?!>).)*/g)
+	if (link.length === 0) return false
+	return true
 }
 
-utils.analyticsDensityKeywords = (keyword, content) => {
-  const reg = new RegExp(keyword, 'g')
-  const match = content.match(reg)
-  return ((keyword.length * match.length) * 100) / content.length
+utils.analyticsDensityFocusWord = (focusWord, content) => {
+	const reg = new RegExp(focusWord, 'g')
+	content = htmlToText.fromString(content,{ignoreImage:true,hideLinkHrefIfSameAsText:true})
+	const match = content.match(reg)
+	return ((focusWord.length * match.length) * 100) / content.length
 }
 
 // Return the number of char in content
 utils.analyticsCharCount = (content) => {
-  return content.length
+	content = htmlToText.fromString(content,{ignoreImage:true,hideLinkHrefIfSameAsText:true})
+  	return content.length
 }
 
 // Return number of repeated focus word in title
-utils.analyticsHasKeywordInTitle = (title, keyword) => {
-  const reg = new RegExp(keyword, 'g')
-  const match = title.match(reg)
+utils.analyticsHasFocusWordInTitle = (title, focusWord) => {
+	const reg = new RegExp(focusWord, 'g')
+	const match = title.match(reg)
 
-  if (match === null) return 0
-  return match.length
+	if (match === null) return 0
+	return match.length
 }
 
-// Return the status of focus keyword weather true/false
+// Return the status of focus focus word weather true/false
 utils.analyticsisFocusWordIsAvailable = (focusWord) => {
-  const wordDetail = api.getFocusWordDetail(focusWord)
+	const wordDetail = api.getFocusWordDetail(focusWord)
 
-  if (wordDetail.size === 0) return true
-  return false
+	if (wordDetail.size === 0) return true
+	return false
 }
 
 
