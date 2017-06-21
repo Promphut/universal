@@ -159,6 +159,7 @@ const client = createConfig([
         },
       ],
     },
+  target: 'node'
   }),
   addPlugins([
     new webpack.DefinePlugin({
