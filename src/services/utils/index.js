@@ -135,7 +135,7 @@ utils.analyticsHasImg = (html) => {
 	if (html === null) return false
 
 	const img = html.match(/<img((?!>).)*/g)
-	if (img.length === 0) return false
+	if (img === null) return false
 	return true
 }
 
@@ -143,7 +143,7 @@ utils.analyticsHasLink = (html) => {
 	if (html === null) return false
 
 	const link = html.match(/<a((?!>).)*/g)
-	if (link.length === 0) return false
+	if (link === null) return false
 	return true
 }
 
