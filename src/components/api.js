@@ -176,20 +176,6 @@ api.getStoryFromSid = (sid, token, countView) => {
 	})
 }
 
-api.getFocusWordDetail = (focusWord) => {
-	if(focusWord==null) throw new Error('Require Focus Word String.')
-
-	return Request
-	.get(config.BACKURL + '/stories/getfocusword/' + focusWord)
-	.set('Accept', 'application/json')
-	.then(res => {
-		return res.body
-	})
-	.catch(err => {
-		throw new Error('Get Focus Word Error.')
-	})
-}
-
 api.getCookieAndToken = (token) => {
 	return Request
     .get(config.BACKURL + '/publishers/'+config.PID+'/menu')

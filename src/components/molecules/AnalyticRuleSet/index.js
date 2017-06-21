@@ -12,7 +12,7 @@ export default class AnalyticRuleSet extends React.Component {
     var rules = [];
 
     for (var rule of this.props.rules)
-      rules.push(<AnalyticRule status={rule.status} text={rule.text} />)
+      rules.push(<AnalyticRule key={rule.text} status={rule.status} text={rule.text} />)
 
     return (
       <RuleSetContainer>

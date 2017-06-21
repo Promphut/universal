@@ -1,4 +1,4 @@
-import api from '../../components/api'
+const Request = require('superagent')
 import htmlToText from 'html-to-text'
 
 const config = require('../../config'), { parse } = require('query-string')
@@ -169,7 +169,7 @@ utils.analyticsCharCount = (content) => {
 
 // Return number of repeated focus word in title
 utils.analyticsHasFocusWordInTitle = (title, focusWord) => {
-	if (title === null || focusWord === null) return 0
+	if (title === null || focusWord === null || focusWord == '') return 0
 
 	const reg = new RegExp(focusWord, 'g')
 	const checkedString = title.match(reg)
@@ -180,15 +180,17 @@ utils.analyticsHasFocusWordInTitle = (title, focusWord) => {
 
 // Return the status of focus focus word weather true/false
 utils.analyticsisFocusWordIsAvailable = (focusWord) => {
-	return false
-
-	if (focusWord === null) return false
-
-	api.getFocusWordDetail(focusWord)
-		.then(result => {
-			if (result.size === 0) return true
-			return false
-		})
+	if (focusWord === null || focusWord == '') return false
+	Request
+	.get(config.BACKURL + '/stories/getfocusword/' + focusWord)
+	.set('Accept', 'application/json')
+	.end((err,res) => {
+		if(err) throw Error('Get Focus Word Error')
+		else {
+			if(res.body.size == 1) return true
+			else return false
+		}
+	})
 }
 
 

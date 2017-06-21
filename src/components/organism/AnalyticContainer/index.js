@@ -78,7 +78,7 @@ export default class AnalyticContainer extends React.Component {
    //Rule 4 Used focus word return the score (0 : used focusWord , 1 : focusWord is available)
    focusWordAvailablityChecker (focusWord)
    {
-     return utils.analyticsisFocusWordIsAvailable (focusWord)? 2 : 0
+     return utils.analyticsisFocusWordIsAvailable(focusWord) ? 2 : 0
    }
 
    //Rule 5 Is Link Tag is in the article return the score (0 : has no link, 1 : has link)
