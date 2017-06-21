@@ -88,6 +88,11 @@ export default class AnalyticContainer extends React.Component {
    componentDidMount () {
      this.calculateRule()
    }
+
+   componentWillReceiveProps (nextProps) {
+      this.calculateRule()
+   }
+
     render () {
       return (
         <AnalyticMainContainer>
