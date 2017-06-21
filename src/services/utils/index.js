@@ -1,5 +1,5 @@
 import api from '../../components/api'
-import htmlToText from 'html-to-text'
+// import htmlToText from 'html-to-text'
 
 const config = require('../../config'), { parse } = require('query-string')
 const utils = {}
@@ -152,8 +152,8 @@ utils.analyticsDensityFocusWord = (focusWord, content) => {
 
 // Return the number of char in content
 utils.analyticsCharCount = (content) => {
-	content = htmlToText.fromString(content,{ignoreImage:true,hideLinkHrefIfSameAsText:true})
-  	return content.length
+	// content = htmlToText.fromString(content,{ignoreImage:true,hideLinkHrefIfSameAsText:true})
+  // 	return content.length
 }
 
 // Return number of repeated focus word in title
