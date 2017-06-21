@@ -148,7 +148,7 @@ utils.analyticsHasLink = (html) => {
 }
 
 utils.analyticsDensityFocusWord = (focusWord, content) => {
-	if (focusWord === null || content === null) return 0
+	if (focusWord === null || content === null || focusWord == '') return 0
 
 	const reg = new RegExp(focusWord, 'g')
 	content = htmlToText.fromString(content,{ignoreImage:true,hideLinkHrefIfSameAsText:true})
