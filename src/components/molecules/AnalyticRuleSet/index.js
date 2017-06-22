@@ -9,12 +9,10 @@ const RuleSetContainer = styled.div `
 
 export default class AnalyticRuleSet extends React.Component {
   render() {
+    var rules = [];
 
-    const rules = Object.key(this.props.rules).map((key) => {
-      return (
-        <AnalyticRule status={this.props.rules[key].status} text={this.props.rules[key].text} />
-      )
-    })
+    for (var rule of this.props.rules)
+      rules.push(<AnalyticRule key={rule.text} status={rule.status} text={rule.text} />)
 
     return (
       <RuleSetContainer>

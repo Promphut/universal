@@ -1,5 +1,4 @@
-import api from '../../components/api'
-import htmlToText from 'html-to-text'
+const htmlToText = require('html-to-text')
 
 const config = require('../../config'), { parse } = require('query-string')
 const moment = require('moment')
@@ -93,8 +92,25 @@ utils.getTrailingSid = url => {
 	if (!url) {
 		if (!window) return null
 		arr = window.location.href.split('/')
-	} else arr = url.split('/')
+	} 
+	else arr = url.split('/')
 
+	return parseInt(arr[arr.length - 1])
+}
+
+/*
+	Refer from url pattern in routes.js
+	Able to match public story url: Story1, Story2, Story3, Story4.
+	For examples: 
+		/stories/nesdwsasdasdกดกดกดdfd/d-sddfsf/301
+		/@ochawin/stories/d-sddfsf/301
+		/u/1121/stories/d-sddfsf/30
+*/
+utils.getPublicSidFromPath = path => {
+	let found = path.match(/\/stories\/[^\/ ]+[^\/ ]\/[^\/ ]+[^\/ ]\/[0-9]+$|\/@[^\/ ]+[^\/ ]\/stories\/[^\/ ]+[^\/ ]\/[0-9]+$|\/u\/[0-9]+\/stories\/[^\/ ]+[^\/ ]\/[0-9]+$/)
+	if(!found) return null
+	
+	let arr = path.split('/')
 	return parseInt(arr[arr.length - 1])
 }
 
@@ -133,45 +149,50 @@ utils.notFound = history => {
 utils.toSignin = history => {}
 
 utils.analyticsHasImg = (html) => {
+	if (html === null) return false
+
 	const img = html.match(/<img((?!>).)*/g)
-	if (img.length === 0) return false
+	if (img === null) return false
 	return true
 }
 
 utils.analyticsHasLink = (html) => {
+	if (html === null) return false
+
 	const link = html.match(/<a((?!>).)*/g)
-	if (link.length === 0) return false
+	if (link === null) return false
 	return true
 }
 
 utils.analyticsDensityFocusWord = (focusWord, content) => {
+	if (focusWord === null || content === null || focusWord == '') return 0
+
 	const reg = new RegExp(focusWord, 'g')
 	content = htmlToText.fromString(content,{ignoreImage:true,hideLinkHrefIfSameAsText:true})
 	const match = content.match(reg)
+
+	if (match === null) return 0
+
 	return ((focusWord.length * match.length) * 100) / content.length
 }
 
 // Return the number of char in content
 utils.analyticsCharCount = (content) => {
-	// content = htmlToText.fromString(content,{ignoreImage:true,hideLinkHrefIfSameAsText:true})
-  // 	return content.length
+	if (content === null) return 0
+
+	content = htmlToText.fromString(content,{ignoreImage:true,hideLinkHrefIfSameAsText:true})
+  	return content.length
 }
 
 // Return number of repeated focus word in title
 utils.analyticsHasFocusWordInTitle = (title, focusWord) => {
+	if (title === null || focusWord === null || focusWord == '') return 0
+
 	const reg = new RegExp(focusWord, 'g')
-	const match = title.match(reg)
+	const checkedString = title.match(reg)
 
-	if (match === null) return 0
-	return match.length
-}
-
-// Return the status of focus focus word weather true/false
-utils.analyticsisFocusWordIsAvailable = (focusWord) => {
-	const wordDetail = api.getFocusWordDetail(focusWord)
-
-	if (wordDetail.size === 0) return true
-	return false
+	if (checkedString === null || checkedString === undefined) return 0
+	return checkedString.length
 }
 
 

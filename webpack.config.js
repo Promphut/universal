@@ -75,8 +75,9 @@ const resolveModules = modules => () => ({
 
 const base = () => group([
   setOutput({
-    filename: '[name].js',
-    path: outputPath, publicPath
+    filename: '[name].[hash].js',
+    path: outputPath, 
+    publicPath
   }),
   defineConstants({
     'process.env.NODE_ENV': process.env.NODE_ENV,
@@ -158,7 +159,7 @@ const client = createConfig([
           })
         },
       ],
-    }
+    },
   }),
   addPlugins([
     new webpack.DefinePlugin({
@@ -211,19 +212,31 @@ const client = createConfig([
   env('production', [
     splitVendor(),
     addPlugins([
-      new webpack.LoaderOptionsPlugin({
-        minimize: true
-      }),
       new webpack.optimize.UglifyJsPlugin({
         compress: {
           warnings: false
-        }
-      })
+        },
+        comments: false
+      }),
+      new webpack.LoaderOptionsPlugin({
+        minimize: true
+      }),
     ]),
   ]),
 
   env('test', [
     splitVendor(),
+    addPlugins([
+      new webpack.optimize.UglifyJsPlugin({
+        compress: {
+          warnings: false
+        },
+        comments: false
+      }),
+      new webpack.LoaderOptionsPlugin({
+        minimize: true
+      }),
+    ]),
   ])
 ])
 

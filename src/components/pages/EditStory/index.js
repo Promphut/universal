@@ -9,7 +9,8 @@ import {
 	DropdownWithIcon,
 	Alert,
 	MenuList,
-  EditorCss
+  EditorCss,
+	AnalyticContainer,
 } from 'components'
 import { findDOMNode as dom } from 'react-dom'
 import TextField from 'material-ui/TextField'
@@ -559,7 +560,8 @@ class EditStory extends React.Component {
         metaDesc:story.meta&&story.meta.desc,
         column: story.column ? story.column._id : 'no',
         contentType: story.contentType ? story.contentType : 'NEWS',
-        focusWord: story.focusWord
+        focusWord: story.focusWord,
+        html: story.html
       })
 
       this.editor.setContent(story.html || '')
@@ -741,7 +743,8 @@ class EditStory extends React.Component {
   render(){
     let {chooseLayout,layout,open,anchorEl,column,contentType,tag,addTag,searchText,
       columnList,contentTypeList,sid,alert,alertWhere,alertConfirm,alertDesc,saveStatus,
-      title,publishStatus,story, slug,metaTitle,metaDesc} = this.state
+      title,publishStatus,story, slug,metaTitle,metaDesc,html,focusWord} = this.state
+
     const dataSourceConfig = {text: 'text', value: 'value', id:'id'};
 
     let {theme} = this.context.setting.publisher
@@ -917,6 +920,8 @@ class EditStory extends React.Component {
           </HighlightBox>
         </div>
         <Paper ref='paper' id='paper'></Paper>
+        <Divider/>
+				<AnalyticContainer html={html} focusWord={focusWord} title={title} />
       </Container>
 	)
     }
