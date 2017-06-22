@@ -214,9 +214,9 @@ const client = createConfig([
     addPlugins([
       new webpack.optimize.UglifyJsPlugin({
         compress: {
-          warnings: false,
-          comments: false
-        }
+          warnings: false
+        },
+        comments: false
       }),
       new webpack.LoaderOptionsPlugin({
         minimize: true
@@ -229,9 +229,9 @@ const client = createConfig([
     addPlugins([
       new webpack.optimize.UglifyJsPlugin({
         compress: {
-          warnings: false,
-          comments: false
-        }
+          warnings: false
+        },
+        comments: false
       }),
       new webpack.LoaderOptionsPlugin({
         minimize: true
