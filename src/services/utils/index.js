@@ -1,5 +1,4 @@
-const Request = require('superagent')
-import htmlToText from 'html-to-text'
+const htmlToText = require('html-to-text')
 
 const config = require('../../config'), { parse } = require('query-string')
 const utils = {}
