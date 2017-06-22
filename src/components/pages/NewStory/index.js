@@ -454,6 +454,7 @@ class NewStory extends React.Component {
           title:title,
           publisher:parseInt(config.PID),
           html:el,
+          focusWord:focusWord,
           highlight
         }
         if(column!='no') s.column = column

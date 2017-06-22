@@ -176,6 +176,15 @@ api.getStoryFromSid = (sid, token, countView) => {
 	})
 }
 
+api.getFocusWordDetail = (focusWord) => {
+    return Request
+    .get(config.BACKURL + '/stories/getfocusword/' + focusWord)
+    .set('Accept','application/json')
+    .then(res => {
+      return res.body
+    }, new Error('Get Focus Word Detail Error'))
+  }
+
 api.getCookieAndToken = (token) => {
 	return Request
     .get(config.BACKURL + '/publishers/'+config.PID+'/menu')
