@@ -1,12 +1,8 @@
-<<<<<<< HEAD
 import api from '../../components/api'
-// import htmlToText from 'html-to-text'
+import htmlToText from 'html-to-text'
 
 const config = require('../../config'), { parse } = require('query-string')
-=======
-const config = require('../../config'), { parse } = require('query-string')
 const moment = require('moment')
->>>>>>> hotfix-1.1.8
 const utils = {}
 
 utils.getWidth = () => {
@@ -136,7 +132,6 @@ utils.notFound = history => {
 }
 utils.toSignin = history => {}
 
-<<<<<<< HEAD
 utils.analyticsHasImg = (html) => {
 	const img = html.match(/<img((?!>).)*/g)
 	if (img.length === 0) return false
@@ -180,7 +175,6 @@ utils.analyticsisFocusWordIsAvailable = (focusWord) => {
 }
 
 
-=======
 utils.dateFormat = d => {
 	var spl =  moment(d).fromNow().split(' ')
   if(spl[1]=='minutes'){
@@ -206,5 +200,4 @@ utils.numberFormat = n => {
 	}
 }
 
->>>>>>> hotfix-1.1.8
 module.exports = utils
