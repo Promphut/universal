@@ -4,14 +4,16 @@ import {
 	ContactAndAboutContainer,
 	ShareButton,
 	TwtShareButton,
-	FbShareButton
+	FbShareButton,
+	EditorCss
 } from 'components'
 import { Helmet } from 'react-helmet'
 import api from 'components/api'
 import config from '../../../config'
 import moment from 'moment'
+import Request from 'superagent'
 
-const Wrapper = styled.div`
+const Wrapper = styled(EditorCss)`
 
 `
 
@@ -29,6 +31,7 @@ const Article = styled.div`
   margin-top:40px;
   clear:both;
 	overflow:hidden;
+<<<<<<< HEAD
   ul > li {
     font-family: 'cs_prajad','PT Sans', sans-serif;
     font-size: 18px;
@@ -84,6 +87,8 @@ const Article = styled.div`
     font-size:16px;
     margin-top:15px;
   }
+=======
+>>>>>>> hotfix-1.1.8
 `
 
 const HiddenMobile = styled.div`
@@ -109,26 +114,27 @@ class AboutPage extends React.Component {
 				aboutUs: aboutUs
 			})
 		})
-
 		var pid = config.PID
 		const from = config.FROMDATE
 		const to = moment().utcOffset('+07:00').format('YYYYMMDD')
-		api
-			.getPublisherInsight(pid, 'share', 'share_fb', null, from, to)
-			.then(ins => {
-				this.setState({ fb: ins.summary.total })
-			})
+		
+		Request.get('http://graph.facebook.com/?id='+config.FRONTURL+this.props.location.pathname)
+		.end((er,res)=>{
+			//console.log(res.body)
+			this.setState({fb:res.body.share.share_count})
+		})
+		Request.get('https://share.yandex.ru/gpp.xml?url='+config.FRONTURL+this.props.location.pathname)
+		.end((er,res)=>{
+			console.log(res)
+			this.setState({twt:res})
+		})
 
-		api
-			.getPublisherInsight(pid, 'share', 'share_twt', null, from, to)
-			.then(ins => {
-				this.setState({ twt: ins.summary.total })
-			})
 	}
 
 	render() {
 		const { fb, twt } = this.state
 		return (
+			<Wrapper>			
 			<ContactAndAboutContainer onLoading={this.props.onLoading}>
 				{/*<Helmet>
 					<link
@@ -142,10 +148,16 @@ class AboutPage extends React.Component {
 						href="/css/medium-editor-insert-plugin.css"
 						type="text/css"
 					/>
+<<<<<<< HEAD
 				</Helmet>*/}
 				<Wrapper>
+=======
+				</Helmet>
+				<div>
+>>>>>>> hotfix-1.1.8
 					<Head className="title-font">About Us</Head>
 					<Article
+						id='paper'
 						className="content-font"
 						dangerouslySetInnerHTML={{ __html: this.state.aboutUs }}
 					/>
@@ -154,7 +166,7 @@ class AboutPage extends React.Component {
 							button={
 								<ShareButton
 									className="fa fa-facebook"
-									number={fb}
+									number={fb||0}
 									color="58,88,155"
 								/>
 							}
@@ -163,15 +175,16 @@ class AboutPage extends React.Component {
 							button={
 								<ShareButton
 									className="fa fa-twitter"
-									number={twt}
+									number={twt||0}
 									color="96,170,222"
 									style={{ marginLeft: '15px' }}
 								/>
 							}
 						/>
 					</HiddenMobile>
-				</Wrapper>
+				</div>
 			</ContactAndAboutContainer>
+			</Wrapper>
 		)
 	}
 }

@@ -50,6 +50,11 @@ const Span1 = styled.span`
   font-size:19px;
   margin:0 5px 0 5px;
 `
+const Div1 = styled.div`
+  @media (max-width:480px){
+    margin-top:10px;
+  }
+`
 
 const WritedAndDate = ({style, writer, column, published,readTime}) => {
   //let {name,date,column,url} = detail
@@ -63,7 +68,7 @@ const WritedAndDate = ({style, writer, column, published,readTime}) => {
         </div>}
         <Contain className="sans-font">
           by <Span1><a href={writer.url || '#'} style={{color:'#222'}}>{writer.display}</a></Span1>,
-          {moment(published).format('lll')} 
+          {utils.isMobile()?<span><br/>{moment(published).format('lll')}</span>:<span>{moment(published).format('lll')}</span>}
           <br/>
           writer of <Link to={column.url}><strong>{column.name}</strong></Link>
           {/*{writer.intro}*/}

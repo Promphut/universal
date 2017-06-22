@@ -8,8 +8,7 @@ import api from 'components/api'
 import truncate from 'lodash/truncate'
 
 const Container = styled.div`
-  width:324px;
-  position:sticky;
+  width:100%;
 `
 
 const Head = styled.div`
@@ -124,7 +123,7 @@ class TrendingSideBar extends React.Component {
 	render() {
 		let { popular } = this.state
 		//console.log('popular', popular)
-		let { style } = this.props
+		let { style,className } = this.props
 		let tn = []
 		if (popular.length > 0) {
 			for (let i = 0; i < Math.min(6, popular.length); i++) {
@@ -135,7 +134,7 @@ class TrendingSideBar extends React.Component {
 		}
 
 		return (
-			<Container style={{ ...style }} ref="contain">
+			<Container style={{ ...style }} ref="contain" className={className}>
 				<Head className="sans-font">TRENDING</Head>
 				<Dash />
 				{popular.length != 0 ? tn : []}

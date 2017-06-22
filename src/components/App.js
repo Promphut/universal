@@ -18,6 +18,7 @@ if (process.env.BROWSER) {
 	require('../../public/scss/main.scss')
 }
 
+<<<<<<< HEAD
 // injectGlobal`
 //   body {
 //     color:#222;
@@ -28,6 +29,19 @@ if (process.env.BROWSER) {
 //     -o-box-sizing: border-box;
 //     box-sizing: border-box;
 //   }
+=======
+injectGlobal`
+  body {
+		overflow-x:hidden;
+    color:#222;
+  }
+  * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+>>>>>>> hotfix-1.1.8
 
 //   h3{
 //     font-size:19px;

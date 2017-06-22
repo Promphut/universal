@@ -36,6 +36,7 @@ const Story = styled.div`
   margin-top:40px;
   clear:both;
 	overflow:hidden;
+<<<<<<< HEAD
   ul > li {
     font-family: 'cs_prajad','PT Sans', sans-serif;
     font-size: 18px;
@@ -105,6 +106,8 @@ const Story = styled.div`
       margin: 0 !important; 
     }
   }
+=======
+>>>>>>> hotfix-1.1.8
 `
 
 const TagContainer = styled.div`
@@ -158,6 +161,7 @@ const Highlight = styled.div`
   width:100%;
   background-color:white;
   padding:20px;
+<<<<<<< HEAD
   ul > li {
     font-family: 'cs_prajad','PT Sans', sans-serif;
     font-size: 18px;
@@ -178,6 +182,8 @@ const Highlight = styled.div`
   @media (max-width:480px){
     padding:5px;
   }
+=======
+>>>>>>> hotfix-1.1.8
 `
 const HighlightText = styled.span`
   position:relative;
@@ -277,12 +283,12 @@ class StoryDetail extends React.Component {
         <WriterAndDate readTime={s.readTime} writer={s.writer} column={s.column} published={s.published}/>
         {s.phighlight &&
         <div>
-          <HighlightText>HIGHLIGHT</HighlightText>
+          <HighlightText>{s.format=='NEWS'?'SUMMARY':'HIGHLIGHTS'}</HighlightText>
           <HighlightBox>
-            <Highlight   dangerouslySetInnerHTML={{__html:s.phighlight}}/>
+            <Highlight id='highlight'  dangerouslySetInnerHTML={{__html:s.phighlight}}/>
           </HighlightBox>
         </div>} 
-        <Story ref="detail"  dangerouslySetInnerHTML={{__html:s.phtml}}></Story>
+        <Story ref="detail" id='paper'  dangerouslySetInnerHTML={{__html:s.phtml}}></Story>
         {/*<WritedBy writer={s.writer} column={s.column} published={s.published} />*/}
 
 
