@@ -224,6 +224,16 @@ const client = createConfig([
 
   env('test', [
     splitVendor(),
+    addPlugins([
+      new webpack.LoaderOptionsPlugin({
+        minimize: true
+      }),
+      new webpack.optimize.UglifyJsPlugin({
+        compress: {
+          warnings: false
+        }
+      })
+    ]),
   ])
 ])
 
