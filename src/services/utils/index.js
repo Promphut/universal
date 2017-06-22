@@ -149,36 +149,36 @@ utils.notFound = history => {
 utils.toSignin = history => {}
 
 utils.analyticsHasImg = (html) => {
-	if (html === null) return false
+	if (!html) return false
 
 	const img = html.match(/<img((?!>).)*/g)
-	if (img === null) return false
+	if (!img) return false
 	return true
 }
 
 utils.analyticsHasLink = (html) => {
-	if (html === null) return false
+	if (!html) return false
 
 	const link = html.match(/<a((?!>).)*/g)
-	if (link === null) return false
+	if (!link) return false
 	return true
 }
 
 utils.analyticsDensityFocusWord = (focusWord, content) => {
-	if (focusWord === null || content === null || focusWord == '') return 0
+	if (!focusWord || !content || focusWord == '') return 0
 
 	const reg = new RegExp(focusWord, 'g')
 	content = htmlToText.fromString(content,{ignoreImage:true,hideLinkHrefIfSameAsText:true})
 	const match = content.match(reg)
 
-	if (match === null) return 0
+	if (!match) return 0
 
 	return ((focusWord.length * match.length) * 100) / content.length
 }
 
 // Return the number of char in content
 utils.analyticsCharCount = (content) => {
-	if (content === null) return 0
+	if (!content) return 0
 
 	content = htmlToText.fromString(content,{ignoreImage:true,hideLinkHrefIfSameAsText:true})
   	return content.length
@@ -186,12 +186,12 @@ utils.analyticsCharCount = (content) => {
 
 // Return number of repeated focus word in title
 utils.analyticsHasFocusWordInTitle = (title, focusWord) => {
-	if (title === null || focusWord === null || focusWord == '') return 0
+	if (!title || !focusWord || focusWord == '') return 0
 
 	const reg = new RegExp(focusWord, 'g')
 	const checkedString = title.match(reg)
 
-	if (checkedString === null || checkedString === undefined) return 0
+	if (!checkedString) return 0
 	return checkedString.length
 }
 
