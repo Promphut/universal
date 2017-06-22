@@ -178,20 +178,4 @@ utils.analyticsHasFocusWordInTitle = (title, focusWord) => {
 	return checkedString.length
 }
 
-// Return the status of focus focus word weather true/false
-utils.analyticsisFocusWordIsAvailable = (focusWord) => {
-	if (focusWord === null || focusWord == '') return false
-	Request
-	.get(config.BACKURL + '/stories/getfocusword/' + focusWord)
-	.set('Accept', 'application/json')
-	.end((err,res) => {
-		if(err) throw Error('Get Focus Word Error')
-		else {
-			if(res.body.size == 1) return true
-			else return false
-		}
-	})
-}
-
-
 module.exports = utils
