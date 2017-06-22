@@ -255,7 +255,7 @@ class StoryPage extends React.Component {
 							: ''}*/}
 						{/*<link rel="canonical" href={window.location.href} />*/}
 
-						<link
+						{/*<link
 							rel="stylesheet"
 							href="/css/medium-editor.css"
 							type="text/css"
@@ -265,7 +265,7 @@ class StoryPage extends React.Component {
 							rel="stylesheet"
 							href="/css/medium-editor-insert-plugin.css"
 							type="text/css"
-						/>
+						/>*/}
 					</Helmet>
 
 					<Wrapper>

@@ -7,3 +7,5 @@ coverage
 webpack/webpack-assets.json
 
 package-lock.json
+yarn.lock
+public/css

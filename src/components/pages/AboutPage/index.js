@@ -78,19 +78,6 @@ class AboutPage extends React.Component {
 		return (
 			<Wrapper>			
 			<ContactAndAboutContainer onLoading={this.props.onLoading}>
-				<Helmet>
-					<link
-						rel="stylesheet"
-						href="/css/medium-editor.css"
-						type="text/css"
-					/>
-					<link rel="stylesheet" href="/css/tim.css" type="text/css" />
-					<link
-						rel="stylesheet"
-						href="/css/medium-editor-insert-plugin.css"
-						type="text/css"
-					/>
-				</Helmet>
 				<div>
 					<Head className="title-font">About Us</Head>
 					<Article

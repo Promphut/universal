@@ -47,6 +47,12 @@ const config = {
     BACKURL:    'https://api.thesolar.co',
     COVER:  '//nextempire.co/pic/fbthumbnail.jpg'
   },
+  test: {
+    DOMAIN:     'presentationxth.com',
+    FRONTURL:     'https://presentationxth.com',
+    BACKURL:    'https://api.presentationxth.com',
+    COVER:  '//presentationxth.com/pic/fbthumbnail.jpg'
+  },
 }
 
 module.exports = merge(config.all, config[config.all.env])

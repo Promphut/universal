@@ -13,12 +13,19 @@ const fs = require('fs')
 const OfflinePlugin = require('offline-plugin')
 
 const {
-  addPlugins, createConfig, entryPoint, env, setOutput,
-  sourceMaps, defineConstants, webpack, group,
+  addPlugins,
+  createConfig,
+  entryPoint,
+  env,
+  setOutput,
+  sourceMaps,
+  defineConstants,
+  webpack,
+  group
 } = require('@webpack-blocks/webpack2')
 
 const host = process.env.HOST || 'localhost'
-const port = (+process.env.PORT + 1) || 3001
+const port = (+ process.env.PORT + 1) || 3001
 const sourceDir = process.env.SOURCE || 'src'
 const publicPath = `/${process.env.PUBLIC_PATH || ''}/`.replace('//', '/')
 const sourcePath = path.join(process.cwd(), sourceDir)
@@ -31,17 +38,24 @@ const devDomain = `https://${host}:${port}/`
 const babel = () => () => ({
   module: {
     rules: [
-      { test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader' },
-    ],
-  },
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader'
+      }
+    ]
+  }
 })
 
 const assets = () => () => ({
   module: {
     rules: [
-      { test: /\.(png|jpe?g|svg|woff2?|ttf|eot)$/, loader: 'url-loader?limit=8000' },
-    ],
-  },
+      {
+        test: /\.(png|jpe?g|svg|woff2?|ttf|eot)$/,
+        loader: 'url-loader?limit=8000'
+      }
+    ]
+  }
 })
 
 const resolveModules = modules => () => ({
@@ -55,19 +69,19 @@ const resolveModules = modules => () => ({
       'jquery-ui/ui/widget': 'blueimp-file-upload/js/vendor/jquery.ui.widget.js',
       'jquery-ui/widget': 'blueimp-file-upload/js/vendor/jquery.ui.widget.js',
       'load-image-scale': 'blueimp-file-upload/js/jquery.fileupload-image.js'
-    },
-  },
+    }
+  }
 })
 
 const base = () => group([
   setOutput({
-    filename: '[name].js',
-    path: outputPath,
-    publicPath,
+    filename: '[name].[hash].js',
+    path: outputPath, 
+    publicPath
   }),
   defineConstants({
     'process.env.NODE_ENV': process.env.NODE_ENV,
-    'process.env.PUBLIC_PATH': publicPath.replace(/\/$/, ''),
+    'process.env.PUBLIC_PATH': publicPath.replace(/\/$/, '')
   }),
   addPlugins([
     new webpack.ProgressPlugin(),
@@ -79,39 +93,41 @@ const base = () => group([
       AppCache: {
         events: true
       }
-    }),
+    })
   ]),
-  happypack([
-    babel(),
-  ]),
+  happypack([babel()]),
   assets(),
   resolveModules(sourceDir),
 
   env('development', [
     setOutput({
-      publicPath: devDomain,
-    }),
-  ]),
+      publicPath: devDomain
+    })
+  ])
 ])
 
 const server = createConfig([
   base(),
-  entryPoint({ server: serverEntryPath }),
+  entryPoint({
+    server: serverEntryPath
+  }),
   setOutput({
     filename: '../[name].js',
-    libraryTarget: 'commonjs2',
+    libraryTarget: 'commonjs2'
   }),
 
   addPlugins([
     new webpack.BannerPlugin({
       banner: 'global.assets = require("./assets.json");',
-      raw: true,
-    }),
+      raw: true
+    })
   ]),
   () => ({
     target: 'node',
-    externals: [nodeExternals()],
-    stats: 'errors-only',
+    externals: [
+      nodeExternals()
+    ],
+    stats: 'errors-only'
   }),
 
   env('development', [
@@ -119,10 +135,8 @@ const server = createConfig([
     addPlugins([
       new SpawnPlugin('node', ['.']),
     ]),
-    () => ({
-      watch: true,
-    }),
-  ]),
+    () => ({watch: true})
+  ])
 ])
 
 const client = createConfig([
@@ -132,31 +146,39 @@ const client = createConfig([
     module: {
       rules: [
         {
+          test: /\.scss$/,
+          use: ExtractTextPlugin.extract({
+            fallback: 'style-loader',
+            use: ['css-loader', 'sass-loader']
+          })
+        }, {
           test: /\.css$/,
           use: ExtractTextPlugin.extract({
             fallback: "style-loader",
-            use: "css-loader"
+            use: 'css-loader'
           })
         },
-      ]
+      ],
     },
   }),
   addPlugins([
     new webpack.DefinePlugin({
-        "process.env": {
-            BROWSER: JSON.stringify(true)
-        }
+      "process.env": {
+        BROWSER: JSON.stringify(true)
+      }
     }),
     new webpack.ProvidePlugin({
-     $: "jquery",
-     jQuery: "jquery"
+      $: "jquery",
+      jQuery: "jquery"
     }),
     new ExtractTextPlugin({
       filename: '[name].[chunkhash].css',
-      allChunks: true,
+      allChunks: true
     }),
-    new AssetsByTypePlugin({ path: assetsPath }),
-    new ChildConfigPlugin(server),
+    new AssetsByTypePlugin({
+      path: assetsPath
+    }),
+    new ChildConfigPlugin(server)
   ]),
 
   //clientCssModules(),
@@ -165,28 +187,57 @@ const client = createConfig([
     devServer({
       contentBase: 'public',
       stats: 'errors-only',
-      historyApiFallback: { index: publicPath },
-      headers: { 'Access-Control-Allow-Origin': '*' },
+      historyApiFallback: {
+        index: publicPath
+      },
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      },
       host,
       port,
       https: {
         key: fs.readFileSync('./private/keys/localhost.key'),
         cert: fs.readFileSync('./private/keys/localhost.crt'),
         passphrase: 'thepublisher'
-      },
+      }
     }),
-    sourceMaps(),
     addPlugins([
       new webpack.NamedModulesPlugin(),
-    ]),
+      new webpack.LoaderOptionsPlugin({
+        minimize: true
+      }),
+    ])
   ]),
 
   env('production', [
     splitVendor(),
     addPlugins([
-      new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }),
+      new webpack.optimize.UglifyJsPlugin({
+        compress: {
+          warnings: false
+        },
+        comments: false
+      }),
+      new webpack.LoaderOptionsPlugin({
+        minimize: true
+      }),
     ]),
   ]),
+
+  env('test', [
+    splitVendor(),
+    addPlugins([
+      new webpack.optimize.UglifyJsPlugin({
+        compress: {
+          warnings: false
+        },
+        comments: false
+      }),
+      new webpack.LoaderOptionsPlugin({
+        minimize: true
+      }),
+    ]),
+  ])
 ])
 
 module.exports = client

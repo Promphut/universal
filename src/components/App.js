@@ -14,34 +14,36 @@ import { withCookies, Cookies } from 'react-cookie'
 import config from '../config'
 import utils from '../services/utils'
 //import theme from './themes/default'
+if (process.env.BROWSER) {
+	require('../../public/scss/main.scss')
+}
 
-injectGlobal`
-  body {
-		overflow-x:hidden;
-    color:#222;
-  }
-  * {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -o-box-sizing: border-box;
-    box-sizing: border-box;
-  }
+// injectGlobal`
+//   body {
+//     color:#222;
+//   }
+//   * {
+//     -webkit-box-sizing: border-box;
+//     -moz-box-sizing: border-box;
+//     -o-box-sizing: border-box;
+//     box-sizing: border-box;
+//   }
 
-  h3{
-    font-size:19px;
-    font-weight:bold;
-    color:#222;
-  }
+//   h3{
+//     font-size:19px;
+//     font-weight:bold;
+//     color:#222;
+//   }
 
-  a {
-    color: #8f8f8f;
-    text-decoration: none;
-  }
-  a:hover{
-    color: #222;
-    text-decoration: none;
-  }
-`
+//   a {
+//     color: #8f8f8f;
+//     text-decoration: none;
+//   }
+//   a:hover{
+//     color: #222;
+//     text-decoration: none;
+//   }
+// `
 
 injectTapEventPlugin()
 
@@ -67,18 +69,20 @@ class App extends React.Component {
 	}
 
 	genHash = nextProps => {
-		//console.log('HASHED')
+		//console.log('HASHED', nextProps, this.props)
 		let hash =
 			new Date().valueOf().toString(36) + Math.round(Math.random() * 100)
-		let { match, location, history } = nextProps
+		let { location, history } = nextProps
 
 		// 1. Create hash
-		// 1.1 For story URL
-		// count dark social if story countView is true
-		if (match.params.countView) api.createHash(hash, match.params.story._id)
-		else
-			// 1.2 For non-story URL
-			api.createHash(hash)
+		let sid = utils.getPublicSidFromPath(location.pathname)
+		api.createHash(hash, sid)
+		// // 1.1 For story URL
+		// // count dark social if story countView is true
+		// if (match.params.countView) api.createHash(hash, match.params.story._id)
+		// else
+		// 	// 1.2 For non-story URL
+		// 	api.createHash(hash)
 
 		// 2. Append #hash to url
 		//history.replace(location.pathname+'#'+hash)
@@ -238,8 +242,7 @@ class App extends React.Component {
 							rel: 'canonical',
 							href: config.FRONTURL + this.props.location.pathname
 						},
-						{ rel: 'stylesheet', href: '/css/main.css' },
-						{ rel: 'stylesheet', href: '/fonts/stylesheet.css' },
+						//{ rel: 'stylesheet', href: '/css/main.css' },
 						{
 							rel: 'stylesheet',
 							href: 'https://fonts.googleapis.com/icon?family=Material+Icons'
