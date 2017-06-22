@@ -279,7 +279,7 @@ class StoryDetail extends React.Component {
 
     return (
       <Wraper>
-        <Head className='title-font'>{s.ptitle}</Head>
+        <Head className='title-font'>{s.ptitle||'NEXT EMPIRE'}</Head>
         <WriterAndDate readTime={s.readTime} writer={s.writer} column={s.column} published={s.published}/>
         {s.phighlight &&
         <div>
