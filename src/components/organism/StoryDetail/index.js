@@ -36,75 +36,6 @@ const Story = styled.div`
   margin-top:40px;
   clear:both;
 	overflow:hidden;
-  ul > li {
-    font-family: 'cs_prajad','PT Sans', sans-serif;
-    font-size: 18px;
-    margin:10px 0 10px 0;
-  }
-  p {
-    font-family: 'cs_prajad','PT Sans', sans-serif;
-    font-size: 18px;
-    margin:12px 0 12px 0;
-    line-height:1.5;
-    font-weight:normal;
-    white-space: pre-wrap;      /* Webkit */
-    white-space: -moz-pre-wrap; /* Firefox */
-    white-space: -pre-wrap;     /* Opera <7 */
-    white-space: -o-pre-wrap;   /* Opera 7 */
-    word-wrap: break-word;      /* IE */
-  }
-  h2 {
-    font-size: 28px;
-    font-weight:bold;
-    color:#222;
-    white-space: pre-wrap;      /* Webkit */
-    white-space: -moz-pre-wrap; /* Firefox */
-    white-space: -pre-wrap;     /* Opera <7 */
-    white-space: -o-pre-wrap;   /* Opera 7 */
-    word-wrap: break-word;      /* IE */
-  }
-  h3 {
-    font-size: 20px;
-    font-weight:normal;
-    color:#222;
-    white-space: pre-wrap;      /* Webkit */
-    white-space: -moz-pre-wrap; /* Firefox */
-    white-space: -pre-wrap;     /* Opera <7 */
-    white-space: -o-pre-wrap;   /* Opera 7 */
-    word-wrap: break-word;      /* IE */
-  }
-  blockquote {
-    font-size: 20px;
-    font-family: 'PT Serif', 'Mitr';
-    font-weight:normal;
-    color:#222;
-    border-left: 3px solid ${props=>props.theme.accentColor};
-    padding-left:20px;
-    display:inline-block;
-    white-space: pre-wrap;      /* Webkit */
-    white-space: -moz-pre-wrap; /* Firefox */
-    white-space: -pre-wrap;     /* Opera <7 */
-    white-space: -o-pre-wrap;   /* Opera 7 */
-    word-wrap: break-word;      /* IE */
-  }
-  a {
-    color:${props=>props.theme.accentColor};
-    &:hover{
-      cursor:pointer;
-    }
-  }
-  @media (max-width:480px){
-    font-size:16px;
-    margin-top:15px;
-    h2 {
-      font-size: 24px;
-    }
-    .medium-insert-embeds iframe, .mediumInsert-embeds iframe {
-      width:100% !important;
-      height:auto !important;
-      margin: 0 !important; 
-    }
-  }
 `
 
 const TagContainer = styled.div`
@@ -158,26 +89,6 @@ const Highlight = styled.div`
   width:100%;
   background-color:white;
   padding:20px;
-  ul > li {
-    font-family: 'cs_prajad','PT Sans', sans-serif;
-    font-size: 18px;
-    margin:8px 0 8px 0;
-    line-height:1.5;
-  }
-  ol > li {
-    font-family: 'cs_prajad','PT Sans', sans-serif;
-    font-size: 18px;
-    margin:8px 0 8px 0;
-    line-height:1.5;
-  }
-  p {
-    font-family: 'cs_prajad','PT Sans', sans-serif;
-    margin:8px 0 8px 0;
-    line-height:1.5;;
-  }
-  @media (max-width:480px){
-    padding:5px;
-  }
 `
 const HighlightText = styled.span`
   position:relative;
@@ -277,12 +188,12 @@ class StoryDetail extends React.Component {
         <WriterAndDate readTime={s.readTime} writer={s.writer} column={s.column} published={s.published}/>
         {s.phighlight &&
         <div>
-          <HighlightText>HIGHLIGHT</HighlightText>
+          <HighlightText>{s.format=='NEWS'?'SUMMARY':'HIGHLIGHTS'}</HighlightText>
           <HighlightBox>
-            <Highlight   dangerouslySetInnerHTML={{__html:s.phighlight}}/>
+            <Highlight id='highlight'  dangerouslySetInnerHTML={{__html:s.phighlight}}/>
           </HighlightBox>
         </div>} 
-        <Story ref="detail"  dangerouslySetInnerHTML={{__html:s.phtml}}></Story>
+        <Story ref="detail" id='paper'  dangerouslySetInnerHTML={{__html:s.phtml}}></Story>
         {/*<WritedBy writer={s.writer} column={s.column} published={s.published} />*/}
 
 

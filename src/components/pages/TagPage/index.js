@@ -230,7 +230,7 @@ class TagPage extends React.Component {
 		return (
 			<Wrapper>
 				<TopBarWithNavigation
-					title={'Title of AomMoney goes here..'}
+					
 					onLoading={this.props.onLoading}
 				/>
 
@@ -281,10 +281,8 @@ class TagPage extends React.Component {
 							</Main>}
 
 					<Aside>
-						<TagSideBar style={{ marginTop: '4 0px' }} />
-						<Stick topOffset={70} style={{ zIndex: '0' }}>
-							<TrendingSideBar />
-						</Stick>
+						<TagSideBar style={{ marginTop:'50px'}} />
+						<TrendingSideBar style={{position:'sticky',top:70}} />
 					</Aside>
 				</Content>
 

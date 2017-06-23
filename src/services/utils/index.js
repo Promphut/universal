@@ -1,5 +1,7 @@
-const config = require('../../config'), { parse } = require('query-string')
+const htmlToText = require('html-to-text')
 
+const config = require('../../config'), { parse } = require('query-string')
+const moment = require('moment')
 const utils = {}
 
 utils.getWidth = () => {
@@ -90,8 +92,25 @@ utils.getTrailingSid = url => {
 	if (!url) {
 		if (!window) return null
 		arr = window.location.href.split('/')
-	} else arr = url.split('/')
+	} 
+	else arr = url.split('/')
 
+	return parseInt(arr[arr.length - 1])
+}
+
+/*
+	Refer from url pattern in routes.js
+	Able to match public story url: Story1, Story2, Story3, Story4.
+	For examples: 
+		/stories/nesdwsasdasdกดกดกดdfd/d-sddfsf/301
+		/@ochawin/stories/d-sddfsf/301
+		/u/1121/stories/d-sddfsf/30
+*/
+utils.getPublicSidFromPath = path => {
+	let found = path.match(/\/stories\/[^\/ ]+[^\/ ]\/[^\/ ]+[^\/ ]\/[0-9]+$|\/@[^\/ ]+[^\/ ]\/stories\/[^\/ ]+[^\/ ]\/[0-9]+$|\/u\/[0-9]+\/stories\/[^\/ ]+[^\/ ]\/[0-9]+$/)
+	if(!found) return null
+	
+	let arr = path.split('/')
 	return parseInt(arr[arr.length - 1])
 }
 
@@ -128,5 +147,78 @@ utils.notFound = history => {
 	})
 }
 utils.toSignin = history => {}
+
+utils.analyticsHasImg = (html) => {
+	if (!html) return false
+
+	const img = html.match(/<img((?!>).)*/g)
+	if (!img) return false
+	return true
+}
+
+utils.analyticsHasLink = (html) => {
+	if (!html) return false
+
+	const link = html.match(/<a((?!>).)*/g)
+	if (!link) return false
+	return true
+}
+
+utils.analyticsDensityFocusWord = (focusWord, content) => {
+	if (!focusWord || !content || focusWord == '') return 0
+
+	const reg = new RegExp(focusWord, 'g')
+	content = htmlToText.fromString(content,{ignoreImage:true,hideLinkHrefIfSameAsText:true})
+	const match = content.match(reg)
+
+	if (!match) return 0
+
+	return ((focusWord.length * match.length) * 100) / content.length
+}
+
+// Return the number of char in content
+utils.analyticsCharCount = (content) => {
+	if (!content) return 0
+
+	content = htmlToText.fromString(content,{ignoreImage:true,hideLinkHrefIfSameAsText:true})
+  	return content.length
+}
+
+// Return number of repeated focus word in title
+utils.analyticsHasFocusWordInTitle = (title, focusWord) => {
+	if (!title || !focusWord || focusWord == '') return 0
+
+	const reg = new RegExp(focusWord, 'g')
+	const checkedString = title.match(reg)
+
+	if (!checkedString) return 0
+	return checkedString.length
+}
+
+
+utils.dateFormat = d => {
+	var spl =  moment(d).fromNow().split(' ')
+  if(spl[1]=='minutes'){
+    return spl[0]+' min '+spl[2]
+  }else if(spl[1]=='days'||spl[1]=='day'){
+    if(spl[0]=='1') return 'yesterday'
+    else return moment(d).format('ll');
+  }else if(spl[1]=='months'||spl[1]=='month'||spl[1]=='years'||spl[1]=='year'){
+    return moment(d).format('ll');
+  }else{
+    return moment(d).fromNow()
+  }
+}
+
+utils.numberFormat = n => {
+	if(n<999) return n
+	else if(n>999&&n<99999){
+		return (n/1000).toFixed(1)+'k'
+	}else if(n>99999&&n<999999){
+		return parseInt(n/1000)+'k'
+	}else if(n>999999){
+		return (n/1000000).toFixed(1)+'m'
+	}
+}
 
 module.exports = utils

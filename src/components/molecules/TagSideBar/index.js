@@ -7,8 +7,7 @@ import {findDOMNode as dom} from 'react-dom'
 import api from 'components/api'
 
 const Container = styled.div`
-  width:324px;
-  position:sticky;
+  width:100%; 
 `
 
 const Head = styled.div`
@@ -37,6 +36,12 @@ const Divider =styled.div`
   top:35px;
   z-index:-5;
   position:relative;
+`
+const FlexBox = styled.div`
+  margin:30px 0 30px 0;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content: flex-start;
 `
 
 class TagSideBar extends React.Component {
@@ -68,13 +73,13 @@ class TagSideBar extends React.Component {
       <Container style={{...style}} >
         <Divider/>
         <Head>SUGGESTED TAGS</Head>
-        <div className='row' style={{margin:'30px 0 60px 0'}}>
+        <FlexBox>
           {tags.length!=0&&tags.map((tag,index)=>(
             <Link to={tag.url} key={index}>
-              <TagBox style={{margin:'0 20px 20px 0'}}>{tag.name}</TagBox>
+              <TagBox style={{margin:'0 10px 10px 0'}}>{tag.name}</TagBox>
             </Link>
           ))}
-        </div>
+        </FlexBox>
       </Container>
     )
   }

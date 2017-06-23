@@ -247,14 +247,14 @@ class PublisherAbout extends React.Component {
 
 		return (
 			<Container>
-				<Helmet>
+				{/*<Helmet>
 					<link
 						rel="stylesheet"
 						href="/css/medium-editor.css"
 						type="text/css"
 					/>
 					<link rel="stylesheet" href="/css/tim.css" type="text/css" />
-				</Helmet>
+				</Helmet>*/}
 				<div className="head sans-font">About Us</div>
 				<br />
 				<Flex>

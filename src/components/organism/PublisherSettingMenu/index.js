@@ -163,7 +163,7 @@ class PublisherSettingMenu extends React.Component {
 							<FontIcon
 								className={'material-icons ' + (openInsights ? 'open' : '')}
 								style={{ color: 'white' }}>
-								keyboard_arrow_up
+								keyboard_arrow_down
 							</FontIcon>
 						}
 						nestedItems={[
@@ -245,7 +245,7 @@ class PublisherSettingMenu extends React.Component {
 							<FontIcon
 								className={'material-icons ' + (openManage ? 'open' : '')}
 								style={{ color: 'white' }}>
-								keyboard_arrow_up
+								keyboard_arrow_down
 							</FontIcon>
 						}
 						nestedItems={[
@@ -309,7 +309,7 @@ class PublisherSettingMenu extends React.Component {
 							<FontIcon
 								className={'material-icons ' + (openSettings ? 'open' : '')}
 								style={{ color: 'white' }}>
-								keyboard_arrow_up
+								keyboard_arrow_down
 							</FontIcon>
 						}
 						nestedItems={[
