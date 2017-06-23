@@ -97,9 +97,9 @@ const TextLine = styled.div`
 	padding-bottom:11px;
 `
 
-const ColumnName = styled.div`
+const ColumnName = styled.h1`
   color:#fff;
-  font-size:72px;
+  font-size:48px;
   font-weight:bold;
 	display:inline;
 	@media (max-width:480px) {
@@ -108,12 +108,12 @@ const ColumnName = styled.div`
   }
 `
 
-const ColumnDetail = styled.div`
+const ColumnDetail = styled.h2`
 	color:#fff;
   font-size:16px;
 	font-family:'Mitr';
 	margin-top:15px;
-
+	font-weight:normal;
 	@media (max-width:480px) {
   	font-size: 12px;
 		margin-top: 8px;

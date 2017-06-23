@@ -86,9 +86,10 @@ const Aside = styled.div`
 		display:none;
 	}
 `
-const Text = styled.div`
+const Text = styled.h2`
 	color:#8E8E8E;
 	font-size:16px;
+	font-weight:normal;
 	text-align:center;
 	width:864px;
 	padding:35px;
