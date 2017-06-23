@@ -155,7 +155,7 @@ class SignUp extends React.Component {
     return (
       <Box style={{...style}}>
         <Head >Email Sign Up</Head>
-        <Text >ไม่พลาดทุกเรื่องราวการเงินดีๆ สมัครสมาชิค</Text>
+        {/*<Text >ไม่พลาดทุกเรื่องราวการเงินดีๆ สมัครสมาชิค</Text>*/}
         <InputBox onSubmit={this.signup} ref='signupForm'>
           <TextField
             

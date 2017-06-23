@@ -9,7 +9,8 @@ import {
 	DropdownWithIcon,
 	Alert,
 	MenuList,
-  EditorCss
+  EditorCss,
+  AnalyticContainer
 } from 'components'
 import { findDOMNode as dom } from 'react-dom'
 import TextField from 'material-ui/TextField'
@@ -198,7 +199,9 @@ class NewStory extends React.Component {
     open:false,
     column:'no',
     contentType:'NEWS',
+    html: '',
 
+    focusWord: '',
     tag:[],
     addTag:[],
     pureTag:[],
@@ -328,6 +331,20 @@ class NewStory extends React.Component {
     })
   }
 
+   changeFocusWord = (e) => {
+    if(this.state.status===this.SAVE_STATUS.DIRTIED)
+      this.setState({
+        focusWord:e.target.value,
+        saveStatus:'Unsave'
+      })
+    else
+      this.setState({
+        focusWord:e.target.value,
+        status:this.SAVE_STATUS.DIRTIED,
+        saveStatus:'Unsave'
+      })
+  }
+
   handleEditableInput = (e, editable) => {
     if(this.state.status === this.SAVE_STATUS.INITIAL)
       this.setState({
@@ -413,7 +430,7 @@ class NewStory extends React.Component {
   }
 
   autoSave = () => {
-    let {prevState,sid,title,column,contentType} = this.state
+    let {prevState,sid,title,column,contentType,focusWord} = this.state
     if(this.state.sid){
       if(this.state.status === this.SAVE_STATUS.DIRTIED){
         const images = [].slice.call(dom(this.refs.paper).getElementsByTagName('img'))
@@ -431,12 +448,17 @@ class NewStory extends React.Component {
           title:title,
           publisher:parseInt(config.PID),
           html:el,
+          focusWord:focusWord,
           highlight
         }
         if(column!='no') s.column = column
         s.contentType = contentType
 
-        this.setState({saveStatus:'saving...'})
+        this.setState({
+          saveStatus:'saving...',
+          html: el,
+          focusWord: focusWord
+        })
 
         api.updateStory(sid, s)
         .then(story => {
@@ -491,7 +513,7 @@ class NewStory extends React.Component {
   }
 
   publishStory = () => {
-    let {sid,column,contentType,title} = this.state
+    let {sid,column,contentType,title,focusWord} = this.state
     let allContents = this.editor.serialize()
     let highlight = this.editor2.serialize().highlight.value
 
@@ -499,6 +521,7 @@ class NewStory extends React.Component {
       title:title,
       publisher:parseInt(config.PID),
       status:1,
+      focusWord:focusWord,
       html:allContents.paper.value,
       highlight
     }
@@ -691,7 +714,7 @@ class NewStory extends React.Component {
   render(){
     let {chooseLayout,layout,open,anchorEl,column,contentType,tag,addTag,searchText,
       columnList,contentTypeList,sid,alert,alertWhere,alertConfirm,alertDesc,saveStatus,
-      title,publishStatus, story, slug,metaTitle,metaDesc,hintDesc} = this.state
+      title,publishStatus, story, slug,metaTitle,metaDesc,hintDesc,html,focusWord} = this.state
     const dataSourceConfig = {text: 'text',value: 'value',id:'id'};
     let {theme} = this.context.setting.publisher
 
@@ -733,11 +756,11 @@ class NewStory extends React.Component {
       </Container>
       :
       <Container onSubmit={this.updateData}>
-        <Helmet>
+        {/*<Helmet>
           <link rel="stylesheet" href="/css/medium-editor.css" type="text/css" />
           <link rel="stylesheet" href="/css/tim.css" type="text/css" />
           <link rel="stylesheet" href="/css/medium-editor-insert-plugin.css" type="text/css" />
-        </Helmet>
+        </Helmet>*/}
         <Alert
           open={alert}
           anchorEl={alertWhere}
@@ -808,6 +831,13 @@ class NewStory extends React.Component {
                   <MenuItem value={index} primaryText={data} key={index} />
                 ))}
               </DropDownMenu>
+              <Label className="nunito-font or" style={{float:'left',marginTop:'22px',minWidth:'60px'}}>Focus Word : </Label>
+              <TextField
+                value = {this.state.focusWord}
+                onChange={this.changeFocusWord}
+                hintText="Enter Keyword"
+                style={{width:'280px',float:'right'}}
+              />
             </div>
             <div className='' style={{display:'block',overflow:'hidden', clear:'both'}}>
               <Label className="nunito-font" style={{float:'left',marginTop:'26px'}}>Add up to 5 tags: </Label>
@@ -902,6 +932,8 @@ class NewStory extends React.Component {
           </HighlightBox>
         </div>
         <Paper ref='paper'  id='paper' />
+        <Divider/>
+				<AnalyticContainer html={html} focusWord={focusWord} title={title} />
       </Container>
     )
   }

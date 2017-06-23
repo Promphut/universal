@@ -1,0 +1,284 @@
+/* Stylesheet Entry Point */
+
+/* Imported Stylesheet Goes Here!*/
+@import "medium-editor.scss";
+@import "tim.scss";
+
+/* Main Stylesheet Goes Here!*/
+
+body {
+  color:#222;
+}
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+h3{
+  font-size:19px;
+  font-weight:bold;
+  color:#222;
+}
+
+a {
+  color: #8f8f8f;
+  text-decoration: none;
+}
+a:hover{
+  color: #222;
+  text-decoration: none;
+}
+
+
+/* FOR DESKTOP AND TABLET */
+@media (min-width:481px) {
+  .menu-font {
+    font-family: 'Nunito', 'Mitr';
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .title-font {
+    font-family: 'PT Serif', 'Mitr';
+    font-size: 36px;
+  }
+  .content-font {
+    font-family: 'PT Sans', 'Mitr', sans-serif;
+    font-size: 20px;
+  }
+  .sans-font{
+    font-family: 'PT Sans', 'Mitr', sans-serif;
+  }
+  .serif-font{
+     font-family: 'PT Serif', 'Mitr';
+  }
+  .nunito-font{
+    font-family: 'Nunito', 'Mitr';
+  }
+  .hidden-des{
+    display: none !important;
+  }
+}
+
+/* FOR MOBILE */
+@media (max-width:480px) {
+  .menu-font {
+    font-family: 'Nunito', 'Mitr';
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .title-font {
+    font-family: 'Roboto Slab', 'Mitr';
+    font-size: 36px;
+  }
+  .content-font {
+    font-family: 'Roboto', 'cs_prajad', sans-serif;
+    font-size: 20px;
+  }
+  .sans-font{
+    font-family: 'Roboto', 'cs_prajad', sans-serif;
+  }
+  .serif-font{
+     font-family: 'Roboto Slab', 'Mitr';
+  }
+  .hidden-mob{
+    display:none !important;
+  }
+  .hidden-des{
+    display:block !important;
+  }
+  .nunito-font{
+    font-family: 'Nunito', 'Mitr';
+  }
+}
+
+
+.container {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+@media (min-width: 576px) {
+  .container {
+    width: 540px;
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    width: 720px;
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    width: 960px;
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 1140px;
+    max-width: 100%;
+  }
+}
+.row {
+  display: -webkit-flex;
+  display: flex;
+  overflow:hidden;
+  flex-wrap: wrap;
+}
+.col {
+  -webkit-flex-basis: 0;
+      -ms-flex-preferred-size: 0;
+          flex-basis: 0;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  max-width: 100%;
+}
+
+.col-auto {
+          flex: 0 0 auto;
+  width: auto;
+}
+
+.col-1 {
+          flex: 0 0 8.333333%;
+  max-width: 8.333333%;
+}
+
+.col-2 {
+          flex: 0 0 16.666667%;
+  max-width: 16.666667%;
+}
+
+.col-3 {
+flex: 0 0 25%;
+  max-width: 25%;
+}
+
+.col-4 {
+  flex: 0 0 33.333333%;
+  max-width: 33.333333%;
+}
+
+.col-5 {
+          flex: 0 0 41.666667%;
+  max-width: 41.666667%;
+}
+
+.col-6 {
+          flex: 0 0 50%;
+  max-width: 50%;
+}
+
+.col-7 {
+          flex: 0 0 58.333333%;
+  max-width: 58.333333%;
+}
+
+.col-8 {
+          flex: 0 0 66.666667%;
+  max-width: 66.666667%;
+}
+
+.col-9 {
+          flex: 0 0 75%;
+  max-width: 75%;
+}
+
+.col-10 {
+          flex: 0 0 83.333333%;
+  max-width: 83.333333%;
+}
+
+.col-11 {
+          flex: 0 0 91.666667%;
+  max-width: 91.666667%;
+}
+
+.col-12 {
+          flex: 0 0 100%;
+  max-width: 100%;
+}
+
+
+
+.container-loader {
+  position: relative;
+  width:100%;
+  height:100%;
+  top:-20px;
+  left:0;
+  display: flex;
+  align-items:center;
+  padding: 10px 0 10px 0;
+}
+
+.loader {
+  height: 4px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background-color: #ddd;
+}
+.loader:before{
+  display: block;
+  position: absolute;
+  content: "";
+  left: -200px;
+  width: 200px;
+  height: 4px;
+  background-color: #2980b9;
+  animation: loading 2s linear infinite;
+}
+
+@keyframes loading {
+    from {left: -200px; width: 30%;}
+    50% {width: 30%;}
+    70% {width: 70%;}
+    80% { left: 50%;}
+    95% {left: 120%;}
+    to {left: 100%;}
+}
+
+@font-face {
+  font-family: 'cs_prajad';
+  src: url('/fonts/csprajad-bolditalic-webfont.woff2') format('woff2'),
+       url('/fonts/csprajad-bolditalic-webfont.woff') format('woff');
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'cs_prajad';
+  src: url('/fonts/csprajad-bold-webfont.woff2') format('woff2'),
+       url('/fonts/csprajad-bold-webfont.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'cs_prajad';
+  src: url('/fonts/csprajad-italic-webfont.woff2') format('woff2'),
+       url('/fonts/csprajad-italic-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'cs_prajad';
+  src: url('/fonts/csprajad-webfont.woff2') format('woff2'),
+       url('/fonts/csprajad-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}

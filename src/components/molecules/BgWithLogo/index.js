@@ -11,8 +11,9 @@ const BG = styled(BGImg)`
 	align-items:center !important;
 	justify-content:center !important;
 `
-const Tagline = styled.div`
+const Tagline = styled.h1`
 	font-size:20px;
+  font-weight:normal;
 	margin:0 auto 0 auto;
 	width:600px;
 	text-align:center;
@@ -32,8 +33,8 @@ const BgWithLogo = ({data})=> {
       className="hidden-mob"
       alt={pub && pub.name}>
       <div>
-        {theme.llogo!=config.BACKURL + '/imgs/brand_display.png'&&<Img src={theme.llogo} id='Largelogo'/>}
-        <Tagline className="nunito-font">{pub && pub.tagline}</Tagline>
+        {theme.llogo!=config.BACKURL + '/imgs/brand_display.png'&&<Img alt={ (pub+'_logo') && (pub.name+'_logo')}src={theme.llogo} id='Largelogo'/>}
+        <Tagline className="nunito-font">{pub ? pub.tagline:'NEXT EMPIRE'}</Tagline>
       </div>
     </BG>
   )

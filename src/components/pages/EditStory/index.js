@@ -9,7 +9,8 @@ import {
 	DropdownWithIcon,
 	Alert,
 	MenuList,
-  EditorCss
+  EditorCss,
+	AnalyticContainer,
 } from 'components'
 import { findDOMNode as dom } from 'react-dom'
 import TextField from 'material-ui/TextField'
@@ -37,10 +38,6 @@ import $ from 'jquery'
 
 var MediumEditor = {}
 if (process.env.BROWSER) {
-  // require('jquery-ui-bundle')
-  // require('blueimp-file-upload/js/vendor/jquery.ui.widget.js')
-  // require('blueimp-file-upload/js/jquery.fileupload.js')
-
   MediumEditor = require('medium-editor')
   window.MediumInsert = require('medium-editor-insert-plugin').MediumInsert
 }
@@ -208,7 +205,9 @@ class EditStory extends React.Component {
       open:false,
       column:'no',
       contentType:'NEWS',
+      html: '',
 
+      focusWord: '',
       tag:[],
       addTag:[],
       pureTag:[],
@@ -244,6 +243,20 @@ class EditStory extends React.Component {
 
   selectedLayout = () => {
     this.setState({chooseLayout:1})
+  }
+
+  changeFocusWord = (e) => {
+    if(this.state.status===this.SAVE_STATUS.DIRTIED)
+      this.setState({
+        focusWord:e.target.value,
+        saveStatus:'Unsave'
+      })
+    else
+      this.setState({
+        focusWord:e.target.value,
+        status:this.SAVE_STATUS.DIRTIED,
+        saveStatus:'Unsave'
+      })
   }
 
   handleEditableInput = (e, editable) => {
@@ -309,7 +322,7 @@ class EditStory extends React.Component {
   }
 
   autoSave = () => {
-    let {sid,title,column,contentType} = this.state
+    let {sid,title,column,contentType,focusWord} = this.state
 
     if(this.state.status === this.SAVE_STATUS.DIRTIED){
       const images = [].slice.call(dom(this.refs.paper).getElementsByTagName('img'))
@@ -325,13 +338,15 @@ class EditStory extends React.Component {
       let highlight = this.editor2.serialize().highlight.value
       //console.log(allContents.paper.value)
       this.setState({
-        saveStatus:'Saving...'
+        saveStatus:'Saving...',
+        html:el
       })
 
       let s = {
         title:title,
         publisher:parseInt(config.PID),
         html:el,
+        focusWord:focusWord,
         highlight
       }
       if(column!='no') s.column = column
@@ -348,7 +363,7 @@ class EditStory extends React.Component {
   }
 
   publishStory = () => {
-    let {sid,column,contentType,title} = this.state
+    let {sid,column,contentType,title,focusWord} = this.state
     let allContents = this.editor.serialize()
     let highlight = this.editor2.serialize().highlight.value
 
@@ -356,6 +371,7 @@ class EditStory extends React.Component {
       title:title,
       publisher:parseInt(config.PID),
       status:1,
+      focusWord:focusWord,
       html:allContents.paper.value,
       highlight
     }
@@ -539,7 +555,9 @@ class EditStory extends React.Component {
         metaTitle:story.meta&&story.meta.title,
         metaDesc:story.meta&&story.meta.desc,
         column: story.column ? story.column._id : 'no',
-        contentType: story.contentType ? story.contentType : 'NEWS'
+        contentType: story.contentType ? story.contentType : 'NEWS',
+        focusWord: story.focusWord,
+        html: story.html
       })
 
       this.editor.setContent(story.html || '')
@@ -638,16 +656,20 @@ class EditStory extends React.Component {
           images: {
             captionPlaceholder: 'Type caption for image',
             fileUploadOptions: { // (object) File upload configuration. See https://github.com/blueimp/jQuery-File-Upload/wiki/Options
-                url: '/upload/img', // (string) A relative path to an upload script
+                url: config.BACKURL+'/publisher/11/upload/img', // (string) A relative path to an upload script
+                //url: '/upload/img',
                 maxChunkSize: 10000000,
                 maxFileSize: 10000000,
                 preview:false,
+                paramName:'image',
                 acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i, // (regexp) Regexp of accepted file types
                 submit:function(e,data){
+                  //console.log("e,",e,'data',data)
                   $('.medium-insert-active').append('<div class="container-loader"><div class="loader"></div></div>')
                 },
             },
             uploadCompleted:function ($el, data) {
+              console.log(data.files)
               $('.container-loader').remove()
             },
             styles: {
@@ -717,7 +739,8 @@ class EditStory extends React.Component {
   render(){
     let {chooseLayout,layout,open,anchorEl,column,contentType,tag,addTag,searchText,
       columnList,contentTypeList,sid,alert,alertWhere,alertConfirm,alertDesc,saveStatus,
-      title,publishStatus,story, slug,metaTitle,metaDesc} = this.state
+      title,publishStatus,story, slug,metaTitle,metaDesc,html,focusWord} = this.state
+
     const dataSourceConfig = {text: 'text', value: 'value', id:'id'};
 
     let {theme} = this.context.setting.publisher
@@ -731,10 +754,10 @@ class EditStory extends React.Component {
 
     return (
       <Container onSubmit={this.updateData}>
-        <Helmet>
+        {/*<Helmet>
           <link rel="stylesheet" href="/css/tim.css" type="text/css"/>
           <link rel="stylesheet" href="/css/medium-editor.css" type="text/css"/>
-        </Helmet>
+        </Helmet>*/}
         <Alert
           open={alert}
           anchorEl={alertWhere}
@@ -805,6 +828,13 @@ class EditStory extends React.Component {
                   <MenuItem value={index} primaryText={data} key={index} />
                 ))}
               </DropDownMenu>
+              <Label className="nunito-font or" style={{float:'left',marginTop:'22px',minWidth:'60px'}}>Focus Word : </Label>
+              <TextField
+                value = {this.state.focusWord}
+                onChange={this.changeFocusWord}
+                hintText="Enter Keyword"
+                style={{width:'280px',float:'right'}}
+              />
             </div>
             <div className='' style={{display:'block',clear:'both',overflow:'hidden'}}>
               <Label className="nunito-font" style={{float:'left',marginTop:'26px'}}>Add up to 5 tags : </Label>
@@ -886,6 +916,8 @@ class EditStory extends React.Component {
           </HighlightBox>
         </div>
         <Paper ref='paper' id='paper'></Paper>
+        <Divider/>
+				<AnalyticContainer html={html} focusWord={focusWord} title={title} />
       </Container>
 	)
     }

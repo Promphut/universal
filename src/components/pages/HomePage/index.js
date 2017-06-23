@@ -375,10 +375,10 @@ class HomePage extends React.Component {
 							</div>*/}
 							</SwipeableViews>}
 					</Main>
-					<Aside>
-						{/*<StaffPickSideBar></StaffPickSideBar>*/}
+					{/*<Aside>
+						<StaffPickSideBar></StaffPickSideBar>
 						<TopNewsHome/>
-					</Aside>
+					</Aside>*/}
 				</Content>
 
 				<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800" />

@@ -58,8 +58,7 @@ const Share = styled.div`
 
 const Copyright = styled.div`
   margin: 15px auto;
-  width: 315px;
-  fontSize: 11px;
+  font-size: 14px;
 	text-align: center;
   color: ${props => props.theme.barTone == 'light' ? '#C4C4C4' : '#FFF'};
   opacity: ${props => props.theme.barTone == 'light' ? '1' : '.5'};
