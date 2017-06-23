@@ -126,7 +126,7 @@ const UserName = styled.div`
 	@media (max-width: 480px) {
 		display: flex;
 		justify-content: center;
-	  color: #FFF;
+	  	color: #FFF;
 		margin: 10px 0px;
 		font-weight: normal;
 	}
@@ -139,17 +139,17 @@ const UserDesc = styled.div`
   width: 220px;
 
 	@media (max-width: 480px) {
-		flex: 1;
+		display: flex;
 		justify-content: center;
 		width: auto;
-	  color: #C2C2C2;
+	  	color: #C2C2C2;
 		textAlign: center;
 	}
 `
 
 const UserShare = styled.div`
 	float: right;
-	width: 225px;
+	width: 250px;
 	margin-top: 10px;
 
 	@media (max-width: 480px) {
@@ -158,13 +158,13 @@ const UserShare = styled.div`
 `
 
 const UserShareMobile = styled.div`
-	overflow:'hidden'
+	overflow:'hidden';
 	display: none;
 
 	@media (max-width: 480px) {
 		display: flex;
 		justify-content: center;
-		marginTop: 20px;
+		margin-top: 20px;
 	}
 `
 
@@ -182,7 +182,8 @@ const A = styled.a`
 `
 
 const LinkMobile = styled.a`
-	textAlign: center;
+	display: flex;
+	justify-content: center;
 	color: #C2C2C2;
 	cursor: pointer;
 	width: 50px;
@@ -223,7 +224,7 @@ const UserDetail = ({ style, user, checkBack }) => {
 					<UserDesc className="sans-font">{user.intro}</UserDesc>
 				</UserData>
 
-				{user.channels &&
+				{user.channels && 
 					<UserShare>
 						{/*<div className='row' style={{overflow:'hidden', textAlign: 'right'}}>*/}
 						<div style={{ textAlign: 'right' }}>
@@ -244,7 +245,36 @@ const UserDetail = ({ style, user, checkBack }) => {
 									<i className="fa fa-instagram" aria-hidden="true" />
 								</A>}
 						</div>
-					</UserShare>}
+					</UserShare> 
+				}
+				{user.channels && 
+					<UserShareMobile className="row">
+						{user.channels.fb &&
+							<LinkMobile
+								href={utils.getFbUrl(user.channels.fb)}
+								target="_blank">
+								<i className="fa fa-facebook" aria-hidden="true" />
+							</LinkMobile>}
+						{user.channels.twt &&
+							<LinkMobile
+								href={utils.getTwtUrl(user.channels.twt)}
+								target="_blank">
+								<i className="fa fa-twitter" aria-hidden="true" />
+							</LinkMobile>}
+						{user.channels.yt &&
+							<LinkMobile
+								href={utils.getYtUrl(user.channels.yt)}
+								target="_blank">
+								<i className="fa fa-youtube-play" aria-hidden="true" />
+							</LinkMobile>}
+						{user.channels.ig &&
+							<LinkMobile
+								href={utils.getIgUrl(user.channels.ig)}
+								target="_blank">
+								<i className="fa fa-instagram" aria-hidden="true" />
+							</LinkMobile>}
+					</UserShareMobile>
+					}
 			</div>
 		</User>
 	)
@@ -405,34 +435,6 @@ class UserStory extends React.Component {
 					 
 				/>
 				<UserDetail user={user} checkBack={this.checkBack} />
-
-				{user.channels &&
-					<UserShareMobile className="row">
-						{user.channels.fb &&
-							<LinkMobile
-								href={utils.getFbUrl(user.channels.fb)}
-								target="_blank">
-								<i className="fa fa-facebook" aria-hidden="true" />
-							</LinkMobile>}
-						{user.channels.twt &&
-							<LinkMobile
-								href={utils.getTwtUrl(user.channels.twt)}
-								target="_blank">
-								<i className="fa fa-twitter" aria-hidden="true" />
-							</LinkMobile>}
-						{user.channels.yt &&
-							<LinkMobile
-								href={utils.getYtUrl(user.channels.yt)}
-								target="_blank">
-								<i className="fa fa-youtube-play" aria-hidden="true" />
-							</LinkMobile>}
-						{user.channels.ig &&
-							<LinkMobile
-								href={utils.getIgUrl(user.channels.ig)}
-								target="_blank">
-								<i className="fa fa-instagram" aria-hidden="true" />
-							</LinkMobile>}
-					</UserShareMobile>}
 
 				<Content>
 					{feedCount <= 0
