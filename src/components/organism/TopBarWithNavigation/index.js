@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {TopBar, TopNavigation, TopBarWithShare, Stick} from 'components'
+import {TopBar, TopNavigation, TopBarWithShare, Stick, FbShareButton} from 'components'
 import auth from 'components/auth'
 import api from 'components/api'
 import { withRouter } from 'react-router'
@@ -117,6 +117,7 @@ class TopBarWithNavigation extends React.Component {
 	  	return (
 			<Stick className={this.props.className} fixed={(articleMobile && hasCover) ? !scrolling : ''}>
 				{articleMobile ?
+					
 					<TopBarWithShare
 						onScroll={this.handleScroll}
 						scrolling={scrolling}
