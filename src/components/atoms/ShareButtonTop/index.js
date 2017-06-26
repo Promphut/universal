@@ -9,7 +9,7 @@ const styles = {
       float:'left',
       margin: '11px 0px',
       borderRadius: '20px',
-      border: '1px solid #FFF',
+      border: (barTone == 'light' && (scrolling || !hasCover)) ? '1px solid #222' : '1px solid #FFF',
       height: '34px',
       lineHeight: '28px',
       minWidth: '72px'
@@ -18,7 +18,7 @@ const styles = {
   labelStyle (barTone, scrolling, hasCover) {
     return {
       fontSize: '15px',
-      color: '#FFF',
+      color: (barTone == 'light' && (scrolling || !hasCover)) ? '#222' : '#FFF',
       textTransform: 'none',
       padding: '0px 0px 0px 0px'
     }
@@ -26,7 +26,7 @@ const styles = {
   iconStyle (barTone, scrolling, hasCover) {
     return {
       fontSize: '11px',
-      color: '#FFF',
+      color: (barTone == 'light' && (scrolling || !hasCover)) ? '#222' : '#FFF',
       margin: '0px',
       padding: '3px 14px 0px 14px'
     }
@@ -37,7 +37,7 @@ const label = (number, barTone, scrolling, hasCover) => {
   return (
     <span>
       <span style={{
-        borderLeft: '1px solid #FFF',
+        borderLeft: (barTone == 'light' && (scrolling || !hasCover)) ? '1px solid #222' : '1px solid #FFF',
         padding: '5px 14px 4px 14px',
         fontSize: '12px',
         fontWeight: 'bold'
@@ -52,7 +52,7 @@ const ShareButtonTop = ({className, number, barTone, scrolling, style, onClick, 
       onClick={onClick}
       label = {label(number, barTone, scrolling, hasCover)}
       labelStyle = {styles.labelStyle(barTone, scrolling, hasCover)}
-      backgroundColor='rgba(59,89,152,1)'
+      backgroundColor='rgba(0, 0, 0, 0)'
       icon = {<i className='fa fa-facebook' style={styles.iconStyle(barTone, scrolling, hasCover)} aria-hidden="true"></i>}
       style = {{...styles.btn(barTone, scrolling, hasCover), ...style}}
     />
