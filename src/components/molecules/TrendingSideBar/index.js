@@ -86,7 +86,7 @@ const TrendingSideBarInner = ({ style, detail, index }) => {
 					style={{
 						maxWidth: '124px',
 						width: '124px',
-						height: '62px',
+						height: '65px',
 						flex: '1 124px'
 					}}
 				/>

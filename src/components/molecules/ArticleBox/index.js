@@ -20,7 +20,7 @@ const Container = styled.div`
   display:flex;
   .imgWidth{
     width:100%;
-    height:222px;
+    height:230px;
   }
   .des-hidden{
     display:block;
@@ -162,7 +162,7 @@ const ArticleBox = ({ detail, style }, context) => {
 	}
 
 	return (
-		<Container style={{ ...style }} height={(screen.width - 32) / 2}>
+		<Container style={{ ...style }} height={(screen.width - 32) / 1.91}>
 			<Box1 style={{ flex: '1' }}>
 				<Div className="sans-font" style={{ margin: '0 0 8px 0' }}>
 					{utils.dateFormat(published)}
