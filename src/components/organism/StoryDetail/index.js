@@ -211,7 +211,7 @@ class StoryDetail extends React.Component {
       <Wraper>
         <Head className='title-font'>{s.ptitle||'NEXT EMPIRE'}</Head>
         <WriterAndDate readTime={s.readTime} writer={s.writer} column={s.column} published={s.published}/>
-        <Share>
+        <Share style={{marginBottom:'32px'}}>
           <FbShareButton  button={<ShareButton><b className="fa fa-facebook fa-1x" aria-hidden="true" style={{color:'white', fontWeight: 'bold',paddingRight:'10px'}}></b><b aria-hidden="true" style={{color:'white', fontWeight: 'bold', fontFamily: 'Helvetica, Arial, sans-serif'}}>   Share on Facebook</b></ShareButton>} />
           <Blank></Blank>
           <div dangerouslySetInnerHTML={{ __html: `<div style="transform: scale(1.428571428571429);" class="fb-save" data-uri=${config.FRONTURL+s.url}></div>` }}></div>
