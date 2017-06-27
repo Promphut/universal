@@ -72,8 +72,8 @@ export default class NextStory extends React.Component {
     }
   }
 
-  getNextStory = () => {
-    api.getFeed(this.props.format, { status: 1, column: this.props.cid }, 'popular', null, null, 1,{'omit' : [this.props.currentID]})
+  getNextStory = (sid,cid,format) => {
+    api.getFeed(format, { status: 1, column: cid }, 'popular', null, null, null,{'omit' : [sid],'next':true})
     .then(result => {
       //console.log(result)
       this.setState({nextStory: result.feed})
@@ -97,12 +97,15 @@ export default class NextStory extends React.Component {
   }
 
   componentWillMount() {
-    this.getNextStory()
+    this.getNextStory(this.props.currentID,this.props.cid,this.props.format)
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.currentID !== nextProps.currentID)
-      {this.getNextStory()}
+    if (this.props.currentID != nextProps.currentID)
+      { console.log('New Props : ' + nextProps.currentID +  ' ' + nextProps.cid + ' ' + nextProps.format)
+      console.log('Old Props : ' + this.props.currentID +  ' ' + this.props.cid + ' ' + this.props.format)
+        this.getNextStory(nextProps.currentID,nextProps.cid,nextProps.format)
+      }
   }
 
   componentDidMount() {
