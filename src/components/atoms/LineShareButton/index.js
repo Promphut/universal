@@ -46,7 +46,7 @@ class LineShareButton extends React.Component {
 			//console.log('before tweet')
 			this.a.addEventListener('tweetStory', function(event){
 				//console.log('tweetStory', sid, event)
-				//api.incStoryInsight(sid, 'share', 'share_twt')
+				api.incStoryInsight(sid, 'share', 'share_line')
 
 				//this.a.removeEventListener('tweetStory')
 			})

@@ -47,7 +47,7 @@ class InShareButton extends React.Component {
 			//console.log('before tweet')
 			this.a.addEventListener('tweetStory', function(event){
 				//console.log('tweetStory', sid, event)
-				//api.incStoryInsight(sid, 'share', 'share_twt.
+				api.incStoryInsight(sid, 'share', 'share_linkedin')
 
 				//this.a.removeEventListener('tweetStory')
 			})
