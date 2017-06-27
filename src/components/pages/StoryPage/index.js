@@ -75,6 +75,22 @@ const Share = styled.div`
 	}
 `
 
+const LikeBoxContainer = styled.div `
+	width:100%;
+	margin: 0 auto 0 auto;
+	text-align: center;
+
+	div > div > .fb-page span
+	{
+			width:100% !important;
+	}
+
+	div > div > .fb-page iframe
+	{
+			width:100% !important;
+	}
+`
+
 const Main = styled.div`
 	flex: 8 730px;
 	max-width: 730px;
@@ -312,6 +328,9 @@ class StoryPage extends React.Component {
 
 							<Main ref={'TT'} isMobile={isMobile}>
 								<StoryDetail story={story} />
+								<LikeBoxContainer>
+									<div dangerouslySetInnerHTML={{ __html: '<div class="fb-page" data-href="https://www.facebook.com/nextempire/" data-tabs="timeline" data-width="500" data-height="210" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/nextempire/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/nextempire/">NextEmpire</a></blockquote></div>' }}></div>
+								</LikeBoxContainer>
 							</Main>
 
 							<Aside id="trendingBar" ref="trendingBar">
