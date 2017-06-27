@@ -656,8 +656,8 @@ class EditStory extends React.Component {
           images: {
             captionPlaceholder: 'Type caption for image',
             fileUploadOptions: { // (object) File upload configuration. See https://github.com/blueimp/jQuery-File-Upload/wiki/Options
-                url: config.BACKURL+'/publisher/11/upload/img', // (string) A relative path to an upload script
-                //url: '/upload/img',
+                //url: config.BACKURL+'/publisher/11/upload/img', // (string) A relative path to an upload script
+                url: '/upload/img',
                 maxChunkSize: 10000000,
                 maxFileSize: 10000000,
                 preview:false,
@@ -901,7 +901,7 @@ class EditStory extends React.Component {
           {/*<Label className="nunito-font" >Select cover picture : </Label>*/}
           <div className='row' style={{overflow:'hidden',margin:'100px 0 20px 0',paddingBottom:'40px',borderBottom:'1px solid #8E8E8E'}}>
             <div className='col-6'>
-              <UploadPicture ratio={1920/860} path={'/stories/'+sid+'/cover'} src={story.cover&&story.cover.medium} size='1920x860' width={300} height={170} label='Landscape Cover' type='cover' style={{width:'194px',height:'137px',margin:'0 auto 0 auto'}} />
+              <UploadPicture ratio={1200/628} path={'/stories/'+sid+'/cover'} src={story.cover&&story.cover.medium} size='1920x860' width={300} height={170} label='Landscape Cover' type='cover' style={{width:'194px',height:'137px',margin:'0 auto 0 auto'}} />
             </div>
             <div className='col-6'>
               <UploadPicture ratio={330/500} path={'/stories/'+sid+'/covermobile'} src={story.coverMobile&&story.coverMobile.medium} size='330x500' width={120} height={170} label='Portrait Cover' type='coverMobile' style={{width:'96px',height:'137px',margin:'0 auto 0 auto'}} />
