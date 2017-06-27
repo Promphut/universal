@@ -10,7 +10,8 @@ import {
 	BGImg,
 	RecommendContainer,
 	Footer,
-	BackToTop
+	BackToTop,
+	NextStory
 } from 'components'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
@@ -117,7 +118,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#222222', end
 
 class StoryPage extends React.Component {
 	state = {
-		recommends: [], 
+		recommends: [],
 		description: '',
 		showTopbarTitle: false,
 		story: {}
@@ -321,6 +322,8 @@ class StoryPage extends React.Component {
 									<TrendingSideBar />
 								</Stick>
 							</Aside>
+
+							<NextStory cid = {story.column._id} currentID = {story._id} format = {story.format}/>
 						</Content>
 
 						<Content>
