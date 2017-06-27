@@ -28,6 +28,11 @@ import utils from '../../../services/utils'
 import isEmpty from 'lodash/isEmpty'
 import config from '../../../config'
 
+const SS = styled.div `
+	// height: 200px !important;
+    // border-bottom: 1px solid #AAA !important;
+`
+
 const Wrapper = styled.div`
 	@media (max-width:480px) {
 		max-width: 100%;
@@ -378,7 +383,9 @@ class HomePage extends React.Component {
 					</Main>
 					<Aside>
 						<Stick topOffset={100}>
-  						<div dangerouslySetInnerHTML={{ __html: '<div class="fb-page" data-href="https://www.facebook.com/nextempire/" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/nextempire/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/nextempire/">NextEmpire</a></blockquote></div>' }}></div>
+							<SS>
+								<div dangerouslySetInnerHTML={{ __html: '<div style="height:1000px;" class="fb-page" data-href="https://www.facebook.com/nextempire/" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/nextempire/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/nextempire/">NextEmpire</a></blockquote></div>' }}></div>
+							</SS>
 						</Stick>
 						{/* <StaffPickSideBar></StaffPickSideBar>
 						<TopNewsHome/> */}

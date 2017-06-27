@@ -62,6 +62,22 @@ utils.getTweetUrl = (url, hashtags) => {
 	)
 }
 
+utils.getLinkedInUrl = (url) => {
+	//console.log("TWT", url, hashtags)
+	return (
+		'https://www.linkedin.com/shareArticle?mini=true&url=' +
+		encodeURIComponent(url)
+	)
+}
+
+utils.getLineUrl = (url) => {
+	//console.log("TWT", url, hashtags)
+	return (
+		'https://timeline.line.me/social-plugin/share?url=' +
+		encodeURIComponent(url)
+	)
+}
+
 // append UTM to url
 // utm: {source, medium, campaign, content}
 utils.appendUTM = (url, utm) => {
