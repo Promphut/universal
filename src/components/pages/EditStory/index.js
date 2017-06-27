@@ -837,12 +837,12 @@ class EditStory extends React.Component {
                 value = {this.state.focusWord}
                 onChange={this.changeFocusWord}
                 hintText="Enter Keyword"
-                style={{width:'280px',float:'right'}}
+                style={{width:'310px',float:'right',marginRight:'20px',marginTop:'5px'}}
               />
             </div>
             <div className='' style={{display:'block',clear:'both',overflow:'hidden'}}>
               <Label className="nunito-font" style={{float:'left',marginTop:'26px'}}>Add up to 5 tags : </Label>
-              <div className='row' style={{marginTop:'15px'}}>
+              <div className='row' style={{marginTop:'15px',paddingLeft:'5px'}}>
                 {addTag.length!=0?addTag.map((data,index)=>(
                   <Chip
                     key={index}
