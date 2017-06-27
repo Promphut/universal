@@ -11,7 +11,8 @@ import {
 	TopNewsHome,
 	LogoLink,
 	BackToTop,
-	BgWithLogo
+	BgWithLogo,
+	Stick
 } from 'components'
 import styled from 'styled-components'
 import auth from 'components/auth'
@@ -289,7 +290,7 @@ class HomePage extends React.Component {
 				{!isEmpty(pub) &&!utils.isMobile() &&<BgWithLogo data={pub}/>}
 
 				<TopBarWithNavigation
-					 
+
 					onLoading={this.props.onLoading}
 				/>
 
@@ -375,10 +376,13 @@ class HomePage extends React.Component {
 							</div>*/}
 							</SwipeableViews>}
 					</Main>
-					{/*<Aside>
-						<StaffPickSideBar></StaffPickSideBar>
-						<TopNewsHome/>
-					</Aside>*/}
+					<Aside>
+						<Stick topOffset={100}>
+  						<div dangerouslySetInnerHTML={{ __html: '<div class="fb-page" data-href="https://www.facebook.com/nextempire/" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/nextempire/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/nextempire/">NextEmpire</a></blockquote></div>' }}></div>
+						</Stick>
+						{/* <StaffPickSideBar></StaffPickSideBar>
+						<TopNewsHome/> */}
+					</Aside>
 				</Content>
 
 				<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800" />
