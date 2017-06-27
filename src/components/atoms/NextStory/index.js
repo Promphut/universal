@@ -91,6 +91,10 @@ export default class NextStory extends React.Component {
     this.getNextStory()
   }
 
+  componentWillReceiveProps() {
+    this.getNextStory()
+  }
+
   componentDidMount() {
     window.addEventListener('scroll', this.handleScroll)
   }
