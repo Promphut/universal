@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import utils from '../../../services/utils'
 import api from 'components/api'
+import truncate from 'lodash/truncate'
 
 const NextStoryContainer = styled.div `
   opacity: ${props => (props.scrollOpacity ? '1' : '0')};
@@ -19,7 +20,8 @@ const NextStoryContainer = styled.div `
   -o-background-size: cover;
   background-size: cover;
   height:auto;
-  max-width: 240px;
+  width: 240px;
+  height: 120px;
 `
 
 const ImgOverlay = styled.div `
@@ -35,13 +37,20 @@ const ImgOverlay = styled.div `
 `
 
 const NextStoryHeaderWarpper = styled.div `
-    padding: 20px 15px 15px 20px;
-    margin-top:-10px;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top:-35px;
 `
 
 const NextStoryName = styled.p `
   color: white;
   text-align: center;
+  padding-left: 15px;
+  padding-right: 15px;
 `
 
 const NextStoryArrow = styled.span `
@@ -111,7 +120,7 @@ export default class NextStory extends React.Component {
           <ImgOverlay></ImgOverlay>
           <NextStoryArrow><i className="material-icons">arrow_forward</i></NextStoryArrow>
           <NextStoryHeaderWarpper>
-            <NextStoryName>{ptitle && ptitle}</NextStoryName>
+            <NextStoryName>{ptitle && truncate(ptitle, {length: 40, seperator: ''})}</NextStoryName>
           </NextStoryHeaderWarpper>
         </NextStoryContainer>
       </Link>
