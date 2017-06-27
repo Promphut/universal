@@ -76,7 +76,7 @@ export default class NextStory extends React.Component {
     api.getFeed(this.props.format, { status: 1, column: this.props.cid }, 'popular', null, null, 1,{'omit' : [this.props.currentID]})
     .then(result => {
       //console.log(result)
-      this.setState({nextStory: result.feed[0]})
+      this.setState({nextStory: result.feed})
     })
   }
 
@@ -100,8 +100,9 @@ export default class NextStory extends React.Component {
     this.getNextStory()
   }
 
-  componentWillReceiveProps() {
-    this.getNextStory()
+  componentWillReceiveProps(nextProps) {
+    if (this.props.currentID !== nextProps.currentID)
+      {this.getNextStory()}
   }
 
   componentDidMount() {
