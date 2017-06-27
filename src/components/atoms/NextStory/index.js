@@ -5,6 +5,7 @@ import utils from '../../../services/utils'
 import api from 'components/api'
 
 const NextStoryContainer = styled.div `
+  opacity: ${props => (props.scrollOpacity ? '1' : '0')};
   position: fixed;
   bottom: 0px;
   right: 0px;
@@ -57,7 +58,8 @@ export default class NextStory extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      nextStory: {}
+      nextStory: {},
+			scrollOpacity: false
     }
   }
 
@@ -69,15 +71,39 @@ export default class NextStory extends React.Component {
     })
   }
 
+  handleScroll = e => {
+    if (!utils.isMobile()) {
+      const scrollToTop = e.srcElement.body.scrollTop >
+        200
+        ? true
+        : false
+      const scrollOpacity = e.srcElement.body.scrollTop > 200
+        ? true
+        : false
+
+      this.setState({
+        scrollOpacity
+      })
+    }
+  }
+
   componentWillMount() {
     this.getNextStory()
+  }
+
+  componentDidMount() {
+    window.addEventListener('scroll', this.handleScroll)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll)
   }
 
   render() {
     let {ptitle, cover, url} = this.state.nextStory
     return (
       <Link to = {url || "/"}>
-        <NextStoryContainer imgSrc = {cover && cover.medium}>
+        <NextStoryContainer scrollOpacity = {this.state.scrollOpacity} imgSrc = {cover && cover.medium}>
           <ImgOverlay></ImgOverlay>
           <NextStoryArrow><i className="material-icons">arrow_forward</i></NextStoryArrow>
           <NextStoryHeaderWarpper>
