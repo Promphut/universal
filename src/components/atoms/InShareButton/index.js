@@ -12,7 +12,7 @@ class InShareButton extends React.Component {
 		sid: PropTypes.number, // optional, default will try to pick sid from url, unless storyinsight won't be saved.
 		url: PropTypes.string, // optional, default is this window.location url. If url presented with /:sid, no need to input sid, it will auto get from the url.
 		onToggle: PropTypes.func
-}
+	}
 
 	constructor(props) {
 		super(props)
