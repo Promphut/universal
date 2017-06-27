@@ -334,12 +334,10 @@ class StoryPage extends React.Component {
 							</Main>
 
 							<Aside id="trendingBar" ref="trendingBar">
-								<Stick
-									topOffset={80}
-									style={{ zIndex: '50' }}
-									marginBottom={60}>
+
 									<TrendingSideBar />
-								</Stick>
+									<div dangerouslySetInnerHTML={{ __html: '<div class="fb-page" data-href="https://www.facebook.com/nextempire/" data-tabs="timeline" data-width="500" data-height="700" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/nextempire/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/nextempire/">NextEmpire</a></blockquote></div>' }}></div>
+
 							</Aside>
 
 							<NextStory cid = {story.column._id} currentID = {story._id} format = {story.format}/>
