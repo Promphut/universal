@@ -11,7 +11,8 @@ import {
 	TopNewsHome,
 	LogoLink,
 	BackToTop,
-	BgWithLogo
+	BgWithLogo,
+	Stick
 } from 'components'
 import styled from 'styled-components'
 import auth from 'components/auth'
@@ -26,6 +27,11 @@ import SwipeableViews from 'react-swipeable-views'
 import utils from '../../../services/utils'
 import isEmpty from 'lodash/isEmpty'
 import config from '../../../config'
+
+const SS = styled.div `
+	// height: 200px !important;
+    // border-bottom: 1px solid #AAA !important;
+`
 
 const Wrapper = styled.div`
 	@media (max-width:480px) {
@@ -289,7 +295,7 @@ class HomePage extends React.Component {
 				{!isEmpty(pub) &&!utils.isMobile() &&<BgWithLogo data={pub}/>}
 
 				<TopBarWithNavigation
-					 
+
 					onLoading={this.props.onLoading}
 				/>
 
@@ -375,10 +381,15 @@ class HomePage extends React.Component {
 							</div>*/}
 							</SwipeableViews>}
 					</Main>
-					{/*<Aside>
-						<StaffPickSideBar></StaffPickSideBar>
-						<TopNewsHome/>
-					</Aside>*/}
+					<Aside>
+						<Stick topOffset={100}>
+							<SS>
+								<div dangerouslySetInnerHTML={{ __html: '<div class="fb-page" data-href="https://www.facebook.com/nextempire/" data-tabs="timeline" data-height="400" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/nextempire/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/nextempire/">NextEmpire</a></blockquote></div>' }}></div>
+							</SS>
+						</Stick>
+						{/* <StaffPickSideBar></StaffPickSideBar>
+						<TopNewsHome/> */}
+					</Aside>
 				</Content>
 
 				<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800" />

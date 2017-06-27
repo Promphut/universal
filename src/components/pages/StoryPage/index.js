@@ -10,7 +10,8 @@ import {
 	BGImg,
 	RecommendContainer,
 	Footer,
-	BackToTop
+	BackToTop,
+	NextStory
 } from 'components'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
@@ -74,6 +75,22 @@ const Share = styled.div`
 	}
 `
 
+const LikeBoxContainer = styled.div `
+	width:100%;
+	margin: 0 auto 0 auto;
+	text-align: center;
+
+	div > div > .fb-page span
+	{
+			width:100% !important;
+	}
+
+	div > div > .fb-page iframe
+	{
+			width:100% !important;
+	}
+`
+
 const Main = styled.div`
 	flex: 8 730px;
 	max-width: 730px;
@@ -117,7 +134,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#222222', end
 
 class StoryPage extends React.Component {
 	state = {
-		recommends: [], 
+		recommends: [],
 		description: '',
 		showTopbarTitle: false,
 		story: {}
@@ -311,16 +328,19 @@ class StoryPage extends React.Component {
 
 							<Main ref={'TT'} isMobile={isMobile}>
 								<StoryDetail story={story} />
+								<LikeBoxContainer>
+									<div dangerouslySetInnerHTML={{ __html: '<div class="fb-page" data-href="https://www.facebook.com/nextempire/" data-tabs="timeline" data-width="500" data-height="210" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/nextempire/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/nextempire/">NextEmpire</a></blockquote></div>' }}></div>
+								</LikeBoxContainer>
 							</Main>
 
 							<Aside id="trendingBar" ref="trendingBar">
-								<Stick
-									topOffset={80}
-									style={{ zIndex: '50' }}
-									marginBottom={60}>
+
 									<TrendingSideBar />
-								</Stick>
+									<div dangerouslySetInnerHTML={{ __html: '<div class="fb-page" data-href="https://www.facebook.com/nextempire/" data-tabs="timeline" data-width="500" data-height="700" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/nextempire/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/nextempire/">NextEmpire</a></blockquote></div>' }}></div>
+
 							</Aside>
+
+							<NextStory cid = {story.column._id} currentID = {story._id} format = {story.format}/>
 						</Content>
 
 						<Content>

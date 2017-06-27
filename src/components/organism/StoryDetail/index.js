@@ -2,11 +2,21 @@ import React from 'react';
 import {Link} from 'react-router-dom'
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon';
-import {EditorCss,WriterAndDate,WritedBy,TagBox,CommentBox,CommentUser,RecommendArticle,FromColumn} from 'components'
+import {EditorCss,WriterAndDate,WritedBy,TagBox,CommentBox,CommentUser,RecommendArticle,FromColumn, FbShareButton} from 'components'
 import RaisedButton from 'material-ui/RaisedButton';
 import api from 'components/api'
 import utils from '../../../services/utils'
+import config from '../../../config'
 
+const Share = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items:center;
+`
+
+const Blank = styled.div`
+  width: 55px;
+`
 const Wraper = styled(EditorCss)`
   color:#222;
   width:100%;
@@ -36,6 +46,7 @@ const Story = styled.div`
   margin-top:40px;
   clear:both;
 	overflow:hidden;
+  padding-bottom: 40px;
 `
 
 const TagContainer = styled.div`
@@ -52,7 +63,7 @@ const Divider = styled.div`
   height:2px;
   width:100%;
   background-color:#E2E2E2;
-  margin:20px 0 20px 0;
+  margin:32px 0 20px 0;
   @media (max-width:480px){
     margin:15px 0 15px 0;
   }
@@ -111,6 +122,20 @@ const Flex= styled.div`
   @media (max-width:480px){
     -webkit-flex:0;
     flex:0;
+  }
+`
+
+const ShareButton = styled.div`
+  width:200px;
+  height:40px;
+  border-radius:4px;
+  background-color:#3A579A;
+  float: left;
+  display: flex;
+  justify-content: center;
+  align-items:center;
+  &:hover{
+    cursor:pointer;
   }
 `
 
@@ -186,6 +211,11 @@ class StoryDetail extends React.Component {
       <Wraper>
         <Head className='title-font'>{s.ptitle||'NEXT EMPIRE'}</Head>
         <WriterAndDate readTime={s.readTime} writer={s.writer} column={s.column} published={s.published}/>
+        <Share>
+          <FbShareButton  button={<ShareButton><b className="fa fa-facebook fa-1x" aria-hidden="true" style={{color:'white', fontWeight: 'bold',paddingRight:'10px'}}></b><b aria-hidden="true" style={{color:'white', fontWeight: 'bold', fontFamily: 'Helvetica, Arial, sans-serif'}}>   Share on Facebook</b></ShareButton>} />
+          <Blank></Blank>
+          <div dangerouslySetInnerHTML={{ __html: `<div style="transform: scale(1.428571428571429);" class="fb-save" data-uri=${config.FRONTURL+s.url}></div>` }}></div>
+        </Share>
         {s.phighlight &&
         <div>
           <HighlightText>{s.format=='NEWS'?'SUMMARY':'HIGHLIGHTS'}</HighlightText>
@@ -197,11 +227,18 @@ class StoryDetail extends React.Component {
         {/*<WritedBy writer={s.writer} column={s.column} published={s.published} />*/}
 
 
-        <TagContainer>
+        {/*<TagContainer>
           {tags.map((tag,index)=>(
             <Link to={tag.url} key={index}><TagBox style={{margin:'0 20px 20px 0'}}>{tag.name}</TagBox></Link>
           ))}
-        </TagContainer>
+        </TagContainer>*/}
+        <Share>
+          <FbShareButton  button={<ShareButton><b className="fa fa-facebook fa-1x" aria-hidden="true" style={{color:'white', fontWeight: 'bold',paddingRight:'10px'}}></b><b aria-hidden="true" style={{color:'white', fontWeight: 'bold', fontFamily: 'Helvetica, Arial, sans-serif'}}>   Share on Facebook</b></ShareButton>} />
+          <Blank></Blank>
+          <div dangerouslySetInnerHTML={{ __html: '<div style="transform: scale(1.428571428571429);" class="fb-save" data-uri="https://developers.facebook.com/docs/plugins/save/"></div>' }}></div>
+        </Share>
+
+        <Blank></Blank>
 
         <Divider/>
 

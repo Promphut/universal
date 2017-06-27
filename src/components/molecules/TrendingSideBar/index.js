@@ -9,6 +9,7 @@ import truncate from 'lodash/truncate'
 
 const Container = styled.div`
   width:100%;
+	padding-bottom: 24px;
 `
 
 const Head = styled.div`
@@ -110,7 +111,7 @@ class TrendingSideBar extends React.Component {
 
 	getPopular = () => {
 		// sort will be changed to 'trending' later when implemented
-		api.getFeed('story', { status: 1 }, 'tranding', null, 0, 5).then(result => {
+		api.getFeed('story', { status: 1 }, 'trending', null, 0, 3).then(result => {
 			this.setState({ popular: result.feed })
 		})
 	}
@@ -141,6 +142,8 @@ class TrendingSideBar extends React.Component {
 				{/*{detail.map((data,index)=><Link to='#' key={index}><TrendingSideBarInner detail={data}/></Link>)}*/}
 				{/*<Divider/>*/}
 			</Container>
+
+
 		)
 	}
 }
