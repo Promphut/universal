@@ -40,7 +40,6 @@ class ShareSideBar extends React.Component {
 	}
 
   ToggleButton =() => {
-    console.log('sejfaskjedf;kasjdfkjas;ef')
     this.setState({status: !this.state.status})
   }
 
