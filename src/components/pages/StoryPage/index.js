@@ -348,7 +348,7 @@ class StoryPage extends React.Component {
 								<RecommendContainer recommend={recommends} />}
 						</Content>
 
-						<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800" />
+						{/*<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800" />*/}
 						<Footer />
 					</Wrapper>
 				</div>
