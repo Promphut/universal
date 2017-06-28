@@ -118,7 +118,7 @@ class TopRank extends React.Component {
 	}
 
 	render() {
-		const { insigth } = this.props
+		const { insight } = this.props
 		const { entries, summary } = this.props.data
 		//console.log(entries)
 
@@ -167,18 +167,18 @@ class TopRank extends React.Component {
 
 						{entries && entries.map((entry, index) => (
 							<TableRow className="sans-font" key={index}>
-								{insigth == 'topstories'
+								{insight == 'topstories'
 									&& <TableRowColumn style={styles.tableTextBodyName}>
 											<Bold to={entry.story.url?entry.story.url:'/'}>{index + 1}. {entry.story&&entry.story.title}</Bold>
 											{entry.story.writer &&entry.story.writer.display}
 										</TableRowColumn>
 									}
-								{insigth == 'topcolumns'
+								{insight == 'topcolumns'
 									&& <TableRowColumn style={styles.tableTextBodyName}>
 											<Bold to={entry.column.url?entry.column.url:'/'}>{index + 1}. {entry.column&&entry.column.name}</Bold>
 										</TableRowColumn>
 									}
-								{insigth == 'topwriters'
+								{insight == 'topwriters'
 									&& <TableRowColumn style={styles.tableTextBodyName}>
 											<Bold to={entry.writer.url?entry.writer.url:'/'}>{index + 1}. {entry.writer &&entry.writer.display}</Bold>
 										</TableRowColumn>

@@ -4,7 +4,6 @@ import onClickOutside from 'react-onclickoutside'
 
 const DropdownWrapper = styled.div`
   float: ${props => props.float};
-
   &:hover{
     cursor: pointer;
   }
@@ -18,7 +17,7 @@ const DropdownContent = styled.div`
   opacity: ${props => props.open ? '1' : '0'};
   transition: .2s;
   position: absolute;
-  margin: ${props => props.margin}
+  margin: ${props => props.margin};
   padding: 0px;
   border: 2px solid ${props=> props.theme.primaryColor};
   background: white;
@@ -26,7 +25,7 @@ const DropdownContent = styled.div`
   max-width: ${props => props.maxWidth};
 
 	@media (max-width: 991px) {
-    margin: ${props => props.marginMobile}
+    margin: ${props => props.marginMobile};
   }
 `
 

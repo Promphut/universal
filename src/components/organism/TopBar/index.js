@@ -113,7 +113,7 @@ const Logo = styled.img`
 `
 
 const Center = styled.div`
-	max-width: 40%;
+	max-width: 60%;
 	white-space: nowrap;
 
 	@media (max-width: 960px) {

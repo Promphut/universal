@@ -164,7 +164,7 @@ api.getStoryFromSid = (sid, token, countView) => {
 	return Request
 	.get(config.BACKURL + '/stories/' + sid)
 	.query({token: token})
-	.query({countview: countView})
+	.query({countView: countView})
 	.set('Accept', 'application/json')
 	.then(res => {
 		if(res.body.canEditStory==null) res.body.canEditStory = false
@@ -639,7 +639,7 @@ api.incStoryInsight = (sid, action, subaction) => {
 	if(sid == null) return Promise.reject(new Error('sid is required.'))
 	if(action == null) return Promise.reject(new Error('action is required.'))
 
-	let url = config.BACKURL+'/insights/stories/'+sid+'/'+action
+	let url = config.BACKURL+'/insights/stories/'+config.PID+'/'+sid+'/'+action
 	if(subaction!=null) url += '/'+subaction
 
 	return Request
@@ -652,7 +652,7 @@ api.incStoryInsight = (sid, action, subaction) => {
 }
 
 api.getPublisherInsight = (pid, action, subaction, period, from, to) => {
-	if(pid == null) return Promise.reject(new Error('sid is required.'))
+	if(pid == null) return Promise.reject(new Error('pid is required.'))
 	if(action == null) return Promise.reject(new Error('action is required.'))
 
 	let url = config.BACKURL+'/insights/publishers/'+pid+'/'+action
@@ -707,7 +707,7 @@ api.getViewInsight = (insight, subaction = '', filter, sort, limit, current) => 
 	const token = auth.getToken()
 
 	return Request
-	.get(config.BACKURL+'/insights/'+insight+'/view/'+subaction)
+	.get(config.BACKURL+'/insights/'+insight +'/'+config.PID+'/view/'+subaction)
 	.set('x-access-token', token || '')
 	.query({filter: filter ? JSON.stringify(filter) : null})
 	.query({sort: sort ? JSON.stringify(sort) : null})
@@ -723,7 +723,7 @@ api.getTrendInsight = (insight, subaction = '', filter, sort, limit, current) =>
 	const token = auth.getToken()
 
 	return Request
-	.get(config.BACKURL+'/insights/'+insight+'/trend/'+subaction)
+	.get(config.BACKURL+'/insights/'+insight+'/'+config.PID+'/trend/'+subaction)
 	.set('x-access-token', token || '')
 	.query({filter: filter ? JSON.stringify(filter) : null})
 	.query({sort: sort ? JSON.stringify(sort) : null})
@@ -739,7 +739,7 @@ api.getShareInsight = (insight, subaction = '', filter, sort, limit, current) =>
 	const token = auth.getToken()
 
 	return Request
-	.get(config.BACKURL+'/insights/'+insight+'/share/'+subaction)
+	.get(config.BACKURL+'/insights/'+insight+'/'+config.PID+'/share/'+subaction)
 	.set('x-access-token', token || '')
 	.query({filter: filter ? JSON.stringify(filter) : null})
 	.query({sort: sort ? JSON.stringify(sort) : null})
@@ -755,7 +755,7 @@ api.getGrowthInsight = (insight, subaction = '', filter, sort, limit, current) =
 	const token = auth.getToken()
 
 	return Request
-	.get(config.BACKURL+'/insights/'+insight+'/growth/'+subaction)
+	.get(config.BACKURL+'/insights/'+insight+'/'+config.PID+'/growth/'+subaction)
 	.set('x-access-token', token || '')
 	.query({filter: filter ? JSON.stringify(filter) : null})
 	.query({sort: sort ? JSON.stringify(sort) : null})

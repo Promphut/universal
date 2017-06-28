@@ -104,7 +104,9 @@ const facebookSdk =
      js = d.createElement(s); js.id = id;
      js.src = "//connect.facebook.net/en_US/sdk.js";
      fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));`
+   }(document, 'script', 'facebook-jssdk'));
+   
+   `
 
 
 const Html = ({ styles, assets, content, meta }) => {
@@ -135,7 +137,7 @@ const Html = ({ styles, assets, content, meta }) => {
         <meta property="twitter:image:alt" content={name} />
         <meta property="fb:app_id" content={analytic} />
         <meta property="og:image:width" content='1200' />
-        <meta property="og:image:height" content='600' />
+        <meta property="og:image:height" content='628' />
 
         {helmet.title.toComponent()}
         {helmet.meta.toComponent()}
@@ -153,6 +155,7 @@ const Html = ({ styles, assets, content, meta }) => {
         <noscript dangerouslySetInnerHTML={{ __html: ggTag.iframe }}></noscript>
         <div id="fb-root"></div>
         <script dangerouslySetInnerHTML={{ __html: facebookSdk }} />
+
 
         <main id="app" dangerouslySetInnerHTML={{ __html: content }} />
 

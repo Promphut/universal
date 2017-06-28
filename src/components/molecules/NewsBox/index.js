@@ -120,7 +120,7 @@ const WriterLink = styled(Link)`
 `
 const BG = styled(BGImg)`
   width:300px;
-  height:150px;
+  height:157px;
   flex:0 300px;
   @media (max-width:480px) {
     width:100%;
@@ -143,7 +143,7 @@ const NewsBox = ({detail, style, timeline}) => {
         <Box>
           <ShareDropdown url={url} className='hidden-des'/>
           <Time className='hidden-des' style={{display:timeline?'block':'none'}}>{utils.dateFormat(published)}</Time>
-          <BG height={(screen.width - 32) / 2} url={url} src={cover.small || cover.medium} alt={ptitle || ''} />
+          <BG height={(screen.width - 32) / 1.91} url={url} src={cover.small || cover.medium} alt={ptitle || ''} />
           <BoxText>
             <ShareDropdown url={url} className='hidden-mob'/>
             <NameLink to={url} className='nunito-font' >{truncate(ptitle, {

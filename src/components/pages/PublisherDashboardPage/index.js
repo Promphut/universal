@@ -118,22 +118,22 @@ class PublisherDashboardPage extends React.Component {
 
 				<SubContainer>
 					<TopHeader className="sans-font">Top Stories</TopHeader>
-					<TopRank insigth={'topstories'} data={topstories} />
+					<TopRank insight={'topstories'} data={topstories} />
 					{this.showAllButton('Show All Top Stories', '/editor/stories')}
 				</SubContainer>
 				<Divider />
 
 				<SubContainer>
 					<TopHeader className="sans-font">Top Columns</TopHeader>
-					<TopRank insigth={'topcolumns'} data={topcolumns} />
+					<TopRank insight={'topcolumns'} data={topcolumns} />
 					{this.showAllButton('Show All Top Columns', '/editor/columns')}
 				</SubContainer>
 				<Divider />
 
 				<SubContainer>
 					<TopHeader className="sans-font">Top Writers</TopHeader>
-					<TopRank insigth={'topwriters'} data={topwriters} />
-					{this.showAllButton('Show All Top Columns', '/editor/writers')}
+					<TopRank insight={'topwriters'} data={topwriters} />
+					{this.showAllButton('Show All Top Writers', '/editor/writers')}
 				</SubContainer>
 			</Container>
 		)

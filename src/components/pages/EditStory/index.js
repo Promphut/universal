@@ -38,10 +38,6 @@ import $ from 'jquery'
 
 var MediumEditor = {}
 if (process.env.BROWSER) {
-  // require('jquery-ui-bundle')
-  // require('blueimp-file-upload/js/vendor/jquery.ui.widget.js')
-  // require('blueimp-file-upload/js/jquery.fileupload.js')
-
   MediumEditor = require('medium-editor')
   window.MediumInsert = require('medium-editor-insert-plugin').MediumInsert
 }
@@ -837,12 +833,12 @@ class EditStory extends React.Component {
                 value = {this.state.focusWord}
                 onChange={this.changeFocusWord}
                 hintText="Enter Keyword"
-                style={{width:'280px',float:'right'}}
+                style={{width:'310px',float:'right',marginRight:'20px',marginTop:'5px'}}
               />
             </div>
             <div className='' style={{display:'block',clear:'both',overflow:'hidden'}}>
               <Label className="nunito-font" style={{float:'left',marginTop:'26px'}}>Add up to 5 tags : </Label>
-              <div className='row' style={{marginTop:'15px'}}>
+              <div className='row' style={{marginTop:'15px',paddingLeft:'5px'}}>
                 {addTag.length!=0?addTag.map((data,index)=>(
                   <Chip
                     key={index}
@@ -905,7 +901,7 @@ class EditStory extends React.Component {
           {/*<Label className="nunito-font" >Select cover picture : </Label>*/}
           <div className='row' style={{overflow:'hidden',margin:'100px 0 20px 0',paddingBottom:'40px',borderBottom:'1px solid #8E8E8E'}}>
             <div className='col-6'>
-              <UploadPicture ratio={1920/860} path={'/stories/'+sid+'/cover'} src={story.cover&&story.cover.medium} size='1920x860' width={300} height={170} label='Landscape Cover' type='cover' style={{width:'194px',height:'137px',margin:'0 auto 0 auto'}} />
+              <UploadPicture ratio={1200/628} path={'/stories/'+sid+'/cover'} src={story.cover&&story.cover.medium} size='1920x860' width={300} height={170} label='Landscape Cover' type='cover' style={{width:'194px',height:'137px',margin:'0 auto 0 auto'}} />
             </div>
             <div className='col-6'>
               <UploadPicture ratio={330/500} path={'/stories/'+sid+'/covermobile'} src={story.coverMobile&&story.coverMobile.medium} size='330x500' width={120} height={170} label='Portrait Cover' type='coverMobile' style={{width:'96px',height:'137px',margin:'0 auto 0 auto'}} />
