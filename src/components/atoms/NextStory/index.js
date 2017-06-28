@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import utils from '../../../services/utils'
 import api from 'components/api'
 import truncate from 'lodash/truncate'
+import isEmpty from 'lodash/isEmpty'
 
 const NextStoryContainer = styled.div `
   opacity: ${props => (props.scrollOpacity ? '1' : '0')};
@@ -117,17 +118,21 @@ export default class NextStory extends React.Component {
   }
 
   render() {
-    let {ptitle, cover, url} = this.state.nextStory
-    return (
-      <Link to = {url || "/"}>
-        <NextStoryContainer scrollOpacity = {this.state.scrollOpacity} imgSrc = {cover && cover.medium}>
-          <ImgOverlay></ImgOverlay>
-          <NextStoryArrow><i className="material-icons">arrow_forward</i></NextStoryArrow>
-          <NextStoryHeaderWarpper>
-            <NextStoryName>{ptitle && truncate(ptitle, {length: 40, seperator: ''})}</NextStoryName>
-          </NextStoryHeaderWarpper>
-        </NextStoryContainer>
-      </Link>
-    )
+    if(!isEmpty(this.state.nextStory)){
+      let {ptitle, cover, url} = this.state.nextStory
+      return (
+        <Link to = {url || "/"}>
+          <NextStoryContainer scrollOpacity = {this.state.scrollOpacity} imgSrc = {cover && cover.medium}>
+            <ImgOverlay></ImgOverlay>
+            <NextStoryArrow><i className="material-icons">arrow_forward</i></NextStoryArrow>
+            <NextStoryHeaderWarpper>
+              <NextStoryName>{ptitle && truncate(ptitle, {length: 40, seperator: ''})}</NextStoryName>
+            </NextStoryHeaderWarpper>
+          </NextStoryContainer>
+        </Link>
+      )
+    } 
+    else
+      return (<div style={{display:'none'}}></div>)
   }
 }
