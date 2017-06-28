@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon'
 import FlatButton from 'material-ui/FlatButton'
-import {Dropdown,TwtShareButton} from 'components'
+import {Dropdown,TwtShareButton, LineShareButton, InShareButton} from 'components'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import config from '../../../config'
 import { withRouter } from 'react-router'
@@ -46,6 +46,7 @@ class ShareDropdownTop extends React.Component {
     }
     let buttons = []
     buttons.push(<span><i className="fa fa-twitter" aria-hidden="true" style={buttonStyle}></i>Twitter</span>)
+    buttons.push(<span><i className="fa fa-linkedin" aria-hidden="true" style={buttonStyle}></i>LinkedIn</span>)
     buttons.push(<span><FontIcon className="material-icons" style={buttonStyle}>link</FontIcon>Copy Link</span>)
 
     const button = (
@@ -57,10 +58,16 @@ class ShareDropdownTop extends React.Component {
             style={{width: '140px', textAlign: 'left', display: 'inline-block'}}
           />
         } />
-
-        <CopyToClipboard text={config.FRONTURL+this.props.location.pathname} onCopy={this.onStoryCopied}>
+        <InShareButton button={
           <FlatButton
             label={buttons[1]}
+            labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
+            style={{width: '140px', textAlign: 'left', display: 'inline-block'}}
+          />
+        } />
+        <CopyToClipboard text={config.FRONTURL+this.props.location.pathname} onCopy={this.onStoryCopied}>
+          <FlatButton
+            label={buttons[2]}
             labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
             style={{width: '140px', textAlign: 'left', display: 'inline-block'}}
           />
