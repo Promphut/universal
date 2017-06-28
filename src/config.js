@@ -17,7 +17,7 @@ const config = {
     FROMDATE:'20170610',
     PID:'11',
     NAME: 'NextEmpire', // one word, no space
-    FACEBOOK: 'aommoneyth',
+    FACEBOOK: 'nextempire',
     FEED_LIMIT: 15,
     ROLES: {
       MEMBER: 0, 
