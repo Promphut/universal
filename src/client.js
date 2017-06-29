@@ -10,28 +10,74 @@ import { BrowserRouter } from 'react-router-dom'
 import { basename } from 'config'
 import { CookiesProvider } from 'react-cookie'
 
-import AppRoutes from 'components/routes'
+import App2 from 'components/App2'
+import api from 'components/api'
+//import AppRoutes from 'components/routes'
 //import mainStyles from '../public/scss/main.scss'
 
 OfflinePluginRuntime.install()
 //import App from 'components/App'
 
-const renderApp = () => (
+// class RenderApp extends React.Component {
+//   constructor(props) {
+//     super(props)
+//     this.state = {
+//       setting: {
+//         publisher:{
+//           theme: {}
+//         },
+//         menu: {}
+//       }
+//     }
+//   }
+
+//   componentWillMount(){
+//     api.getPublisherSetting()
+//     .then(setting => {
+//       //console.log('componentWillMount', setting)
+//       this.setState({
+//         setting: setting
+//       })
+//     })
+//   } 
+
+//   render() {
+//     return (
+//       <CookiesProvider>
+//         <BrowserRouter basename={basename}>
+//           {/*<AppRoutes/>*/}
+//           <AppRoutes2 setting={this.state.setting}/>
+//         </BrowserRouter>
+//       </CookiesProvider>
+//     )
+//   }
+// }
+
+const renderApp = (setting) => (
 	<CookiesProvider>
 		<BrowserRouter basename={basename}>
-			<AppRoutes/>
+			{/*<AppRoutes/>*/}
+      <App2 setting={setting}/>
 		</BrowserRouter>
 	</CookiesProvider>
 )
 
 const root = document.getElementById('app')
-render(renderApp(), root)
+api.getPublisherSetting()
+.then(setting => {
+  render(renderApp(setting), root)
+})
 
 if (module.hot) {
   //module.hot.accept('components/App', () => {
   module.hot.accept('components/routes', () => {
     //require('components/App')
     require('components/routes')
-    render(renderApp(), root)
+
+    const root = document.getElementById('app')
+    api.getPublisherSetting()
+    .then(setting => {
+      render(renderApp(setting), root)
+    })
   })
 }

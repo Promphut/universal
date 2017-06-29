@@ -156,7 +156,7 @@ class Footer extends React.Component {
   render() {
     let {theme, channels} = this.context.setting.publisher
 
-		console.log(theme.barTone)
+		//console.log(theme.barTone)
 
 		let theSolarLogoFileName = null
 
