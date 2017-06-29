@@ -155,15 +155,11 @@ const styles ={
 
 class StoryDetail extends React.Component {
   state = {
-    tags:[]
+    tags:[],
+    open:false
   }
   constructor(props) {
     super(props)
-    //console.log(props)
-    // this.story = {
-    //   writer: {},
-    //   column: {}
-    // }
   }
 
   getStoryTags = (sid) => {
@@ -185,8 +181,29 @@ class StoryDetail extends React.Component {
     )
   }
 
+  handleRequestClose = () => {
+    this.setState({
+      open: false,
+    });
+  };
+
+  hadleMouseEnter = (e) => {
+    this.setState({
+      open: true,
+      anchorEl:e.currentTarget
+    });
+  } 
+
   componentDidMount(){
-     this.getStoryTags(this.props.story._id)
+    var self  =  this
+    this.getStoryTags(this.props.story._id)
+    this.imgContainer = document.getElementsByClassName('medium-insert-images')
+    var eventList = [].forEach.call(this.imgContainer,function(e){e.addEventListener('mouseenter',function(e){
+      self.hadleMouseEnter(e)
+    })})
+    var eventList2 = [].forEach.call(this.imgContainer,function(e){e.addEventListener('mouseleave',function(e){
+
+    })})
   }
 
   componentWillReceiveProps(nextProps){
@@ -194,6 +211,11 @@ class StoryDetail extends React.Component {
       this.getStoryTags(nextProps.story._id)
       //console.log(nextProps.story)
     }
+  }
+
+  componentWillUnmount(){
+    var eventList = [].forEach.call(this.imgContainer,function(e){e.removeEventListener('mouseenter')})
+    var eventList2 = [].forEach.call(this.imgContainer,function(e){e.removeEventListener('mouseleave')})
   }
 
   render(){
