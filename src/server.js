@@ -111,13 +111,14 @@ const renderHtml = ({ content, sheet, meta }) => {
 
 const app = express()
 const sitemap = sm.createSitemap({
-	hostname: 'https:'+FRONTURL,
+	hostname: FRONTURL,
 	cacheTime: 600000,        // 600 sec - cache purge period
 	urls: [
 		{ url: '/',  changefreq: 'daily', priority: 0.5 ,img: COVER},
 		{ url: '/stories/news',  changefreq: 'daily',  priority: 0.3 },
-		{ url: '/about',   priority: 0.1 },
-		{ url: '/contact',  priority: 0.1 }
+		{ url: '/stories/columns',  changefreq: 'weekly',  priority: 0.2 },
+		{ url: '/about'},
+		{ url: '/contact'}
 	]
 })
 //app.use(forceSSL)
