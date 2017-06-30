@@ -11,10 +11,10 @@ import { withRouter } from 'react-router'
 
 const Container = styled.div`
 	padding: 40px 0px 40px 0px;
-  background: ${props => props.theme.barTone == 'light' ? '#F4F4F4' : props.theme.primaryColor};
+  	background: ${props => props.theme.barTone == 'light' ? '#F4F4F4' : props.theme.primaryColor};
 	color: ${props => props.theme.barTone == 'light' ? '#8E8E8E' : '#FFF'};
 	width: 100%;
-	margin-top: 56px;
+	margin-top: ${props => props.isStoryPage};
 `
 
 const Content = styled.div`
@@ -149,6 +149,7 @@ class Footer extends React.Component {
   }
 
   render() {
+	let mar = this.props.isStoryPage ? '120px' : '56px';
     let {theme, channels} = this.context.setting.publisher
 		let theSolarLogoFileName = null
 
@@ -199,7 +200,7 @@ class Footer extends React.Component {
 
 		//Normal Footer
     return (
-      <Container className="sans-font">
+      <Container isStoryPage = {mar} className="sans-font">
 				<Content>
 						<Column width = {1.5}>
 							<ColumnHeader>MENU</ColumnHeader>

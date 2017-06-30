@@ -90,10 +90,10 @@ export default class NextStory extends React.Component {
 
       //var height = Math.max(body.scrollHeight, body.offsetHeight);
 
-      const scrollToTop = e.srcElement.body.scrollTop > e.srcElement.body.scrollHeight - window.innerHeight - 600
+      const scrollToTop = e.srcElement.body.scrollTop > e.srcElement.body.scrollHeight - window.innerHeight - 800
         ? true
         : false
-      const scrollOpacity = e.srcElement.body.scrollTop > e.srcElement.body.scrollHeight - window.innerHeight - 600
+      const scrollOpacity = e.srcElement.body.scrollTop > e.srcElement.body.scrollHeight - window.innerHeight - 800
         ? true
         : false
 
@@ -126,15 +126,15 @@ export default class NextStory extends React.Component {
     if(!isEmpty(this.state.nextStory)){
       let {ptitle, cover, url} = this.state.nextStory
       return (
-        <Link to = {url || "/"}>
-          <NextStoryContainer scrollOpacity = {this.state.scrollOpacity} imgSrc = {cover && cover.medium}>
-            <ImgOverlay></ImgOverlay>
-            <NextStoryArrow><i className="material-icons">arrow_forward</i></NextStoryArrow>
-            <NextStoryHeaderWarpper>
-              <NextStoryName>{ptitle && truncate(ptitle, {length: 40, seperator: ''})}</NextStoryName>
-            </NextStoryHeaderWarpper>
-          </NextStoryContainer>
-        </Link>
+          <Link to = {url || "/"}>
+            <NextStoryContainer scrollOpacity = {this.state.scrollOpacity} imgSrc = {cover && cover.medium}>
+              <ImgOverlay></ImgOverlay>
+              <NextStoryArrow><i className="material-icons">arrow_forward</i></NextStoryArrow>
+              <NextStoryHeaderWarpper>
+                <NextStoryName>{ptitle && truncate(ptitle, {length: 40, seperator: ''})}</NextStoryName>
+              </NextStoryHeaderWarpper>
+            </NextStoryContainer>
+          </Link>
       )
     } 
     else

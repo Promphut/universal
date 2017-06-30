@@ -342,14 +342,14 @@ class StoryPage extends React.Component {
 
 							
 						</Content>
-
+						
 						<Content>
 							{recommends.length != 0 &&
 								<RecommendContainer recommend={recommends} />}
 						</Content>
-						<NextStory cid = {story.column._id} currentID = {story._id} format = {story.format}/>
+							<NextStory cid = {story.column._id} currentID = {story._id} format = {story.format}/>
 						{/*<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800" />*/}
-						<Footer />
+						<Footer isStoryPage = {true}/>
 					</Wrapper>
 				</div>
 			)
