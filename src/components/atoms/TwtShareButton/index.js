@@ -28,6 +28,15 @@ class TwtShareButton extends React.Component {
 		.then(done)
 	}
 
+	componentWillReceiveProps(nextProps){
+		if(nextProps.url && this.props.url != nextProps.url){
+			api.shorten(nextProps.url, {medium:'social', source:'twitter'})
+			.then(res => {
+				this.setState({url: res.url})
+			})
+		}
+	}
+
 	componentDidMount(){
 		// Handel url
 		this.getUrl(res => {
