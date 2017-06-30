@@ -63,15 +63,6 @@ const SocialContentItem = styled.li `
 	}
 `
 
-const SiteLogoImage = styled.img `
-	height: 24px;
-	width: auto;
-`
-
-const TheSolarLogo = styled(SiteLogoImage) `
-	opacity: 0.7;
-`
-
 const InnerLink = styled(Link) `
 	color: ${props => props.theme.barTone == 'light' ? '#8E8E8E' : '#FFF'} !important;
 	transition: .2s;
@@ -97,13 +88,22 @@ const SocialIcon = styled.i `
 	margin: 0;
 `
 
+const SiteLogoImage = styled.img `
+	height: 24px;
+	width: auto;
+`
+
+const TheSolarLogo = styled(SiteLogoImage) `
+	opacity: 0.7;
+`
+
 const CopyrightText = styled.p `
 	font-size: 12px;
 	opacity: 0.7;
 	font-weight: lighter;
 `
 
-// Mobile Footer Styled components
+// Mobile Friendly Footer's Styled components
 
 const MobileContainer = styled(Container)`
  padding-top: 14px;
@@ -127,6 +127,8 @@ const MobileSocialRow = styled.div `
 	flex-direction: row-reverse;
 `
 
+
+
 class Footer extends React.Component {
   static contextTypes = {
     setting: PropTypes.object
@@ -136,44 +138,28 @@ class Footer extends React.Component {
     super(props)
   }
 
-  componentDidMount(){
-    // Get from cookie, else get from query
-    let token = utils.querystring('token', this.props.location) || auth.getToken()
-    // let query = parse(this.props.location.search)
-    // let token = query && query.token ? query.token : auth.getToken()
+  componentDidMount() {
 
-    // 1. Fetch menu, user, and roles information
+    let token = utils.querystring('token', this.props.location) || auth.getToken()
     api.getCookieAndToken(token)
     .then(result => {
-      //console.log('TopBarWithNavigation', result)
-      // 2. Update newly fetch cookie
       auth.setCookieAndToken(result)
-
-      // 3. Set the state to "loggedin" or "unloggedin"
       this.menu = result.menu
     })
   }
 
   render() {
     let {theme, channels} = this.context.setting.publisher
-
-		//console.log(theme.barTone)
-
 		let theSolarLogoFileName = null
 
 		//Check for theme
-		if (theme.barTone === 'dark') {
-				theSolarLogoFileName = 'poweredby_white.svg'
-		}
-		else {
+		if (theme.barTone === 'dark')
+			theSolarLogoFileName = 'poweredby_white.svg'
+		else
 			theSolarLogoFileName = 'poweredby_black.svg'
-		}
-
-    //console.log('publisher', this.context.setting.publisher)
-    const isMobile = utils.isMobile()
 
 		// Footer for Mobile
-		if (isMobile)
+		if (utils.isMobile())
 		return (
 			<MobileContainer className="sans-font">
 				<MobileContent>
