@@ -35,7 +35,6 @@ const config = {
     amazonAccessKey : 'AKIAJP3QZLKUMZXLKBGA',
     secretKey : "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"
   },
-  test: {},
   development: {
     DOMAIN:     'localhost',
     FRONTURL:     'http://localhost:3000',

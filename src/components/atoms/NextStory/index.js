@@ -103,8 +103,7 @@ export default class NextStory extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.currentID != nextProps.currentID)
-      { console.log('New Props : ' + nextProps.currentID +  ' ' + nextProps.cid + ' ' + nextProps.format)
-      console.log('Old Props : ' + this.props.currentID +  ' ' + this.props.cid + ' ' + this.props.format)
+      {
         this.getNextStory(nextProps.currentID,nextProps.cid,nextProps.format)
       }
   }

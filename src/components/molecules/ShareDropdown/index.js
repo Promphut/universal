@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon'
 import FlatButton from 'material-ui/FlatButton'
-import {Dropdown,TwtShareButton, FbShareButton} from 'components'
+import {Dropdown,TwtShareButton, FbShareButton, InShareButton} from 'components'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import api from 'components/api' 
 import config from '../../../config'
@@ -57,6 +57,7 @@ class ShareDropdown extends React.Component {
     let buttons = []
     buttons.push(<span><i className="fa fa-facebook" aria-hidden="true" style={buttonStyle}></i>Share on Facebook</span>)
     buttons.push(<span><i className="fa fa-twitter" aria-hidden="true" style={buttonStyle}></i>Share on Twitter</span>)
+    buttons.push(<span><i className="fa fa-linkedin" aria-hidden="true" style={buttonStyle}></i>Share on LinkedIn</span>)
     buttons.push(<span><FontIcon className="material-icons" style={buttonStyle}>link</FontIcon>Copy Link</span>)
 
     // for (let i = 0; i < buttons.length; i++){
@@ -99,10 +100,21 @@ class ShareDropdown extends React.Component {
             />
           } />
         </div>
+
         <div onMouseEnter={() => this.onHover(2)}>
-          <CopyToClipboard text={config.FRONTURL+this.props.url} onCopy={this.onStoryCopied}>
+          <InShareButton url={config.FRONTURL+this.props.url} button={
             <FlatButton
               label={buttons[2]}
+              labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
+              style={{width: '180px', textAlign: 'left', display: 'inline-block'}}
+            />
+          } />
+        </div>
+
+        <div onMouseEnter={() => this.onHover(3)}>
+          <CopyToClipboard text={config.FRONTURL+this.props.url} onCopy={this.onStoryCopied}>
+            <FlatButton
+              label={buttons[3]}
               labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
               style={{width: '180px', textAlign: 'left', display: 'inline-block'}}
             />

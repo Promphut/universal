@@ -10,68 +10,124 @@ import utils from '../../../services/utils'
 import { withRouter } from 'react-router'
 
 const Container = styled.div`
-	margin: 65px 0px 0px;
-	padding: 0px;
+	padding: 40px 0px 40px 0px;
   background: ${props => props.theme.barTone == 'light' ? '#F4F4F4' : props.theme.primaryColor};
 	color: ${props => props.theme.barTone == 'light' ? '#8E8E8E' : '#FFF'};
-  height: 96px;
 	width: 100%;
+	margin-top: 56px;
 `
 
-const LinkAndShare = styled.div`
-  margin: auto;
-	padding-top: 24px;
-  width: 315px;
-  display: flex;
-  justify-content: space-between;
-	flex-flow: row wrap;
-
-	@media (max-width: 480px) {
-		padding-top: 14px;
-	}
+const Content = styled.div`
+	display: flex;
+	width:90%;
+	margin: auto;
 `
 
-const Item = styled(Link)`
+const Column = styled.div `
   font-size: 14px;
   color: ${props => props.theme.barTone == 'light' ? '#8E8E8E' : '#FFF'};
-	text-align: center;
-	flex: 1;
+	text-align: left;
+	flex: ${props => props.width};
+`
 
-  &:hover {
-	  color: ${props => props.theme.barTone == 'light' ? '#8E8E8E' : '#FFF'};
-    textDecoration: underline;
-  }
+const ColumnHeader = styled.div `
+	color: ${props => props.theme.barTone == 'light' ? '#6e6b6b' : '#FFF'};
+	font-weight: bold;
+	margin-bottom: 6px;
+	font-size: 14px;
+`
 
-	@media (max-width: 480px) {
-		flex: 1 1 49%;
+const ColumnItemContainer = styled.div `
+	padding-top:10px;
+`
+
+const ColumnItem = styled.div `
+	margin-top: 6px;
+	margin-bottom:15px;
+	font-size: 14px;
+`
+
+const SocialContent = styled.ul `
+	display: inline;
+	list-style-type: none;
+	padding-left: 0px;
+`
+
+const SocialContentItem = styled.li `
+	display: inline;
+	margin-left: 15px;
+	margin-right: 0px;
+
+	&:first-child {
+		margin-left: 0px;
 	}
 `
 
-const Share = styled.div`
-	flex: 2;
-	text-align: center;
+const InnerLink = styled(Link) `
+	color: ${props => props.theme.barTone == 'light' ? '#8E8E8E' : '#FFF'} !important;
+	transition: .2s;
 
-	@media (max-width: 480px) {
-  	margin: 8px auto 0px;
+	&:hover {
+		color: ${props => props.theme.accentColor} !important;
+	}
+`;
+
+const SocialLink = styled.a `
+	color: ${props => props.theme.barTone == 'light' ? '#8E8E8E' : '#FFF'} !important;
+	transition: .2s;
+
+	&:hover {
+		color: ${props => props.theme.accentColor} !important;
 	}
 `
 
-const Copyright = styled.div`
-  margin: 15px auto;
-  font-size: 14px;
+const SocialIcon = styled.i `
+	height: 14px;
+	width:auto;
+	padding: 0;
+	margin: 0;
+`
+
+const SiteLogoImage = styled.img `
+	height: 24px;
+	width: auto;
+`
+
+const TheSolarLogo = styled(SiteLogoImage) `
+	opacity: 0.7;
+`
+
+const CopyrightText = styled.p `
+	font-size: 12px;
+	opacity: 0.7;
+	font-weight: lighter;
+`
+
+// Mobile Friendly Footer's Styled components
+
+const MobileContainer = styled(Container)`
+ padding-top: 14px;
+ padding-bottom: 24px;
+`
+
+const MobileContent = styled(Content) `
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+`
+
+const MobileColumnItem = styled(ColumnItem) `
 	text-align: center;
-  color: ${props => props.theme.barTone == 'light' ? '#C4C4C4' : '#FFF'};
-  opacity: ${props => props.theme.barTone == 'light' ? '1' : '.5'};
-
-	@media (max-width: 480px) {
-  	margin: 10px auto 0px;
-	}
+	margin-bottom: 0;
+	margin-top: ${props => props.margin? props.margin: 0}px
 `
 
-const VerticalLine = styled.div`
-  border: ${props => props.theme.barTone == 'light' ? '1px solid #8E8E8E' : '1px solid #FFF'};
-  opacity: .4;
+const MobileSocialRow = styled.div `
+	display: flex;
+	flex-direction: row-reverse;
 `
+
+
 
 class Footer extends React.Component {
   static contextTypes = {
@@ -82,76 +138,115 @@ class Footer extends React.Component {
     super(props)
   }
 
-  componentDidMount(){
-    // Get from cookie, else get from query
-    let token = utils.querystring('token', this.props.location) || auth.getToken()
-    // let query = parse(this.props.location.search)
-    // let token = query && query.token ? query.token : auth.getToken()
+  componentDidMount() {
 
-    // 1. Fetch menu, user, and roles information
+    let token = utils.querystring('token', this.props.location) || auth.getToken()
     api.getCookieAndToken(token)
     .then(result => {
-      //console.log('TopBarWithNavigation', result)
-      // 2. Update newly fetch cookie
       auth.setCookieAndToken(result)
-
-      // 3. Set the state to "loggedin" or "unloggedin"
       this.menu = result.menu
     })
   }
 
   render() {
     let {theme, channels} = this.context.setting.publisher
-    //console.log('publisher', this.context.setting.publisher)
-    const isMobile = utils.isMobile()
+		let theSolarLogoFileName = null
 
-    const logoStyleBase = {
-      display: 'flex',
-      justifyContent: 'center',
-      margin: 'auto'
-    }
-    let logoStyle
-    if (isMobile) {
-      logoStyle = {
-        ...logoStyleBase,
-        height: '40px',
-        width: '157px',
-        padding: '28px 0px'
-      }
-    } else {
-      logoStyle = {
-        ...logoStyleBase,
-        height: '45px',
-        width: '315px',
-        padding: '45px 0px'
-      }
-    }
+		//Check for theme
+		if (theme.barTone === 'dark')
+			theSolarLogoFileName = 'poweredby_white.svg'
+		else
+			theSolarLogoFileName = 'poweredby_black.svg'
 
-    const iconStyle = {
-      color: (theme.barTone == 'light') ? '#8E8E8E' : '#FFF',
-      fontSize: '14px',
-      margin: '0px 12px',
-      cursor: 'pointer'
-    }
+		// Footer for Mobile
+		if (utils.isMobile())
+		return (
+			<MobileContainer className="sans-font">
+				<MobileContent>
 
+					<ColumnItemContainer>
+
+						<MobileColumnItem>
+							<SiteLogoImage src = {theme.slogo} />
+							<SiteLogoImage src = {theme.llogo} />
+						</MobileColumnItem>
+
+						<MobileColumnItem margin={16}>
+							<ColumnItemContainer>
+								{channels && <SocialContent>
+									{channels.fb && <SocialContentItem><SocialLink href={utils.getFbUrl(channels.fb)} target="_blank"><SocialIcon className="fa fa-facebook fa-2x" aria-hidden="true"></SocialIcon></SocialLink></SocialContentItem>}
+									{channels.twt && <SocialContentItem><SocialLink href={utils.getFbUrl(channels.twt)} target="_blank"><SocialIcon className="fa fa-twitter fa-2x" aria-hidden="true"></SocialIcon></SocialLink></SocialContentItem>}
+									{channels.yt && <SocialContentItem><SocialLink href={utils.getFbUrl(channels.yt)} target="_blank"><SocialIcon className="fa fa-youtube-play fa-2x" aria-hidden="true"></SocialIcon></SocialLink></SocialContentItem>}
+									{channels.ig && <SocialContentItem><SocialLink href={utils.getFbUrl(channels.ig)} target="_blank"><SocialIcon className="fa fa-instagram fa-2x" aria-hidden="true"></SocialIcon></SocialLink></SocialContentItem>}
+
+								</SocialContent>}
+							</ColumnItemContainer>
+						</MobileColumnItem>
+
+						<MobileColumnItem margin={24}>
+							<TheSolarLogo src = {'/pic/' + theSolarLogoFileName}/>
+						</MobileColumnItem>
+
+						<MobileColumnItem margin={5}>
+							<CopyrightText>© 2017 LikeMe Co., Ltd. All Right Reserved.</CopyrightText>
+						</MobileColumnItem>
+					</ColumnItemContainer>
+
+				</MobileContent>
+			</MobileContainer>
+		)
+
+
+		//Normal Footer
     return (
       <Container className="sans-font">
-        {/*<LogoLink to="/" src={theme.logo} style={logoStyle} fill={(theme.barTone == 'light') ? '' : '#FFF'}/>*/}
-        <LinkAndShare>
-          <Item to="/about">About</Item>
-          <VerticalLine/>
-          <Item to="/contact">Contact</Item>
-          {/*{isMobile || channels && <VerticalLine/>}
+				<Content>
+						<Column width = {1.5}>
+							<ColumnHeader>MENU</ColumnHeader>
+							<ColumnItemContainer>
+								<ColumnItem><InnerLink to = "/">Home</InnerLink></ColumnItem>
+								<ColumnItem><InnerLink to = "/about">About Us</InnerLink></ColumnItem>
+								<ColumnItem><InnerLink to = "/stories/news">News</InnerLink></ColumnItem>
+							</ColumnItemContainer>
+						</Column>
 
-          {channels && <Share>
-            {channels.fb && <a href={utils.getFbUrl(channels.fb)} target="_blank" style={{display: 'inline-block'}}><i className="fa fa-facebook fa-2x" aria-hidden="true" style={iconStyle}></i></a>}
-            {channels.twt && <a href={utils.getTwtUrl(channels.twt)} target="_blank" style={{display: 'inline-block'}}><i className="fa fa-twitter fa-2x" aria-hidden="true" style={iconStyle}></i></a>}
-            {channels.yt && <a href={utils.getYtUrl(channels.yt)} target="_blank" style={{display: 'inline-block'}}><i className="fa fa-youtube-play fa-2x" aria-hidden="true" style={iconStyle}></i></a>}
-            {channels.ig && <a href={utils.getIgUrl(channels.ig)} target="_blank" style={{display: 'inline-block'}}><i className="fa fa-instagram fa-2x" aria-hidden="true" style={iconStyle}></i></a>}
-          </Share>}*/}
+						<Column width = {1.5}>
+							<ColumnHeader>STORIES</ColumnHeader>
+							<ColumnItemContainer>
+								<ColumnItem><InnerLink to = "/stories/transform">Transform</InnerLink></ColumnItem>
+								<ColumnItem><InnerLink to = "/stories/next-big-thing">Next Big Thing</InnerLink></ColumnItem>
+								<ColumnItem><InnerLink to = "/stories/next-business">Next Business</InnerLink></ColumnItem>
+								<ColumnItem><InnerLink to = "/stories/thought-leader">Thought Leader</InnerLink></ColumnItem>
+							</ColumnItemContainer>
+						</Column>
 
-        </LinkAndShare>
-        <Copyright>&copy; 2017 LikeMe Co., Ltd. All Right Reserved.</Copyright>
+						<Column width = {2}>
+							<ColumnHeader>SUBSCRIBE</ColumnHeader>
+							<ColumnItemContainer>
+								{channels && <SocialContent>
+									{channels.fb && <SocialContentItem><SocialLink href={utils.getFbUrl(channels.fb)} target="_blank"><SocialIcon className="fa fa-facebook fa-2x" aria-hidden="true"></SocialIcon></SocialLink></SocialContentItem>}
+									{channels.twt && <SocialContentItem><SocialLink href={utils.getFbUrl(channels.twt)} target="_blank"><SocialIcon className="fa fa-twitter fa-2x" aria-hidden="true"></SocialIcon></SocialLink></SocialContentItem>}
+									{channels.yt && <SocialContentItem><SocialLink href={utils.getFbUrl(channels.yt)} target="_blank"><SocialIcon className="fa fa-youtube-play fa-2x" aria-hidden="true"></SocialIcon></SocialLink></SocialContentItem>}
+									{channels.ig && <SocialContentItem><SocialLink href={utils.getFbUrl(channels.ig)} target="_blank"><SocialIcon className="fa fa-instagram fa-2x" aria-hidden="true"></SocialIcon></SocialLink></SocialContentItem>}
+
+								</SocialContent>}
+							</ColumnItemContainer>
+						</Column>
+
+						<Column width = {6} style={{display:'flex', justifyContent:'flex-end'}}>
+								<ColumnItemContainer>
+									<ColumnItem style = {{marginTop:'0px', marginBottom:'25px'}}>
+										<SiteLogoImage src = {theme.slogo} />
+										<SiteLogoImage src = {theme.llogo} />
+									</ColumnItem>
+									<ColumnItem>
+										<TheSolarLogo src = {'/pic/' + theSolarLogoFileName}/>
+									</ColumnItem>
+									<ColumnItem style = {{marginTop:'-10px'}}><CopyrightText>© 2017 LikeMe Co., Ltd. All Right Reserved.</CopyrightText></ColumnItem>
+								</ColumnItemContainer>
+						</Column>
+
+				</Content>
       </Container>
     )
   }

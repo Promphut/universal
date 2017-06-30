@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom'
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon';
-import {EditorCss,WriterAndDate,WritedBy,TagBox,CommentBox,CommentUser,RecommendArticle,FromColumn, FbShareButton} from 'components'
+import {EditorCss,WriterAndDate,WritedBy,TagBox,CommentBox,CommentUser,RecommendArticle,FromColumn, FbShareButton, ImageShare} from 'components'
 import RaisedButton from 'material-ui/RaisedButton';
 import api from 'components/api'
 import utils from '../../../services/utils'
@@ -36,7 +36,7 @@ const Head = styled.h1`
   white-space: -pre-wrap;     /* Opera <7 */
   white-space: -o-pre-wrap;   /* Opera 7 */
   word-wrap: break-word;      /* IE */
-  
+
   @media (max-width:480px){
     font-size:24px;
   }
@@ -46,7 +46,6 @@ const Story = styled.div`
   margin-top:40px;
   clear:both;
 	overflow:hidden;
-  padding-bottom: 40px;
 `
 
 const TagContainer = styled.div`
@@ -154,20 +153,16 @@ const styles ={
 }
 
 class StoryDetail extends React.Component {
+
   state = {
-    tags:[]
+    tags:[],
   }
   constructor(props) {
     super(props)
-    //console.log(props)
-    // this.story = {
-    //   writer: {},
-    //   column: {}
-    // }
   }
 
   getStoryTags = (sid) => {
-    if(sid) 
+    if(sid)
       api.getStoryTags(sid).then((tags)=>{
         //console.log(tags)
         this.setState({
@@ -176,7 +171,7 @@ class StoryDetail extends React.Component {
       })
   }
 
-  renderComment = (data, index) => { 
+  renderComment = (data, index) => {
     return (
       <div key={index}>
         <CommentUser data={data}/>
@@ -186,7 +181,7 @@ class StoryDetail extends React.Component {
   }
 
   componentDidMount(){
-     this.getStoryTags(this.props.story._id)
+    this.getStoryTags(this.props.story._id)
   }
 
   componentWillReceiveProps(nextProps){
@@ -195,6 +190,7 @@ class StoryDetail extends React.Component {
       //console.log(nextProps.story)
     }
   }
+
 
   render(){
     var {story} = this.props
@@ -209,20 +205,30 @@ class StoryDetail extends React.Component {
 
     return (
       <Wraper>
+        <ImageShare/>
         <Head className='title-font'>{s.ptitle||'NEXT EMPIRE'}</Head>
         <WriterAndDate readTime={s.readTime} writer={s.writer} column={s.column} published={s.published}/>
-        <Share style={{marginBottom:'32px'}}>
-          <FbShareButton  button={<ShareButton><b className="fa fa-facebook fa-1x" aria-hidden="true" style={{color:'white', fontWeight: 'bold',paddingRight:'10px'}}></b><b aria-hidden="true" style={{color:'white', fontWeight: 'bold', fontFamily: 'Helvetica, Arial, sans-serif'}}>   Share on Facebook</b></ShareButton>} />
+
+        {!isMobile && <Share style={{marginBottom:'32px'}}>
+          <FbShareButton  button={<ShareButton><b className="fa fa-facebook fa-lg" aria-hidden="true" style={{color:'white', fontWeight: 'bold',paddingRight:'10px'}}></b><b aria-hidden="true" style={{color:'white', fontWeight: 'bold', fontFamily: 'Helvetica, Arial, sans-serif', fontSize: '14px'}}>   Share on Facebook</b></ShareButton>} />
           <Blank></Blank>
           <div dangerouslySetInnerHTML={{ __html: `<div style="transform: scale(1.428571428571429);" class="fb-save" data-uri=${config.FRONTURL+s.url}></div>` }}></div>
-        </Share>
+        </Share>}  
+
+        {isMobile && <Share style={{marginBottom:'19px'}}>
+          <FbShareButton  button={<ShareButton style={{width:'86px', height:'28px'}}><b className="fa fa-facebook fa-1x" aria-hidden="true" style={{color:'white', fontWeight: 'bold',paddingRight:'10px',fontSize: '11px'}}></b><b aria-hidden="true" style={{color:'white', fontWeight: 'bold', fontFamily: 'Helvetica, Arial, sans-serif',fontSize: '14px'}}>   Share</b></ShareButton>} />
+          <Blank style={{width: '10px'}}></Blank>
+          <div dangerouslySetInnerHTML={{ __html: `<div class="fb-save" data-uri="${config.FRONTURL+s.url}"></div>` }}></div>
+        </Share>}
+
+
         {s.phighlight &&
         <div>
           <HighlightText>{s.format=='NEWS'?'SUMMARY':'HIGHLIGHTS'}</HighlightText>
           <HighlightBox>
             <Highlight id='highlight'  dangerouslySetInnerHTML={{__html:s.phighlight}}/>
           </HighlightBox>
-        </div>} 
+        </div>}
         <Story ref="detail" id='paper'  dangerouslySetInnerHTML={{__html:s.phtml}}></Story>
         {/*<WritedBy writer={s.writer} column={s.column} published={s.published} />*/}
 
@@ -232,11 +238,17 @@ class StoryDetail extends React.Component {
             <Link to={tag.url} key={index}><TagBox style={{margin:'0 20px 20px 0'}}>{tag.name}</TagBox></Link>
           ))}
         </TagContainer>*/}
-        <Share>
-          <FbShareButton  button={<ShareButton><b className="fa fa-facebook fa-1x" aria-hidden="true" style={{color:'white', fontWeight: 'bold',paddingRight:'10px'}}></b><b aria-hidden="true" style={{color:'white', fontWeight: 'bold', fontFamily: 'Helvetica, Arial, sans-serif'}}>   Share on Facebook</b></ShareButton>} />
+        {!isMobile && <Share style={{marginBottom:'32px'}}>
+          <FbShareButton  button={<ShareButton><b className="fa fa-facebook fa-lg" aria-hidden="true" style={{color:'white', fontWeight: 'bold',paddingRight:'10px'}}></b><b aria-hidden="true" style={{color:'white', fontWeight: 'bold', fontFamily: 'Helvetica, Arial, sans-serif', fontSize: '14px'}}>   Share on Facebook</b></ShareButton>} />
           <Blank></Blank>
           <div dangerouslySetInnerHTML={{ __html: `<div style="transform: scale(1.428571428571429);" class="fb-save" data-uri=${config.FRONTURL+s.url}></div>` }}></div>
-        </Share>
+        </Share>}  
+
+        {isMobile && <Share style={{marginBottom:'19px'}}>
+          <FbShareButton  button={<ShareButton style={{width:'86px', height:'28px'}}><b className="fa fa-facebook fa-1x" aria-hidden="true" style={{color:'white', fontWeight: 'bold',paddingRight:'10px',fontSize: '11px'}}></b><b aria-hidden="true" style={{color:'white', fontWeight: 'bold', fontFamily: 'Helvetica, Arial, sans-serif',fontSize: '14px'}}>   Share</b></ShareButton>} />
+          <Blank style={{width: '10px'}}></Blank>
+          <div dangerouslySetInnerHTML={{ __html: `<div class="fb-save" data-uri="${config.FRONTURL+s.url}"></div>` }}></div>
+        </Share>}
 
         <Blank></Blank>
 

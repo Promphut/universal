@@ -56,7 +56,7 @@ utils.getYtUrl = username => {
 utils.getTweetUrl = (url, hashtags) => {
 	//console.log("TWT", url, hashtags)
 	return (
-		'https://twitter.com/intent/tweet?url=' +
+		'https://twitter.com/intent/tweet?text=' +
 		encodeURIComponent(url) +
 		(hashtags ? '&hashtags=' + hashtags : '')
 	)
@@ -108,7 +108,7 @@ utils.getTrailingSid = url => {
 	if (!url) {
 		if (!window) return null
 		arr = window.location.href.split('/')
-	} 
+	}
 	else arr = url.split('/')
 
 	return parseInt(arr[arr.length - 1])
@@ -117,7 +117,7 @@ utils.getTrailingSid = url => {
 /*
 	Refer from url pattern in routes.js
 	Able to match public story url: Story1, Story2, Story3, Story4.
-	For examples: 
+	For examples:
 		/stories/nesdwsasdasdกดกดกดdfd/d-sddfsf/301
 		/@ochawin/stories/d-sddfsf/301
 		/u/1121/stories/d-sddfsf/30
@@ -125,7 +125,7 @@ utils.getTrailingSid = url => {
 utils.getPublicSidFromPath = path => {
 	let found = path.match(/\/stories\/[^\/ ]+[^\/ ]\/[^\/ ]+[^\/ ]\/[0-9]+$|\/@[^\/ ]+[^\/ ]\/stories\/[^\/ ]+[^\/ ]\/[0-9]+$|\/u\/[0-9]+\/stories\/[^\/ ]+[^\/ ]\/[0-9]+$/)
 	if(!found) return null
-	
+
 	let arr = path.split('/')
 	return parseInt(arr[arr.length - 1])
 }
