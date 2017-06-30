@@ -75,7 +75,7 @@ const resolveModules = modules => () => ({
 
 const base = () => group([
   setOutput({
-    filename: '[name].[hash].js',
+    filename: '[name].[chunkhash].js',
     path: outputPath, 
     publicPath
   }),
