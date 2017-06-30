@@ -39,19 +39,19 @@ const config = {
     DOMAIN:     'localhost',
     FRONTURL:     'http://localhost:3000',
     BACKURL:    'https://localhost:4000',
-    COVER:  '//localhost:3000/pic/fbthumbnail.jpg'
+    COVER:  'https://localhost:3000/pic/fbthumbnail.jpg'
   },
   production: {
     DOMAIN:     'nextempire.co',
     FRONTURL:     'https://nextempire.co',
     BACKURL:    'https://api.thesolar.co',
-    COVER:  '//nextempire.co/pic/fbthumbnail.jpg'
+    COVER:  'https://nextempire.co/pic/fbthumbnail.jpg'
   },
   test: {
     DOMAIN:     'presentationxth.com',
     FRONTURL:     'https://presentationxth.com',
     BACKURL:    'https://api.presentationxth.com',
-    COVER:  '//presentationxth.com/pic/fbthumbnail.jpg'
+    COVER:  'https://presentationxth.com/pic/fbthumbnail.jpg'
   },
 }
 
