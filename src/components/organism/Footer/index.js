@@ -14,6 +14,7 @@ const Container = styled.div`
   background: ${props => props.theme.barTone == 'light' ? '#F4F4F4' : props.theme.primaryColor};
 	color: ${props => props.theme.barTone == 'light' ? '#8E8E8E' : '#FFF'};
 	width: 100%;
+	margin-top: 56px;
 `
 
 const Content = styled.div`

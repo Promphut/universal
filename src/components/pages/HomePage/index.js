@@ -28,11 +28,6 @@ import utils from '../../../services/utils'
 import isEmpty from 'lodash/isEmpty'
 import config from '../../../config'
 
-const SS = styled.div `
-	// height: 200px !important;
-    // border-bottom: 1px solid #AAA !important;
-`
-
 const Wrapper = styled.div`
 	@media (max-width:480px) {
 		max-width: 100%;
@@ -88,6 +83,7 @@ const Aside = styled.div`
 	flex: 1 300px;
 	max-width: 300px;
 	margin-left:60px;
+	z-index: -10;
 	@media (max-width: 1160px) {
 		display:none;
 	}
@@ -383,9 +379,7 @@ class HomePage extends React.Component {
 					</Main>
 					<Aside>
 						<Stick topOffset={100}>
-							<SS>
-								<div dangerouslySetInnerHTML={{ __html: `<div class="fb-page" data-href="https://www.facebook.com/${config.FACEBOOK}/" data-tabs="timeline" data-height="400" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/${config.FACEBOOK}/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/${config.FACEBOOK}/">${config.NAME}</a></blockquote></div>` }}></div>
-							</SS>
+							<div dangerouslySetInnerHTML={{ __html: `<div class="fb-page" data-href="https://www.facebook.com/${config.FACEBOOK}/" data-tabs="timeline" data-height="400" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/${config.FACEBOOK}/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/${config.FACEBOOK}/">${config.NAME}</a></blockquote></div>` }}></div>
 						</Stick>
 						{/* <StaffPickSideBar></StaffPickSideBar>
 						<TopNewsHome/> */}
