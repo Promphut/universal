@@ -6,12 +6,9 @@ import utils from '../../../services/utils'
 import config from '../../../config'
 
 const ImageShareContainer = styled.div `
-
-  ${'' /* Check for open state  */}
   display: ${props=>props.open==true?'flex':'none;'};
-
-  left: ${props => props.posLeft};
-  top: ${props => props.posTop};
+  left: ${props => props.posLeft}px;
+  top: ${props => props.posTop}px;
   position: absolute;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
@@ -20,6 +17,7 @@ const ImageShareContainer = styled.div `
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
+  z-index:3;
 `
 
 const SocialItem = styled.a `
@@ -40,7 +38,6 @@ const SocialIcon = styled.i `
 `
 
 export default class ImageShare extends React.Component {
-
   constructor (props) {
     super(props)
 
@@ -48,15 +45,10 @@ export default class ImageShare extends React.Component {
       url:'',
       posTop: 0,
       posLeft: 0,
+      open:false,
+      open2:false,
+      topen:false
     }
-  }
-
-  componentDidMount(){
-    // Handel url
-    this.getUrl(res => {
-      // console.log('URL', res.url)
-      this.setState({url: res.url})
-    })
   }
 
   //Get shorten url based on current page
@@ -97,17 +89,75 @@ export default class ImageShare extends React.Component {
     if(val!=null) api.incStoryInsight(val, 'share', 'share_dark')
   }
 
-  render () {
+  getPos = (el)=> {
+    // yay readability
+    for (var lx=0, ly=0;
+        el != null;
+        lx += el.offsetLeft, ly += el.offsetTop, el = el.offsetParent);
+    this.setState({
+      posLeft:lx,
+      posTop:ly
+    })
+  }
 
+  hadleMouseEnter = (e) => {
+    this.getPos(e.currentTarget)
+    this.setState({
+      open: true,
+    },()=>this.checkOpen());
+  }
+
+  mouseEnter = (e)=>{
+    this.setState({
+      open2:true
+    },()=>this.checkOpen())
+  }
+
+  mouseLeave = (e)=>{
+    this.setState({
+      open2:false
+    },()=>this.checkOpen())
+  }
+
+  checkOpen = ()=>{
+    var {open,open2} = this.state
+    if(open==false&&open2==false) this.setState({topen:false})
+    else this.setState({topen:true})
+  }
+
+  componentDidMount(){
+    // Handel url
+    this.getUrl(res => {
+      // console.log('URL', res.url)
+      this.setState({url: res.url})
+    })
+    var self  =  this
+    this.imgContainer = document.querySelectorAll('img.ui-sortable-handle')
+    var eventList = [].forEach.call(this.imgContainer,function(e){e.addEventListener('mouseenter',function(e){
+      self.hadleMouseEnter(e)
+    })})
+    var eventList2 = [].forEach.call(this.imgContainer,function(e){e.addEventListener('mouseleave',function(e){
+      self.setState({
+        open: false,
+      },()=>self.checkOpen());
+    })})
+  }
+
+  componentWillUnmount(){
+    var eventList = [].forEach.call(this.imgContainer,function(e){e.removeEventListener('mouseenter')})
+    var eventList2 = [].forEach.call(this.imgContainer,function(e){e.removeEventListener('mouseleave')})
+  }
+
+  render () {
     // Set url
 		let url = this.state.url
 
 		// Set hashtags
 		let hashtags = this.props.hashtags
 		if(hashtags==null) hashtags = config.NAME
-
+    var o = this.checkOpen
     return (
-      <ImageShareContainer open={this.props.open} posLeft = {this.state.posLeft} posTop = {this.state.posTop}>
+      <ImageShareContainer onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} open={this.state.topen} posLeft = {this.state.posLeft} posTop = {this.state.posTop} id='shareImg'>
         <SocialItem onClick={this.handleFbShare} target="_blank" BGColor = {"#38559c"} BGDarkColor = {"#052269"} order = {"1"}><SocialIcon className = "fa fa-facebook" aria-hidden="true"></SocialIcon></SocialItem>
         <SocialItem href = {utils.getTweetUrl(url, hashtags)} target="_blank" BGColor = {"#35a9e0"} BGDarkColor = {"#0276AD"} order = {"2"}><SocialIcon className = "fa fa-twitter" aria-hidden="true"></SocialIcon></SocialItem>
 
