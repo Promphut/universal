@@ -14,6 +14,7 @@ const Container = styled.div`
   background: ${props => props.theme.barTone == 'light' ? '#F4F4F4' : props.theme.primaryColor};
 	color: ${props => props.theme.barTone == 'light' ? '#8E8E8E' : '#FFF'};
 	width: 100%;
+	margin-top: 56px;
 `
 
 const Content = styled.div`
@@ -40,7 +41,7 @@ const ColumnItemContainer = styled.div `
 	padding-top:10px;
 `
 
-const ColumnItem = styled.h5 `
+const ColumnItem = styled.div `
 	margin-top: 6px;
 	margin-bottom:15px;
 	font-size: 14px;
@@ -60,11 +61,6 @@ const SocialContentItem = styled.li `
 	&:first-child {
 		margin-left: 0px;
 	}
-`
-
-const SiteLogoImage = styled.img `
-	height: 24px;
-	width: auto;
 `
 
 const InnerLink = styled(Link) `
@@ -92,6 +88,47 @@ const SocialIcon = styled.i `
 	margin: 0;
 `
 
+const SiteLogoImage = styled.img `
+	height: 24px;
+	width: auto;
+`
+
+const TheSolarLogo = styled(SiteLogoImage) `
+	opacity: 0.7;
+`
+
+const CopyrightText = styled.p `
+	font-size: 12px;
+	opacity: 0.7;
+	font-weight: lighter;
+`
+
+// Mobile Friendly Footer's Styled components
+
+const MobileContainer = styled(Container)`
+ padding-top: 14px;
+ padding-bottom: 24px;
+`
+
+const MobileContent = styled(Content) `
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+`
+
+const MobileColumnItem = styled(ColumnItem) `
+	text-align: center;
+	margin-bottom: 0;
+	margin-top: ${props => props.margin? props.margin: 0}px
+`
+
+const MobileSocialRow = styled.div `
+	display: flex;
+	flex-direction: row-reverse;
+`
+
+
+
 class Footer extends React.Component {
   static contextTypes = {
     setting: PropTypes.object
@@ -101,29 +138,66 @@ class Footer extends React.Component {
     super(props)
   }
 
-  componentDidMount(){
-    // Get from cookie, else get from query
-    let token = utils.querystring('token', this.props.location) || auth.getToken()
-    // let query = parse(this.props.location.search)
-    // let token = query && query.token ? query.token : auth.getToken()
+  componentDidMount() {
 
-    // 1. Fetch menu, user, and roles information
+    let token = utils.querystring('token', this.props.location) || auth.getToken()
     api.getCookieAndToken(token)
     .then(result => {
-      //console.log('TopBarWithNavigation', result)
-      // 2. Update newly fetch cookie
       auth.setCookieAndToken(result)
-
-      // 3. Set the state to "loggedin" or "unloggedin"
       this.menu = result.menu
     })
   }
 
   render() {
     let {theme, channels} = this.context.setting.publisher
-    //console.log('publisher', this.context.setting.publisher)
-    const isMobile = utils.isMobile()
+		let theSolarLogoFileName = null
 
+		//Check for theme
+		if (theme.barTone === 'dark')
+			theSolarLogoFileName = 'poweredby_white.svg'
+		else
+			theSolarLogoFileName = 'poweredby_black.svg'
+
+		// Footer for Mobile
+		if (utils.isMobile())
+		return (
+			<MobileContainer className="sans-font">
+				<MobileContent>
+
+					<ColumnItemContainer>
+
+						<MobileColumnItem>
+							<SiteLogoImage src = {theme.slogo} />
+							<SiteLogoImage src = {theme.llogo} />
+						</MobileColumnItem>
+
+						<MobileColumnItem margin={16}>
+							<ColumnItemContainer>
+								{channels && <SocialContent>
+									{channels.fb && <SocialContentItem><SocialLink href={utils.getFbUrl(channels.fb)} target="_blank"><SocialIcon className="fa fa-facebook fa-2x" aria-hidden="true"></SocialIcon></SocialLink></SocialContentItem>}
+									{channels.twt && <SocialContentItem><SocialLink href={utils.getFbUrl(channels.twt)} target="_blank"><SocialIcon className="fa fa-twitter fa-2x" aria-hidden="true"></SocialIcon></SocialLink></SocialContentItem>}
+									{channels.yt && <SocialContentItem><SocialLink href={utils.getFbUrl(channels.yt)} target="_blank"><SocialIcon className="fa fa-youtube-play fa-2x" aria-hidden="true"></SocialIcon></SocialLink></SocialContentItem>}
+									{channels.ig && <SocialContentItem><SocialLink href={utils.getFbUrl(channels.ig)} target="_blank"><SocialIcon className="fa fa-instagram fa-2x" aria-hidden="true"></SocialIcon></SocialLink></SocialContentItem>}
+
+								</SocialContent>}
+							</ColumnItemContainer>
+						</MobileColumnItem>
+
+						<MobileColumnItem margin={24}>
+							<TheSolarLogo src = {'/pic/' + theSolarLogoFileName}/>
+						</MobileColumnItem>
+
+						<MobileColumnItem margin={5}>
+							<CopyrightText>© 2017 LikeMe Co., Ltd. All Right Reserved.</CopyrightText>
+						</MobileColumnItem>
+					</ColumnItemContainer>
+
+				</MobileContent>
+			</MobileContainer>
+		)
+
+
+		//Normal Footer
     return (
       <Container className="sans-font">
 				<Content>
@@ -166,13 +240,12 @@ class Footer extends React.Component {
 										<SiteLogoImage src = {theme.llogo} />
 									</ColumnItem>
 									<ColumnItem>
-										<SiteLogoImage src = {'/pic/poweredby_black.svg'}/>
+										<TheSolarLogo src = {'/pic/' + theSolarLogoFileName}/>
 									</ColumnItem>
-									<ColumnItem style = {{fontSize:'12px', marginTop:'-10px'}}>© 2017 LikeMe Co., Ltd. All Right Reserved.</ColumnItem>
+									<ColumnItem style = {{marginTop:'-10px'}}><CopyrightText>© 2017 LikeMe Co., Ltd. All Right Reserved.</CopyrightText></ColumnItem>
 								</ColumnItemContainer>
 						</Column>
 
-        	{/* <Copyright>&copy; 2017 LikeMe Co., Ltd. All Right Reserved.</Copyright> */}
 				</Content>
       </Container>
     )

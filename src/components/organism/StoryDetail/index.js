@@ -46,7 +46,6 @@ const Story = styled.div`
   margin-top:40px;
   clear:both;
 	overflow:hidden;
-  padding-bottom: 40px;
 `
 
 const TagContainer = styled.div`
@@ -209,11 +208,20 @@ class StoryDetail extends React.Component {
         <ImageShare/>
         <Head className='title-font'>{s.ptitle||'NEXT EMPIRE'}</Head>
         <WriterAndDate readTime={s.readTime} writer={s.writer} column={s.column} published={s.published}/>
-        <Share style={{marginBottom:'32px'}}>
-          <FbShareButton  button={<ShareButton><b className="fa fa-facebook fa-1x" aria-hidden="true" style={{color:'white', fontWeight: 'bold',paddingRight:'10px'}}></b><b aria-hidden="true" style={{color:'white', fontWeight: 'bold', fontFamily: 'Helvetica, Arial, sans-serif'}}>   Share on Facebook</b></ShareButton>} />
+
+        {!isMobile && <Share style={{marginBottom:'32px'}}>
+          <FbShareButton  button={<ShareButton><b className="fa fa-facebook fa-lg" aria-hidden="true" style={{color:'white', fontWeight: 'bold',paddingRight:'10px'}}></b><b aria-hidden="true" style={{color:'white', fontWeight: 'bold', fontFamily: 'Helvetica, Arial, sans-serif', fontSize: '14px'}}>   Share on Facebook</b></ShareButton>} />
           <Blank></Blank>
           <div dangerouslySetInnerHTML={{ __html: `<div style="transform: scale(1.428571428571429);" class="fb-save" data-uri=${config.FRONTURL+s.url}></div>` }}></div>
-        </Share>
+        </Share>}  
+
+        {isMobile && <Share style={{marginBottom:'19px'}}>
+          <FbShareButton  button={<ShareButton style={{width:'86px', height:'28px'}}><b className="fa fa-facebook fa-1x" aria-hidden="true" style={{color:'white', fontWeight: 'bold',paddingRight:'10px',fontSize: '11px'}}></b><b aria-hidden="true" style={{color:'white', fontWeight: 'bold', fontFamily: 'Helvetica, Arial, sans-serif',fontSize: '14px'}}>   Share</b></ShareButton>} />
+          <Blank style={{width: '10px'}}></Blank>
+          <div dangerouslySetInnerHTML={{ __html: `<div class="fb-save" data-uri="${config.FRONTURL+s.url}"></div>` }}></div>
+        </Share>}
+
+
         {s.phighlight &&
         <div>
           <HighlightText>{s.format=='NEWS'?'SUMMARY':'HIGHLIGHTS'}</HighlightText>
@@ -230,14 +238,17 @@ class StoryDetail extends React.Component {
             <Link to={tag.url} key={index}><TagBox style={{margin:'0 20px 20px 0'}}>{tag.name}</TagBox></Link>
           ))}
         </TagContainer>*/}
-        <Share>
-          <FbShareButton  button={<ShareButton><b className="fa fa-facebook fa-1x" aria-hidden="true" style={{color:'white', fontWeight: 'bold',paddingRight:'10px'}}></b><b aria-hidden="true" style={{color:'white', fontWeight: 'bold', fontFamily: 'Helvetica, Arial, sans-serif'}}>   Share on Facebook</b></ShareButton>} />
+        {!isMobile && <Share style={{marginBottom:'32px'}}>
+          <FbShareButton  button={<ShareButton><b className="fa fa-facebook fa-lg" aria-hidden="true" style={{color:'white', fontWeight: 'bold',paddingRight:'10px'}}></b><b aria-hidden="true" style={{color:'white', fontWeight: 'bold', fontFamily: 'Helvetica, Arial, sans-serif', fontSize: '14px'}}>   Share on Facebook</b></ShareButton>} />
           <Blank></Blank>
           <div dangerouslySetInnerHTML={{ __html: `<div style="transform: scale(1.428571428571429);" class="fb-save" data-uri=${config.FRONTURL+s.url}></div>` }}></div>
+        </Share>}  
 
-          {/* Example of ImageShare */}
-          {/* <ImageShare open={true} posLeft = {0} posTop = {50}/> */}
-        </Share>
+        {isMobile && <Share style={{marginBottom:'19px'}}>
+          <FbShareButton  button={<ShareButton style={{width:'86px', height:'28px'}}><b className="fa fa-facebook fa-1x" aria-hidden="true" style={{color:'white', fontWeight: 'bold',paddingRight:'10px',fontSize: '11px'}}></b><b aria-hidden="true" style={{color:'white', fontWeight: 'bold', fontFamily: 'Helvetica, Arial, sans-serif',fontSize: '14px'}}>   Share</b></ShareButton>} />
+          <Blank style={{width: '10px'}}></Blank>
+          <div dangerouslySetInnerHTML={{ __html: `<div class="fb-save" data-uri="${config.FRONTURL+s.url}"></div>` }}></div>
+        </Share>}
 
         <Blank></Blank>
 
