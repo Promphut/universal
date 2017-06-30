@@ -8,10 +8,12 @@ import isEmpty from 'lodash/isEmpty'
 
 const NextStoryContainer = styled.div `
   opacity: ${props => (props.scrollOpacity ? '1' : '0')};
-  position: fixed;
+  position: -webkit-sticky;
+  position: sticky;
+  display: block;
+  float: right;
   bottom: 0px;
   right: 0px;
-  z-index: 1;
   border-color: #c6c6c6;
   border-width: 1px 1px 1px 1px;
   border-style: solid;
@@ -23,6 +25,7 @@ const NextStoryContainer = styled.div `
   height:auto;
   width: 240px;
   height: 120px;
+  transition: .2s;
 `
 
 const ImgOverlay = styled.div `
@@ -83,11 +86,14 @@ export default class NextStory extends React.Component {
 
   handleScroll = e => {
     if (!utils.isMobile()) {
-      const scrollToTop = e.srcElement.body.scrollTop >
-        200
+      //var body = e.srcElement.body
+
+      //var height = Math.max(body.scrollHeight, body.offsetHeight);
+
+      const scrollToTop = e.srcElement.body.scrollTop > e.srcElement.body.scrollHeight - window.innerHeight - 600
         ? true
         : false
-      const scrollOpacity = e.srcElement.body.scrollTop > 200
+      const scrollOpacity = e.srcElement.body.scrollTop > e.srcElement.body.scrollHeight - window.innerHeight - 600
         ? true
         : false
 
