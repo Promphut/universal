@@ -28,6 +28,7 @@ const SocialItem = styled.a `
   &:hover {
 		color: white !important;
     background-color: ${props => props.BGDarkColor};
+    cursor: pointer;
 	}
 `
 
@@ -166,7 +167,7 @@ export default class ImageShare extends React.Component {
             <SocialIcon className = "fa fa-link" aria-hidden="true"></SocialIcon>
           </SocialItem>
         </CopyToClipboard>
-        
+
       </ImageShareContainer>
     )
   }
