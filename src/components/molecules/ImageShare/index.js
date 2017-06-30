@@ -5,6 +5,8 @@ import api from 'components/api'
 import utils from '../../../services/utils'
 import config from '../../../config'
 
+import {TwtShareButton, FbShareButton} from 'components'
+
 const ImageShareContainer = styled.div `
   display: ${props=>props.open==true?'flex':'none;'};
   left: ${props => props.posLeft}px;
@@ -20,20 +22,25 @@ const ImageShareContainer = styled.div `
   z-index:3;
 `
 
-const SocialItem = styled.a `
+const SocialItem = styled.div`
   order: ${props => props.order};
   color: white;
   background-color: ${props => props.BGColor};
-
+  padding: 20px 20px 20px 20px;
   &:hover {
 		color: white !important;
     background-color: ${props => props.BGDarkColor};
+    cursor: pointer;
 	}
+`
+
+const SocialItemContainer = styled.div `
+  flex:0;
+  display:'inline';
 `
 
 const SocialIcon = styled.i `
   height: auto;
-  margin: 20px 20px 20px 20px;
   font-size: 20px;
 `
 
@@ -47,7 +54,8 @@ export default class ImageShare extends React.Component {
       posLeft: 0,
       open:false,
       open2:false,
-      topen:false
+      topen:false,
+      imgContainer:[]
     }
   }
 
@@ -59,29 +67,6 @@ export default class ImageShare extends React.Component {
     }
     api.shorten(url, {medium:'social'})
     .then(done)
-  }
-
-  handleFbShare = (e) => {
-    // Get sid
-    let sid = this.props.sid
-    if(sid==null) sid = utils.getTrailingSid(this.state.url)
-    if(sid!=null) api.incStoryInsight(sid, 'share', 'share_fb')
-    //console.log(sid)
-    this.getUrl(res => {
-      //console.log('URL', res)
-
-      // Set hashtags
-      let hashtag = this.props.hashtag
-      if(hashtag==null) hashtag = '#'+config.NAME
-
-      FB.ui({
-        method: 'share',
-        display:'dialog',
-        hashtag: hashtag,
-        href: res.url,
-      }, function(response){
-      })
-    })
   }
 
   onStoryCopied (val) {
@@ -125,48 +110,62 @@ export default class ImageShare extends React.Component {
     else this.setState({topen:true})
   }
 
+  handleMouse = () =>{
+    var self  =  this
+        this.setState({imgContainer:document.querySelectorAll('img.ui-sortable-handle')},()=>{
+            var eventList = [].forEach.call(this.state.imgContainer,function(e){e.addEventListener('mouseenter',function(e){
+              self.hadleMouseEnter(e)
+            })})
+            var eventList2 = [].forEach.call(this.state.imgContainer,function(e){e.addEventListener('mouseleave',function(e){
+              self.setState({
+                open: false,
+              },()=>self.checkOpen());
+            })})
+        })
+  }
+
+  removeHandleMouse = () =>{
+    var eventList = [].forEach.call(this.state.imgContainer,function(e){e.removeEventListener('mouseenter',()=>{})})
+    var eventList2 = [].forEach.call(this.state.imgContainer,function(e){e.removeEventListener('mouseleave',()=>{})})
+}
+
   componentDidMount(){
-    // Handel url
     this.getUrl(res => {
-      // console.log('URL', res.url)
       this.setState({url: res.url})
     })
-    var self  =  this
-    this.imgContainer = document.querySelectorAll('img.ui-sortable-handle')
-    var eventList = [].forEach.call(this.imgContainer,function(e){e.addEventListener('mouseenter',function(e){
-      self.hadleMouseEnter(e)
-    })})
-    var eventList2 = [].forEach.call(this.imgContainer,function(e){e.addEventListener('mouseleave',function(e){
-      self.setState({
-        open: false,
-      },()=>self.checkOpen());
-    })})
+    this.handleMouse()
   }
 
   componentWillUnmount(){
-    var eventList = [].forEach.call(this.imgContainer,function(e){e.removeEventListener('mouseenter')})
-    var eventList2 = [].forEach.call(this.imgContainer,function(e){e.removeEventListener('mouseleave')})
+   this.removeHandleMouse()
   }
 
-  render () {
-    // Set url
-		let url = this.state.url
+  componentWillReceiveProps(nextProps){
+    if(nextProps.sid != this.props.sid){
+      this.removeHandleMouse()
+      this.setState({imgContainer:[]},()=>{
+        this.handleMouse()
+      })
+    }
+  }
 
-		// Set hashtags
+
+  render () {
+		let url = this.state.url
 		let hashtags = this.props.hashtags
 		if(hashtags==null) hashtags = config.NAME
     var o = this.checkOpen
     return (
       <ImageShareContainer onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} open={this.state.topen} posLeft = {this.state.posLeft} posTop = {this.state.posTop} id='shareImg'>
-        <SocialItem onClick={this.handleFbShare} target="_blank" BGColor = {"#38559c"} BGDarkColor = {"#052269"} order = {"1"}><SocialIcon className = "fa fa-facebook" aria-hidden="true"></SocialIcon></SocialItem>
-        <SocialItem href = {utils.getTweetUrl(url, hashtags)} target="_blank" BGColor = {"#35a9e0"} BGDarkColor = {"#0276AD"} order = {"2"}><SocialIcon className = "fa fa-twitter" aria-hidden="true"></SocialIcon></SocialItem>
+        <SocialItemContainer><FbShareButton button = {<SocialItem target="_blank" BGColor = {"#38559c"} BGDarkColor = {"#052269"} order = {"1"}><SocialIcon className = "fa fa-facebook" aria-hidden="true"></SocialIcon></SocialItem>}/></SocialItemContainer>
+        <SocialItemContainer><TwtShareButton button = {<SocialItem target="_blank" BGColor = {"#35a9e0"} BGDarkColor = {"#0276AD"} order = {"2"}><SocialIcon className = "fa fa-twitter" aria-hidden="true"></SocialIcon></SocialItem>}/></SocialItemContainer>
 
-        <CopyToClipboard SocialItem text={url} onCopy={this.onStoryCopied.bind(this)}>
+        <SocialItemContainer><CopyToClipboard SocialItem text={url} onCopy={this.onStoryCopied.bind(this)}>
           <SocialItem BGColor = {"#c7c7c7"} BGDarkColor = {"#949494"} order = {"3"}>
             <SocialIcon className = "fa fa-link" aria-hidden="true"></SocialIcon>
           </SocialItem>
-        </CopyToClipboard>
-        
+        </CopyToClipboard></SocialItemContainer>
+
       </ImageShareContainer>
     )
   }
