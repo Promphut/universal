@@ -58,7 +58,7 @@ const extractMeta = (setting, url) => {
 	if(setting.publisher.name) 
 		meta.name = setting.publisher.name + (setting.publisher.tagline ? ' | ' + setting.publisher.tagline : '')
 
-	let paths = url.split('/')
+	let path = url.split('/')
 
 	if (path[1] === 'stories' && !path[3]) {
 		// 1. Column case
@@ -284,7 +284,7 @@ app.use((req, res, next) => {
 	.then(setting => {
 		if(!setting || !setting.publisher) return next(new Error('Cannot get publisher setting.'))
 		//console.log('SETTING', setting)
-		extractMeta(setting, req.url)
+		extractMeta(setting, location)
 		.then(meta => {
 			//console.log("META", meta)
 			renderApp({ cookies:req.universalCookies, context, location, sheet, setting })
