@@ -125,12 +125,7 @@ export default class ImageShare extends React.Component {
     else this.setState({topen:true})
   }
 
-  componentDidMount(){
-    // Handel url
-    this.getUrl(res => {
-      // console.log('URL', res.url)
-      this.setState({url: res.url})
-    })
+  handleMouse = () =>{
     var self  =  this
     this.imgContainer = document.querySelectorAll('img.ui-sortable-handle')
     var eventList = [].forEach.call(this.imgContainer,function(e){e.addEventListener('mouseenter',function(e){
@@ -143,10 +138,26 @@ export default class ImageShare extends React.Component {
     })})
   }
 
+  componentDidMount(){
+    // Handel url
+    this.getUrl(res => {
+      // console.log('URL', res.url)
+      this.setState({url: res.url})
+    })
+    this.handleMouse()
+  }
+
   componentWillUnmount(){
     var eventList = [].forEach.call(this.imgContainer,function(e){e.removeEventListener('mouseenter')})
     var eventList2 = [].forEach.call(this.imgContainer,function(e){e.removeEventListener('mouseleave')})
   }
+
+  componentWillReceiveProps(nextProps){
+    if(nextProps.sid != this.props.sid){
+      this.handleMouse()
+    }
+  }
+
 
   render () {
     // Set url
