@@ -31,6 +31,7 @@ class FbShareButton extends React.Component {
 		// Get sid
 		let sid = this.props.sid
 		if(sid==null) sid = utils.getTrailingSid(this.props.url)
+		if(sid!=null) api.incStoryInsight(sid, 'share', 'share_fb')
 		//console.log(sid)
 		this.getUrl(res => {
 			//console.log('URL', res)
@@ -45,7 +46,6 @@ class FbShareButton extends React.Component {
 				hashtag: hashtag,
 				href: res.url,
 			}, function(response){
-				if(sid!=null) api.incStoryInsight(sid, 'share', 'share_fb')
 			})
 		})
 	}

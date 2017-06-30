@@ -23,18 +23,20 @@ import http from 'http'
 import https from 'https'
 import fs from 'fs'
 
-import { FRONTURL,port, host, basename, ANALYTIC, COVER,amazonAccessKey,secretKey,PID } from 'config'
-import AppRoutes from 'components/routes'
+import { FRONTURL, port, host, basename, ANALYTIC, COVER, amazonAccessKey, secretKey, PID } from 'config'
+//import AppRoutes from 'components/routes'
+import App2 from 'components/App2'
 import Html from 'components/Html'
 import Error from 'components/Error'
 import api from 'components/api'
 import sm from 'sitemap'
 
-const renderApp = ({ cookies, context, location, sheet }) => {
+const renderApp = ({ cookies, context, location, sheet, setting }) => {
 	const app = sheet.collectStyles(
 		<CookiesProvider cookies={cookies}>
 			<StaticRouter context={context} location={location}>
-				<AppRoutes/>
+				<App2 setting={setting}/>
+				{/*<AppRoutes/>*/}
 				{/*<AppRoutes currentlocation = {req.url}/>*/}
 			</StaticRouter>
 		</CookiesProvider>
@@ -43,63 +45,125 @@ const renderApp = ({ cookies, context, location, sheet }) => {
 	return renderToString(app)
 }
 
-const getMeta = (u) => {
-	return api.getPublisherSetting().then(setting => {
-		let name = setting.publisher.name+' | '+setting.publisher.tagline || ''
-		let keywords = setting.publisher.keywords || ''
-		let desc = setting.publisher.desc || ''
-		let cover = COVER || ''
-		let url = '' || ''
-		let analytic = ANALYTIC.FBAPPID || ''
-		var data = {name,keywords,desc,cover,analytic,url}
-		const path = u.split('/')
-		if (path[1] === 'stories' && (path[3] == '' || path[3] == undefined)) {
-			const slug = decodeURIComponent(path[2])
-			return api.getColumnFromSlug(slug).then(res => {
+const extractMeta = (setting, url) => {
+	let meta = {
+		name: '',
+		keywords: setting.publisher.keywords || '',
+		desc: setting.publisher.desc || '',
+		cover : COVER || '',
+		analytic: ANALYTIC.FBAPPID || '',
+		url : FRONTURL + url
+	}
 
-				data.name = res.name && res.name
-				data.desc = res.shortDesc && res.shortDesc
-				data.cover = res.cover.medium && res.cover.medium
-				data.url = res.url && res.url
-				return data
-			}).catch((err)=>{return data})
-		} else if (path[1] === 'stories') {
-			const sid = path[4]
-			return api.getStoryFromSid(sid).then(res => {
+	if(setting.publisher.name) 
+		meta.name = setting.publisher.name + (setting.publisher.tagline ? ' | ' + setting.publisher.tagline : '')
 
-				data.name = res.story.ptitle && res.story.ptitle
-				data.desc = res.story.contentShort && res.story.contentShort
-				data.cover = res.story.cover.large && res.story.cover.large
-				data.url = res.story.url && res.story.url
-				return data
-			}).catch((err)=>{return data})
-		} else if (path[1].substring(0, 1) === '@') {
-			const user = decodeURIComponent(path[1].substring(1))
-			return api.getUserFromUsername(user).then(res => {
+	let paths = url.split('/')
 
-				data.name = res.display && res.display
- 				data.desc = res.desc && res.desc
-				data.url = res.url && res.url
-				return data
-			}).catch((err)=>{return data})
-		} else if (path[1] === 'u') {
-			const uid = path[2]
-			return api.getUser(uid).then(res => {
-
-				data.name = res.display && res.display
- 				data.desc = res.desc && res.desc
-				data.url = res.url && res.url
-				return data
-			}).catch((err)=>{return data})
-		} else {
-			return data
-		}
-	}).catch((err)=>{
-		console.error(err)
-		var data = {name:'',keywords:'',desc:'',cover:'',analytic:'',url:''}
-		return data
-	})
+	if (path[1] === 'stories' && !path[3]) {
+		// 1. Column case
+		let slug = decodeURIComponent(path[2])
+		return api.getColumnFromSlug(slug)
+		.then(col => {
+			if(col.name) meta.name = col.name + ' | ' + setting.publisher.name
+			if(col.shortDesc) meta.desc = col.shortDesc
+			if(col.cover && col.cover.medium) meta.cover = col.cover.medium
+			if(col.url) meta.url = col.url
+			return meta
+		})
+	} else if (path[1] === 'stories') {
+		// 2. Story case
+		let sid = path[4]
+		return api.getStoryFromSid(sid)
+		.then(res => {
+			let s = res.story
+			if(s.ptitle) meta.name = s.ptitle + ' | ' + setting.publisher.name
+			if(s.contentShort) meta.desc = s.contentShort
+			if(s.cover && res.story.cover.large) meta.cover = s.cover.large
+			if(s.url) meta.url = s.url
+			return meta
+		})
+	} else if (path[1] && path[1].substring(0, 1) === '@') {
+		// 3. User case with username
+		let user = decodeURIComponent(path[1].substring(1))
+		return api.getUserFromUsername(user)
+		.then(u => {
+			if(u.display) meta.name = u.display + ' | ' + setting.publisher.name
+			if(u.desc) meta.desc = u.desc
+			if(u.url) meta.url = u.url
+			return meta
+		})
+	} else if (path[1] === 'u') {
+		// 4. User case with user id
+		const uid = path[2]
+		return api.getUser(uid)
+		.then(u => {
+			if(u.display) meta.name = u.display + ' | ' + setting.publisher.name
+			if(u.desc) meta.desc = u.desc
+			if(u.url) meta.url = u.url
+			return meta
+		})
+	}
+	else return Promise.resolve(meta)
 }
+
+// const getMeta = (u) => {
+// 	return api.getPublisherSetting().then(setting => {
+// 		let name = setting.publisher.name+' | '+setting.publisher.tagline || ''
+// 		let keywords = setting.publisher.keywords || ''
+// 		let desc = setting.publisher.desc || ''
+// 		let cover = COVER || ''
+// 		let url = '' || ''
+// 		let analytic = ANALYTIC.FBAPPID || ''
+// 		var data = {name,keywords,desc,cover,analytic,url}
+// 		const path = u.split('/')
+// 		if (path[1] === 'stories' && (path[3] == '' || path[3] == undefined)) {
+// 			const slug = decodeURIComponent(path[2])
+// 			return api.getColumnFromSlug(slug).then(res => {
+
+// 				data.name = res.name && res.name
+// 				data.desc = res.shortDesc && res.shortDesc
+// 				data.cover = res.cover.medium && res.cover.medium
+// 				data.url = res.url && res.url
+// 				return data
+// 			}).catch((err)=>{return data})
+// 		} else if (path[1] === 'stories') {
+// 			const sid = path[4]
+// 			return api.getStoryFromSid(sid).then(res => {
+
+// 				data.name = res.story.ptitle && res.story.ptitle
+// 				data.desc = res.story.contentShort && res.story.contentShort
+// 				data.cover = res.story.cover.large && res.story.cover.large
+// 				data.url = res.story.url && res.story.url
+// 				return data
+// 			}).catch((err)=>{return data})
+// 		} else if (path[1].substring(0, 1) === '@') {
+// 			const user = decodeURIComponent(path[1].substring(1))
+// 			return api.getUserFromUsername(user).then(res => {
+
+// 				data.name = res.display && res.display
+//  				data.desc = res.desc && res.desc
+// 				data.url = res.url && res.url
+// 				return data
+// 			}).catch((err)=>{return data})
+// 		} else if (path[1] === 'u') {
+// 			const uid = path[2]
+// 			return api.getUser(uid).then(res => {
+
+// 				data.name = res.display && res.display
+//  				data.desc = res.desc && res.desc
+// 				data.url = res.url && res.url
+// 				return data
+// 			}).catch((err)=>{return data})
+// 		} else {
+// 			return data
+// 		}
+// 	}).catch((err)=>{
+// 		console.error(err)
+// 		var data = {name:'',keywords:'',desc:'',cover:'',analytic:'',url:''}
+// 		return data
+// 	})
+// }
 
 const renderHtml = ({ content, sheet, meta }) => {
 	//const styles = styleSheet.rules().map(rule => rule.cssText).join('\n')
@@ -111,13 +175,14 @@ const renderHtml = ({ content, sheet, meta }) => {
 
 const app = express()
 const sitemap = sm.createSitemap({
-	hostname: 'https:'+FRONTURL,
+	hostname: FRONTURL,
 	cacheTime: 600000,        // 600 sec - cache purge period
 	urls: [
 		{ url: '/',  changefreq: 'daily', priority: 0.5 ,img: COVER},
 		{ url: '/stories/news',  changefreq: 'daily',  priority: 0.3 },
-		{ url: '/about',   priority: 0.1 },
-		{ url: '/contact',  priority: 0.1 }
+		{ url: '/stories/columns',  changefreq: 'weekly',  priority: 0.2 },
+		{ url: '/about'},
+		{ url: '/contact'}
 	]
 })
 //app.use(forceSSL)
@@ -215,21 +280,46 @@ app.use((req, res, next) => {
 	const context = {}
 	const sheet = new ServerStyleSheet()
 
-	getMeta(req.url).then((meta)=>{
-		//console.log('data',meta)
-		renderApp({ cookies:req.universalCookies, context, location, sheet })
-		.then(({ html: content }) => {
-			if (context.status) {
-				res.status(context.status)
-			}
-			if (context.url) {
-				res.redirect(context.url)
-			} else {
-				res.send(renderHtml({ content, sheet, meta }))
-			}
+	api.getPublisherSetting()
+	.then(setting => {
+		if(!setting || !setting.publisher) return next(new Error('Cannot get publisher setting.'))
+		//console.log('SETTING', setting)
+		extractMeta(setting, req.url)
+		.then(meta => {
+			//console.log("META", meta)
+			renderApp({ cookies:req.universalCookies, context, location, sheet, setting })
+			.then(({ html: content }) => {
+				if (context.status) { 
+					res.status(context.status)
+				}
+				if (context.url) {
+					res.redirect(context.url)
+				} else {
+					res.send(renderHtml({ content, sheet, meta }))
+				}
+			})
+			.catch(next)
+
 		})
 		.catch(next)
+		
 	})
+
+	// getMeta(req.url).then((meta)=>{
+	// 	//console.log('data',meta)
+	// 	renderApp({ cookies:req.universalCookies, context, location, sheet })
+	// 	.then(({ html: content }) => {
+	// 		if (context.status) {
+	// 			res.status(context.status)
+	// 		}
+	// 		if (context.url) {
+	// 			res.redirect(context.url)
+	// 		} else {
+	// 			res.send(renderHtml({ content, sheet, meta }))
+	// 		}
+	// 	})
+	// 	.catch(next)
+	// })
 })
 
 app.use((err, req, res, next) => {

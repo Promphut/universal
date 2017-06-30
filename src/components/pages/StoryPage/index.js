@@ -153,7 +153,7 @@ class StoryPage extends React.Component {
 			let cid = story.column._id
 
 			api
-				.getFeed('story', { status: 1, column: cid }, 'latest', null, 0, 4)
+				.getFeed('story', { status: 1, column: cid }, 'latest', null, 0, 4,{omit : [this.props.match.params.sid]})
 				.then(result => {
 					//console.log('feed', result.feed.length)
 					this.setState({
@@ -165,7 +165,7 @@ class StoryPage extends React.Component {
 			let uid = story.writer._id
 
 			api
-				.getFeed('story', { status: 1, writer: uid }, 'latest', null, 0, 4)
+				.getFeed('story', { status: 1, writer: uid }, 'latest', null, 0, 4,{omit : [this.props.match.params.sid]})
 				.then(result => {
 					//console.log('feed', result.feed.length)
 					this.setState({
@@ -335,20 +335,20 @@ class StoryPage extends React.Component {
 
 							<Aside id="trendingBar" ref="trendingBar">
 
-									<TrendingSideBar />
+									<TrendingSideBar sid={story._id} />
 									<div dangerouslySetInnerHTML={{ __html: `<div class="fb-page" data-href="https://www.facebook.com/${config.FACEBOOK}/" data-tabs="timeline" data-width="500" data-height="700" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/${config.FACEBOOK}/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/${config.FACEBOOK}/">${config.NAME}</a></blockquote></div>` }}></div>
 
 							</Aside>
 
-							<NextStory cid = {story.column._id} currentID = {story._id} format = {story.format}/>
+							
 						</Content>
 
 						<Content>
 							{recommends.length != 0 &&
 								<RecommendContainer recommend={recommends} />}
 						</Content>
-
-						<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800" />
+						<NextStory cid = {story.column._id} currentID = {story._id} format = {story.format}/>
+						{/*<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800" />*/}
 						<Footer />
 					</Wrapper>
 				</div>
