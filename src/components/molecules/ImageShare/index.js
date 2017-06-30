@@ -54,7 +54,8 @@ export default class ImageShare extends React.Component {
       posLeft: 0,
       open:false,
       open2:false,
-      topen:false
+      topen:false,
+      imgContainer:[]
     }
   }
 
@@ -111,43 +112,46 @@ export default class ImageShare extends React.Component {
 
   handleMouse = () =>{
     var self  =  this
-    this.imgContainer = document.querySelectorAll('img.ui-sortable-handle')
-    var eventList = [].forEach.call(this.imgContainer,function(e){e.addEventListener('mouseenter',function(e){
-      self.hadleMouseEnter(e)
-    })})
-    var eventList2 = [].forEach.call(this.imgContainer,function(e){e.addEventListener('mouseleave',function(e){
-      self.setState({
-        open: false,
-      },()=>self.checkOpen());
-    })})
+        this.setState({imgContainer:document.querySelectorAll('img.ui-sortable-handle')},()=>{
+            var eventList = [].forEach.call(this.state.imgContainer,function(e){e.addEventListener('mouseenter',function(e){
+              self.hadleMouseEnter(e)
+            })})
+            var eventList2 = [].forEach.call(this.state.imgContainer,function(e){e.addEventListener('mouseleave',function(e){
+              self.setState({
+                open: false,
+              },()=>self.checkOpen());
+            })})
+        })
   }
 
+  removeHandleMouse = () =>{
+    var eventList = [].forEach.call(this.state.imgContainer,function(e){e.removeEventListener('mouseenter',()=>{})})
+    var eventList2 = [].forEach.call(this.state.imgContainer,function(e){e.removeEventListener('mouseleave',()=>{})})
+}
+
   componentDidMount(){
-    // Handel url
     this.getUrl(res => {
-      // console.log('URL', res.url)
       this.setState({url: res.url})
     })
     this.handleMouse()
   }
 
   componentWillUnmount(){
-    var eventList = [].forEach.call(this.imgContainer,function(e){e.removeEventListener('mouseenter')})
-    var eventList2 = [].forEach.call(this.imgContainer,function(e){e.removeEventListener('mouseleave')})
+   this.removeHandleMouse()
   }
 
   componentWillReceiveProps(nextProps){
     if(nextProps.sid != this.props.sid){
-      this.handleMouse()
+      this.removeHandleMouse()
+      this.setState({imgContainer:[]},()=>{
+        this.handleMouse()
+      })
     }
   }
 
 
   render () {
-    // Set url
 		let url = this.state.url
-
-		// Set hashtags
 		let hashtags = this.props.hashtags
 		if(hashtags==null) hashtags = config.NAME
     var o = this.checkOpen
