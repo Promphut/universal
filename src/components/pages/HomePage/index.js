@@ -83,7 +83,7 @@ const Aside = styled.div`
 	flex: 1 300px;
 	max-width: 300px;
 	margin-left:60px;
-	z-index: -10;
+	z-index: 9;
 	@media (max-width: 1160px) {
 		display:none;
 	}
