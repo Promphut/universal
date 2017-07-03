@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon'
 import FlatButton from 'material-ui/FlatButton'
-import {Dropdown,TwtShareButton, FbShareButton, InShareButton} from 'components'
+import {Dropdown,TwtShareButton, FbShareButton, InShareButton, LineShareButton, LineIcon} from 'components'
 import CopyToClipboard from 'react-copy-to-clipboard'
-import api from 'components/api' 
+import api from 'components/api'
 import config from '../../../config'
 import utils from '../../../services/utils'
 
@@ -48,16 +48,37 @@ class ShareDropdown extends React.Component {
     let {theme} = this.context.setting.publisher
     const buttonStyle = {
       color: theme.primaryColor,
+      fill: theme.primaryColor,
       fontSize: '18px',
       float: 'left',
       marginTop: '10px',
       paddingLeft: '10px',
-      width: '28px'
+      width: '28px',
     }
+
+    const LineIconStyle = {
+        height: '28px',
+        width: '28px',
+        marginTop:'5px !important',
+        paddingLeft: '10px',
+        fill: theme.primaryColor,
+    }
+
+    const LineIconPosController = {
+      marginLeft: '-10px',
+      position: 'relative',
+      top: '4px',
+    }
+
+    const LineIconTextPosController = {
+      marginLeft: '10px',
+    }
+
     let buttons = []
     buttons.push(<span><i className="fa fa-facebook" aria-hidden="true" style={buttonStyle}></i>Share on Facebook</span>)
     buttons.push(<span><i className="fa fa-twitter" aria-hidden="true" style={buttonStyle}></i>Share on Twitter</span>)
     buttons.push(<span><i className="fa fa-linkedin" aria-hidden="true" style={buttonStyle}></i>Share on LinkedIn</span>)
+    buttons.push(<span><LineIcon injectStyle = {LineIconPosController} width = {'28px'} height={'28px'} color = {theme.primaryColor} style = {LineIconStyle}/><span style={LineIconTextPosController}>Share on Line</span></span>)
     buttons.push(<span><FontIcon className="material-icons" style={buttonStyle}>link</FontIcon>Copy Link</span>)
 
     // for (let i = 0; i < buttons.length; i++){
@@ -111,10 +132,20 @@ class ShareDropdown extends React.Component {
           } />
         </div>
 
-        <div onMouseEnter={() => this.onHover(3)}>
-          <CopyToClipboard text={config.FRONTURL+this.props.url} onCopy={this.onStoryCopied}>
+        <div onMouseEnter={() => this.onHover(3)} style={{marginTop:'-3px'}}>
+          <LineShareButton url={config.FRONTURL+this.props.url} button={
             <FlatButton
               label={buttons[3]}
+              labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
+              style={{width: '180px', textAlign: 'left', display: 'inline-block'}}
+            />
+          } />
+        </div>
+
+        <div onMouseEnter={() => this.onHover(4)}>
+          <CopyToClipboard text={config.FRONTURL+this.props.url} onCopy={this.onStoryCopied}>
+            <FlatButton
+              label={buttons[4]}
               labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
               style={{width: '180px', textAlign: 'left', display: 'inline-block'}}
             />
