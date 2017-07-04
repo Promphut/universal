@@ -76,7 +76,7 @@ class App2 extends React.Component {
 		// 2. Append #hash to url
 		//history.replace(location.pathname+'#'+hash)
 		//console.log(location)
-		history.replace({ hash: '#' + hash })
+		history.replace({ hash: '#' + hash ,search: location.search})
 		// this.props.router.replace({
 		//   ...nextProps.location,
 		//   hash:'#'+hash

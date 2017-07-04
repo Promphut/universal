@@ -123,6 +123,7 @@ api.getUserFromUserId = (uid) => {
 }
 
 api.getColumnFromSlug = (slug) => {
+	slug = slug.split("?")[0]
 	return Request
 	.get(config.BACKURL + '/slugs/publishers/' + config.PID + '/columns/' + encodeURIComponent(slug))
 	.set('Accept', 'application/json')

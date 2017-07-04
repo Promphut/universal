@@ -319,7 +319,7 @@ class LeftMenu extends React.Component {
 			if (cols[i].slug.toLowerCase() !== 'news'|| cols[i].name.toLowerCase() !== 'news'){
 				items.push(
 					<li key={i}>
-						<a href="#" onClick={e => this.props.closeAndLink(e, '/stories/' +  cols[i].slug)}>
+						<a href="#" onClick={e => this.props.closeAndLink(e, '/stories/' +  cols[i].slug + '?page=1')}>
 							{ cols[i].name }
 						</a>
 					</li>

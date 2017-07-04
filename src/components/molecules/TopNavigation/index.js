@@ -97,7 +97,7 @@ const TopNavigation = ({ menu }) => {
 						<DropdownRow
 							key={j}
 							exact
-							to={'/stories/' + cols[j].slug}
+							to={'/stories/' + cols[j].slug + '?page=1'}
 							activeClassName="active"
 							className="nunito-font">
 							{cols[j].name}
