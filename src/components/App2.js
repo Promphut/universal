@@ -48,7 +48,8 @@ class App2 extends React.Component {
 		super(props)
 
 		this.state = {
-			completed: 0
+			completed: 0,
+			fbInit:false
 		}
 	}
 
@@ -61,6 +62,7 @@ class App2 extends React.Component {
 		//console.log('HASHED', nextProps, this.props)
 		let hash =
 			new Date().valueOf().toString(36) + Math.round(Math.random() * 100)
+
 		let { location, history } = nextProps
 
 		// 1. Create hash
@@ -77,6 +79,7 @@ class App2 extends React.Component {
 		//history.replace(location.pathname+'#'+hash)
 		//console.log(location)
 		history.replace({ hash: '#' + hash })
+
 		// this.props.router.replace({
 		//   ...nextProps.location,
 		//   hash:'#'+hash
@@ -122,7 +125,6 @@ class App2 extends React.Component {
 		//console.log("RECEIVE2", nextProps.location.hash, nextProps.location.action)
 		//console.log('componentWillReceiveProps', nextProps.history, nextProps.location, this.props.location)
 		//let isFirstTime = !nextProps.location.key && !this.props.location.key
-		//console.log(nextProps.location.pathname)
 
 		if (nextProps.history.action === 'PUSH') {
 			//this.timer = setTimeout(() => this.progress(10), 100); //loading
@@ -170,7 +172,9 @@ class App2 extends React.Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
+
 		clearTimeout(this.timer)
+		FB.XFBML.parse()
 		//this.setState({completed:120})
 		//this.progress(200)
 		//console.log(this.timer)
