@@ -163,10 +163,12 @@ const ArticleBox = ({ detail, style }, context) => {
 
 	return (
 		<Container style={{ ...style }} height={(screen.width - 32) / 1.91}>
+    <ShareDropdown buttonSize={16} url={url} className='hidden-des'/>
 			<Box1 style={{ flex: '1' }}>
 				<Div className="sans-font" style={{ margin: '0 0 8px 0' }}>
 					{utils.dateFormat(published)}
 				</Div>
+        
 				<BGImg
 					url={url}
 					src={cover.medium&&cover.medium||cover.small}
@@ -187,8 +189,10 @@ const ArticleBox = ({ detail, style }, context) => {
 					<Div className="sans-font" style={{ margin: '0 0 7px 0', flex: 20 }}>
 						{readTime + ' min read'}
 					</Div>
+          <ShareDropdown buttonSize={16} url={url} className='hidden-mob'/>
 				</div>
 				<NameLink to={url} className="nunito-font" style={{ marginTop: '5px' }}>
+          
 					{truncate(ptitle, {
 						length: 90,
 						separator: ''
