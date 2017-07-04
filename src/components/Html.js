@@ -89,15 +89,18 @@ const twitterIntent =
   });`
 
 const facebookSdk =
-  `window.fbAsyncInit = function() {
+  `
+  window.fbAsyncInit = function() {
     FB.init({
       appId      : '${config.ANALYTIC.FBAPPID}',
+      autoLogAppEvents : true,
+      status           : true,
+      cookie		 : true,
       xfbml      : true,
       version    : 'v2.8'
     });
     FB.AppEvents.logPageView();
   };
-
   (function(d, s, id){
      var js, fjs = d.getElementsByTagName(s)[0];
      if (d.getElementById(id)) {return;}
@@ -105,7 +108,6 @@ const facebookSdk =
      js.src = "//connect.facebook.net/en_US/sdk.js";
      fjs.parentNode.insertBefore(js, fjs);
    }(document, 'script', 'facebook-jssdk'));
-   
    `
 
 
