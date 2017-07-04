@@ -189,6 +189,8 @@ class NewsPage extends React.Component {
 		}
 	}
 
+	FEED_LIMIT = 20
+
 	getTrendingNews = () => {
 		api.getFeed('news', { status: 1 }, 'trending', null, 0, 4).then(result => {
 			if (result) {
@@ -219,15 +221,15 @@ class NewsPage extends React.Component {
 			let page = this.state.page
 			//console.log('page', page)
 			var sort = this.state.selectTab ? 'trending' : 'latest'
-			api.getFeed('news', { status: 1 }, sort, null, page, 15)
+			api.getFeed('news', { status: 1 }, sort, null, page, this.FEED_LIMIT)
 			.then(result => {
 				let feed = this.state.feed.concat(result.feed)
 				this.setState(
 					{
-						page: ++page,
+						page: feed.length <= this.FEED_LIMIT ? 2 : ++page,
 						feed: feed,
 						feedCount: result.count['1']?result.count['1']:0,
-						hasMoreFeed: page < 2
+						hasMoreFeed: feed.length <= this.FEED_LIMIT ? false : page < 2
 						/*hasMoreFeed: feed.length < result.count['1']*/
 					},
 					() => {
@@ -375,7 +377,7 @@ class NewsPage extends React.Component {
 									loader={this.onload()}>
 									<div>
 										{feed.map((item, index) => (
-											<NewsBox final= {index == 29 || index == feed.length -1 ? true:false} detail={item} key={index} timeline={false} />
+											<NewsBox final= {index == feed.length -1 ? true:false} detail={item} key={index} timeline={false} />
 										))}
 									</div>
 								</InfiniteScroll>
@@ -391,7 +393,7 @@ class NewsPage extends React.Component {
 									loader={this.onload()}>
 									<div>
 										{feed.map((item, index) => (
-											<NewsBox final= {index == 29 || index == feed.length -1 ? true:false} detail={item} key={index} timeline={false} />
+											<NewsBox final= {index == feed.length -1 ? true:false} detail={item} key={index} timeline={false} />
 										))}
 									</div>
 								</InfiniteScroll>
