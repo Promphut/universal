@@ -238,7 +238,7 @@ class AllColumn extends React.Component {
 															left: '15px',
 															bottom: '20px'
 														}}>
-														<Link to={'/stories/' + data.slug}>
+														<Link to={'/stories/' + data.slug + '?page=1'}>
 															<ColumnName className="serif-font">
 																{data.name}
 															</ColumnName>

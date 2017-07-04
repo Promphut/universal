@@ -123,6 +123,7 @@ api.getUserFromUserId = (uid) => {
 }
 
 api.getColumnFromSlug = (slug) => {
+	slug = slug.split("?")[0]
 	return Request
 	.get(config.BACKURL + '/slugs/publishers/' + config.PID + '/columns/' + encodeURIComponent(slug))
 	.set('Accept', 'application/json')
@@ -179,7 +180,7 @@ api.getStoryFromSid = (sid, token, countView) => {
 api.getStoryFromKeyword = (keyword) => {
 	return Request
 	.post(config.BACKURL + '/stories/find' )
-	.send(keyword)
+	.send({title: keyword})
 	.set('Accept','application/json')
 	.then(res => {
 		return res.body

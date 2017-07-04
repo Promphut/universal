@@ -164,7 +164,7 @@ class ColumnPage extends React.Component {
 		},
 		isMobile: false,
 
-		currentPage: 0,
+		currentPage: this.props.location.search != "" ? parseInt(this.props.location.search.substr(6))-1 : 0,
 		feedCount: 1,
 		feed: [],
 		totalPages: 0,
@@ -172,7 +172,7 @@ class ColumnPage extends React.Component {
 		loading: false
 	}
 
-	FEED_LIMIT = config.FEED_LIMIT
+	FEED_LIMIT = 20
 
 	static contextTypes = {
 		setting: PropTypes.object
@@ -197,7 +197,7 @@ class ColumnPage extends React.Component {
 	reloadFeed = () => {
 		this.setState(
 			{
-				currentPage: 0,
+				currentPage: this.props.location.search != "" ? parseInt(this.props.location.search.substr(6))-1 : 0,
 				feedCount: 1,
 				feed: [],
 				totalPages: 0,
@@ -210,7 +210,7 @@ class ColumnPage extends React.Component {
 
 	loadFeed = colId => {
 		return () => {
-			//console.log('LOAD FEED0', colId, this.loading)
+			//console.log('LOAD FEED0', colId)
 			if (colId == null) return
 			// ensure this method is called only once at a time
 			if (this.state.loading === true) return
@@ -251,6 +251,7 @@ class ColumnPage extends React.Component {
 	}
 
 	changePage = e => {
+		this.props.history.push({ hash: this.props.location.hash ,search: "?page=" + e })
 		this.setState({ currentPage: e - 1 , hasMoreFeed: true}, () => {
 			this.loadFeed(this.state.column._id)()
 		})
@@ -281,13 +282,14 @@ class ColumnPage extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		//console.log('COL', nextProps, this.props)
-		if (
-			nextProps.match.params.columnSlug != this.props.match.params.columnSlug
-		) {
-			//console.log('RELOAD FEED')
+		if (nextProps.match.params.columnSlug != this.props.match.params.columnSlug) {
 			this.getColumnFromSlug(nextProps.match.params.columnSlug, this.reloadFeed)
 			//this.reloadFeed()
+		}
+		if(nextProps.location.search != this.props.location.search){
+			this.setState({currentPage : parseInt(nextProps.location.search.substr(6))-1}
+				,()=>{this.loadFeed(this.state.column._id)()
+			})
 		}
 	}
 
