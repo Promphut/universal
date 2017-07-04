@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import { BGImg } from 'components'
+import { BGImg, SeeMore } from 'components'
 import { findDOMNode as dom } from 'react-dom'
 //import Request from 'superagent'
 import api from 'components/api'
@@ -75,6 +75,13 @@ const Dash = styled.div`
   margin:5px 0 20px 0;
 `
 
+const SeemoreContainer = styled.div`
+	margin-top: 26px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+`
+
 const TrendingSideBarInner = ({ style, detail, index }) => {
 	if (!detail) return <div />
 	let { ptitle, comments, votes, cover } = detail
@@ -95,7 +102,7 @@ const TrendingSideBarInner = ({ style, detail, index }) => {
 					{truncate(ptitle, { length: 90, separator: '' })}
 				</Name>
 			</Con>
-			<Line />
+			{index != 3 && <Line />}
 		</div>
 	)
 }
@@ -143,10 +150,12 @@ class TrendingSideBar extends React.Component {
 		return (
 			<Container style={{ ...style }} ref="contain" className={className}>
 				<Head className="sans-font">TRENDING</Head>
-				<Dash />
 				{popular.length != 0 ? tn : []}
 				{/*{detail.map((data,index)=><Link to='#' key={index}><TrendingSideBarInner detail={data}/></Link>)}*/}
 				{/*<Divider/>*/}
+				<SeemoreContainer>
+					<SeeMore isTraindingSideBar = {true}/>
+				</SeemoreContainer>
 			</Container>
 
 

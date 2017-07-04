@@ -15,7 +15,7 @@ import utils from '../../../services/utils'
 const Container = styled.div`
   width:100%;
   padding:30px 0 30px 0;
-  border-bottom:1px solid #e2e2e2;
+  border-bottom: ${props => props.hr ? '' : '1px solid #e2e2e2'} ;
   overflow:hidden;
   display:flex;
   .imgWidth{
@@ -139,7 +139,7 @@ const Box1 = styled.div`
   }
 `
 
-const ArticleBox = ({ detail, style }, context) => {
+const ArticleBox = ({ detail, style, final }, context) => {
 	let {
 		ptitle,
 		cover,
@@ -162,7 +162,7 @@ const ArticleBox = ({ detail, style }, context) => {
 	}
 
 	return (
-		<Container style={{ ...style }} height={(screen.width - 32) / 1.91}>
+		<Container hr={final} style={{ ...style }} height={(screen.width - 32) / 1.91}>
     <ShareDropdown buttonSize={16} url={url} className='hidden-des'/>
 			<Box1 style={{ flex: '1' }}>
 				<Div className="sans-font" style={{ margin: '0 0 8px 0' }}>

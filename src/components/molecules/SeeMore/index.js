@@ -1,14 +1,17 @@
 import React from 'react'
+import {
+  Link
+} from 'react-router-dom'
 import styled from 'styled-components'
 
 const Button = styled.div`
   border: 0.5px solid #c4c4c4;
-  border-radius: 100px;
+  border-radius: ${props => props.isTraindingSideBar ? '3px' : '100px'};
   text-align: center;
   padding: 8px 15px 15px 15px;
   font-size: 14px;
   color: #8E8E8E;
-  width: 168px;
+  width: ${props => props.isTraindingSideBar ? '325px' : '168px'};
   height: 35px;
 
   &:hover{
@@ -29,7 +32,9 @@ class SeeMore extends React.Component {
 
     render() {
         return(
-            <a href={this.props.linkTo}><Button>See More</Button></a>
+            <Link to={this.props.linkTo||'/'}>
+                <Button isTraindingSideBar = {this.props.isTraindingSideBar}>See More</Button>
+            </Link>
         )
     }
   
