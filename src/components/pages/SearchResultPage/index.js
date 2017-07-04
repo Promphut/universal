@@ -96,11 +96,15 @@ export default class SearchResultPage extends React.Component {
   }
 
   fetchResult = (keyword) => {
-    api.getStoryFromKeyword(keyword)
-    .then(result => {
-      console.log(result)
-      this.setState({result: result});
-    })
+    if(!_.isEmpty(keyword))
+      api.getStoryFromKeyword(keyword)
+      .then(result => {
+        console.log(result)
+        this.setState({result: result});
+      })
+    else {
+      this.setState({result: null});
+    }
   }
 
   handleKeywordChange = (e) => {
