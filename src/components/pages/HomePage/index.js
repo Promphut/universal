@@ -241,7 +241,8 @@ class HomePage extends React.Component {
 							page: ++page,
 							feed: feed,
 							feedCount: result.count['1']?result.count['1']:0,
-							hasMoreFeed: feed.length < result.count['1']
+							hasMoreFeed: page < 2
+							/*hasMoreFeed: feed.length < result.count['1']*/
 						},
 						() => {
 							this.loading = false
@@ -313,6 +314,8 @@ class HomePage extends React.Component {
 									))}
 							</div>
 						</InfiniteScroll>}
+
+						{!hasMoreFeed && <div>More...</div> }
 
 						<Tabs
 							style={{ width: '100%' }}

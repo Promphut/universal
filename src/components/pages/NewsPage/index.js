@@ -8,7 +8,7 @@ import {
 	Footer,
 	TopNews,
 	TopNewsSmall,
-	BackToTop
+	BackToTop,
 } from 'components'
 import styled from 'styled-components'
 import auth from 'components/auth'
@@ -210,14 +210,16 @@ class NewsPage extends React.Component {
 			let page = this.state.page
 			//console.log('page', page)
 			var sort = this.state.selectTab ? 'trending' : 'latest'
-			api.getFeed('news', { status: 1 }, sort, null, page, 15).then(result => {
+			api.getFeed('news', { status: 1 }, sort, null, page, 15)
+			.then(result => {
 				let feed = this.state.feed.concat(result.feed)
 				this.setState(
 					{
 						page: ++page,
 						feed: feed,
 						feedCount: result.count['1']?result.count['1']:0,
-						hasMoreFeed: feed.length < result.count['1']
+						hasMoreFeed: page < 2
+						/*hasMoreFeed: feed.length < result.count['1']*/
 					},
 					() => {
 						this.loading = false
@@ -368,6 +370,7 @@ class NewsPage extends React.Component {
 										))}
 									</div>
 								</InfiniteScroll>
+								{!hasMoreFeed && <div>More...</div> }
 							</Latest>
 							<Trending>
 								<InfiniteScroll
@@ -380,6 +383,7 @@ class NewsPage extends React.Component {
 										))}
 									</div>
 								</InfiniteScroll>
+								{!hasMoreFeed && <div>More...</div> }
 							</Trending>
 						</SwipeableViews>
 					</Feed>

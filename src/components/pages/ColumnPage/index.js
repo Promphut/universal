@@ -10,7 +10,8 @@ import {
 	Stick,
 	Footer,
 	EmptyStory,
-	BackToTop
+	BackToTop,
+	Pagination
 } from 'components'
 import { findDOMNode as dom } from 'react-dom'
 import styled from 'styled-components'
@@ -149,6 +150,13 @@ const Onload = styled.div`
 	margin:50px 0 50px 0;
 `
 
+const Page = styled.div`
+  display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+  padding:30px 0 30px 0;
+`
+
 class ColumnPage extends React.Component {
 	state = {
 		column: {
@@ -156,11 +164,15 @@ class ColumnPage extends React.Component {
 		},
 		isMobile: false,
 
-		page: 0,
+		currentPage: 0,
 		feedCount: 1,
 		feed: [],
-		hasMoreFeed: true
+		totalPages: 0,
+
+		loading: false
 	}
+
+	FEED_LIMIT = config.FEED_LIMIT
 
 	static contextTypes = {
 		setting: PropTypes.object
@@ -181,29 +193,31 @@ class ColumnPage extends React.Component {
 			</div>
 		</Onload>
 	)
+
 	reloadFeed = () => {
 		this.setState(
 			{
-				page: 0,
+				currentPage: 0,
 				feedCount: 1,
 				feed: [],
-				hasMoreFeed: true
+				totalPages: 0,
 			},
 			() => {
 				this.loadFeed(this.state.column._id)()
 			}
 		)
 	}
+
 	loadFeed = colId => {
 		return () => {
 			//console.log('LOAD FEED0', colId, this.loading)
 			if (colId == null) return
 			// ensure this method is called only once at a time
-			if (this.loading === true) return
-			this.loading = true
+			if (this.state.loading === true) return
+			this.state.loading = true
 			//console.log('LOAD FEED1')
 
-			let page = this.state.page
+			let currentPage = this.state.currentPage
 			//console.log('page', page)
 
 			api
@@ -212,27 +226,34 @@ class ColumnPage extends React.Component {
 					{ status: 1, column: colId },
 					'latest',
 					null,
-					page,
-					15
+					currentPage,
+					this.FEED_LIMIT
 				)
 				.then(result => {
 					//console.log(result)
-					let feed = this.state.feed.concat(result.feed)
+					//let feed = this.state.feed.concat(result.feed)
 					this.setState(
 						{
-							page: ++page,
-							feed: feed,
+							feed: result.feed,
 							feedCount: result.count['1']
 								? result.count['1']
 								: 0 ? result.count['1'] : 0,
-							hasMoreFeed: feed.length < result.count['1']
+							hasMoreFeed: false,
+							totalPages: utils.getTotalPages(this.FEED_LIMIT, result.count['total']),
+							loading: false
 						},
 						() => {
-							this.loading = false
+							this.state.loading = false
 						}
 					)
 				})
 		}
+	}
+
+	changePage = e => {
+		this.setState({ currentPage: e - 1 , hasMoreFeed: true}, () => {
+			this.loadFeed(this.state.column._id)()
+		})
 	}
 
 	getColumnFromSlug = (columnSlug, done = () => {}) => {
@@ -249,7 +270,7 @@ class ColumnPage extends React.Component {
 	}
 
 	componentWillMount() {
-		this.getColumnFromSlug(this.props.match.params.columnSlug)
+		this.getColumnFromSlug(this.props.match.params.columnSlug, this.reloadFeed)
 	}
 
 	componentDidMount() {
@@ -273,10 +294,8 @@ class ColumnPage extends React.Component {
 	render() {
 		let { keywords, channels, theme } = this.context.setting.publisher
 		const BGImgSize = (utils.isMobile() ? 100 : 280) + 60
-		let { column, isMobile } = this.state
-		let { feedCount, feed, hasMoreFeed } = this.state
+		let { column, isMobile, feedCount, feed, currentPage, totalPages, loading } = this.state
 		//let {count, loadOffset, isInfiniteLoading, latestStories, isMobile} = this.state
-		//console.log(feedCount)
 		var head = (
 			<Head>
 				<div className="row">
@@ -344,17 +363,21 @@ class ColumnPage extends React.Component {
 									next={column.name}
 								/>
 								<TextLine className="sans-font">Latest</TextLine>
-								<InfiniteScroll
-									loadMore={this.loadFeed(column._id)}
-									hasMore={hasMoreFeed}
-									loader={this.onload()}>
+								{loading ?  this.onLoad :
 									<div>
 										{feed &&
 											feed.map((item, index) => (
 												<ArticleBox detail={item} key={index} />
 											))}
 									</div>
-								</InfiniteScroll>
+								}
+								<Page>
+									{totalPages > 0 && <Pagination
+										currentPage={currentPage + 1}
+										totalPages={totalPages}
+										onChange={this.changePage}
+									/>}
+								</Page>
 							</Main>}
 					<Aside>
 						<Stick topOffset={70} style={{ zIndex: '0' }}>
