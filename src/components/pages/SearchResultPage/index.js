@@ -96,11 +96,15 @@ export default class SearchResultPage extends React.Component {
   }
 
   fetchResult = (keyword) => {
-    api.getStoryFromKeyword(keyword)
-    .then(result => {
-      console.log(result)
-      this.setState({result: result});
-    })
+    if(!_.isEmpty(keyword))
+      api.getStoryFromKeyword(keyword)
+      .then(result => {
+        console.log(result)
+        this.setState({result: result});
+      })
+    else {
+      this.setState({result: null});
+    }
   }
 
   handleKeywordChange = (e) => {
@@ -133,7 +137,7 @@ export default class SearchResultPage extends React.Component {
         <Content isMobile={isMobile}>
 
           <Main>
-            <TextField id="search-box" hintText="Search Keyword Here" fullWidth={true} value={this.state.keyword} style={{fontSize:'28px'}} onChange={this.handleKeywordChange}/>
+            <TextField id="search-box" hintText="Search Keyword Here" autoFocus={true} fullWidth={true} value={this.state.keyword} style={{fontSize:'28px'}} onChange={this.handleKeywordChange}/>
             <FilterContainer>
               <Link to={"/search/stories/" + this.state.keyword}><FilterItem select={this.state.type === 'stories'}>STORIES</FilterItem></Link>
               <Link to={"/search/news/" + this.state.keyword}><FilterItem select={this.state.type === 'news'}>NEWS</FilterItem></Link>
