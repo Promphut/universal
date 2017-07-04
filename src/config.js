@@ -36,6 +36,9 @@ const config = {
     secretKey : "E1dohFRDvW+sXdVphps6tbwDp42u4Y1XLalDSQq+"
   },
   development: {
+    ANALYTIC: {
+      FBAPPID: '443088079071757',
+    },
     DOMAIN:     'localhost',
     FRONTURL:     'http://localhost:3000',
     BACKURL:    'https://localhost:4000',
