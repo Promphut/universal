@@ -141,11 +141,11 @@ const NewsBox = ({detail, style, timeline}) => {
           <VerticalTimeline/>
         </div>
         <Box>
-          <ShareDropdown url={url} className='hidden-des'/>
+          <ShareDropdown buttonSize={24} url={url} className='hidden-des'/>
           <Time className='hidden-des' style={{display:timeline?'block':'none'}}>{utils.dateFormat(published)}</Time>
           <BG height={(screen.width - 32) / 1.91} url={url} src={cover.small || cover.medium} alt={ptitle || ''} />
           <BoxText>
-            <ShareDropdown url={url} className='hidden-mob'/>
+            <ShareDropdown buttonSize={24} url={url} className='hidden-mob'/>
             <NameLink to={url} className='nunito-font' >{truncate(ptitle, {
                 'length': 70,
                 'separator': ''

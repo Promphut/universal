@@ -157,7 +157,7 @@ class ShareDropdown extends React.Component {
     )
 
     const buttonDropdown = (
-      <FontIcon className="material-icons" style={{color:'#8f8f8f'}}>
+      <FontIcon className="material-icons" style={{color:'#8f8f8f', fontSize: `${this.props.buttonSize}px`}}>
         keyboard_arrow_down
       </FontIcon>
     )
