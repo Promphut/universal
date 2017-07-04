@@ -12,7 +12,8 @@ import {
 	LogoLink,
 	BackToTop,
 	BgWithLogo,
-	Stick
+	Stick,
+	SeeMore
 } from 'components'
 import styled from 'styled-components'
 import auth from 'components/auth'
@@ -147,6 +148,13 @@ const Img = styled.img`
 const ImgGif = styled.img`
 	width:849px;
 	height:200px;
+`
+
+const SeemoreContainer = styled.div`
+	margin-top: 26px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
 `
 
 const styles = {
@@ -310,12 +318,15 @@ class HomePage extends React.Component {
 							<div>
 								{feed.length != 0 &&
 									feed.map((item, index) => (
-										<ArticleBox detail={item} key={index} />
+										<ArticleBox final= {index == 29 || index == feed.length -1 ? true:false} detail={item} key={index} />
 									))}
 							</div>
 						</InfiniteScroll>}
 
-						{!hasMoreFeed && <div>More...</div> }
+						{!hasMoreFeed && 
+						<SeemoreContainer>
+							<SeeMore/>
+						</SeemoreContainer>}
 
 						<Tabs
 							style={{ width: '100%' }}
@@ -347,7 +358,7 @@ class HomePage extends React.Component {
 			                />*/}
 						</Tabs>
 
-						<Line />
+						{/*<Line />*/}
 
 						{utils.isMobile() &&
 							<SwipeableViews

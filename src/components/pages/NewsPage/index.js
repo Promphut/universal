@@ -9,6 +9,7 @@ import {
 	TopNews,
 	TopNewsSmall,
 	BackToTop,
+	SeeMore
 } from 'components'
 import styled from 'styled-components'
 import auth from 'components/auth'
@@ -150,6 +151,14 @@ const News = styled.div`
 		z-index:1000;
 	}
 `
+
+const SeemoreContainer = styled.div`
+	margin-top: 26px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+`
+
 
 // const Infinite2 = styled(Infinite)`
 // 	overflow-y:visible !important;
@@ -366,11 +375,14 @@ class NewsPage extends React.Component {
 									loader={this.onload()}>
 									<div>
 										{feed.map((item, index) => (
-											<NewsBox detail={item} key={index} timeline={true} />
+											<NewsBox final= {index == 29 || index == feed.length -1 ? true:false} detail={item} key={index} timeline={false} />
 										))}
 									</div>
 								</InfiniteScroll>
-								{!hasMoreFeed && <div>More...</div> }
+								{!hasMoreFeed && 
+								<SeemoreContainer>
+									<SeeMore/>
+								</SeemoreContainer>}
 							</Latest>
 							<Trending>
 								<InfiniteScroll
@@ -379,11 +391,16 @@ class NewsPage extends React.Component {
 									loader={this.onload()}>
 									<div>
 										{feed.map((item, index) => (
-											<NewsBox detail={item} key={index} timeline={false} />
+											<NewsBox final= {index == 29 || index == feed.length -1 ? true:false} detail={item} key={index} timeline={false} />
 										))}
 									</div>
 								</InfiniteScroll>
-								{!hasMoreFeed && <div>More...</div> }
+								
+								{!hasMoreFeed && 
+								<SeemoreContainer>
+									<SeeMore/>
+								</SeemoreContainer>}
+								
 							</Trending>
 						</SwipeableViews>
 					</Feed>
