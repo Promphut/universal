@@ -19,7 +19,7 @@ import { Route, Switch, Link, Redirect } from 'react-router-dom'
 import { HomePage, NewsPage, AllColumn, AboutPage, ContactPage, TagPage, ColumnPage,
 	StoryPage, ForgetPasswordPage, SignInPage, SignUpPage, UserStory,
 	PublisherEditor, UserSetting, PrivateRoute, NotFoundPage, ErrorPage,
-	UserSettingProfile, UserSettingAccount, UserSettingStory, NewStory, EditStory } from 'components'
+	UserSettingProfile, UserSettingAccount, UserSettingStory, NewStory, EditStory, SearchResultPage } from 'components'
 
 //import theme from './themes/default'
 if (process.env.BROWSER) {
@@ -278,6 +278,8 @@ class App2 extends React.Component {
 								<Route exact path='/stories/news/:storySlug/:sid' render={props => <StoryPage {...props} countView={true}/>} />
 								{/* STORY 2: HAVE COLUMN */ }
 								<Route exact path='/stories/:columnSlug/:storySlug/:sid' render={props => <StoryPage {...props} countView={true}/>} />
+
+								<Route exact path='/search/:type/:keyword' component={SearchResultPage}/>
 
 								<Route exact path='/about' component={AboutPage} />
 								<Route exact path='/contact' component={ContactPage} />
