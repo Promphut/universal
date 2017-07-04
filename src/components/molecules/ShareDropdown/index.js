@@ -65,13 +65,15 @@ class ShareDropdown extends React.Component {
     }
 
     const LineIconPosController = {
-      marginLeft: '-10px',
+      marginLeft: '-18px',
       position: 'relative',
       top: '4px',
     }
 
     const LineIconTextPosController = {
-      marginLeft: '10px',
+      marginLeft: '18px',   
+      position: 'relative',
+      bottom: '4px',
     }
 
     let buttons = []
