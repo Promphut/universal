@@ -50,11 +50,17 @@ const config = {
     BACKURL:    'https://api.thesolar.co',
     COVER:  'https://nextempire.co/pic/fbthumbnail.jpg'
   },
-  test: {
-    DOMAIN:     'presentationxth.com',
-    FRONTURL:     'https://presentationxth.com',
-    BACKURL:    'https://api.presentationxth.com',
-    COVER:  'https://presentationxth.com/pic/fbthumbnail.jpg'
+  'stagingne': {
+    DOMAIN:     'staging.nextempire.co',
+    FRONTURL:     'https://staging.nextempire.co',
+    BACKURL:    'https://staging.thesolar.co',
+    COVER:  'https://staging.nextempire.co/pic/fbthumbnail.jpg'
+  },
+  'stagingam': {
+    DOMAIN:     'staging.aommoney.com',
+    FRONTURL:     'https://staging.aommoney.com',
+    BACKURL:    'https://staging.thesolar.co',
+    COVER:  'https://staging.aommoney.com/pic/fbthumbnail.jpg'
   },
 }
 
