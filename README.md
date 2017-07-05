@@ -7,14 +7,14 @@
 - npm run dev
 
 # Staging NextEmpire:
-- NODE_ENV=stagingne PORT=5000 npm run build
-- NODE_ENV=stagingne node . 
-	e.g. on test server: NODE_ENV=stagingne PORT=5000 forever start -c 'node .' ./
+- NODE_ENV=staging PORT=5000 npm run build
+- NODE_ENV=staging node . 
+	e.g. on test server: NODE_ENV=staging PORT=5000 forever start -c 'node .' ./
 
 # Staging Aommoney:
-- NODE_ENV=stagingam PORT=5500 npm run build
-- NODE_ENV=stagingam node . 
-	e.g. on test server: NODE_ENV=stagingam PORT=5500 forever start -c 'node .' ./
+- NODE_ENV=staging PORT=5500 npm run build
+- NODE_ENV=staging node . 
+	e.g. on test server: NODE_ENV=staging PORT=5500 forever start -c 'node .' ./
 
 # Production:
 - NODE_ENV=production PORT=5000 npm run build
