@@ -46,13 +46,13 @@ const Content = styled.div`
 	@media (max-width:480px) {
 		padding: 0;
   }
+	@media (min-width: 768px) and (max-width: 992px) {
+		padding: 20px 0 0 0;
+  }
 
 `
 
 const Main = styled.div`
-
-	// flex: 3 825px;
-	// max-width: 825px;
 	flex: 3 780px;
 	max-width: 780px;
 	@media (max-width:480px) {
@@ -60,13 +60,10 @@ const Main = styled.div`
 		max-width: 100%;
 		padding:0 16px 0 16px;
   }
-
-	.hidden-des-flex {
-		display: none !important;
-		@media (max-width: 480px) {
-			display: flex !important;
-	  }
-	}
+	@media (min-width: 768px) and (max-width: 992px) {
+    flex: 3 720px;
+		max-width: 720px;
+  }
 `
 const Feed = styled.div`
 	flex: 12 1120px;
