@@ -201,7 +201,7 @@ class HomePage extends React.Component {
 		this.column = []
 	}
 
-	FEED_LIMIT = 20;
+	FEED_LIMIT = config.FEED_LIMIT;
 
 	onload = () => (
 		<Onload>
@@ -323,7 +323,7 @@ class HomePage extends React.Component {
 
 						{!hasMoreFeed && 
 						<SeemoreContainer>
-							<SeeMore/>
+							<SeeMore url={'/all?type=article&sort=latest&page=1'}/>
 						</SeemoreContainer>}
 
 						<Tabs
