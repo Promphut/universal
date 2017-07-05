@@ -132,7 +132,7 @@ const BG = styled(BGImg)`
 const NewsBox = ({detail, style, timeline, final}) => {
 
     let {ptitle,cover,writer,column,votes,comments,updated,url,readTime,contentShort,published} = detail
-    //console.log(detail)
+    // console.log(detail)
     return (
       <Container style={{...style}}>
         <Time className='hidden-mob' style={{display:timeline?'block':'none'}}>{utils.dateFormat(published)}</Time>

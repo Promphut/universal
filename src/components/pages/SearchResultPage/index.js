@@ -96,11 +96,11 @@ export default class SearchResultPage extends React.Component {
   }
 
   fetchResult = (keyword) => {
-    if(!_.isEmpty(keyword))
+    if(!_.isEmpty(keyword) && keyword.length >= 3)
       api.getStoryFromKeyword(keyword)
       .then(result => {
-        console.log(result)
-        this.setState({result: result});
+				// console.log(result)
+        this.setState({result: result.stories});
       })
     else {
       this.setState({result: null});
