@@ -21,6 +21,7 @@ import LinearProgress from 'material-ui/LinearProgress'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import SwipeableViews from 'react-swipeable-views'
 import utils from '../../../services/utils'
+import config from '../../../config'
 
 const Wrapper = styled.div`
 	@media (max-width:480px) {
@@ -189,7 +190,7 @@ class NewsPage extends React.Component {
 		}
 	}
 
-	FEED_LIMIT = 20
+	FEED_LIMIT = config.FEED_LIMIT
 
 	getTrendingNews = () => {
 		api.getFeed('news', { status: 1 }, 'trending', null, 0, 4).then(result => {
@@ -382,7 +383,7 @@ class NewsPage extends React.Component {
 								</InfiniteScroll>
 								{!hasMoreFeed && 
 								<SeemoreContainer>
-									<SeeMore/>
+									<SeeMore url={'/all?type=news&sort=latest&page=1'}/>
 								</SeemoreContainer>}
 							</Latest>
 							<Trending>
@@ -399,7 +400,7 @@ class NewsPage extends React.Component {
 								
 								{!hasMoreFeed && 
 								<SeemoreContainer>
-									<SeeMore/>
+									<SeeMore url={'/all?type=news&sort=trending&page=1'}/>
 								</SeemoreContainer>}
 								
 							</Trending>

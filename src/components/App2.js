@@ -18,7 +18,7 @@ import utils from '../services/utils'
 import { Route, Switch, Link, Redirect } from 'react-router-dom'
 import { HomePage, NewsPage, AllColumn, AboutPage, ContactPage, TagPage, ColumnPage,
 	StoryPage, ForgetPasswordPage, SignInPage, SignUpPage, UserStory,
-	PublisherEditor, UserSetting, PrivateRoute, NotFoundPage, ErrorPage,
+	PublisherEditor, UserSetting, PrivateRoute, NotFoundPage, ErrorPage, AllStoriesPage,
 	UserSettingProfile, UserSettingAccount, UserSettingStory, NewStory, EditStory, SearchResultPage } from 'components'
 
 //import theme from './themes/default'
@@ -275,6 +275,7 @@ class App2 extends React.Component {
 
 								<Route exact path='/' component={HomePage}/>
 								<Route exact path='/stories/news' component={NewsPage} />
+								<Route exact path='/all' component={AllStoriesPage}/>
 								<Route exact path='/stories/columns' component={AllColumn}/>
 								<Route exact path='/stories/:columnSlug' component={ColumnPage}/>
 								{/* STORY 1: FORMAT is 'NEWS' */ }

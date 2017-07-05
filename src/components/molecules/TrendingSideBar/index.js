@@ -153,9 +153,9 @@ class TrendingSideBar extends React.Component {
 				{popular.length != 0 ? tn : []}
 				{/*{detail.map((data,index)=><Link to='#' key={index}><TrendingSideBarInner detail={data}/></Link>)}*/}
 				{/*<Divider/>*/}
-				<SeemoreContainer>
+				{/*<SeemoreContainer>
 					<SeeMore isTraindingSideBar = {true}/>
-				</SeemoreContainer>
+				</SeemoreContainer>*/}
 			</Container>
 
 

@@ -172,7 +172,7 @@ class ColumnPage extends React.Component {
 		loading: false
 	}
 
-	FEED_LIMIT = 20
+	FEED_LIMIT = config.FEED_LIMIT
 
 	static contextTypes = {
 		setting: PropTypes.object

@@ -360,6 +360,7 @@ class TopBar extends React.Component {
 
 					{status == 'LOGGEDIN' &&
 						<Right>
+							<SearchButton />
 							{this.role &&
 								editButton &&
 								<Edit
