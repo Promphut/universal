@@ -37,7 +37,7 @@ const config = {
   },
   development: {
     ANALYTIC: {
-      FBAPPID: '443088079071757',
+      FBAPPID: '407326816302135',
     },
     DOMAIN:     'localhost',
     FRONTURL:     'http://localhost:3000',
@@ -50,17 +50,11 @@ const config = {
     BACKURL:    'https://api.thesolar.co',
     COVER:  'https://nextempire.co/pic/fbthumbnail.jpg'
   },
-  'stagingne': {
+  'staging': {
     DOMAIN:     'staging.nextempire.co',
     FRONTURL:     'https://staging.nextempire.co',
     BACKURL:    'https://staging.thesolar.co',
     COVER:  'https://staging.nextempire.co/pic/fbthumbnail.jpg'
-  },
-  'stagingam': {
-    DOMAIN:     'staging.aommoney.com',
-    FRONTURL:     'https://staging.aommoney.com',
-    BACKURL:    'https://staging.thesolar.co',
-    COVER:  'https://staging.aommoney.com/pic/fbthumbnail.jpg'
   },
 }
 

@@ -6,10 +6,15 @@
 # Development: 
 - npm run dev
 
-# Test:
-- NODE_ENV=test PORT=5000 npm run build
-- NODE_ENV=test node . 
-	e.g. on test server: NODE_ENV=test PORT=5000 forever start -c 'node .' ./
+# Staging NextEmpire:
+- NODE_ENV=stagingne PORT=5000 npm run build
+- NODE_ENV=stagingne node . 
+	e.g. on test server: NODE_ENV=stagingne PORT=5000 forever start -c 'node .' ./
+
+# Staging Aommoney:
+- NODE_ENV=stagingam PORT=5500 npm run build
+- NODE_ENV=stagingam node . 
+	e.g. on test server: NODE_ENV=stagingam PORT=5500 forever start -c 'node .' ./
 
 # Production:
 - NODE_ENV=production PORT=5000 npm run build
