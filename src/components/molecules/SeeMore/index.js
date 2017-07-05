@@ -3,6 +3,7 @@ import {
   Link
 } from 'react-router-dom'
 import styled from 'styled-components'
+import config from '../../../config'
 
 const Button = styled.div`
   border: 0.5px solid #c4c4c4;
@@ -31,8 +32,9 @@ class SeeMore extends React.Component {
   }
 
     render() {
+        let url = this.props.url ? this.props.url : config.FRONTURL + '/stories/all'
         return(
-            <Link to={this.props.url||'/all'}>
+            <Link to={url}>
                 <Button isTraindingSideBar = {this.props.isTraindingSideBar}>See More</Button>
             </Link>
         )

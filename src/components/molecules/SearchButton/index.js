@@ -52,7 +52,7 @@ const styles = {
 
 const muiTheme = getMuiTheme({
   palette: {
-    textColor: 'white',
+    textColor: '#ffffff',
   },
 });
 

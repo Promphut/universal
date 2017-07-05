@@ -60,7 +60,7 @@ const extractMeta = (setting, url) => {
 
 	let path = url.split('/')
 
-	if (path[1] === 'stories' && !path[3]) {
+	if (path[1] === 'stories' && !(path[2].startsWith('all')||path[2].startsWith('columns')) && !path[3]) {
 		// 1. Column case
 		let slug = decodeURIComponent(path[2])
 		return api.getColumnFromSlug(slug)
@@ -71,7 +71,7 @@ const extractMeta = (setting, url) => {
 			if(col.url) meta.url = col.url
 			return meta
 		})
-	} else if (path[1] === 'stories') {
+	} else if (path[1] === 'stories' && !(path[2].startsWith('all')||path[2].startsWith('columns'))) {
 		// 2. Story case
 		let sid = path[4]
 		return api.getStoryFromSid(sid)

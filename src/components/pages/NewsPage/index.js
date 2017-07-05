@@ -389,7 +389,7 @@ class NewsPage extends React.Component {
 								</InfiniteScroll>
 								{!hasMoreFeed && 
 								<SeemoreContainer>
-									<SeeMore url={'/all?type=news&sort=latest&page=1'}/>
+									<SeeMore url={'/stories/all?type=news&sort=latest&page=1'}/>
 								</SeemoreContainer>}
 							</Latest>
 							<Trending>
@@ -406,7 +406,7 @@ class NewsPage extends React.Component {
 								
 								{!hasMoreFeed && 
 								<SeemoreContainer>
-									<SeeMore url={'/all?type=news&sort=trending&page=1'}/>
+									<SeeMore url={'/stories/all?type=news&sort=trending&page=1'}/>
 								</SeemoreContainer>}
 								
 							</Trending>

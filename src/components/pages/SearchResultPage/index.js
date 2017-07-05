@@ -93,16 +93,16 @@ export default class SearchResultPage extends React.Component {
   }
 
   fetchResult = (keyword, type) => {
-    if(!_.isEmpty(keyword) && keyword.length >= 3)
+    if(!_.isEmpty(keyword) && keyword.length >= 3){
       api.getStoryFromKeyword(keyword, type)
       .then(result => {
         this.setState({
-					keyword: keyword,
-					type: type,
-					result: result.stories
-				});
+          keyword: keyword,
+          type: type,
+          result: result.stories
+        });
       })
-    else {
+    } else {
       this.setState({result: null});
     }
   }
@@ -135,7 +135,7 @@ export default class SearchResultPage extends React.Component {
               <Link to={"/search/news/" + this.state.keyword}><FilterItem select={this.state.type === 'news'}>NEWS</FilterItem></Link>
               {/* <Link to={"/search/video/" + this.state.keyword}><FilterItem select={this.state.type === 'video'}>VIDEO</FilterItem></Link> */}
             </FilterContainer>
-            <SearchResultBox type={this.state.type} result={this.props.result}/>
+            <SearchResultBox type={this.state.type} result={this.state.result}/>
           </Main>
 
         </Content>

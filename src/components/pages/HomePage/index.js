@@ -323,7 +323,7 @@ class HomePage extends React.Component {
 
 						{!hasMoreFeed && 
 						<SeemoreContainer>
-							<SeeMore url={'/all?type=article&sort=latest&page=1'}/>
+							<SeeMore url={'/stories/all?type=article&sort=latest&page=1'}/>
 						</SeemoreContainer>}
 
 						<Tabs

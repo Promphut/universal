@@ -164,7 +164,7 @@ class ColumnPage extends React.Component {
 		},
 		isMobile: false,
 
-		currentPage: this.props.location.search != "" ? parseInt(this.props.location.search.substr(6))-1 : 0,
+		currentPage: utils.querystring('page',this.props.location) ? utils.querystring('page',this.props.location) - 1 : 0,
 		feedCount: 1,
 		feed: [],
 		totalPages: 0,
@@ -197,7 +197,7 @@ class ColumnPage extends React.Component {
 	reloadFeed = () => {
 		this.setState(
 			{
-				currentPage: this.props.location.search != "" ? parseInt(this.props.location.search.substr(6))-1 : 0,
+				currentPage: utils.querystring('page',this.props.location) ? utils.querystring('page',this.props.location) - 1 : 0,
 				feedCount: 1,
 				feed: [],
 				totalPages: 0,
@@ -210,7 +210,6 @@ class ColumnPage extends React.Component {
 
 	loadFeed = colId => {
 		return () => {
-			//console.log('LOAD FEED0', colId)
 			if (colId == null) return
 			// ensure this method is called only once at a time
 			if (this.state.loading === true) return
@@ -235,15 +234,11 @@ class ColumnPage extends React.Component {
 					this.setState(
 						{
 							feed: result.feed,
-							feedCount: result.count['1']
-								? result.count['1']
-								: 0 ? result.count['1'] : 0,
-							hasMoreFeed: false,
+							feedCount: result.count['total'] ? result.count['total'] : 0,
 							totalPages: utils.getTotalPages(this.FEED_LIMIT, result.count['total']),
-							loading: false
 						},
 						() => {
-							this.state.loading = false
+							this.setState({loading:false})
 						}
 					)
 				})
@@ -252,8 +247,9 @@ class ColumnPage extends React.Component {
 
 	changePage = e => {
 		this.props.history.push({ hash: this.props.location.hash ,search: "?page=" + e })
-		this.setState({ currentPage: e - 1 , hasMoreFeed: true}, () => {
-			this.loadFeed(this.state.column._id)()
+		this.setState({ currentPage: e - 1}, () => {
+			document.body.scrollTop = document.documentElement.scrollTop = 400
+			this.reloadFeed()
 		})
 	}
 
@@ -285,12 +281,6 @@ class ColumnPage extends React.Component {
 		if (nextProps.match.params.columnSlug != this.props.match.params.columnSlug) {
 			this.getColumnFromSlug(nextProps.match.params.columnSlug, this.reloadFeed)
 			//this.reloadFeed()
-		}
-		if(nextProps.location.search != this.props.location.search){
-			document.body.scrollTop = document.documentElement.scrollTop = 400
-			this.setState({currentPage : parseInt(nextProps.location.search.substr(6))-1}
-				,()=>{this.loadFeed(this.state.column._id)()
-			})
 		}
 	}
 
@@ -365,21 +355,43 @@ class ColumnPage extends React.Component {
 									style={{ padding: '15px 0 15px 0', margin: '0 0 50px 0' }}
 									next={column.name}
 								/>
-								<TextLine className="sans-font">Latest</TextLine>
-								{loading ?  this.onLoad :
+								{totalPages > 0 && totalPages > currentPage && currentPage >= 0
+									&& <TextLine className="sans-font">Latest</TextLine>
+								}
+								{loading ?  this.onload() : 
 									<div>
-										{feed &&
+										{feed && currentPage >= 0 &&
 											feed.map((item, index) => (
 												<ArticleBox detail={item} key={index} />
 											))}
-									</div>
+									</div> 
 								}
 								<Page>
-									{totalPages > 0 && <Pagination
-										currentPage={currentPage + 1}
-										totalPages={totalPages}
-										onChange={this.changePage}
-									/>}
+									{totalPages > 0 && ((totalPages > currentPage && currentPage >= 0) ?
+										<Pagination
+											currentPage={currentPage + 1}
+											totalPages={totalPages}
+											onChange={this.changePage}/>
+										:
+										<EmptyStory
+											title="No More Story"
+											description={
+												<div>
+													There are no more stories in this page. Go back to
+													<Link
+														to={"/stories/" + this.state.column.slug + "?page=1"}
+														style={{
+															color: theme.accentColor,
+															padding: '0 0.5em 0 0.5em'
+														}}>
+														first page
+													</Link>of this column
+													?
+												</div>
+											}
+											hideButton={true}
+										/>)
+									}
 								</Page>
 							</Main>}
 					<Aside>
