@@ -248,11 +248,10 @@ class HomePage extends React.Component {
 					// console.log(result)
 					this.setState(
 						{
-							page: feed.length <= this.FEED_LIMIT ? 2 : ++page,
+							page: ++page,
 							feed: feed,
 							feedCount: result.count['1']?result.count['1']:0,
-							hasMoreFeed: feed.length <= this.FEED_LIMIT ? false : page < 2
-							/*hasMoreFeed: feed.length < result.count['1']*/
+							hasMoreFeed: feed.length < result.count['1']
 						},
 						() => {
 							this.loading = false
@@ -402,7 +401,7 @@ class HomePage extends React.Component {
 					</Aside>
 				</Content>
 
-				<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800" />
+				<BackToTop scrollStepInPx="800" delayInMs="16.66" showOnTop="1800" />
 				<Footer />
 			</Wrapper>
 		)

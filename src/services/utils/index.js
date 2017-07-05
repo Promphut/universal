@@ -49,7 +49,7 @@ utils.getYtUrl = username => {
 		return 'https://youtube.com/channel/' + username
 
 	// user
-	return 'https://youtube.com/user/' + username
+	return 'https://youtube.com/' + username
 }
 
 // default twt tweet url
