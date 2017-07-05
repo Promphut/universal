@@ -9,6 +9,9 @@ import {
 import styled from 'styled-components'
 import TextField from 'material-ui/TextField'
 
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
 const ButtonContainer = styled.div`
     width: auto;
     height: 30px;
@@ -47,6 +50,12 @@ const styles = {
   }
 }
 
+const muiTheme = getMuiTheme({
+  palette: {
+    textColor: 'white',
+  },
+});
+
 class SearchButton extends React.Component {
     constructor(props) {
         super(props)
@@ -58,16 +67,18 @@ class SearchButton extends React.Component {
     }
 
     handleClick = (e) => {
-        this.setState({focus: !this.state.focus})
+        if(this.state.focus && _.trim(this.state.text).length != 0)  {
+            this.setState({focus: !this.state.focus})
+            window.open('http://localhost:3000/search/stories/' + _.trim(this.state.text), "_top")
+        }
+        else if(this.state.focus) this.setState({focus: true})
+        else this.setState({focus: !this.state.focus})
+        this.setState({text: ''})
     }
 
     handleChange = (event) => {
         const value = event.target.value;
         this.setState({text: value})
-    }
-
-    focusUsernameInputField = (input) => {
-        input.focus();
     }
 
     componentDidMount() {
@@ -77,6 +88,7 @@ class SearchButton extends React.Component {
     render() {
         return(
             // <Link to={'/search/news/fsfsf'}>
+            <MuiThemeProvider muiTheme={muiTheme}>
                 <ButtonContainer>
                     <Button>
                         <i id="bt" className="fa fa-search" aria-hidden="true"></i>
@@ -93,16 +105,16 @@ class SearchButton extends React.Component {
                             value={this.state.text}
                             onChange={this.handleChange}
                             onKeyPress={(ev) => {
-                                if (ev.key === 'Enter') {
+                                if (ev.key === 'Enter' && _.trim(this.state.text).length != 0) {
                                     // Do code here
                                     {/*alert(this.state.text)*/}
-                                    window.open('http://localhost:3000/search/stories/' + this.state.text, "_top")
+                                    window.open('http://localhost:3000/search/stories/' + _.trim(this.state.text), "_top")
                                     ev.preventDefault();
-                                }
+                                } else if (ev.key === 'Enter') this.setState({text: ''})
                             }}
-                            ref={this.focusUsernameInputField}
                         />}
                 </ButtonContainer>
+            </MuiThemeProvider>
             // </Link>
         )
     }

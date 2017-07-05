@@ -7,7 +7,6 @@ import { Tabs, Tab } from 'material-ui/Tabs'
 import SwipeableViews from 'react-swipeable-views'
 import {Footer, TopBarWithNavigation, SearchResultBox} from 'components'
 import api from 'components/api'
-import utils from '../../../services/utils'
 import isEmpty from 'lodash/isEmpty'
 
 const Wrapper = styled.div`
@@ -86,54 +85,48 @@ export default class SearchResultPage extends React.Component {
 
   constructor(props) {
     super(props)
-
     this.state = {
       keyword: '',
       type: '',
       result: null
     }
-
   }
 
   fetchResult = (keyword, type) => {
     if(!_.isEmpty(keyword) && keyword.length >= 3)
       api.getStoryFromKeyword(keyword, type)
       .then(result => {
-        this.setState({result: result.stories});
+        this.setState({
+					keyword: keyword,
+					type: type,
+					result: result.stories
+				});
       })
     else {
       this.setState({result: null});
     }
   }
 
+	componentWillMount () {
+			this.setState({
+				keyword: this.props.match.params.keyword,
+				type: this.props.match.params.type,
+			})
+	}
+
+	componentDidMount () {
+		this.fetchResult(this.state.keyword, this.state.type)
+	}
+
   handleKeywordChange = (e) => {
-    this.setState({
-      keyword: e.target.value,
-      result: this.fetchResult(e.target.value,this.state.type),
-    })
-  }
-
-  componentDidMount() {
-    this.setState({
-      isMobile: utils.isMobile(),
-      completed: 100
-    })
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      keyword: nextProps.match.params.keyword,
-      result: this.fetchResult(nextProps.match.params.keyword,nextProps.match.params.type),
-      type: nextProps.match.params.type,
-    })
+		this.fetchResult(e.target.value, this.state.type)
   }
 
   render() {
-    let { isMobile, completed } = this.state
     return (
       <Wrapper>
         <TopBarWithNavigation/>
-        <Content isMobile={isMobile}>
+        <Content>
 
           <Main>
             <TextField id="search-box" hintText="Search Keyword Here" autoFocus={true} fullWidth={true} value={this.state.keyword} style={{fontSize:'28px'}} onChange={this.handleKeywordChange}/>
@@ -142,7 +135,7 @@ export default class SearchResultPage extends React.Component {
               <Link to={"/search/news/" + this.state.keyword}><FilterItem select={this.state.type === 'news'}>NEWS</FilterItem></Link>
               {/* <Link to={"/search/video/" + this.state.keyword}><FilterItem select={this.state.type === 'video'}>VIDEO</FilterItem></Link> */}
             </FilterContainer>
-            <SearchResultBox type={this.state.type} result={this.state.result}/>
+            <SearchResultBox type={this.state.type} result={this.props.result}/>
           </Main>
 
         </Content>
