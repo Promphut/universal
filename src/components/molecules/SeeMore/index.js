@@ -32,7 +32,7 @@ class SeeMore extends React.Component {
 
     render() {
         return(
-            <Link to={this.props.url||'/'}>
+            <Link to={this.props.url||'/all'}>
                 <Button isTraindingSideBar = {this.props.isTraindingSideBar}>See More</Button>
             </Link>
         )
