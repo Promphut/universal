@@ -7,31 +7,30 @@ import {ArticleBox, NewsBox} from 'components'
 
 export default class SearchResultBox extends React.Component  {
   render() {
-    let resultFeed = [];
+    var resultFeed = [];
 
-    if (!isEmpty(this.props.result))
+    if (!isEmpty(this.props.result)){
       resultFeed = []
-      let i = 0
 
       if (this.props.type === 'news') {
-        for (let item in this.props.result)
+        for (var i = 0 ; i < this.props.result.length ; i++)
         {
-          if (this.props.result.length > 0)
-            resultFeed.push(<NewsBox detail={item} timeline={false} key={++i}/>)
+            resultFeed.push(<NewsBox detail={this.props.result[i]} timeline={false} key={i}/>)
         }
       }
       else {
-        for (let item in this.props.result)
-        {
-          if (this.props.result.length > 0)
-          resultFeed.push(<ArticleBox detail={item} key={++i}/>)
+        for (var i = 0 ; i < this.props.result.length ; i++)
+        { 
+            resultFeed.push(<ArticleBox detail={this.props.result[i]} key={i}/>)
         }
       }
+    }
 
       // console.log(this.props.result)
-
     return (
-      <div>{resultFeed}</div>
+      <div>
+        {resultFeed}
+      </div>
     )
   }
 }

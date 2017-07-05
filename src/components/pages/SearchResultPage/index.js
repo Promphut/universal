@@ -95,11 +95,10 @@ export default class SearchResultPage extends React.Component {
 
   }
 
-  fetchResult = (keyword) => {
+  fetchResult = (keyword, type) => {
     if(!_.isEmpty(keyword) && keyword.length >= 3)
-      api.getStoryFromKeyword(keyword)
+      api.getStoryFromKeyword(keyword, type)
       .then(result => {
-				// console.log(result)
         this.setState({result: result.stories});
       })
     else {
@@ -110,7 +109,7 @@ export default class SearchResultPage extends React.Component {
   handleKeywordChange = (e) => {
     this.setState({
       keyword: e.target.value,
-      result: this.fetchResult(e.target.value),
+      result: this.fetchResult(e.target.value,this.state.type),
     })
   }
 
@@ -124,7 +123,7 @@ export default class SearchResultPage extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       keyword: nextProps.match.params.keyword,
-      result: this.fetchResult(nextProps.match.params.keyword),
+      result: this.fetchResult(nextProps.match.params.keyword,nextProps.match.params.type),
       type: nextProps.match.params.type,
     })
   }
