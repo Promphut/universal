@@ -43,11 +43,9 @@ const Content = styled.div`
 	flex-flow: row wrap;
 	justify-content: center;
 	padding: 40px 0 0 0;
-
 	@media (max-width:480px) {
 		padding: 10px 0 0 0;
   }
-
 	@media (min-width: 481px) {
 
 	}
@@ -61,13 +59,6 @@ const Main = styled.div`
 		max-width: 100%;
 		padding:0 15px 0 15px;
   }
-
-	.hidden-des-flex {
-		display: none !important;
-		@media (max-width: 480px) {
-			display: flex !important;
-	  }
-	}
 `
 const Feed = styled.div`
 	flex: 12 1120px;
@@ -77,6 +68,11 @@ const Feed = styled.div`
 		max-width: 100%;
 		padding:0 15px 0 15px;
   }
+	@media (min-width: 768px) and (max-width: 992px) {
+		flex: 12 720px;
+		max-width: 720px;
+  }
+	
 `
 
 const Aside = styled.div`
@@ -93,7 +89,7 @@ const Text = styled.h2`
 	font-weight:normal;
 	text-align:center;
 	width:864px;
-	padding:35px;
+	padding:35px 0 35px 0;
 	@media (max-width: 480px) {
 		width:100%;
 		padding:15px;
@@ -115,11 +111,16 @@ const Onload = styled.div`
 
 const Line = styled.div`
   position:relative;
-  top:-2px;
+  top:-41px;
   z-index:-5;
   width:100%;
   height:1px;
   background-color:#C4C4C4;
+	@media (min-width: 768px) and (max-width: 992px) {
+		top:-32px;
+		width:720px;
+		margin:0 auto 0 auto;
+  }
 `
 
 const Latest = styled.div`
@@ -138,6 +139,10 @@ const Head = styled.h1`
 	margin:0 auto 0 auto;
 	background:white;
 	width:280px;
+	@media (min-width: 768px) and (max-width: 992px) {
+		font-size:48px;
+		width:220px;
+  }
 `
 
 const News = styled.div`
@@ -150,6 +155,7 @@ const News = styled.div`
 	@media (max-width: 480px) {
 		z-index:1000;
 	}
+
 `
 
 const SeemoreContainer = styled.div`
@@ -296,7 +302,7 @@ class NewsPage extends React.Component {
 					? <Content>
 							<Feed>
 								<Head className="serif-font hidden-mob">NEWS</Head>
-								<Line className="hidden-mob" style={{ top: '-41px' }} />
+								<Line className="hidden-mob" />
 								<Text className="center">{shortDesc}</Text>
 							</Feed>
 						</Content>
