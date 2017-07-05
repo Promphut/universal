@@ -50,6 +50,12 @@ const Container = styled.div`
       margin-top:12px;
     }
   }
+  @media (min-width: 768px) and (max-width: 992px) {
+    padding:20px 0 20px 0;
+    .imgWidth{
+      height:178px;
+    }
+  }
 `
 
 const Div = styled.div`
@@ -136,6 +142,10 @@ const Box1 = styled.div`
     display:block;
     min-width:100%;
     width:100%;
+  }
+  @media (min-width: 768px) and (max-width: 992px) {
+    flex:1 340px;
+    min-width:340px;
   }
 `
 

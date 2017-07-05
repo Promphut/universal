@@ -15,6 +15,9 @@ const NewsBox = styled.div`
     padding:0px;
     height:auto;
   }
+  @media (min-width: 768px) and (max-width: 992px) {
+    height:300px;
+  }
 `
 const News = styled.div`
   color:${props=>props.theme.primaryColor};
@@ -36,6 +39,9 @@ const VerticalTimeline = styled.div`
   background-color:#F4F4F4;
   position:relative;
   min-height:50px;
+  @media (min-width: 768px) and (max-width: 992px) {
+    min-height:40px;
+  }
 `
 const Doughnut = styled.div`
   margin:0 5px 0 0px;
@@ -61,6 +67,9 @@ const NameLink = styled(Link)`
   @media (max-width:480px) {
     font-size:14px;
   }
+  @media (min-width: 768px) and (max-width: 992px) {
+    font-size:14px;
+  }
 `
 const Time = styled.div`
   color:#8E8E8E;
@@ -81,6 +90,9 @@ const BoxInner = styled.div`
   width:100%;
   height:90%;
   position:relative;
+  @media (min-width: 768px) and (max-width: 992px) {
+    height:80%;
+  }
 `
 const Grad = styled.div`
   position:relative;
@@ -147,7 +159,7 @@ class TopNewsHome extends React.Component {
         <BoxInner>
           {news && news.map((val,ind)=>(
             <Box key={ind}>
-              <BoxDiv  style={{}}>
+              <BoxDiv>
                 <Doughnut/>
                 <VerticalTimeline/>
               </BoxDiv>
