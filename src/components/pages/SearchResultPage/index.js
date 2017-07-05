@@ -140,7 +140,7 @@ export default class SearchResultPage extends React.Component {
             <FilterContainer>
               <Link to={"/search/stories/" + this.state.keyword}><FilterItem select={this.state.type === 'stories'}>STORIES</FilterItem></Link>
               <Link to={"/search/news/" + this.state.keyword}><FilterItem select={this.state.type === 'news'}>NEWS</FilterItem></Link>
-              <Link to={"/search/video/" + this.state.keyword}><FilterItem select={this.state.type === 'video'}>VIDEO</FilterItem></Link>
+              {/* <Link to={"/search/video/" + this.state.keyword}><FilterItem select={this.state.type === 'video'}>VIDEO</FilterItem></Link> */}
             </FilterContainer>
             <SearchResultBox type={this.state.type} result={this.state.result}/>
           </Main>
