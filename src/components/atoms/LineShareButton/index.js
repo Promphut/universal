@@ -15,20 +15,10 @@ class LineShareButton extends React.Component {
 
 	constructor(props) {
 		super(props)
-
-		this.state = { url:'' }
+		//this.state = { url:'' }
 	}
 
-	getUrl = (done) => {
-		let url = this.props.url
-		if(!url){
-			url = config.FRONTURL + this.props.location.pathname
-		}
-		api.shorten(url, {medium:'social', source:'line'})
-		.then(done)
-	}
-
-	componentDidMount(){
+	/*componentDidMount(){
 		// Handel url
 		this.getUrl(res => {
 			//console.log('URL', res)
@@ -51,13 +41,31 @@ class LineShareButton extends React.Component {
 				//this.a.removeEventListener('tweetStory')
 			})
 		} 
+	}*/
+
+	handleLineShare = (e) => {
+		let sid = this.props.sid
+		let url = this.props.url
+
+		if(sid==null) sid = utils.getTrailingSid(this.props.url)
+		if(sid!=null) api.incStoryInsight(sid, 'share', 'share_line')
+
+		if(!url) url = config.FRONTURL + this.props.location.pathname
+		
+		window.open(utils.getLineUrl(url),'_blank');
 	}
 
 	render(){
 		// Set url
-		let url = this.state.url
+		/*let url = this.state.url
+		
+		return <a href={utils.getLineUrl(url)} target="_blank" ref={(_a) => {this.a = _a}}>{this.props.button}</a>;*/
 
-		return <a href={utils.getLineUrl(url)} target="_blank" ref={(_a) => {this.a = _a}}>{this.props.button}</a>;
+		return (
+			<div onClick={this.handleLineShare} style={{...this.props.style}}>
+				{this.props.button}
+			</div>
+		)
 	}
 }
 

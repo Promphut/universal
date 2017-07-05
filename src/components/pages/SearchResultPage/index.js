@@ -95,12 +95,11 @@ export default class SearchResultPage extends React.Component {
 
   }
 
-  fetchResult = (keyword) => {
-    if(!_.isEmpty(keyword))
-      api.getStoryFromKeyword(keyword)
+  fetchResult = (keyword, type) => {
+    if(!_.isEmpty(keyword) && keyword.length >= 3)
+      api.getStoryFromKeyword(keyword, type)
       .then(result => {
-        console.log(result)
-        this.setState({result: result});
+        this.setState({result: result.stories});
       })
     else {
       this.setState({result: null});
@@ -110,7 +109,7 @@ export default class SearchResultPage extends React.Component {
   handleKeywordChange = (e) => {
     this.setState({
       keyword: e.target.value,
-      result: this.fetchResult(e.target.value),
+      result: this.fetchResult(e.target.value,this.state.type),
     })
   }
 
@@ -124,7 +123,7 @@ export default class SearchResultPage extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       keyword: nextProps.match.params.keyword,
-      result: this.fetchResult(nextProps.match.params.keyword),
+      result: this.fetchResult(nextProps.match.params.keyword,nextProps.match.params.type),
       type: nextProps.match.params.type,
     })
   }
@@ -141,7 +140,7 @@ export default class SearchResultPage extends React.Component {
             <FilterContainer>
               <Link to={"/search/stories/" + this.state.keyword}><FilterItem select={this.state.type === 'stories'}>STORIES</FilterItem></Link>
               <Link to={"/search/news/" + this.state.keyword}><FilterItem select={this.state.type === 'news'}>NEWS</FilterItem></Link>
-              <Link to={"/search/video/" + this.state.keyword}><FilterItem select={this.state.type === 'video'}>VIDEO</FilterItem></Link>
+              {/* <Link to={"/search/video/" + this.state.keyword}><FilterItem select={this.state.type === 'video'}>VIDEO</FilterItem></Link> */}
             </FilterContainer>
             <SearchResultBox type={this.state.type} result={this.state.result}/>
           </Main>
