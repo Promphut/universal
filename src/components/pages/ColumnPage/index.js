@@ -287,6 +287,7 @@ class ColumnPage extends React.Component {
 			//this.reloadFeed()
 		}
 		if(nextProps.location.search != this.props.location.search){
+			document.body.scrollTop = document.documentElement.scrollTop = 400
 			this.setState({currentPage : parseInt(nextProps.location.search.substr(6))-1}
 				,()=>{this.loadFeed(this.state.column._id)()
 			})

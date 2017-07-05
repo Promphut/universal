@@ -201,6 +201,8 @@ class HomePage extends React.Component {
 		this.column = []
 	}
 
+	FEED_LIMIT = 20;
+
 	onload = () => (
 		<Onload>
 			<div className="row">
@@ -237,7 +239,7 @@ class HomePage extends React.Component {
 			//console.log('page', page)
 
 			api
-				.getFeed('article', { status: 1 }, 'latest', null, page, 15)
+				.getFeed('article', { status: 1 }, 'latest', null, page, this.FEED_LIMIT)
 				.then(result => {
 					let feed = this.state.feed.concat(result.feed)
 					// console.log(result)
@@ -246,8 +248,7 @@ class HomePage extends React.Component {
 							page: ++page,
 							feed: feed,
 							feedCount: result.count['1']?result.count['1']:0,
-							hasMoreFeed: page < 2
-							/*hasMoreFeed: feed.length < result.count['1']*/
+							hasMoreFeed: feed.length < result.count['1']
 						},
 						() => {
 							this.loading = false
@@ -315,7 +316,7 @@ class HomePage extends React.Component {
 							<div>
 								{feed.length != 0 &&
 									feed.map((item, index) => (
-										<ArticleBox final= {index == 29 || index == feed.length -1 ? true:false} detail={item} key={index} />
+										<ArticleBox final= {index == feed.length -1 ? true:false} detail={item} key={index} />
 									))}
 							</div>
 						</InfiniteScroll>}
@@ -397,7 +398,7 @@ class HomePage extends React.Component {
 					</Aside>
 				</Content>
 
-				<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800" />
+				<BackToTop scrollStepInPx="800" delayInMs="16.66" showOnTop="1800" />
 				<Footer />
 			</Wrapper>
 		)

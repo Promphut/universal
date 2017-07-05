@@ -176,9 +176,9 @@ class Footer extends React.Component {
 							<ColumnItemContainer>
 								{channels && <SocialContent>
 									{channels.fb && <SocialContentItem><SocialLink href={utils.getFbUrl(channels.fb)} target="_blank"><SocialIcon className="fa fa-facebook fa-2x" aria-hidden="true"></SocialIcon></SocialLink></SocialContentItem>}
-									{channels.twt && <SocialContentItem><SocialLink href={utils.getFbUrl(channels.twt)} target="_blank"><SocialIcon className="fa fa-twitter fa-2x" aria-hidden="true"></SocialIcon></SocialLink></SocialContentItem>}
-									{channels.yt && <SocialContentItem><SocialLink href={utils.getFbUrl(channels.yt)} target="_blank"><SocialIcon className="fa fa-youtube-play fa-2x" aria-hidden="true"></SocialIcon></SocialLink></SocialContentItem>}
-									{channels.ig && <SocialContentItem><SocialLink href={utils.getFbUrl(channels.ig)} target="_blank"><SocialIcon className="fa fa-instagram fa-2x" aria-hidden="true"></SocialIcon></SocialLink></SocialContentItem>}
+									{channels.twt && <SocialContentItem><SocialLink href={utils.getTwtUrl(channels.twt)} target="_blank"><SocialIcon className="fa fa-twitter fa-2x" aria-hidden="true"></SocialIcon></SocialLink></SocialContentItem>}
+									{channels.yt && <SocialContentItem><SocialLink href={utils.getYtUrl(channels.yt)} target="_blank"><SocialIcon className="fa fa-youtube-play fa-2x" aria-hidden="true"></SocialIcon></SocialLink></SocialContentItem>}
+									{channels.ig && <SocialContentItem><SocialLink href={utils.getIgUrl(channels.ig)} target="_blank"><SocialIcon className="fa fa-instagram fa-2x" aria-hidden="true"></SocialIcon></SocialLink></SocialContentItem>}
 
 								</SocialContent>}
 							</ColumnItemContainer>
@@ -226,9 +226,9 @@ class Footer extends React.Component {
 							<ColumnItemContainer>
 								{channels && <SocialContent>
 									{channels.fb && <SocialContentItem><SocialLink href={utils.getFbUrl(channels.fb)} target="_blank"><SocialIcon className="fa fa-facebook fa-2x" aria-hidden="true"></SocialIcon></SocialLink></SocialContentItem>}
-									{channels.twt && <SocialContentItem><SocialLink href={utils.getFbUrl(channels.twt)} target="_blank"><SocialIcon className="fa fa-twitter fa-2x" aria-hidden="true"></SocialIcon></SocialLink></SocialContentItem>}
-									{channels.yt && <SocialContentItem><SocialLink href={utils.getFbUrl(channels.yt)} target="_blank"><SocialIcon className="fa fa-youtube-play fa-2x" aria-hidden="true"></SocialIcon></SocialLink></SocialContentItem>}
-									{channels.ig && <SocialContentItem><SocialLink href={utils.getFbUrl(channels.ig)} target="_blank"><SocialIcon className="fa fa-instagram fa-2x" aria-hidden="true"></SocialIcon></SocialLink></SocialContentItem>}
+									{channels.twt && <SocialContentItem><SocialLink href={utils.getTwtUrl(channels.twt)} target="_blank"><SocialIcon className="fa fa-twitter fa-2x" aria-hidden="true"></SocialIcon></SocialLink></SocialContentItem>}
+									{channels.yt && <SocialContentItem><SocialLink href={utils.getYtUrl(channels.yt)} target="_blank"><SocialIcon className="fa fa-youtube-play fa-2x" aria-hidden="true"></SocialIcon></SocialLink></SocialContentItem>}
+									{channels.ig && <SocialContentItem><SocialLink href={utils.getIgUrl(channels.ig)} target="_blank"><SocialIcon className="fa fa-instagram fa-2x" aria-hidden="true"></SocialIcon></SocialLink></SocialContentItem>}
 
 								</SocialContent>}
 							</ColumnItemContainer>

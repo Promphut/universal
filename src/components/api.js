@@ -177,10 +177,10 @@ api.getStoryFromSid = (sid, token, countView) => {
 	})
 }
 
-api.getStoryFromKeyword = (keyword) => {
+api.getStoryFromKeyword = (keyword,type) => {
 	return Request
 	.post(config.BACKURL + '/stories/find' )
-	.send({title: keyword})
+	.send({title: keyword,status: 1,type: type})
 	.set('Accept','application/json')
 	.then(res => {
 		return res.body
