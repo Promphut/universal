@@ -281,6 +281,11 @@ class ColumnPage extends React.Component {
 		if (nextProps.match.params.columnSlug != this.props.match.params.columnSlug) {
 			this.getColumnFromSlug(nextProps.match.params.columnSlug, this.reloadFeed)
 			//this.reloadFeed()
+		} else if(nextProps.location.search != this.props.location.search){
+			this.setState({currentPage : utils.querystring('page',this.props.location) - 1},()=>{
+				document.body.scrollTop = document.documentElement.scrollTop = 0
+				this.reloadFeed()
+			})
 		}
 	}
 
@@ -379,7 +384,7 @@ class ColumnPage extends React.Component {
 												<div>
 													There are no more stories in this page. Go back to
 													<Link
-														to={"/stories/" + this.state.column.slug + "?page=1"}
+														to={"/stories/" + this.state.column.slug + "?page=1"+this.props.location.hash}
 														style={{
 															color: theme.accentColor,
 															padding: '0 0.5em 0 0.5em'

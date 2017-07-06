@@ -59,8 +59,8 @@ class AboutPage extends React.Component {
 		var pid = config.PID
 		const from = config.FROMDATE
 		const to = moment().utcOffset('+07:00').format('YYYYMMDD')
-		
-		Request.get('http://graph.facebook.com/?id='+config.FRONTURL+this.props.location.pathname)
+
+		Request.get('https://graph.facebook.com/?id='+config.FRONTURL+this.props.location.pathname)
 		.end((er,res)=>{
 			//console.log(res.body)
 			this.setState({fb:res.body.share.share_count})
@@ -76,7 +76,7 @@ class AboutPage extends React.Component {
 	render() {
 		const { fb, twt } = this.state
 		return (
-			<Wrapper>			
+			<Wrapper>
 			<ContactAndAboutContainer onLoading={this.props.onLoading}>
 				<div>
 					<Head className="title-font">About Us</Head>

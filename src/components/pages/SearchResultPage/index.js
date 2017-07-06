@@ -160,7 +160,7 @@ export default class SearchResultPage extends React.Component {
         <TopBarWithNavigation/>
         <Content>
 
-					<Feed><TextField id="search-box" hintText="ค้นหา" autoFocus={true} fullWidth={true} value={this.state.keyword} style={{fontSize:'35px'},{fontFamily: "'Nunito', 'Mitr'"}} onChange={(e)=>this.handleKeywordChange(e)}/></Feed>
+					<Feed><TextField id="search-box" hintText="ค้นหา" autoFocus={true} fullWidth={true} value={this.state.keyword} inputStyle={{fontSize:'28px'}} style={{fontFamily: "'Nunito', 'Mitr'"}} onChange={(e)=>this.handleKeywordChange(e)}/></Feed>
 
 					<Main>
             <FilterContainer>

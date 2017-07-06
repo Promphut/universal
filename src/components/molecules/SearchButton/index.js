@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom'
 import styled from 'styled-components'
 import TextField from 'material-ui/TextField'
+import trim from 'lodash/trim'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -67,9 +68,9 @@ class SearchButton extends React.Component {
     }
 
     handleClick = (e) => {
-        if(this.state.focus && _.trim(this.state.text).length != 0)  {
+        if(this.state.focus && trim(this.state.text).length != 0)  {
             this.setState({focus: !this.state.focus})
-            window.open('http://localhost:3000/search/stories/' + _.trim(this.state.text), "_top")
+            window.open('http://localhost:3000/search/stories/' + trim(this.state.text), "_top")
         }
         else if(this.state.focus) this.setState({focus: true})
         else this.setState({focus: !this.state.focus})
@@ -105,10 +106,10 @@ class SearchButton extends React.Component {
                             value={this.state.text}
                             onChange={this.handleChange}
                             onKeyPress={(ev) => {
-                                if (ev.key === 'Enter' && _.trim(this.state.text).length != 0) {
+                                if (ev.key === 'Enter' && trim(this.state.text).length != 0) {
                                     // Do code here
                                     {/*alert(this.state.text)*/}
-                                    window.open('http://localhost:3000/search/stories/' + _.trim(this.state.text), "_top")
+                                    window.open('http://localhost:3000/search/stories/' + trim(this.state.text), "_top")
                                     ev.preventDefault();
                                 } else if (ev.key === 'Enter') this.setState({text: ''})
                             }}
