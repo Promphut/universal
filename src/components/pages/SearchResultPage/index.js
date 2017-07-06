@@ -24,21 +24,20 @@ const ContentWrapper = styled.div`
 
 const Content = styled.div`
 	display: flex;
-	flex-flow: row wrap;
+	flex-flow: column wrap;
 	justify-content: center;
-	padding: 30px 0 0 0;
+	padding-top: 30px;
+	padding-left: 10%;
+	padding-right: 10%;
 	min-height: calc(100vh - ${props => (props.isMobile ? '261px' : '261px')});
 
 	@media (max-width:480px) {
-		padding: 0;
+		padding: 0 0 0 0;
   }
 
 `
 
 const Main = styled.div`
-
-	${'' /* flex: 3 825px; */}
-	${'' /* max-width: 825px; */}
 	flex: 3 780px;
 	max-width: 780px;
 	@media (max-width:480px) {
@@ -67,8 +66,7 @@ const Aside = styled.div`
 `
 
 const Feed = styled.div`
-	flex: 12 1120px;
-	max-width: 1120px;
+	flex: 1;
 	display:flex;
 	margin-top: 70px;
 	@media (max-width:480px) {
