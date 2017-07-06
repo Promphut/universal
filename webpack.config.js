@@ -80,7 +80,7 @@ const base = () => group([
     publicPath
   }),
   defineConstants({
-    'process.env.NODE_ENV': process.env.NODE_ENV,
+    'process.env.NODE_ENV': process.env.NODE_ENV !== 'development' ? 'production' : 'development',
     'process.env.PUBLIC_PATH': publicPath.replace(/\/$/, '')
   }),
   addPlugins([

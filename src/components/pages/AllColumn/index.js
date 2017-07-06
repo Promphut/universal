@@ -9,7 +9,7 @@ import FontIcon from 'material-ui/FontIcon'
 import Slider from 'react-slick'
 //import Request from 'superagent'
 import api from 'components/api'
-import _ from 'lodash'
+import remove from 'lodash/remove'
 import config from '../../../config'
 
 const Wrapper = styled.div`
@@ -176,7 +176,7 @@ class AllColumn extends React.Component {
 		//  })
 
 		api.getColumns().then(cols => {
-			_.remove(cols, col => {
+			remove(cols, col => {
 				return col.slug == 'news'
 			})
 			this.setState({ columns: cols })

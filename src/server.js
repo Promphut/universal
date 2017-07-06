@@ -79,7 +79,7 @@ const extractMeta = (setting, url) => {
 			let s = res.story
 			if(s.ptitle) meta.name = s.ptitle + ' | ' + setting.publisher.name
 			if(s.contentShort) meta.desc = s.contentShort
-			if(s.cover) meta.cover = s.cover.large || s.cover.large.medium
+			if(s.cover) meta.cover = s.cover.large || s.cover.medium
 			if(s.url) meta.url = s.url
 			return meta
 		})
