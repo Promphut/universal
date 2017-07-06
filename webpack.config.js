@@ -75,12 +75,12 @@ const resolveModules = modules => () => ({
 
 const base = () => group([
   setOutput({
-    filename: '[name].[hash].js',
+    filename: process.env.NODE_ENV==='development' ? '[name].js' : '[name].[chunkhash].js',
     path: outputPath, 
     publicPath
   }),
   defineConstants({
-    'process.env.NODE_ENV': process.env.NODE_ENV,
+    'process.env.NODE_ENV': process.env.NODE_ENV !== 'development' ? 'production' : 'development',
     'process.env.PUBLIC_PATH': publicPath.replace(/\/$/, '')
   }),
   addPlugins([
@@ -183,7 +183,7 @@ const client = createConfig([
 
   //clientCssModules(),
 
-  env('development', [
+  process.env.NODE_ENV==='development' ? env('development', [
     devServer({
       contentBase: 'public',
       stats: 'errors-only',
@@ -207,9 +207,7 @@ const client = createConfig([
         minimize: true
       }),
     ])
-  ]),
-
-  env('production', [
+  ]) : env(process.env.NODE_ENV, [
     splitVendor(),
     addPlugins([
       new webpack.optimize.UglifyJsPlugin({
@@ -223,21 +221,6 @@ const client = createConfig([
       }),
     ]),
   ]),
-
-  env('test', [
-    splitVendor(),
-    addPlugins([
-      new webpack.optimize.UglifyJsPlugin({
-        compress: {
-          warnings: false
-        },
-        comments: false
-      }),
-      new webpack.LoaderOptionsPlugin({
-        minimize: true
-      }),
-    ]),
-  ])
 ])
 
 module.exports = client

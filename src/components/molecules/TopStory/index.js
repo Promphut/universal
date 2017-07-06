@@ -15,6 +15,9 @@ const LargeBox = styled.div`
     border-bottom:1px solid #E2E2E2;
     display:${props => (props.head ? 'block' : 'flex')};
   }
+@media (min-width: 768px) and (max-width: 992px) {
+    height:150px;
+  }
 `
 const MiniBox = styled(BGImg)`
 	height:222px;
@@ -24,6 +27,9 @@ const MiniBox = styled(BGImg)`
   @media (max-width:480px) {
     height:${props => (props.head ? props.height : '80')}px;
     margin-bottom:${props => (props.head ? '10' : '0')}px;
+  }
+@media (min-width: 768px) and (max-width: 992px) {
+    height:150px;
   }
 `
 const Box1 = styled.div`
@@ -37,11 +43,17 @@ const Box1 = styled.div`
     flex: 1 ;
     height:auto;
   }
+@media (min-width: 768px) and (max-width: 992px) {
+    height:150px;
+  }
 `
 const MiniBoxDark = styled.div`
 	flex:1;
 	height:222px;
 	background-color:${props => props.theme.primaryColor};
+@media (min-width: 768px) and (max-width: 992px) {
+    height:150px;
+  }
 `
 const MiniBoxLight = styled.div`
 	flex:1;
@@ -51,6 +63,9 @@ const MiniBoxLight = styled.div`
     flex: 2 ;
   	height:auto;
     background:none;
+  }
+@media (min-width: 768px) and (max-width: 992px) {
+    height:150px;
   }
 `
 const ArrowLeft = styled.div`
@@ -66,6 +81,9 @@ const ArrowLeft = styled.div`
   @media (max-width:480px) {
     display:none;
   }
+@media (min-width: 768px) and (max-width: 992px) {
+    top:60px;
+  }
 `
 const ArrowRight = styled.div`
 	position:relative;
@@ -80,10 +98,16 @@ const ArrowRight = styled.div`
   @media (max-width:480px) {
     display:none;
   }
+	@media (min-width: 768px) and (max-width: 992px) {
+    top:60px;
+  }
 `
 const NewsBox = styled.div`
 	flex:2;
 	height:444px;
+	@media (min-width: 768px) and (max-width: 992px) {
+    height:150px;
+  }
 `
 const SName = styled(Link)`
 	font-size:18px;
@@ -94,6 +118,9 @@ const SName = styled(Link)`
   }
   @media (max-width:480px) {
     color:white;
+    font-size:14px;
+  }
+	@media (min-width: 768px) and (max-width: 992px) {
     font-size:14px;
   }
 `
@@ -108,13 +135,23 @@ const HName = styled.div`
     margin-bottom:4px;
     color:${props => props.theme.accentColor};
   }
+	@media (min-width: 768px) and (max-width: 992px) {
+    font-size:12px;
+  }
 `
 const Inner = styled.div`
-  width:174px;
-  margin:0 0 0 20px;
+	position:relative;
+	top:-30px;
+	left:0;
+	width:100%;
+	height:100%;
+  padding:20px;
   @media (max-width:480px) {
     width:auto;
     margin:0 0 0 15px;
+  }
+	@media (min-width: 768px) and (max-width: 992px) {
+    height:150px;
   }
 `
 
@@ -177,7 +214,7 @@ class TopStory extends React.Component {
 								hover2={hover}
 								to={this.props.detail && url}
 								className="nunito-font">
-								{truncate(ptitle ? ptitle : '', { length: 150, separator: '' })}
+								{truncate(ptitle ? ptitle : '', { length: 70, separator: '' })}
 							</SName>
 						</Inner>
 					</MiniBoxLight>
@@ -219,7 +256,7 @@ class TopStory extends React.Component {
 						<Inner>
 							<HName className="sans-font" style={{}}>TOP STORIES</HName>
 							<SName hover2={hover} to={url} className="nunito-font">
-								{truncate(ptitle ? ptitle : '', { length: 150, separator: '' })}
+								{truncate(ptitle ? ptitle : '', { length: 60, separator: '' })}
 							</SName>
 						</Inner>
 					</MiniBoxLight>

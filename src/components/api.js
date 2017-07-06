@@ -123,6 +123,7 @@ api.getUserFromUserId = (uid) => {
 }
 
 api.getColumnFromSlug = (slug) => {
+	slug = slug.split("?")[0]
 	return Request
 	.get(config.BACKURL + '/slugs/publishers/' + config.PID + '/columns/' + encodeURIComponent(slug))
 	.set('Accept', 'application/json')
@@ -174,6 +175,16 @@ api.getStoryFromSid = (sid, token, countView) => {
 	.catch(err => {
 		return api.storyNotFoundPromise()
 	})
+}
+
+api.getStoryFromKeyword = (keyword,type) => {
+	return Request
+	.post(config.BACKURL + '/stories/find' )
+	.send({title: keyword,status: 1,type: type})
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body
+	},api.err)
 }
 
 api.getFocusWordDetail = (focusWord) => {

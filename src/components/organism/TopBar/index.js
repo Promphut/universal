@@ -9,7 +9,8 @@ import {
 	SecondaryButton,
 	LeftMenu,
 	RightMenu,
-	BGImg
+	BGImg,
+	SearchButton
 } from 'components'
 import auth from 'components/auth'
 import FontIcon from 'material-ui/FontIcon'
@@ -359,6 +360,7 @@ class TopBar extends React.Component {
 
 					{status == 'LOGGEDIN' &&
 						<Right>
+							<SearchButton />
 							{this.role &&
 								editButton &&
 								<Edit
@@ -394,6 +396,7 @@ class TopBar extends React.Component {
 						</Right>}
 					{status == 'UNLOGGEDIN' &&
 						<Right>
+							<SearchButton />
 							<NotLogin>
 								<RaisedButton
 									label=" Sign In"

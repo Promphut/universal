@@ -10,7 +10,8 @@ import {
 	Stick,
 	Footer,
 	EmptyStory,
-	BackToTop
+	BackToTop,
+	Pagination
 } from 'components'
 import { findDOMNode as dom } from 'react-dom'
 import styled from 'styled-components'
@@ -149,6 +150,13 @@ const Onload = styled.div`
 	margin:50px 0 50px 0;
 `
 
+const Page = styled.div`
+  display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+  padding:30px 0 30px 0;
+`
+
 class ColumnPage extends React.Component {
 	state = {
 		column: {
@@ -156,11 +164,15 @@ class ColumnPage extends React.Component {
 		},
 		isMobile: false,
 
-		page: 0,
+		currentPage: utils.querystring('page',this.props.location) ? utils.querystring('page',this.props.location) - 1 : 0,
 		feedCount: 1,
 		feed: [],
-		hasMoreFeed: true
+		totalPages: 0,
+
+		loading: false
 	}
+
+	FEED_LIMIT = config.FEED_LIMIT
 
 	static contextTypes = {
 		setting: PropTypes.object
@@ -181,29 +193,30 @@ class ColumnPage extends React.Component {
 			</div>
 		</Onload>
 	)
+
 	reloadFeed = () => {
 		this.setState(
 			{
-				page: 0,
+				currentPage: utils.querystring('page',this.props.location) ? utils.querystring('page',this.props.location) - 1 : 0,
 				feedCount: 1,
 				feed: [],
-				hasMoreFeed: true
+				totalPages: 0,
 			},
 			() => {
 				this.loadFeed(this.state.column._id)()
 			}
 		)
 	}
+
 	loadFeed = colId => {
 		return () => {
-			//console.log('LOAD FEED0', colId, this.loading)
 			if (colId == null) return
 			// ensure this method is called only once at a time
-			if (this.loading === true) return
-			this.loading = true
+			if (this.state.loading === true) return
+			this.state.loading = true
 			//console.log('LOAD FEED1')
 
-			let page = this.state.page
+			let currentPage = this.state.currentPage
 			//console.log('page', page)
 
 			api
@@ -212,27 +225,32 @@ class ColumnPage extends React.Component {
 					{ status: 1, column: colId },
 					'latest',
 					null,
-					page,
-					15
+					currentPage,
+					this.FEED_LIMIT
 				)
 				.then(result => {
 					//console.log(result)
-					let feed = this.state.feed.concat(result.feed)
+					//let feed = this.state.feed.concat(result.feed)
 					this.setState(
 						{
-							page: ++page,
-							feed: feed,
-							feedCount: result.count['1']
-								? result.count['1']
-								: 0 ? result.count['1'] : 0,
-							hasMoreFeed: feed.length < result.count['1']
+							feed: result.feed,
+							feedCount: result.count['total'] ? result.count['total'] : 0,
+							totalPages: utils.getTotalPages(this.FEED_LIMIT, result.count['total']),
 						},
 						() => {
-							this.loading = false
+							this.setState({loading:false})
 						}
 					)
 				})
 		}
+	}
+
+	changePage = e => {
+		this.props.history.push({ hash: this.props.location.hash ,search: "?page=" + e })
+		this.setState({ currentPage: e - 1}, () => {
+			document.body.scrollTop = document.documentElement.scrollTop = 400
+			this.reloadFeed()
+		})
 	}
 
 	getColumnFromSlug = (columnSlug, done = () => {}) => {
@@ -249,7 +267,7 @@ class ColumnPage extends React.Component {
 	}
 
 	componentWillMount() {
-		this.getColumnFromSlug(this.props.match.params.columnSlug)
+		this.getColumnFromSlug(this.props.match.params.columnSlug, this.reloadFeed)
 	}
 
 	componentDidMount() {
@@ -260,11 +278,7 @@ class ColumnPage extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		//console.log('COL', nextProps, this.props)
-		if (
-			nextProps.match.params.columnSlug != this.props.match.params.columnSlug
-		) {
-			//console.log('RELOAD FEED')
+		if (nextProps.match.params.columnSlug != this.props.match.params.columnSlug) {
 			this.getColumnFromSlug(nextProps.match.params.columnSlug, this.reloadFeed)
 			//this.reloadFeed()
 		}
@@ -273,10 +287,8 @@ class ColumnPage extends React.Component {
 	render() {
 		let { keywords, channels, theme } = this.context.setting.publisher
 		const BGImgSize = (utils.isMobile() ? 100 : 280) + 60
-		let { column, isMobile } = this.state
-		let { feedCount, feed, hasMoreFeed } = this.state
+		let { column, isMobile, feedCount, feed, currentPage, totalPages, loading } = this.state
 		//let {count, loadOffset, isInfiniteLoading, latestStories, isMobile} = this.state
-		//console.log(feedCount)
 		var head = (
 			<Head>
 				<div className="row">
@@ -343,18 +355,44 @@ class ColumnPage extends React.Component {
 									style={{ padding: '15px 0 15px 0', margin: '0 0 50px 0' }}
 									next={column.name}
 								/>
-								<TextLine className="sans-font">Latest</TextLine>
-								<InfiniteScroll
-									loadMore={this.loadFeed(column._id)}
-									hasMore={hasMoreFeed}
-									loader={this.onload()}>
+								{totalPages > 0 && totalPages > currentPage && currentPage >= 0
+									&& <TextLine className="sans-font">Latest</TextLine>
+								}
+								{loading ?  this.onload() : 
 									<div>
-										{feed &&
+										{feed && currentPage >= 0 &&
 											feed.map((item, index) => (
 												<ArticleBox detail={item} key={index} />
 											))}
-									</div>
-								</InfiniteScroll>
+									</div> 
+								}
+								<Page>
+									{totalPages > 0 && ((totalPages > currentPage && currentPage >= 0) ?
+										<Pagination
+											currentPage={currentPage + 1}
+											totalPages={totalPages}
+											onChange={this.changePage}/>
+										:
+										<EmptyStory
+											title="No More Story"
+											description={
+												<div>
+													There are no more stories in this page. Go back to
+													<Link
+														to={"/stories/" + this.state.column.slug + "?page=1"}
+														style={{
+															color: theme.accentColor,
+															padding: '0 0.5em 0 0.5em'
+														}}>
+														first page
+													</Link>of this column
+													?
+												</div>
+											}
+											hideButton={true}
+										/>)
+									}
+								</Page>
 							</Main>}
 					<Aside>
 						<Stick topOffset={70} style={{ zIndex: '0' }}>

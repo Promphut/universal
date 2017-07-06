@@ -105,7 +105,7 @@ const Doughnut = styled.div`
 const Box = styled.div`
   flex:0 90%;
   display:flex;
-  border-bottom:1px solid #C4C4C4;
+  border-bottom: ${props => props.hr ? '' : '1px solid #c4c4c4'} ;
   padding-top:30px;
   @media (max-width:480px) {
     padding-top:0px;
@@ -129,10 +129,10 @@ const BG = styled(BGImg)`
   }
 `
 
-const NewsBox = ({detail, style, timeline}) => {
+const NewsBox = ({detail, style, timeline, final}) => {
 
     let {ptitle,cover,writer,column,votes,comments,updated,url,readTime,contentShort,published} = detail
-    //console.log(detail)
+    // console.log(detail)
     return (
       <Container style={{...style}}>
         <Time className='hidden-mob' style={{display:timeline?'block':'none'}}>{utils.dateFormat(published)}</Time>
@@ -140,12 +140,12 @@ const NewsBox = ({detail, style, timeline}) => {
           <Doughnut/>
           <VerticalTimeline/>
         </div>
-        <Box>
-          <ShareDropdown url={url} className='hidden-des'/>
+        <Box hr={final}>
+          <ShareDropdown buttonSize={24} url={url} className='hidden-des'/>
           <Time className='hidden-des' style={{display:timeline?'block':'none'}}>{utils.dateFormat(published)}</Time>
           <BG height={(screen.width - 32) / 1.91} url={url} src={cover.small || cover.medium} alt={ptitle || ''} />
           <BoxText>
-            <ShareDropdown url={url} className='hidden-mob'/>
+            <ShareDropdown buttonSize={24} url={url} className='hidden-mob'/>
             <NameLink to={url} className='nunito-font' >{truncate(ptitle, {
                 'length': 70,
                 'separator': ''

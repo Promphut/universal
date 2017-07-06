@@ -15,7 +15,7 @@ import utils from '../../../services/utils'
 const Container = styled.div`
   width:100%;
   padding:30px 0 30px 0;
-  border-bottom:1px solid #e2e2e2;
+  border-bottom: ${props => props.hr ? '' : '1px solid #e2e2e2'} ;
   overflow:hidden;
   display:flex;
   .imgWidth{
@@ -48,6 +48,12 @@ const Container = styled.div`
     }
     .by{
       margin-top:12px;
+    }
+  }
+  @media (min-width: 768px) and (max-width: 992px) {
+    padding:20px 0 20px 0;
+    .imgWidth{
+      height:178px;
     }
   }
 `
@@ -137,9 +143,13 @@ const Box1 = styled.div`
     min-width:100%;
     width:100%;
   }
+  @media (min-width: 768px) and (max-width: 992px) {
+    flex:1 340px;
+    min-width:340px;
+  }
 `
 
-const ArticleBox = ({ detail, style }, context) => {
+const ArticleBox = ({ detail, style, final }, context) => {
 	let {
 		ptitle,
 		cover,
@@ -162,11 +172,13 @@ const ArticleBox = ({ detail, style }, context) => {
 	}
 
 	return (
-		<Container style={{ ...style }} height={(screen.width - 32) / 1.91}>
+		<Container hr={final} style={{ ...style }} height={(screen.width - 32) / 1.91}>
+    <ShareDropdown buttonSize={16} url={url} className='hidden-des'/>
 			<Box1 style={{ flex: '1' }}>
 				<Div className="sans-font" style={{ margin: '0 0 8px 0' }}>
 					{utils.dateFormat(published)}
 				</Div>
+        
 				<BGImg
 					url={url}
 					src={cover.medium&&cover.medium||cover.small}
@@ -187,8 +199,10 @@ const ArticleBox = ({ detail, style }, context) => {
 					<Div className="sans-font" style={{ margin: '0 0 7px 0', flex: 20 }}>
 						{readTime + ' min read'}
 					</Div>
+          <ShareDropdown buttonSize={16} url={url} className='hidden-mob'/>
 				</div>
 				<NameLink to={url} className="nunito-font" style={{ marginTop: '5px' }}>
+          
 					{truncate(ptitle, {
 						length: 90,
 						separator: ''

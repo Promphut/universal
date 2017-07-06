@@ -4,7 +4,7 @@ import { Route, Switch, Link, Redirect } from 'react-router-dom'
 import api from 'components/api'
 import auth from 'components/auth'
 import App from 'components/App'
-import { HomePage, NewsPage, AllColumn, AboutPage, ContactPage, TagPage, ColumnPage,
+import { HomePage, NewsPage, AllColumn, AboutPage, AllStoriesPage, ContactPage, TagPage, ColumnPage,
 	StoryPage, ForgetPasswordPage, SignInPage, SignUpPage, UserStory,
 	PublisherEditor, UserSetting, PrivateRoute, NotFoundPage, ErrorPage,
 	UserSettingProfile, UserSettingAccount, UserSettingStory, NewStory, EditStory } from 'components'

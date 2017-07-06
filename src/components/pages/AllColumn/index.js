@@ -9,7 +9,7 @@ import FontIcon from 'material-ui/FontIcon'
 import Slider from 'react-slick'
 //import Request from 'superagent'
 import api from 'components/api'
-import _ from 'lodash'
+import remove from 'lodash/remove'
 import config from '../../../config'
 
 const Wrapper = styled.div`
@@ -176,7 +176,7 @@ class AllColumn extends React.Component {
 		//  })
 
 		api.getColumns().then(cols => {
-			_.remove(cols, col => {
+			remove(cols, col => {
 				return col.slug == 'news'
 			})
 			this.setState({ columns: cols })
@@ -238,7 +238,7 @@ class AllColumn extends React.Component {
 															left: '15px',
 															bottom: '20px'
 														}}>
-														<Link to={'/stories/' + data.slug}>
+														<Link to={'/stories/' + data.slug + '?page=1'}>
 															<ColumnName className="serif-font">
 																{data.name}
 															</ColumnName>

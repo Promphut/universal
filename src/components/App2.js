@@ -18,8 +18,8 @@ import utils from '../services/utils'
 import { Route, Switch, Link, Redirect } from 'react-router-dom'
 import { HomePage, NewsPage, AllColumn, AboutPage, ContactPage, TagPage, ColumnPage,
 	StoryPage, ForgetPasswordPage, SignInPage, SignUpPage, UserStory,
-	PublisherEditor, UserSetting, PrivateRoute, NotFoundPage, ErrorPage,
-	UserSettingProfile, UserSettingAccount, UserSettingStory, NewStory, EditStory } from 'components'
+	PublisherEditor, UserSetting, PrivateRoute, NotFoundPage, ErrorPage, AllStoriesPage,
+	UserSettingProfile, UserSettingAccount, UserSettingStory, NewStory, EditStory, SearchResultPage } from 'components'
 
 //import theme from './themes/default'
 if (process.env.BROWSER) {
@@ -48,7 +48,8 @@ class App2 extends React.Component {
 		super(props)
 
 		this.state = {
-			completed: 0
+			completed: 0,
+			fbInit:false
 		}
 	}
 
@@ -61,6 +62,7 @@ class App2 extends React.Component {
 		//console.log('HASHED', nextProps, this.props)
 		let hash =
 			new Date().valueOf().toString(36) + Math.round(Math.random() * 100)
+
 		let { location, history } = nextProps
 
 		// 1. Create hash
@@ -76,7 +78,7 @@ class App2 extends React.Component {
 		// 2. Append #hash to url
 		//history.replace(location.pathname+'#'+hash)
 		//console.log(location)
-		history.replace({ hash: '#' + hash })
+		history.replace({ hash: '#' + hash ,search: location.search})
 		// this.props.router.replace({
 		//   ...nextProps.location,
 		//   hash:'#'+hash
@@ -122,7 +124,6 @@ class App2 extends React.Component {
 		//console.log("RECEIVE2", nextProps.location.hash, nextProps.location.action)
 		//console.log('componentWillReceiveProps', nextProps.history, nextProps.location, this.props.location)
 		//let isFirstTime = !nextProps.location.key && !this.props.location.key
-		//console.log(nextProps.location.pathname)
 
 		if (nextProps.history.action === 'PUSH') {
 			//this.timer = setTimeout(() => this.progress(10), 100); //loading
@@ -170,7 +171,9 @@ class App2 extends React.Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
+
 		clearTimeout(this.timer)
+		FB.XFBML.parse()
 		//this.setState({completed:120})
 		//this.progress(200)
 		//console.log(this.timer)
@@ -272,12 +275,15 @@ class App2 extends React.Component {
 
 								<Route exact path='/' component={HomePage}/>
 								<Route exact path='/stories/news' component={NewsPage} />
+								<Route exact path='/stories/all' component={AllStoriesPage}/>
 								<Route exact path='/stories/columns' component={AllColumn}/>
 								<Route exact path='/stories/:columnSlug' component={ColumnPage}/>
 								{/* STORY 1: FORMAT is 'NEWS' */ }
 								<Route exact path='/stories/news/:storySlug/:sid' render={props => <StoryPage {...props} countView={true}/>} />
 								{/* STORY 2: HAVE COLUMN */ }
 								<Route exact path='/stories/:columnSlug/:storySlug/:sid' render={props => <StoryPage {...props} countView={true}/>} />
+
+								<Route exact path='/search/:type/:keyword' component={SearchResultPage}/>
 
 								<Route exact path='/about' component={AboutPage} />
 								<Route exact path='/contact' component={ContactPage} />

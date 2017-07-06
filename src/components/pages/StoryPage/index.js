@@ -336,20 +336,20 @@ class StoryPage extends React.Component {
 							<Aside id="trendingBar" ref="trendingBar">
 
 									<TrendingSideBar sid={story._id} />
-									<div dangerouslySetInnerHTML={{ __html: `<div class="fb-page" data-href="https://www.facebook.com/${config.FACEBOOK}/" data-tabs="timeline" data-width="500" data-height="700" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/${config.FACEBOOK}/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/${config.FACEBOOK}/">${config.NAME}</a></blockquote></div>` }}></div>
+									<div dangerouslySetInnerHTML={{ __html: `<div class="fb-page" data-href="https://www.facebook.com/${config.FACEBOOK}/" data-tabs="timeline" data-height="700" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/${config.FACEBOOK}/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/${config.FACEBOOK}/">${config.NAME}</a></blockquote></div>` }}></div>
 
 							</Aside>
 
 							
 						</Content>
-
+						
 						<Content>
 							{recommends.length != 0 &&
 								<RecommendContainer recommend={recommends} />}
 						</Content>
-						<NextStory cid = {story.column._id} currentID = {story._id} format = {story.format}/>
+							<NextStory cid = {story.column._id} currentID = {story._id} format = {story.format}/>
 						{/*<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800" />*/}
-						<Footer />
+						<Footer isStoryPage = {true}/>
 					</Wrapper>
 				</div>
 			)
