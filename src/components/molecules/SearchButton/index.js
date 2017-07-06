@@ -9,6 +9,7 @@ import {
 import styled from 'styled-components'
 import TextField from 'material-ui/TextField'
 import trim from 'lodash/trim'
+import config from '../../../config'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -35,6 +36,10 @@ const Button = styled.div`
     color: ${props => props.theme.accentColor};
   }
 
+`
+
+const SearchButtonIcon = styled.i`
+  transition: 0.2;
 `
 
 const styles = {
@@ -92,7 +97,7 @@ class SearchButton extends React.Component {
             <MuiThemeProvider muiTheme={muiTheme}>
                 <ButtonContainer>
                     <Button>
-                        <i id="bt" className="fa fa-search" aria-hidden="true"></i>
+                        <SearchButtonIcon id="bt" className="fa fa-search" aria-hidden="true"></SearchButtonIcon>
                     </Button>
                     {this.state.focus &&
                         <TextField
@@ -109,7 +114,7 @@ class SearchButton extends React.Component {
                                 if (ev.key === 'Enter' && trim(this.state.text).length != 0) {
                                     // Do code here
                                     {/*alert(this.state.text)*/}
-                                    window.open('http://localhost:3000/search/stories/' + trim(this.state.text), "_top")
+                                    window.open(config.FRONTURL + '/search/stories/' + trim(this.state.text), "_top")
                                     ev.preventDefault();
                                 } else if (ev.key === 'Enter') this.setState({text: ''})
                             }}
