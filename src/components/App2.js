@@ -275,7 +275,7 @@ class App2 extends React.Component {
 
 								<Route exact path='/' component={HomePage}/>
 								<Route exact path='/stories/news' component={NewsPage} />
-								<Route exact path='/all' component={AllStoriesPage}/>
+								<Route exact path='/stories/all' component={AllStoriesPage}/>
 								<Route exact path='/stories/columns' component={AllColumn}/>
 								<Route exact path='/stories/:columnSlug' component={ColumnPage}/>
 								{/* STORY 1: FORMAT is 'NEWS' */ }

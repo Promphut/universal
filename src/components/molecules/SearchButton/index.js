@@ -25,7 +25,7 @@ const Button = styled.div`
   text-align: center;
   margin-right: 8px;
   font-size: 21.86px;
-  color: #8E8E8E;
+  color: #ffffff;
   width: 30px;
   height: 30px;
 
@@ -33,7 +33,7 @@ const Button = styled.div`
     cursor:pointer;
     color: ${props => props.theme.accentColor};
   }
-  
+
 `
 
 const styles = {
@@ -52,7 +52,7 @@ const styles = {
 
 const muiTheme = getMuiTheme({
   palette: {
-    textColor: 'white',
+    textColor: '#ffffff',
   },
 });
 
@@ -93,7 +93,7 @@ class SearchButton extends React.Component {
                     <Button>
                         <i id="bt" className="fa fa-search" aria-hidden="true"></i>
                     </Button>
-                    {this.state.focus && 
+                    {this.state.focus &&
                         <TextField
                             id="textField"
                             hintText="Search Stories"
@@ -118,7 +118,7 @@ class SearchButton extends React.Component {
             // </Link>
         )
     }
-  
+
 }
 
 export default SearchButton
