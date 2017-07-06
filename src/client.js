@@ -11,7 +11,7 @@ import { basename } from 'config'
 import { CookiesProvider } from 'react-cookie'
 
 import App2 from 'components/App2'
-import api from 'components/api'
+import api from 'services/api'
 //import AppRoutes from 'components/routes'
 //import mainStyles from '../public/scss/main.scss'
 

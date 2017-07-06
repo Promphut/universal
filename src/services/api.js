@@ -1,8 +1,8 @@
 const auth = require('./auth'),
 	Request = require('superagent'),
-	{NotFoundError} = require('./Error'),
+	{NotFoundError} = require('./errors'),
 	config = require('../config'),
-	utils = require('../services/utils')
+	utils = require('./utils')
 
 let api =  {}
 

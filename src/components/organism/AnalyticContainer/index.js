@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import api from 'components/api'
+import api from '../../../services/api'
 import {AnalyticRuleSet} from 'components'
 import utils from '../../../services/utils'
 

@@ -8,7 +8,7 @@ import FlatButton from 'material-ui/FlatButton'
 import FontIcon from 'material-ui/FontIcon'
 import Slider from 'react-slick'
 //import Request from 'superagent'
-import api from 'components/api'
+import api from '../../../services/api'
 import remove from 'lodash/remove'
 import config from '../../../config'
 

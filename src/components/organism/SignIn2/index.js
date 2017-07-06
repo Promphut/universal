@@ -4,9 +4,9 @@ import styled from 'styled-components'
 import Avatar from 'material-ui/Avatar'
 import RaisedButton from 'material-ui/RaisedButton';
 import {Link} from 'react-router-dom'
-import api from 'components/api'
+import api from '../../../services/api'
 import TextField from 'material-ui/TextField';
-import auth from 'components/auth'
+import auth from '../../../services/auth'
 import {withRouter} from 'react-router'
 
 const Box = styled.div`

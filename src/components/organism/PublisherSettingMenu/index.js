@@ -5,7 +5,7 @@ import { PrimaryButton, SecondaryButton } from 'components'
 import { List, ListItem, makeSelectable } from 'material-ui/List'
 import FontIcon from 'material-ui/FontIcon'
 import { Link } from 'react-router-dom'
-import auth from 'components/auth'
+import auth from '../../../services/auth'
 import { withRouter } from 'react-router'
 
 const Wrapper = styled.div`

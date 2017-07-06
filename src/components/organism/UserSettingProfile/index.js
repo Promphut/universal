@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import {PrimaryButton,SecondaryButton,UploadPicture} from 'components'
 import TextField from 'material-ui/TextField';
-import auth from 'components/auth'
+import auth from '../../../services/auth'
 import {findDOMNode as dom} from 'react-dom';
-import api from 'components/api'
+import api from '../../../services/api'
 import utils from '../../../services/utils'
 
 const Container = styled.form`

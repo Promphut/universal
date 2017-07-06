@@ -8,7 +8,7 @@ import {
 	EditorCss
 } from 'components'
 import { Helmet } from 'react-helmet'
-import api from 'components/api'
+import api from '../../../services/api'
 import config from '../../../config'
 import moment from 'moment'
 import Request from 'superagent'

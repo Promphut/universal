@@ -7,7 +7,7 @@ import {Dropdown,TwtShareButton, LineShareButton, InShareButton, LineIcon} from 
 import CopyToClipboard from 'react-copy-to-clipboard'
 import config from '../../../config'
 import { withRouter } from 'react-router'
-import api from 'components/api' 
+import api from '../../../services/api' 
 import utils from '../../../services/utils'
 
 

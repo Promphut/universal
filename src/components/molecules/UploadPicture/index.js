@@ -3,8 +3,7 @@ import PropTypes from 'prop-types'
 import {Link} from 'react-router-dom';
 import styled from 'styled-components'
 import {findDOMNode as dom} from 'react-dom'
-import api from 'components/api'
-import auth from 'components/auth'
+import api from '../../../services/api'
 import Cropper from 'react-cropper';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';

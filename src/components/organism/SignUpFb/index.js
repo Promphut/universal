@@ -4,7 +4,7 @@ import Avatar from 'material-ui/Avatar'
 import RaisedButton from 'material-ui/RaisedButton';
 import {Link} from 'react-router-dom'
 import config from '../../../config'
-import api from 'components/api'
+import api from '../../../services/api'
 
 const Box = styled.div`
   width:600px;

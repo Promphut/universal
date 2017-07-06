@@ -5,8 +5,7 @@ import { PrimaryButton, SecondaryButton, EditorCss } from 'components'
 import TextField from 'material-ui/TextField'
 import SelectField from 'material-ui/SelectField'
 import MenuItem from 'material-ui/MenuItem'
-import auth from 'components/auth'
-import api from 'components/api'
+import api from '../../../services/api'
 import { Helmet } from 'react-helmet'
 
 var MediumEditor = {}

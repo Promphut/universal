@@ -4,11 +4,11 @@ import styled from 'styled-components'
 import {PrimaryButton,SecondaryButton} from 'components'
 import TextField from 'material-ui/TextField';
 import Request from 'superagent'
-import auth from 'components/auth'
+import auth from '../../../services/auth'
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon'
 import {findDOMNode as dom}from 'react-dom'
-import api from 'components/api'
+import api from '../../../services/api'
 import utils from '../../../services/utils'
 import config from '../../../config'
 

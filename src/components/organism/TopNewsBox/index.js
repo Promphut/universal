@@ -5,16 +5,6 @@ import {
 	TopNewsSmall,
 } from 'components'
 import styled from 'styled-components'
-import auth from 'components/auth'
-import api from 'components/api'
-import slider from 'react-slick'
-import InfiniteScroll from 'react-infinite-scroller'
-import CircularProgress from 'material-ui/CircularProgress'
-import LinearProgress from 'material-ui/LinearProgress'
-import { Tabs, Tab } from 'material-ui/Tabs'
-import SwipeableViews from 'react-swipeable-views'
-import utils from '../../../services/utils'
-import config from '../../../config'
 
 
 const Content = styled.div`

@@ -27,8 +27,8 @@ import { FRONTURL, port, host, basename, ANALYTIC, COVER, amazonAccessKey, secre
 //import AppRoutes from 'components/routes'
 import App2 from 'components/App2'
 import Html from 'components/Html'
-import Error from 'components/Error'
-import api from 'components/api'
+import ErrorPage from 'components/ErrorPage'
+import api from './services/api'
 import sm from 'sitemap'
 
 const renderApp = ({ cookies, context, location, sheet, setting }) => {
@@ -352,7 +352,7 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
 	const sheet = new ServerStyleSheet()
-	const content = renderToStaticMarkup(sheet.collectStyles(<Error />))
+	const content = renderToStaticMarkup(sheet.collectStyles(<ErrorPage />))
 
 	var meta = {name:'',keywords:'',desc:'',cover:'',analytic:'',url:''}
 
