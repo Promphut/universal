@@ -221,12 +221,13 @@ class StoryPage extends React.Component {
 		window.addEventListener('scroll', this.handleScroll)
 
 		Request.get(
-			'http://graph.facebook.com/?id=' +
+			'https://graph.facebook.com/?id=' +
 				config.FRONTURL +
 				this.props.location.pathname
 		).end((er, res) => {
+			const fb = res ? res.body.share.share_count : 0
 			//console.log(res.body)
-			this.setState({ fb: res.body.share.share_count })
+			this.setState({ fb })
 		})
 	}
 
