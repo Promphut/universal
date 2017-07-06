@@ -260,7 +260,8 @@ Sitemap: ${FRONTURL}/sitemap.xml`
 	else 
 		robotTxt = 
 `User-agent: *
-Disallow: /`
+Disallow: /
+Sitemap: ${FRONTURL}/sitemap.xml`
 
 	res.send(robotTxt)
 })
