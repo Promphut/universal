@@ -259,7 +259,7 @@ class ContactPage extends React.Component {
   componentDidMount(){
     api.getPublisherContactCats()
     .then(contactCats => {
-      console.log(contactCats)
+      //console.log(contactCats)
       // if (contactCats.length === 0) {
       //   contactCats.push({catName: 'General'})
       // }
