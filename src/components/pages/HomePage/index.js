@@ -77,7 +77,6 @@ const Feed = styled.div`
 `
 
 const Aside = styled.div`
-	//max-width: 255px;
 	flex: 1 300px;
 	max-width: 300px;
 	margin-left:60px;
