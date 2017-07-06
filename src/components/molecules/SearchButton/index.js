@@ -47,17 +47,17 @@ const SearchButtonIcon = styled.i`
 const getStyles = (name,theme) => {
     if(name=='hintStyle')
         return {
-            color: 'light' ? '#222':'white',
+            color: theme.barTone == 'light' ? '#222':'white',
             fontWeight: 'normal'
         }
     else if(name=='inputStyle')
         return {
-            color: 'light' ? '#222':'white',
+            color: theme.barTone == 'light' ? '#222':'white',
         }
     else if(name=='textareaStyle')
         return {
             width: '180px',
-            color: 'light' ? '#222':'white',
+            color: theme.barTone == 'light' ? '#222':'white',
         }
 }
 
