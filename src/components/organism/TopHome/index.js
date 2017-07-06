@@ -12,25 +12,6 @@ import styled, { keyframes } from 'styled-components'
 import { Link } from 'react-router-dom'
 import api from 'components/api'
 
-const LargeBox = styled(Link)`
-  display:flex;
-	flex:${props => (props.large ? 3 : 2)};
-	height:222px;
-`
-const MiniBox = styled(BGImg)`
-	height:222px;
-  transition: all 0.3s;
-  transform: ${props => (props.hover ? 'scale(1.15)' : 'scale(1)')};
-  z-index:-1;
-`
-const Box1 = styled.div`
-  flex:${props => (props.large ? 2 : 1)};
-	height:222px;
-  overflow: hidden;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-`
 const MiniBoxDark = styled.div`
 	flex:1;
 	height:222px;
@@ -38,22 +19,9 @@ const MiniBoxDark = styled.div`
 	display:flex;
   align-items: center;
   justify-content: center;
-`
-const MiniBoxLight = styled.div`
-	flex:1;
-	height:222px;
-	background-color:white;
-`
-const ArrowLeft = styled.div`
-	position:relative;
-	left:-15px;
-	top:96px;
-	width:0;
-	height:0;
-	z-index:10;
-  border-top: 15px solid transparent;
-  border-bottom: 15px solid transparent;
-  border-left:15px solid ${props => props.theme.primaryColor};
+	@media (min-width: 768px) and (max-width: 992px) {
+		height:150px;
+  }
 `
 const Line = styled.div`
 	background:${props => props.theme.accentColor};
@@ -61,36 +29,7 @@ const Line = styled.div`
 	height:4px;
 	margin:20px 0 20px 0;
 `
-const ArrowRight = styled.div`
-	position:relative;
-	left:-15px;
-	top:96px;
-	width:0;
-	height:0;
-	z-index:10;
-  border-top: 15px solid transparent;
-  border-bottom: 15px solid transparent;
-  border-right:15px solid ${props => props.theme.primaryColor};
-`
-const NewsBox = styled.div`
-	flex:2;
-	height:444px;
-`
-const SName = styled(Link)`
-	font-size:18px;
-  transition: all 0.3s;
-  color:${props => (props.hover ? props.theme.accentColor : '#222')};
-  &:hover{
-    color:${props => props.theme.accentColor};
-  }
-`
-const HName = styled.div`
-	text-transform: uppercase;
-	color:#C4C4C4;
-	font-size:14px;
-	font-weight:bold;
-  margin-bottom:8px;
-`
+
 const Feed = styled.div`
 	flex: 12 1120px;
 	max-width: 1120px;
@@ -99,6 +38,10 @@ const Feed = styled.div`
     display:block;
 		max-width: 100%;
 		padding:0 15px 0 15px;
+  }
+	@media (min-width: 768px) and (max-width: 992px) {
+    flex: 12 768px;
+		max-width: 768px;
   }
 `
 const Content = styled.div`
@@ -111,10 +54,12 @@ const Content = styled.div`
 		padding: 70px 0 0 0;
     background:${props => props.theme.primaryColor};
   }
-
 	@media (min-width: 481px) {
 		min-height: 480px;
 	}
+	@media (min-width: 768px) and (max-width: 992px) {
+		padding: 60px 0 0 0;
+  }
 `
 const Share = styled.span`
   color:white;

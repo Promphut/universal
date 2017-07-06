@@ -10,26 +10,15 @@ class InShareButton extends React.Component {
 		button: PropTypes.node.isRequired,
 		hashtags: PropTypes.string, // optional, a string comma seperated, default is publisher name
 		sid: PropTypes.number, // optional, default will try to pick sid from url, unless storyinsight won't be saved.
-		url: PropTypes.string, // optional, default is this window.location url. If url presented with /:sid, no need to input sid, it will auto get from the url.
-		onToggle: PropTypes.func
+		url: PropTypes.string // optional, default is this window.location url. If url presented with /:sid, no need to input sid, it will auto get from the url.
 	}
 
 	constructor(props) {
 		super(props)
-
-		this.state = { url:'' }
+		//this.state = { url:'' }
 	}
 
-	getUrl = (done) => {
-		let url = this.props.url
-		if(!url){
-			url = config.FRONTURL + this.props.location.pathname
-		}
-		api.shorten(url, {medium:'social', source:'linkedin'})
-		.then(done)
-	}
-
-	componentDidMount(){
+	/*componentDidMount(){
 		// Handel url
 		this.getUrl(res => {
 			//console.log('URL', res)
@@ -47,18 +36,36 @@ class InShareButton extends React.Component {
 			//console.log('before tweet')
 			this.a.addEventListener('click', function(event){
 				//console.log('tweetStory', sid, event)
-				api.incStoryInsight(sid, 'share', 'share_linkedin')
+				api.incStoryInsight(sid, 'share', 'share_line')
 
 				//this.a.removeEventListener('tweetStory')
 			})
 		} 
+	}*/
+
+	handleInShare = (e) => {
+		let sid = this.props.sid
+		let url = this.props.url
+	
+		if(sid==null) sid = utils.getTrailingSid(this.props.url)
+		if(sid!=null) api.incStoryInsight(sid, 'share', 'share_linkedin')
+
+		if(!url) url = config.FRONTURL + this.props.location.pathname
+
+		window.open(utils.getLinkedInUrl(url),'_blank');
 	}
 
 	render(){
 		// Set url
-		let url = this.state.url
+		/*let url = this.state.url
+		
+		return <a href={utils.getLineUrl(url)} target="_blank" ref={(_a) => {this.a = _a}}>{this.props.button}</a>;*/
 
-		return <a href={utils.getLinkedInUrl(url)} target="_blank" ref={(_a) => {this.a = _a}}>{this.props.button}</a>;
+		return (
+			<div onClick={this.handleInShare} style={{...this.props.style}}>
+				{this.props.button}
+			</div>
+		)
 	}
 }
 

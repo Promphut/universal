@@ -128,7 +128,7 @@ const Nav = styled.nav`
 	}
 
 	& ul li a {
-		text-decoration:none
+		text-decoration:none;
 		color:#FFF;
     transition: .2s;
 
@@ -172,6 +172,18 @@ const Nav = styled.nav`
     }
 
   }
+	@media (min-width: 768px) and (max-width: 992px) {
+		width:380px;
+		& ul {
+      font-size: 20px;
+    }
+		& ul li .arrow {
+      font-size: 28px !important;
+      line-height: 40px;
+      vertical-align: middle;
+      margin-left: 70px !important;
+    }
+  }
 `
 
 const CloseBtn = styled(IconButton)`
@@ -191,11 +203,6 @@ const CloseBtn = styled(IconButton)`
 `
 
 const MiniMenu = styled.div`
-  // position:relative;
-  // top:0;
-  // left:0;
-  // width:70px;
-  // height:100%;
   height: ${props => props.height};
   overflow: hidden;
   transition: height 0.5s;
@@ -203,6 +210,9 @@ const MiniMenu = styled.div`
   font-size: 24px;
   @media (max-width:480px){
     font-size: 20px;
+  }
+	@media (min-width: 768px) and (max-width: 992px) {
+    font-size: 18px;
   }
 `
 
@@ -222,6 +232,9 @@ const DropDownListLink = styled.div`
   font-size:40px;
   @media (max-width:480px){
     font-size:32px;
+  }
+	@media (min-width: 768px) and (max-width: 992px) {
+    font-size: 28px;
   }
 
   > span {
@@ -319,7 +332,7 @@ class LeftMenu extends React.Component {
 			if (cols[i].slug.toLowerCase() !== 'news'|| cols[i].name.toLowerCase() !== 'news'){
 				items.push(
 					<li key={i}>
-						<a href="#" onClick={e => this.props.closeAndLink(e, '/stories/' +  cols[i].slug)}>
+						<a href="#" onClick={e => this.props.closeAndLink(e, '/stories/' +  cols[i].slug + '?page=1')}>
 							{ cols[i].name }
 						</a>
 					</li>

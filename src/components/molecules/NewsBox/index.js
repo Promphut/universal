@@ -50,10 +50,13 @@ const NameLink = styled(Link)`
   &:hover{
     color:${props=>props.theme.accentColor};
   }
+  @media (min-width: 768px) and (max-width: 992px) {
+    font-size:16px;
+  }
 `
 
 const BoxText = styled.div`
-  flex:0 700px;
+  flex:2;
   padding-left:38px;
   border-bottom:1px solid ##C4C4C4;
   @media (max-width:480px) {
@@ -62,13 +65,19 @@ const BoxText = styled.div`
     padding-left:0px;
     margin-top:10px;
   }
+  @media (min-width: 768px) and (max-width: 992px) {
+    flex:2;
+    padding-left:18px;
+  }
 `
 
 const Desc = styled.div`
   color:#8E8E8E;
   font-size:14px;
-
   margin:10px 0 10px 0;
+  @media (min-width: 768px) and (max-width: 992px) {
+    font-size:12px;
+  }
 `
 
 const Time = styled.div`
@@ -82,6 +91,9 @@ const Time = styled.div`
     margin-bottom:10px;
     width:50%;
   }
+  @media (min-width: 768px) and (max-width: 992px) {
+    font-size:9px;
+  }
 `
 
 const VerticalTimeline = styled.div`
@@ -92,6 +104,9 @@ const VerticalTimeline = styled.div`
   background-color:#F4F4F4;
   position:relative;
   z-index:-5;
+  @media (min-width: 768px) and (max-width: 992px) {
+    height:150px;
+  }
 `
 
 const Doughnut = styled.div`
@@ -105,7 +120,7 @@ const Doughnut = styled.div`
 const Box = styled.div`
   flex:0 90%;
   display:flex;
-  border-bottom:1px solid #C4C4C4;
+  border-bottom: ${props => props.hr ? '' : '1px solid #c4c4c4'} ;
   padding-top:30px;
   @media (max-width:480px) {
     padding-top:0px;
@@ -113,39 +128,55 @@ const Box = styled.div`
     width:100%;
     padding-bottom:10px;
   }
+  @media (min-width: 768px) and (max-width: 992px) {
+    padding-top:15px;
+  }
 `
 
 const WriterLink = styled(Link)`
   transition: .1s;
 `
 const BG = styled(BGImg)`
-  width:300px;
+  max-width:300px;
   height:157px;
-  flex:0 300px;
+  flex:1 300px;
   @media (max-width:480px) {
     width:100%;
     height:${props => props.height}px;
     padding-bottom:10px;
   }
+  @media (min-width: 768px) and (max-width: 992px) {
+    max-width:250px;
+    height:131px;
+    flex:1 250px;
+  }
+`
+const TimeBox = styled.div`
+  flex:0;
+  margin-right:10px;
+  visibility:${props=>props.timeline?'show':'hidden'};
+  @media (min-width: 768px) and (max-width: 992px) {
+    margin-right:0px;
+  }
 `
 
-const NewsBox = ({detail, style, timeline}) => {
+const NewsBox = ({detail, style, timeline, final}) => {
 
     let {ptitle,cover,writer,column,votes,comments,updated,url,readTime,contentShort,published} = detail
-    //console.log(detail)
+    // console.log(detail)
     return (
       <Container style={{...style}}>
         <Time className='hidden-mob' style={{display:timeline?'block':'none'}}>{utils.dateFormat(published)}</Time>
-        <div className='hidden-mob' style={{flex:0,marginRight:'10px',visibility:timeline?'show':'hidden'}}>
+        <TimeBox className='hidden-mob' timeline={timeline}>
           <Doughnut/>
           <VerticalTimeline/>
-        </div>
-        <Box>
-          <ShareDropdown url={url} className='hidden-des'/>
+        </TimeBox>
+        <Box hr={final}>
+          <ShareDropdown buttonSize={24} url={url} className='hidden-des'/>
           <Time className='hidden-des' style={{display:timeline?'block':'none'}}>{utils.dateFormat(published)}</Time>
           <BG height={(screen.width - 32) / 1.91} url={url} src={cover.small || cover.medium} alt={ptitle || ''} />
           <BoxText>
-            <ShareDropdown url={url} className='hidden-mob'/>
+            <ShareDropdown buttonSize={24} url={url} className='hidden-mob'/>
             <NameLink to={url} className='nunito-font' >{truncate(ptitle, {
                 'length': 70,
                 'separator': ''

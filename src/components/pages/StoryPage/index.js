@@ -23,6 +23,7 @@ import config from '../../../config'
 import utils from '../../../services/utils'
 import auth from 'components/auth'
 import isEmpty from 'lodash/isEmpty'
+import Request from 'superagent'
 
 const Wrapper = styled.div`
 	 .hidden-des{
@@ -75,7 +76,7 @@ const Share = styled.div`
 	}
 `
 
-const LikeBoxContainer = styled.div `
+const LikeBoxContainer = styled.div`
 	width:100%;
 	margin: 0 auto 0 auto;
 	text-align: center;
@@ -115,6 +116,14 @@ const Aside = styled.div`
 		display:none;
 	}
 `
+const BG = styled(BGImg)`
+	width: 100%;
+	height: 85vh;
+	background-position-y: bottom;
+	@media (min-width: 768px) and (max-width: 992px) {
+		height: 384px;
+  }
+`
 
 const Cover = styled.div`
 	position:relative;
@@ -122,14 +131,14 @@ const Cover = styled.div`
 	left:0;
 	width:100%;
 	height:100%;
-background: rgba(34,34,34,0.64);
-background: -moz-linear-gradient(top, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0) 20%);
-background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(34,34,34,0.64)), color-stop(0%, rgba(0,0,0,0.64)), color-stop(20%, rgba(0,0,0,0)));
-background: -webkit-linear-gradient(top, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0) 20%);
-background: -o-linear-gradient(top, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0) 20%);
-background: -ms-linear-gradient(top, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0) 20%);
-background: linear-gradient(to bottom, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0) 20%);
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#222222', endColorstr='#000000', GradientType=0 );
+	background: rgba(34,34,34,0.64);
+	background: -moz-linear-gradient(top, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0) 20%);
+	background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(34,34,34,0.64)), color-stop(0%, rgba(0,0,0,0.64)), color-stop(20%, rgba(0,0,0,0)));
+	background: -webkit-linear-gradient(top, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0) 20%);
+	background: -o-linear-gradient(top, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0) 20%);
+	background: -ms-linear-gradient(top, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0) 20%);
+	background: linear-gradient(to bottom, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0) 20%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#222222', endColorstr='#000000', GradientType=0 );
 `
 
 class StoryPage extends React.Component {
@@ -137,7 +146,8 @@ class StoryPage extends React.Component {
 		recommends: [],
 		description: '',
 		showTopbarTitle: false,
-		story: {}
+		story: {},
+		fb: 0
 	}
 	static contextTypes = {
 		setting: PropTypes.object
@@ -153,7 +163,9 @@ class StoryPage extends React.Component {
 			let cid = story.column._id
 
 			api
-				.getFeed('story', { status: 1, column: cid }, 'latest', null, 0, 4,{omit : [this.props.match.params.sid]})
+				.getFeed('story', { status: 1, column: cid }, 'latest', null, 0, 4, {
+					omit: [this.props.match.params.sid]
+				})
 				.then(result => {
 					//console.log('feed', result.feed.length)
 					this.setState({
@@ -165,7 +177,9 @@ class StoryPage extends React.Component {
 			let uid = story.writer._id
 
 			api
-				.getFeed('story', { status: 1, writer: uid }, 'latest', null, 0, 4,{omit : [this.props.match.params.sid]})
+				.getFeed('story', { status: 1, writer: uid }, 'latest', null, 0, 4, {
+					omit: [this.props.match.params.sid]
+				})
 				.then(result => {
 					//console.log('feed', result.feed.length)
 					this.setState({
@@ -213,6 +227,16 @@ class StoryPage extends React.Component {
 			//this.findDescription()
 		})
 		window.addEventListener('scroll', this.handleScroll)
+
+		Request.get(
+			'https://graph.facebook.com/?id=' +
+				config.FRONTURL +
+				this.props.location.pathname
+		).end((er, res) => {
+			const fb = res ? res.body.share.share_count : 0
+			//console.log(res.body)
+			this.setState({ fb })
+		})
 	}
 
 	componentWillUnmount() {
@@ -231,17 +255,18 @@ class StoryPage extends React.Component {
 	render() {
 		const isMobile = utils.isMobile()
 		let { keywords, channels } = this.context.setting.publisher
-		let { recommends, description, showTopbarTitle, story } = this.state
+		let { recommends, description, showTopbarTitle, story, fb } = this.state
 		//console.log(story.shares)
 		let hasCover = false
 		if (!isEmpty(story)) {
-			if (isMobile){
-				if (story.coverMobile.medium !=
-						config.BACKURL + '/imgs/article_cover_portrait.png'
+			if (isMobile) {
+				if (
+					story.coverMobile.medium !=
+					config.BACKURL + '/imgs/article_cover_portrait.png'
 				) {
 					hasCover = true
 				}
-			}else{
+			} else {
 				if (
 					story.cover.medium !=
 					config.BACKURL + '/imgs/article_cover_landscape.png'
@@ -261,28 +286,6 @@ class StoryPage extends React.Component {
 						<meta name="title" content={story.ptitle} />
 						<meta name="keywords" content={keywords} />
 						<meta name="description" content={story.shortDesc} />
-
-						{/*<link
-							rel="shortcut icon"
-							type="image/ico"
-							href={config.BACKURL + '/publishers/' + config.PID + '/favicon'}
-						/>
-						{channels && channels.fb
-							? <link rel="author" href={utils.getFbUrl(channels.fb)} />
-							: ''}*/}
-						{/*<link rel="canonical" href={window.location.href} />*/}
-
-						{/*<link
-							rel="stylesheet"
-							href="/css/medium-editor.css"
-							type="text/css"
-						/>
-						<link rel="stylesheet" href="/css/tim.css" type="text/css" />
-						<link
-							rel="stylesheet"
-							href="/css/medium-editor-insert-plugin.css"
-							type="text/css"
-						/>*/}
 					</Helmet>
 
 					<Wrapper>
@@ -297,17 +300,12 @@ class StoryPage extends React.Component {
 
 						{story.cover.medium !=
 							config.BACKURL + '/imgs/article_cover_landscape.png' &&
-							<BGImg
-								style={{
-									width: '100%',
-									height: '85vh',
-									backgroundPositionY: 'bottom'
-								}}
+							<BG
 								src={story.cover.large || story.cover.medium}
 								className="hidden-mob"
 								alt={story.title}>
 								<Cover />
-							</BGImg>}
+							</BG>}
 						{story.coverMobile.medium !=
 							config.BACKURL + '/imgs/article_cover_portrait.png' &&
 							<BGImg
@@ -321,7 +319,7 @@ class StoryPage extends React.Component {
 							<Share ref="share" style={{ zIndex: '50' }}>
 								<Stick topOffset={100}>
 									<ShareSideBar
-										shareCount={story.shares ? story.shares.total : 0}
+										shareCount={story.shares ? story.shares.total + fb : 0 + fb}
 									/>
 								</Stick>
 							</Share>
@@ -329,18 +327,30 @@ class StoryPage extends React.Component {
 							<Main ref={'TT'} isMobile={isMobile}>
 								<StoryDetail story={story} />
 								<LikeBoxContainer>
-									<div dangerouslySetInnerHTML={{ __html: `<div class="fb-page" data-href="https://www.facebook.com/${config.FACEBOOK}" data-tabs="timeline" data-width="500" data-height="210" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/${config.FACEBOOK}/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/${config.FACEBOOK}/">${config.NAME}</a></blockquote></div>` }}></div>
+									<div
+										dangerouslySetInnerHTML={{
+											__html: `<div class="fb-page" data-href="https://www.facebook.com/${config.FACEBOOK}" data-tabs="timeline" data-width="500" data-height="210" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/${config.FACEBOOK}/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/${config.FACEBOOK}/">${config.NAME}</a></blockquote></div>`
+										}}
+									/>
 								</LikeBoxContainer>
 							</Main>
 
 							<Aside id="trendingBar" ref="trendingBar">
 
-									<TrendingSideBar sid={story._id} />
-									<div dangerouslySetInnerHTML={{ __html: `<div class="fb-page" data-href="https://www.facebook.com/${config.FACEBOOK}/" data-tabs="timeline" data-height="700" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/${config.FACEBOOK}/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/${config.FACEBOOK}/">${config.NAME}</a></blockquote></div>` }}></div>
+								<TrendingSideBar sid={story._id} />
+								<div
+									dangerouslySetInnerHTML={{
+										__html: `<div class="fb-page" data-href="https://www.facebook.com/${config.FACEBOOK}/" data-tabs="timeline" data-height="700" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/${config.FACEBOOK}/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/${config.FACEBOOK}/">${config.NAME}</a></blockquote></div>`
+									}}
+								/>
 
 							</Aside>
 
-							<NextStory cid = {story.column._id} currentID = {story._id} format = {story.format}/>
+							<NextStory
+								cid={story.column._id}
+								currentID={story._id}
+								format={story.format}
+							/>
 						</Content>
 
 						<Content>

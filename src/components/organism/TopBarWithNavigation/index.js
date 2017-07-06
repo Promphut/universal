@@ -14,6 +14,9 @@ const Title = styled.div`
 	font-weight:bold;
 	margin:18px 0 0 0;
 	animation:${props=>props.show?slideIn:slideOut} 0.5s forwards;
+	@media (min-width: 768px) and (max-width: 992px) {
+		display:none;
+  }
 `
 const slideIn = keyframes`
 	from { opacity:0; }

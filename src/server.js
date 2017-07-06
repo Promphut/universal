@@ -60,7 +60,7 @@ const extractMeta = (setting, url) => {
 
 	let path = url.split('/')
 
-	if (path[1] === 'stories' && !path[3]) {
+	if (path[1] === 'stories' && !(path[2].startsWith('all')||path[2].startsWith('columns')) && !path[3]) {
 		// 1. Column case
 		let slug = decodeURIComponent(path[2])
 		return api.getColumnFromSlug(slug)
@@ -71,7 +71,7 @@ const extractMeta = (setting, url) => {
 			if(col.url) meta.url = col.url
 			return meta
 		})
-	} else if (path[1] === 'stories') {
+	} else if (path[1] === 'stories' && !(path[2].startsWith('all')||path[2].startsWith('columns'))) {
 		// 2. Story case
 		let sid = path[4]
 		return api.getStoryFromSid(sid)
@@ -79,7 +79,7 @@ const extractMeta = (setting, url) => {
 			let s = res.story
 			if(s.ptitle) meta.name = s.ptitle + ' | ' + setting.publisher.name
 			if(s.contentShort) meta.desc = s.contentShort
-			if(s.cover) meta.cover = s.cover.large || s.cover.large.medium
+			if(s.cover) meta.cover = s.cover.large || s.cover.medium
 			if(s.url) meta.url = s.url
 			return meta
 		})
@@ -246,6 +246,25 @@ app.get('/sitemap.xml', (req, res)=> {
       res.send( xml );
   });
 });
+
+app.get('/robots.txt', (req, res) => {
+	let robotTxt = ''
+
+	if(process.env.NODE_ENV === 'production') 
+		robotTxt = 
+`User-agent: *
+Disallow: /me/*
+Disallow: /editor
+Disallow: /editor/*
+Sitemap: ${FRONTURL}/sitemap.xml`
+	else 
+		robotTxt = 
+`User-agent: *
+Disallow: /
+Sitemap: ${FRONTURL}/sitemap.xml`
+
+	res.send(robotTxt)
+})
 
 app.get(['/feed', '/feed/rss', '/rss'],(req,res) => {
 	let type = req.query.type || 'article'

@@ -6,9 +6,9 @@ import {
 	BGImg,
 	NewsBox,
 	Footer,
-	TopNews,
-	TopNewsSmall,
-	BackToTop
+	TopNewsBox,
+	BackToTop,
+	SeeMore
 } from 'components'
 import styled from 'styled-components'
 import auth from 'components/auth'
@@ -20,6 +20,7 @@ import LinearProgress from 'material-ui/LinearProgress'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import SwipeableViews from 'react-swipeable-views'
 import utils from '../../../services/utils'
+import config from '../../../config'
 
 const Wrapper = styled.div`
 	@media (max-width:480px) {
@@ -42,14 +43,15 @@ const Content = styled.div`
 	flex-flow: row wrap;
 	justify-content: center;
 	padding: 40px 0 0 0;
-
 	@media (max-width:480px) {
 		padding: 10px 0 0 0;
   }
-
 	@media (min-width: 481px) {
 
 	}
+	@media (min-width: 768px) and (max-width: 992px) {
+		padding: 20px 0 0 0;
+  }
 `
 
 const Main = styled.div`
@@ -60,13 +62,6 @@ const Main = styled.div`
 		max-width: 100%;
 		padding:0 15px 0 15px;
   }
-
-	.hidden-des-flex {
-		display: none !important;
-		@media (max-width: 480px) {
-			display: flex !important;
-	  }
-	}
 `
 const Feed = styled.div`
 	flex: 12 1120px;
@@ -75,6 +70,10 @@ const Feed = styled.div`
     flex: 0 100%;
 		max-width: 100%;
 		padding:0 15px 0 15px;
+  }
+	@media (min-width: 768px) and (max-width: 992px) {
+		flex: 12 720px;
+		max-width: 720px;
   }
 `
 
@@ -92,11 +91,15 @@ const Text = styled.div`
 	font-weight:normal;
 	text-align:center;
 	width:864px;
-	padding:35px;
+	padding:35px 0 35px 0;
 	@media (max-width: 480px) {
 		width:100%;
 		padding:15px;
 	}
+	@media (min-width: 768px) and (max-width: 992px) {
+		width:100%;
+		padding:25px 0 25px 0;
+  }
 `
 
 const TextLine = styled.div`
@@ -114,11 +117,16 @@ const Onload = styled.div`
 
 const Line = styled.div`
   position:relative;
-  top:-2px;
+  top:-41px;
   z-index:-5;
   width:100%;
   height:1px;
   background-color:#C4C4C4;
+	@media (min-width: 768px) and (max-width: 992px) {
+		top:-32px;
+		width:720px;
+		margin:0 auto 0 auto;
+  }
 `
 
 const Latest = styled.div`
@@ -137,6 +145,10 @@ const Head = styled.div`
 	margin:0 auto 0 auto;
 	background:white;
 	width:280px;
+	@media (min-width: 768px) and (max-width: 992px) {
+		font-size:48px;
+		width:220px;
+  }
 `
 
 const News = styled.div`
@@ -149,11 +161,15 @@ const News = styled.div`
 	@media (max-width: 480px) {
 		z-index:1000;
 	}
+
 `
 
-// const Infinite2 = styled(Infinite)`
-// 	overflow-y:visible !important;
-// `
+const SeemoreContainer = styled.div`
+	margin-top: 26px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+`
 
 class NewsPage extends React.Component {
 	static contextTypes = {
@@ -179,6 +195,8 @@ class NewsPage extends React.Component {
 			shortDesc: ''
 		}
 	}
+
+	FEED_LIMIT = config.FEED_LIMIT
 
 	getTrendingNews = () => {
 		api.getFeed('news', { status: 1 }, 'trending', null, 0, 4).then(result => {
@@ -210,7 +228,8 @@ class NewsPage extends React.Component {
 			let page = this.state.page
 			//console.log('page', page)
 			var sort = this.state.selectTab ? 'trending' : 'latest'
-			api.getFeed('news', { status: 1 }, sort, null, page, 15).then(result => {
+			api.getFeed('news', { status: 1 }, sort, null, page, this.FEED_LIMIT)
+			.then(result => {
 				let feed = this.state.feed.concat(result.feed)
 				this.setState(
 					{
@@ -284,24 +303,12 @@ class NewsPage extends React.Component {
 					? <Content>
 							<Feed>
 								<Head className="serif-font hidden-mob">NEWS</Head>
-								<Line className="hidden-mob" style={{ top: '-41px' }} />
+								<Line className="hidden-mob" />
 								<Text className="center">{shortDesc}</Text>
 							</Feed>
 						</Content>
 					: ''}
-				<Content style={{ paddingTop: '0px' }} className="hidden-mob">
-					<Main>
-						<TopNews detail={trendingNews[0]} />
-					</Main>
-					<Aside>
-						<TopNewsSmall detail={trendingNews[1]} />
-						<TopNewsSmall detail={trendingNews[2]} />
-						<TopNewsSmall
-							detail={trendingNews[3]}
-							style={{ borderBottom: '1px solid #000' }}
-						/>
-					</Aside>
-				</Content>
+				<TopNewsBox className='hidden-mob' data={trendingNews} />
 				<Content>
 					<Feed>
 						<Tabs
@@ -352,7 +359,7 @@ class NewsPage extends React.Component {
 								value={1}
 							/>
 						</Tabs>
-						<Line />
+						<Line style={{top:-1}} />
 
 						<SwipeableViews
 							index={selectTab}
@@ -364,10 +371,14 @@ class NewsPage extends React.Component {
 									loader={this.onload()}>
 									<div>
 										{feed.map((item, index) => (
-											<NewsBox detail={item} key={index} timeline={true} />
+											<NewsBox final= {index == feed.length -1 ? true:false} detail={item} key={index} timeline={true} />
 										))}
 									</div>
 								</InfiniteScroll>
+								{!hasMoreFeed && 
+								<SeemoreContainer>
+									<SeeMore url={'/stories/all?type=news&sort=latest&page=1'}/>
+								</SeemoreContainer>}
 							</Latest>
 							<Trending>
 								<InfiniteScroll
@@ -376,10 +387,16 @@ class NewsPage extends React.Component {
 									loader={this.onload()}>
 									<div>
 										{feed.map((item, index) => (
-											<NewsBox detail={item} key={index} timeline={false} />
+											<NewsBox final= {index == feed.length -1 ? true:false} detail={item} key={index} timeline={false} />
 										))}
 									</div>
 								</InfiniteScroll>
+								
+								{!hasMoreFeed && 
+								<SeemoreContainer>
+									<SeeMore url={'/stories/all?type=news&sort=trending&page=1'}/>
+								</SeemoreContainer>}
+								
 							</Trending>
 						</SwipeableViews>
 					</Feed>

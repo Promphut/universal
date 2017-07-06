@@ -12,7 +12,8 @@ import {
 	LogoLink,
 	BackToTop,
 	BgWithLogo,
-	Stick
+	Stick,
+	SeeMore
 } from 'components'
 import styled from 'styled-components'
 import auth from 'components/auth'
@@ -45,13 +46,13 @@ const Content = styled.div`
 	@media (max-width:480px) {
 		padding: 0;
   }
+	@media (min-width: 768px) and (max-width: 992px) {
+		padding: 20px 0 0 0;
+  }
 
 `
 
 const Main = styled.div`
-
-	// flex: 3 825px;
-	// max-width: 825px;
 	flex: 3 780px;
 	max-width: 780px;
 	@media (max-width:480px) {
@@ -59,13 +60,10 @@ const Main = styled.div`
 		max-width: 100%;
 		padding:0 16px 0 16px;
   }
-
-	.hidden-des-flex {
-		display: none !important;
-		@media (max-width: 480px) {
-			display: flex !important;
-	  }
-	}
+	@media (min-width: 768px) and (max-width: 992px) {
+    flex: 3 720px;
+		max-width: 720px;
+  }
 `
 const Feed = styled.div`
 	flex: 12 1120px;
@@ -79,7 +77,6 @@ const Feed = styled.div`
 `
 
 const Aside = styled.div`
-	//max-width: 255px;
 	flex: 1 300px;
 	max-width: 300px;
 	margin-left:60px;
@@ -149,6 +146,13 @@ const ImgGif = styled.img`
 	height:200px;
 `
 
+const SeemoreContainer = styled.div`
+	margin-top: 26px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+`
+
 const styles = {
 	headline: {
 		fontSize: 24,
@@ -196,6 +200,8 @@ class HomePage extends React.Component {
 		this.column = []
 	}
 
+	FEED_LIMIT = config.FEED_LIMIT;
+
 	onload = () => (
 		<Onload>
 			<div className="row">
@@ -232,7 +238,7 @@ class HomePage extends React.Component {
 			//console.log('page', page)
 
 			api
-				.getFeed('article', { status: 1 }, 'latest', null, page, 15)
+				.getFeed('article', { status: 1 }, 'latest', null, page, this.FEED_LIMIT)
 				.then(result => {
 					let feed = this.state.feed.concat(result.feed)
 					// console.log(result)
@@ -309,10 +315,15 @@ class HomePage extends React.Component {
 							<div>
 								{feed.length != 0 &&
 									feed.map((item, index) => (
-										<ArticleBox detail={item} key={index} />
+										<ArticleBox final= {index == feed.length -1 ? true:false} detail={item} key={index} />
 									))}
 							</div>
 						</InfiniteScroll>}
+
+						{!hasMoreFeed && 
+						<SeemoreContainer>
+							<SeeMore url={'/stories/all?type=article&sort=latest&page=1'}/>
+						</SeemoreContainer>}
 
 						<Tabs
 							style={{ width: '100%' }}
@@ -344,7 +355,7 @@ class HomePage extends React.Component {
 			                />*/}
 						</Tabs>
 
-						<Line />
+						{/*<Line />*/}
 
 						{utils.isMobile() &&
 							<SwipeableViews
@@ -386,7 +397,7 @@ class HomePage extends React.Component {
 					</Aside>
 				</Content>
 
-				<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800" />
+				<BackToTop scrollStepInPx="800" delayInMs="16.66" showOnTop="1800" />
 				<Footer />
 			</Wrapper>
 		)

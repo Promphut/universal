@@ -10,6 +10,9 @@ const BG = styled(BGImg)`
 	display:flex !important;
 	align-items:center !important;
 	justify-content:center !important;
+@media (min-width: 768px) and (max-width: 992px) {
+    height:200px;
+  }
 `
 const Tagline = styled.div`
 	font-size:20px;
@@ -18,10 +21,17 @@ const Tagline = styled.div`
 	width:600px;
 	text-align:center;
 	color:white;
+@media (min-width: 768px) and (max-width: 992px) {
+    width:350px;
+  }
 `
 const Img = styled.img`
 	width:749px;
 	height:100px;
+@media (min-width: 768px) and (max-width: 992px) {
+    width:350px;
+    height:36px;
+  }
 `
 const BgWithLogo = ({data})=> {
   let pub = data

@@ -10,7 +10,8 @@ import {
 	Stick,
 	Footer,
 	EmptyStory,
-	BackToTop
+	BackToTop,
+	Pagination
 } from 'components'
 import { findDOMNode as dom } from 'react-dom'
 import styled from 'styled-components'
@@ -33,6 +34,9 @@ const Content = styled.div`
 	justify-content: center;
 	padding:110px 0 20px 0;
 	min-height: calc(100vh - ${props => (props.isMobile ? '321px' : '501px')});
+	@media (min-width: 768px) and (max-width: 992px) {
+		padding:80px 0 0 0;
+  }
 `
 
 const Main = styled.div`
@@ -55,13 +59,12 @@ const Head = styled.div`
 	 justify-content:center;
 	 padding:0 20% 0 20%;
 	 flex-direction:column;
-	@media (max-width: 768px) {
-		padding:0 5% 0 5%;
-  }
-
 	@media (max-width: 480px) {
 		padding:0 5% 0 5%;
 	}
+	@media (min-width: 768px) and (max-width: 992px) {
+		padding:0 15% 0 15%;
+  }
 `
 
 const Feed = styled.div`
@@ -90,13 +93,6 @@ const Text = styled.div`
 	font-size:19px;
 `
 
-const TextLine = styled.div`
-	color:#8F8F8F;
-	font-size:19px;
-	border-bottom:1px solid #E2E2E2;
-	padding-bottom:11px;
-`
-
 const ColumnName = styled.div`
   color:#fff;
   font-size:48px;
@@ -105,6 +101,9 @@ const ColumnName = styled.div`
 	@media (max-width:480px) {
 		padding-top:13px;
   	font-size: 16px;
+  }
+	@media (min-width: 768px) and (max-width: 992px) {
+		font-size: 32px;
   }
 `
 
@@ -118,17 +117,24 @@ const ColumnDetail = styled.div`
   	font-size: 12px;
 		margin-top: 8px;
   }
+	@media (min-width: 768px) and (max-width: 992px) {
+		margin-top: 10px;
+		font-size: 12px;
+  }
 `
 const Cover = styled(BGImg)`
 	 width: 100%;
-	 height: 340px;
+	 height: 280px;
 	 position:relative;
 	 top:60px;
 	 display: flex;
 	 align-items:center;
 	 @media (max-width:480px) {
-			height: 160px;
+		height: 160px;
 	 }
+	@media (min-width: 768px) and (max-width: 992px) {
+		height:200px;
+  }
 `
 
 const Icon = styled.img`
@@ -141,6 +147,11 @@ const Icon = styled.img`
 		height:30px;
 		margin:0 10px 0 0;
   }
+	@media (min-width: 768px) and (max-width: 992px) {
+		width:37px;
+		height:37px;
+		margin:0 20px 0 0;
+  }
 `
 
 const Onload = styled.div`
@@ -149,6 +160,23 @@ const Onload = styled.div`
 	margin:50px 0 50px 0;
 `
 
+const Page = styled.div`
+  display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+  padding:30px 0 30px 0;
+`
+const TextLine = styled.div`
+  color:${props => props.theme.primaryColor};
+  font-size:28px;
+  font-weight:bold;
+`
+const Dash = styled.div`
+  margin:5px 0 0 0;
+  width:30px;
+  height:4px;
+  background-color:${props => props.theme.accentColor};
+`
 class ColumnPage extends React.Component {
 	state = {
 		column: {
@@ -156,11 +184,15 @@ class ColumnPage extends React.Component {
 		},
 		isMobile: false,
 
-		page: 0,
+		currentPage: utils.querystring('page',this.props.location) ? utils.querystring('page',this.props.location) - 1 : 0,
 		feedCount: 1,
 		feed: [],
-		hasMoreFeed: true
+		totalPages: 0,
+
+		loading: false
 	}
+
+	FEED_LIMIT = config.FEED_LIMIT
 
 	static contextTypes = {
 		setting: PropTypes.object
@@ -181,29 +213,30 @@ class ColumnPage extends React.Component {
 			</div>
 		</Onload>
 	)
+
 	reloadFeed = () => {
 		this.setState(
 			{
-				page: 0,
+				currentPage: utils.querystring('page',this.props.location) ? utils.querystring('page',this.props.location) - 1 : 0,
 				feedCount: 1,
 				feed: [],
-				hasMoreFeed: true
+				totalPages: 0,
 			},
 			() => {
 				this.loadFeed(this.state.column._id)()
 			}
 		)
 	}
+
 	loadFeed = colId => {
 		return () => {
-			//console.log('LOAD FEED0', colId, this.loading)
 			if (colId == null) return
 			// ensure this method is called only once at a time
-			if (this.loading === true) return
-			this.loading = true
+			if (this.state.loading === true) return
+			this.state.loading = true
 			//console.log('LOAD FEED1')
 
-			let page = this.state.page
+			let currentPage = this.state.currentPage
 			//console.log('page', page)
 
 			api
@@ -212,27 +245,32 @@ class ColumnPage extends React.Component {
 					{ status: 1, column: colId },
 					'latest',
 					null,
-					page,
-					15
+					currentPage,
+					this.FEED_LIMIT
 				)
 				.then(result => {
 					//console.log(result)
-					let feed = this.state.feed.concat(result.feed)
+					//let feed = this.state.feed.concat(result.feed)
 					this.setState(
 						{
-							page: ++page,
-							feed: feed,
-							feedCount: result.count['1']
-								? result.count['1']
-								: 0 ? result.count['1'] : 0,
-							hasMoreFeed: feed.length < result.count['1']
+							feed: result.feed,
+							feedCount: result.count['total'] ? result.count['total'] : 0,
+							totalPages: utils.getTotalPages(this.FEED_LIMIT, result.count['total']),
 						},
 						() => {
-							this.loading = false
+							this.setState({loading:false})
 						}
 					)
 				})
 		}
+	}
+
+	changePage = e => {
+		this.props.history.push({ hash: this.props.location.hash ,search: "?page=" + e })
+		this.setState({ currentPage: e - 1}, () => {
+			document.body.scrollTop = document.documentElement.scrollTop = 400
+			this.reloadFeed()
+		})
 	}
 
 	getColumnFromSlug = (columnSlug, done = () => {}) => {
@@ -249,7 +287,7 @@ class ColumnPage extends React.Component {
 	}
 
 	componentWillMount() {
-		this.getColumnFromSlug(this.props.match.params.columnSlug)
+		this.getColumnFromSlug(this.props.match.params.columnSlug, this.reloadFeed)
 	}
 
 	componentDidMount() {
@@ -260,23 +298,22 @@ class ColumnPage extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		//console.log('COL', nextProps, this.props)
-		if (
-			nextProps.match.params.columnSlug != this.props.match.params.columnSlug
-		) {
-			//console.log('RELOAD FEED')
+		if (nextProps.match.params.columnSlug != this.props.match.params.columnSlug) {
 			this.getColumnFromSlug(nextProps.match.params.columnSlug, this.reloadFeed)
 			//this.reloadFeed()
+		} else if(nextProps.location.search != this.props.location.search){
+			this.setState({currentPage : utils.querystring('page',this.props.location) - 1},()=>{
+				document.body.scrollTop = document.documentElement.scrollTop = 0
+				this.reloadFeed()
+			})
 		}
 	}
 
 	render() {
 		let { keywords, channels, theme } = this.context.setting.publisher
 		const BGImgSize = (utils.isMobile() ? 100 : 280) + 60
-		let { column, isMobile } = this.state
-		let { feedCount, feed, hasMoreFeed } = this.state
+		let { column, isMobile, feedCount, feed, currentPage, totalPages, loading } = this.state
 		//let {count, loadOffset, isInfiniteLoading, latestStories, isMobile} = this.state
-		//console.log(feedCount)
 		var head = (
 			<Head>
 				<div className="row">
@@ -339,22 +376,47 @@ class ColumnPage extends React.Component {
 								/>
 							</Main>
 						: <Main>
-								<StoryMenu
-									style={{ padding: '15px 0 15px 0', margin: '0 0 50px 0' }}
-									next={column.name}
-								/>
-								<TextLine className="sans-font">Latest</TextLine>
-								<InfiniteScroll
-									loadMore={this.loadFeed(column._id)}
-									hasMore={hasMoreFeed}
-									loader={this.onload()}>
+								{totalPages > 0 && totalPages > currentPage && currentPage >= 0
+									&&  <div>
+												<TextLine className="sans-font hidden-mob">LATEST STORIES</TextLine>
+												<Dash className="hidden-mob" style={{ margin: '5px 0 10px 0' }} />
+											</div>
+								}
+								{loading ?  this.onload() : 
 									<div>
-										{feed &&
+										{feed && currentPage >= 0 &&
 											feed.map((item, index) => (
 												<ArticleBox detail={item} key={index} />
 											))}
-									</div>
-								</InfiniteScroll>
+									</div> 
+								}
+								<Page>
+									{totalPages > 0 && ((totalPages > currentPage && currentPage >= 0) ?
+										<Pagination
+											currentPage={currentPage + 1}
+											totalPages={totalPages}
+											onChange={this.changePage}/>
+										:
+										<EmptyStory
+											title="No More Story"
+											description={
+												<div>
+													There are no more stories in this page. Go back to
+													<Link
+														to={"/stories/" + this.state.column.slug + "?page=1"+this.props.location.hash}
+														style={{
+															color: theme.accentColor,
+															padding: '0 0.5em 0 0.5em'
+														}}>
+														first page
+													</Link>of this column
+													?
+												</div>
+											}
+											hideButton={true}
+										/>)
+									}
+								</Page>
 							</Main>}
 					<Aside>
 						<Stick topOffset={70} style={{ zIndex: '0' }}>

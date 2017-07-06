@@ -40,6 +40,11 @@ const Container = styled.div`
       height:175px;
     }
   }
+  @media (min-width: 768px) and (max-width: 992px) {
+    .imgWidth{
+      height:274px;
+    }
+  }
 `
 
 const NameLink = styled(Link)`
@@ -56,6 +61,9 @@ const NameLink = styled(Link)`
     color:${props=>props.theme.accentColor};
     cursor:pointer;
   }
+  @media (min-width: 768px) and (max-width: 992px) {
+    font-size:16px;
+  }
 `
 
 const BoxText = styled.div`
@@ -65,6 +73,9 @@ const BoxText = styled.div`
   background:rgba(0,0,0,0.7);
   position:absolute;
   bottom:0;
+  @media (min-width: 768px) and (max-width: 992px) {
+    height:58px;
+  }
 `
 
 const TopNews = ({detail, style}) => {

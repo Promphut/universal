@@ -16,7 +16,7 @@ class TwtShareButton extends React.Component {
 	constructor(props) {
 		super(props)
 
-		this.state = { url:'' }
+		//this.state = { url:'' }
 	}
 
 	getUrl = (done) => {
@@ -28,7 +28,7 @@ class TwtShareButton extends React.Component {
 		.then(done)
 	}
 
-	componentWillReceiveProps(nextProps){
+	/*componentWillReceiveProps(nextProps){
 		if(nextProps.url && this.props.url != nextProps.url){
 			api.shorten(nextProps.url, {medium:'social', source:'twitter'})
 			.then(res => {
@@ -60,17 +60,35 @@ class TwtShareButton extends React.Component {
 				//this.a.removeEventListener('tweetStory')
 			})
 		} 
+	}*/
+
+	handleTwtShare = (e) => {
+		let sid = this.props.sid
+		let url = this.props.url
+		if(sid==null) sid = utils.getTrailingSid(this.props.url)
+		if(sid!=null) api.incStoryInsight(sid, 'share', 'share_twt')
+		this.getUrl(res => {
+			let hashtag = this.props.hashtag
+			if(hashtag==null) hashtag = config.NAME
+			window.open(utils.getTweetUrl(res.url, hashtag),'_blank');
+		})
 	}
 
 	render(){
 		// Set url
-		let url = this.state.url
+		/*let url = this.state.url
 
 		// Set hashtags
 		let hashtags = this.props.hashtags
-		if(hashtags==null) hashtags = config.NAME
+		if(hashtags==null) hashtags = config.NAME*/
 
-		return <a href={utils.getTweetUrl(url, hashtags)} ref={(_a) => {this.a = _a}}>{this.props.button}</a>;
+		return (
+			<div onClick={this.handleTwtShare} style={{...this.props.style}}>
+				{this.props.button}
+			</div>
+		)
+
+		//return <a href={utils.getTweetUrl(url, hashtags)} ref={(_a) => {this.a = _a}}>{this.props.button}</a>;
 	}
 }
 

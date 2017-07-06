@@ -9,7 +9,8 @@ import {
 	SecondaryButton,
 	LeftMenu,
 	RightMenu,
-	BGImg
+	BGImg,
+	SearchButton
 } from 'components'
 import auth from 'components/auth'
 import FontIcon from 'material-ui/FontIcon'
@@ -106,12 +107,6 @@ const LogoWrapper = styled.div`
 	height: 60px;
 `
 
-const Logo = styled.img`
-	height: 60px;
-	width: 60px;
-	cursor: pointer
-`
-
 const Center = styled.div`
 	max-width: 60%;
 	white-space: nowrap;
@@ -160,6 +155,15 @@ const LogoGif = styled(BGImg)`
 	height:60px;
 	margin-right:12px;
 	animation:${props => (props.onLoading ? fadeOut : fadeIn)} 1.25s linear;
+`
+const Logo = styled.img`
+	height: 60px;
+	@media (max-width: 640px) {
+		display: none;
+	}
+	@media (min-width: 768px) and (max-width: 992px) {
+		display:none;
+  }
 `
 const ContainerCenter = styled.div`
 	position:absolute;
@@ -340,14 +344,11 @@ class TopBar extends React.Component {
 								/>
 							</Link>
 
-							<LogoLink
-								to="/"
-								src={theme.logo}
-								title={config.DOMAIN}
-								style={{...logoStyle}}
-								id={'logo'}
-								fill={!scrolling && hasCover ? '#FFF' : ''}
-							/>
+							<Link to="/">
+								<Logo
+									src={theme.logo}
+								/>
+							</Link>
 						</LogoWrapper>
 					</Left>
 
@@ -359,6 +360,7 @@ class TopBar extends React.Component {
 
 					{status == 'LOGGEDIN' &&
 						<Right>
+							<SearchButton />
 							{this.role &&
 								editButton &&
 								<Edit
@@ -394,6 +396,7 @@ class TopBar extends React.Component {
 						</Right>}
 					{status == 'UNLOGGEDIN' &&
 						<Right>
+							<SearchButton />
 							<NotLogin>
 								<RaisedButton
 									label=" Sign In"
