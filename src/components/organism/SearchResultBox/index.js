@@ -18,8 +18,11 @@ const NotFoundTextContainer = styled.div `
 export default class SearchResultBox extends React.Component  {
   render() {
     var resultFeed = [];
-
-    if (!isEmpty(this.props.result)){
+    if (this.props.isLoading)
+    {
+      resultFeed = <NotFoundTextContainer><NotFoundText>กำลังค้นหา</NotFoundText></NotFoundTextContainer>
+    }
+    else if (!isEmpty(this.props.result)){
       resultFeed = []
 
       if (this.props.type === 'news') {

@@ -112,7 +112,8 @@ export default class SearchResultPage extends React.Component {
       keyword: this.props.keyword || '',
       type: this.props.type || '',
 			throttle: 200,
-      result: null
+      result: null,
+			isLoading: true,
     }
   }
 
@@ -138,7 +139,8 @@ export default class SearchResultPage extends React.Component {
 		  api.getStoryFromKeyword(keyword, type)
 		  .then(result => {
 		    this.setState({
-		      result: result.stories
+		      result: result.stories,
+					isLoading: false
 		    });
 		  })
 		}
@@ -168,7 +170,7 @@ export default class SearchResultPage extends React.Component {
               <Link to={"/search/news/" + this.state.keyword}><FilterItem select={this.state.type === 'news'}>NEWS</FilterItem></Link>
               {/* <Link to={"/search/video/" + this.state.keyword}><FilterItem select={this.state.type === 'video'}>VIDEO</FilterItem></Link> */}
             </FilterContainer>
-            <SearchResultBox type={this.state.type} result={this.state.result}/>
+            <SearchResultBox type={this.state.type} result={this.state.result} isLoading={this.state.isLoading}/>
           </Main>
 
 					<Aside></Aside>
