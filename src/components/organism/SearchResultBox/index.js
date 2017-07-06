@@ -5,6 +5,16 @@ import isEmpty from 'lodash/isEmpty'
 
 import {ArticleBox, NewsBox} from 'components'
 
+const NotFoundText = styled.span `
+  font-size: 20px;
+  font-family: 'Nunito', 'Mitr';
+`
+
+const NotFoundTextContainer = styled.div `
+  width: 100%;
+  text-align: center;
+`
+
 export default class SearchResultBox extends React.Component  {
   render() {
     var resultFeed = [];
@@ -20,10 +30,13 @@ export default class SearchResultBox extends React.Component  {
       }
       else {
         for (var i = 0 ; i < this.props.result.length ; i++)
-        { 
+        {
             resultFeed.push(<ArticleBox detail={this.props.result[i]} key={i}/>)
         }
       }
+    }
+    else {
+      resultFeed = <NotFoundTextContainer><NotFoundText>ไม่พบผลลัพธ์จากคำที่ค้นหา</NotFoundText></NotFoundTextContainer>
     }
 
       // console.log(this.props.result)
