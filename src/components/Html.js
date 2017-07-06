@@ -89,8 +89,7 @@ const twitterIntent =
   });`
 
 const facebookSdk =
-  `
-  window.fbAsyncInit = function() {
+  `window.fbAsyncInit = function() {
     FB.init({
       appId      : '${config.ANALYTIC.FBAPPID}',
       autoLogAppEvents : true,
@@ -107,9 +106,20 @@ const facebookSdk =
      js = d.createElement(s); js.id = id;
      js.src = "//connect.facebook.net/en_US/sdk.js";
      fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-   `
+   }(document, 'script', 'facebook-jssdk'));`
 
+const ggWebfont = 
+  `WebFontConfig = {
+    google: { families: [ 'Mitr|Nunito|PT+Sans|PT+Serif:400,700,700i|Roboto|Roboto+Slab' ] }
+  };
+  (function() {
+    var wf = document.createElement('script');
+    wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+    wf.type = 'text/javascript';
+    wf.async = 'true';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(wf, s);
+  })();`
 
 const Html = ({ styles, assets, content, meta }) => {
   const helmet = Helmet.rewind()
@@ -150,12 +160,12 @@ const Html = ({ styles, assets, content, meta }) => {
         {assets.css.map(path => <link rel="stylesheet" type="text/css" key={path} href={path} />)}
         {styles}
         
-        <link rel="stylesheet"  href='https://fonts.googleapis.com/icon?family=Material+Icons' />
-        <link rel="stylesheet"  href='https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css' />
-        <link rel="stylesheet"  href='https://fonts.googleapis.com/css?family=Mitr|Nunito|PT+Sans|PT+Serif:400,700,700i|Roboto|Roboto+Slab' />
+        {/*<link rel="stylesheet"  href='https://fonts.googleapis.com/icon?family=Material+Icons' />*/}
+        {/*<link rel="stylesheet"  href='https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css' />*/}
+        {/*<link rel="stylesheet"  href='https://fonts.googleapis.com/css?family=Mitr|Nunito|PT+Sans|PT+Serif:400,700,700i|Roboto|Roboto+Slab' />*/}
 
         <script dangerouslySetInnerHTML={{ __html: quantcast.headScript }} />
-        <script src='https://use.fontawesome.com/3df470c471.js'/>
+        
       </head>
       <body {...bodyAttrs}>
         <noscript dangerouslySetInnerHTML={{ __html: ggTag.iframe }}></noscript>
@@ -169,8 +179,9 @@ const Html = ({ styles, assets, content, meta }) => {
 
         {assets.js.map(path => <script key={path} src={path} />)}
 
-        <script dangerouslySetInnerHTML={{ __html: twitterIntent + chartbeat.bodyScript + quantcast.bodyScript }} />
+        <script dangerouslySetInnerHTML={{ __html: twitterIntent + chartbeat.bodyScript + quantcast.bodyScript + ggWebfont }} />
         <noscript dangerouslySetInnerHTML={{ __html: quantcast.noscript }} />
+        <script src='https://use.fontawesome.com/3df470c471.js'/>
       </body>
     </html>
   )

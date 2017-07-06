@@ -246,14 +246,23 @@ app.get('/sitemap.xml', (req, res)=> {
       res.send( xml );
   });
 });
+
 app.get('/robots.txt', (req, res) => {
-	res.send(`
-User-agent: *
+	let robotTxt = ''
+
+	if(process.env.NODE_ENV === 'production') 
+		robotTxt = 
+`User-agent: *
 Disallow: /me/*
 Disallow: /editor
 Disallow: /editor/*
-Sitemap: ${FRONTURL}/sitemap.xml
-	`)
+Sitemap: ${FRONTURL}/sitemap.xml`
+	else 
+		robotTxt = 
+`User-agent: *
+Disallow: /`
+
+	res.send(robotTxt)
 })
 
 app.get(['/feed', '/feed/rss', '/rss'],(req,res) => {
