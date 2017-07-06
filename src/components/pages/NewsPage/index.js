@@ -6,8 +6,7 @@ import {
 	BGImg,
 	NewsBox,
 	Footer,
-	TopNews,
-	TopNewsSmall,
+	TopNewsBox,
 	BackToTop,
 	SeeMore
 } from 'components'
@@ -50,6 +49,9 @@ const Content = styled.div`
 	@media (min-width: 481px) {
 
 	}
+	@media (min-width: 768px) and (max-width: 992px) {
+		padding: 20px 0 0 0;
+  }
 `
 
 const Main = styled.div`
@@ -73,7 +75,6 @@ const Feed = styled.div`
 		flex: 12 720px;
 		max-width: 720px;
   }
-	
 `
 
 const Aside = styled.div`
@@ -95,6 +96,10 @@ const Text = styled.div`
 		width:100%;
 		padding:15px;
 	}
+	@media (min-width: 768px) and (max-width: 992px) {
+		width:100%;
+		padding:25px 0 25px 0;
+  }
 `
 
 const TextLine = styled.div`
@@ -165,11 +170,6 @@ const SeemoreContainer = styled.div`
 	display: flex;
 	justify-content: center;
 `
-
-
-// const Infinite2 = styled(Infinite)`
-// 	overflow-y:visible !important;
-// `
 
 class NewsPage extends React.Component {
 	static contextTypes = {
@@ -308,19 +308,7 @@ class NewsPage extends React.Component {
 							</Feed>
 						</Content>
 					: ''}
-				<Content style={{ paddingTop: '0px' }} className="hidden-mob">
-					<Main>
-						<TopNews detail={trendingNews[0]} />
-					</Main>
-					<Aside>
-						<TopNewsSmall detail={trendingNews[1]} />
-						<TopNewsSmall detail={trendingNews[2]} />
-						<TopNewsSmall
-							detail={trendingNews[3]}
-							style={{ borderBottom: '1px solid #000' }}
-						/>
-					</Aside>
-				</Content>
+				<TopNewsBox className='hidden-mob' data={trendingNews} />
 				<Content>
 					<Feed>
 						<Tabs
@@ -371,7 +359,7 @@ class NewsPage extends React.Component {
 								value={1}
 							/>
 						</Tabs>
-						<Line />
+						<Line style={{top:-1}} />
 
 						<SwipeableViews
 							index={selectTab}
@@ -383,7 +371,7 @@ class NewsPage extends React.Component {
 									loader={this.onload()}>
 									<div>
 										{feed.map((item, index) => (
-											<NewsBox final= {index == feed.length -1 ? true:false} detail={item} key={index} timeline={false} />
+											<NewsBox final= {index == feed.length -1 ? true:false} detail={item} key={index} timeline={true} />
 										))}
 									</div>
 								</InfiniteScroll>

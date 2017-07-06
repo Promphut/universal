@@ -97,7 +97,7 @@ const facebookSdk =
       status           : true,
       cookie		 : true,
       xfbml      : true,
-      version    : 'v2.8'
+      version    : 'v2.9'
     });
     FB.AppEvents.logPageView();
   };

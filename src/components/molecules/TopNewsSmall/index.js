@@ -22,7 +22,6 @@ const Container = styled.div`
   }
   .imgWidth{
     width:100%;
-    height:141px;
   }
   .hideText{
     position:relative;
@@ -32,10 +31,18 @@ const Container = styled.div`
   }
   &:hover{
     cursor:pointer;
-
     .hideText{
       z-index:-10;
     }
+  }
+	@media (min-width: 768px) and (max-width: 992px) {
+		.imgWidth{
+			height:92px;
+		}
+		.hideText{
+			top:-92px;
+		}
+    height:92px;
   }
 `
 const BG = styled(BGImg)`
@@ -52,11 +59,17 @@ const BoxText = styled.div`
   justify-content:center;
   align-items:center;
   text-align:center;
-
+	@media (min-width: 768px) and (max-width: 992px) {
+		height:92px;
+    font-size:14px;
+  }
 `
 const Cover = styled.div`
   background:rgba(0,0,0, ${props => props.hover ? 0.7 : 0.4});
   transition: .5s;
+`
+const Span = styled.span`
+	width:146px;
 `
 
 const slideOut = keyframes`
@@ -114,22 +127,22 @@ class TopNewsSmall extends React.Component {
 					style={{ backgroundPosition: 'right' }}>
 					<Cover hover={this.state.hover}>
 						<BoxText className="nunito-font showText" hover={this.state.hover}>
-							<span>
+							<Span>
 								{truncate(detail && detail.ptitle, {
-									length: 70,
+									length: 60,
 									separator: ''
 								})}
-							</span>
+							</Span>
 						</BoxText>
 					</Cover>
 				</BG>
 				<BoxText className="nunito-font hideText">
-					<span>
+					<Span>
 						{truncate(detail && detail.ptitle, {
-							length: 70,
+							length: 60,
 							separator: ''
 						})}
-					</span>
+					</Span>
 				</BoxText>
 			</Container>
 		)

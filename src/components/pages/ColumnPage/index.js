@@ -34,6 +34,9 @@ const Content = styled.div`
 	justify-content: center;
 	padding:110px 0 20px 0;
 	min-height: calc(100vh - ${props => (props.isMobile ? '321px' : '501px')});
+	@media (min-width: 768px) and (max-width: 992px) {
+		padding:80px 0 0 0;
+  }
 `
 
 const Main = styled.div`
@@ -56,13 +59,12 @@ const Head = styled.div`
 	 justify-content:center;
 	 padding:0 20% 0 20%;
 	 flex-direction:column;
-	@media (max-width: 768px) {
-		padding:0 5% 0 5%;
-  }
-
 	@media (max-width: 480px) {
 		padding:0 5% 0 5%;
 	}
+	@media (min-width: 768px) and (max-width: 992px) {
+		padding:0 15% 0 15%;
+  }
 `
 
 const Feed = styled.div`
@@ -91,13 +93,6 @@ const Text = styled.div`
 	font-size:19px;
 `
 
-const TextLine = styled.div`
-	color:#8F8F8F;
-	font-size:19px;
-	border-bottom:1px solid #E2E2E2;
-	padding-bottom:11px;
-`
-
 const ColumnName = styled.div`
   color:#fff;
   font-size:48px;
@@ -106,6 +101,9 @@ const ColumnName = styled.div`
 	@media (max-width:480px) {
 		padding-top:13px;
   	font-size: 16px;
+  }
+	@media (min-width: 768px) and (max-width: 992px) {
+		font-size: 32px;
   }
 `
 
@@ -119,17 +117,24 @@ const ColumnDetail = styled.div`
   	font-size: 12px;
 		margin-top: 8px;
   }
+	@media (min-width: 768px) and (max-width: 992px) {
+		margin-top: 10px;
+		font-size: 12px;
+  }
 `
 const Cover = styled(BGImg)`
 	 width: 100%;
-	 height: 340px;
+	 height: 280px;
 	 position:relative;
 	 top:60px;
 	 display: flex;
 	 align-items:center;
 	 @media (max-width:480px) {
-			height: 160px;
+		height: 160px;
 	 }
+	@media (min-width: 768px) and (max-width: 992px) {
+		height:200px;
+  }
 `
 
 const Icon = styled.img`
@@ -141,6 +146,11 @@ const Icon = styled.img`
   	width:30px;
 		height:30px;
 		margin:0 10px 0 0;
+  }
+	@media (min-width: 768px) and (max-width: 992px) {
+		width:37px;
+		height:37px;
+		margin:0 20px 0 0;
   }
 `
 
@@ -156,7 +166,17 @@ const Page = styled.div`
 	justify-content: center;
   padding:30px 0 30px 0;
 `
-
+const TextLine = styled.div`
+  color:${props => props.theme.primaryColor};
+  font-size:28px;
+  font-weight:bold;
+`
+const Dash = styled.div`
+  margin:5px 0 0 0;
+  width:30px;
+  height:4px;
+  background-color:${props => props.theme.accentColor};
+`
 class ColumnPage extends React.Component {
 	state = {
 		column: {
@@ -351,12 +371,11 @@ class ColumnPage extends React.Component {
 								/>
 							</Main>
 						: <Main>
-								<StoryMenu
-									style={{ padding: '15px 0 15px 0', margin: '0 0 50px 0' }}
-									next={column.name}
-								/>
 								{totalPages > 0 && totalPages > currentPage && currentPage >= 0
-									&& <TextLine className="sans-font">Latest</TextLine>
+									&&  <div>
+												<TextLine className="sans-font hidden-mob">LATEST STORIES</TextLine>
+												<Dash className="hidden-mob" style={{ margin: '5px 0 10px 0' }} />
+											</div>
 								}
 								{loading ?  this.onload() : 
 									<div>
