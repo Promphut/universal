@@ -5,9 +5,12 @@ import { Link } from 'react-router-dom'
 import TextField from 'material-ui/TextField'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import SwipeableViews from 'react-swipeable-views'
-import {Footer, TopBarWithNavigation, SearchResultBox} from 'components'
+import {Footer, TopBarWithNavigation, SearchResultBox, Pagination} from 'components'
 import api from 'components/api'
+import utils from '../../../services/utils'
+import config from '../../../config'
 import isEmpty from 'lodash/isEmpty'
+import split from 'lodash/split'
 
 const Wrapper = styled.div`
 	@media (max-width:480px) {
@@ -102,28 +105,36 @@ const FilterItem = styled.li `
   }
 `
 
+const PaginationContainer = styled.div `
+	display: flex;
+	justify-content: center;
+	margin-top: 20px;
+`
+
 export default class SearchResultPage extends React.Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      keyword: this.props.keyword || '',
+      keyword: split(this.props.keyword, '&')[0] || '',
       type: this.props.type || '',
 			throttle: 200,
       result: null,
 			isLoading: true,
+			currentPage: utils.querystring('page',this.props.location) ? utils.querystring('page',this.props.location) - 1 : 0,
+			totalPages: 0,
     }
   }
 
 	componentWillMount () {
 			this.setState({
-				keyword: this.props.match.params.keyword,
+				keyword: split(this.props.match.params.keyword,'&')[0],
 				type: this.props.match.params.type,
 			})
 	}
 
 	componentDidMount () {
-		this.fetchResult(this.state.keyword, this.state.type)
+		this.fetchResult(split(this.state.keyword, '&')[0], this.state.type)
 	}
 
 	componentWillReceiveProps (nextProps) {
@@ -138,11 +149,20 @@ export default class SearchResultPage extends React.Component {
 		  .then(result => {
 		    this.setState({
 		      result: result.stories,
-					isLoading: false
+					isLoading: false,
+					feedCount: result.stories.length ? result.stories.length : 0,
+					totalPages: utils.getTotalPages(config.FEED_LIMIT, result.stories.length),
 		    });
 		  })
 		}
   }
+
+	changePage = (e) => {
+			this.props.history.push({ hash: this.props.location.hash ,search: "&page=" + e})
+			this.setState({ currentPage: e - 1}, () => {
+					this.getAllFeed()
+			})
+	}
 
   handleKeywordChange = (e) => {
 		this.setState({keyword: e.target.value}, () => {
@@ -155,20 +175,32 @@ export default class SearchResultPage extends React.Component {
   }
 
   render() {
+		let { isMobile, completed, totalPages, currentPage, loading, feed, feedCount, keyword, type, result, isLoading} = this.state
     return (
       <Wrapper>
         <TopBarWithNavigation/>
         <Content>
 
-					<Feed><TextField id="search-box" hintText="ค้นหา" autoFocus={true} fullWidth={true} value={this.state.keyword} inputStyle={{fontSize:'28px'}} style={{fontFamily: "'Nunito', 'Mitr'"}} onChange={(e)=>this.handleKeywordChange(e)}/></Feed>
+					<Feed><TextField id="search-box" hintText="ค้นหา" autoFocus={true} fullWidth={true} value={keyword} inputStyle={{fontSize:'28px'}} style={{fontFamily: "'Nunito', 'Mitr'"}} onChange={(e)=>this.handleKeywordChange(e)}/></Feed>
 
 					<Main>
             <FilterContainer>
-              <Link to={"/search/stories/" + this.state.keyword}><FilterItem select={this.state.type === 'stories'}>STORIES</FilterItem></Link>
-              <Link to={"/search/news/" + this.state.keyword}><FilterItem select={this.state.type === 'news'}>NEWS</FilterItem></Link>
+              <Link to={"/search/stories/" + keyword}><FilterItem select={type === 'stories'}>STORIES</FilterItem></Link>
+              <Link to={"/search/news/" + keyword}><FilterItem select={type === 'news'}>NEWS</FilterItem></Link>
               {/* <Link to={"/search/video/" + this.state.keyword}><FilterItem select={this.state.type === 'video'}>VIDEO</FilterItem></Link> */}
             </FilterContainer>
-            <SearchResultBox type={this.state.type} result={this.state.result} isLoading={this.state.isLoading}/>
+            <SearchResultBox type={type} result={result} isLoading={isLoading}/>
+						{totalPages > 0 && ((totalPages > currentPage && currentPage >= 0) ?
+
+						<PaginationContainer>
+							<Pagination
+								currentPage={currentPage + 1}
+								totalPages={totalPages}
+								onChange={this.changePage}
+							/>
+						</PaginationContainer> :
+
+							<div></div>)}
           </Main>
 
 					<Aside></Aside>

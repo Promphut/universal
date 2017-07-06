@@ -162,7 +162,7 @@ export default class AllStoriesPage extends React.Component {
 	}
 
 	getAllFeed = () => {
-		
+
 		if (this.state.loading === true) return
 			this.state.loading = true
 
@@ -235,7 +235,7 @@ export default class AllStoriesPage extends React.Component {
                         <FilterItem onClick={(e) => this.changeSort('trending')} select={this.state.sort === 'trending'}>TRENDING</FilterItem>
                     </FilterContainer>
 
-					{feedCount <= 0 ? 
+					{feedCount <= 0 ?
 						<EmptyStory
 							title="No Story, yet"
 							description={
@@ -252,8 +252,8 @@ export default class AllStoriesPage extends React.Component {
 									?
 								</div>
 							}
-						/> 
-						: 
+						/>
+						:
 						<div>
 
 							{loading ?  this.onload() :
