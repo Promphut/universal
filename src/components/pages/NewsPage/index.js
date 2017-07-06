@@ -184,9 +184,13 @@ class NewsPage extends React.Component {
 
 		this.state = {
 			page: 0,
+			page2: 0,
 			feedCount: 1,
-			feed: [],
+			feedCount2: 1,
+			feedLatest: [],
+			feedTrend: [],
 			hasMoreFeed: true,
+			hasMoreFeed2: true,
 
 			trendingNews: [],
 
@@ -224,31 +228,53 @@ class NewsPage extends React.Component {
 			// ensure this method is called only once at a time
 			if (this.loading === true) return
 			this.loading = true
-
 			let page = this.state.page
 			//console.log('page', page)
-			var sort = this.state.selectTab ? 'trending' : 'latest'
-			api.getFeed('news', { status: 1 }, sort, null, page, this.FEED_LIMIT)
+			api.getFeed('news', { status: 1 }, 'latest', null, page, this.FEED_LIMIT)
 			.then(result => {
-				let feed = this.state.feed.concat(result.feed)
-				this.setState(
-					{
-						page: ++page,
-						feed: feed,
-						feedCount: result.count['1']?result.count['1']:0,
-						hasMoreFeed: feed.length < result.count['1']
-					},
-					() => {
-						this.loading = false
-					}
-				)
+					let feed = this.state.feedLatest.concat(result.feed)
+					this.setState(
+						{
+							page: ++page,
+							feedLatest: feed,
+							feedCount: result.count['1']?result.count['1']:0,
+							hasMoreFeed: feed.length < result.count['1']
+						},
+						() => {
+							this.loading = false
+						}
+					)
+			})
+		}
+	}
+
+	loadFeed2 = () => {
+		return () => {
+			// ensure this method is called only once at a time
+			if (this.loading === true) return
+			this.loading = true
+			let page = this.state.page2
+			//console.log('page', page)
+			api.getFeed('news', { status: 1 }, 'trending', null, page, this.FEED_LIMIT)
+			.then(result => {
+					let feed = this.state.feedTrend.concat(result.feed)
+					this.setState(
+						{
+							page2: ++page,
+							feedTrend: feed,
+							feedCount2: result.count['1']?result.count['1']:0,
+							hasMoreFeed2: feed.length < result.count['1']
+						},
+						() => {
+							this.loading = false
+						}
+					)
 			})
 		}
 	}
 
 	handleChangeTab = e => {
 		this.setState({ selectTab: e })
-		this.loadFeed()
 	}
 
 	componentDidMount() {
@@ -266,8 +292,11 @@ class NewsPage extends React.Component {
 	render() {
 		let {
 			feedCount,
-			feed,
+			feedCount2,
+			feedLatest,
+			feedTrend,
 			hasMoreFeed,
+			hasMoreFeed2,
 			trendingNews,
 			isMobile,
 			selectTab,
@@ -370,8 +399,8 @@ class NewsPage extends React.Component {
 									hasMore={hasMoreFeed}
 									loader={this.onload()}>
 									<div>
-										{feed.map((item, index) => (
-											<NewsBox final= {index == feed.length -1 ? true:false} detail={item} key={index} timeline={true} />
+										{feedLatest.map((item, index) => (
+											<NewsBox final= {index == feedLatest.length -1 ? true:false} detail={item} key={index} timeline={true} />
 										))}
 									</div>
 								</InfiniteScroll>
@@ -381,18 +410,19 @@ class NewsPage extends React.Component {
 								</SeemoreContainer>}
 							</Latest>
 							<Trending>
-								<InfiniteScroll
-									loadMore={this.loadFeed()}
-									hasMore={hasMoreFeed}
+
+								{selectTab==1&&<InfiniteScroll
+									loadMore={this.loadFeed2()}
+									hasMore={hasMoreFeed2}
 									loader={this.onload()}>
 									<div>
-										{feed.map((item, index) => (
-											<NewsBox final= {index == feed.length -1 ? true:false} detail={item} key={index} timeline={false} />
+										{feedTrend.map((item, index) => (
+											<NewsBox final= {index == feedTrend.length -1 ? true:false} detail={item} key={index} timeline={false} />
 										))}
 									</div>
-								</InfiniteScroll>
+								</InfiniteScroll>}
 								
-								{!hasMoreFeed && 
+								{!hasMoreFeed2 && 
 								<SeemoreContainer>
 									<SeeMore url={'/stories/all?type=news&sort=trending&page=1'}/>
 								</SeemoreContainer>}
