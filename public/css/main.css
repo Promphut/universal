@@ -347,6 +347,11 @@ a:hover {
   color: #222;
   text-decoration: none; }
 
+.h1-for-seo {
+  visibility: hidden;
+  z-index: -100;
+  position: absolute; }
+
 /* FOR DESKTOP AND TABLET */
 @media (min-width: 481px) {
   .menu-font {
