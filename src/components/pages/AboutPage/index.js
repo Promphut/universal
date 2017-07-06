@@ -76,7 +76,7 @@ class AboutPage extends React.Component {
 	render() {
 		const { fb, twt } = this.state
 		return (
-			<Wrapper>			
+			<Wrapper>
 			<ContactAndAboutContainer onLoading={this.props.onLoading}>
 				<div>
 					<Head className="title-font">About Us</Head>

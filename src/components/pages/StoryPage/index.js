@@ -23,6 +23,7 @@ import config from '../../../config'
 import utils from '../../../services/utils'
 import auth from 'components/auth'
 import isEmpty from 'lodash/isEmpty'
+import Request from 'superagent'
 
 const Wrapper = styled.div`
 	 .hidden-des{
@@ -75,7 +76,7 @@ const Share = styled.div`
 	}
 `
 
-const LikeBoxContainer = styled.div `
+const LikeBoxContainer = styled.div`
 	width:100%;
 	margin: 0 auto 0 auto;
 	text-align: center;
@@ -145,7 +146,8 @@ class StoryPage extends React.Component {
 		recommends: [],
 		description: '',
 		showTopbarTitle: false,
-		story: {}
+		story: {},
+		fb: 0
 	}
 	static contextTypes = {
 		setting: PropTypes.object
@@ -161,7 +163,9 @@ class StoryPage extends React.Component {
 			let cid = story.column._id
 
 			api
-				.getFeed('story', { status: 1, column: cid }, 'latest', null, 0, 4,{omit : [this.props.match.params.sid]})
+				.getFeed('story', { status: 1, column: cid }, 'latest', null, 0, 4, {
+					omit: [this.props.match.params.sid]
+				})
 				.then(result => {
 					//console.log('feed', result.feed.length)
 					this.setState({
@@ -173,7 +177,9 @@ class StoryPage extends React.Component {
 			let uid = story.writer._id
 
 			api
-				.getFeed('story', { status: 1, writer: uid }, 'latest', null, 0, 4,{omit : [this.props.match.params.sid]})
+				.getFeed('story', { status: 1, writer: uid }, 'latest', null, 0, 4, {
+					omit: [this.props.match.params.sid]
+				})
 				.then(result => {
 					//console.log('feed', result.feed.length)
 					this.setState({
@@ -221,6 +227,16 @@ class StoryPage extends React.Component {
 			//this.findDescription()
 		})
 		window.addEventListener('scroll', this.handleScroll)
+
+		Request.get(
+			'https://graph.facebook.com/?id=' +
+				config.FRONTURL +
+				this.props.location.pathname
+		).end((er, res) => {
+			const fb = res ? res.body.share.share_count : 0
+			//console.log(res.body)
+			this.setState({ fb })
+		})
 	}
 
 	componentWillUnmount() {
@@ -239,17 +255,18 @@ class StoryPage extends React.Component {
 	render() {
 		const isMobile = utils.isMobile()
 		let { keywords, channels } = this.context.setting.publisher
-		let { recommends, description, showTopbarTitle, story } = this.state
+		let { recommends, description, showTopbarTitle, story, fb } = this.state
 		//console.log(story.shares)
 		let hasCover = false
 		if (!isEmpty(story)) {
-			if (isMobile){
-				if (story.coverMobile.medium !=
-						config.BACKURL + '/imgs/article_cover_portrait.png'
+			if (isMobile) {
+				if (
+					story.coverMobile.medium !=
+					config.BACKURL + '/imgs/article_cover_portrait.png'
 				) {
 					hasCover = true
 				}
-			}else{
+			} else {
 				if (
 					story.cover.medium !=
 					config.BACKURL + '/imgs/article_cover_landscape.png'
@@ -302,7 +319,7 @@ class StoryPage extends React.Component {
 							<Share ref="share" style={{ zIndex: '50' }}>
 								<Stick topOffset={100}>
 									<ShareSideBar
-										shareCount={story.shares ? story.shares.total : 0}
+										shareCount={story.shares ? story.shares.total + fb : 0 + fb}
 									/>
 								</Stick>
 							</Share>
@@ -310,27 +327,39 @@ class StoryPage extends React.Component {
 							<Main ref={'TT'} isMobile={isMobile}>
 								<StoryDetail story={story} />
 								<LikeBoxContainer>
-									<div dangerouslySetInnerHTML={{ __html: `<div class="fb-page" data-href="https://www.facebook.com/${config.FACEBOOK}" data-tabs="timeline" data-width="500" data-height="210" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/${config.FACEBOOK}/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/${config.FACEBOOK}/">${config.NAME}</a></blockquote></div>` }}></div>
+									<div
+										dangerouslySetInnerHTML={{
+											__html: `<div class="fb-page" data-href="https://www.facebook.com/${config.FACEBOOK}" data-tabs="timeline" data-width="500" data-height="210" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/${config.FACEBOOK}/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/${config.FACEBOOK}/">${config.NAME}</a></blockquote></div>`
+										}}
+									/>
 								</LikeBoxContainer>
 							</Main>
 
 							<Aside id="trendingBar" ref="trendingBar">
 
-									<TrendingSideBar sid={story._id} />
-									<div dangerouslySetInnerHTML={{ __html: `<div class="fb-page" data-href="https://www.facebook.com/${config.FACEBOOK}/" data-tabs="timeline" data-height="700" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/${config.FACEBOOK}/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/${config.FACEBOOK}/">${config.NAME}</a></blockquote></div>` }}></div>
+								<TrendingSideBar sid={story._id} />
+								<div
+									dangerouslySetInnerHTML={{
+										__html: `<div class="fb-page" data-href="https://www.facebook.com/${config.FACEBOOK}/" data-tabs="timeline" data-height="700" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/${config.FACEBOOK}/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/${config.FACEBOOK}/">${config.NAME}</a></blockquote></div>`
+									}}
+								/>
 
 							</Aside>
 
-							
+							<NextStory
+								cid={story.column._id}
+								currentID={story._id}
+								format={story.format}
+							/>
 						</Content>
-						
+
 						<Content>
 							{recommends.length != 0 &&
 								<RecommendContainer recommend={recommends} />}
 						</Content>
-							<NextStory cid = {story.column._id} currentID = {story._id} format = {story.format}/>
+
 						{/*<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800" />*/}
-						<Footer isStoryPage = {true}/>
+						<Footer />
 					</Wrapper>
 				</div>
 			)

@@ -247,6 +247,25 @@ app.get('/sitemap.xml', (req, res)=> {
   });
 });
 
+app.get('/robots.txt', (req, res) => {
+	let robotTxt = ''
+
+	if(process.env.NODE_ENV === 'production') 
+		robotTxt = 
+`User-agent: *
+Disallow: /me/*
+Disallow: /editor
+Disallow: /editor/*
+Sitemap: ${FRONTURL}/sitemap.xml`
+	else 
+		robotTxt = 
+`User-agent: *
+Disallow: /
+Sitemap: ${FRONTURL}/sitemap.xml`
+
+	res.send(robotTxt)
+})
+
 app.get(['/feed', '/feed/rss', '/rss'],(req,res) => {
 	let type = req.query.type || 'article'
 	api.getFeed(type.toLowerCase() ,{ status: 1 },'latest',null,null,20,{'rss' :true}).then(result => {
