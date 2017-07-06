@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import TextField from 'material-ui/TextField'
 import trim from 'lodash/trim'
 import config from '../../../config'
+import PropTypes from 'prop-types'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -40,23 +41,33 @@ const Button = styled.div`
 
 const SearchButtonIcon = styled.i`
   transition: 0.2;
+  color: ${props => props.theme.barTone=='light'?'#222':'white'};
 `
 
-const styles = {
-  hintStyle: {
-    color: 'rgba(255,255,255,0.7)',
-    fontWeight: 'normal',
-  },
-  inputStyle: {
-      color: 'rgb(0,255,255)'
-  },
-  textareaStyle: {
-      width: '180px',
-      color: 'rgb(0,255,255)',
-  }
+const getStyles = (name,theme) => {
+    if(name=='hintStyle')
+        return {
+            color: 'light' ? '#222':'white',
+            fontWeight: 'normal'
+        }
+    else if(name=='inputStyle')
+        return {
+            color: 'light' ? '#222':'white',
+        }
+    else if(name=='textareaStyle')
+        return {
+            width: '180px',
+            color: 'light' ? '#222':'white',
+        }
 }
 
 const muiTheme = getMuiTheme({
+  palette: {
+    textColor: '#222',
+  },
+});
+
+const muiTheme2 = getMuiTheme({
   palette: {
     textColor: '#ffffff',
   },
@@ -72,10 +83,14 @@ class SearchButton extends React.Component {
         }
     }
 
+    static contextTypes = {
+		setting: PropTypes.object
+	}
+
     handleClick = (e) => {
         if(this.state.focus && trim(this.state.text).length != 0)  {
             this.setState({focus: !this.state.focus})
-            window.open('http://localhost:3000/search/stories/' + trim(this.state.text), "_top")
+            window.open(config.FRONTURL + '/search/stories?keyword=' + trim(this.state.text), "_top")
         }
         else if(this.state.focus) this.setState({focus: true})
         else this.setState({focus: !this.state.focus})
@@ -92,9 +107,9 @@ class SearchButton extends React.Component {
 	}
 
     render() {
+        let { theme } = this.context.setting.publisher
         return(
-            // <Link to={'/search/news/fsfsf'}>
-            <MuiThemeProvider muiTheme={muiTheme}>
+            <MuiThemeProvider muiTheme={theme.barTone=='light' ? muiTheme : muiTheme2}>
                 <ButtonContainer>
                     <Button>
                         <SearchButtonIcon id="bt" className="fa fa-search" aria-hidden="true"></SearchButtonIcon>
@@ -103,18 +118,19 @@ class SearchButton extends React.Component {
                         <TextField
                             id="textField"
                             hintText="Search Stories"
-                            hintStyle={styles.hintStyle}
-                            inputStyle={styles.inputStyle}
-                            style={styles.textareaStyle}
-                            textareaStyle={styles.textareaStyle}
-                            floatingLabelFocusStyle={styles.inputStyle}
+                            hintStyle={getStyles('hintStyle',theme.barTone)}
+                            inputStyle={getStyles('inputStyle',theme.barTone)}
+                            style={getStyles('textareaStyle',theme.barTone)}
+                            textareaStyle={getStyles('textareaStyle',theme.barTone)}
+                            floatingLabelFocusStyle={getStyles('inputStyle',theme.barTone)}
+                            underlineFocusStyle={{borderColor: theme.accentColor}}
                             value={this.state.text}
                             onChange={this.handleChange}
                             onKeyPress={(ev) => {
                                 if (ev.key === 'Enter' && trim(this.state.text).length != 0) {
                                     // Do code here
                                     {/*alert(this.state.text)*/}
-                                    window.open(config.FRONTURL + '/search/stories/' + trim(this.state.text), "_top")
+                                    window.open(config.FRONTURL + '/search/stories?keyword=' + trim(this.state.text), "_top")
                                     ev.preventDefault();
                                 } else if (ev.key === 'Enter') this.setState({text: ''})
                             }}

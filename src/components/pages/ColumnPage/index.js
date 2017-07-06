@@ -266,7 +266,7 @@ class ColumnPage extends React.Component {
 	}
 
 	changePage = e => {
-		this.props.history.push({ hash: this.props.location.hash ,search: "?page=" + e })
+		this.props.history.push({ search: "?page=" + e })
 		this.setState({ currentPage: e - 1}, () => {
 			document.body.scrollTop = document.documentElement.scrollTop = 400
 			this.reloadFeed()
@@ -403,7 +403,7 @@ class ColumnPage extends React.Component {
 												<div>
 													There are no more stories in this page. Go back to
 													<Link
-														to={"/stories/" + this.state.column.slug + "?page=1"+this.props.location.hash}
+														to={"/stories/" + this.state.column.slug + "?page=1"}
 														style={{
 															color: theme.accentColor,
 															padding: '0 0.5em 0 0.5em'

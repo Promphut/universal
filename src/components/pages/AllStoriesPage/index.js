@@ -183,7 +183,7 @@ export default class AllStoriesPage extends React.Component {
 	}
 
     changePage = e => {
-        this.props.history.push({ hash: this.props.location.hash ,search: "?type=" + this.state.type  + "&sort="+ this.state.sort + "&page=" + e})
+        this.props.history.push({ search: "?type=" + this.state.type  + "&sort="+ this.state.sort + "&page=" + e})
         this.setState({ currentPage: e - 1}, () => {
             this.getAllFeed()
         })
@@ -191,7 +191,7 @@ export default class AllStoriesPage extends React.Component {
 
     changeSort = sort => {
 		if(sort != this.state.sort){
-			this.props.history.push({ hash: this.props.location.hash ,search: "?type=" + this.state.type  + "&sort="+ sort + "&page=" + 1})
+			this.props.history.push({ search: "?type=" + this.state.type  + "&sort="+ sort + "&page=" + 1})
 			this.setState({ currentPage: 0, sort: sort}, () => {
 				this.getAllFeed()
 			})

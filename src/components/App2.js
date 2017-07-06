@@ -129,7 +129,7 @@ class App2 extends React.Component {
 			//this.timer = setTimeout(() => this.progress(10), 100); //loading
 			// if pushing for the next path, gen hash
 			//console.log('CASE 3')
-			if (nextProps.location.pathname !== this.props.location.pathname)
+			if (nextProps.location.pathname !== this.props.location.pathname || nextProps.location.search !== this.props.location.search )
 				return this.genHash(nextProps)
 			// if reclick the same url
 			// if(this.props.location.hash && !nextProps.location.hash) {
@@ -268,7 +268,7 @@ class App2 extends React.Component {
 								{/* STORY 2: HAVE COLUMN */ }
 								<Route exact path='/stories/:columnSlug/:storySlug/:sid' render={props => <StoryPage {...props} countView={true}/>} />
 
-								<Route exact path='/search/:type/:keyword' component={SearchResultPage}/>
+								<Route exact path='/search/:type' component={SearchResultPage}/>
 
 								<Route exact path='/about' component={AboutPage} />
 								<Route exact path='/contact' component={ContactPage} />

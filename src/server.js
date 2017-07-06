@@ -85,7 +85,11 @@ const extractMeta = (setting, url) => {
 		})
 	} else if (path[1] && path[1].substring(0, 1) === '@') {
 		// 3. User case with username
-		let user = decodeURIComponent(path[1].substring(1))
+		let user
+		if(path[1].indexOf("?") != -1)
+			user = decodeURIComponent(path[1].substring(1,path[1].indexOf("?")))
+		else
+			user = decodeURIComponent(path[1].substring(1))
 		return api.getUserFromUsername(user)
 		.then(u => {
 			if(u.display) meta.name = u.display + ' | ' + setting.publisher.name
@@ -95,7 +99,12 @@ const extractMeta = (setting, url) => {
 		})
 	} else if (path[1] === 'u') {
 		// 4. User case with user id
-		const uid = path[2]
+		let uid
+		if(path[2].indexOf("?") != -1)
+			uid = path[2].substring(path[2].indexOf("?"))
+		else
+			uid = path[2]
+		path[2].substring(1,path[1].indexOf("?"))
 		return api.getUser(uid)
 		.then(u => {
 			if(u.display) meta.name = u.display + ' | ' + setting.publisher.name
