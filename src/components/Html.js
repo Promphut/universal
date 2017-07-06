@@ -116,7 +116,7 @@ const Html = ({ styles, assets, content, meta }) => {
   const htmlAttrs = helmet.htmlAttributes.toComponent()
   const bodyAttrs = helmet.bodyAttributes.toComponent()
   var {name, keywords, desc, cover, analytic, url} = meta
-  console.log('meta',meta)
+  //console.log('meta',meta)
   return (
     <html {...htmlAttrs}>
       <head>
