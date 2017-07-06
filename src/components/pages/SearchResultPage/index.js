@@ -138,7 +138,7 @@ export default class SearchResultPage extends React.Component {
         <Content>
 
           <Main>
-            <TextField id="search-box" hintText="Search Keyword Here" autoFocus={true} fullWidth={true} value={this.state.keyword} style={{fontSize:'28px'}} onChange={(e)=>this.handleKeywordChange(e)}/>
+            <TextField id="search-box" hintText="ค้นหา" autoFocus={true} fullWidth={true} value={this.state.keyword} style={{fontSize:'28px'}} onChange={(e)=>this.handleKeywordChange(e)}/>
             <FilterContainer>
               <Link to={"/search/stories/" + this.state.keyword}><FilterItem select={this.state.type === 'stories'}>STORIES</FilterItem></Link>
               <Link to={"/search/news/" + this.state.keyword}><FilterItem select={this.state.type === 'news'}>NEWS</FilterItem></Link>
