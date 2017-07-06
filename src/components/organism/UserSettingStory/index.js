@@ -11,8 +11,8 @@ import DropDownMenu from 'material-ui/DropDownMenu';
 import {Link} from 'react-router-dom'
 import CircularProgress from 'material-ui/CircularProgress';
 import moment from 'moment'
-import auth from 'components/auth'
-import api from 'components/api'
+import auth from '../../../services/auth'
+import api from '../../../services/api'
 import utils from '../../../services/utils'
 import config from '../../../config'
 

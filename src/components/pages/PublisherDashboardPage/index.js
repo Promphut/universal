@@ -4,7 +4,7 @@ import { GraphDashboard, TopRank } from 'components'
 import Divider from 'material-ui/Divider'
 import FlatButton from 'material-ui/FlatButton'
 import { Link } from 'react-router-dom'
-import api from 'components/api'
+import api from '../../../services/api'
 
 const Container = styled.div`
 `

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import api from 'components/api'
+import api from '../../../services/api'
 import utils from '../../../services/utils'
 import config from '../../../config'
 import { withRouter } from 'react-router'

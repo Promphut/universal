@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
 import utils from '../../../services/utils'
-import auth from 'components/auth'
+import auth from '../../../services/auth'
 
 let toSigninPage = (props) => <Redirect to={{
 	pathname: '/signin',

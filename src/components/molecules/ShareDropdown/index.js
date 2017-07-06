@@ -5,7 +5,7 @@ import FontIcon from 'material-ui/FontIcon'
 import FlatButton from 'material-ui/FlatButton'
 import {Dropdown,TwtShareButton, FbShareButton, InShareButton, LineShareButton, LineIcon} from 'components'
 import CopyToClipboard from 'react-copy-to-clipboard'
-import api from 'components/api'
+import api from '../../../services/api'
 import config from '../../../config'
 import utils from '../../../services/utils'
 

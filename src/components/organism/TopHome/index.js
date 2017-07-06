@@ -10,7 +10,7 @@ import {
 } from 'components'
 import styled, { keyframes } from 'styled-components'
 import { Link } from 'react-router-dom'
-import api from 'components/api'
+import api from '../../../services/api'
 
 const MiniBoxDark = styled.div`
 	flex:1;

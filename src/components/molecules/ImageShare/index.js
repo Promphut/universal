@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
 import CopyToClipboard from 'react-copy-to-clipboard'
-import api from 'components/api'
+import api from '../../../services/api'
 import utils from '../../../services/utils'
 import config from '../../../config'
 

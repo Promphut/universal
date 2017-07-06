@@ -1,8 +1,8 @@
 import React from 'react'
 import { OverlayImg, PublisherContact, PublisherAbout } from 'components'
 import styled from 'styled-components'
-import api from 'components/api'
-import auth from 'components/auth'
+import api from '../../../services/api'
+import auth from '../../../services/auth'
 
 const Container = styled.div`
   width:100%;

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import {TagBox} from 'components'
 import {findDOMNode as dom} from 'react-dom'
 //import Request from 'superagent'
-import api from 'components/api'
+import api from '../../../services/api'
 
 const Container = styled.div`
   width:100%; 

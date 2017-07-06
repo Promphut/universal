@@ -5,8 +5,8 @@ import styled from 'styled-components'
 import {PrimaryButton} from 'components'
 import TextField from 'material-ui/TextField';
 import {findDOMNode as dom}from 'react-dom';
-import auth from 'components/auth'
-import api from 'components/api'
+import auth from '../../../services/auth'
+import api from '../../../services/api'
 import { withRouter } from 'react-router'
 
 const Box = styled.div`
