@@ -98,7 +98,7 @@ const TextLine = styled.div`
 	padding-bottom:11px;
 `
 
-const ColumnName = styled.h1`
+const ColumnName = styled.div`
   color:#fff;
   font-size:48px;
   font-weight:bold;
@@ -109,7 +109,7 @@ const ColumnName = styled.h1`
   }
 `
 
-const ColumnDetail = styled.h2`
+const ColumnDetail = styled.div`
 	color:#fff;
   font-size:16px;
 	font-family:'Mitr';

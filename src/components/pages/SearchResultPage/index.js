@@ -26,7 +26,7 @@ const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
-	padding: 116px 0 0 0;
+	padding: 30px 0 0 0;
 	min-height: calc(100vh - ${props => (props.isMobile ? '261px' : '261px')});
 
 	@media (max-width:480px) {
@@ -53,6 +53,29 @@ const Main = styled.div`
 			display: flex !important;
 	  }
 	}
+`
+
+const Aside = styled.div`
+	//max-width: 255px;
+	flex: 1 300px;
+	max-width: 300px;
+	margin-left:60px;
+	z-index: 9;
+	@media (max-width: 1160px) {
+		display:none;
+	}
+`
+
+const Feed = styled.div`
+	flex: 12 1120px;
+	max-width: 1120px;
+	display:flex;
+	margin-top: 70px;
+	@media (max-width:480px) {
+    flex: 0 100%;
+		max-width: 100%;
+		padding:0 15px 0 15px;
+  }
 `
 
 const FilterContainer = styled.ul `
@@ -111,7 +134,7 @@ export default class SearchResultPage extends React.Component {
 	}
 
   fetchResult = (keyword, type) => {
-		if(!_.isEmpty(keyword)){
+		if(!isEmpty(keyword)){
 		  api.getStoryFromKeyword(keyword, type)
 		  .then(result => {
 		    this.setState({
@@ -137,8 +160,9 @@ export default class SearchResultPage extends React.Component {
         <TopBarWithNavigation/>
         <Content>
 
-          <Main>
-            <TextField id="search-box" hintText="Search Keyword Here" autoFocus={true} fullWidth={true} value={this.state.keyword} style={{fontSize:'28px'}} onChange={(e)=>this.handleKeywordChange(e)}/>
+					<Feed><TextField id="search-box" hintText="ค้นหา" autoFocus={true} fullWidth={true} value={this.state.keyword} style={{fontSize:'35px'},{fontFamily: "'Nunito', 'Mitr'"}} onChange={(e)=>this.handleKeywordChange(e)}/></Feed>
+
+					<Main>
             <FilterContainer>
               <Link to={"/search/stories/" + this.state.keyword}><FilterItem select={this.state.type === 'stories'}>STORIES</FilterItem></Link>
               <Link to={"/search/news/" + this.state.keyword}><FilterItem select={this.state.type === 'news'}>NEWS</FilterItem></Link>
@@ -147,8 +171,9 @@ export default class SearchResultPage extends React.Component {
             <SearchResultBox type={this.state.type} result={this.state.result}/>
           </Main>
 
-        </Content>
+					<Aside></Aside>
 
+        </Content>
         <Footer />
       </Wrapper>
     )
