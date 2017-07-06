@@ -282,7 +282,7 @@ class ColumnPage extends React.Component {
 			this.getColumnFromSlug(nextProps.match.params.columnSlug, this.reloadFeed)
 			//this.reloadFeed()
 		} else if(nextProps.location.search != this.props.location.search){
-			this.setState({currentPage : utils.querystring('page',this.props.location)},()=>{
+			this.setState({currentPage : utils.querystring('page',this.props.location) - 1},()=>{
 				document.body.scrollTop = document.documentElement.scrollTop = 0
 				this.reloadFeed()
 			})
