@@ -433,7 +433,7 @@ class UserStory extends React.Component {
 			this.getUserFromUid(nextProps.match.params.uid, this.reloadFeed)
 			//this.reloadFeed()
 		} else if(nextProps.location.search != this.props.location.search){
-			this.setState({currentPage : utils.querystring('page',this.props.location)},()=>{
+			this.setState({currentPage : utils.querystring('page',this.props.location) - 1},()=>{
 				document.body.scrollTop = document.documentElement.scrollTop = 0
 				this.reloadFeed()
 			})
@@ -443,7 +443,6 @@ class UserStory extends React.Component {
 	render() {
 		let { theme } = this.context.setting.publisher
 		let { user, isMobile, feedCount, feed, currentPage, totalPages, loading } = this.state
-		console.log(currentPage, totalPages)
 		return (
 			<Wrapper>
 				<Helmet>
