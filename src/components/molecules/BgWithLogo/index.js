@@ -14,7 +14,7 @@ const BG = styled(BGImg)`
     height:200px;
   }
 `
-const Tagline = styled.h1`
+const Tagline = styled.div`
 	font-size:20px;
   font-weight:normal;
 	margin:0 auto 0 auto;

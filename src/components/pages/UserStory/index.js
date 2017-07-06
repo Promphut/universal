@@ -9,7 +9,8 @@ import {
 	StoryMenu,
 	EmptyStory,
 	Footer,
-	BackToTop
+	BackToTop,
+	Pagination
 } from 'components'
 import { findDOMNode as dom } from 'react-dom'
 import { Link } from 'react-router-dom'
@@ -33,7 +34,7 @@ const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
-	padding: 25px 0 50px 0;
+	padding: 25px 0 20px 0;
 	min-height: calc(100vh - 421px);
 `
 
@@ -190,6 +191,13 @@ const LinkMobile = styled.a`
 	font-size: 20px;
 `
 
+const Page = styled.div`
+    display: flex;
+        flex-flow: row wrap;
+        justify-content: center;
+    padding:30px 0 30px 0;
+`
+
 const UserDetail = ({ style, user, checkBack }) => {
 	const backStyle = {
 		color: '#FFF',
@@ -289,18 +297,22 @@ class UserStory extends React.Component {
 		//isInfiniteLoading: true,
 		//loadOffset:300,
 		//feedCount:0,
-		page: 0,
-		feedCount: 1,
-		feed: [],
-		hasMoreFeed: true,
-
 		user: {
 			channels: {},
 			pic: {}
 		},
+		isMobile: false,
 
-		isMobile: false
+		currentPage: utils.querystring('page',this.props.location) ? utils.querystring('page',this.props.location) - 1 : 0,
+		feedCount: 1,
+		feed: [],
+		totalPages: 0,
+
+		loading: false,
 	}
+
+	FEED_LIMIT = config.FEED_LIMIT
+
 	static contextTypes = {
 		setting: PropTypes.object
 	}
@@ -321,46 +333,55 @@ class UserStory extends React.Component {
 			</div>
 		</Onload>
 	)
+
 	reloadFeed = () => {
 		this.setState(
 			{
-				page: 0,
+				currentPage: utils.querystring('page',this.props.location) ? utils.querystring('page',this.props.location) - 1 : 0,
 				feedCount: 1,
 				feed: [],
-				hasMoreFeed: true
+				totalPages: 0,
 			},
 			() => {
 				this.loadFeed(this.state.user._id)()
 			}
 		)
 	}
+
 	loadFeed = uid => {
 		return () => {
 			if (uid == null) return
 			// ensure this method is called only once at a time
-			if (this.loading === true) return
-			this.loading = true
+			if (this.state.loading === true) return
+			this.state.loading = true
 
-			let page = this.state.page
+			let currentPage = this.state.currentPage
 			//console.log('page', page)
 			//console.log('UID', uid)
 			api
-				.getFeed('story', { writer: uid, status: 1 }, 'latest', null, page, 15)
+				.getFeed('story', { writer: uid, status: 1 }, 'latest', null, currentPage, this.FEED_LIMIT)
 				.then(result => {
 					let feed = this.state.feed.concat(result.feed)
 					this.setState(
 						{
-							page: ++page,
 							feed: feed,
-							feedCount: result.count['1']?result.count['1']:0,
-							hasMoreFeed: feed.length < result.count['1']
+							feedCount: result.count['total'] ? result.count['total'] : 0,
+							totalPages: utils.getTotalPages(this.FEED_LIMIT, result.count['total']),
 						},
 						() => {
-							this.loading = false
+							this.setState({loading : false})
 						}
 					)
 				})
 		}
+	}
+
+	changePage = e => {
+		this.props.history.push({ hash: this.props.location.hash ,search: "?page=" + e })
+		this.setState({ currentPage: e - 1}, () => {
+			document.body.scrollTop = document.documentElement.scrollTop = 0
+			this.reloadFeed()
+		})
 	}
 
 	getUserFromUsername = (username, done = () => {}) => {
@@ -394,9 +415,9 @@ class UserStory extends React.Component {
 	componentDidMount() {
 		let username, uid
 		if ((username = this.props.match.params.username)) {
-			this.getUserFromUsername(username)
+			this.getUserFromUsername(username, this.reloadFeed)
 		} else if ((uid = this.props.match.params.uid)) {
-			this.getUserFromUid(uid)
+			this.getUserFromUid(uid, this.reloadFeed)
 		}
 
 		this.setState({
@@ -405,23 +426,24 @@ class UserStory extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		//console.log('COL', nextProps, this.props)
 		if (nextProps.match.params.username != this.props.match.params.username) {
-			//console.log('RELOAD FEED')
 			this.getUserFromUsername(nextProps.match.params.username, this.reloadFeed)
 			//this.reloadFeed()
 		} else if (nextProps.match.params.uid != this.props.match.params.uid) {
-			//console.log('RELOAD FEED')
 			this.getUserFromUid(nextProps.match.params.uid, this.reloadFeed)
 			//this.reloadFeed()
+		} else if(nextProps.location.search != this.props.location.search){
+			this.setState({currentPage : utils.querystring('page',this.props.location)},()=>{
+				document.body.scrollTop = document.documentElement.scrollTop = 0
+				this.reloadFeed()
+			})
 		}
 	}
 
 	render() {
 		let { theme } = this.context.setting.publisher
-		let { user, isMobile } = this.state
-		let { feedCount, feed, hasMoreFeed } = this.state
-		//console.log(feed)
+		let { user, isMobile, feedCount, feed, currentPage, totalPages, loading } = this.state
+		console.log(currentPage, totalPages)
 		return (
 			<Wrapper>
 				<Helmet>
@@ -469,16 +491,42 @@ class UserStory extends React.Component {
 									{/*<span style={{fontSize:'30px'}}>101</span> Upvotes*/}
 								</TextLine>
 
-								<InfiniteScroll
-									loadMore={this.loadFeed(user._id)}
-									hasMore={hasMoreFeed}
-									loader={this.onload()}>
+								{loading ?  this.onload() : 
 									<div>
-										{feed.map((item, index) => (
-											<ArticleBox detail={item} key={index} />
-										))}
-									</div>
-								</InfiniteScroll>
+										{feed && currentPage >= 0 &&
+											feed.map((item, index) => (
+												<ArticleBox final={index == feed.length -1 ? true:false} detail={item} key={index} />
+											))}
+									</div> 
+								}
+
+								<Page>
+									{totalPages > 0 && ((totalPages > currentPage && currentPage >= 0) ?
+										<Pagination
+											currentPage={currentPage + 1}
+											totalPages={totalPages}
+											onChange={this.changePage}/>
+										:
+										<EmptyStory
+											title="No More Story"
+											description={
+												<div>
+													There are no more stories in this page. Go back to
+													<Link
+														to={user.url+"?page=1"+this.props.location.hash}
+														style={{
+															color: theme.accentColor,
+															padding: '0 0.5em 0 0.5em'
+														}}>
+														first page
+													</Link>
+													?
+												</div>
+											}
+											hideButton={true}
+										/>)
+									}
+								</Page>
 							</Main>}
 				</Content>
 				<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="600" />

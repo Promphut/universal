@@ -116,7 +116,7 @@ const Html = ({ styles, assets, content, meta }) => {
   const htmlAttrs = helmet.htmlAttributes.toComponent()
   const bodyAttrs = helmet.bodyAttributes.toComponent()
   var {name, keywords, desc, cover, analytic, url} = meta
-  console.log('meta',meta)
+  //console.log('meta',meta)
   return (
     <html {...htmlAttrs}>
       <head>
@@ -149,16 +149,22 @@ const Html = ({ styles, assets, content, meta }) => {
 
         {assets.css.map(path => <link rel="stylesheet" type="text/css" key={path} href={path} />)}
         {styles}
-        {/*<style dangerouslySetInnerHTML={{ __html: styles }} />*/}
+        
+        <link rel="stylesheet"  href='https://fonts.googleapis.com/icon?family=Material+Icons' />
+        <link rel="stylesheet"  href='https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css' />
+        <link rel="stylesheet"  href='https://fonts.googleapis.com/css?family=Mitr|Nunito|PT+Sans|PT+Serif:400,700,700i|Roboto|Roboto+Slab' />
 
         <script dangerouslySetInnerHTML={{ __html: quantcast.headScript }} />
+        <script src='https://use.fontawesome.com/3df470c471.js'/>
       </head>
       <body {...bodyAttrs}>
         <noscript dangerouslySetInnerHTML={{ __html: ggTag.iframe }}></noscript>
         <div id="fb-root"></div>
         <script dangerouslySetInnerHTML={{ __html: facebookSdk }} />
 
-
+        <h1 className='h1-for-seo'>{name}</h1>
+        <h2 className='h1-for-seo'>{desc}</h2>
+        <h3 className='h1-for-seo'>{keywords}</h3>
         <main id="app" dangerouslySetInnerHTML={{ __html: content }} />
 
         {assets.js.map(path => <script key={path} src={path} />)}

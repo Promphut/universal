@@ -246,6 +246,15 @@ app.get('/sitemap.xml', (req, res)=> {
       res.send( xml );
   });
 });
+app.get('/robots.txt', (req, res) => {
+	res.send(`
+User-agent: *
+Disallow: /me/*
+Disallow: /editor
+Disallow: /editor/*
+Sitemap: ${FRONTURL}/sitemap.xml
+	`)
+})
 
 app.get(['/feed', '/feed/rss', '/rss'],(req,res) => {
 	let type = req.query.type || 'article'

@@ -1,6 +1,6 @@
 {
   "name": "ThePublisher",
-  "version": "1.3.4",
+  "version": "1.3.5",
   "private": true,
   "main": "dist/server",
   "scripts": {
@@ -19,7 +19,7 @@
     "build:clean": "rimraf \"dist/!(.git*|Procfile)**\"",
     "build:copy": "copyfiles public/* public/**/* dist",
     "prebuild": "npm run build:clean && npm run build:copy",
-    "build": "webpack"
+    "build": "webpack -p"
   },
   "jest": {
     "moduleDirectories": [

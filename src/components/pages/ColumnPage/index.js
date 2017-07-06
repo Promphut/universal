@@ -98,7 +98,7 @@ const TextLine = styled.div`
 	padding-bottom:11px;
 `
 
-const ColumnName = styled.h1`
+const ColumnName = styled.div`
   color:#fff;
   font-size:48px;
   font-weight:bold;
@@ -109,7 +109,7 @@ const ColumnName = styled.h1`
   }
 `
 
-const ColumnDetail = styled.h2`
+const ColumnDetail = styled.div`
 	color:#fff;
   font-size:16px;
 	font-family:'Mitr';
@@ -281,6 +281,11 @@ class ColumnPage extends React.Component {
 		if (nextProps.match.params.columnSlug != this.props.match.params.columnSlug) {
 			this.getColumnFromSlug(nextProps.match.params.columnSlug, this.reloadFeed)
 			//this.reloadFeed()
+		} else if(nextProps.location.search != this.props.location.search){
+			this.setState({currentPage : utils.querystring('page',this.props.location)},()=>{
+				document.body.scrollTop = document.documentElement.scrollTop = 0
+				this.reloadFeed()
+			})
 		}
 	}
 
@@ -379,7 +384,7 @@ class ColumnPage extends React.Component {
 												<div>
 													There are no more stories in this page. Go back to
 													<Link
-														to={"/stories/" + this.state.column.slug + "?page=1"}
+														to={"/stories/" + this.state.column.slug + "?page=1"+this.props.location.hash}
 														style={{
 															color: theme.accentColor,
 															padding: '0 0.5em 0 0.5em'

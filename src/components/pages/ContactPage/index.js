@@ -31,7 +31,7 @@ const DropdownContent = styled.div`
   max-width: 90%;
 `
 
-const Head = styled.h1`
+const Head = styled.div`
   font-size: 36px;
   font-weight: bold;
   margin-bottom: 0px;

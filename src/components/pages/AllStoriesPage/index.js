@@ -260,7 +260,7 @@ export default class AllStoriesPage extends React.Component {
 								<div>
 									{feed && currentPage >= 0 &&
 										feed.map((item, index) => (
-											<ArticleBox detail={item} key={index} />
+											<ArticleBox final={index == feed.length -1 ? true:false} detail={item} key={index} />
 										))}
 								</div>
 							}
