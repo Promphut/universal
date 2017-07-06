@@ -86,24 +86,10 @@ export default class SearchResultPage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      keyword: '',
-      type: '',
+      keyword: this.props.keyword || '',
+      type: this.props.type || '',
+			throttle: 200,
       result: null
-    }
-  }
-
-  fetchResult = (keyword, type) => {
-    if(!_.isEmpty(keyword) && keyword.length >= 3){
-      api.getStoryFromKeyword(keyword, type)
-      .then(result => {
-        this.setState({
-          keyword: keyword,
-          type: type,
-          result: result.stories
-        });
-      })
-    } else {
-      this.setState({result: null});
     }
   }
 
@@ -118,8 +104,31 @@ export default class SearchResultPage extends React.Component {
 		this.fetchResult(this.state.keyword, this.state.type)
 	}
 
+	componentWillReceiveProps (nextProps) {
+		this.setState({
+			type: nextProps.match.params.type
+		})
+	}
+
+  fetchResult = (keyword, type) => {
+		if(!_.isEmpty(keyword)){
+		  api.getStoryFromKeyword(keyword, type)
+		  .then(result => {
+		    this.setState({
+		      result: result.stories
+		    });
+		  })
+		}
+  }
+
   handleKeywordChange = (e) => {
-		this.fetchResult(e.target.value, this.state.type)
+		this.setState({keyword: e.target.value}, () => {
+			if (this._throttleTimeout) clearTimeout(this._throttleTimeout)
+
+			this._throttleTimeout = setTimeout (
+				() => this.fetchResult(this.state.keyword, this.state.type), this.props.throttle
+			)
+		})
   }
 
   render() {
@@ -129,7 +138,7 @@ export default class SearchResultPage extends React.Component {
         <Content>
 
           <Main>
-            <TextField id="search-box" hintText="Search Keyword Here" autoFocus={true} fullWidth={true} value={this.state.keyword} style={{fontSize:'28px'}} onChange={this.handleKeywordChange}/>
+            <TextField id="search-box" hintText="Search Keyword Here" autoFocus={true} fullWidth={true} value={this.state.keyword} style={{fontSize:'28px'}} onChange={(e)=>this.handleKeywordChange(e)}/>
             <FilterContainer>
               <Link to={"/search/stories/" + this.state.keyword}><FilterItem select={this.state.type === 'stories'}>STORIES</FilterItem></Link>
               <Link to={"/search/news/" + this.state.keyword}><FilterItem select={this.state.type === 'news'}>NEWS</FilterItem></Link>
