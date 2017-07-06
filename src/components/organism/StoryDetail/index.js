@@ -28,7 +28,7 @@ const Wraper = styled(EditorCss)`
   }
 `
 
-const Head = styled.h1`
+const Head = styled.div`
   font-size:36px;
   font-Weight:bold;
   white-space: pre-wrap;      /* Webkit */

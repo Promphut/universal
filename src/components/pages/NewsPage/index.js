@@ -84,7 +84,7 @@ const Aside = styled.div`
 		display:none;
 	}
 `
-const Text = styled.h2`
+const Text = styled.div`
 	color:#8E8E8E;
 	font-size:16px;
 	font-weight:normal;
@@ -132,7 +132,7 @@ const Trending = styled.div`
 	margin:30px 0 0 0;
 `
 
-const Head = styled.h1`
+const Head = styled.div`
 	font-size:64px;
 	font-weight:bold;
 	text-align:center;

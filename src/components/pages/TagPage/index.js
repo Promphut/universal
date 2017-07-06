@@ -97,7 +97,7 @@ const ColumnName = styled.div`
   }
 `
 
-const TagName = styled.h1`
+const TagName = styled.div`
   font-size:32px;
   font-weight:bold;
   color:${props => props.theme.primaryColor};

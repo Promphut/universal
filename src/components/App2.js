@@ -171,12 +171,10 @@ class App2 extends React.Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-
-		clearTimeout(this.timer)
+		
 		FB.XFBML.parse()
-		//this.setState({completed:120})
-		//this.progress(200)
-		//console.log(this.timer)
+		clearTimeout(this.timer)
+
 	}
 
 	render() {
@@ -242,22 +240,9 @@ class App2 extends React.Component {
 						{
 							rel: 'canonical',
 							href: config.FRONTURL + this.props.location.pathname
-						},
-						//{ rel: 'stylesheet', href: '/css/main.css' },
-						{
-							rel: 'stylesheet',
-							href: 'https://fonts.googleapis.com/icon?family=Material+Icons'
-						},
-						{
-							rel: 'stylesheet',
-							href: 'https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css'
-						},
-						{
-							rel: 'stylesheet',
-							href: 'https://fonts.googleapis.com/css?family=Mitr|Nunito|PT+Sans|PT+Serif:400,700,700i|Roboto|Roboto+Slab'
 						}
 					]}
-					script={[{ src: 'https://use.fontawesome.com/3df470c471.js' }]}
+					
 				/>
 
 				<ThemeProvider theme={theme}>
