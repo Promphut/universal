@@ -58,6 +58,7 @@ api.getUsers = (keyword) => {
 		return res.body.users
 	}, api.err)
 }
+
 api.getPublisherColumns = () => {
    return Request
 	.get(config.BACKURL+'/publishers/'+config.PID+'/columns')

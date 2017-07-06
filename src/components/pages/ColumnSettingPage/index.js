@@ -135,13 +135,18 @@ class ColumnSettingPage extends React.Component {
 			desc: '',
 			cover: {
 				medium: ''
-			}
+			},
+			parent: ''
 		},
 
 		cover: {
 			medium: ''
 		},
 		dialogText: '',
+
+		parent: [],
+		parentAutoComplete: [],
+		parentSearchText: '',
 
 		writers: [],
 		writersAutoComplete: [],
@@ -203,10 +208,33 @@ class ColumnSettingPage extends React.Component {
 		if (cid == null) return
 
 		api.getColumn(cid).then(col => {
-			//console.log(col)
+			// console.log(col)
 			this.column = col
 			this.setState({ column: col })
+
+			this.getParent(col.parent)
 		})
+	}
+
+	getParent = cid => {
+		if (cid) {
+			api
+				.getColumn(cid)
+				.then(parentCol => {
+					let column = this.state.column
+					column.parent = parentCol.name
+
+					this.setState({
+						column,
+						parentSearchText: parentCol.name
+					})
+				})
+				.catch(err => {
+					this.setState({ parentSearchText: '' })
+				})
+		} else {
+			this.setState({ parentSearchText: '' })
+		}
 	}
 
 	deleteWriter = () => {
@@ -278,6 +306,7 @@ class ColumnSettingPage extends React.Component {
 		// data["shortDesc"] = document.getElementById("shortDesc").value;
 
 		let column = this.state.column
+		// column.parent = 
 		api
 			.updateColumn(cid, column)
 			.then(col => {
@@ -292,6 +321,22 @@ class ColumnSettingPage extends React.Component {
 					error: true
 				})
 			})
+	}
+
+	fetchParentAutoComplete = keyword => {
+		this.setState({ parentSearchText: keyword })
+
+		let inp = keyword.split('').length, a = []
+		api.getColumns().then(columns => {
+			columns.map((column, index) => {
+				if (column.slug !== 'news')
+					a[index] = { text: column.name, value: column.id }
+			})
+
+			this.setState({
+				parentAutoComplete: a
+			})
+		})
 	}
 
 	fetchEditorsAutoComplete = keyword => {
@@ -327,6 +372,29 @@ class ColumnSettingPage extends React.Component {
 					writersAutoComplete: a
 				})
 			})
+		}
+	}
+
+	addParent = (item, index) => {
+		let cid = this.state.column._id
+		if (cid == null) return
+
+		if (typeof item === 'object') {
+			console.log('item', item)
+			console.log('cid', cid)
+
+			// api
+			// 	.addEditorToColumn(parseInt(item.value), cid)
+			// 	.then(result => {
+			// 		let editors = this.state.editors.slice()
+			// 		editors.push(item)
+			//
+			// 		this.setState({
+			// 			editors: editors,
+			// 			editorSearchText: ''
+			// 		})
+			// 	})
+			// 	.catch(err => {})
 		}
 	}
 
@@ -522,11 +590,14 @@ class ColumnSettingPage extends React.Component {
 			textStatus,
 			dialogText,
 			cover,
+			parent,
 			writers,
 			editors,
 			switchTo,
-			editorsAutoComplete,
+			parentAutoComplete,
 			writersAutoComplete,
+			editorsAutoComplete,
+			parentSearchText,
 			writerSearchText,
 			editorSearchText,
 			alert,
@@ -660,7 +731,7 @@ class ColumnSettingPage extends React.Component {
 						</Title>
 						<Edit>
 							<UploadPicture
-								src={col.cover&&col.cover.medium}
+								src={col.cover && col.cover.medium}
 								path={
 									'/publishers/' +
 										config.PID +
@@ -699,6 +770,24 @@ class ColumnSettingPage extends React.Component {
 						</Edit>
 					</Flex>
 					{/*<Divider/>*/}
+					<Flex>
+						<Title>
+							<div className="sans-font">Parent column</div>
+						</Title>
+						<Edit>
+							<div className="row" style={{ marginTop: '15px' }}>
+								<AutoComplete
+									hintText="Add an parent column..."
+									filter={AutoComplete.noFilter}
+									dataSource={parentAutoComplete}
+									onUpdateInput={this.fetchParentAutoComplete}
+									onNewRequest={this.addParent}
+									searchText={parentSearchText}
+									style={{ marginLeft: '10px', height: '32px' }}
+								/>
+							</div>
+						</Edit>
+					</Flex>
 					<Flex>
 						<Title>
 							<div className="sans-font">Writers</div>
@@ -765,7 +854,11 @@ class ColumnSettingPage extends React.Component {
 							style={{ float: 'right', margin: '0 20px 0 0' }}
 						/>
 						<TextStatus
-							style={{ color: error ? '#D8000C' : theme.accentColor,float:'right',marginRight:'30px' }}>
+							style={{
+								color: error ? '#D8000C' : theme.accentColor,
+								float: 'right',
+								marginRight: '30px'
+							}}>
 							{textStatus}
 						</TextStatus>
 					</div>
