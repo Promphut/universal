@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom'
 import TextField from 'material-ui/TextField'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import SwipeableViews from 'react-swipeable-views'
-import {Footer, TopBarWithNavigation, SearchResultBox, Pagination} from 'components'
-import api from 'components/api'
+import {Footer, TopBarWithNavigation, SearchResultBox, Pagination, BackToTop} from 'components'
+import api from '../../../services/api'
 import utils from '../../../services/utils'
 import config from '../../../config'
 import isEmpty from 'lodash/isEmpty'
@@ -76,6 +76,7 @@ const Feed = styled.div`
     flex: 0 100%;
 		max-width: 100%;
 		padding:0 15px 0 15px;
+		margin-top: -160px;
   }
 `
 
@@ -90,9 +91,9 @@ const FilterItem = styled.li `
   display: inline;
   margin-left: 0px;
   margin-right: 20px;
-  background-color: ${props => props.select == true ? props.theme.primaryColor : 'rgba(0,0,0,0)'};
+  background-color: ${props => props.select == true ? props.theme.accentColor : 'rgba(0,0,0,0)'};
   border-radius: 100px;
-  color: ${props => props.theme.barTone == 'light' || !props.select ? '#000000' : '#FFF'};
+  color: ${props => props.select ? 'white' : '#222'};
   padding-top: 9px;
   padding-bottom: 9px;
   padding-left: 25px;
@@ -100,8 +101,7 @@ const FilterItem = styled.li `
   text-align: center;
 
   &:hover {
-    background-color: ${props => props.theme.secondaryColor};
-    color: ${props => props.theme.barTone == 'light' || !props.select ? '#000000' : '#FFF'};
+    background-color: ${props => !props.select && props.theme.secondaryColor};
   }
 `
 
@@ -116,7 +116,7 @@ export default class SearchResultPage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      keyword: split(this.props.keyword, '&')[0] || '',
+      keyword: utils.querystring('keyword',this.props.location) || '',
       type: this.props.type || '',
 			throttle: 200,
       result: null,
@@ -128,39 +128,48 @@ export default class SearchResultPage extends React.Component {
 
 	componentWillMount () {
 			this.setState({
-				keyword: split(this.props.match.params.keyword,'&')[0],
+				keyword: utils.querystring('keyword',this.props.location) ? utils.querystring('keyword',this.props.location) : '',
 				type: this.props.match.params.type,
 			})
 	}
 
 	componentDidMount () {
-		this.fetchResult(split(this.state.keyword, '&')[0], this.state.type)
+		this.fetchResult(this.state.keyword, this.state.type)
 	}
 
 	componentWillReceiveProps (nextProps) {
-		this.setState({
-			type: nextProps.match.params.type
-		})
+		if(nextProps.match.params.type != this.props.match.params.type ){
+			this.setState({
+				type: nextProps.match.params.type
+			},this.fetchResult(this.state.keyword,nextProps.match.params.type))
+		}
 	}
 
   fetchResult = (keyword, type) => {
 		if(!isEmpty(keyword)){
-		  api.getStoryFromKeyword(keyword, type)
+		  api.getStoryFromKeyword(keyword, type, this.state.currentPage)
 		  .then(result => {
 		    this.setState({
 		      result: result.stories,
 					isLoading: false,
-					feedCount: result.stories.length ? result.stories.length : 0,
-					totalPages: utils.getTotalPages(config.FEED_LIMIT, result.stories.length),
+					feedCount: result.count['total'] ? result.count['total'] : 0,
+					totalPages: utils.getTotalPages(config.FEED_LIMIT, result.count['total']),
 		    });
 		  })
+		}
+		else {
+			this.setState({
+				isLoading: false,
+				result: null,
+			})
 		}
   }
 
 	changePage = (e) => {
-			this.props.history.push({ hash: this.props.location.hash ,search: "&page=" + e})
+			this.props.history.push({search: "?keyword=" + this.state.keyword + "&page=" + e})
+			document.body.scrollTop = document.documentElement.scrollTop = 0
 			this.setState({ currentPage: e - 1}, () => {
-					this.getAllFeed()
+					this.fetchResult(this.state.keyword, this.state.type)
 			})
 	}
 
@@ -175,20 +184,21 @@ export default class SearchResultPage extends React.Component {
   }
 
   render() {
-		let { isMobile, completed, totalPages, currentPage, loading, feed, feedCount, keyword, type, result, isLoading} = this.state
-    return (
+		let { isMobile, completed, totalPages, currentPage, loading, feedCount, keyword, type, result, isLoading} = this.state
+		return (
       <Wrapper>
         <TopBarWithNavigation/>
         <Content>
 
-					<Feed><TextField id="search-box" hintText="ค้นหา" autoFocus={true} fullWidth={true} value={keyword} inputStyle={{fontSize:'28px'}} style={{fontFamily: "'Nunito', 'Mitr'"}} onChange={(e)=>this.handleKeywordChange(e)}/></Feed>
+					<Feed isMobile={utils.isMobile()}><TextField id="search-box" hintText="ค้นหา" autoFocus={true} fullWidth={true} value={keyword} inputStyle={{fontSize:'28px'}} style={{fontFamily: "'Nunito', 'Mitr'"}} onChange={(e)=>this.handleKeywordChange(e)}/></Feed>
 
 					<Main>
             <FilterContainer>
-              <Link to={"/search/stories/" + keyword}><FilterItem select={type === 'stories'}>STORIES</FilterItem></Link>
-              <Link to={"/search/news/" + keyword}><FilterItem select={type === 'news'}>NEWS</FilterItem></Link>
+              <Link to={"/search/stories?keyword=" + keyword}><FilterItem select={type === 'stories'}>STORIES</FilterItem></Link>
+              <Link to={"/search/news?keyword=" + keyword}><FilterItem select={type === 'news'}>NEWS</FilterItem></Link>
               {/* <Link to={"/search/video/" + this.state.keyword}><FilterItem select={this.state.type === 'video'}>VIDEO</FilterItem></Link> */}
             </FilterContainer>
+
             <SearchResultBox type={type} result={result} isLoading={isLoading}/>
 						{totalPages > 0 && ((totalPages > currentPage && currentPage >= 0) ?
 
@@ -203,9 +213,11 @@ export default class SearchResultPage extends React.Component {
 							<div></div>)}
           </Main>
 
-					<Aside></Aside>
+					{/*<Aside></Aside>*/}
 
         </Content>
+
+				<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="600" />
         <Footer />
       </Wrapper>
     )

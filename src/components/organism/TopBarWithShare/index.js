@@ -5,7 +5,7 @@ import {Link} from 'react-router-dom'
 import Avatar from 'material-ui/Avatar'
 import {LogoLink, PrimaryButton, SecondaryButton, LeftMenu,
 	ShareButtonTop, ShareDropdownTop, FbShareButton} from 'components'
-import auth from 'components/auth'
+import auth from '../../../services/auth'
 //import utils from 'components/utils'
 import FontIcon from 'material-ui/FontIcon'
 import { withRouter } from 'react-router'

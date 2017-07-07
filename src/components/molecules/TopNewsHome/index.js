@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {BGImg} from 'components'
 import styled,{keyframes} from 'styled-components'
 import {Link} from 'react-router-dom'
-import api from 'components/api'
+import api from '../../../services/api'
 import moment from 'moment'
 import truncate from 'lodash/truncate'
 const NewsBox = styled.div`

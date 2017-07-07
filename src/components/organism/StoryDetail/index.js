@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon';
 import {EditorCss,WriterAndDate,WritedBy,TagBox,CommentBox,CommentUser,RecommendArticle,FromColumn, FbShareButton, ImageShare} from 'components'
 import RaisedButton from 'material-ui/RaisedButton';
-import api from 'components/api'
+import api from '../../../services/api'
 import utils from '../../../services/utils'
 import config from '../../../config'
 

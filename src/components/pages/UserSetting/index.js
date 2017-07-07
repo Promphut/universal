@@ -2,7 +2,7 @@ import React from 'react'
 import {Route} from 'react-router-dom'
 import { TopBarWithNavigation, TopBarWithBack, UserSettingMenu, Footer} from 'components'
 import styled from 'styled-components'
-import auth from 'components/auth'
+import auth from '../../../services/auth'
 import utils from '../../../services/utils'
 
 const Wrapper = styled.div`

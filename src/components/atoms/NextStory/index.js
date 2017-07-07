@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import utils from '../../../services/utils'
-import api from 'components/api'
+import api from '../../../services/api'
 import truncate from 'lodash/truncate'
 import isEmpty from 'lodash/isEmpty'
 

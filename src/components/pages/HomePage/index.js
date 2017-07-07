@@ -16,8 +16,7 @@ import {
 	SeeMore
 } from 'components'
 import styled from 'styled-components'
-import auth from 'components/auth'
-import api from 'components/api'
+import api from '../../../services/api'
 import slider from 'react-slick'
 import InfiniteScroll from 'react-infinite-scroller'
 import CircularProgress from 'material-ui/CircularProgress'

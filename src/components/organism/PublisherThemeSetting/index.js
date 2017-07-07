@@ -8,7 +8,7 @@ import {findDOMNode as dom} from 'react-dom'
 import Menu from 'material-ui/Menu'
 import Popover from 'material-ui/Popover';
 import Request from 'superagent'
-import auth from 'components/auth'
+import auth from '../../../services/auth'
 import RaisedButton from 'material-ui/RaisedButton'
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import config from '../../../config'

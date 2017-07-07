@@ -16,12 +16,12 @@ import {
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { findDOMNode as dom } from 'react-dom'
-import api from 'components/api'
+import api from '../../../services/api'
 import { StickyContainer, Sticky } from 'react-sticky'
 import { Helmet } from 'react-helmet'
 import config from '../../../config'
 import utils from '../../../services/utils'
-import auth from 'components/auth'
+import auth from '../../../services/auth'
 import isEmpty from 'lodash/isEmpty'
 import Request from 'superagent'
 
@@ -346,20 +346,21 @@ class StoryPage extends React.Component {
 
 							</Aside>
 
-							<NextStory
-								cid={story.column._id}
-								currentID={story._id}
-								format={story.format}
-							/>
 						</Content>
 
 						<Content>
 							{recommends.length != 0 &&
 								<RecommendContainer recommend={recommends} />}
 						</Content>
+						
+						<NextStory
+							cid={story.column._id}
+							currentID={story._id}
+							format={story.format}
+						/>
 
 						{/*<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800" />*/}
-						<Footer />
+						<Footer isStoryPage={true} />
 					</Wrapper>
 				</div>
 			)

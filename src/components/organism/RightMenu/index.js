@@ -7,7 +7,7 @@ import IconButton from 'material-ui/IconButton'
 import Divider from 'material-ui/Divider'
 import { findDOMNode as dom } from 'react-dom'
 import Avatar from 'material-ui/Avatar'
-import auth from 'components/auth'
+import auth from '../../../services/auth'
 import utils from '../../../services/utils'
 
 const Container = styled.div`

@@ -11,7 +11,7 @@ import {
 	Footer,
 	BgWithLogo
 } from 'components'
-import api from 'components/api'
+import api from '../../../services/api'
 import utils from '../../../services/utils'
 import config from '../../../config'
 import isEmpty from 'lodash/isEmpty'

@@ -12,7 +12,7 @@ import {
 	BGImg,
 	SearchButton
 } from 'components'
-import auth from 'components/auth'
+import auth from '../../../services/auth'
 import FontIcon from 'material-ui/FontIcon'
 import RaisedButton from 'material-ui/RaisedButton'
 import utils from '../../../services/utils'

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {Link} from 'react-router-dom'
 import styled, {css} from 'styled-components'
 import {PrimaryButton} from 'components'
-import auth from 'components/auth'
+import auth from '../../../services/auth'
 
 const Container = styled.div`
   display:block;
