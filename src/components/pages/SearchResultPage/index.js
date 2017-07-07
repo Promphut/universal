@@ -197,6 +197,7 @@ export default class SearchResultPage extends React.Component {
               <Link to={"/search/news?keyword=" + keyword}><FilterItem select={type === 'news'}>NEWS</FilterItem></Link>
               {/* <Link to={"/search/video/" + this.state.keyword}><FilterItem select={this.state.type === 'video'}>VIDEO</FilterItem></Link> */}
             </FilterContainer>
+
             <SearchResultBox type={type} result={result} isLoading={isLoading}/>
 						{totalPages > 0 && ((totalPages > currentPage && currentPage >= 0) ?
 
@@ -214,6 +215,7 @@ export default class SearchResultPage extends React.Component {
 					{/*<Aside></Aside>*/}
 
         </Content>
+				
 				<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="600" />
         <Footer />
       </Wrapper>
