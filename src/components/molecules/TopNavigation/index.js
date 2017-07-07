@@ -10,6 +10,9 @@ const Container = styled.div`
 		font-weight:bold;
 		color:${props => props.theme.accentColor};
 	}
+	@media (min-width: 768px) and (max-width: 992px) {
+		display:none;
+  }
 `
 
 const NavSpan = styled.span`

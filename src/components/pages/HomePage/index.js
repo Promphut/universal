@@ -319,7 +319,7 @@ class HomePage extends React.Component {
 							</div>
 						</InfiniteScroll>}
 
-						{!hasMoreFeed && 
+						{(!hasMoreFeed && !isMobile)&&
 						<SeemoreContainer>
 							<SeeMore url={'/stories/all?type=article&sort=latest&page=1'}/>
 						</SeemoreContainer>}
