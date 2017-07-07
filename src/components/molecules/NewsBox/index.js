@@ -141,9 +141,10 @@ const BG = styled(BGImg)`
   height:157px;
   flex:1 300px;
   @media (max-width:480px) {
+    flex:0 100%;
+    max-width:100%;
     width:100%;
     height:${props => props.height}px;
-    padding-bottom:10px;
   }
   @media (min-width: 768px) and (max-width: 992px) {
     max-width:250px;

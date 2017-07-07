@@ -194,7 +194,7 @@ const Page = styled.div`
     display: flex;
         flex-flow: row wrap;
         justify-content: center;
-    padding:30px 0 30px 0;
+    padding:20px 0 0 0;
 `
 
 const UserDetail = ({ style, user, checkBack }) => {

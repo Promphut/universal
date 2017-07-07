@@ -18,47 +18,36 @@ const Wrapper = styled.div`
 		width:100%;
   }
 `
-
-const ContentWrapper = styled.div`
-  position: relative;
-  top: 116px;
-  padding-bottom: 70px;
-`
-
 const Content = styled.div`
 	display: flex;
-	flex-flow: column wrap;
-	justify-content: center;
-	padding-top: 30px;
-	padding-left: 10%;
-	padding-right: 10%;
-	min-height: calc(100vh - ${props => (props.isMobile ? '261px' : '261px')});
+	flex-flow: row wrap;
+	padding-top: 100px;
+	justify-content:center;
+	@media (max-width:480px) {
+		display: block;
+		padding: 60px 0 0 0;
+  }
+`
+const Content2 = styled.div`
+	display: flex;
+	flex-flow: row wrap;
+	justify-content:center;
+	min-height: calc(100vh - ${props => (props.isMobile ? '191px' : '456px')});
 
 	@media (max-width:480px) {
-		padding: 0 0 0 0;
+		display: block;
   }
-
 `
 
 const Main = styled.div`
 	flex: 3 780px;
 	max-width: 780px;
 	@media (max-width:480px) {
-    flex: 0 100%;
-		max-width: 100%;
 		padding:0 16px 0 16px;
   }
-
-	.hidden-des-flex {
-		display: none !important;
-		@media (max-width: 480px) {
-			display: flex !important;
-	  }
-	}
 `
 
 const Aside = styled.div`
-	//max-width: 255px;
 	flex: 1 300px;
 	max-width: 300px;
 	margin-left:60px;
@@ -69,14 +58,17 @@ const Aside = styled.div`
 `
 
 const Feed = styled.div`
-	flex: 1;
-	display:flex;
-	margin-top: 70px;
+	flex: 1 1120;
+	max-width:1120px;
 	@media (max-width:480px) {
-    flex: 0 100%;
-		max-width: 100%;
-		padding:0 15px 0 15px;
-		margin-top: -160px;
+		padding:40px 24px 0 24px;
+  }
+`
+const Feed2 = styled.div`
+	flex: 1 1120;
+	max-width:1120px;
+	@media (max-width:480px) {
+		padding:0px 24px 0 24px;
   }
 `
 
@@ -109,6 +101,9 @@ const PaginationContainer = styled.div `
 	display: flex;
 	justify-content: center;
 	margin-top: 20px;
+	@media (max-width:480px) {
+		margin-bottom: 20px;
+  }
 `
 
 export default class SearchResultPage extends React.Component {
@@ -143,6 +138,10 @@ export default class SearchResultPage extends React.Component {
 				type: nextProps.match.params.type
 			},this.fetchResult(this.state.keyword,nextProps.match.params.type))
 		}
+		if(nextProps.location.search != this.props.location.search){
+				this.setState({keyword : utils.querystring('keyword',nextProps.location)}
+				,this.fetchResult(utils.querystring('keyword',nextProps.location),this.state.type))
+		}
 	}
 
   fetchResult = (keyword, type) => {
@@ -159,6 +158,8 @@ export default class SearchResultPage extends React.Component {
 		}
 		else {
 			this.setState({
+				currentPage : 0,
+				totalPages : 0,
 				isLoading: false,
 				result: null,
 			})
@@ -189,10 +190,10 @@ export default class SearchResultPage extends React.Component {
       <Wrapper>
         <TopBarWithNavigation/>
         <Content>
-
 					<Feed isMobile={utils.isMobile()}><TextField id="search-box" hintText="ค้นหา" autoFocus={true} fullWidth={true} value={keyword} inputStyle={{fontSize:'28px'}} style={{fontFamily: "'Nunito', 'Mitr'"}} onChange={(e)=>this.handleKeywordChange(e)}/></Feed>
-
-					<Main>
+				</Content>
+				<Content2>
+					<Feed2>
             <FilterContainer>
               <Link to={"/search/stories?keyword=" + keyword}><FilterItem select={type === 'stories'}>STORIES</FilterItem></Link>
               <Link to={"/search/news?keyword=" + keyword}><FilterItem select={type === 'news'}>NEWS</FilterItem></Link>
@@ -211,11 +212,9 @@ export default class SearchResultPage extends React.Component {
 						</PaginationContainer> :
 
 							<div></div>)}
-          </Main>
+          </Feed2>
 
-					{/*<Aside></Aside>*/}
-
-        </Content>
+        </Content2>
 
 				<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="600" />
         <Footer />
