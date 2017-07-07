@@ -76,6 +76,7 @@ const Feed = styled.div`
     flex: 0 100%;
 		max-width: 100%;
 		padding:0 15px 0 15px;
+		margin-top: -160px;
   }
 `
 
@@ -189,7 +190,7 @@ export default class SearchResultPage extends React.Component {
         <TopBarWithNavigation/>
         <Content>
 
-					<Feed><TextField id="search-box" hintText="ค้นหา" autoFocus={true} fullWidth={true} value={keyword} inputStyle={{fontSize:'28px'}} style={{fontFamily: "'Nunito', 'Mitr'"}} onChange={(e)=>this.handleKeywordChange(e)}/></Feed>
+					<Feed isMobile={utils.isMobile()}><TextField id="search-box" hintText="ค้นหา" autoFocus={true} fullWidth={true} value={keyword} inputStyle={{fontSize:'28px'}} style={{fontFamily: "'Nunito', 'Mitr'"}} onChange={(e)=>this.handleKeywordChange(e)}/></Feed>
 
 					<Main>
             <FilterContainer>
@@ -215,7 +216,7 @@ export default class SearchResultPage extends React.Component {
 					{/*<Aside></Aside>*/}
 
         </Content>
-				
+
 				<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="600" />
         <Footer />
       </Wrapper>
