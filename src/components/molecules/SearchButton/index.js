@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import TextField from 'material-ui/TextField'
 import trim from 'lodash/trim'
 import config from '../../../config'
+import utils from '../../../services/utils'
 import PropTypes from 'prop-types'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -93,13 +94,17 @@ class SearchButton extends React.Component {
             this.setState({focus : false, redirect: true})
             /*window.open(config.FRONTURL + '/search/stories?keyword=' + trim(this.state.text), "_top")*/
         }
-        else this.setState({focus: true})
+        else if(!utils.isMobile()) this.setState({focus: true})
     }
 
     handleChange = (event) => {
         const value = event.target.value;
         if(value != this.state.text)
             this.setState({text: value})
+    }
+
+    handleFocus = (e) => {
+      this.setState({focus: false})
     }
 
     componentDidMount() {
@@ -121,9 +126,13 @@ class SearchButton extends React.Component {
                 }   
                 <MuiThemeProvider muiTheme={theme.barTone=='light' ? muiTheme : muiTheme2}>
                     <ButtonContainer>
-                        <Button>
-                            <SearchButtonIcon id="bt" className="fa fa-search" aria-hidden="true"></SearchButtonIcon>
-                        </Button>
+                        {utils.isMobile() ? 
+                            <Link to ="/search/stories?keyword="><SearchButtonIcon id="bt" className="fa fa-search" aria-hidden="true"></SearchButtonIcon></Link>
+                            :
+                            <Button>
+                                <SearchButtonIcon id="bt" className="fa fa-search" aria-hidden="true"></SearchButtonIcon>
+                            </Button>
+                        }
                         {this.state.focus &&
                             <TextField
                                 id="textField"

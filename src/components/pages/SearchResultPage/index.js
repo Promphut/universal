@@ -127,7 +127,7 @@ export default class SearchResultPage extends React.Component {
 
 	componentWillMount () {
 			this.setState({
-				keyword: utils.querystring('keyword',this.props.location) || '',
+				keyword: utils.querystring('keyword',this.props.location) ? utils.querystring('keyword',this.props.location) : '',
 				type: this.props.match.params.type,
 			})
 	}
@@ -159,6 +159,14 @@ export default class SearchResultPage extends React.Component {
 					totalPages: utils.getTotalPages(config.FEED_LIMIT, result.count['total']),
 		    });
 		  })
+		}
+		else {
+			this.setState({
+				currentPage : 0,
+				totalPages : 0,
+				isLoading: false,
+				result: null,
+			})
 		}
   }
 
@@ -195,6 +203,7 @@ export default class SearchResultPage extends React.Component {
               <Link to={"/search/news?keyword=" + keyword}><FilterItem select={type === 'news'}>NEWS</FilterItem></Link>
               {/* <Link to={"/search/video/" + this.state.keyword}><FilterItem select={this.state.type === 'video'}>VIDEO</FilterItem></Link> */}
             </FilterContainer>
+
             <SearchResultBox type={type} result={result} isLoading={isLoading}/>
 						{totalPages > 0 && ((totalPages > currentPage && currentPage >= 0) ?
 
@@ -212,6 +221,7 @@ export default class SearchResultPage extends React.Component {
 					{/*<Aside></Aside>*/}
 
         </Content>
+				
 				<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="600" />
         <Footer />
       </Wrapper>
