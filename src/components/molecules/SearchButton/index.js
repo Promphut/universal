@@ -79,7 +79,8 @@ class SearchButton extends React.Component {
 
         this.state = {
             focus: false,
-            text: ''
+            text: '',
+            redirect: false
         }
     }
 
@@ -88,55 +89,65 @@ class SearchButton extends React.Component {
 	}
 
     handleClick = (e) => {
-        if(this.state.focus && trim(this.state.text).length != 0)  {
-            this.setState({focus: !this.state.focus})
-            window.open(config.FRONTURL + '/search/stories?keyword=' + trim(this.state.text), "_top")
+        if(trim(this.state.text).length != 0)  {
+            this.setState({focus : false, redirect: true})
+            /*window.open(config.FRONTURL + '/search/stories?keyword=' + trim(this.state.text), "_top")*/
         }
-        else if(this.state.focus) this.setState({focus: true})
-        else this.setState({focus: !this.state.focus})
-        this.setState({text: ''})
+        else this.setState({focus: true})
     }
 
     handleChange = (event) => {
         const value = event.target.value;
-        this.setState({text: value})
+        if(value != this.state.text)
+            this.setState({text: value})
     }
 
     componentDidMount() {
 		document.getElementById("bt").addEventListener('click', this.handleClick)
 	}
 
+    componentWillReceiveProps(nextProps) {
+        if(this.state.redirect)
+            this.setState({redirect : false, text : ''})
+	}
+
     render() {
         let { theme } = this.context.setting.publisher
+        let { text, redirect } = this.state
+
         return(
-            <MuiThemeProvider muiTheme={theme.barTone=='light' ? muiTheme : muiTheme2}>
-                <ButtonContainer>
-                    <Button>
-                        <SearchButtonIcon id="bt" className="fa fa-search" aria-hidden="true"></SearchButtonIcon>
-                    </Button>
-                    {this.state.focus &&
-                        <TextField
-                            id="textField"
-                            hintText="Search Stories"
-                            hintStyle={getStyles('hintStyle',theme.barTone)}
-                            inputStyle={getStyles('inputStyle',theme.barTone)}
-                            style={getStyles('textareaStyle',theme.barTone)}
-                            textareaStyle={getStyles('textareaStyle',theme.barTone)}
-                            floatingLabelFocusStyle={getStyles('inputStyle',theme.barTone)}
-                            underlineFocusStyle={{borderColor: theme.accentColor}}
-                            value={this.state.text}
-                            onChange={this.handleChange}
-                            onKeyPress={(ev) => {
-                                if (ev.key === 'Enter' && trim(this.state.text).length != 0) {
-                                    // Do code here
-                                    {/*alert(this.state.text)*/}
-                                    window.open(config.FRONTURL + '/search/stories?keyword=' + trim(this.state.text), "_top")
-                                    ev.preventDefault();
-                                } else if (ev.key === 'Enter') this.setState({text: ''})
-                            }}
-                        />}
-                </ButtonContainer>
-            </MuiThemeProvider>
+            <div>
+                {redirect && <Redirect push to={'/search/stories?keyword=' + trim(text)} />
+                }   
+                <MuiThemeProvider muiTheme={theme.barTone=='light' ? muiTheme : muiTheme2}>
+                    <ButtonContainer>
+                        <Button>
+                            <SearchButtonIcon id="bt" className="fa fa-search" aria-hidden="true"></SearchButtonIcon>
+                        </Button>
+                        {this.state.focus &&
+                            <TextField
+                                id="textField"
+                                hintText="Search Stories"
+                                hintStyle={getStyles('hintStyle',theme.barTone)}
+                                inputStyle={getStyles('inputStyle',theme.barTone)}
+                                style={getStyles('textareaStyle',theme.barTone)}
+                                textareaStyle={getStyles('textareaStyle',theme.barTone)}
+                                floatingLabelFocusStyle={getStyles('inputStyle',theme.barTone)}
+                                underlineFocusStyle={{borderColor: theme.accentColor}}
+                                value={text}
+                                onChange={this.handleChange}
+                                onKeyPress={(ev) => {
+                                    if (ev.key === 'Enter' && trim(text).length != 0) {
+                                        // Do code here
+                                        this.setState({focus:false ,redirect: true})
+                                        {/*alert(this.state.text)*/}
+                                        /*window.open(config.FRONTURL + '/search/stories?keyword=' + trim(text), "_top")*/
+                                    } else if (ev.key === 'Enter') this.setState({text: ''})
+                                }}
+                            />}
+                    </ButtonContainer>
+                </MuiThemeProvider>
+            </div>
             // </Link>
         )
     }
