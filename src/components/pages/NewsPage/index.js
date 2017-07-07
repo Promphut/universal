@@ -168,6 +168,9 @@ const SeemoreContainer = styled.div`
 	width: 100%;
 	display: flex;
 	justify-content: center;
+	@media (max-width:480px) {
+		margin-bottom: 26px;
+  	}
 `
 
 class NewsPage extends React.Component {
@@ -237,7 +240,7 @@ class NewsPage extends React.Component {
 							page: ++page,
 							feedLatest: feed,
 							feedCount: result.count['1']?result.count['1']:0,
-							hasMoreFeed: feed.length < result.count['1']
+							hasMoreFeed: feed.length < this.FEED_LIMIT ? false : (page < 2)
 						},
 						() => {
 							this.loading = false
@@ -262,7 +265,7 @@ class NewsPage extends React.Component {
 							page2: ++page,
 							feedTrend: feed,
 							feedCount2: result.count['1']?result.count['1']:0,
-							hasMoreFeed2: feed.length < result.count['1']
+							hasMoreFeed2: feed.length < this.FEED_LIMIT ? false : (page < 2)
 						},
 						() => {
 							this.loading = false

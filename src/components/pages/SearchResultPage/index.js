@@ -109,6 +109,9 @@ const PaginationContainer = styled.div `
 	display: flex;
 	justify-content: center;
 	margin-top: 20px;
+	@media (max-width:480px) {
+		margin-bottom: 20px;
+  }
 `
 
 export default class SearchResultPage extends React.Component {

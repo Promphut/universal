@@ -164,7 +164,7 @@ const Page = styled.div`
   display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
-  padding:30px 0 30px 0;
+  padding:20px 0 0px 0;
 `
 const TextLine = styled.div`
   color:${props => props.theme.primaryColor};
@@ -386,7 +386,7 @@ class ColumnPage extends React.Component {
 									<div>
 										{feed && currentPage >= 0 &&
 											feed.map((item, index) => (
-												<ArticleBox detail={item} key={index} />
+												<ArticleBox final={index == feed.length -1 ? true:false} detail={item} key={index} />
 											))}
 									</div> 
 								}

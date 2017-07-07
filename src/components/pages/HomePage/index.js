@@ -150,6 +150,9 @@ const SeemoreContainer = styled.div`
 	width: 100%;
 	display: flex;
 	justify-content: center;
+	@media (max-width:480px) {
+		margin-bottom: 26px;
+  	}
 `
 
 const styles = {
@@ -237,16 +240,15 @@ class HomePage extends React.Component {
 			//console.log('page', page)
 
 			api
-				.getFeed('article', { status: 1 }, 'latest', null, page, this.FEED_LIMIT)
+				.getFeed('stories', { status: 1 }, 'latest', null, page, this.FEED_LIMIT)
 				.then(result => {
 					let feed = this.state.feed.concat(result.feed)
-					// console.log(result)
 					this.setState(
 						{
 							page: ++page,
 							feed: feed,
 							feedCount: result.count['1']?result.count['1']:0,
-							hasMoreFeed: feed.length < result.count['1']
+							hasMoreFeed: feed.length < this.FEED_LIMIT ? false : (page < 2)
 						},
 						() => {
 							this.loading = false
@@ -366,17 +368,25 @@ class HomePage extends React.Component {
 									<ArticleBox detail={story} key={index}/>
 								))}
 							</div>*/}
-								<InfiniteScroll
-									loadMore={this.loadFeed()}
-									hasMore={hasMoreFeed}
-									loader={this.onload()}>
-									<div>
-										{feed.length != 0 &&
-											feed.map((item, index) => (
-												<ArticleBox detail={item} key={index} />
-											))}
-									</div>
-								</InfiniteScroll>
+								<div>
+									<InfiniteScroll
+										loadMore={this.loadFeed()}
+										hasMore={hasMoreFeed}
+										loader={this.onload()}>
+										<div>
+											{feed.length != 0 &&
+												feed.map((item, index) => (
+													<ArticleBox final= {index == feed.length -1 ? true:false} detail={item} key={index} />
+												))}
+										</div>
+									</InfiniteScroll>
+
+									{ !hasMoreFeed &&
+									<SeemoreContainer>
+										<SeeMore url={'/stories/all?type=article&sort=latest&page=1'}/>
+									</SeemoreContainer>
+									}
+								</div>
 
 								<div className="news">
 									<TopNewsHome />

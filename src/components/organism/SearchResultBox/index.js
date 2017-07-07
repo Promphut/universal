@@ -28,7 +28,7 @@ export default class SearchResultBox extends React.Component  {
       resultFeed = []
 
       for (var i = 0 ; i < this.props.result.length ; i++)
-          resultFeed.push(<ArticleBox detail={this.props.result[i]} key={i}/>)
+          resultFeed.push(<ArticleBox final={i == this.props.result.length - 1} detail={this.props.result[i]} key={i}/>)
 
     } else {
 
