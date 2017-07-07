@@ -102,6 +102,10 @@ class SearchButton extends React.Component {
         this.setState({text: value})
     }
 
+    handleFocus = (e) => {
+      this.setState({focus: false})
+    }
+
     componentDidMount() {
 		document.getElementById("bt").addEventListener('click', this.handleClick)
 	}
@@ -126,6 +130,8 @@ class SearchButton extends React.Component {
                             underlineFocusStyle={{borderColor: theme.accentColor}}
                             value={this.state.text}
                             onChange={this.handleChange}
+                            onBlur={this.handleFocus}
+                            autoFocus
                             onKeyPress={(ev) => {
                                 if (ev.key === 'Enter' && trim(this.state.text).length != 0) {
                                     // Do code here
