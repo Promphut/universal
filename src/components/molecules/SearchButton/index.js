@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import TextField from 'material-ui/TextField'
 import trim from 'lodash/trim'
 import config from '../../../config'
+import utils from '../../../services/utils'
 import PropTypes from 'prop-types'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -112,12 +113,18 @@ class SearchButton extends React.Component {
 
     render() {
         let { theme } = this.context.setting.publisher
+
+        var searchButton = <div></div>
+
+        if ( utils.isMobile() )
+          searchButton = <Link to ="/search/stories?keyword="><SearchButtonIcon className="fa fa-search" aria-hidden="true"></SearchButtonIcon></Link>
+        else
+          searchButton = <Button><SearchButtonIcon id="bt" className="fa fa-search" aria-hidden="true"></SearchButtonIcon></Button>
+
         return(
             <MuiThemeProvider muiTheme={theme.barTone=='light' ? muiTheme : muiTheme2}>
                 <ButtonContainer>
-                    <Button>
-                        <SearchButtonIcon id="bt" className="fa fa-search" aria-hidden="true"></SearchButtonIcon>
-                    </Button>
+                    {searchButton}
                     {this.state.focus &&
                         <TextField
                             id="textField"
