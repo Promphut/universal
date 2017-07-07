@@ -69,9 +69,9 @@ const FilterItem = styled.li `
 	cursor: pointer;
     margin-left: 0px;
     margin-right: 20px;
-    background-color: ${props => props.select == true ? props.theme.primaryColor : 'rgba(0,0,0,0)'};
+    background-color: ${props => props.select == true ? props.theme.accentColor : 'rgba(0,0,0,0)'};
     border-radius: 100px;
-    color: ${props => props.theme.barTone == 'light' || !props.select ? '#000000' : '#FFF'};
+    color: ${props => props.select ? 'white' : '#222'};
     padding-top: 9px;
     padding-bottom: 9px;
     padding-left: 25px;
@@ -79,8 +79,7 @@ const FilterItem = styled.li `
     text-align: center;
 
     &:hover {
-        background-color: ${props => props.theme.secondaryColor};
-        color: ${props => props.theme.barTone == 'light' || !props.select ? '#000000' : '#FFF'};
+        background-color: ${props => !props.select && props.theme.secondaryColor};
     }
 `
 
