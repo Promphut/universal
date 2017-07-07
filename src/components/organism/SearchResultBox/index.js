@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import isEmpty from 'lodash/isEmpty'
 
-import {ArticleBox, NewsBox} from 'components'
+import { NewsBox} from 'components'
 
 const NotFoundText = styled.span `
   font-size: 20px;
@@ -28,7 +28,7 @@ export default class SearchResultBox extends React.Component  {
       resultFeed = []
 
       for (var i = 0 ; i < this.props.result.length ; i++)
-          resultFeed.push(<ArticleBox detail={this.props.result[i]} key={i}/>)
+          resultFeed.push(<NewsBox detail={this.props.result[i]} key={i}/>)
 
     } else {
 
