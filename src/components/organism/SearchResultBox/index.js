@@ -22,7 +22,7 @@ export default class SearchResultBox extends React.Component  {
     {
       resultFeed = <NotFoundTextContainer><NotFoundText>กำลังค้นหา</NotFoundText></NotFoundTextContainer>
     }
-    else if (!isEmpty(this.props.result)){
+    else if (!isEmpty(this.props.result) || this.props.result === []){
       resultFeed = []
 
       /*if (this.props.type === 'news') {

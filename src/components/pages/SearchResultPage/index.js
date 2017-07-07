@@ -127,7 +127,7 @@ export default class SearchResultPage extends React.Component {
 
 	componentWillMount () {
 			this.setState({
-				keyword: utils.querystring('keyword',this.props.location) || '',
+				keyword: utils.querystring('keyword',this.props.location) ? utils.querystring('keyword',this.props.location) : '',
 				type: this.props.match.params.type,
 			})
 	}
@@ -155,6 +155,12 @@ export default class SearchResultPage extends React.Component {
 					totalPages: utils.getTotalPages(config.FEED_LIMIT, result.count['total']),
 		    });
 		  })
+		}
+		else {
+			this.setState({
+				isLoading: false,
+				result: null,
+			})
 		}
   }
 
