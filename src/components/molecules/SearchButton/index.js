@@ -121,7 +121,7 @@ class SearchButton extends React.Component {
                     {this.state.focus &&
                         <TextField
                             id="textField"
-                            hintText="Search Stories"
+                            hintText="ค้นหา"
                             hintStyle={getStyles('hintStyle',theme.barTone)}
                             inputStyle={getStyles('inputStyle',theme.barTone)}
                             style={getStyles('textareaStyle',theme.barTone)}
