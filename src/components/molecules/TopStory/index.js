@@ -22,10 +22,10 @@ const LargeBox = styled.div`
 const MiniBox = styled(BGImg)`
 	height:222px;
   transition: all 0.3s;
-  transform: ${props => (props.hover2 ? 'scale(1.15)' : 'scale(1)')};
+  transform: ${props => (props["data-hover2"] ? 'scale(1.15)' : 'scale(1)')};
   z-index:-1;
   @media (max-width:480px) {
-    height:${props => (props.head ? props.height : '80')}px;
+    height:${props => (props.head ? props.height : props.height/2)}px;
     margin-bottom:${props => (props.head ? '10' : '0')}px;
   }
 @media (min-width: 768px) and (max-width: 992px) {
@@ -40,7 +40,7 @@ const Box1 = styled.div`
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   @media (max-width:480px) {
-    flex: 1 ;
+    flex: 1;
     height:auto;
   }
 @media (min-width: 768px) and (max-width: 992px) {
@@ -60,7 +60,7 @@ const MiniBoxLight = styled.div`
 	height:222px;
 	background-color:white;
   @media (max-width:480px) {
-    flex: 2 ;
+    flex: 1 ;
   	height:auto;
     background:none;
   }
@@ -112,7 +112,7 @@ const NewsBox = styled.div`
 const SName = styled(Link)`
 	font-size:18px;
   transition: all 0.3s;
-  color:${props => (props.hover2 ? props.theme.accentColor : '#222')};
+  color:${props => (props["data-hover2"] ? props.theme.accentColor : '#222')};
   &:hover{
     color:${props => props.theme.accentColor};
   }
@@ -124,6 +124,7 @@ const SName = styled(Link)`
     font-size:14px;
   }
 `
+
 const HName = styled.div`
 	text-transform: uppercase;
 	color:#C4C4C4;
@@ -148,7 +149,8 @@ const Inner = styled.div`
   padding:20px;
   @media (max-width:480px) {
     width:auto;
-    margin:0 0 0 15px;
+		top:0px;
+		padding:${props => (props.head ? 0 : '0 0 0 10')}px;
   }
 	@media (min-width: 768px) and (max-width: 992px) {
     height:150px;
@@ -211,7 +213,7 @@ class TopStory extends React.Component {
 						<Inner>
 							<HName className="sans-font" style={{}}>TOP STORIES</HName>
 							<SName
-								hover2={hover}
+								data-hover2={hover}
 								to={this.props.detail && url}
 								className="nunito-font">
 								{truncate(ptitle ? ptitle : '', { length: 70, separator: '' })}
@@ -221,9 +223,9 @@ class TopStory extends React.Component {
 					<Box1 large={large}>
 						<MiniBox
 							url={url}
-							hover2={hover}
+							data-hover2={hover}
 							head={head}
-							height={(screen.width - 16) / 2}
+							height={(screen.width - 16) / 1.91}
 							src={cover && cover.medium}
 							opacity={0.2}
 						/>
@@ -243,8 +245,8 @@ class TopStory extends React.Component {
 						<MiniBox
 							url={url}
 							head={head}
-							height={(screen.width - 16) / 2}
-							hover2={hover}
+							height={(screen.width - 16) / 1.91}
+							data-hover2={hover}
 							src={cover && cover.medium}
 							opacity={0.2}
 						/>
@@ -253,9 +255,9 @@ class TopStory extends React.Component {
 						<ArrowRight
 							style={{ borderRight: '15px solid white', left: '-14px' }}
 						/>
-						<Inner>
+						<Inner head={head}>
 							<HName className="sans-font" style={{}}>TOP STORIES</HName>
-							<SName hover2={hover} to={url} className="nunito-font">
+							<SName data-hover2={hover} to={url} className="nunito-font">
 								{truncate(ptitle ? ptitle : '', { length: 60, separator: '' })}
 							</SName>
 						</Inner>
