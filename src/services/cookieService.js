@@ -3,7 +3,8 @@ const config = require('../config')
 //console.log('COOKIE', global.cookies, 'x', window.cookies)
 //const cookies = new Cookies()
 
-const domain = {domain:config.DOMAIN, path:'/'}
+// We don't need "staging.[domain]" instead use ".[domain]" to cover all subdomains
+const domain = {domain:config.DOMAIN.replace('staging.', ''), path:'/'}
 
 let cookieService = {}
 cookieService = {
