@@ -93,7 +93,7 @@ const FilterItem = styled.li `
   text-align: center;
 
   &:hover {
-    background-color: ${props => !props.select && props.theme.secondaryColor};
+    background-color: ${props => (!props.select && !props.mobile) && props.theme.secondaryColor};
   }
 `
 
@@ -133,14 +133,13 @@ export default class SearchResultPage extends React.Component {
 	}
 
 	componentWillReceiveProps (nextProps) {
-		if(nextProps.match.params.type != this.props.match.params.type ){
+		if(nextProps.match.params.type != this.props.match.params.type 
+		|| nextProps.location.search != this.props.location.search ){
 			this.setState({
-				type: nextProps.match.params.type
-			},this.fetchResult(this.state.keyword,nextProps.match.params.type))
-		}
-		if(nextProps.location.search != this.props.location.search){
-				this.setState({keyword : utils.querystring('keyword',nextProps.location)}
-				,this.fetchResult(utils.querystring('keyword',nextProps.location),this.state.type))
+				type: nextProps.match.params.type,
+				keyword : utils.querystring('keyword',nextProps.location)
+			})
+			this.fetchResult(utils.querystring('keyword',nextProps.location),nextProps.match.params.type)
 		}
 	}
 
@@ -195,8 +194,8 @@ export default class SearchResultPage extends React.Component {
 				<Content2>
 					<Feed2>
             <FilterContainer>
-              <Link to={"/search/stories?keyword=" + keyword}><FilterItem select={type === 'stories'}>STORIES</FilterItem></Link>
-              <Link to={"/search/news?keyword=" + keyword}><FilterItem select={type === 'news'}>NEWS</FilterItem></Link>
+              <Link to={"/search/stories?keyword=" + keyword}><FilterItem mobile = {utils.isMobile()} select={type === 'stories'}>STORIES</FilterItem></Link>
+              <Link to={"/search/news?keyword=" + keyword}><FilterItem mobile = {utils.isMobile()} select={type === 'news'}>NEWS</FilterItem></Link>
               {/* <Link to={"/search/video/" + this.state.keyword}><FilterItem select={this.state.type === 'video'}>VIDEO</FilterItem></Link> */}
             </FilterContainer>
 

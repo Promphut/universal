@@ -22,7 +22,7 @@ const ButtonContainer = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-right: 32px;
+    margin-right: {props.mar};
 `
 
 const Button = styled.div`
@@ -42,23 +42,23 @@ const Button = styled.div`
 
 const SearchButtonIcon = styled.i`
   transition: 0.2;
-  color: ${props => props.theme.barTone=='light'?'#222':'white'};
+  color: ${props => (!props.scrolling && props.transparent && props.hasCover) || props.theme.barTone=='dark' ? 'white':'#222'};
 `
 
-const getStyles = (name,theme) => {
+const getStyles = (name,theme,scrolling,transparent,hasCover) => {
     if(name=='hintStyle')
         return {
-            color: theme.barTone == 'light' ? '#222':'white',
+            color: (!scrolling && transparent && hasCover) ||theme == 'dark' ? 'rgba(255,255,255,0.7)':'rgba(34, 34, 34, 0.7)',
             fontWeight: 'normal'
         }
     else if(name=='inputStyle')
         return {
-            color: theme.barTone == 'light' ? '#222':'white',
+            color: (!scrolling && transparent && hasCover) ||theme == 'dark' ? 'white':'#222',
         }
     else if(name=='textareaStyle')
         return {
             width: '180px',
-            color: theme.barTone == 'light' ? '#222':'white',
+            color: (!scrolling && transparent && hasCover) ||theme == 'dark' ? 'white':'#222',
         }
 }
 
@@ -107,6 +107,7 @@ class SearchButton extends React.Component {
       this.setState({focus: false})
     }
 
+
     componentDidMount() {
 		document.getElementById("bt").addEventListener('click', this.handleClick)
 	}
@@ -124,24 +125,24 @@ class SearchButton extends React.Component {
             <div>
                 {redirect && <Redirect push to={'/search/stories?keyword=' + trim(text)} />
                 }   
-                <MuiThemeProvider muiTheme={theme.barTone=='light' ? muiTheme : muiTheme2}>
-                    <ButtonContainer>
+                <MuiThemeProvider muiTheme={(!this.props.scrolling && this.props.transparent && this.props.hasCover) || theme.barTone=='dark' ? muiTheme2 : muiTheme}>
+                    <ButtonContainer mar= {utils.isMobile() ? '8px' : '32px'}>
                         {utils.isMobile() ? 
                             <Link to ="/search/stories?keyword="><SearchButtonIcon id="bt" className="fa fa-search" aria-hidden="true"></SearchButtonIcon></Link>
                             :
                             <Button>
-                                <SearchButtonIcon id="bt" className="fa fa-search" aria-hidden="true"></SearchButtonIcon>
+                                <SearchButtonIcon scrolling={this.props.scrolling} transparent={this.props.transparent} hasCover={this.props.hasCover} id="bt" className="fa fa-search" aria-hidden="true"></SearchButtonIcon>
                             </Button>
                         }
                         {this.state.focus &&
                             <TextField
                                 id="textField"
                                 hintText="Search Stories"
-                                hintStyle={getStyles('hintStyle',theme.barTone)}
-                                inputStyle={getStyles('inputStyle',theme.barTone)}
-                                style={getStyles('textareaStyle',theme.barTone)}
-                                textareaStyle={getStyles('textareaStyle',theme.barTone)}
-                                floatingLabelFocusStyle={getStyles('inputStyle',theme.barTone)}
+                                hintStyle={getStyles('hintStyle',theme.barTone, this.props.scrolling, this.props.transparent, this.props.hasCover)}
+                                inputStyle={getStyles('inputStyle',theme.barTone,theme.barTone, this.props.scrolling, this.props.transparent, this.props.hasCover)}
+                                style={getStyles('textareaStyle',theme.barTone,theme.barTone, this.props.scrolling, this.props.transparent, this.props.hasCover)}
+                                textareaStyle={getStyles('textareaStyle',theme.barTone,theme.barTone, this.props.scrolling, this.props.transparent, this.props.hasCover)}
+                                floatingLabelFocusStyle={getStyles('inputStyle',theme.barTone,theme.barTone, this.props.scrolling, this.props.transparent, this.props.hasCover)}
                                 underlineFocusStyle={{borderColor: theme.accentColor}}
                                 value={text}
                                 onChange={this.handleChange}
@@ -153,6 +154,8 @@ class SearchButton extends React.Component {
                                         /*window.open(config.FRONTURL + '/search/stories?keyword=' + trim(text), "_top")*/
                                     } else if (ev.key === 'Enter') this.setState({text: ''})
                                 }}
+                                onBlur={this.handleFocus}
+                                autoFocus
                             />}
                     </ButtonContainer>
                 </MuiThemeProvider>
