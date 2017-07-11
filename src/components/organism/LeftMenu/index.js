@@ -10,6 +10,8 @@ import utils from '../../../services/utils'
 import find from 'lodash/find'
 
 const Container = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
   position:fixed;
   width:100%;
   height:100%;
