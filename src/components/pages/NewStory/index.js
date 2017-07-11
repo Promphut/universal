@@ -178,7 +178,7 @@ const HintLabel = styled.div`
 
 const styles = {
 	backButton: {
-		color: '#8E8E8E',
+		color: '#8e8e8e',
 		cursor: 'pointer',
 		height: '20px'
 	}
@@ -197,7 +197,7 @@ class NewStory extends React.Component {
     chooseLayout:null,
     layout:'',
     open:false,
-    column:'no',
+    column:null,
     contentType:'NEWS',
     html: '',
 
@@ -430,7 +430,7 @@ class NewStory extends React.Component {
   }
 
   autoSave = () => {
-    let {prevState,sid,title,column,contentType,focusWord} = this.state
+    let {prevState,sid,title,column,contentType,focusWord,story} = this.state
     if(this.state.sid){
       if(this.state.status === this.SAVE_STATUS.DIRTIED){
         const images = [].slice.call(dom(this.refs.paper).getElementsByTagName('img'))
@@ -449,9 +449,10 @@ class NewStory extends React.Component {
           publisher:parseInt(config.PID),
           html:el,
           focusWord:focusWord,
+          meta:story.meta,
           highlight
         }
-        if(column!='no') s.column = column
+        if(column) s.column = column
         s.contentType = contentType
 
         this.setState({
@@ -494,7 +495,7 @@ class NewStory extends React.Component {
           format:this.state.layout
         }
         //console.log(s)
-        if(column!='no') s.column = column
+        if(column) s.column = column
         s.contentType = contentType
 
         api.createStory(s)
@@ -513,7 +514,7 @@ class NewStory extends React.Component {
   }
 
   publishStory = () => {
-    let {sid,column,contentType,title,focusWord} = this.state
+    let {sid,column,columnList,contentType,title,focusWord,story} = this.state
     let allContents = this.editor.serialize()
     let highlight = this.editor2.serialize().highlight.value
 
@@ -523,6 +524,9 @@ class NewStory extends React.Component {
       status:1,
       focusWord:focusWord,
       html:allContents.paper.value,
+      format: (columnList.find(col => col._id == column).name == 'news' 
+      || columnList.find(col => col._id == column).name =='News') ? 'NEWS' : 'ARTICLE',
+      meta:story.meta,
       highlight
     }
     if(column!='no') s.column = column
@@ -796,11 +800,13 @@ class NewStory extends React.Component {
             <AdvancedEdit onClick={() => this.settingHandleChange(1)}>Advanced Edit</AdvancedEdit>
             <div className='' style={{display:'block', clear:'both'}}>
               <Label className="nunito-font or" style={{float:'left',marginTop:'22px',minWidth:'60px'}}>Column: </Label>
-              <DropDownMenu
+              <SelectField
+                hintText='Please Select Column First'
                 value={column}
                 onChange={this.chooseColumn}
                 autoWidth={false}
-                labelStyle={{top:'-11px'}}
+                hintStyle={{top:'5px',left:'24px'}}
+                labelStyle={{top:'-11px',left:'24px'}}
                 iconStyle={{top:'-8px',left:'300px'}}
                 style={{margin:'15px 0 15px 15px',width:'340px',height:'34px',border:'1px solid #e2e2e2',float:'left'}}
                 underlineStyle={{display:'none'}}
@@ -808,11 +814,10 @@ class NewStory extends React.Component {
                 menuItemStyle={{width:'320px'}}
                 selectedMenuItemStyle={{color:'#222',background:theme.accentColor}}
               >
-                <MenuItem value='no' primaryText='No Column' />
                 {columnList.length!=0 && columnList.map((data,index)=>(
                   <MenuItem value={data._id} primaryText={data.name} key={index} />
                 ))}
-              </DropDownMenu>
+              </SelectField>
               <Label className="nunito-font or" style={{float:'left',marginTop:'22px',minWidth:'60px'}}>Type: </Label>
               <DropDownMenu
                 value={contentTypeId}
@@ -883,7 +888,7 @@ class NewStory extends React.Component {
             </div>
             <div className='row' style={{display:'block',overflow:'hidden',marginTop:'0px'}}>
               <Delete style={{float:'left',margin:'10px'}} onClick={this.showAlert}>Delete</Delete>
-              <PrimaryButton label={story.status===1 ? moment(story.published).format('ddd, [at] h:mm a') : 'Publish'} style={{float:'right'}} onClick={this.publishStory} iconName="done"/>
+              <PrimaryButton label={story.status===1 ? moment(story.published).format('ddd, [at] h:mm a') : 'Publish'} style={{float:'right'}} onClick={this.publishStory} disabled={!column}/>
               {story.status===1 && <SecondaryButton label="Unpublish" style={{float:'right',marginRight:'20px'}} onClick={this.unpublishStory}/>}
             </div>
           </BasicSetting>

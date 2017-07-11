@@ -21,7 +21,7 @@ const PrimaryButton = (props, context) => {
 				fontWeight: 'bold',
 				fontSize: 18,
 				fontFamily: "'Nunito', 'Mitr'",
-				color: 'white',
+				color: '#ffffff',
 				...props.labelStyle
 			},
 			style: {
@@ -31,13 +31,14 @@ const PrimaryButton = (props, context) => {
 				boxShadow: 'none',
 				...props.style
 			},
-			backgroundColor: theme.accentColor
+			backgroundColor: theme.accentColor,
+			disabled: props.disabled
 		}
 
 		if (props.buttonStyle === 'Flat') {
 			opt['hoverColor'] = theme.accentColor
 		} else {
-			opt['labelColor'] = 'white'
+			opt['labelColor'] = '#ffffff'
 			opt['buttonStyle'] = {
 				borderRadius: '24px',
 				backgroundColor: theme.accentColor,
@@ -47,7 +48,7 @@ const PrimaryButton = (props, context) => {
 
 		defaultStyle = {
 			icon: {
-				color: 'white',
+				color: '#ffffff',
 				margin: '-4px 0px 0 18px',
 				fontSize: '18px',
 				width: 18
@@ -68,7 +69,7 @@ const PrimaryButton = (props, context) => {
 				fontWeight: 'bold',
 				fontSize: 13,
 				fontFamily: "'Nunito', 'Mitr'",
-				color: 'white',
+				color: '#ffffff',
 				...props.labelStyle
 			},
 			style: {
@@ -78,13 +79,14 @@ const PrimaryButton = (props, context) => {
 				boxShadow: 'none',
 				...props.style
 			},
-			backgroundColor: theme.primaryColor
+			backgroundColor: theme.primaryColor,
+			disabled: props.disabled
 		}
 
 		if (props.buttonStyle === 'Flat') {
 			opt['hoverColor'] = theme.primaryColor
 		} else {
-			opt['labelColor'] = 'white'
+			opt['labelColor'] = '#ffffff'
 			opt['buttonStyle'] = {
 				borderRadius: '17px',
 				backgroundColor: theme.primaryColor,
@@ -94,7 +96,7 @@ const PrimaryButton = (props, context) => {
 
 		defaultStyle = {
 			icon: {
-				color: 'white',
+				color: '#ffffff',
 				margin: '-1px 0 0 14px',
 				fontSize: '13px',
 				width: 13
@@ -116,7 +118,7 @@ const PrimaryButton = (props, context) => {
 				fontWeight: 'bold',
 				fontSize: 15,
 				fontFamily: "'Nunito', 'Mitr'",
-				color: 'white',
+				color: '#ffffff',
 				...props.labelStyle
 			},
 			style: {
@@ -126,23 +128,24 @@ const PrimaryButton = (props, context) => {
 				boxShadow: 'none',
 				...props.style
 			},
-			backgroundColor: theme.accentColor
+			backgroundColor: theme.accentColor,
+			disabled: props.disabled
 		}
 
 		if (props.buttonStyle === 'Flat') {
 			opt['hoverColor'] = theme.accentColor
 		} else {
-			opt['labelColor'] = 'white'
+			opt['labelColor'] = '#ffffff'
 			opt['buttonStyle'] = {
 				borderRadius: '20px',
-				backgroundColor: theme.accentColor,
+				backgroundColor: props.disabled ? '#C4C4C4' : theme.accentColor,
 				padding: '0 2px'
 			}
 		}
 
 		defaultStyle = {
 			icon: {
-				color: 'white',
+				color: '#ffffff',
 				margin: '-2px 0px 0 15px',
 				fontSize: '15px',
 				width: 15
