@@ -360,7 +360,7 @@ class TopBar extends React.Component {
 
 					{status == 'LOGGEDIN' &&
 						<Right>
-							<SearchButton />
+							<SearchButton scrolling={scrolling} transparent={transparent} hasCover={hasCover}/>
 							{this.role &&
 								editButton &&
 								<Edit
