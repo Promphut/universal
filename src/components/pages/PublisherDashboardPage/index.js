@@ -57,7 +57,7 @@ let styles = {
 		borderRadius: '20px'
 	},
 	labelButton: {
-		color: '#8F8F8F',
+		color: '#8f8f8f',
 		textTransform: 'none',
 		fontFamily: "'PT Sans', 'cs_prajad', sans-serif"
 	}

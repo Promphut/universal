@@ -42,23 +42,23 @@ const Button = styled.div`
 
 const SearchButtonIcon = styled.i`
   transition: 0.2;
-  color: ${props => props.theme.barTone=='light'?'#222':'white'};
+  color: ${props => props.theme.barTone=='light'?'#222':'#ffffff'};
 `
 
 const getStyles = (name,theme) => {
     if(name=='hintStyle')
         return {
-            color: theme.barTone == 'light' ? '#222':'white',
+            color: theme.barTone == 'light' ? '#222':'#ffffff',
             fontWeight: 'normal'
         }
     else if(name=='inputStyle')
         return {
-            color: theme.barTone == 'light' ? '#222':'white',
+            color: theme.barTone == 'light' ? '#222':'#ffffff',
         }
     else if(name=='textareaStyle')
         return {
             width: '180px',
-            color: theme.barTone == 'light' ? '#222':'white',
+            color: theme.barTone == 'light' ? '#222':'#ffffff',
         }
 }
 

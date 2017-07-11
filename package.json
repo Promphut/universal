@@ -100,7 +100,7 @@
     "lodash": "^4.17.4",
     "material-ui": "^0.18.1",
     "medium-editor": "^5.23.0",
-    "medium-editor-insert-plugin": "git+https://github.com/stepboom/medium-editor-insert-plugin",
+    "medium-editor-insert-plugin": "^2.4.1",
     "moment": "^2.17.1",
     "prop-types": "^15.5.8",
     "query-string": "^4.3.4",

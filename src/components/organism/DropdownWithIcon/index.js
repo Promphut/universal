@@ -113,7 +113,7 @@ class DropdownWithIcon extends React.Component {
       },
       showInactive:{
         textDecoration:'underline',
-        color:'#8F8F8F'
+        color:'#8f8f8f'
       }
     }
 

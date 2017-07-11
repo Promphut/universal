@@ -31,7 +31,8 @@ const PrimaryButton = (props, context) => {
 				boxShadow: 'none',
 				...props.style
 			},
-			backgroundColor: theme.accentColor
+			backgroundColor: theme.accentColor,
+			disabled: props.disabled
 		}
 
 		if (props.buttonStyle === 'Flat') {
@@ -78,7 +79,8 @@ const PrimaryButton = (props, context) => {
 				boxShadow: 'none',
 				...props.style
 			},
-			backgroundColor: theme.primaryColor
+			backgroundColor: theme.primaryColor,
+			disabled: props.disabled
 		}
 
 		if (props.buttonStyle === 'Flat') {
@@ -126,7 +128,8 @@ const PrimaryButton = (props, context) => {
 				boxShadow: 'none',
 				...props.style
 			},
-			backgroundColor: theme.accentColor
+			backgroundColor: theme.accentColor,
+			disabled: props.disabled
 		}
 
 		if (props.buttonStyle === 'Flat') {
@@ -135,7 +138,7 @@ const PrimaryButton = (props, context) => {
 			opt['labelColor'] = 'white'
 			opt['buttonStyle'] = {
 				borderRadius: '20px',
-				backgroundColor: theme.accentColor,
+				backgroundColor: props.disabled ? '#C4C4C4' : theme.accentColor,
 				padding: '0 2px'
 			}
 		}
