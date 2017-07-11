@@ -133,14 +133,13 @@ export default class SearchResultPage extends React.Component {
 	}
 
 	componentWillReceiveProps (nextProps) {
-		if(nextProps.match.params.type != this.props.match.params.type ){
+		if(nextProps.match.params.type != this.props.match.params.type 
+		|| nextProps.location.search != this.props.location.search ){
 			this.setState({
-				type: nextProps.match.params.type
-			},this.fetchResult(this.state.keyword,nextProps.match.params.type))
-		}
-		if(nextProps.location.search != this.props.location.search){
-				this.setState({keyword : utils.querystring('keyword',nextProps.location)}
-				,this.fetchResult(utils.querystring('keyword',nextProps.location),this.state.type))
+				type: nextProps.match.params.type,
+				keyword : utils.querystring('keyword',nextProps.location)
+			})
+			this.fetchResult(utils.querystring('keyword',nextProps.location),nextProps.match.params.type)
 		}
 	}
 
