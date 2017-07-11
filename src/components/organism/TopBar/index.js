@@ -142,7 +142,7 @@ const NotLogin = styled.div`
 `
 
 const Edit = styled(Link)`
-	min-width: 100px;
+	min-width: 105px;
 	font-size:18px;
 	float:left;
 	text-decoration:underline;
