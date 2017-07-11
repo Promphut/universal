@@ -17,7 +17,7 @@ const Wrapper = styled.div`
 
 let styles = {
 	list: {
-		color: '#FFFFFF'
+		color: '#ffffff'
 	},
 
 	listItem: {
