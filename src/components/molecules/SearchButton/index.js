@@ -120,9 +120,6 @@ class SearchButton extends React.Component {
     render() {
         let { theme } = this.context.setting.publisher
         let { text, redirect } = this.state
-        console.log(this.props.scrolling)
-        console.log(this.props.transparent)
-        console.log(this.props.hasCover)
 
         return(
             <div>

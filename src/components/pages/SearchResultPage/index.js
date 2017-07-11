@@ -93,7 +93,7 @@ const FilterItem = styled.li `
   text-align: center;
 
   &:hover {
-    background-color: ${props => !props.select && props.theme.secondaryColor};
+    background-color: ${props => (!props.select && !props.mobile) && props.theme.secondaryColor};
   }
 `
 
@@ -194,8 +194,8 @@ export default class SearchResultPage extends React.Component {
 				<Content2>
 					<Feed2>
             <FilterContainer>
-              <Link to={"/search/stories?keyword=" + keyword}><FilterItem select={type === 'stories'}>STORIES</FilterItem></Link>
-              <Link to={"/search/news?keyword=" + keyword}><FilterItem select={type === 'news'}>NEWS</FilterItem></Link>
+              <Link to={"/search/stories?keyword=" + keyword}><FilterItem mobile = {utils.isMobile()} select={type === 'stories'}>STORIES</FilterItem></Link>
+              <Link to={"/search/news?keyword=" + keyword}><FilterItem mobile = {utils.isMobile()} select={type === 'news'}>NEWS</FilterItem></Link>
               {/* <Link to={"/search/video/" + this.state.keyword}><FilterItem select={this.state.type === 'video'}>VIDEO</FilterItem></Link> */}
             </FilterContainer>
 
