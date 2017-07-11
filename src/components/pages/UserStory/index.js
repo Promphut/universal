@@ -393,7 +393,7 @@ class UserStory extends React.Component {
 				this.setState({ user: user }, done)
 			})
 			.catch(err => {
-				utils.toError(this.props.history, err)
+				utils.notFound(this.props.history, err)
 			})
 	}
 
@@ -407,7 +407,7 @@ class UserStory extends React.Component {
 				this.setState({ user: user }, done)
 			})
 			.catch(err => {
-				utils.toError(this.props.history, err)
+				utils.notFound(this.props.history, err)
 			})
 	}
 

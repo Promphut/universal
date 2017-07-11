@@ -282,7 +282,7 @@ class ColumnPage extends React.Component {
 				this.setState({ column: col }, done)
 			})
 			.catch(err => {
-				utils.toError(this.props.history, err)
+				utils.notFound(this.props.history, err)
 			})
 	}
 
