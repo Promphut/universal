@@ -11,11 +11,11 @@ import { withRouter } from 'react-router'
 
 let styles = {
   list:{
-    color:'white'
+    color:'#ffffff'
   },
   listItem:{
     padding:'20px',
-    color:"white",
+    color:"#ffffff",
     fontWeight:'bold'
   }
 }

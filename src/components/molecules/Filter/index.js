@@ -153,7 +153,7 @@ class Filter extends React.Component {
       },
       showInactive:{
         textDecoration:'underline',
-        color:'#8F8F8F'
+        color:'#8f8f8f'
       }
     }
     const dataSourceConfig = {text: 'text', value: 'value', id:'id'};

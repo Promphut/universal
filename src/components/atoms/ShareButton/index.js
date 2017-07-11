@@ -10,12 +10,12 @@ const styles = {
   },
   labelStyle: {
     fontSize: '15px',
-    color: '#FFF',
+    color: '#ffffff',
     textTransform: 'none'
   },
   iconStyle: {
     fontSize: '14px',
-    color: '#FFF',
+    color: '#ffffff',
     padding: '0px 0px 0px 5px'
   }
 }

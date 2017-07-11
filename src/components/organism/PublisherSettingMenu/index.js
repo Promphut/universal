@@ -17,19 +17,19 @@ const Wrapper = styled.div`
 
 let styles = {
 	list: {
-		color: 'white'
+		color: '#ffffff'
 	},
 
 	listItem: {
 		padding: '16px 20px',
-		color: 'white',
+		color: '#FFFFFF',
 		fontFamily: "'Nunito', 'Mitr', sans-serif",
 		fontWeight: 'bold'
 	},
 
 	listNestedItem: {
 		padding: '5px 20px',
-		color: 'white',
+		color: '#FFFFFF',
 		fontFamily: "'Nunito', 'Mitr', sans-serif",
 		fontWeight: 'bold'
 	}
