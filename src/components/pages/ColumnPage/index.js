@@ -192,7 +192,7 @@ class ColumnPage extends React.Component {
 		loading: false
 	}
 
-	FEED_LIMIT = config.FEED_LIMIT
+	FEED_LIMIT = utils.isMobile() ? config.FEED_LIMIT_MOBILE*2 : config.FEED_LIMIT;
 
 	static contextTypes = {
 		setting: PropTypes.object
@@ -214,63 +214,35 @@ class ColumnPage extends React.Component {
 		</Onload>
 	)
 
-	reloadFeed = () => {
-		this.setState(
-			{
-				currentPage: utils.querystring('page',this.props.location) ? utils.querystring('page',this.props.location) - 1 : 0,
-				feedCount: 1,
-				feed: [],
-				totalPages: 0,
-			},
-			() => {
-				this.loadFeed(this.state.column._id)()
-			}
-		)
-	}
+	loadFeed = () => {	
+		if (this.state.column._id == null) return
+		// ensure this method is called only once at a time
+		if (this.state.loading === true) return
+		this.state.loading = true
+		//console.log('LOAD FEED1')
 
-	loadFeed = colId => {
-		return () => {
-			if (colId == null) return
-			// ensure this method is called only once at a time
-			if (this.state.loading === true) return
-			this.state.loading = true
-			//console.log('LOAD FEED1')
+		let currentPage = this.state.currentPage
+		let colId = this.state.column._id
+		//console.log('page', page)
 
-			let currentPage = this.state.currentPage
-			//console.log('page', page)
-
-			api
-				.getFeed(
-					'article',
-					{ status: 1, column: colId },
-					'latest',
-					null,
-					currentPage,
-					this.FEED_LIMIT
+		api.getFeed('article', { status: 1, column: colId }, 'latest', null, currentPage, this.FEED_LIMIT)
+			.then(result => {
+				this.setState(
+					{
+						feed: result.feed,
+						feedCount: result.feed.length!=0 ? (result.count['1'] ? result.count['1'] : 0 ): 0,
+						totalPages: result.feed.length!=0 ? utils.getTotalPages(this.FEED_LIMIT, result.count['1']) : 0,
+					},
+					() => {
+						this.setState({loading:false})
+					}
 				)
-				.then(result => {
-					//console.log(result)
-					//let feed = this.state.feed.concat(result.feed)
-					this.setState(
-						{
-							feed: result.feed,
-							feedCount: result.count['total'] ? result.count['total'] : 0,
-							totalPages: utils.getTotalPages(this.FEED_LIMIT, result.count['total']),
-						},
-						() => {
-							this.setState({loading:false})
-						}
-					)
-				})
-		}
+			})
+	
 	}
 
 	changePage = e => {
 		this.props.history.push({ search: "?page=" + e })
-		this.setState({ currentPage: e - 1}, () => {
-			document.body.scrollTop = document.documentElement.scrollTop = 400
-			this.reloadFeed()
-		})
 	}
 
 	getColumnFromSlug = (columnSlug, done = () => {}) => {
@@ -287,7 +259,7 @@ class ColumnPage extends React.Component {
 	}
 
 	componentWillMount() {
-		this.getColumnFromSlug(this.props.match.params.columnSlug, this.reloadFeed)
+		this.getColumnFromSlug(this.props.match.params.columnSlug, this.loadFeed)
 	}
 
 	componentDidMount() {
@@ -299,12 +271,11 @@ class ColumnPage extends React.Component {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.match.params.columnSlug != this.props.match.params.columnSlug) {
-			this.getColumnFromSlug(nextProps.match.params.columnSlug, this.reloadFeed)
-			//this.reloadFeed()
+			this.getColumnFromSlug(nextProps.match.params.columnSlug, this.loadFeed)
 		} else if(nextProps.location.search != this.props.location.search){
-			this.setState({currentPage : utils.querystring('page',this.props.location) - 1},()=>{
+			this.setState({currentPage : utils.querystring('page',nextProps.location) - 1},()=>{
 				document.body.scrollTop = document.documentElement.scrollTop = 0
-				this.reloadFeed()
+				this.loadFeed()
 			})
 		}
 	}
@@ -393,9 +364,13 @@ class ColumnPage extends React.Component {
 								<Page>
 									{totalPages > 0 && ((totalPages > currentPage && currentPage >= 0) ?
 										<Pagination
+											hideFirstAndLastPageLinks={utils.isMobile() ? false : true}
+											hidePreviousAndNextPageLinks={utils.isMobile() ? true : false}
+											boundaryPagesRange={utils.isMobile() ? 0 : 1}
 											currentPage={currentPage + 1}
 											totalPages={totalPages}
-											onChange={this.changePage}/>
+											onChange={this.changePage}
+										/>
 										:
 										<EmptyStory
 											title="No More Story"

@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom'
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon';
-import {EditorCss,WriterAndDate,WritedBy,TagBox,CommentBox,CommentUser,RecommendArticle,FromColumn, FbShareButton, ImageShare} from 'components'
+import {EditorCss,WriterAndDate,WritedBy,TagBox,CommentBox,CommentUser,RecommendArticle,FromColumn, FbShareButton, ImageShare,ShareBottom,} from 'components'
 import RaisedButton from 'material-ui/RaisedButton';
 import api from '../../../services/api'
 import utils from '../../../services/utils'
@@ -202,7 +202,7 @@ class StoryDetail extends React.Component {
 
 
   render(){
-    var {story} = this.props
+    var {story,id} = this.props
     var s = story
     //console.log(s)
     const isMobile = utils.isMobile()
@@ -213,7 +213,7 @@ class StoryDetail extends React.Component {
     //console.log(s)
 
     return (
-      <Wraper>
+      <Wraper id={id}>
         <ImageShare sid={s&&s._id}/>
         <Head className='title-font'>{s.ptitle||'NEXT EMPIRE'}</Head>
         <WriterAndDate readTime={s.readTime} writer={s.writer} column={s.column} published={s.published}/>

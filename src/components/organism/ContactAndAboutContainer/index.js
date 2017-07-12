@@ -24,6 +24,9 @@ const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
+	@media (max-width: 480px) {
+		padding:0 0 15px 0;
+	}
 `
 
 const Main = styled.div`

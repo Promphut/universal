@@ -6,10 +6,12 @@ import NavigationLastPage from 'material-ui/svg-icons/navigation/last-page';
 import NavigationChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
 import NavigationChevronRight from 'material-ui/svg-icons/navigation/chevron-right';
 import PropTypes from 'prop-types';
+import utils from '../../../services/utils';
 
 const flatButtonStyle = {
-  minWidth: 36,
+  minWidth: 20,
   color:'#8F8F8F',
+  padding: 5
 };
 const active = {
   textDecoration:'underline',
@@ -20,28 +22,33 @@ const Page = ({value, isActive, onClick},context) => {
   //console.log('Page', value, isActive)
   var acc = context.setting.publisher.theme.accentColor
   return (
-    <FlatButton style={!isActive?{...flatButtonStyle}:{...flatButtonStyle,...active,color:acc}} labelStyle={!isActive?{fontSize:'20px'}:{fontSize:'20px',fontWeight:'bold'}}  label={value.toString()} primary={isActive} onClick={onClick}/>
+    <FlatButton 
+      style={!isActive?{...flatButtonStyle}:{...flatButtonStyle,...active,color:acc}} 
+      labelStyle={!isActive?{fontSize: utils.isMobile() ? '14px' : '16px' ,padding:10}:{fontSize: utils.isMobile() ? '14px' : '16px' ,fontWeight:'bold',padding:10}}  
+      label={value.toString()} 
+      primary={isActive} 
+      onClick={onClick}/>
   )
 };
 
 const Ellipsis = ({onClick}) => (
-  <FlatButton style={{...flatButtonStyle}} label="..." onClick={onClick}/>
+  <FlatButton style={{...flatButtonStyle}} labelStyle={{padding:0}} label="..." onClick={onClick}/>
 );
 
 const FirstPageLink = ({isActive, onClick}) => (
-  <FlatButton style={{...flatButtonStyle}} icon={<NavigationFirstPage/>} onClick={onClick}/>
+  <FlatButton style={{...flatButtonStyle}} icon={<NavigationFirstPage style={{width: utils.isMobile() ? '20px' : '24px',height: utils.isMobile() ? '20px' : '24px'}}/>}  onClick={onClick}/>
 );
 
 const PreviousPageLink = ({isActive, onClick}) => (
-  <FlatButton style={{...flatButtonStyle}} icon={<NavigationChevronLeft/>} onClick={onClick}/>
+  <FlatButton style={{...flatButtonStyle}} icon={<NavigationChevronLeft style={{width: utils.isMobile() ? '20px' : '24px',height: utils.isMobile() ? '20px' : '24px'}}/>} onClick={onClick}/>
 );
 
 const NextPageLink = ({isActive, onClick}) => (
-  <FlatButton style={{...flatButtonStyle}} icon={<NavigationChevronRight/>} onClick={onClick}/>
+  <FlatButton style={{...flatButtonStyle}} icon={<NavigationChevronRight style={{width: utils.isMobile() ? '20px' : '24px',height: utils.isMobile() ? '20px' : '24px'}}/>} onClick={onClick}/>
 );
 
 const LastPageLink = ({isActive, onClick}) => (
-  <FlatButton style={{...flatButtonStyle}} icon={<NavigationLastPage/>} onClick={onClick}/>
+  <FlatButton style={{...flatButtonStyle}} icon={<NavigationLastPage style={{width: utils.isMobile() ? '20px' : '24px',height: utils.isMobile() ? '20px' : '24px'}}/>} onClick={onClick}/>
 );
 
 const itemTypeToComponent = {

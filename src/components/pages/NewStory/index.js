@@ -392,12 +392,20 @@ class NewStory extends React.Component {
   }
 
   chooseColumn = (e,ind,val) => {
-    this.setState({column:val})
+    this.setState({
+      column:val,
+      status: this.SAVE_STATUS.DIRTIED,
+      saveStatus:'Unsave'
+    })
   }
 
   chooseContentType = (e,ind,val) => {
     const contentType = this.state.contentTypeList[val]
-    this.setState({contentType})
+    this.setState({
+      contentType,
+      status: this.SAVE_STATUS.DIRTIED,
+      saveStatus:'Unsave'
+    })
   }
 
   getTags = () => {
