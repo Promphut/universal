@@ -294,8 +294,6 @@ class HomePage extends React.Component {
 		//console.log(this.state.feedCount)
 		//if(feed.length==0) return <div></div>
 
-		console.log('render')
-
 		return (
 			<Wrapper>
 				{!isEmpty(pub) &&!utils.isMobile() &&<BgWithLogo data={pub}/>}

@@ -326,8 +326,6 @@ class NewsPage extends React.Component {
 			}
 		}
 
-		console.log('render')
-
 		return (
 			<Wrapper>
 				<TopBarWithNavigation onLoading={this.props.onLoading} />
