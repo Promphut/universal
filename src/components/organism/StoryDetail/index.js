@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom'
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon';
-import {EditorCss,WriterAndDate,WritedBy,TagBox,CommentBox,CommentUser,RecommendArticle,FromColumn, FbShareButton, ImageShare} from 'components'
+import {EditorCss,WriterAndDate,WritedBy,TagBox,CommentBox,CommentUser,RecommendArticle,FromColumn, FbShareButton, ImageShare,ShareButtom,} from 'components'
 import RaisedButton from 'material-ui/RaisedButton';
 import api from '../../../services/api'
 import utils from '../../../services/utils'
@@ -275,6 +275,8 @@ class StoryDetail extends React.Component {
         </div>}
 
         <Divider/>
+
+        {utils.isMobile() && <ShareButtom />}
 
         {/* NEXT ITERATION
         <NoComment>5 Comments</NoComment>

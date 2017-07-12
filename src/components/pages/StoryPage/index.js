@@ -344,8 +344,6 @@ class StoryPage extends React.Component {
 						</Content>
 
 
-						{utils.isMobile() && <ShareButtom />}
-
 						{!utils.isMobile() && <NextStory
 
 							cid={story.column._id}

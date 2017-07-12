@@ -5,10 +5,14 @@ import CopyToClipboard from 'react-copy-to-clipboard'
 import utils from '../../../services/utils'
 
 const ShareContainer = styled.div`
+    position: fixed;
+    bottom: 0;
     display: flex;
-    wigth: 100%;
+    width: 100%;
     height: 40px;
     border: 1px solid #EAEAEA;
+    z-index: 20;
+    visibility: ${props => props.scrollOpacity? 1 : 0}
 `
 
 const Item = styled.div `
@@ -37,10 +41,10 @@ export default class ShareButtom extends React.Component {
     }
 
     handleScroll = e => {
-    if (!utils.isMobile()) {
+    if (utils.isMobile()) {
       const scrollOpacity = e.srcElement.body.scrollTop > e.srcElement.body.scrollHeight - window.innerHeight - 10
-        ? true
-        : false
+        ? false
+        : true
 
       this.setState({
         scrollOpacity
@@ -48,7 +52,7 @@ export default class ShareButtom extends React.Component {
     }
   }
 
-    componentDidMount() {
+  componentDidMount() {
 		window.addEventListener('scroll', this.handleScroll)
 	}
 
@@ -67,5 +71,5 @@ export default class ShareButtom extends React.Component {
             </ShareContainer>
         )
     }
-    
+
 }
