@@ -22,6 +22,7 @@ import api from 'components/api'
 import utils from '../../../services/utils'
 import config from '../../../config'
 import Snackbar from 'material-ui/Snackbar'
+import _ from 'lodash'
 
 const Div = styled.div`
   width:100%;
@@ -217,12 +218,12 @@ class ColumnSettingPage extends React.Component {
 	}
 
 	getParent = cid => {
-		if (cid) {
+		if (cid && cid !== null) {
 			api
 				.getColumn(cid)
 				.then(parentCol => {
 					let column = this.state.column
-					column.parent = parentCol.name
+					column.parent = parentCol._id
 
 					this.setState({
 						column,
@@ -233,7 +234,12 @@ class ColumnSettingPage extends React.Component {
 					this.setState({ parentSearchText: '' })
 				})
 		} else {
-			this.setState({ parentSearchText: '' })
+			let column = this.state.column
+			column.parent = null
+			this.setState({
+				column,
+				parentSearchText: ''
+			})
 		}
 	}
 
@@ -306,7 +312,10 @@ class ColumnSettingPage extends React.Component {
 		// data["shortDesc"] = document.getElementById("shortDesc").value;
 
 		let column = this.state.column
-		// column.parent = 
+		console.log(column)
+		if (column.parent === -1) {
+			column.parent = null
+		}
 		api
 			.updateColumn(cid, column)
 			.then(col => {
@@ -328,9 +337,16 @@ class ColumnSettingPage extends React.Component {
 
 		let inp = keyword.split('').length, a = []
 		api.getColumns().then(columns => {
+			a[0] = { text: 'No column', value: -1 }
 			columns.map((column, index) => {
 				if (column.slug !== 'news')
-					a[index] = { text: column.name, value: column.id }
+					a[index + 1] = { text: column.name, value: column._id }
+			})
+
+			_.remove(a, c => {
+				if (c && c.value) {
+					return c.value === this.state.selectColumn
+				}
 			})
 
 			this.setState({
@@ -380,21 +396,9 @@ class ColumnSettingPage extends React.Component {
 		if (cid == null) return
 
 		if (typeof item === 'object') {
-			console.log('item', item)
-			console.log('cid', cid)
-
-			// api
-			// 	.addEditorToColumn(parseInt(item.value), cid)
-			// 	.then(result => {
-			// 		let editors = this.state.editors.slice()
-			// 		editors.push(item)
-			//
-			// 		this.setState({
-			// 			editors: editors,
-			// 			editorSearchText: ''
-			// 		})
-			// 	})
-			// 	.catch(err => {})
+			const column = this.state.column
+			column.parent = parseInt(item.value)
+			this.setState({ column })
 		}
 	}
 
