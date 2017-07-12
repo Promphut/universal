@@ -36,19 +36,19 @@ const Ellipsis = ({onClick}) => (
 );
 
 const FirstPageLink = ({isActive, onClick}) => (
-  <FlatButton style={{...flatButtonStyle}} icon={<NavigationFirstPage style={{width: utils.isMobile() ? '20' : '24',height: utils.isMobile() ? '20' : '24'}}/>}  onClick={onClick}/>
+  <FlatButton style={{...flatButtonStyle}} icon={<NavigationFirstPage style={{width: utils.isMobile() ? '20px' : '24px',height: utils.isMobile() ? '20px' : '24px'}}/>}  onClick={onClick}/>
 );
 
 const PreviousPageLink = ({isActive, onClick}) => (
-  <FlatButton style={{...flatButtonStyle}} icon={<NavigationChevronLeft style={{width: utils.isMobile() ? '20' : '24',height: utils.isMobile() ? '20' : '24'}}/>} onClick={onClick}/>
+  <FlatButton style={{...flatButtonStyle}} icon={<NavigationChevronLeft style={{width: utils.isMobile() ? '20px' : '24px',height: utils.isMobile() ? '20px' : '24px'}}/>} onClick={onClick}/>
 );
 
 const NextPageLink = ({isActive, onClick}) => (
-  <FlatButton style={{...flatButtonStyle}} icon={<NavigationChevronRight style={{width: utils.isMobile() ? '20' : '24',height: utils.isMobile() ? '20' : '24'}}/>} onClick={onClick}/>
+  <FlatButton style={{...flatButtonStyle}} icon={<NavigationChevronRight style={{width: utils.isMobile() ? '20px' : '24px',height: utils.isMobile() ? '20px' : '24px'}}/>} onClick={onClick}/>
 );
 
 const LastPageLink = ({isActive, onClick}) => (
-  <FlatButton style={{...flatButtonStyle}} icon={<NavigationLastPage style={{width: utils.isMobile() ? '20' : '24',height: utils.isMobile() ? '20' : '24'}}/>} onClick={onClick}/>
+  <FlatButton style={{...flatButtonStyle}} icon={<NavigationLastPage style={{width: utils.isMobile() ? '20px' : '24px',height: utils.isMobile() ? '20px' : '24px'}}/>} onClick={onClick}/>
 );
 
 const itemTypeToComponent = {

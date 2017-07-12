@@ -343,7 +343,7 @@ class StoryPage extends React.Component {
 								<RecommendContainer recommend={recommends} />}
 						</Content>
 
-						{utils.isMobile() && <ShareButtom />}
+						{/* {utils.isMobile() && <ShareButtom />} */}
 
 						{!utils.isMobile() && <NextStory
 							cid={story.column._id}

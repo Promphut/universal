@@ -333,54 +333,33 @@ class UserStory extends React.Component {
 		</Onload>
 	)
 
-	reloadFeed = () => {
-		this.setState(
-			{
-				currentPage: utils.querystring('page',this.props.location) ? utils.querystring('page',this.props.location) - 1 : 0,
-				feedCount: 1,
-				feed: [],
-				totalPages: 0,
-			},
-			() => {
-				this.loadFeed(this.state.user._id)()
-			}
-		)
-	}
-
-	loadFeed = uid => {
-		return () => {
-			if (uid == null) return
-			// ensure this method is called only once at a time
-			if (this.state.loading === true) return
+	loadFeed = () => {
+		if (this.state.user._id == null) return
+		// ensure this method is called only once at a time
+		if (this.state.loading === true) return
 			this.state.loading = true
 
-			let currentPage = this.state.currentPage
-			//console.log('page', page)
-			//console.log('UID', uid)
-			api
-				.getFeed('story', { writer: uid, status: 1 }, 'latest', null, currentPage, this.FEED_LIMIT)
-				.then(result => {
-					let feed = this.state.feed.concat(result.feed)
-					this.setState(
-						{
-							feed: feed,
-							feedCount: result.count['total'] ? result.count['total'] : 0,
-							totalPages: utils.getTotalPages(this.FEED_LIMIT, result.count['total']),
-						},
-						() => {
-							this.setState({loading : false})
-						}
-					)
-				})
-		}
+		let currentPage = this.state.currentPage
+		let uid = this.state.user._id
+		//console.log('page', page)
+		//console.log('UID', uid)
+		api.getFeed('story', { writer: uid, status: 1 }, 'latest', null, currentPage, this.FEED_LIMIT)
+			.then(result => {
+				this.setState(
+					{
+						feed: result.feed,
+						feedCount: result.feed.length!=0 ? (result.count['1'] ? result.count['1'] : 0) : 0,
+						totalPages: result.feed.length!=0 ? utils.getTotalPages(this.FEED_LIMIT, result.count['1']) : 0,
+					},
+					() => {
+						this.setState({loading : false})
+					}
+				)
+			})
 	}
 
 	changePage = e => {
 		this.props.history.push({ search: "?page=" + e })
-		this.setState({ currentPage: e - 1}, () => {
-			document.body.scrollTop = document.documentElement.scrollTop = 0
-			this.reloadFeed()
-		})
 	}
 
 	getUserFromUsername = (username, done = () => {}) => {
@@ -414,9 +393,9 @@ class UserStory extends React.Component {
 	componentDidMount() {
 		let username, uid
 		if ((username = this.props.match.params.username)) {
-			this.getUserFromUsername(username, this.reloadFeed)
+			this.getUserFromUsername(username, this.loadFeed)
 		} else if ((uid = this.props.match.params.uid)) {
-			this.getUserFromUid(uid, this.reloadFeed)
+			this.getUserFromUid(uid, this.loadFeed)
 		}
 
 		this.setState({
@@ -426,15 +405,13 @@ class UserStory extends React.Component {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.match.params.username != this.props.match.params.username) {
-			this.getUserFromUsername(nextProps.match.params.username, this.reloadFeed)
-			//this.reloadFeed()
+			this.getUserFromUsername(nextProps.match.params.username, this.loadFeed)
 		} else if (nextProps.match.params.uid != this.props.match.params.uid) {
-			this.getUserFromUid(nextProps.match.params.uid, this.reloadFeed)
-			//this.reloadFeed()
+			this.getUserFromUid(nextProps.match.params.uid, this.loadFeed)
 		} else if(nextProps.location.search != this.props.location.search){
-			this.setState({currentPage : utils.querystring('page',this.props.location) - 1},()=>{
+			this.setState({currentPage : utils.querystring('page',nextProps.location) - 1},()=>{
 				document.body.scrollTop = document.documentElement.scrollTop = 0
-				this.reloadFeed()
+				this.loadFeed()
 			})
 		}
 	}

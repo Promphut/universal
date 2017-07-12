@@ -170,20 +170,6 @@ export default class AllStoriesPage extends React.Component {
         </Onload>
     )
 
-	reloadFeed = () => {
-		this.setState(
-			{
-				currentPage: utils.querystring('page',this.props.location) ? utils.querystring('page',this.props.location) - 1 : 0,
-				feedCount: 1,
-				feed: [],
-				totalPages: 0,
-			},
-			() => {
-				this.getAllFeed()
-			}
-		)
-	}
-
 	getAllFeed = () => {
 
 		if (this.state.loading === true) return
@@ -194,11 +180,11 @@ export default class AllStoriesPage extends React.Component {
 				this.setState(
 					{
 						feed: result.feed,
-						feedCount: result.count['1'] ? result.count['1'] : 0,
-						totalPages: utils.getTotalPages(this.FEED_LIMIT, result.count['total']),
+						feedCount: result.feed.length!=0 ? (result.count['1'] ? result.count['1'] : 0 ): 0,
+						totalPages: result.feed.length!=0 ? utils.getTotalPages(this.FEED_LIMIT, result.count['1']) : 0,
 					},
 					() => {
-						this.setState({loading:false})
+					this.setState({loading:false})
 					}
 				)
 
@@ -207,9 +193,6 @@ export default class AllStoriesPage extends React.Component {
 
     changePage = e => {
         this.props.history.push({ search: "?type=" + this.state.type  + "&sort="+ this.state.sort + "&page=" + e})
-        this.setState({ currentPage: e - 1}, () => {
-            this.getAllFeed()
-        })
     }
 
     changeSort = sort => {
@@ -222,7 +205,7 @@ export default class AllStoriesPage extends React.Component {
     }
 
     componentWillMount(){
-        this.reloadFeed()
+        this.getAllFeed()
     }
 
     componentDidMount() {
@@ -235,7 +218,7 @@ export default class AllStoriesPage extends React.Component {
         if(nextProps.location.search != this.props.location.search){
             document.body.scrollTop = document.documentElement.scrollTop = 0
             this.setState({currentPage : utils.querystring('page',nextProps.location)-1}
-                ,()=>{this.reloadFeed()
+                ,()=>{this.getAllFeed()
             })
         }
     }
