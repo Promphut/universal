@@ -13,12 +13,13 @@ if (process.env.BROWSER) {
 	cookies = new Cookies();
 }
 // We don't need "staging.[domain]" instead use ".[domain]" to cover all subdomains
-const domain = {domain:config.DOMAIN.replace('staging.', ''), path:'/', secure:true}
+const domain = {domain:config.DOMAIN, path:'/', secure:config.isDev ? false : true, expires: new Date(Number(new Date()) + 7776000000)}
 
 let cookieService = {}
 cookieService = {
 	// Set cookie string by name
 	set(cookieName, str){ 
+		console.log('COOKIE', cookieName, str, domain)
 		cookies.set(cookieName, str, domain)
 	},
 
