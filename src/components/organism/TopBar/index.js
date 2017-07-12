@@ -78,7 +78,7 @@ const Container = styled.div`
 
 const Left = styled.div`
 	justify-content: flex-start;
-	display: inline-block;
+	display: flex;
 	z-index:10;
 `
 
@@ -128,7 +128,8 @@ const Right = styled.div`
 `
 
 const HideOnTablet = styled.div`
-	float: left;
+	flex:0;
+	min-width: 100px;
 
 	@media (max-width: 640px) {
 		display: none;
@@ -141,6 +142,7 @@ const NotLogin = styled.div`
 `
 
 const Edit = styled(Link)`
+	min-width: 105px;
 	font-size:18px;
 	float:left;
 	text-decoration:underline;
@@ -166,7 +168,6 @@ const Logo = styled.img`
   }
 `
 const ContainerCenter = styled.div`
-	position:absolute;
 	width:100%;
 	height:100%;
 	display:flex;
@@ -380,7 +381,7 @@ class TopBar extends React.Component {
 									<Link to="/me/stories/new">
 										<PrimaryButton
 											label="Story"
-											labelStyle={{ textTransform: 'none' }}
+											labelStyle={{ textTransform: 'none'}}
 											iconName="add"
 											style={buttonStyle}
 										/>

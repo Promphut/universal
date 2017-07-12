@@ -22,7 +22,7 @@ const ButtonContainer = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-right: {props.mar};
+    margin-right: 10px;
 `
 
 const Button = styled.div`
@@ -42,7 +42,7 @@ const Button = styled.div`
 
 const SearchButtonIcon = styled.i`
   transition: 0.2;
-  color: ${props => (!props.scrolling && props.transparent && props.hasCover) || props.theme.barTone=='dark' ? 'white':'#222'};
+  color: ${props => (!props.scrolling && props.transparent && props.hasCover) || props.theme.barTone=='dark' ? '#ffffff':'#222'};
 `
 
 const getStyles = (name,theme,scrolling,transparent,hasCover) => {
@@ -53,12 +53,12 @@ const getStyles = (name,theme,scrolling,transparent,hasCover) => {
         }
     else if(name=='inputStyle')
         return {
-            color: (!scrolling && transparent && hasCover) ||theme == 'dark' ? 'white':'#222',
+            color: (!scrolling && transparent && hasCover) ||theme == 'dark' ? '#ffffff':'#222',
         }
     else if(name=='textareaStyle')
         return {
             width: '180px',
-            color: (!scrolling && transparent && hasCover) ||theme == 'dark' ? 'white':'#222',
+            color: (!scrolling && transparent && hasCover) ||theme == 'dark' ? '#ffffff':'#222',
         }
 }
 
@@ -124,10 +124,10 @@ class SearchButton extends React.Component {
         return(
             <div>
                 {redirect && <Redirect push to={'/search/stories?keyword=' + trim(text)} />
-                }   
+                }
                 <MuiThemeProvider muiTheme={(!this.props.scrolling && this.props.transparent && this.props.hasCover) || theme.barTone=='dark' ? muiTheme2 : muiTheme}>
                     <ButtonContainer mar= {utils.isMobile() ? '8px' : '32px'}>
-                        {utils.isMobile() ? 
+                        {utils.isMobile() ?
                             <Link to ="/search/stories?keyword="><SearchButtonIcon id="bt" className="fa fa-search" aria-hidden="true"></SearchButtonIcon></Link>
                             :
                             <Button>

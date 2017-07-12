@@ -61,7 +61,7 @@ const styles = {
 	},
 	arrow: {
 		fontSize: '12px',
-		color: '#C4C4C4',
+		color: '#c4c4c4',
 		padding: '0px 5px 0px 0px'
 	}
 }

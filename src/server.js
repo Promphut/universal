@@ -70,19 +70,21 @@ const extractMeta = (setting, url) => {
 			if(col.cover && col.cover.medium) meta.cover = col.cover.medium
 			if(col.url) meta.url = col.url
 			return meta
-		})
+		}).catch((err)=>{return Promise.resolve(meta)})
 	} else if (path[1] === 'stories' && !(path[2].startsWith('all')||path[2].startsWith('columns'))) {
 		// 2. Story case
-		let sid = path[4]
-		return api.getStoryFromSid(sid)
-		.then(res => {
-			let s = res.story
-			if(s.ptitle) meta.name = s.ptitle + ' | ' + setting.publisher.name
-			if(s.contentShort) meta.desc = s.contentShort
-			if(s.cover) meta.cover = s.cover.large || s.cover.medium
-			if(s.url) meta.url = s.url
-			return meta
-		})
+			if(path.length>4 && path[4]) {
+				let sid = path[4]
+				return api.getStoryFromSid(sid)
+				.then(res => {
+					let s = res.story
+					if(s.ptitle) meta.name = s.ptitle + ' | ' + setting.publisher.name
+					if(s.contentShort) meta.desc = s.contentShort
+					if(s.cover) meta.cover = s.cover.large || s.cover.medium
+					if(s.url) meta.url = s.url
+					return meta
+				}).catch((err)=>{return Promise.resolve(meta)})
+			}else return Promise.resolve(meta)
 	} else if (path[1] && path[1].substring(0, 1) === '@') {
 		// 3. User case with username
 		let user
@@ -96,7 +98,7 @@ const extractMeta = (setting, url) => {
 			if(u.desc) meta.desc = u.desc
 			if(u.url) meta.url = u.url
 			return meta
-		})
+		}).catch((err)=>{return Promise.resolve(meta)})
 	} else if (path[1] === 'u') {
 		// 4. User case with user id
 		let uid
@@ -111,7 +113,7 @@ const extractMeta = (setting, url) => {
 			if(u.desc) meta.desc = u.desc
 			if(u.url) meta.url = u.url
 			return meta
-		})
+		}).catch((err)=>{return Promise.resolve(meta)})
 	}
 	else return Promise.resolve(meta)
 }

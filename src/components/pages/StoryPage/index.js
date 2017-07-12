@@ -78,19 +78,8 @@ const Share = styled.div`
 `
 
 const LikeBoxContainer = styled.div`
-	width:100%;
+	width:70%;
 	margin: 0 auto 0 auto;
-	text-align: center;
-
-	div > div > .fb-page span
-	{
-			width:100% !important;
-	}
-
-	div > div > .fb-page iframe
-	{
-			width:100% !important;
-	}
 `
 
 const Main = styled.div`
@@ -354,9 +343,13 @@ class StoryPage extends React.Component {
 								<RecommendContainer recommend={recommends} />}
 						</Content>
 
+<<<<<<< HEAD
 						{utils.isMobile() && <ShareButtom />}
 						
 						{!utils.isMobile() && <NextStory
+=======
+						<NextStory
+>>>>>>> 2e7b44f0d679bde9c045db439e276a05ee1e8071
 							cid={story.column._id}
 							currentID={story._id}
 							format={story.format}
