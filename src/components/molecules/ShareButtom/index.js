@@ -1,0 +1,75 @@
+import React from 'react'
+import styled from 'styled-components'
+import {TwtShareButton, FbShareButton, InShareButton, LineShareButton, LineIcon2, CopyLinkIcon, Stick} from 'components'
+import CopyToClipboard from 'react-copy-to-clipboard'
+import utils from '../../../services/utils'
+
+const ShareContainer = styled.div`
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    width: 100%;
+    height: 40px;
+    border: 1px solid #EAEAEA;
+    z-index: 20;
+    visibility: ${props => props.scrollOpacity? 1 : 0}
+`
+
+const Item = styled.div `
+    flex: 1;
+    height: 40px;
+    background-color: ${props => props.color};
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+const ShareButton = styled.div`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+
+export default class ShareButtom extends React.Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            scrollOpacity: false
+        }
+    }
+
+    handleScroll = e => {
+    if (utils.isMobile()) {
+      const scrollOpacity = e.srcElement.body.scrollTop > e.srcElement.body.scrollHeight - window.innerHeight - 10
+        ? false
+        : true
+
+      this.setState({
+        scrollOpacity
+      })
+    }
+  }
+
+  componentDidMount() {
+		window.addEventListener('scroll', this.handleScroll)
+	}
+
+	componentWillUnmount() {
+		window.removeEventListener('scroll', this.handleScroll)
+	}
+
+    render() {
+        return (
+            <ShareContainer scrollOpacity = {this.state.scrollOpacity}>
+                <Item color='#3A579A'><FbShareButton  button={<ShareButton> <i className="fa fa-facebook" aria-hidden="true" style={{color:'white', fontSize:'12px'}}></i> </ShareButton>} /></Item>
+                <Item color='#60AADE'><TwtShareButton button={<ShareButton> <i className="fa  fa-twitter" aria-hidden="true" style={{color:'white', fontSize:'12px'}}></i> </ShareButton>} /></Item>
+                <Item color='#0077b5'><InShareButton  button={<ShareButton> <i className="fa  fa-linkedin" aria-hidden="true" style={{color:'white', fontSize:'12px'}}></i> </ShareButton>} /></Item>
+                <Item color='#00c300'><LineShareButton button={<ShareButton> <LineIcon2 width='20.92px' height='8px' color='#FFF'/> </ShareButton>} /></Item>
+                <Item color='#FFF'><ShareButton> <CopyLinkIcon width='12px' height='12px' color='#8E8E8E'/> </ShareButton></Item>
+            </ShareContainer>
+        )
+    }
+
+}

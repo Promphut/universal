@@ -7,7 +7,7 @@ const merge = require('lodash/merge')
 const config = {
 	all: {
 		env: process.env.NODE_ENV || 'development',
-		isDev: process.env.NODE_ENV !== 'production',
+		isDev: process.env.NODE_ENV === 'development',
 		basename: process.env.PUBLIC_PATH,
 		isBrowser: typeof window !== 'undefined',
 		isServer: typeof window === 'undefined',
@@ -19,6 +19,7 @@ const config = {
     NAME: 'NextEmpire', // one word, no space
     FACEBOOK: 'nextempire',
     FEED_LIMIT: 15,
+    FEED_LIMIT_MOBILE: 5,
     ROLES: {
       MEMBER: 0, 
       EDITOR: 1, 
