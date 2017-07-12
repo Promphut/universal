@@ -12,7 +12,7 @@ import {
 	Footer,
 	BackToTop,
 	NextStory,
-	ShareButtom
+	ShareBottom
 } from 'components'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
@@ -315,7 +315,7 @@ class StoryPage extends React.Component {
 							</Share>
 
 							<Main ref={'TT'} isMobile={isMobile}>
-								<StoryDetail story={story} />
+								<StoryDetail story={story} id='storyDetail'/>
 								<LikeBoxContainer>
 									<div
 										dangerouslySetInnerHTML={{
@@ -343,6 +343,7 @@ class StoryPage extends React.Component {
 								<RecommendContainer recommend={recommends} />}
 						</Content>
 
+						{utils.isMobile() && <ShareBottom sid={story.id}/>}
 
 						{!utils.isMobile() && <NextStory
 							cid={story.column._id}
