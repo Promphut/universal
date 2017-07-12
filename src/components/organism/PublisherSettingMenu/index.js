@@ -5,7 +5,7 @@ import { PrimaryButton, SecondaryButton } from 'components'
 import { List, ListItem, makeSelectable } from 'material-ui/List'
 import FontIcon from 'material-ui/FontIcon'
 import { Link } from 'react-router-dom'
-import auth from 'components/auth'
+import auth from '../../../services/auth'
 import { withRouter } from 'react-router'
 
 const Wrapper = styled.div`
@@ -17,19 +17,19 @@ const Wrapper = styled.div`
 
 let styles = {
 	list: {
-		color: 'white'
+		color: '#ffffff'
 	},
 
 	listItem: {
 		padding: '16px 20px',
-		color: 'white',
+		color: '#FFFFFF',
 		fontFamily: "'Nunito', 'Mitr', sans-serif",
 		fontWeight: 'bold'
 	},
 
 	listNestedItem: {
 		padding: '5px 20px',
-		color: 'white',
+		color: '#FFFFFF',
 		fontFamily: "'Nunito', 'Mitr', sans-serif",
 		fontWeight: 'bold'
 	}

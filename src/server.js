@@ -27,8 +27,8 @@ import { FRONTURL, port, host, basename, ANALYTIC, COVER, amazonAccessKey, secre
 //import AppRoutes from 'components/routes'
 import App2 from 'components/App2'
 import Html from 'components/Html'
-import Error from 'components/Error'
-import api from 'components/api'
+import ErrorPage from 'components/ErrorPage'
+import api from './services/api'
 import sm from 'sitemap'
 
 const renderApp = ({ cookies, context, location, sheet, setting }) => {
@@ -70,39 +70,50 @@ const extractMeta = (setting, url) => {
 			if(col.cover && col.cover.medium) meta.cover = col.cover.medium
 			if(col.url) meta.url = col.url
 			return meta
-		})
+		}).catch((err)=>{return Promise.resolve(meta)})
 	} else if (path[1] === 'stories' && !(path[2].startsWith('all')||path[2].startsWith('columns'))) {
 		// 2. Story case
-		let sid = path[4]
-		return api.getStoryFromSid(sid)
-		.then(res => {
-			let s = res.story
-			if(s.ptitle) meta.name = s.ptitle + ' | ' + setting.publisher.name
-			if(s.contentShort) meta.desc = s.contentShort
-			if(s.cover) meta.cover = s.cover.large || s.cover.medium
-			if(s.url) meta.url = s.url
-			return meta
-		})
+			if(path.length>4 && path[4]) {
+				let sid = path[4]
+				return api.getStoryFromSid(sid)
+				.then(res => {
+					let s = res.story
+					if(s.ptitle) meta.name = s.ptitle + ' | ' + setting.publisher.name
+					if(s.contentShort) meta.desc = s.contentShort
+					if(s.cover) meta.cover = s.cover.large || s.cover.medium
+					if(s.url) meta.url = s.url
+					return meta
+				}).catch((err)=>{return Promise.resolve(meta)})
+			}else return Promise.resolve(meta)
 	} else if (path[1] && path[1].substring(0, 1) === '@') {
 		// 3. User case with username
-		let user = decodeURIComponent(path[1].substring(1))
+		let user
+		if(path[1].indexOf("?") != -1)
+			user = decodeURIComponent(path[1].substring(1,path[1].indexOf("?")))
+		else
+			user = decodeURIComponent(path[1].substring(1))
 		return api.getUserFromUsername(user)
 		.then(u => {
 			if(u.display) meta.name = u.display + ' | ' + setting.publisher.name
 			if(u.desc) meta.desc = u.desc
 			if(u.url) meta.url = u.url
 			return meta
-		})
+		}).catch((err)=>{return Promise.resolve(meta)})
 	} else if (path[1] === 'u') {
 		// 4. User case with user id
-		const uid = path[2]
+		let uid
+		if(path[2].indexOf("?") != -1)
+			uid = path[2].substring(path[2].indexOf("?"))
+		else
+			uid = path[2]
+		path[2].substring(1,path[1].indexOf("?"))
 		return api.getUser(uid)
 		.then(u => {
 			if(u.display) meta.name = u.display + ' | ' + setting.publisher.name
 			if(u.desc) meta.desc = u.desc
 			if(u.url) meta.url = u.url
 			return meta
-		})
+		}).catch((err)=>{return Promise.resolve(meta)})
 	}
 	else return Promise.resolve(meta)
 }
@@ -246,14 +257,24 @@ app.get('/sitemap.xml', (req, res)=> {
       res.send( xml );
   });
 });
+
 app.get('/robots.txt', (req, res) => {
-	res.send(`
-User-agent: *
+	let robotTxt = ''
+
+	if(process.env.NODE_ENV === 'production') 
+		robotTxt = 
+`User-agent: *
 Disallow: /me/*
 Disallow: /editor
 Disallow: /editor/*
-Sitemap: ${FRONTURL}/sitemap.xml
-	`)
+Sitemap: ${FRONTURL}/sitemap.xml`
+	else 
+		robotTxt = 
+`User-agent: *
+Disallow: /
+Sitemap: ${FRONTURL}/sitemap.xml`
+
+	res.send(robotTxt)
 })
 
 app.get(['/feed', '/feed/rss', '/rss'],(req,res) => {
@@ -333,7 +354,7 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
 	const sheet = new ServerStyleSheet()
-	const content = renderToStaticMarkup(sheet.collectStyles(<Error />))
+	const content = renderToStaticMarkup(sheet.collectStyles(<ErrorPage />))
 
 	var meta = {name:'',keywords:'',desc:'',cover:'',analytic:'',url:''}
 

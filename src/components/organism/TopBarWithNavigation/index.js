@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {TopBar, TopNavigation, TopBarWithShare, Stick} from 'components'
-import auth from 'components/auth'
-import api from 'components/api'
+import auth from '../../../services/auth'
+import api from '../../../services/api'
 import { withRouter } from 'react-router'
 import utils from '../../../services/utils'
 import truncate from 'lodash/truncate'
@@ -14,6 +14,9 @@ const Title = styled.div`
 	font-weight:bold;
 	margin:18px 0 0 0;
 	animation:${props=>props.show?slideIn:slideOut} 0.5s forwards;
+	@media (min-width: 768px) and (max-width: 992px) {
+		display:none;
+  }
 `
 const slideIn = keyframes`
 	from { opacity:0; }

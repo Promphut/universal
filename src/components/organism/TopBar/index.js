@@ -12,7 +12,7 @@ import {
 	BGImg,
 	SearchButton
 } from 'components'
-import auth from 'components/auth'
+import auth from '../../../services/auth'
 import FontIcon from 'material-ui/FontIcon'
 import RaisedButton from 'material-ui/RaisedButton'
 import utils from '../../../services/utils'
@@ -78,7 +78,7 @@ const Container = styled.div`
 
 const Left = styled.div`
 	justify-content: flex-start;
-	display: inline-block;
+	display: flex;
 	z-index:10;
 `
 
@@ -107,12 +107,6 @@ const LogoWrapper = styled.div`
 	height: 60px;
 `
 
-const Logo = styled.img`
-	height: 60px;
-	width: 60px;
-	cursor: pointer
-`
-
 const Center = styled.div`
 	max-width: 60%;
 	white-space: nowrap;
@@ -134,7 +128,8 @@ const Right = styled.div`
 `
 
 const HideOnTablet = styled.div`
-	float: left;
+	flex:0;
+	min-width: 100px;
 
 	@media (max-width: 640px) {
 		display: none;
@@ -147,6 +142,7 @@ const NotLogin = styled.div`
 `
 
 const Edit = styled(Link)`
+	min-width: 105px;
 	font-size:18px;
 	float:left;
 	text-decoration:underline;
@@ -162,8 +158,16 @@ const LogoGif = styled(BGImg)`
 	margin-right:12px;
 	animation:${props => (props.onLoading ? fadeOut : fadeIn)} 1.25s linear;
 `
+const Logo = styled.img`
+	height: 60px;
+	@media (max-width: 640px) {
+		display: none;
+	}
+	@media (min-width: 768px) and (max-width: 992px) {
+		display:none;
+  }
+`
 const ContainerCenter = styled.div`
-	position:absolute;
 	width:100%;
 	height:100%;
 	display:flex;
@@ -341,14 +345,11 @@ class TopBar extends React.Component {
 								/>
 							</Link>
 
-							<LogoLink
-								to="/"
-								src={theme.logo}
-								title={config.DOMAIN}
-								style={{...logoStyle}}
-								id={'logo'}
-								fill={!scrolling && hasCover ? '#FFF' : ''}
-							/>
+							<Link to="/">
+								<Logo
+									src={theme.logo}
+								/>
+							</Link>
 						</LogoWrapper>
 					</Left>
 
@@ -360,7 +361,7 @@ class TopBar extends React.Component {
 
 					{status == 'LOGGEDIN' &&
 						<Right>
-							<SearchButton />
+							<SearchButton scrolling={scrolling} transparent={transparent} hasCover={hasCover}/>
 							{this.role &&
 								editButton &&
 								<Edit
@@ -380,7 +381,7 @@ class TopBar extends React.Component {
 									<Link to="/me/stories/new">
 										<PrimaryButton
 											label="Story"
-											labelStyle={{ textTransform: 'none' }}
+											labelStyle={{ textTransform: 'none'}}
 											iconName="add"
 											style={buttonStyle}
 										/>

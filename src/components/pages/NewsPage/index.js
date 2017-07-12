@@ -6,14 +6,12 @@ import {
 	BGImg,
 	NewsBox,
 	Footer,
-	TopNews,
-	TopNewsSmall,
+	TopNewsBox,
 	BackToTop,
 	SeeMore
 } from 'components'
 import styled from 'styled-components'
-import auth from 'components/auth'
-import api from 'components/api'
+import api from '../../../services/api'
 import slider from 'react-slick'
 import InfiniteScroll from 'react-infinite-scroller'
 import CircularProgress from 'material-ui/CircularProgress'
@@ -50,6 +48,9 @@ const Content = styled.div`
 	@media (min-width: 481px) {
 
 	}
+	@media (min-width: 768px) and (max-width: 992px) {
+		padding: 20px 0 0 0;
+  }
 `
 
 const Main = styled.div`
@@ -73,7 +74,6 @@ const Feed = styled.div`
 		flex: 12 720px;
 		max-width: 720px;
   }
-	
 `
 
 const Aside = styled.div`
@@ -95,6 +95,10 @@ const Text = styled.div`
 		width:100%;
 		padding:15px;
 	}
+	@media (min-width: 768px) and (max-width: 992px) {
+		width:100%;
+		padding:25px 0 25px 0;
+  }
 `
 
 const TextLine = styled.div`
@@ -164,12 +168,10 @@ const SeemoreContainer = styled.div`
 	width: 100%;
 	display: flex;
 	justify-content: center;
+	@media (max-width:480px) {
+		margin-bottom: 26px;
+  	}
 `
-
-
-// const Infinite2 = styled(Infinite)`
-// 	overflow-y:visible !important;
-// `
 
 class NewsPage extends React.Component {
 	static contextTypes = {
@@ -184,9 +186,13 @@ class NewsPage extends React.Component {
 
 		this.state = {
 			page: 0,
+			page2: 0,
 			feedCount: 1,
-			feed: [],
+			feedCount2: 1,
+			feedLatest: [],
+			feedTrend: [],
 			hasMoreFeed: true,
+			hasMoreFeed2: true,
 
 			trendingNews: [],
 
@@ -224,31 +230,53 @@ class NewsPage extends React.Component {
 			// ensure this method is called only once at a time
 			if (this.loading === true) return
 			this.loading = true
-
 			let page = this.state.page
 			//console.log('page', page)
-			var sort = this.state.selectTab ? 'trending' : 'latest'
-			api.getFeed('news', { status: 1 }, sort, null, page, this.FEED_LIMIT)
+			api.getFeed('news', { status: 1 }, 'latest', null, page, this.FEED_LIMIT)
 			.then(result => {
-				let feed = this.state.feed.concat(result.feed)
-				this.setState(
-					{
-						page: ++page,
-						feed: feed,
-						feedCount: result.count['1']?result.count['1']:0,
-						hasMoreFeed: feed.length < result.count['1']
-					},
-					() => {
-						this.loading = false
-					}
-				)
+					let feed = this.state.feedLatest.concat(result.feed)
+					this.setState(
+						{
+							page: ++page,
+							feedLatest: feed,
+							feedCount: result.count['1']?result.count['1']:0,
+							hasMoreFeed: feed.length < this.FEED_LIMIT ? false : (page < 2)
+						},
+						() => {
+							this.loading = false
+						}
+					)
+			})
+		}
+	}
+
+	loadFeed2 = () => {
+		return () => {
+			// ensure this method is called only once at a time
+			if (this.loading === true) return
+			this.loading = true
+			let page = this.state.page2
+			//console.log('page', page)
+			api.getFeed('news', { status: 1 }, 'trending', null, page, this.FEED_LIMIT)
+			.then(result => {
+					let feed = this.state.feedTrend.concat(result.feed)
+					this.setState(
+						{
+							page2: ++page,
+							feedTrend: feed,
+							feedCount2: result.count['1']?result.count['1']:0,
+							hasMoreFeed2: feed.length < this.FEED_LIMIT ? false : (page < 2)
+						},
+						() => {
+							this.loading = false
+						}
+					)
 			})
 		}
 	}
 
 	handleChangeTab = e => {
 		this.setState({ selectTab: e })
-		this.loadFeed()
 	}
 
 	componentDidMount() {
@@ -266,8 +294,11 @@ class NewsPage extends React.Component {
 	render() {
 		let {
 			feedCount,
-			feed,
+			feedCount2,
+			feedLatest,
+			feedTrend,
 			hasMoreFeed,
+			hasMoreFeed2,
 			trendingNews,
 			isMobile,
 			selectTab,
@@ -308,19 +339,7 @@ class NewsPage extends React.Component {
 							</Feed>
 						</Content>
 					: ''}
-				<Content style={{ paddingTop: '0px' }} className="hidden-mob">
-					<Main>
-						<TopNews detail={trendingNews[0]} />
-					</Main>
-					<Aside>
-						<TopNewsSmall detail={trendingNews[1]} />
-						<TopNewsSmall detail={trendingNews[2]} />
-						<TopNewsSmall
-							detail={trendingNews[3]}
-							style={{ borderBottom: '1px solid #000' }}
-						/>
-					</Aside>
-				</Content>
+				<TopNewsBox className='hidden-mob' data={trendingNews} />
 				<Content>
 					<Feed>
 						<Tabs
@@ -371,7 +390,7 @@ class NewsPage extends React.Component {
 								value={1}
 							/>
 						</Tabs>
-						<Line />
+						<Line style={{top:-1}} />
 
 						<SwipeableViews
 							index={selectTab}
@@ -382,8 +401,8 @@ class NewsPage extends React.Component {
 									hasMore={hasMoreFeed}
 									loader={this.onload()}>
 									<div>
-										{feed.map((item, index) => (
-											<NewsBox final= {index == feed.length -1 ? true:false} detail={item} key={index} timeline={false} />
+										{feedLatest.map((item, index) => (
+											<NewsBox final= {index == feedLatest.length -1 ? true:false} detail={item} key={index} timeline={true} />
 										))}
 									</div>
 								</InfiniteScroll>
@@ -393,18 +412,19 @@ class NewsPage extends React.Component {
 								</SeemoreContainer>}
 							</Latest>
 							<Trending>
-								<InfiniteScroll
-									loadMore={this.loadFeed()}
-									hasMore={hasMoreFeed}
+
+								{selectTab==1&&<InfiniteScroll
+									loadMore={this.loadFeed2()}
+									hasMore={hasMoreFeed2}
 									loader={this.onload()}>
 									<div>
-										{feed.map((item, index) => (
-											<NewsBox final= {index == feed.length -1 ? true:false} detail={item} key={index} timeline={false} />
+										{feedTrend.map((item, index) => (
+											<NewsBox final= {index == feedTrend.length -1 ? true:false} detail={item} key={index} timeline={false} />
 										))}
 									</div>
-								</InfiniteScroll>
+								</InfiniteScroll>}
 								
-								{!hasMoreFeed && 
+								{!hasMoreFeed2 && 
 								<SeemoreContainer>
 									<SeeMore url={'/stories/all?type=news&sort=trending&page=1'}/>
 								</SeemoreContainer>}

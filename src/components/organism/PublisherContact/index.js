@@ -5,9 +5,8 @@ import {PrimaryButton,SecondaryButton,DropdownWithIcon,Alert,MenuList} from 'com
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import auth from 'components/auth'
 import Snackbar from 'material-ui/Snackbar';
-import api from 'components/api'
+import api from '../../../services/api'
 import utils from '../../../services/utils'
 import isEmpty from 'lodash/isEmpty'
 import findLast from 'lodash/findLast'

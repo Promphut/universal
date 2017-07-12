@@ -18,8 +18,7 @@ import styled from 'styled-components'
 import FlatButton from 'material-ui/FlatButton'
 import FontIcon from 'material-ui/FontIcon'
 import Avatar from 'material-ui/Avatar'
-import auth from 'components/auth'
-import api from 'components/api'
+import api from '../../../services/api'
 import InfiniteScroll from 'react-infinite-scroller'
 import CircularProgress from 'material-ui/CircularProgress'
 import { Helmet } from 'react-helmet'
@@ -195,7 +194,7 @@ const Page = styled.div`
     display: flex;
         flex-flow: row wrap;
         justify-content: center;
-    padding:30px 0 30px 0;
+    padding:20px 0 0 0;
 `
 
 const UserDetail = ({ style, user, checkBack }) => {
@@ -377,7 +376,7 @@ class UserStory extends React.Component {
 	}
 
 	changePage = e => {
-		this.props.history.push({ hash: this.props.location.hash ,search: "?page=" + e })
+		this.props.history.push({ search: "?page=" + e })
 		this.setState({ currentPage: e - 1}, () => {
 			document.body.scrollTop = document.documentElement.scrollTop = 0
 			this.reloadFeed()
@@ -394,7 +393,7 @@ class UserStory extends React.Component {
 				this.setState({ user: user }, done)
 			})
 			.catch(err => {
-				utils.toError(this.props.history, err)
+				utils.notFound(this.props.history, err)
 			})
 	}
 
@@ -408,7 +407,7 @@ class UserStory extends React.Component {
 				this.setState({ user: user }, done)
 			})
 			.catch(err => {
-				utils.toError(this.props.history, err)
+				utils.notFound(this.props.history, err)
 			})
 	}
 
@@ -512,7 +511,7 @@ class UserStory extends React.Component {
 												<div>
 													There are no more stories in this page. Go back to
 													<Link
-														to={user.url+"?page=1"+this.props.location.hash}
+														to={user.url+"?page=1"}
 														style={{
 															color: theme.accentColor,
 															padding: '0 0.5em 0 0.5em'

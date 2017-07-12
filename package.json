@@ -1,6 +1,6 @@
 {
   "name": "ThePublisher",
-  "version": "1.3.5",
+  "version": "1.4.0",
   "private": true,
   "main": "dist/server",
   "scripts": {
@@ -65,7 +65,7 @@
     "node-sass": "^4.5.3",
     "offline-plugin": "^4.8.1",
     "opn-cli": "^3.1.0",
-    "postcss-loader": "^2.0.5",
+    "postcss-loader": "^2.0.6",
     "raw-loader": "^0.5.1",
     "react-test-renderer": "^15.5.4",
     "rimraf": "^2.6.1",
@@ -100,13 +100,16 @@
     "lodash": "^4.17.4",
     "material-ui": "^0.18.1",
     "medium-editor": "^5.23.0",
-    "medium-editor-insert-plugin": "git+https://github.com/stepboom/medium-editor-insert-plugin",
+    "medium-editor-insert-plugin": "^2.4.1",
     "moment": "^2.17.1",
+    "postcss-autoreset": "^2.0.0",
+    "postcss-cssnext": "^3.0.2",
+    "postcss-import": "^10.0.0",
     "prop-types": "^15.5.8",
     "query-string": "^4.3.4",
     "react": "^15.5.4",
     "react-color": "^2.11.1",
-    "react-cookie": "^2.0.6",
+    "react-cookie": "^2.0.8",
     "react-copy-to-clipboard": "^4.2.3",
     "react-cropper": "^0.12.0",
     "react-datepicker": "^0.46.0",
@@ -130,7 +133,7 @@
     "styled-theme": "^0.3.3",
     "styled-tools": "^0.1.4",
     "superagent": "^3.5.2",
-    "universal-cookie": "^2.0.5",
+    "universal-cookie": "^2.0.8",
     "universal-cookie-express": "^2.0.5"
   }
 }

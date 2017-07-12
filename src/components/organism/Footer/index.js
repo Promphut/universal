@@ -4,8 +4,8 @@ import styled from 'styled-components'
 import {Link} from 'react-router-dom'
 import {LogoLink} from 'components'
 import FontIcon from 'material-ui/FontIcon';
-import auth from 'components/auth'
-import api from 'components/api'
+import auth from '../../../services/auth'
+import api from '../../../services/api'
 import utils from '../../../services/utils'
 import { withRouter } from 'react-router'
 

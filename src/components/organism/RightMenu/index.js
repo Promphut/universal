@@ -7,7 +7,7 @@ import IconButton from 'material-ui/IconButton'
 import Divider from 'material-ui/Divider'
 import { findDOMNode as dom } from 'react-dom'
 import Avatar from 'material-ui/Avatar'
-import auth from 'components/auth'
+import auth from '../../../services/auth'
 import utils from '../../../services/utils'
 
 const Container = styled.div`
@@ -24,6 +24,11 @@ const Container = styled.div`
     .mobile{
       margin:20px;
     }
+  }
+	@media (min-width: 768px) and (max-width: 992px) {
+		.hidden-mob{
+			display:none;
+		}
   }
 `
 
@@ -137,6 +142,12 @@ const Nav = styled.nav`
     & ul {
       font-size: 20px;
     }
+  }	
+	@media (min-width: 768px) and (max-width: 992px) {
+		width:370px;
+		& ul {
+      font-size: 20px;
+    }
   }
 `
 
@@ -189,7 +200,17 @@ const Profile = styled.div`
       display: block;
     }
     padding: 0px 20px 0 20px;
+  }	
+	@media (min-width: 768px) and (max-width: 992px) {
+		padding: 20px 20px 0 20px;
+    & > div {
+      font-size: 12px;
+    }
+		& > div a h3 {
+			font-size: 14px;
+		}
   }
+
 `
 
 const EditMode = styled.div`
@@ -296,7 +317,7 @@ class RightMenu extends React.Component {
 				<Nav open={open}>
 					<div className="menu menu-font">
 						{auth.hasRoles(['ADMIN', 'EDITOR']) &&
-							<Link style={hiddenMobile} to={'/editor'}>
+							<Link to={'/editor'} className='hidden-mob'>
 								<EditMode className="nunito-font">
 									<FontIcon
 										className="material-icons"

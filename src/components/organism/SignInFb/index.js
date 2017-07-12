@@ -6,8 +6,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {Link} from 'react-router-dom'
 import TextField from 'material-ui/TextField';
 import {findDOMNode as dom}from 'react-dom';
-import api from 'components/api'
-import auth from 'components/auth'
+import api from '../../../services/api'
+import auth from '../../../services/auth'
 import config from '../../../config'
 import { withRouter } from 'react-router'
 

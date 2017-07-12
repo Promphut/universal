@@ -7,7 +7,7 @@ import TextField from 'material-ui/TextField'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import SwipeableViews from 'react-swipeable-views'
 import {Footer, TopBarWithNavigation, SearchResultBox, Pagination, ArticleBox, EmptyStory, BackToTop} from 'components'
-import api from 'components/api'
+import api from '../../../services/api'
 import toUpper from 'lodash/toUpper'
 import CircularProgress from 'material-ui/CircularProgress'
 import utils from '../../../services/utils'
@@ -69,9 +69,9 @@ const FilterItem = styled.li `
 	cursor: pointer;
     margin-left: 0px;
     margin-right: 20px;
-    background-color: ${props => props.select == true ? props.theme.primaryColor : 'rgba(0,0,0,0)'};
+    background-color: ${props => props.select == true ? props.theme.accentColor : 'rgba(0,0,0,0)'};
     border-radius: 100px;
-    color: ${props => props.theme.barTone == 'light' || !props.select ? '#000000' : '#FFF'};
+    color: ${props => props.select ? 'white' : '#222'};
     padding-top: 9px;
     padding-bottom: 9px;
     padding-left: 25px;
@@ -79,8 +79,7 @@ const FilterItem = styled.li `
     text-align: center;
 
     &:hover {
-        background-color: ${props => props.theme.secondaryColor};
-        color: ${props => props.theme.barTone == 'light' || !props.select ? '#000000' : '#FFF'};
+        background-color: ${props => !props.select && props.theme.secondaryColor};
     }
 `
 
@@ -107,7 +106,7 @@ const Page = styled.div`
     display: flex;
         flex-flow: row wrap;
         justify-content: center;
-    padding:30px 0 30px 0;
+    padding:20px 0 20px 0;
 `
 
 export default class AllStoriesPage extends React.Component {
@@ -162,7 +161,7 @@ export default class AllStoriesPage extends React.Component {
 	}
 
 	getAllFeed = () => {
-		
+
 		if (this.state.loading === true) return
 			this.state.loading = true
 
@@ -183,7 +182,7 @@ export default class AllStoriesPage extends React.Component {
 	}
 
     changePage = e => {
-        this.props.history.push({ hash: this.props.location.hash ,search: "?type=" + this.state.type  + "&sort="+ this.state.sort + "&page=" + e})
+        this.props.history.push({ search: "?type=" + this.state.type  + "&sort="+ this.state.sort + "&page=" + e})
         this.setState({ currentPage: e - 1}, () => {
             this.getAllFeed()
         })
@@ -191,7 +190,7 @@ export default class AllStoriesPage extends React.Component {
 
     changeSort = sort => {
 		if(sort != this.state.sort){
-			this.props.history.push({ hash: this.props.location.hash ,search: "?type=" + this.state.type  + "&sort="+ sort + "&page=" + 1})
+			this.props.history.push({ search: "?type=" + this.state.type  + "&sort="+ sort + "&page=" + 1})
 			this.setState({ currentPage: 0, sort: sort}, () => {
 				this.getAllFeed()
 			})
@@ -235,7 +234,7 @@ export default class AllStoriesPage extends React.Component {
                         <FilterItem onClick={(e) => this.changeSort('trending')} select={this.state.sort === 'trending'}>TRENDING</FilterItem>
                     </FilterContainer>
 
-					{feedCount <= 0 ? 
+					{feedCount <= 0 ?
 						<EmptyStory
 							title="No Story, yet"
 							description={
@@ -252,8 +251,8 @@ export default class AllStoriesPage extends React.Component {
 									?
 								</div>
 							}
-						/> 
-						: 
+						/>
+						:
 						<div>
 
 							{loading ?  this.onload() :

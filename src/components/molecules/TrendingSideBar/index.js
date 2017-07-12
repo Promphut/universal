@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { BGImg, SeeMore } from 'components'
 import { findDOMNode as dom } from 'react-dom'
 //import Request from 'superagent'
-import api from 'components/api'
+import api from '../../../services/api'
 import truncate from 'lodash/truncate'
 
 const Container = styled.div`

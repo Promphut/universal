@@ -4,7 +4,7 @@ import { GraphDashboard, TopRank } from 'components'
 import Divider from 'material-ui/Divider'
 import FlatButton from 'material-ui/FlatButton'
 import { Link } from 'react-router-dom'
-import api from 'components/api'
+import api from '../../../services/api'
 
 const Container = styled.div`
 `
@@ -57,7 +57,7 @@ let styles = {
 		borderRadius: '20px'
 	},
 	labelButton: {
-		color: '#8F8F8F',
+		color: '#8f8f8f',
 		textTransform: 'none',
 		fontFamily: "'PT Sans', 'cs_prajad', sans-serif"
 	}

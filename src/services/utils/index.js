@@ -159,7 +159,7 @@ utils.toError = (history, err) => {
 }
 utils.notFound = history => {
 	history.replace({
-		pathname: '/'
+		pathname: '/404'
 	})
 }
 utils.toSignin = history => {}

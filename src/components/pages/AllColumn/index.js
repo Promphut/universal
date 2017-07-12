@@ -8,7 +8,7 @@ import FlatButton from 'material-ui/FlatButton'
 import FontIcon from 'material-ui/FontIcon'
 import Slider from 'react-slick'
 //import Request from 'superagent'
-import api from 'components/api'
+import api from '../../../services/api'
 import remove from 'lodash/remove'
 import config from '../../../config'
 
@@ -27,6 +27,12 @@ const Wrapper = styled.div`
     .row{
       display:block;
     }
+  }
+	@media (min-width: 768px) and (max-width: 992px) {
+		.imgWidth{
+			width:230px;
+			height:127px;
+		}
   }
 `
 const Content = styled.div`
@@ -89,6 +95,10 @@ const Feed = styled.div`
 		min-width: 100%;
 		padding:0 15px 0 15px;
   }
+	@media (min-width: 768px) and (max-width: 992px) {
+		flex: 12 720px;
+		max-width: 720px;
+  }
 `
 
 const Box = styled.div`
@@ -107,6 +117,10 @@ const Box = styled.div`
       color: ${props => props.accentColor};
     }
   }
+	@media (min-width: 768px) and (max-width: 992px) {
+		width:230px;
+		height:224px;
+  }
 `
 const Blur = styled.div`
 background: rgba(255,255,255,0);
@@ -121,6 +135,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
   width:100%;
   height:117px;
   opacity:1;
+	top:-120px;
+	@media (min-width: 768px) and (max-width: 992px) {
+		top:-70px;
+		height:70px;
+  }
 `
 const Desc = styled.div`
   font-size:14px;
@@ -136,6 +155,9 @@ const Desc = styled.div`
   background:white;
   height:120px;
   padding:15px;
+	@media (min-width: 768px) and (max-width: 992px) {
+		height:90px;
+  }
 `
 const Div= styled.div`
 	display:flex;
@@ -144,7 +166,10 @@ const Div= styled.div`
 `
 
 const Div2 = styled.div`
-		flex:1;
+	flex:0 25%;
+	@media (min-width: 768px) and (max-width: 992px) {
+		flex:1 30%;
+  }
 `
 
 
@@ -252,7 +277,7 @@ class AllColumn extends React.Component {
 												<Desc className="sans-font">
 													{data.shortDesc}
 												</Desc>
-												<Blur style={{ top: '-120px' }} />
+												<Blur />
 											</Box>
 									</Div2>
 								))}

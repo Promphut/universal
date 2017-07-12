@@ -8,7 +8,7 @@ import {
 	EditorCss
 } from 'components'
 import { Helmet } from 'react-helmet'
-import api from 'components/api'
+import api from '../../../services/api'
 import config from '../../../config'
 import moment from 'moment'
 import Request from 'superagent'
@@ -62,12 +62,12 @@ class AboutPage extends React.Component {
 
 		Request.get('https://graph.facebook.com/?id='+config.FRONTURL+this.props.location.pathname)
 		.end((er,res)=>{
-			//console.log(res.body)
+			console.log(res.body)
 			this.setState({fb:res.body.share.share_count})
 		})
 		Request.get('https://share.yandex.ru/gpp.xml?url='+config.FRONTURL+this.props.location.pathname)
 		.end((er,res)=>{
-			console.log(res)
+			//console.log(res)
 			this.setState({twt:res})
 		})
 

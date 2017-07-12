@@ -113,7 +113,7 @@ let styles = {
   },
   btnStyle:{
     borderRadius:'20px',
-    border:'2px solid #C1C1C1',
+    border:'2px solid #c1c1c1',
     background:'none',
   },
   cont:{

@@ -20,7 +20,7 @@ import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import DropDownMenu from 'material-ui/DropDownMenu'
 //import {Link} from 'react-router-dom'
-import auth from 'components/auth'
+import auth from '../../../services/auth'
 import Snackbar from 'material-ui/Snackbar'
 import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
@@ -28,7 +28,7 @@ import IconButton from 'material-ui/IconButton'
 import TextField from 'material-ui/TextField'
 import CircularProgress from 'material-ui/CircularProgress'
 import moment from 'moment'
-import api from 'components/api'
+import api from '../../../services/api'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import SwipeableViews from 'react-swipeable-views'
 import AutoComplete from 'material-ui/AutoComplete'
@@ -677,8 +677,8 @@ class PublisherStoryPage extends React.Component {
 			},
 			selected: {
 				backgroundColor: theme.primaryColor,
-				color: 'white',
-				fill: 'white'
+				color: '#ffffff',
+				fill: '#ffffff'
 			},
 			menuItem: {
 				padding: '15px 40px 15px 15px'
@@ -689,7 +689,7 @@ class PublisherStoryPage extends React.Component {
 			},
 			showInactive: {
 				textDecoration: 'underline',
-				color: '#8F8F8F'
+				color: '#8f8f8f'
 			},
 			headline: {
 				fontSize: 24,

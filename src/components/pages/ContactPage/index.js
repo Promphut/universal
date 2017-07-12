@@ -4,8 +4,8 @@ import styled from 'styled-components'
 import TextField from 'material-ui/TextField'
 import FontIcon from 'material-ui/FontIcon'
 import FlatButton from 'material-ui/FlatButton'
-import auth from 'components/auth'
-import api from 'components/api'
+import auth from '../../../services/auth'
+import api from '../../../services/api'
 import {ContactAndAboutContainer, PrimaryButton, SecondaryButton} from 'components'
 import utils from '../../../services/utils'
 
@@ -259,7 +259,7 @@ class ContactPage extends React.Component {
   componentDidMount(){
     api.getPublisherContactCats()
     .then(contactCats => {
-      console.log(contactCats)
+      //console.log(contactCats)
       // if (contactCats.length === 0) {
       //   contactCats.push({catName: 'General'})
       // }

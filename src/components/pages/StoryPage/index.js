@@ -16,12 +16,12 @@ import {
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { findDOMNode as dom } from 'react-dom'
-import api from 'components/api'
+import api from '../../../services/api'
 import { StickyContainer, Sticky } from 'react-sticky'
 import { Helmet } from 'react-helmet'
 import config from '../../../config'
 import utils from '../../../services/utils'
-import auth from 'components/auth'
+import auth from '../../../services/auth'
 import isEmpty from 'lodash/isEmpty'
 import Request from 'superagent'
 
@@ -116,6 +116,14 @@ const Aside = styled.div`
 		display:none;
 	}
 `
+const BG = styled(BGImg)`
+	width: 100%;
+	height: 85vh;
+	background-position-y: bottom;
+	@media (min-width: 768px) and (max-width: 992px) {
+		height: 384px;
+  }
+`
 
 const Cover = styled.div`
 	position:relative;
@@ -123,14 +131,14 @@ const Cover = styled.div`
 	left:0;
 	width:100%;
 	height:100%;
-background: rgba(34,34,34,0.64);
-background: -moz-linear-gradient(top, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0) 20%);
-background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(34,34,34,0.64)), color-stop(0%, rgba(0,0,0,0.64)), color-stop(20%, rgba(0,0,0,0)));
-background: -webkit-linear-gradient(top, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0) 20%);
-background: -o-linear-gradient(top, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0) 20%);
-background: -ms-linear-gradient(top, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0) 20%);
-background: linear-gradient(to bottom, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0) 20%);
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#222222', endColorstr='#000000', GradientType=0 );
+	background: rgba(34,34,34,0.64);
+	background: -moz-linear-gradient(top, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0) 20%);
+	background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(34,34,34,0.64)), color-stop(0%, rgba(0,0,0,0.64)), color-stop(20%, rgba(0,0,0,0)));
+	background: -webkit-linear-gradient(top, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0) 20%);
+	background: -o-linear-gradient(top, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0) 20%);
+	background: -ms-linear-gradient(top, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0) 20%);
+	background: linear-gradient(to bottom, rgba(34,34,34,0.64) 0%, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0) 20%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#222222', endColorstr='#000000', GradientType=0 );
 `
 
 class StoryPage extends React.Component {
@@ -278,28 +286,6 @@ class StoryPage extends React.Component {
 						<meta name="title" content={story.ptitle} />
 						<meta name="keywords" content={keywords} />
 						<meta name="description" content={story.shortDesc} />
-
-						{/*<link
-							rel="shortcut icon"
-							type="image/ico"
-							href={config.BACKURL + '/publishers/' + config.PID + '/favicon'}
-						/>
-						{channels && channels.fb
-							? <link rel="author" href={utils.getFbUrl(channels.fb)} />
-							: ''}*/}
-						{/*<link rel="canonical" href={window.location.href} />*/}
-
-						{/*<link
-							rel="stylesheet"
-							href="/css/medium-editor.css"
-							type="text/css"
-						/>
-						<link rel="stylesheet" href="/css/tim.css" type="text/css" />
-						<link
-							rel="stylesheet"
-							href="/css/medium-editor-insert-plugin.css"
-							type="text/css"
-						/>*/}
 					</Helmet>
 
 					<Wrapper>
@@ -314,17 +300,12 @@ class StoryPage extends React.Component {
 
 						{story.cover.medium !=
 							config.BACKURL + '/imgs/article_cover_landscape.png' &&
-							<BGImg
-								style={{
-									width: '100%',
-									height: '85vh',
-									backgroundPositionY: 'bottom'
-								}}
+							<BG
 								src={story.cover.large || story.cover.medium}
 								className="hidden-mob"
 								alt={story.title}>
 								<Cover />
-							</BGImg>}
+							</BG>}
 						{story.coverMobile.medium !=
 							config.BACKURL + '/imgs/article_cover_portrait.png' &&
 							<BGImg
@@ -365,20 +346,21 @@ class StoryPage extends React.Component {
 
 							</Aside>
 
-							<NextStory
-								cid={story.column._id}
-								currentID={story._id}
-								format={story.format}
-							/>
 						</Content>
 
 						<Content>
 							{recommends.length != 0 &&
 								<RecommendContainer recommend={recommends} />}
 						</Content>
+						
+						<NextStory
+							cid={story.column._id}
+							currentID={story._id}
+							format={story.format}
+						/>
 
 						{/*<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800" />*/}
-						<Footer />
+						<Footer isStoryPage={true} />
 					</Wrapper>
 				</div>
 			)

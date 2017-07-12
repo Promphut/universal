@@ -11,7 +11,7 @@ import { basename } from 'config'
 import { CookiesProvider } from 'react-cookie'
 
 import App2 from 'components/App2'
-import api from 'components/api'
+import api from 'services/api'
 //import AppRoutes from 'components/routes'
 //import mainStyles from '../public/scss/main.scss'
 
@@ -70,9 +70,9 @@ api.getPublisherSetting()
 
 if (module.hot) {
   //module.hot.accept('components/App', () => {
-  module.hot.accept('components/routes', () => {
+  module.hot.accept('components/App2', () => {
     //require('components/App')
-    require('components/routes')
+    require('components/App2')
 
     const root = document.getElementById('app')
     api.getPublisherSetting()

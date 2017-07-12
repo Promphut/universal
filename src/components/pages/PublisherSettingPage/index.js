@@ -7,8 +7,8 @@ import {
 	PublisherPublishingSetting,
 	PublisherThemeSetting
 } from 'components'
-import auth from 'components/auth'
-import api from 'components/api'
+import auth from '../../../services/auth'
+import api from '../../../services/api'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import SwipeableViews from 'react-swipeable-views'
 

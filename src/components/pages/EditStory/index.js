@@ -17,7 +17,7 @@ import TextField from 'material-ui/TextField'
 import SelectField from 'material-ui/SelectField'
 import MenuItem from 'material-ui/MenuItem'
 import Request from 'superagent'
-import auth from 'components/auth'
+import auth from '../../../services/auth'
 import Snackbar from 'material-ui/Snackbar'
 import FontIcon from 'material-ui/FontIcon'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -29,7 +29,7 @@ import moment from 'moment'
 import CircularProgress from 'material-ui/CircularProgress'
 import SwipeableViews from 'react-swipeable-views'
 import { Helmet } from 'react-helmet'
-import api from 'components/api'
+import api from '../../../services/api'
 import config from '../../../config'
 import pullAllWith from 'lodash/pullAllWith'
 import isEqual from 'lodash/isEqual'
@@ -179,7 +179,7 @@ const HintLabel = styled.div`
 `
 const styles = {
 	backButton: {
-		color: '#8E8E8E',
+		color: '#8e8e8e',
 		cursor: 'pointer',
 		height: '20px'
 	}
@@ -322,7 +322,7 @@ class EditStory extends React.Component {
   }
 
   autoSave = () => {
-    let {sid,title,column,contentType,focusWord} = this.state
+    let {sid,title,column,contentType,focusWord,story} = this.state
 
     if(this.state.status === this.SAVE_STATUS.DIRTIED){
       const images = [].slice.call(dom(this.refs.paper).getElementsByTagName('img'))
@@ -347,6 +347,7 @@ class EditStory extends React.Component {
         publisher:parseInt(config.PID),
         html:el,
         focusWord:focusWord,
+        meta:story.meta,
         highlight
       }
       if(column!='no') s.column = column
@@ -363,16 +364,18 @@ class EditStory extends React.Component {
   }
 
   publishStory = () => {
-    let {sid,column,contentType,title,focusWord} = this.state
+    let {sid,column,contentType,title,focusWord,columnList,story} = this.state
     let allContents = this.editor.serialize()
     let highlight = this.editor2.serialize().highlight.value
 
     let s = {
       title:title,
       publisher:parseInt(config.PID),
-      status:1,
       focusWord:focusWord,
       html:allContents.paper.value,
+      format: (columnList.find(col => col._id == column).name == 'news' 
+      || columnList.find(col => col._id == column).name =='News') ? 'NEWS' : 'ARTICLE',
+      meta:story.meta,
       highlight
     }
     if(column!='no') s.column = column
@@ -739,7 +742,7 @@ class EditStory extends React.Component {
   render(){
     let {chooseLayout,layout,open,anchorEl,column,contentType,tag,addTag,searchText,
       columnList,contentTypeList,sid,alert,alertWhere,alertConfirm,alertDesc,saveStatus,
-      title,publishStatus,story, slug,metaTitle,metaDesc,html,focusWord} = this.state
+      title,publishStatus,story, slug,metaTitle,metaDesc,html,focusWord,status} = this.state
 
     const dataSourceConfig = {text: 'text', value: 'value', id:'id'};
 
@@ -805,7 +808,6 @@ class EditStory extends React.Component {
                 menuItemStyle={{width:'320px'}}
                 selectedMenuItemStyle={{color:'#222',background:theme.accentColor}}
               >
-                <MenuItem value='no' primaryText='No Column' />
                 {columnList.length!=0 && columnList.map((data,index)=>(
                   <MenuItem value={data._id} primaryText={data.name} key={index} />
                 ))}
@@ -866,7 +868,8 @@ class EditStory extends React.Component {
             </div>
             <div className='row' style={{display:'block',overflow:'hidden',marginTop:'0px'}}>
               <Delete style={{float:'left',margin:'10px'}} onClick={this.showAlert}>Delete</Delete>
-              <PrimaryButton label={story.status===1 ? moment(story.published).format('ddd, [at] h:mm a') : 'Publish'} style={{float:'right'}} onClick={this.publishStory} iconName="done"/>
+              <PrimaryButton label='update' style={{float:'right'}} onClick={this.publishStory}/>
+              {/*<PrimaryButton label={story.status===1 ? moment(story.published).format('ddd, [at] h:mm a') : 'Publish'} style={{float:'right'}} onClick={this.publishStory} iconName="done"/>*/}
               {/*<SecondaryButton label="Save" style={{float:'right',marginRight:'20px'}} onClick={this.save}/>*/}
               {story.status===1 && <SecondaryButton label="Unpublish" style={{float:'right',marginRight:'20px'}} onClick={this.unpublishStory}/>}
             </div>

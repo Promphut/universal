@@ -9,6 +9,9 @@ import {
 import styled from 'styled-components'
 import TextField from 'material-ui/TextField'
 import trim from 'lodash/trim'
+import config from '../../../config'
+import utils from '../../../services/utils'
+import PropTypes from 'prop-types'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -19,7 +22,7 @@ const ButtonContainer = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-right: 32px;
+    margin-right: 10px;
 `
 
 const Button = styled.div`
@@ -37,21 +40,35 @@ const Button = styled.div`
 
 `
 
-const styles = {
-  hintStyle: {
-    color: 'rgba(255,255,255,0.7)',
-    fontWeight: 'normal',
-  },
-  inputStyle: {
-      color: 'rgb(0,255,255)'
-  },
-  textareaStyle: {
-      width: '180px',
-      color: 'rgb(0,255,255)',
-  }
+const SearchButtonIcon = styled.i`
+  transition: 0.2;
+  color: ${props => (!props.scrolling && props.transparent && props.hasCover) || props.theme.barTone=='dark' ? '#ffffff':'#222'};
+`
+
+const getStyles = (name,theme,scrolling,transparent,hasCover) => {
+    if(name=='hintStyle')
+        return {
+            color: (!scrolling && transparent && hasCover) ||theme == 'dark' ? 'rgba(255,255,255,0.7)':'rgba(34, 34, 34, 0.7)',
+            fontWeight: 'normal'
+        }
+    else if(name=='inputStyle')
+        return {
+            color: (!scrolling && transparent && hasCover) ||theme == 'dark' ? '#ffffff':'#222',
+        }
+    else if(name=='textareaStyle')
+        return {
+            width: '180px',
+            color: (!scrolling && transparent && hasCover) ||theme == 'dark' ? '#ffffff':'#222',
+        }
 }
 
 const muiTheme = getMuiTheme({
+  palette: {
+    textColor: '#222',
+  },
+});
+
+const muiTheme2 = getMuiTheme({
   palette: {
     textColor: '#ffffff',
   },
@@ -63,59 +80,86 @@ class SearchButton extends React.Component {
 
         this.state = {
             focus: false,
-            text: ''
+            text: '',
+            redirect: false
         }
     }
 
+    static contextTypes = {
+		setting: PropTypes.object
+	}
+
     handleClick = (e) => {
-        if(this.state.focus && trim(this.state.text).length != 0)  {
-            this.setState({focus: !this.state.focus})
-            window.open('http://localhost:3000/search/stories/' + trim(this.state.text), "_top")
+        if(trim(this.state.text).length != 0)  {
+            this.setState({focus : false, redirect: true})
+            /*window.open(config.FRONTURL + '/search/stories?keyword=' + trim(this.state.text), "_top")*/
         }
-        else if(this.state.focus) this.setState({focus: true})
-        else this.setState({focus: !this.state.focus})
-        this.setState({text: ''})
+        else if(!utils.isMobile()) this.setState({focus: true})
     }
 
     handleChange = (event) => {
         const value = event.target.value;
-        this.setState({text: value})
+        if(value != this.state.text)
+            this.setState({text: value})
     }
+
+    handleFocus = (e) => {
+      this.setState({focus: false})
+    }
+
 
     componentDidMount() {
 		document.getElementById("bt").addEventListener('click', this.handleClick)
 	}
 
+    componentWillReceiveProps(nextProps) {
+        if(this.state.redirect)
+            this.setState({redirect : false, text : ''})
+	}
+
     render() {
+        let { theme } = this.context.setting.publisher
+        let { text, redirect } = this.state
+
         return(
-            // <Link to={'/search/news/fsfsf'}>
-            <MuiThemeProvider muiTheme={muiTheme}>
-                <ButtonContainer>
-                    <Button>
-                        <i id="bt" className="fa fa-search" aria-hidden="true"></i>
-                    </Button>
-                    {this.state.focus &&
-                        <TextField
-                            id="textField"
-                            hintText="Search Stories"
-                            hintStyle={styles.hintStyle}
-                            inputStyle={styles.inputStyle}
-                            style={styles.textareaStyle}
-                            textareaStyle={styles.textareaStyle}
-                            floatingLabelFocusStyle={styles.inputStyle}
-                            value={this.state.text}
-                            onChange={this.handleChange}
-                            onKeyPress={(ev) => {
-                                if (ev.key === 'Enter' && trim(this.state.text).length != 0) {
-                                    // Do code here
-                                    {/*alert(this.state.text)*/}
-                                    window.open('http://localhost:3000/search/stories/' + trim(this.state.text), "_top")
-                                    ev.preventDefault();
-                                } else if (ev.key === 'Enter') this.setState({text: ''})
-                            }}
-                        />}
-                </ButtonContainer>
-            </MuiThemeProvider>
+            <div>
+                {redirect && <Redirect push to={'/search/stories?keyword=' + trim(text)} />
+                }
+                <MuiThemeProvider muiTheme={(!this.props.scrolling && this.props.transparent && this.props.hasCover) || theme.barTone=='dark' ? muiTheme2 : muiTheme}>
+                    <ButtonContainer mar= {utils.isMobile() ? '8px' : '32px'}>
+                        {utils.isMobile() ?
+                            <Link to ="/search/stories?keyword="><SearchButtonIcon id="bt" className="fa fa-search" aria-hidden="true"></SearchButtonIcon></Link>
+                            :
+                            <Button>
+                                <SearchButtonIcon scrolling={this.props.scrolling} transparent={this.props.transparent} hasCover={this.props.hasCover} id="bt" className="fa fa-search" aria-hidden="true"></SearchButtonIcon>
+                            </Button>
+                        }
+                        {this.state.focus &&
+                            <TextField
+                                id="textField"
+                                hintText="Search Stories"
+                                hintStyle={getStyles('hintStyle',theme.barTone, this.props.scrolling, this.props.transparent, this.props.hasCover)}
+                                inputStyle={getStyles('inputStyle',theme.barTone,theme.barTone, this.props.scrolling, this.props.transparent, this.props.hasCover)}
+                                style={getStyles('textareaStyle',theme.barTone,theme.barTone, this.props.scrolling, this.props.transparent, this.props.hasCover)}
+                                textareaStyle={getStyles('textareaStyle',theme.barTone,theme.barTone, this.props.scrolling, this.props.transparent, this.props.hasCover)}
+                                floatingLabelFocusStyle={getStyles('inputStyle',theme.barTone,theme.barTone, this.props.scrolling, this.props.transparent, this.props.hasCover)}
+                                underlineFocusStyle={{borderColor: theme.accentColor}}
+                                value={text}
+                                onChange={this.handleChange}
+                                onKeyPress={(ev) => {
+                                    if (ev.key === 'Enter' && trim(text).length != 0) {
+                                        // Do code here
+                                        this.setState({focus:false ,redirect: true})
+                                        {/*alert(this.state.text)*/}
+                                        /*window.open(config.FRONTURL + '/search/stories?keyword=' + trim(text), "_top")*/
+                                    } else if (ev.key === 'Enter') this.setState({text: ''})
+                                }}
+                                onBlur={this.handleFocus}
+                                autoFocus
+                            />}
+                    </ButtonContainer>
+                </MuiThemeProvider>
+            </div>
             // </Link>
         )
     }

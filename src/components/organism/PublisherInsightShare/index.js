@@ -15,7 +15,7 @@ import DatePicker from 'react-datepicker'
 import Popover from 'material-ui/Popover'
 import FlatButton from 'material-ui/FlatButton'
 import moment from 'moment'
-import api from 'components/api'
+import api from '../../../services/api'
 import isObject from 'lodash/isObject'
 
 const Container = styled.div`
@@ -83,7 +83,7 @@ let styles = {
 	},
 	arrow: {
 		fontSize: '12px',
-		color: '#C4C4C4',
+		color: '#c4c4c4',
 		padding: '0px 5px 0px 0px'
 	},
 	dropup(color, right = 0) {

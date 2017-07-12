@@ -10,7 +10,7 @@ import FlatButton from 'material-ui/FlatButton';
 import Popover from 'material-ui/Popover'
 import Menu from 'material-ui/Menu'
 import AutoComplete from 'material-ui/AutoComplete';
-import api from 'components/api'
+import api from '../../../services/api'
 
 const Text = styled.div`
   font-size:14px;
@@ -153,7 +153,7 @@ class Filter extends React.Component {
       },
       showInactive:{
         textDecoration:'underline',
-        color:'#8F8F8F'
+        color:'#8f8f8f'
       }
     }
     const dataSourceConfig = {text: 'text', value: 'value', id:'id'};

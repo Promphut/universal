@@ -7,16 +7,15 @@ import FontIcon from 'material-ui/FontIcon'
 import {Link} from 'react-router-dom'
 import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar'
-import auth from 'components/auth'
 import { withRouter } from 'react-router'
 
 let styles = {
   list:{
-    color:'white'
+    color:'#ffffff'
   },
   listItem:{
     padding:'20px',
-    color:"white",
+    color:"#ffffff",
     fontWeight:'bold'
   }
 }
