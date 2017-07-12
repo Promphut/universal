@@ -57,7 +57,6 @@ const DropdownBox = styled.div`
 
 const DropdownFlex = styled.div`
 	display: flex;
-  flex-flow: row wrap;
 `
 
 const DropdownCol = styled.div`
@@ -70,6 +69,7 @@ const DropdownRow = styled(NavLink)`
 	display: block;
 	color: #222;
 	padding: 7px;
+	min-width: 140px;
 	max-width: 225px;
 	white-space: initial;
 
@@ -91,29 +91,29 @@ const TopNavigation = ({ menu }) => {
 	})
 
 	let stories_cols = []
-		const s_colsNumber = Math.ceil(cols.length / 7)
-		for (let i = 0; i < s_colsNumber; i++) {
-			let stories_rows = []
-			for (let j = i * 7; j < i * 7 + 7; j++) {
-				if (cols[j]) {
-					stories_rows.push(
-						<DropdownRow
-							key={j}
-							exact
-							to={'/stories/' + cols[j].slug + '?page=1'}
-							activeClassName="active"
-							className="nunito-font">
-							{cols[j].name}
-						</DropdownRow>
-					)
-				}
+	const s_colsNumber = Math.ceil(cols.length / 7)
+	for (let i = 0; i < s_colsNumber; i++) {
+		let stories_rows = []
+		for (let j = i * 7; j < i * 7 + 7; j++) {
+			if (cols[j]) {
+				stories_rows.push(
+					<DropdownRow
+						key={j}
+						exact
+						to={'/stories/' + cols[j].slug + '?page=1'}
+						activeClassName="active"
+						className="nunito-font">
+						{cols[j].name}
+					</DropdownRow>
+				)
 			}
-			stories_cols.push(
-				<DropdownCol key={i}>
-					{stories_rows}
-				</DropdownCol>
-			)
 		}
+		stories_cols.push(
+			<DropdownCol key={i}>
+				{stories_rows}
+			</DropdownCol>
+		)
+	}
 	return (
 		<Container>
 			<NavLink2

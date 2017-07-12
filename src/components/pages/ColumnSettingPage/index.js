@@ -311,7 +311,6 @@ class ColumnSettingPage extends React.Component {
 		// data["shortDesc"] = document.getElementById("shortDesc").value;
 
 		let column = this.state.column
-		console.log(column)
 		if (column.parent === -1) {
 			column.parent = null
 		}
@@ -338,14 +337,12 @@ class ColumnSettingPage extends React.Component {
 		api.getColumns().then(columns => {
 			a[0] = { text: 'No column', value: -1 }
 			columns.map((column, index) => {
-				if (column.slug !== 'news')
+				if (
+					column.slug !== 'news' &&
+					column._id !== this.state.selectColumn &&
+					column.parent == null
+				)
 					a[index + 1] = { text: column.name, value: column._id }
-			})
-
-			_.remove(a, c => {
-				if (c && c.value) {
-					return c.value === this.state.selectColumn
-				}
 			})
 
 			this.setState({
