@@ -11,7 +11,8 @@ import {
 	RecommendContainer,
 	Footer,
 	BackToTop,
-	NextStory
+	NextStory,
+	ShareButtom
 } from 'components'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
@@ -352,14 +353,16 @@ class StoryPage extends React.Component {
 							{recommends.length != 0 &&
 								<RecommendContainer recommend={recommends} />}
 						</Content>
+
+						{utils.isMobile() && <ShareButtom />}
 						
-						<NextStory
+						{!utils.isMobile() && <NextStory
 							cid={story.column._id}
 							currentID={story._id}
 							format={story.format}
-						/>
+						/>}
 
-						{/*<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800" />*/}
+						{/* <BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800" /> */}
 						<Footer isStoryPage={true} />
 					</Wrapper>
 				</div>
