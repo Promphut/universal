@@ -85,6 +85,7 @@ const base = () => group([
   }),
   addPlugins([
     new webpack.ProgressPlugin(),
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new OfflinePlugin({
       safeToUseOptionalCaches: true,
       ServiceWorker: {
