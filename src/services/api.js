@@ -855,4 +855,13 @@ api.filterStoryByTitle = (title,sort)=> {
 	}, api.err)
 }
 
+api.getChildrenIds = (parent) => {
+	return Request
+	.post(config.BACKURL+'/publishers/'+config.PID+'/columns/'+parent+'/parent')
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body.column
+	}, api.err)
+}
+
 module.exports = api
