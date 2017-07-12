@@ -11,7 +11,8 @@ import {
 	RecommendContainer,
 	Footer,
 	BackToTop,
-	NextStory
+	NextStory,
+	ShareButtom
 } from 'components'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
@@ -77,19 +78,8 @@ const Share = styled.div`
 `
 
 const LikeBoxContainer = styled.div`
-	width:100%;
+	width:70%;
 	margin: 0 auto 0 auto;
-	text-align: center;
-
-	div > div > .fb-page span
-	{
-			width:100% !important;
-	}
-
-	div > div > .fb-page iframe
-	{
-			width:100% !important;
-	}
 `
 
 const Main = styled.div`
@@ -352,14 +342,18 @@ class StoryPage extends React.Component {
 							{recommends.length != 0 &&
 								<RecommendContainer recommend={recommends} />}
 						</Content>
-						
-						<NextStory
+
+
+						{utils.isMobile() && <ShareButtom />}
+
+						{!utils.isMobile() && <NextStory
+
 							cid={story.column._id}
 							currentID={story._id}
 							format={story.format}
-						/>
+						/>}
 
-						{/*<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800" />*/}
+						{/* <BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800" /> */}
 						<Footer isStoryPage={true} />
 					</Wrapper>
 				</div>

@@ -90,9 +90,6 @@ export default class NextStory extends React.Component {
 
       //var height = Math.max(body.scrollHeight, body.offsetHeight);
 
-      const scrollToTop = e.srcElement.body.scrollTop > e.srcElement.body.scrollHeight - window.innerHeight - 800
-        ? true
-        : false
       const scrollOpacity = e.srcElement.body.scrollTop > e.srcElement.body.scrollHeight - window.innerHeight - 800
         ? true
         : false
