@@ -203,7 +203,7 @@ class EditStory extends React.Component {
       chooseLayout:null,
       layout:'news',
       open:false,
-      column:'no',
+      column:null,
       contentType:'NEWS',
       html: '',
 
@@ -284,12 +284,20 @@ class EditStory extends React.Component {
   }
 
   chooseColumn = (e,ind,val) => {
-    this.setState({column:val})
+    this.setState({
+      column: val,
+      status: this.SAVE_STATUS.DIRTIED,
+      saveStatus:'Unsave'
+    })
   }
 
   chooseContentType = (e,ind,val) => {
     const contentType = this.state.contentTypeList[val]
-    this.setState({contentType})
+    this.setState({
+      contentType,
+      status: this.SAVE_STATUS.DIRTIED,
+      saveStatus:'Unsave'
+    })
   }
 
   getTags = () => {
@@ -350,15 +358,15 @@ class EditStory extends React.Component {
         meta:story.meta,
         highlight
       }
-      if(column!='no') s.column = column
+      if(column) s.column = column
       s.contentType = contentType
 
       api.updateStory(sid, s)
       .then(story => {
-        this.setState({
-          status: this.SAVE_STATUS.UNDIRTIED,
-          saveStatus:"Saved "+ moment(story.updated).calendar()
-        })
+          this.setState({
+            status: this.SAVE_STATUS.UNDIRTIED,
+            saveStatus:"Saved "+ moment(story.updated).calendar(),
+          })
       })
     }
   }
@@ -373,12 +381,18 @@ class EditStory extends React.Component {
       publisher:parseInt(config.PID),
       focusWord:focusWord,
       html:allContents.paper.value,
+      status:1,
       format: (columnList.find(col => col._id == column).name == 'news' 
       || columnList.find(col => col._id == column).name =='News') ? 'NEWS' : 'ARTICLE',
       meta:story.meta,
       highlight
     }
-    if(column!='no') s.column = column
+
+    if(story.status == 0) {
+      s[status] = 1;
+    }
+
+    if(column) s.column = column
     s.contentType = contentType
 
     api.updateStory(sid, s)
@@ -557,7 +571,7 @@ class EditStory extends React.Component {
         slug:story.slug,
         metaTitle:story.meta&&story.meta.title,
         metaDesc:story.meta&&story.meta.desc,
-        column: story.column ? story.column._id : 'no',
+        column: story.column ? story.column._id : null,
         contentType: story.contentType ? story.contentType : 'NEWS',
         focusWord: story.focusWord,
         html: story.html
@@ -742,7 +756,7 @@ class EditStory extends React.Component {
   render(){
     let {chooseLayout,layout,open,anchorEl,column,contentType,tag,addTag,searchText,
       columnList,contentTypeList,sid,alert,alertWhere,alertConfirm,alertDesc,saveStatus,
-      title,publishStatus,story, slug,metaTitle,metaDesc,html,focusWord,status} = this.state
+      title,publishStatus,story,slug,metaTitle,metaDesc,html,focusWord,status} = this.state
 
     const dataSourceConfig = {text: 'text', value: 'value', id:'id'};
 
@@ -796,11 +810,13 @@ class EditStory extends React.Component {
             <AdvancedEdit onClick={() => this.settingHandleChange(1)}>Advanced Edit</AdvancedEdit>
             <div className='' style={{display:'block',clear:'both'}}>
               <Label className="nunito-font or" style={{float:'left',marginTop:'22px',minWidth:'57px'}}>Column : </Label>
-              <DropDownMenu
+              <SelectField
+                hintText='Please Select Column First'
                 value={column}
                 onChange={this.chooseColumn}
                 autoWidth={false}
-                labelStyle={{top:'-11px'}}
+                hintStyle={{top:'5px',left:'24px'}}
+                labelStyle={{top:'-11px',left:'24px'}}
                 iconStyle={{top:'-8px',left:'300px'}}
                 style={{margin:'15px 0 15px 15px',width:'340px',height:'34px',border:'1px solid #e2e2e2',float:'left'}}
                 underlineStyle={{display:'none'}}
@@ -811,7 +827,7 @@ class EditStory extends React.Component {
                 {columnList.length!=0 && columnList.map((data,index)=>(
                   <MenuItem value={data._id} primaryText={data.name} key={index} />
                 ))}
-              </DropDownMenu>
+              </SelectField>
               <Label className="nunito-font or" style={{float:'left',marginTop:'22px',minWidth:'57px'}}>Type : </Label>
               <DropDownMenu
                 value={contentTypeId}
@@ -868,7 +884,7 @@ class EditStory extends React.Component {
             </div>
             <div className='row' style={{display:'block',overflow:'hidden',marginTop:'0px'}}>
               <Delete style={{float:'left',margin:'10px'}} onClick={this.showAlert}>Delete</Delete>
-              <PrimaryButton label='update' style={{float:'right'}} onClick={this.publishStory}/>
+              <PrimaryButton label={story.status==1 ? 'update' : 'publish'} style={{float:'right'}} onClick={this.publishStory} disabled={!column}/>
               {/*<PrimaryButton label={story.status===1 ? moment(story.published).format('ddd, [at] h:mm a') : 'Publish'} style={{float:'right'}} onClick={this.publishStory} iconName="done"/>*/}
               {/*<SecondaryButton label="Save" style={{float:'right',marginRight:'20px'}} onClick={this.save}/>*/}
               {story.status===1 && <SecondaryButton label="Unpublish" style={{float:'right',marginRight:'20px'}} onClick={this.unpublishStory}/>}

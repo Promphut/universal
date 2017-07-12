@@ -274,8 +274,6 @@ class StoryDetail extends React.Component {
           </ContentInfoContainer>
         </div>}
 
-        <Divider/>
-
         {utils.isMobile() && <ShareButtom />}
 
         {/* NEXT ITERATION
