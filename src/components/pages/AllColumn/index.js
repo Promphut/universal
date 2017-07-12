@@ -163,6 +163,9 @@ const Div= styled.div`
 	display:flex;
 	flex-wrap: wrap;
 	justify-content:flex-start;
+	@media (max-width: 480px) {
+		justify-content:center;
+	}
 `
 
 const Div2 = styled.div`

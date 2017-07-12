@@ -202,7 +202,7 @@ class NewsPage extends React.Component {
 		}
 	}
 
-	FEED_LIMIT = config.FEED_LIMIT
+	FEED_LIMIT = utils.isMobile() ? config.FEED_LIMIT_MOBILE : config.FEED_LIMIT;
 
 	getTrendingNews = () => {
 		api.getFeed('news', { status: 1 }, 'trending', null, 0, 4).then(result => {
@@ -325,6 +325,8 @@ class NewsPage extends React.Component {
 				textTransform: 'none'
 			}
 		}
+
+		console.log('render')
 
 		return (
 			<Wrapper>

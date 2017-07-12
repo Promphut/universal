@@ -202,7 +202,7 @@ class HomePage extends React.Component {
 		this.column = []
 	}
 
-	FEED_LIMIT = config.FEED_LIMIT;
+	FEED_LIMIT = utils.isMobile() ? config.FEED_LIMIT_MOBILE : config.FEED_LIMIT;
 
 	onload = () => (
 		<Onload>
@@ -240,7 +240,7 @@ class HomePage extends React.Component {
 			//console.log('page', page)
 
 			api
-				.getFeed('stories', { status: 1 }, 'latest', null, page, this.FEED_LIMIT)
+				.getFeed('article', { status: 1 }, 'latest', null, page, this.FEED_LIMIT)
 				.then(result => {
 					let feed = this.state.feed.concat(result.feed)
 					this.setState(
@@ -293,6 +293,9 @@ class HomePage extends React.Component {
 
 		//console.log(this.state.feedCount)
 		//if(feed.length==0) return <div></div>
+
+		console.log('render')
+
 		return (
 			<Wrapper>
 				{!isEmpty(pub) &&!utils.isMobile() &&<BgWithLogo data={pub}/>}

@@ -353,11 +353,11 @@ class StoryPage extends React.Component {
 								<RecommendContainer recommend={recommends} />}
 						</Content>
 						
-						<NextStory
+						{!utils.isMobile() && <NextStory
 							cid={story.column._id}
 							currentID={story._id}
 							format={story.format}
-						/>
+						/>}
 
 						{/*<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800" />*/}
 						<Footer isStoryPage={true} />
