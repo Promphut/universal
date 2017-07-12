@@ -19,7 +19,6 @@ let cookieService = {}
 cookieService = {
 	// Set cookie string by name
 	set(cookieName, str){ 
-		console.log('COOKIE', cookieName, str, domain)
 		cookies.set(cookieName, str, domain)
 	},
 

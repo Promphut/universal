@@ -65,19 +65,12 @@ const Container = styled.div`
 	transition: .1s;
 	position: absolute;
 
-	display: flex;
-	flex-flow: row nowrap;
-	justify-content: space-between;
-
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
+	display: inline;
 `
 
 const Left = styled.div`
-	justify-content: flex-start;
+	float: left;
+	position: relative;
 	display: flex;
 	z-index:10;
 `
@@ -110,6 +103,8 @@ const LogoWrapper = styled.div`
 const Center = styled.div`
 	max-width: 60%;
 	white-space: nowrap;
+	position: relative;
+	top: -60px;
 
 	@media (max-width: 960px) {
 		display: none;
@@ -117,7 +112,9 @@ const Center = styled.div`
 `
 
 const Right = styled.div`
-	justify-content: flex-end;
+	float: right;
+	position: relative;
+	top: -106px;
 	padding:0 20px;
 	z-index:10;
 	display:flex;
