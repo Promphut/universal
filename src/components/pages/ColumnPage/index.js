@@ -192,7 +192,7 @@ class ColumnPage extends React.Component {
 		loading: false
 	}
 
-	FEED_LIMIT = config.FEED_LIMIT
+	FEED_LIMIT = utils.isMobile() ? config.FEED_LIMIT_MOBILE*2 : config.FEED_LIMIT;
 
 	static contextTypes = {
 		setting: PropTypes.object
@@ -393,9 +393,13 @@ class ColumnPage extends React.Component {
 								<Page>
 									{totalPages > 0 && ((totalPages > currentPage && currentPage >= 0) ?
 										<Pagination
+											hideFirstAndLastPageLinks={utils.isMobile() ? false : true}
+											hidePreviousAndNextPageLinks={utils.isMobile() ? true : false}
+											boundaryPagesRange={utils.isMobile() ? 0 : 1}
 											currentPage={currentPage + 1}
 											totalPages={totalPages}
-											onChange={this.changePage}/>
+											onChange={this.changePage}
+										/>
 										:
 										<EmptyStory
 											title="No More Story"

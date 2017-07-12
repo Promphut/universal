@@ -345,7 +345,6 @@ class StoryPage extends React.Component {
 
 
 						{!utils.isMobile() && <NextStory
-
 							cid={story.column._id}
 							currentID={story._id}
 							format={story.format}

@@ -119,7 +119,9 @@ export default class SearchResultPage extends React.Component {
 			currentPage: utils.querystring('page',this.props.location) ? utils.querystring('page',this.props.location) - 1 : 0,
 			totalPages: 0,
     }
-  }
+	}
+	
+	FEED_LIMIT = utils.isMobile() ? config.FEED_LIMIT_MOBILE*2 : config.FEED_LIMIT;
 
 	componentWillMount () {
 			this.setState({
@@ -151,7 +153,7 @@ export default class SearchResultPage extends React.Component {
 		      result: result.stories,
 					isLoading: false,
 					feedCount: result.count['total'] ? result.count['total'] : 0,
-					totalPages: utils.getTotalPages(config.FEED_LIMIT, result.count['total']),
+					totalPages: utils.getTotalPages(this.FEED_LIMIT, result.count['total']),
 		    });
 		  })
 		}
@@ -204,9 +206,12 @@ export default class SearchResultPage extends React.Component {
 
 						<PaginationContainer>
 							<Pagination
-								currentPage={currentPage + 1}
-								totalPages={totalPages}
-								onChange={this.changePage}
+									hideFirstAndLastPageLinks={utils.isMobile() ? false : true}
+									hidePreviousAndNextPageLinks={utils.isMobile() ? true : false}
+									boundaryPagesRange={utils.isMobile() ? 0 : 1}
+									currentPage={currentPage + 1}
+									totalPages={totalPages}
+									onChange={this.changePage}
 							/>
 						</PaginationContainer> :
 
