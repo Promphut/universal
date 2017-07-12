@@ -677,8 +677,8 @@ class PublisherStoryPage extends React.Component {
 			},
 			selected: {
 				backgroundColor: theme.primaryColor,
-				color: 'white',
-				fill: 'white'
+				color: '#ffffff',
+				fill: '#ffffff'
 			},
 			menuItem: {
 				padding: '15px 40px 15px 15px'
@@ -689,7 +689,7 @@ class PublisherStoryPage extends React.Component {
 			},
 			showInactive: {
 				textDecoration: 'underline',
-				color: '#8F8F8F'
+				color: '#8f8f8f'
 			},
 			headline: {
 				fontSize: 24,

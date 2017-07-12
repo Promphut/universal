@@ -87,7 +87,7 @@ let styles = {
   },
   btn:{
     borderRadius:'10px',
-    backgroundColor:'#3A589B'
+    backgroundColor:'#3a589b'
   },
   exampleImageInput: {
     cursor: 'pointer',

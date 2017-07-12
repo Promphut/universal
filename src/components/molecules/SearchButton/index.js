@@ -42,7 +42,7 @@ const Button = styled.div`
 
 const SearchButtonIcon = styled.i`
   transition: 0.2;
-  color: ${props => (!props.scrolling && props.transparent && props.hasCover) || props.theme.barTone=='dark' ? 'white':'#222'};
+  color: ${props => (!props.scrolling && props.transparent && props.hasCover) || props.theme.barTone=='dark' ? '#ffffff':'#222'};
 `
 
 const getStyles = (name,theme,scrolling,transparent,hasCover) => {
@@ -53,12 +53,12 @@ const getStyles = (name,theme,scrolling,transparent,hasCover) => {
         }
     else if(name=='inputStyle')
         return {
-            color: (!scrolling && transparent && hasCover) ||theme == 'dark' ? 'white':'#222',
+            color: (!scrolling && transparent && hasCover) ||theme == 'dark' ? '#ffffff':'#222',
         }
     else if(name=='textareaStyle')
         return {
             width: '180px',
-            color: (!scrolling && transparent && hasCover) ||theme == 'dark' ? 'white':'#222',
+            color: (!scrolling && transparent && hasCover) ||theme == 'dark' ? '#ffffff':'#222',
         }
 }
 
