@@ -238,15 +238,15 @@ class StoryPage extends React.Component {
 		})
 		window.addEventListener('scroll', this.handleScroll)
 
-		Request.get(
-			'https://graph.facebook.com/?id=' +
-				config.FRONTURL +
-				this.props.location.pathname
-		).end((er, res) => {
-			const fb = res ? res.body.share.share_count : 0
-			//console.log(res.body)
-			this.setState({ fb })
-		})
+		// Request.get(
+		// 	'https://graph.facebook.com/?id=' +
+		// 		config.FRONTURL +
+		// 		this.props.location.pathname
+		// ).end((er, res) => {
+		// 	const fb = res ? res.body.share.share_count : 0
+		// 	//console.log(res.body)
+		// 	this.setState({ fb })
+		// })
 	}
 
 	componentWillUnmount() {
@@ -344,7 +344,7 @@ class StoryPage extends React.Component {
 							<Share ref="share" style={{ zIndex: '50' }}>
 								<Stick topOffset={100}>
 									<ShareSideBar
-										shareCount={story.shares ? story.shares.total + fb : 0 + fb}
+										shareCount={story.shares && story.shares.total}
 									/>
 								</Stick>
 							</Share>
