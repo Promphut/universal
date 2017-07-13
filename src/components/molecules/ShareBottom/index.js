@@ -11,14 +11,14 @@ const ShareContainer = styled.div`
     bottom:0;
     display: ${props=>props.scrollOpacity?'none':'flex'};
     width: 100%;
-    height: 44.8px;
+    height: 45px;
     border-top: 1px solid #EAEAEA;
     z-index: 20;
 `
 
 const Item = styled.div `
     flex: 1;
-    height: 44.8px;
+    height: 45px;
     background-color: ${props => props.color};
     display: flex;
     justify-content: center;
@@ -87,11 +87,11 @@ export default class ShareButtom extends React.Component {
     render() {
         return (
             <ShareContainer scrollOpacity = {this.state.scrollOpacity} >
-                <Item color='#3A579A'><FbShareButton  button={<ShareButton> <i className="fa fa-facebook" aria-hidden="true" style={{color:'white', fontSize:'20px'}}></i> </ShareButton>} /></Item>
-                <Item color='#60AADE'><TwtShareButton button={<ShareButton> <i className="fa  fa-twitter" aria-hidden="true" style={{color:'white', fontSize:'20px'}}></i> </ShareButton>} /></Item>
-                <Item color='#0077b5'><InShareButton  button={<ShareButton> <i className="fa  fa-linkedin" aria-hidden="true" style={{color:'white', fontSize:'20px'}}></i> </ShareButton>} /></Item>
-                <Item color='#00c300'><LineShareButton button={<ShareButton> <LineIcon2 width='41.84px' height='16px' color='#FFF'/> </ShareButton>} /></Item>
-                <Item color='#FFF'><CopyToClipboard text={this.props.url} onCopy={this.onStoryCopied}><ShareButton> <CopyLinkIcon width='20px' height='20px' color='#8E8E8E'/> </ShareButton></CopyToClipboard></Item> 
+                <Item color='#3A579A'><FbShareButton  button={<ShareButton> <i className="fa fa-facebook" aria-hidden="true" style={{color:'white', fontSize:'18px'}}></i> </ShareButton>} /></Item>
+                <Item color='#60AADE'><TwtShareButton button={<ShareButton> <i className="fa  fa-twitter" aria-hidden="true" style={{color:'white', fontSize:'18px'}}></i> </ShareButton>} /></Item>
+                <Item color='#0077b5'><InShareButton  button={<ShareButton> <i className="fa  fa-linkedin" aria-hidden="true" style={{color:'white', fontSize:'18px'}}></i> </ShareButton>} /></Item>
+                <Item color='#00c300'><LineShareButton button={<ShareButton> <LineIcon2 width='31.38px' height='12px' color='#FFF'/> </ShareButton>} /></Item>
+                <Item color='#FFF'><CopyToClipboard text={this.props.url} onCopy={this.onStoryCopied}><ShareButton> <CopyLinkIcon width='18px' height='18px' color='#8E8E8E'/> </ShareButton></CopyToClipboard></Item> 
             </ShareContainer>
         )
     }

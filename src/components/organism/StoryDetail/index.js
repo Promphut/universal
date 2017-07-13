@@ -274,8 +274,6 @@ class StoryDetail extends React.Component {
           </ContentInfoContainer>
         </div>}
 
-        <Divider/>
-
         {/* NEXT ITERATION
         <NoComment>5 Comments</NoComment>
         <CommentBox className="hidden-mob"/>
