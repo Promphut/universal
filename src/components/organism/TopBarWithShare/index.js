@@ -32,7 +32,7 @@ const Container = styled.div`
 	position: absolute;
 
 
-  animation: ${props=> props.open ? slideIn : slideOut} 0.2s forwards;
+  animation: ${props=> props.open ? slideIn : slideOut} 0.1s forwards;
 	display: flex;
 
 	flex-flow: row nowrap;
@@ -191,7 +191,7 @@ class TopBarWithShare extends React.Component {
 
 		// this.setState({ scroll: nowTop})
 		// this.setState({scroll: nowTop})
-		if(Math.abs(diff)>8){
+		if(Math.abs(diff)>5){
 			if (nowTop<120&&!diff > 0) {this.setState({open: true,  scroll: nowTop})
 			}else if (diff > 0) {this.setState({open: true,  scroll: nowTop})
 			}else this.setState({open: false, scroll: nowTop})

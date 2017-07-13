@@ -44,27 +44,12 @@ export default class ShareButtom extends React.Component {
     }
 
     handleScroll = e => {
-        const prevTop = this.state.scroll
 		const nowTop = e.srcElement.body.scrollTop
-		const diff = nowTop - prevTop
-        if(!(nowTop>this.state.edge)){
-            if(Math.abs(diff)>8){
-                if (nowTop<120&&!diff < 0) {this.setState({scrollOpacity: true,  scroll: nowTop})
-                }else if (diff < 0) {this.setState({scrollOpacity: true,  scroll: nowTop})
-                }else this.setState({scrollOpacity: false, scroll: nowTop})
-            }
-        }else{
+        if((nowTop>this.state.edge)){
             this.setState({scrollOpacity:true})
+        }else{
+            this.setState({scrollOpacity:false})
         }
-        // if (utils.isMobile()) {
-        //     const scrollOpacity = e.srcElement.body.scrollTop > e.srcElement.body.scrollHeight - window.innerHeight - 10
-        //         ? false
-        //         : true
-            
-        //     this.setState({
-        //         scrollOpacity
-        //     })
-        // }
     }
 
     onStoryCopied = (val) => {
