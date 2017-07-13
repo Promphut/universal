@@ -242,7 +242,7 @@ utils.FBShareCount = url => {
 	return (
 		Request.get('https://graph.facebook.com/?id='+url)
 		.then((res)=>{
-			console.log(res)
+			//console.log(res)
 			return res.body.share.share_count
 		})
 		.catch((er)=>{
