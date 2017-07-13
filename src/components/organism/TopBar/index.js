@@ -148,6 +148,9 @@ const Edit = styled(Link)`
 	&:hover{
 		cursor:pointer;
 	}
+	@media (max-width: 480px) {
+		display:none;
+	}
 `
 const LogoGif = styled(BGImg)`
 	width:60px;
