@@ -11,7 +11,6 @@ import { Helmet } from 'react-helmet'
 import api from '../../../services/api'
 import config from '../../../config'
 import moment from 'moment'
-import Request from 'superagent'
 import utils from '../../../services/utils'
 
 const Wrapper = styled(EditorCss)`
@@ -63,11 +62,11 @@ class AboutPage extends React.Component {
 
     utils.FBShareCount(config.FRONTURL).then((res)=>this.setState({fb:res}))
 
-		Request.get('https://share.yandex.ru/gpp.xml?url='+config.FRONTURL)
-		.end((er,res)=>{
-			//console.log(res)
-			this.setState({twt:res})
-		})
+		// Request.get('https://share.yandex.ru/gpp.xml?url='+config.FRONTURL)
+		// .end((er,res)=>{
+		// 	//console.log(res)
+		// 	this.setState({twt:res})
+		// })
 
 	}
 
