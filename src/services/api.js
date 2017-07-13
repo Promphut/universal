@@ -177,10 +177,10 @@ api.getStoryFromSid = (sid, token, countView) => {
 	})
 }
 
-api.getStoryFromKeyword = (keyword,type,page) => {
+api.getStoryFromKeyword = (keyword,type,page,limit) => {
 	return Request
 	.post(config.BACKURL + '/stories/'+config.PID+'/find' )
-	.query({page: page})
+	.query({page: page,limit: limit})
 	.send({title: keyword,status: 1,type: type})
 	.set('Accept','application/json')
 	.then(res => {
