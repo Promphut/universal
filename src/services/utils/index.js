@@ -3,6 +3,7 @@ const htmlToText = require('html-to-text')
 const config = require('../../config'), { parse } = require('query-string')
 const moment = require('moment')
 const utils = {}
+const Request = require('superagent')
 
 utils.getWidth = () => {
 	return (
@@ -235,6 +236,19 @@ utils.numberFormat = n => {
 	}else if(n>999999){
 		return (n/1000000).toFixed(1)+'m'
 	}
+}
+
+utils.FBShareCount = url => {
+	return (
+		Request.get('https://graph.facebook.com/?id='+url)
+		.then((res)=>{
+			console.log(res)
+			return res.body.share.share_count
+		})
+		.catch((er)=>{
+			return Promise.resolve(0)
+		})
+	)
 }
 
 module.exports = utils
