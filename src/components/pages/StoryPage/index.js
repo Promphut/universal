@@ -83,7 +83,7 @@ const LikeBoxContainer = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	margin: 0 auto 15px auto;
+	margin: 0 auto 24px auto;
 `
 
 const Main = styled.div`
@@ -334,18 +334,18 @@ class StoryPage extends React.Component {
 							</Share>
 
 							<Main ref={'TT'} isMobile={isMobile}>
-								<StoryDetail story={story} id='storyDetail'/>
+								<StoryDetail share={story.shares && story.shares} story={story} id='storyDetail'/>
 							</Main>
 
 							{utils.isMobile() && nextStoryContainer}
 
-							<Main>
+							{/* <Main> */}
 								<LikeBoxContainer
 									dangerouslySetInnerHTML={{
 										__html: `<div class="fb-page" data-href="https://www.facebook.com/${config.FACEBOOK}" data-tabs="timeline" data-width="${likeBoxSize}" data-height="300" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/${config.FACEBOOK}/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/${config.FACEBOOK}/">${config.NAME}</a></blockquote></div>`
 									}}
 								/>
-							</Main>
+							{/* </Main> */}
 
 
 							<Aside id="trendingBar" ref="trendingBar">
