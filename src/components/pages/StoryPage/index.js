@@ -339,14 +339,6 @@ class StoryPage extends React.Component {
 
 							{utils.isMobile() && nextStoryContainer}
 
-							{/* <Main> */}
-								<LikeBoxContainer
-									dangerouslySetInnerHTML={{
-										__html: `<div class="fb-page" data-href="https://www.facebook.com/${config.FACEBOOK}" data-tabs="timeline" data-width="${likeBoxSize}" data-height="300" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/${config.FACEBOOK}/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/${config.FACEBOOK}/">${config.NAME}</a></blockquote></div>`
-									}}
-								/>
-							{/* </Main> */}
-
 
 							<Aside id="trendingBar" ref="trendingBar">
 
@@ -359,6 +351,17 @@ class StoryPage extends React.Component {
 
 							</Aside>
 
+						</Content>
+
+						<Content>
+							<Main>
+									<LikeBoxContainer
+										dangerouslySetInnerHTML={{
+											__html: `<div class="fb-page" data-href="https://www.facebook.com/${config.FACEBOOK}" data-tabs="timeline" data-width="${likeBoxSize}" data-height="300" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/${config.FACEBOOK}/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/${config.FACEBOOK}/">${config.NAME}</a></blockquote></div>`
+										}}
+									/>
+							</Main>
+							<Aside></Aside>
 						</Content>
 
 						<Content>
