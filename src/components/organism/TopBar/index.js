@@ -133,13 +133,16 @@ const Center = styled.div`
 const Right = styled.div`
 	float: right;
 	position: relative;
-	top: -106px;
+	top: -120px;
 	padding:0 20px;
 	z-index:10;
 	display:flex;
 	align-items:center;
+	height:60px;
 	@media (max-width: 480px) {
 		padding:0 15px;
+		display:flex;
+		position:static;
 	}
 `
 
@@ -191,6 +194,9 @@ const ContainerCenter = styled.div`
 	height:100%;
 	display:flex;
 	justify-content: center;
+	@media (max-width: 480px) {
+		display:none;
+	}
 `
 const fadeOut = keyframes`
   0% {
@@ -386,11 +392,11 @@ class TopBar extends React.Component {
 						</LogoWrapper>
 					</Left>
 
-					<ContainerCenter>
+					{!isMobile&&<ContainerCenter>
 						<Center className={transparent ? 'hide' : ''}>
 							{this.props.children}
 						</Center>
-					</ContainerCenter>
+					</ContainerCenter>}
 
 					{status == 'LOGGEDIN' &&
 						<Right>
