@@ -12,6 +12,7 @@ import {
 	Footer,
 	BackToTop,
 	NextStory,
+	NextStoryMobile,
 	ShareBottom
 } from 'components'
 import { Link } from 'react-router-dom'
@@ -252,9 +253,17 @@ class StoryPage extends React.Component {
 		let likeBoxSize = 500
 		//console.log(story.shares)
 		let hasCover = false
+		let nextStoryContainer = <div></div>
+
 		if (!isEmpty(story)) {
 			if (isMobile) {
+
 				likeBoxSize = 300
+				nextStoryContainer = <NextStoryMobile
+					cid={story.column._id}
+					currentID={story._id}
+					format={story.format}/>
+
 				if (
 					story.coverMobile.medium !=
 					config.BACKURL + '/imgs/article_cover_portrait.png'
@@ -262,6 +271,11 @@ class StoryPage extends React.Component {
 					hasCover = true
 				}
 			} else {
+
+				nextStoryContainer = <NextStory
+					cid={story.column._id}
+					currentID={story._id}
+					format={story.format}/>
 				if (
 					story.cover.medium !=
 					config.BACKURL + '/imgs/article_cover_landscape.png'
@@ -321,12 +335,18 @@ class StoryPage extends React.Component {
 
 							<Main ref={'TT'} isMobile={isMobile}>
 								<StoryDetail story={story} id='storyDetail'/>
+							</Main>
+
+							{utils.isMobile() && nextStoryContainer}
+
+							<Main>
 								<LikeBoxContainer
 									dangerouslySetInnerHTML={{
 										__html: `<div class="fb-page" data-href="https://www.facebook.com/${config.FACEBOOK}" data-tabs="timeline" data-width="${likeBoxSize}" data-height="300" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/${config.FACEBOOK}/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/${config.FACEBOOK}/">${config.NAME}</a></blockquote></div>`
 									}}
 								/>
 							</Main>
+
 
 							<Aside id="trendingBar" ref="trendingBar">
 
@@ -348,11 +368,7 @@ class StoryPage extends React.Component {
 
 						{utils.isMobile() && <ShareBottom sid={story.id}/>}
 
-						{!utils.isMobile() && <NextStory
-							cid={story.column._id}
-							currentID={story._id}
-							format={story.format}
-						/>}
+						{!utils.isMobile && nextStoryContainer}
 
 						{/* <BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800" /> */}
 						<Footer isStoryPage={true} />
