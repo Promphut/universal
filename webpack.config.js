@@ -11,6 +11,7 @@ const SpawnPlugin = require('webpack-spawn-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const fs = require('fs')
 const OfflinePlugin = require('offline-plugin')
+const WebpackMd5Hash = require('webpack-md5-hash')
 
 const {
   addPlugins,
@@ -79,6 +80,9 @@ const base = () => group([
     path: outputPath,
     publicPath
   }),
+  addPlugins([
+    new WebpackMd5Hash(),
+  ]),
   defineConstants({
     'process.env.NODE_ENV': process.env.NODE_ENV,
     'process.env.PUBLIC_PATH': publicPath.replace(/\/$/, '')
@@ -121,7 +125,8 @@ const server = createConfig([
     new webpack.BannerPlugin({
       banner: 'global.assets = require("./assets.json");',
       raw: true
-    })
+    }),
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
   ]),
   () => ({
     target: 'node',
@@ -209,7 +214,7 @@ const client = createConfig([
       }),
     ])
   ]) : env(process.env.NODE_ENV, [
-    splitVendor(),
+    splitVendor({ exclude: [/lodash/, /offline-plugin\/runtime\.js/] }),
     addPlugins([
       new webpack.optimize.UglifyJsPlugin({
         compress: {
