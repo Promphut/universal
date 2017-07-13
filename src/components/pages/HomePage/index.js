@@ -152,6 +152,7 @@ const SeemoreContainer = styled.div`
 	justify-content: center;
 	@media (max-width:480px) {
 		margin-bottom: 26px;
+		padding-bottom:26px;
   	}
 `
 
