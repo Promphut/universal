@@ -58,18 +58,12 @@ const NameLink = styled(Link)`
   font-weight:bold;
   font-style: normal;
   font-size:14px;
-	transition: .1s;
-  white-space: pre-wrap;      /* Webkit */
-  white-space: -moz-pre-wrap; /* Firefox */
-  white-space: -pre-wrap;     /* Opera <7 */
-  white-space: -o-pre-wrap;   /* Opera 7 */
-  word-wrap: break-word;      /* IE */
   &:hover{
     color:${props=>props.theme.accentColor}
   }
   @media (max-width:480px) {
     font-size:14px;
-    margin-top: 6px;
+    line-height:1.3;
   }
   @media (min-width: 768px) and (max-width: 992px) {
     font-size:14px;
@@ -79,7 +73,8 @@ const Time = styled.div`
   color:#8E8E8E;
   font-size:10px;
   @media (max-width:480px) {
-    margin-bottom:10px;
+    align-self:flex-end;
+    margin:3px 0 3px 0;
   }
 `
 const Box = styled.div`
@@ -87,6 +82,9 @@ const Box = styled.div`
   min-height:50px;
   height:auto;
   padding-bottom:8px;
+  @media (max-width:480px) {
+    height:76px;
+  }
 `
 const BoxInner = styled.div`
   margin:20px 0 0 0;
@@ -113,20 +111,24 @@ background: linear-gradient(to bottom, rgba(255,255,255,0) 48%, rgba(255,255,255
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff', GradientType=0 );
 `
 const BoxDivMo = styled.div`
-  flex:3;
-  margin-right: 6px;
+  margin-right: 10px;
 `
 const BoxDiv2Mo = styled.div`
   flex:7;
   margin-right: 8px;
+  @media (max-width:480px) {
+    display:flex;
+    flex-wrap: wrap;
+  }
 `
 const BoxDiv3Mo = styled.div`
   float:right;
 `
 
 const TextBox = styled.div`
-  width : 174px;
-  height: 53px;
+   @media (max-width:480px) {
+    flex:1 100%;
+  }
 `
 
 const BoxInnerInner = styled.div`
@@ -137,8 +139,8 @@ const BoxInnerInner = styled.div`
 const BG = styled(BGImg)`
   position: relative;
   margin-top: 6px;
-  width: ${props => props.width}px;
-  height: ${props => props.height}px;
+  width: 80px;
+  height: 42px;
 `
 
 const BoxDiv = styled.div`
@@ -195,13 +197,13 @@ class TopNewsHome extends React.Component {
               <BoxInnerInner isMobile={utils.isMobile()}>   
                 <Box>
                   <BoxDivMo>
-                    <BG width={screen.width * 0.25} height = {(screen.width * 0.25 * 42) / 80} url={val.url} src={val.cover.small || val.cover.medium} alt={val.ptitle || ''} />
+                    <BG  url={val.url} src={val.cover.small || val.cover.medium} alt={val.ptitle || ''} />
                   </BoxDivMo>
                   <BoxDiv2Mo>
                     <TextBox>
                       <NameLink to={val.url} className='nunito-font' >
                         {truncate(val.ptitle&&val.ptitle, {
-                          'length': 70,
+                          'length': 65,
                           'separator': ''
                         })}
                       </NameLink>
@@ -209,7 +211,7 @@ class TopNewsHome extends React.Component {
                     <Time className='sans-font'>{moment(val.published).fromNow()}</Time>
                   </BoxDiv2Mo>
                   <BoxDiv3Mo>
-                      <ShareDropdown buttonSize={12} url={val.url} className='hidden-des'/>
+                      <ShareDropdown buttonSize={16} url={val.url} className='hidden-des'/>
                   </BoxDiv3Mo>
                 </Box>
               </BoxInnerInner>
