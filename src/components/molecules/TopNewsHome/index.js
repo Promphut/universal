@@ -57,7 +57,6 @@ const NameLink = styled(Link)`
   color:#222;
   font-weight:bold;
   font-style: normal;
-  margin-top: 6px;
   font-size:14px;
 	transition: .1s;
   white-space: pre-wrap;      /* Webkit */
@@ -70,6 +69,7 @@ const NameLink = styled(Link)`
   }
   @media (max-width:480px) {
     font-size:14px;
+    margin-top: 6px;
   }
   @media (min-width: 768px) and (max-width: 992px) {
     font-size:14px;
@@ -190,8 +190,10 @@ class TopNewsHome extends React.Component {
         <Dash className='hidden-mob'/>
         <BoxInner>
           {news && news.map((val,ind)=>(
-            <BoxInnerInner isMobile={utils.isMobile()}>   
-              {utils.isMobile() && <Box key={ind}>
+            <div key={ind}>
+              {utils.isMobile() ?
+              <BoxInnerInner isMobile={utils.isMobile()}>   
+                <Box>
                   <BoxDivMo>
                     <BG width={screen.width * 0.25} height = {(screen.width * 0.25 * 42) / 80} url={val.url} src={val.cover.small || val.cover.medium} alt={val.ptitle || ''} />
                   </BoxDivMo>
@@ -209,24 +211,25 @@ class TopNewsHome extends React.Component {
                   <BoxDiv3Mo>
                       <ShareDropdown buttonSize={12} url={val.url} className='hidden-des'/>
                   </BoxDiv3Mo>
-            </Box>}
-
-            {!utils.isMobile() && <Box key={ind}>
-                  <BoxDiv>
-                    <Doughnut/>
-                    <VerticalTimeline/>
-                  </BoxDiv>
-                  <BoxDiv2>
-                    <NameLink to={val.url} className='nunito-font' >
-                      {truncate(val.ptitle&&val.ptitle, {
-                        'length': 70,
-                        'separator': ''
-                      })}
-                    </NameLink>
-                    <Time className='sans-font'>{moment(val.published).fromNow()}</Time>
-                  </BoxDiv2>
+                </Box>
+              </BoxInnerInner>
+            :
+              <Box>
+                <BoxDiv>
+                  <Doughnut/>
+                  <VerticalTimeline/>
+                </BoxDiv>
+                <BoxDiv2>
+                  <NameLink to={val.url} className='nunito-font' >
+                    {truncate(val.ptitle&&val.ptitle, {
+                      'length': 70,
+                      'separator': ''
+                    })}
+                  </NameLink>
+                  <Time className='sans-font'>{moment(val.published).fromNow()}</Time>
+                </BoxDiv2>
               </Box>}
-            </BoxInnerInner>
+            </div>
           ))}
         </BoxInner>
 
