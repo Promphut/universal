@@ -152,6 +152,7 @@ const SeemoreContainer = styled.div`
 	justify-content: center;
 	@media (max-width:480px) {
 		margin-bottom: 26px;
+		padding-bottom:26px;
   	}
 `
 
@@ -202,7 +203,7 @@ class HomePage extends React.Component {
 		this.column = []
 	}
 
-	FEED_LIMIT = config.FEED_LIMIT;
+	FEED_LIMIT = utils.isMobile() ? config.FEED_LIMIT_MOBILE : config.FEED_LIMIT;
 
 	onload = () => (
 		<Onload>
@@ -240,7 +241,7 @@ class HomePage extends React.Component {
 			//console.log('page', page)
 
 			api
-				.getFeed('stories', { status: 1 }, 'latest', null, page, this.FEED_LIMIT)
+				.getFeed('article', { status: 1 }, 'latest', null, page, this.FEED_LIMIT)
 				.then(result => {
 					let feed = this.state.feed.concat(result.feed)
 					this.setState(
@@ -293,6 +294,7 @@ class HomePage extends React.Component {
 
 		//console.log(this.state.feedCount)
 		//if(feed.length==0) return <div></div>
+
 		return (
 			<Wrapper>
 				{!isEmpty(pub) &&!utils.isMobile() &&<BgWithLogo data={pub}/>}
@@ -361,6 +363,9 @@ class HomePage extends React.Component {
 						{utils.isMobile() &&
 							<SwipeableViews
 								index={selectTab}
+								animateHeight={true}
+								disableLazyLoading={true}
+								style={{overflow:'hidden'}}
 								onChangeIndex={this.handleChangeTab}
 								className="hidden-des">
 								{/*<div className='story'>

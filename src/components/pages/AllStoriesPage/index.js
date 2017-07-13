@@ -14,73 +14,98 @@ import utils from '../../../services/utils'
 import config from '../../../config'
 
 const Wrapper = styled.div`
-    @media (max-width:480px) {
-        max-width: 100%;
-        width:100%;
+	@media (max-width:480px) {
+		max-width: 100%;
+		width:100%;
+  }
+`
+const Content = styled.div`
+	display: flex;
+	flex-flow: row wrap;
+	padding-top: 100px;
+	justify-content:center;
+	@media (max-width:480px) {
+		display: block;
+		padding: 60px 0 0 0;
+  }
+`
+const Content2 = styled.div`
+	display: flex;
+	flex-flow: row wrap;
+	justify-content:center;
+	min-height: calc(100vh - ${props => (props.isMobile ? '191px' : '456px')});
+
+	@media (max-width:480px) {
+		display: block;
   }
 `
 
-const ContentWrapper = styled.div`
-  position: relative;
-  top: 116px;
-  padding-bottom: 70px;
-`
-
-const Content = styled.div`
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    padding: 116px 0 0 0;
-    min-height: calc(100vh - ${props => (props.isMobile ? '261px' : '261px')});
-
-    @media (max-width:480px) {
-        padding: 0;
-  	}
-`
-
 const Main = styled.div`
-    ${'' /* flex: 3 825px; */}
-    ${'' /* max-width: 825px; */}
-    flex: 3 780px;
-    max-width: 780px;
-    @media (max-width:480px) {
-        flex: 0 100%;
-        max-width: 100%;
-        padding:0 16px 0 16px;
-    }
+	flex: 3 780px;
+	max-width: 780px;
+	@media (max-width:480px) {
+		padding:0 16px 0 16px;
+  }
+`
 
-    .hidden-des-flex {
-        display: none !important;
-        @media (max-width: 480px) {
-            display: flex !important;
-      }
-    }
+const Aside = styled.div`
+	flex: 1 300px;
+	max-width: 300px;
+	margin-left:60px;
+	z-index: 9;
+	@media (max-width: 1160px) {
+		display:none;
+	}
+`
+
+const Feed = styled.div`
+	flex: 1 1120;
+	max-width:1120px;
+	@media (max-width:480px) {
+		padding:40px 24px 0 24px;
+  }
+`
+const Feed2 = styled.div`
+	flex: 1 1120;
+	max-width:1120px;
+	@media (max-width:480px) {
+		padding:0px 24px 0 24px;
+  }
 `
 
 const FilterContainer = styled.ul `
-    list-style-type: none;
-    margin-top: 40px;
-    margin-bottom: 32px;
-    padding-left: 0px;
+  list-style-type: none;
+  margin-top: 40px;
+  margin-bottom: 32px;
+  padding-left: 0px;
 `
 
 const FilterItem = styled.li `
-    display: inline;
-	cursor: pointer;
-    margin-left: 0px;
-    margin-right: 20px;
-    background-color: ${props => props.select == true ? props.theme.accentColor : 'rgba(0,0,0,0)'};
-    border-radius: 100px;
-    color: ${props => props.select ? 'white' : '#222'};
-    padding-top: 9px;
-    padding-bottom: 9px;
-    padding-left: 25px;
-    padding-right: 25px;
-    text-align: center;
+  display: inline;
+  margin-left: 0px;
+  margin-right: 20px;
+  background-color: ${props => props.select == true ? props.theme.accentColor : 'rgba(0,0,0,0)'};
+  border-radius: 100px;
+  color: ${props => props.select ? 'white' : '#222'};
+  padding-top: 9px;
+  padding-bottom: 9px;
+  padding-left: 25px;
+  padding-right: 25px;
+  text-align: center;
 
-    &:hover {
-        background-color: ${props => !props.select && props.theme.secondaryColor};
-    }
+  &:hover {
+	background-color: ${props => (!props.select && !props.mobile) && props.theme.secondaryColor};
+	cursor: pointer;
+  }
+`
+
+const PaginationContainer = styled.div `
+	display: flex;
+	justify-content: center;
+	margin-top: 20px;
+	@media (max-width:480px) {
+		margin-bottom: 20px;
+  }
 `
 
 const Onload = styled.div`
@@ -132,7 +157,7 @@ export default class AllStoriesPage extends React.Component {
 		setting: PropTypes.object
 	}
 
-  	FEED_LIMIT = config.FEED_LIMIT
+  	FEED_LIMIT = utils.isMobile() ? config.FEED_LIMIT_MOBILE*2 : config.FEED_LIMIT;
 
  	onload = () => (
         <Onload>
@@ -146,20 +171,6 @@ export default class AllStoriesPage extends React.Component {
         </Onload>
     )
 
-	reloadFeed = () => {
-		this.setState(
-			{
-				currentPage: utils.querystring('page',this.props.location) ? utils.querystring('page',this.props.location) - 1 : 0,
-				feedCount: 1,
-				feed: [],
-				totalPages: 0,
-			},
-			() => {
-				this.getAllFeed()
-			}
-		)
-	}
-
 	getAllFeed = () => {
 
 		if (this.state.loading === true) return
@@ -170,11 +181,11 @@ export default class AllStoriesPage extends React.Component {
 				this.setState(
 					{
 						feed: result.feed,
-						feedCount: result.count['1'] ? result.count['1'] : 0,
-						totalPages: utils.getTotalPages(this.FEED_LIMIT, result.count['total']),
+						feedCount: result.feed.length!=0 ? (result.count['1'] ? result.count['1'] : 0 ): 0,
+						totalPages: result.feed.length!=0 ? utils.getTotalPages(this.FEED_LIMIT, result.count['1']) : 0,
 					},
 					() => {
-						this.setState({loading:false})
+					this.setState({loading:false})
 					}
 				)
 
@@ -183,22 +194,16 @@ export default class AllStoriesPage extends React.Component {
 
     changePage = e => {
         this.props.history.push({ search: "?type=" + this.state.type  + "&sort="+ this.state.sort + "&page=" + e})
-        this.setState({ currentPage: e - 1}, () => {
-            this.getAllFeed()
-        })
     }
 
     changeSort = sort => {
 		if(sort != this.state.sort){
 			this.props.history.push({ search: "?type=" + this.state.type  + "&sort="+ sort + "&page=" + 1})
-			this.setState({ currentPage: 0, sort: sort}, () => {
-				this.getAllFeed()
-			})
 		}
     }
 
     componentWillMount(){
-        this.reloadFeed()
+        this.getAllFeed()
     }
 
     componentDidMount() {
@@ -210,15 +215,18 @@ export default class AllStoriesPage extends React.Component {
     componentWillReceiveProps(nextProps) {
         if(nextProps.location.search != this.props.location.search){
             document.body.scrollTop = document.documentElement.scrollTop = 0
-            this.setState({currentPage : utils.querystring('page',nextProps.location)-1}
-                ,()=>{this.reloadFeed()
+            this.setState({
+				currentPage : utils.querystring('page',nextProps.location) ? utils.querystring('page',nextProps.location)-1 : 0 ,
+				type: utils.querystring('type',nextProps.location) ? utils.querystring('type',nextProps.location) : 'article',
+				sort: utils.querystring('sort',nextProps.location) ? utils.querystring('sort',nextProps.location) : 'latest' ,
+			},()=>{this.getAllFeed()
             })
         }
     }
 
     render() {
 		let { theme } = this.context.setting.publisher
-        let { isMobile, completed, totalPages, currentPage, loading, feed, feedCount} = this.state
+		let { isMobile, completed, totalPages, currentPage, loading, feed, feedCount} = this.state
         return (
         <Wrapper>
             <TopBarWithNavigation/>
@@ -230,8 +238,8 @@ export default class AllStoriesPage extends React.Component {
                     <Dash className="hidden-mob" style={{ margin: '5px 0 10px 0' }} />
 
                     <FilterContainer>
-                        <FilterItem onClick={(e) => this.changeSort('latest')} select={this.state.sort === 'latest'}>LATEST</FilterItem>
-                        <FilterItem onClick={(e) => this.changeSort('trending')} select={this.state.sort === 'trending'}>TRENDING</FilterItem>
+                        <FilterItem mobile = {utils.isMobile()} onClick={(e) => this.changeSort('latest')} select={this.state.sort === 'latest'}>LATEST</FilterItem>
+                        <FilterItem mobile = {utils.isMobile()} onClick={(e) => this.changeSort('trending')} select={this.state.sort === 'trending'}>TRENDING</FilterItem>
                     </FilterContainer>
 
 					{feedCount <= 0 ?
@@ -265,11 +273,15 @@ export default class AllStoriesPage extends React.Component {
 							}
 
 							<Page>
-								{totalPages > 0 && ((totalPages > currentPage && currentPage >= 0) ?
+								{!loading && totalPages > 0 && ((totalPages > currentPage && currentPage >= 0) ?
 									<Pagination
-										currentPage={currentPage + 1}
-										totalPages={totalPages}
-										onChange={this.changePage}/>
+                                        hideFirstAndLastPageLinks={utils.isMobile() ? false : true}
+                                        hidePreviousAndNextPageLinks={utils.isMobile() ? true : false}
+                                        boundaryPagesRange={utils.isMobile() ? 0 : 1}
+                                        currentPage={currentPage + 1}
+                                        totalPages={totalPages}
+                                        onChange={this.changePage}
+                                    />
 									:
 									<EmptyStory
 										title="No More Story"

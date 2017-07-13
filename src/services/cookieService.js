@@ -1,9 +1,19 @@
 const config = require('../config')
+const Cookies = require('universal-cookie')
 //let cookies = new Cookies()
 //console.log('COOKIE', global.cookies, 'x', window.cookies)
 //const cookies = new Cookies()
 
-const domain = {domain:config.DOMAIN, path:'/'}
+let cookies = {
+	set: () => {},
+	get: () => {},
+	remove: () => {}
+}
+if (process.env.BROWSER) {
+	cookies = new Cookies();
+}
+// We don't need "staging.[domain]" instead use ".[domain]" to cover all subdomains
+const domain = {domain:config.DOMAIN, path:'/', secure:config.isDev ? false : true, expires: new Date(Number(new Date()) + 7776000000)}
 
 let cookieService = {}
 cookieService = {

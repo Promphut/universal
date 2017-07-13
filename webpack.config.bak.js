@@ -76,7 +76,7 @@ const resolveModules = modules => () => ({
 const base = () => group([
   setOutput({
     filename: process.env.NODE_ENV==='development' ? '[name].js' : '[name].[chunkhash].js',
-    path: outputPath, 
+    path: outputPath,
     publicPath
   }),
   defineConstants({
@@ -85,6 +85,7 @@ const base = () => group([
   }),
   addPlugins([
     new webpack.ProgressPlugin(),
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new OfflinePlugin({
       safeToUseOptionalCaches: true,
       ServiceWorker: {
@@ -149,13 +150,13 @@ const client = createConfig([
           test: /\.scss$/,
           use: ExtractTextPlugin.extract({
             fallback: 'style-loader',
-            use: ['css-loader', 'sass-loader']
+            use: ['css-loader', 'postcss-loader', 'sass-loader']
           })
         }, {
           test: /\.css$/,
           use: ExtractTextPlugin.extract({
             fallback: "style-loader",
-            use: 'css-loader'
+            use: ['css-loader', 'postcss-loader']
           })
         },
       ],

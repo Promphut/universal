@@ -1,6 +1,6 @@
 {
   "name": "ThePublisher",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "private": true,
   "main": "dist/server",
   "scripts": {
@@ -80,12 +80,11 @@
     "webpack-blocks-split-vendor": "^0.2.1",
     "webpack-child-config-plugin": "^0.1.1",
     "webpack-dev-server": "^2.3.0",
+    "webpack-md5-hash": "^0.0.5",
     "webpack-node-externals": "^1.5.4",
     "webpack-spawn-plugin": "^0.1.2"
   },
   "dependencies": {
-    "@webpack-blocks/css-modules": "^0.4.0",
-    "@webpack-blocks/extract-text2": "^0.4.0",
     "blueimp-canvas-to-blob": "^3.7.0",
     "blueimp-file-upload": "^9.17.0",
     "blueimp-file-upload-expressjs": "git+https://github.com/ochawin/blueimp-file-upload-expressjs",
@@ -109,7 +108,7 @@
     "query-string": "^4.3.4",
     "react": "^15.5.4",
     "react-color": "^2.11.1",
-    "react-cookie": "^2.0.6",
+    "react-cookie": "^2.0.8",
     "react-copy-to-clipboard": "^4.2.3",
     "react-cropper": "^0.12.0",
     "react-datepicker": "^0.46.0",
@@ -133,7 +132,7 @@
     "styled-theme": "^0.3.3",
     "styled-tools": "^0.1.4",
     "superagent": "^3.5.2",
-    "universal-cookie": "^2.0.5",
+    "universal-cookie": "^2.0.8",
     "universal-cookie-express": "^2.0.5"
   }
 }
