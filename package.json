@@ -80,12 +80,11 @@
     "webpack-blocks-split-vendor": "^0.2.1",
     "webpack-child-config-plugin": "^0.1.1",
     "webpack-dev-server": "^2.3.0",
+    "webpack-md5-hash": "^0.0.5",
     "webpack-node-externals": "^1.5.4",
     "webpack-spawn-plugin": "^0.1.2"
   },
   "dependencies": {
-    "@webpack-blocks/css-modules": "^0.4.0",
-    "@webpack-blocks/extract-text2": "^0.4.0",
     "blueimp-canvas-to-blob": "^3.7.0",
     "blueimp-file-upload": "^9.17.0",
     "blueimp-file-upload-expressjs": "git+https://github.com/ochawin/blueimp-file-upload-expressjs",
@@ -134,7 +133,6 @@
     "styled-tools": "^0.1.4",
     "superagent": "^3.5.2",
     "universal-cookie": "^2.0.8",
-    "universal-cookie-express": "^2.0.5",
-    "webpack-md5-hash": "^0.0.5"
+    "universal-cookie-express": "^2.0.5"
   }
 }

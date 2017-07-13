@@ -126,7 +126,6 @@ const server = createConfig([
       banner: 'global.assets = require("./assets.json");',
       raw: true
     }),
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
   ]),
   () => ({
     target: 'node',
