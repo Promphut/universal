@@ -144,6 +144,7 @@ class TopBarWithNavigation extends React.Component {
 						editButton={editButton}
 						hasCover={hasCover}
 						onLoading={this.props.onLoading}
+						article={article}
 					> {children}
 					</TopBar>
 				{/* } */}
