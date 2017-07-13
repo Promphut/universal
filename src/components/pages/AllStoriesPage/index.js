@@ -94,7 +94,8 @@ const FilterItem = styled.li `
   text-align: center;
 
   &:hover {
-    background-color: ${props => (!props.select && !props.mobile) && props.theme.secondaryColor};
+	background-color: ${props => (!props.select && !props.mobile) && props.theme.secondaryColor};
+	cursor: pointer;
   }
 `
 
@@ -198,9 +199,6 @@ export default class AllStoriesPage extends React.Component {
     changeSort = sort => {
 		if(sort != this.state.sort){
 			this.props.history.push({ search: "?type=" + this.state.type  + "&sort="+ sort + "&page=" + 1})
-			this.setState({ currentPage: 0, sort: sort}, () => {
-				this.getAllFeed()
-			})
 		}
     }
 
@@ -217,15 +215,18 @@ export default class AllStoriesPage extends React.Component {
     componentWillReceiveProps(nextProps) {
         if(nextProps.location.search != this.props.location.search){
             document.body.scrollTop = document.documentElement.scrollTop = 0
-            this.setState({currentPage : utils.querystring('page',nextProps.location)-1}
-                ,()=>{this.getAllFeed()
+            this.setState({
+				currentPage : utils.querystring('page',nextProps.location) ? utils.querystring('page',nextProps.location)-1 : 0 ,
+				type: utils.querystring('type',nextProps.location) ? utils.querystring('type',nextProps.location) : 'article',
+				sort: utils.querystring('sort',nextProps.location) ? utils.querystring('sort',nextProps.location) : 'latest' ,
+			},()=>{this.getAllFeed()
             })
         }
     }
 
     render() {
 		let { theme } = this.context.setting.publisher
-        let { isMobile, completed, totalPages, currentPage, loading, feed, feedCount} = this.state
+		let { isMobile, completed, totalPages, currentPage, loading, feed, feedCount} = this.state
         return (
         <Wrapper>
             <TopBarWithNavigation/>
@@ -237,8 +238,8 @@ export default class AllStoriesPage extends React.Component {
                     <Dash className="hidden-mob" style={{ margin: '5px 0 10px 0' }} />
 
                     <FilterContainer>
-                        <FilterItem onClick={(e) => this.changeSort('latest')} select={this.state.sort === 'latest'}>LATEST</FilterItem>
-                        <FilterItem onClick={(e) => this.changeSort('trending')} select={this.state.sort === 'trending'}>TRENDING</FilterItem>
+                        <FilterItem mobile = {utils.isMobile()} onClick={(e) => this.changeSort('latest')} select={this.state.sort === 'latest'}>LATEST</FilterItem>
+                        <FilterItem mobile = {utils.isMobile()} onClick={(e) => this.changeSort('trending')} select={this.state.sort === 'trending'}>TRENDING</FilterItem>
                     </FilterContainer>
 
 					{feedCount <= 0 ?
@@ -272,7 +273,7 @@ export default class AllStoriesPage extends React.Component {
 							}
 
 							<Page>
-								{totalPages > 0 && ((totalPages > currentPage && currentPage >= 0) ?
+								{!loading && totalPages > 0 && ((totalPages > currentPage && currentPage >= 0) ?
 									<Pagination
                                         hideFirstAndLastPageLinks={utils.isMobile() ? false : true}
                                         hidePreviousAndNextPageLinks={utils.isMobile() ? true : false}

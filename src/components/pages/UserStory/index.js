@@ -369,7 +369,7 @@ class UserStory extends React.Component {
 		api
 			.getUserFromUsername(username)
 			.then(user => {
-				this.setState({ user: user }, done)
+				this.setState({ user: user , currentPage : 0}, done)
 			})
 			.catch(err => {
 				utils.notFound(this.props.history, err)
@@ -383,7 +383,7 @@ class UserStory extends React.Component {
 		api
 			.getUserFromUserId(uid)
 			.then(user => {
-				this.setState({ user: user }, done)
+				this.setState({ user: user , currentPage : 0}, done)
 			})
 			.catch(err => {
 				utils.notFound(this.props.history, err)
@@ -409,7 +409,8 @@ class UserStory extends React.Component {
 		} else if (nextProps.match.params.uid != this.props.match.params.uid) {
 			this.getUserFromUid(nextProps.match.params.uid, this.loadFeed)
 		} else if(nextProps.location.search != this.props.location.search){
-			this.setState({currentPage : utils.querystring('page',nextProps.location) - 1},()=>{
+			this.setState({currentPage : utils.querystring('page',nextProps.location) ? utils.querystring('page',nextProps.location) - 1 : 0}
+			,()=>{
 				document.body.scrollTop = document.documentElement.scrollTop = 0
 				this.loadFeed()
 			})
@@ -427,86 +428,84 @@ class UserStory extends React.Component {
 					<meta name="description" content={user.shortDesc} />
 				</Helmet>
 
-				<TopBarWithNavigation
-					className="hidden-mob"
-					 
-				/>
+				<TopBarWithNavigation className="hidden-mob" />
+
 				<UserDetail user={user} checkBack={this.checkBack} />
 
 				<Content>
 					{feedCount <= 0
-						? <Main>
-								<TextLine className="sans-font">
-									<strong
-										style={{ color: theme.primaryColor, marginRight: '30px' }}>
-										<span style={{ fontSize: '30px' }}>
-											{feedCount >= 0 ? feedCount : 0}
-										</span>
-										{' '}
-										stories
-									</strong>
-									{/*<span style={{fontSize:'30px'}}>101</span> Upvotes*/}
-								</TextLine>
-								<EmptyStory
-									title="Start your first story!"
-									description="You haven’t write any stories right now."
+					? <Main>
+							<TextLine className="sans-font">
+								<strong
+									style={{ color: theme.primaryColor, marginRight: '30px' }}>
+									<span style={{ fontSize: '30px' }}>
+										{feedCount >= 0 ? feedCount : 0}
+									</span>
+									{' '}
+									stories
+								</strong>
+								{/*<span style={{fontSize:'30px'}}>101</span> Upvotes*/}
+							</TextLine>
+							<EmptyStory
+								title="Start your first story!"
+								description="You haven’t write any stories right now."
+							/>
+						</Main>
+					: <Main>
+
+						<TextLine className="sans-font">
+							<strong
+								style={{ color: theme.primaryColor, marginRight: '30px' }}>
+								<span style={{ fontSize: '30px' }}>
+									{feedCount >= 0 ? feedCount : 0}
+								</span>
+								{' '}
+								stories
+							</strong>
+							{/*<span style={{fontSize:'30px'}}>101</span> Upvotes*/}
+						</TextLine>
+
+						{loading ?  this.onload() : 
+							<div>
+								{feed && currentPage >= 0 &&
+									feed.map((item, index) => (
+										<ArticleBox final={index == feed.length -1 ? true:false} detail={item} key={index} />
+									))}
+							</div> 
+						}
+
+						<Page>
+							{!loading && totalPages > 0 && ((totalPages > currentPage && currentPage >= 0) ?
+								<Pagination
+									hideFirstAndLastPageLinks={utils.isMobile() ? false : true}
+									hidePreviousAndNextPageLinks={utils.isMobile() ? true : false}
+									boundaryPagesRange={utils.isMobile() ? 0 : 1}
+									currentPage={currentPage + 1}
+									totalPages={totalPages}
+									onChange={this.changePage}
 								/>
-							</Main>
-						: <Main>
-
-								<TextLine className="sans-font">
-									<strong
-										style={{ color: theme.primaryColor, marginRight: '30px' }}>
-										<span style={{ fontSize: '30px' }}>
-											{feedCount >= 0 ? feedCount : 0}
-										</span>
-										{' '}
-										stories
-									</strong>
-									{/*<span style={{fontSize:'30px'}}>101</span> Upvotes*/}
-								</TextLine>
-
-								{loading ?  this.onload() : 
-									<div>
-										{feed && currentPage >= 0 &&
-											feed.map((item, index) => (
-												<ArticleBox final={index == feed.length -1 ? true:false} detail={item} key={index} />
-											))}
-									</div> 
-								}
-
-								<Page>
-									{totalPages > 0 && ((totalPages > currentPage && currentPage >= 0) ?
-										<Pagination
-											hideFirstAndLastPageLinks={utils.isMobile() ? false : true}
-											hidePreviousAndNextPageLinks={utils.isMobile() ? true : false}
-											boundaryPagesRange={utils.isMobile() ? 0 : 1}
-											currentPage={currentPage + 1}
-											totalPages={totalPages}
-											onChange={this.changePage}
-										/>
-										:
-										<EmptyStory
-											title="No More Story"
-											description={
-												<div>
-													There are no more stories in this page. Go back to
-													<Link
-														to={user.url+"?page=1"}
-														style={{
-															color: theme.accentColor,
-															padding: '0 0.5em 0 0.5em'
-														}}>
-														first page
-													</Link>
-													?
-												</div>
-											}
-											hideButton={true}
-										/>)
+								:
+								<EmptyStory
+									title="No More Story"
+									description={
+										<div>
+											There are no more stories in this page. Go back to
+											<Link
+												to={user.url+"?page=1"}
+												style={{
+													color: theme.accentColor,
+													padding: '0 0.5em 0 0.5em'
+												}}>
+												first page
+											</Link>
+											?
+										</div>
 									}
-								</Page>
-							</Main>}
+									hideButton={true}
+								/>)
+							}
+						</Page>
+					</Main>}
 				</Content>
 				<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="600" />
 				<Footer />

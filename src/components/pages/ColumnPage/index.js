@@ -247,11 +247,11 @@ class ColumnPage extends React.Component {
 
 	getColumnFromSlug = (columnSlug, done = () => {}) => {
 		if (!columnSlug) utils.notFound(this.props.history)
-
+		
 		api
 			.getColumnFromSlug(columnSlug)
 			.then(col => {
-				this.setState({ column: col }, done)
+				this.setState({ column: col , currentPage : 0}, done)
 			})
 			.catch(err => {
 				utils.notFound(this.props.history, err)
@@ -273,7 +273,9 @@ class ColumnPage extends React.Component {
 		if (nextProps.match.params.columnSlug != this.props.match.params.columnSlug) {
 			this.getColumnFromSlug(nextProps.match.params.columnSlug, this.loadFeed)
 		} else if(nextProps.location.search != this.props.location.search){
-			this.setState({currentPage : utils.querystring('page',nextProps.location) - 1},()=>{
+			this.setState({
+				currentPage : utils.querystring('page',nextProps.location) ? utils.querystring('page',nextProps.location) - 1 : 0,
+			},()=>{
 				document.body.scrollTop = document.documentElement.scrollTop = 0
 				this.loadFeed()
 			})
@@ -362,7 +364,7 @@ class ColumnPage extends React.Component {
 									</div> 
 								}
 								<Page>
-									{totalPages > 0 && ((totalPages > currentPage && currentPage >= 0) ?
+									{!loading && totalPages > 0 && ((totalPages > currentPage && currentPage >= 0) ?
 										<Pagination
 											hideFirstAndLastPageLinks={utils.isMobile() ? false : true}
 											hidePreviousAndNextPageLinks={utils.isMobile() ? true : false}
