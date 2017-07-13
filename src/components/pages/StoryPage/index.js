@@ -83,7 +83,7 @@ const LikeBoxContainer = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	margin: 0 auto 0 auto;
+	margin: 0 auto 15px auto;
 `
 
 const Main = styled.div`
@@ -366,7 +366,7 @@ class StoryPage extends React.Component {
 								<RecommendContainer recommend={recommends} />}
 						</Content>
 
-						{utils.isMobile() && <ShareBottom sid={story.id}/>}
+						{utils.isMobile() && <ShareBottom url={config.FRONTURL+story.url} sid={story.id}/>}
 
 						{!utils.isMobile && nextStoryContainer}
 
