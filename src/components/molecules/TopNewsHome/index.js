@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {BGImg} from 'components'
+import {BGImg, ShareDropdown} from 'components'
 import styled,{keyframes} from 'styled-components'
 import {Link} from 'react-router-dom'
 import api from '../../../services/api'
 import moment from 'moment'
 import truncate from 'lodash/truncate'
+import utils from '../../../services/utils'
 const NewsBox = styled.div`
 	flex:2;
 	height:444px;
@@ -52,8 +53,10 @@ const Doughnut = styled.div`
 `
 const NameLink = styled(Link)`
   display: block;
+  font-family: Mitr;
   color:#222;
   font-weight:bold;
+  font-style: normal;
   font-size:14px;
 	transition: .1s;
   white-space: pre-wrap;      /* Webkit */
@@ -66,6 +69,7 @@ const NameLink = styled(Link)`
   }
   @media (max-width:480px) {
     font-size:14px;
+    margin-top: 6px;
   }
   @media (min-width: 768px) and (max-width: 992px) {
     font-size:14px;
@@ -73,7 +77,7 @@ const NameLink = styled(Link)`
 `
 const Time = styled.div`
   color:#8E8E8E;
-  font-size:12px;
+  font-size:10px;
   @media (max-width:480px) {
     margin-bottom:10px;
   }
@@ -108,6 +112,35 @@ background: -ms-linear-gradient(top, rgba(255,255,255,0) 48%, rgba(255,255,255,1
 background: linear-gradient(to bottom, rgba(255,255,255,0) 48%, rgba(255,255,255,1) 100%);
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff', GradientType=0 );
 `
+const BoxDivMo = styled.div`
+  flex:3;
+  margin-right: 6px;
+`
+const BoxDiv2Mo = styled.div`
+  flex:7;
+  margin-right: 8px;
+`
+const BoxDiv3Mo = styled.div`
+  float:right;
+`
+
+const TextBox = styled.div`
+  width : 174px;
+  height: 53px;
+`
+
+const BoxInnerInner = styled.div`
+  margin-top: 10px;
+  ${props => props.isMobile ? 'border-bottom: 1px solid #e2e2e2' : ''};
+`
+
+const BG = styled(BGImg)`
+  position: relative;
+  margin-top: 6px;
+  width: ${props => props.width}px;
+  height: ${props => props.height}px;
+`
+
 const BoxDiv = styled.div`
   flex:0 15px;
 `
@@ -151,28 +184,52 @@ class TopNewsHome extends React.Component {
     var {theme} = this.context.setting.publisher
     var {style,swift,className,large} = this.props
     var {hover,news} = this.state
-    //console.log(news)
     return (
       <NewsBox>
         <News className='hidden-mob'>NEWS</News>
         <Dash className='hidden-mob'/>
         <BoxInner>
           {news && news.map((val,ind)=>(
-            <Box key={ind}>
-              <BoxDiv>
-                <Doughnut/>
-                <VerticalTimeline/>
-              </BoxDiv>
-              <BoxDiv2>
-                <NameLink to={val.url} className='nunito-font' >
-                  {truncate(val.ptitle&&val.ptitle, {
-                    'length': 70,
-                    'separator': ''
-                  })}
-                </NameLink>
-                <Time className='sans-font'>{moment(val.published).fromNow()}</Time>
-              </BoxDiv2>
-            </Box>
+            <div key={ind}>
+              {utils.isMobile() ?
+              <BoxInnerInner isMobile={utils.isMobile()}>   
+                <Box>
+                  <BoxDivMo>
+                    <BG width={screen.width * 0.25} height = {(screen.width * 0.25 * 42) / 80} url={val.url} src={val.cover.small || val.cover.medium} alt={val.ptitle || ''} />
+                  </BoxDivMo>
+                  <BoxDiv2Mo>
+                    <TextBox>
+                      <NameLink to={val.url} className='nunito-font' >
+                        {truncate(val.ptitle&&val.ptitle, {
+                          'length': 70,
+                          'separator': ''
+                        })}
+                      </NameLink>
+                    </TextBox>
+                    <Time className='sans-font'>{moment(val.published).fromNow()}</Time>
+                  </BoxDiv2Mo>
+                  <BoxDiv3Mo>
+                      <ShareDropdown buttonSize={12} url={val.url} className='hidden-des'/>
+                  </BoxDiv3Mo>
+                </Box>
+              </BoxInnerInner>
+            :
+              <Box>
+                <BoxDiv>
+                  <Doughnut/>
+                  <VerticalTimeline/>
+                </BoxDiv>
+                <BoxDiv2>
+                  <NameLink to={val.url} className='nunito-font' >
+                    {truncate(val.ptitle&&val.ptitle, {
+                      'length': 70,
+                      'separator': ''
+                    })}
+                  </NameLink>
+                  <Time className='sans-font'>{moment(val.published).fromNow()}</Time>
+                </BoxDiv2>
+              </Box>}
+            </div>
           ))}
         </BoxInner>
 

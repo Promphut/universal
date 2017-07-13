@@ -78,7 +78,10 @@ const Share = styled.div`
 `
 
 const LikeBoxContainer = styled.div`
-	width:70%;
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	margin: 0 auto 0 auto;
 `
 
@@ -246,10 +249,12 @@ class StoryPage extends React.Component {
 		const isMobile = utils.isMobile()
 		let { keywords, channels } = this.context.setting.publisher
 		let { recommends, description, showTopbarTitle, story, fb } = this.state
+		let likeBoxSize = 500
 		//console.log(story.shares)
 		let hasCover = false
 		if (!isEmpty(story)) {
 			if (isMobile) {
+				likeBoxSize = 300
 				if (
 					story.coverMobile.medium !=
 					config.BACKURL + '/imgs/article_cover_portrait.png'
@@ -316,13 +321,11 @@ class StoryPage extends React.Component {
 
 							<Main ref={'TT'} isMobile={isMobile}>
 								<StoryDetail story={story} id='storyDetail'/>
-								<LikeBoxContainer>
-									<div
-										dangerouslySetInnerHTML={{
-											__html: `<div class="fb-page" data-href="https://www.facebook.com/${config.FACEBOOK}" data-tabs="timeline" data-width="500" data-height="210" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/${config.FACEBOOK}/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/${config.FACEBOOK}/">${config.NAME}</a></blockquote></div>`
-										}}
-									/>
-								</LikeBoxContainer>
+								<LikeBoxContainer
+									dangerouslySetInnerHTML={{
+										__html: `<div class="fb-page" data-href="https://www.facebook.com/${config.FACEBOOK}" data-tabs="timeline" data-width="${likeBoxSize}" data-height="300" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/${config.FACEBOOK}/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/${config.FACEBOOK}/">${config.NAME}</a></blockquote></div>`
+									}}
+								/>
 							</Main>
 
 							<Aside id="trendingBar" ref="trendingBar">
@@ -343,7 +346,7 @@ class StoryPage extends React.Component {
 								<RecommendContainer recommend={recommends} />}
 						</Content>
 
-						{utils.isMobile() && <ShareBottom sid={story.id}/>}
+						{utils.isMobile() && <ShareBottom url={config.FRONTURL+story.url} sid={story.id}/>}
 
 						{!utils.isMobile() && <NextStory
 							cid={story.column._id}
