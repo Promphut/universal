@@ -240,10 +240,6 @@ class HomePage extends React.Component {
 			let page = this.state.page
 			//console.log('page', page)
 
-			api.getChildrenIds(22).then(result => {
-				console.log(result)
-			})
-
 			api
 				.getFeed(
 					'article',

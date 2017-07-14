@@ -242,7 +242,8 @@ api.signup = (data) => {
 
 */
 api.getFeed = (type, filter, sort, sortby, page, limit, option) => {
-	//console.log('filter', JSON.stringify(filter))
+	console.log('filter', filter)
+	console.log('filter', JSON.stringify(filter))
 	let token
 	if(option && option.onlyAuthorized) token = auth.getToken()
 	//console.log(token)
@@ -857,7 +858,7 @@ api.filterStoryByTitle = (title,sort)=> {
 
 api.getChildrenIds = (parent) => {
 	return Request
-	.post(config.BACKURL+'/publishers/'+config.PID+'/columns/'+parent+'/parent')
+	.get(config.BACKURL+'/publishers/'+config.PID+'/columns/'+parent+'/parent')
 	.set('Accept','application/json')
 	.then(res => {
 		return res.body.column
