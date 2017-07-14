@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
 import remove from 'lodash/remove'
+import api from '../../../services/api'
 
 const Container = styled.div`
 	display:flex;
@@ -83,7 +84,7 @@ const Line = styled.div`
 	height: 1px;
 	margin: 0px 15px;
 `
-const TopNavigation = ({ menu }) => {
+const TopNavigation = ({ menu, children }) => {
 	let cols = menu && menu.column ? menu.column : []
 
 	remove(cols, col => {

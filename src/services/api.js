@@ -856,12 +856,21 @@ api.filterStoryByTitle = (title,sort)=> {
 	}, api.err)
 }
 
-api.getChildrenIds = (parent) => {
+api.getChildren = () => {
+	return Request
+	.get(config.BACKURL+'/publishers/'+config.PID+'/columns/parent')
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body.columns
+	}, api.err)
+}
+
+api.getChildrenFromParent = (parent) => {
 	return Request
 	.get(config.BACKURL+'/publishers/'+config.PID+'/columns/'+parent+'/parent')
 	.set('Accept','application/json')
 	.then(res => {
-		return res.body.column
+		return res.body.columns
 	}, api.err)
 }
 

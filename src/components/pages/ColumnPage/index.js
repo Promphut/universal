@@ -229,18 +229,19 @@ class ColumnPage extends React.Component {
 		let colId = this.state.column._id
 		//console.log('page', page)
 
-		// let colIds = []
-		// api.getChildrenIds(colId).then(res => {
-			// res.forEach(col => {
-				// colIds.push(col.id)
-			// })
+		let colIds = []
+		api.getChildrenFromParent(colId).then(res => {
+			res.forEach(col => {
+				colIds.push(col._id)
+			})
 
-			// console.log('colIds', colIds)
+			if (colIds.length === 0) colIds = colId
 
+			console.log('colIds', colIds)
 			api
 				.getFeed(
 					'article',
-					{ status: 1, column: colId },
+					{ status: 1, column: colIds },
 					'latest',
 					null,
 					currentPage,
@@ -262,7 +263,7 @@ class ColumnPage extends React.Component {
 						}
 					)
 				})
-		// })
+		})
 	}
 
 	changePage = e => {
