@@ -7,7 +7,8 @@ import IconButton from 'material-ui/IconButton'
 import Divider from 'material-ui/Divider'
 import { findDOMNode as dom } from 'react-dom'
 import utils from '../../../services/utils'
-import find from 'lodash/find'
+import _ from 'lodash'
+import api from '../../../services/api'
 
 const Container = styled.div`
   position:fixed;
@@ -267,7 +268,8 @@ class LeftMenu extends React.Component {
 			miniMenu: false,
 			toggleArrow: 'toggleUp',
 			height: 0,
-			display:'none'
+			display: 'none',
+      children: []
 		}
 		//console.log('STATE0', this.state)
 	}
@@ -295,17 +297,34 @@ class LeftMenu extends React.Component {
 		this.state.height = this.state.miniMenu ? 0 : height
 	}
 
+	componentDidMount() {
+		let children = []
+		api.getChildren().then(cols => {
+			cols.forEach(col => {
+				children.push(col.slug)
+			})
+			this.setState({ children })
+		})
+	}
+
 	componentWillReceiveProps(nextProps) {
 		var self = this
-		if(nextProps.open!=this.props.open){
-			if(!nextProps.open){
+		if (nextProps.open != this.props.open) {
+			if (!nextProps.open) {
 				setTimeout(function() {
+<<<<<<< HEAD
 					self.setState({display:'none'})
 					document.getElementsByTagName('body')[0].style.overflow = 'auto'
 				}, 300);
 			}else{
 					this.setState({display:'block'})
 					document.getElementsByTagName('body')[0].style.overflow = 'hidden'
+=======
+					self.setState({ display: 'none' })
+				}, 500)
+			} else {
+				this.setState({ display: 'block' })
+>>>>>>> a793fc8a9c4ba8afa3289bc4a9cdf7bddaec564a
 			}
 		}
 		if (utils.isMobile()) {
@@ -327,32 +346,43 @@ class LeftMenu extends React.Component {
 		let isMobile = false
 
 		let { theme } = this.context.setting.publisher
-		let { miniMenu, toggleArrow, height,display } = this.state
+		let { miniMenu, toggleArrow, height, display, children } = this.state
 		let { open, close, menu } = this.props
 		let cols = menu && menu.column ? menu.column : []
 
 		let items = []
-		const news = find(cols, { slug: 'news' })
+		const news = _.find(cols, { slug: 'news' })
+    _.remove(cols, col => {
+  		return _.indexOf(children, col.slug) !== -1
+  	})
 		//if (news) this.pushItem(items, 0, news)
-		for (let i = 0; i < cols.length; i++){
-			if (cols[i].slug.toLowerCase() !== 'news'|| cols[i].name.toLowerCase() !== 'news'){
+		for (let i = 0; i < cols.length; i++) {
+			if (
+				cols[i].slug.toLowerCase() !== 'news' ||
+				cols[i].name.toLowerCase() !== 'news'
+			) {
 				items.push(
 					<li key={i}>
-						<a href="#" onClick={e => this.props.closeAndLink(e, '/stories/' +  cols[i].slug + '?page=1')}>
-							{ cols[i].name }
+						<a
+							href="#"
+							onClick={e =>
+								this.props.closeAndLink(
+									e,
+									'/stories/' + cols[i].slug + '?page=1'
+								)}>
+							{cols[i].name}
 						</a>
 					</li>
 				)
 			}
-	}
-
+		}
 
 		if (utils.isMobile()) {
 			isMobile = true
 		}
 
 		return (
-			<Container open={open} style={{display:display}}>
+			<Container open={open} style={{ display: display }}>
 				<Container2 onClick={close} />
 				<Nav open={open}>
 					<div className="menu menu-font">

@@ -1,19 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {TopBar, TopNavigation, TopBarWithShare, Stick} from 'components'
+import { TopBar, TopNavigation, TopBarWithShare, Stick } from 'components'
 import auth from '../../../services/auth'
 import api from '../../../services/api'
 import { withRouter } from 'react-router'
 import utils from '../../../services/utils'
 import truncate from 'lodash/truncate'
-import styled,{keyframes} from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
 const Title = styled.div`
 	color: ${props => (props.theme.barTone == 'light' ? '#222' : '#FFF')};
 	font-size:18px;
 	font-weight:bold;
 	margin:18px 0 0 0;
-	animation:${props=>props.show?slideIn:slideOut} 0.5s forwards;
+	animation:${props => (props.show ? slideIn : slideOut)} 0.5s forwards;
 	@media (min-width: 768px) and (max-width: 992px) {
 		display:none;
   }
@@ -41,7 +41,8 @@ class TopBarWithNavigation extends React.Component {
 
 		this.state = {
 			scrolling: false,
-	    	status: 'LOADING'
+			status: 'LOADING',
+			child: []
 		}
 	}
 
@@ -55,28 +56,24 @@ class TopBarWithNavigation extends React.Component {
 	// 		this.setState({scrolling: false})
 	// }
 
-	handleScroll = (e) => {
+	handleScroll = e => {
 		//console.log('HAHAH')
-		let top = e.srcElement.body.scrollTop,
-			scrolling = this.state.scrolling
+		let top = e.srcElement.body.scrollTop, scrolling = this.state.scrolling
 
-		if (top > 60 && !scrolling)
-			this.setState({scrolling: true})
-
-		else if (top <= 60 && scrolling)
-			this.setState({scrolling: false})
+		if (top > 60 && !scrolling) this.setState({ scrolling: true })
+		else if (top <= 60 && scrolling) this.setState({ scrolling: false })
 	}
 
-	componentDidMount(){
+	componentDidMount() {
 		// Get from cookie, else get from query
-		let token = utils.querystring('token', this.props.location) || auth.getToken()
+		let token =
+			utils.querystring('token', this.props.location) || auth.getToken()
 		//let token = browserHistory.getCurrentLocation().query.token || auth.getToken()
 		// let query = parse(this.props.location.search)
 		// let token = query && query.token ? query.token : auth.getToken()
 		//console.log('TOKEN', this.props.location, token, 'YYY', query.token, 'XXX', auth.getToken())
 		// 1. Fetch menu, user, and roles information
-		api.getCookieAndToken(token)
-		.then(result => {
+		api.getCookieAndToken(token).then(result => {
 			//console.log('TopBarWithNavigation', result)
 			// 2. Update newly fetch cookie
 			auth.setCookieAndToken(result)
@@ -87,7 +84,7 @@ class TopBarWithNavigation extends React.Component {
 			this.roles = result.roles
 			//console.log('TopBarWithNavigation', this.menu, this.user, this.roles)
 
-			if(this.user && token)
+			if (this.user && token)
 				this.setState({
 					status: 'LOGGEDIN'
 				})
@@ -96,29 +93,51 @@ class TopBarWithNavigation extends React.Component {
 					status: 'UNLOGGEDIN'
 				})
 		})
+
+		let child = []
+		api.getChildren().then(cols => {
+			cols.forEach(col => {
+				child.push(col.slug)
+			})
+			this.setState({ child })
+		})
 	}
 
-	render () {
-		let {theme} = this.context.setting.publisher
-		let {scrolling, scroll, status} = this.state
-		let {title, article, notShowNav, editButton, hasCover,showTitle,share} = this.props
+	render() {
+		let { theme } = this.context.setting.publisher
+		let { scrolling, scroll, status, child } = this.state
+		let {
+			title,
+			article,
+			notShowNav,
+			editButton,
+			hasCover,
+			showTitle,
+			share
+		} = this.props
 		let transparent = false
 		let articleMobile = false
 
 		// titleText = 'Article'
 		let children = ''
 		if (article) {
-			children = 	<Title show={showTitle} className="nunito-font">{truncate(article, {'length':80,'separator':''})}</Title>
+			children = (
+				<Title show={showTitle} className="nunito-font">
+					{truncate(article, { length: 80, separator: '' })}
+				</Title>
+			)
 
 			transparent = true
 			if (utils.isMobile()) {
 				articleMobile = true
 			}
 		} else if (!notShowNav) {
-			children = <TopNavigation menu={this.menu} />
+			children = <TopNavigation menu={this.menu} children={child} />
 		}
-	  	return (
-			<Stick className={this.props.className} fixed={(articleMobile && hasCover) ? !scrolling : ''}>
+		return (
+			<Stick
+				className={this.props.className}
+				fixed={articleMobile && hasCover ? !scrolling : ''}>
 				{/* {articleMobile ?
 					<TopBarWithShare
 						onScroll={this.handleScroll}
@@ -133,24 +152,24 @@ class TopBarWithNavigation extends React.Component {
 						share={share}
 					> {children}
 					</TopBarWithShare> : */}
-					<TopBar
-						onScroll={this.handleScroll}
-						scrolling={scrolling}
-						status={status}
-						title={title}
-						user={this.user}
-						menu={this.menu}
-						transparent={transparent}
-						editButton={editButton}
-						hasCover={hasCover}
-						onLoading={this.props.onLoading}
-						article={article}
-					> {children}
-					</TopBar>
+				<TopBar
+					onScroll={this.handleScroll}
+					scrolling={scrolling}
+					status={status}
+					title={title}
+					user={this.user}
+					menu={this.menu}
+					transparent={transparent}
+					editButton={editButton}
+					hasCover={hasCover}
+					onLoading={this.props.onLoading}
+					article={article}>
+					{' '}{children}
+				</TopBar>
 				{/* } */}
 			</Stick>
-	  	)
+		)
 	}
 }
 
-export default withRouter(TopBarWithNavigation);
+export default withRouter(TopBarWithNavigation)

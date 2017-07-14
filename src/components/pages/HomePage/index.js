@@ -190,7 +190,7 @@ class HomePage extends React.Component {
 		feedCount: 1,
 		feed: [],
 		hasMoreFeed: true,
-		animate:false
+		animate: false
 	}
 
 	constructor(props) {
@@ -203,7 +203,7 @@ class HomePage extends React.Component {
 		this.column = []
 	}
 
-	FEED_LIMIT = utils.isMobile() ? config.FEED_LIMIT_MOBILE : config.FEED_LIMIT;
+	FEED_LIMIT = utils.isMobile() ? config.FEED_LIMIT_MOBILE : config.FEED_LIMIT
 
 	onload = () => (
 		<Onload>
@@ -241,15 +241,22 @@ class HomePage extends React.Component {
 			//console.log('page', page)
 
 			api
-				.getFeed('article', { status: 1 }, 'latest', null, page, this.FEED_LIMIT)
+				.getFeed(
+					'article',
+					{ status: 1 },
+					'latest',
+					null,
+					page,
+					this.FEED_LIMIT
+				)
 				.then(result => {
 					let feed = this.state.feed.concat(result.feed)
 					this.setState(
 						{
 							page: ++page,
 							feed: feed,
-							feedCount: result.count['1']?result.count['1']:0,
-							hasMoreFeed: feed.length < this.FEED_LIMIT ? false : (page < 2)
+							feedCount: result.count['1'] ? result.count['1'] : 0,
+							hasMoreFeed: feed.length < this.FEED_LIMIT ? false : page < 2
 						},
 						() => {
 							this.loading = false
@@ -282,13 +289,13 @@ class HomePage extends React.Component {
 		// 	})
 		// },10000)
 	}
-	componentWillUnmount(){
+	componentWillUnmount() {
 		//clearInterval(this.interval)
 	}
 
 	render() {
 		let { isMobile, completed, selectTab } = this.state
-		let { feedCount, feed, hasMoreFeed,animate } = this.state
+		let { feedCount, feed, hasMoreFeed, animate } = this.state
 		let pub = this.context.setting.publisher
 		let { theme } = this.context.setting.publisher
 
@@ -297,12 +304,9 @@ class HomePage extends React.Component {
 
 		return (
 			<Wrapper>
-				{!isEmpty(pub) &&!utils.isMobile() &&<BgWithLogo data={pub}/>}
+				{!isEmpty(pub) && !utils.isMobile() && <BgWithLogo data={pub} />}
 
-				<TopBarWithNavigation
-
-					onLoading={this.props.onLoading}
-				/>
+				<TopBarWithNavigation onLoading={this.props.onLoading} />
 
 				<TopHome />
 
@@ -311,22 +315,28 @@ class HomePage extends React.Component {
 					<Main>
 						<TextLine className="sans-font hidden-mob">LATEST STORIES</TextLine>
 						<Dash className="hidden-mob" style={{ margin: '5px 0 10px 0' }} />
-						{!isMobile&&<InfiniteScroll
-							loadMore={this.loadFeed()}
-							hasMore={hasMoreFeed}
-							loader={this.onload()}>
-							<div>
-								{feed.length != 0 &&
-									feed.map((item, index) => (
-										<ArticleBox final= {index == feed.length -1 ? true:false} detail={item} key={index} />
-									))}
-							</div>
-						</InfiniteScroll>}
+						{!isMobile &&
+							<InfiniteScroll
+								loadMore={this.loadFeed()}
+								hasMore={hasMoreFeed}
+								loader={this.onload()}>
+								<div>
+									{feed.length != 0 &&
+										feed.map((item, index) => (
+											<ArticleBox
+												final={index == feed.length - 1 ? true : false}
+												detail={item}
+												key={index}
+											/>
+										))}
+								</div>
+							</InfiniteScroll>}
 
-						{(!hasMoreFeed && !isMobile)&&
-						<SeemoreContainer>
-							<SeeMore url={'/stories/all?type=article&sort=latest&page=1'}/>
-						</SeemoreContainer>}
+						{!hasMoreFeed &&
+							!isMobile &&
+							<SeemoreContainer>
+								<SeeMore url={'/stories/all?type=article&sort=latest&page=1'} />
+							</SeemoreContainer>}
 
 						<Tabs
 							style={{ width: '100%' }}
@@ -381,16 +391,21 @@ class HomePage extends React.Component {
 										<div>
 											{feed.length != 0 &&
 												feed.map((item, index) => (
-													<ArticleBox final= {index == feed.length -1 ? true:false} detail={item} key={index} />
+													<ArticleBox
+														final={index == feed.length - 1 ? true : false}
+														detail={item}
+														key={index}
+													/>
 												))}
 										</div>
 									</InfiniteScroll>
 
-									{ !hasMoreFeed &&
-									<SeemoreContainer>
-										<SeeMore url={'/stories/all?type=article&sort=latest&page=1'}/>
-									</SeemoreContainer>
-									}
+									{!hasMoreFeed &&
+										<SeemoreContainer>
+											<SeeMore
+												url={'/stories/all?type=article&sort=latest&page=1'}
+											/>
+										</SeemoreContainer>}
 								</div>
 
 								<div className="news">
@@ -404,7 +419,11 @@ class HomePage extends React.Component {
 					</Main>
 					<Aside>
 						<Stick topOffset={100}>
-							<div dangerouslySetInnerHTML={{ __html: `<div class="fb-page" data-href="https://www.facebook.com/${config.FACEBOOK}/" data-tabs="timeline" data-height="400" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/${config.FACEBOOK}/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/${config.FACEBOOK}/">${config.NAME}</a></blockquote></div>` }}></div>
+							<div
+								dangerouslySetInnerHTML={{
+									__html: `<div class="fb-page" data-href="https://www.facebook.com/${config.FACEBOOK}/" data-tabs="timeline" data-height="400" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/${config.FACEBOOK}/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/${config.FACEBOOK}/">${config.NAME}</a></blockquote></div>`
+								}}
+							/>
 						</Stick>
 						{/* <StaffPickSideBar></StaffPickSideBar>
 						<TopNewsHome/> */}
