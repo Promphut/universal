@@ -10,14 +10,15 @@ import utils from '../../../services/utils'
 import find from 'lodash/find'
 
 const Container = styled.div`
-  display: flex;
-  flex-wrap: nowrap;
   position:fixed;
-  width:100%;
-  height:100%;
-  top:0;
-  left:0;
 	z-index:100;
+	top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: none;
+  overflow: hidden;
+  outline: 0;
 	animation: ${props => (props.open ? displayBlock : displayNone)} 0.5s forwards;
   @media (max-width:480px){
     width: 100vw;
@@ -31,7 +32,8 @@ const Container2 = styled.div`
   top:0;
   left:0;
   z-index:101;
-  background:rgba(0,0,0,0.8);
+	background:rgba(0,0,0,0.8);
+	overflow: hidden;
   animation: ${props => (props.open ? fadeOut : fadeIn)} 0.5s forwards;
   @media (max-width:480px){
     width: 100vw;
@@ -101,8 +103,7 @@ const Nav = styled.nav`
 	left:0;
 	height: 100%;
 	width: 400px;
-	overflow-x: hidden;
-	overflow-y: auto;
+	overflow: hidden;
 	-webkit-overflow-scrolling: touch;
 	z-index:102;
   animation: ${props => (props.open ? slideOut : slideIn)} 0.6s forwards;
@@ -162,6 +163,7 @@ const Nav = styled.nav`
   }
 
   @media (max-width:480px){
+		overflow-y: auto;
     width: 100vw;
     & ul li .arrow {
       font-size: 28px !important;
@@ -299,9 +301,11 @@ class LeftMenu extends React.Component {
 			if(!nextProps.open){
 				setTimeout(function() {
 					self.setState({display:'none'})
-				}, 500);
+					document.getElementsByTagName('body')[0].style.overflow = 'auto'
+				}, 300);
 			}else{
 					this.setState({display:'block'})
+					document.getElementsByTagName('body')[0].style.overflow = 'hidden'
 			}
 		}
 		if (utils.isMobile()) {
