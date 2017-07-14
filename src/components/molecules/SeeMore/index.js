@@ -7,12 +7,12 @@ import config from '../../../config'
 
 const Button = styled.div`
   border: 0.5px solid #c4c4c4;
-  border-radius: ${props => props.isTraindingSideBar ? '3px' : '100px'};
+  border-radius: ${props => props.isTrendingSideBar ? '3px' : '100px'};
   text-align: center;
   padding: 8px 15px 15px 15px;
   font-size: 14px;
   color: #8E8E8E;
-  width: ${props => props.isTraindingSideBar ? '325px' : '168px'};
+  width: ${props => props.isTrendingSideBar ? '325px' : '168px'};
   height: 35px;
 
   &:hover{
@@ -35,7 +35,7 @@ class SeeMore extends React.Component {
         let url = this.props.url ? this.props.url : config.FRONTURL + '/stories/all'
         return(
             <Link to={url}>
-                <Button isTraindingSideBar = {this.props.isTraindingSideBar}>See More</Button>
+                <Button isTrendingSideBar = {this.props.isTrendingSideBar}>See More</Button>
             </Link>
         )
     }
