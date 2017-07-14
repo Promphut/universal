@@ -154,7 +154,7 @@ class SearchButton extends React.Component {
                                         /*window.open(config.FRONTURL + '/search/stories?keyword=' + trim(text), "_top")*/
                                     } else if (ev.key === 'Enter') this.setState({text: ''})
                                 }}
-                                onBlur={this.handleFocus}
+                                onBlur={text ? ()=>{} : this.handleFocus}
                                 autoFocus
                             />}
                     </ButtonContainer>

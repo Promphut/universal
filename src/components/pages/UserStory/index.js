@@ -24,6 +24,7 @@ import CircularProgress from 'material-ui/CircularProgress'
 import { Helmet } from 'react-helmet'
 import utils from '../../../services/utils'
 import config from '../../../config'
+import auth from '../../../services/auth'
 
 const Wrapper = styled.div`
 
@@ -288,32 +289,35 @@ const UserDetail = ({ style, user, checkBack }) => {
 }
 
 class UserStory extends React.Component {
-	state = {
-		//feed:[],
-		//feedCount: 0,
-		//latestStories:[],
-		//page:0,
-		//isInfiniteLoading: true,
-		//loadOffset:300,
-		//feedCount:0,
-		user: {
-			channels: {},
-			pic: {}
-		},
-		isMobile: false,
-
-		currentPage: utils.querystring('page',this.props.location) ? utils.querystring('page',this.props.location) - 1 : 0,
-		feedCount: 1,
-		feed: [],
-		totalPages: 0,
-
-		loading: false,
-	}
 
 	FEED_LIMIT = utils.isMobile() ? config.FEED_LIMIT_MOBILE*2 : config.FEED_LIMIT;
 
 	static contextTypes = {
 		setting: PropTypes.object
+	}
+
+	constructor(props) {
+		super(props)
+
+		this.state = {
+			user: {
+				channels: {},
+				pic: {}
+			},
+			isMobile: false,
+
+			currentPage: utils.querystring('page',this.props.location) ? utils.querystring('page',this.props.location) - 1 : 0,
+			feedCount: 0,
+			feed: [],
+			totalPages: 0,
+			isEmpty: false,
+
+			loading: false,
+			initialLoading: true,
+
+			loggedUser: {},
+			roles: [],
+		}
 	}
 
 	checkBack = e => {
@@ -337,22 +341,23 @@ class UserStory extends React.Component {
 		if (this.state.user._id == null) return
 		// ensure this method is called only once at a time
 		if (this.state.loading === true) return
-			this.state.loading = true
+		
+		this.state.loading = true
 
 		let currentPage = this.state.currentPage
 		let uid = this.state.user._id
-		//console.log('page', page)
-		//console.log('UID', uid)
+
 		api.getFeed('story', { writer: uid, status: 1 }, 'latest', null, currentPage, this.FEED_LIMIT)
 			.then(result => {
 				this.setState(
 					{
 						feed: result.feed,
-						feedCount: result.feed.length!=0 ? (result.count['1'] ? result.count['1'] : 0) : 0,
-						totalPages: result.feed.length!=0 ? utils.getTotalPages(this.FEED_LIMIT, result.count['1']) : 0,
+						feedCount: result.count['1'] ? result.count['1'] : 0,
+						totalPages: result.count['1'] ? utils.getTotalPages(this.FEED_LIMIT, result.count['1']) : 0,
+						isEmpty: result.count['total']==0 || (!result.count['1'])
 					},
 					() => {
-						this.setState({loading : false})
+						this.setState({loading : false,initialLoading:false})
 					}
 				)
 			})
@@ -363,13 +368,11 @@ class UserStory extends React.Component {
 	}
 
 	getUserFromUsername = (username, done = () => {}) => {
-		//console.log('PROP', this.props)
 		if (!username) utils.notFound(this.props.history)
 
-		api
-			.getUserFromUsername(username)
+		api.getUserFromUsername(username)
 			.then(user => {
-				this.setState({ user: user , currentPage : 0}, done)
+				this.setState({ user: user}, done)
 			})
 			.catch(err => {
 				utils.notFound(this.props.history, err)
@@ -377,13 +380,11 @@ class UserStory extends React.Component {
 	}
 
 	getUserFromUid = (uid, done = () => {}) => {
-		//console.log('PROP', this.props)
 		if (uid == null) utils.notFound(this.props.history)
 
-		api
-			.getUserFromUserId(uid)
+		api.getUserFromUserId(uid)
 			.then(user => {
-				this.setState({ user: user , currentPage : 0}, done)
+				this.setState({ user: user}, done)
 			})
 			.catch(err => {
 				utils.notFound(this.props.history, err)
@@ -401,16 +402,38 @@ class UserStory extends React.Component {
 		this.setState({
 			isMobile: utils.isMobile()
 		})
+
+		let token = utils.querystring('token', this.props.location) || auth.getToken()
+
+		api.getCookieAndToken(token)
+		.then(result => {
+			this.setState({
+				loggedUser : result.user,
+				roles : result.roles,
+			})
+		})
 	}
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.match.params.username != this.props.match.params.username) {
-			this.getUserFromUsername(nextProps.match.params.username, this.loadFeed)
+			this.setState({
+				currentPage : utils.querystring('page',nextProps.location) ? utils.querystring('page',nextProps.location) - 1 : 0,
+				feed : [],
+			},()=>{
+				this.getUserFromUsername(nextProps.match.params.username, this.loadFeed)
+			})
 		} else if (nextProps.match.params.uid != this.props.match.params.uid) {
-			this.getUserFromUid(nextProps.match.params.uid, this.loadFeed)
+			this.setState({
+				currentPage : utils.querystring('page',nextProps.location) ? utils.querystring('page',nextProps.location) - 1 : 0,
+				feed : [],
+			},()=>{
+				this.getUserFromUid(nextProps.match.params.uid, this.loadFeed)
+			})
 		} else if(nextProps.location.search != this.props.location.search){
-			this.setState({currentPage : utils.querystring('page',nextProps.location) ? utils.querystring('page',nextProps.location) - 1 : 0}
-			,()=>{
+			this.setState({
+				currentPage : utils.querystring('page',nextProps.location) ? utils.querystring('page',nextProps.location) - 1 : 0,
+				feed : [],
+			},()=>{
 				document.body.scrollTop = document.documentElement.scrollTop = 0
 				this.loadFeed()
 			})
@@ -419,7 +442,8 @@ class UserStory extends React.Component {
 
 	render() {
 		let { theme } = this.context.setting.publisher
-		let { user, isMobile, feedCount, feed, currentPage, totalPages, loading } = this.state
+		let { user, isMobile, feedCount, feed, currentPage, totalPages, loading, initialLoading, isEmpty, loggedUser, roles} = this.state
+		
 		return (
 			<Wrapper>
 				<Helmet>
@@ -433,80 +457,72 @@ class UserStory extends React.Component {
 				<UserDetail user={user} checkBack={this.checkBack} />
 
 				<Content>
-					{feedCount <= 0
-					? <Main>
-							<TextLine className="sans-font">
-								<strong
-									style={{ color: theme.primaryColor, marginRight: '30px' }}>
-									<span style={{ fontSize: '30px' }}>
-										{feedCount >= 0 ? feedCount : 0}
-									</span>
-									{' '}
-									stories
-								</strong>
-								{/*<span style={{fontSize:'30px'}}>101</span> Upvotes*/}
-							</TextLine>
-							<EmptyStory
-								title="Start your first story!"
-								description="You haven’t write any stories right now."
-							/>
-						</Main>
-					: <Main>
-
+					<Main>
 						<TextLine className="sans-font">
 							<strong
 								style={{ color: theme.primaryColor, marginRight: '30px' }}>
 								<span style={{ fontSize: '30px' }}>
-									{feedCount >= 0 ? feedCount : 0}
+									{(loading || initialLoading) ? '' : feedCount >= 0 ? feedCount : 0}
 								</span>
 								{' '}
 								stories
 							</strong>
-							{/*<span style={{fontSize:'30px'}}>101</span> Upvotes*/}
+							{/* <span style={{fontSize:'30px'}}>101</span> Upvotes */}
 						</TextLine>
 
-						{loading ?  this.onload() : 
+						{ (loading || initialLoading) ?  this.onload() :
 							<div>
-								{feed && currentPage >= 0 &&
+								{ (feed && currentPage >= 0) &&
 									feed.map((item, index) => (
 										<ArticleBox final={index == feed.length -1 ? true:false} detail={item} key={index} />
-									))}
+								))}
+							
+								{ (isEmpty) &&
+									<EmptyStory
+										title={ loggedUser._id == user._id ? "Start your first story!" : 'No Story!'}
+										description={ ( loggedUser._id == user._id ? "You haven't" : "This person hasn't" ) + " write any stories right now."}
+										hideButton={loggedUser._id != user._id}
+									/>
+								}
+
+								{ (!isEmpty && !(totalPages > currentPage && currentPage >= 0)) &&
+									<EmptyStory
+										title="No More Story"
+										description={
+											<div>
+												There are no more stories in this page. Go back to
+												<Link
+													to={user.url+"?page=1"}
+													style={{
+														color: theme.accentColor,
+														padding: '0 0.5em 0 0.5em'
+													}}>
+													first page
+												</Link>
+												?
+											</div>
+										}
+										hideButton={true}
+									/>
+								}
+
+								<Page>
+									{ (totalPages > currentPage && currentPage >= 0) &&
+										<Pagination
+											hideFirstAndLastPageLinks={utils.isMobile() ? false : true}
+											hidePreviousAndNextPageLinks={utils.isMobile() ? true : false}
+											boundaryPagesRange={utils.isMobile() ? 0 : 1}
+											currentPage={currentPage + 1}
+											totalPages={totalPages}
+											onChange={this.changePage}
+										/>
+									}
+								</Page>
 							</div> 
 						}
-
-						<Page>
-							{!loading && totalPages > 0 && ((totalPages > currentPage && currentPage >= 0) ?
-								<Pagination
-									hideFirstAndLastPageLinks={utils.isMobile() ? false : true}
-									hidePreviousAndNextPageLinks={utils.isMobile() ? true : false}
-									boundaryPagesRange={utils.isMobile() ? 0 : 1}
-									currentPage={currentPage + 1}
-									totalPages={totalPages}
-									onChange={this.changePage}
-								/>
-								:
-								<EmptyStory
-									title="No More Story"
-									description={
-										<div>
-											There are no more stories in this page. Go back to
-											<Link
-												to={user.url+"?page=1"}
-												style={{
-													color: theme.accentColor,
-													padding: '0 0.5em 0 0.5em'
-												}}>
-												first page
-											</Link>
-											?
-										</div>
-									}
-									hideButton={true}
-								/>)
-							}
-						</Page>
-					</Main>}
+					</Main>
 				</Content>
+
 				<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="600" />
 				<Footer />
 			</Wrapper>

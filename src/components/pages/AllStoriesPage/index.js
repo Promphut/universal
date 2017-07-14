@@ -136,28 +136,30 @@ const Page = styled.div`
 
 export default class AllStoriesPage extends React.Component {
 
-  constructor(props) {
-    super(props)
+	FEED_LIMIT = utils.isMobile() ? config.FEED_LIMIT_MOBILE*2 : config.FEED_LIMIT;
+
+	static contextTypes = {
+		setting: PropTypes.object
+	}
+
+	constructor(props) {
+		super(props)
 
 		this.state = {
 			type: utils.querystring('type',this.props.location) ? utils.querystring('type',this.props.location) : 'article',
 			sort: utils.querystring('sort',this.props.location) ? utils.querystring('sort',this.props.location) : 'latest',
 
 			currentPage: utils.querystring('page',this.props.location) ? utils.querystring('page',this.props.location) - 1 : 0,
-			feedCount: 1,
+			feedCount: 0,
 			feed: [],
 			totalPages: 0,
+			isEmpty: false,
 
-			loading: false
+			loading: false,
+			initialLoading: true,
 		}
 
   	}
-
-  	static contextTypes = {
-		setting: PropTypes.object
-	}
-
-  	FEED_LIMIT = utils.isMobile() ? config.FEED_LIMIT_MOBILE*2 : config.FEED_LIMIT;
 
  	onload = () => (
         <Onload>
@@ -174,21 +176,22 @@ export default class AllStoriesPage extends React.Component {
 	getAllFeed = () => {
 
 		if (this.state.loading === true) return
-			this.state.loading = true
+		
+		this.state.loading = true
 
 		api.getFeed(this.state.type,{status : 1},this.state.sort,null,this.state.currentPage,this.FEED_LIMIT)
 			.then(result => {
 				this.setState(
 					{
 						feed: result.feed,
-						feedCount: result.feed.length!=0 ? (result.count['1'] ? result.count['1'] : 0 ): 0,
-						totalPages: result.feed.length!=0 ? utils.getTotalPages(this.FEED_LIMIT, result.count['1']) : 0,
+						feedCount: result.count['1'] ? result.count['1'] : 0,
+						totalPages: result.count['1'] ? utils.getTotalPages(this.FEED_LIMIT, result.count['1']) : 0,
+						isEmpty: result.count['total']==0 || (!result.count['1'])
 					},
 					() => {
-					this.setState({loading:false})
+						this.setState({loading:false,initialLoading:false})
 					}
 				)
-
 			})
 	}
 
@@ -219,15 +222,18 @@ export default class AllStoriesPage extends React.Component {
 				currentPage : utils.querystring('page',nextProps.location) ? utils.querystring('page',nextProps.location)-1 : 0 ,
 				type: utils.querystring('type',nextProps.location) ? utils.querystring('type',nextProps.location) : 'article',
 				sort: utils.querystring('sort',nextProps.location) ? utils.querystring('sort',nextProps.location) : 'latest' ,
-			},()=>{this.getAllFeed()
+				feed: [],
+			},()=>{
+				this.getAllFeed()
             })
         }
     }
 
     render() {
 		let { theme } = this.context.setting.publisher
-		let { isMobile, completed, totalPages, currentPage, loading, feed, feedCount} = this.state
-        return (
+		let { isMobile, completed, totalPages, currentPage, loading, feed, feedCount, initialLoading, isEmpty} = this.state
+
+		return (
         <Wrapper>
             <TopBarWithNavigation/>
 
@@ -242,38 +248,59 @@ export default class AllStoriesPage extends React.Component {
                         <FilterItem mobile = {utils.isMobile()} onClick={(e) => this.changeSort('trending')} select={this.state.sort === 'trending'}>TRENDING</FilterItem>
                     </FilterContainer>
 
-					{feedCount <= 0 ?
-						<EmptyStory
-							title="No Story, yet"
-							description={
-								<div>
-									There are no stories in this publisher right now. Wanna back to
-									<Link
-										to="/"
-										style={{
-											color: theme.accentColor,
-											padding: '0 0.5em 0 0.5em'
-										}}>
-										home
-									</Link>
-									?
-								</div>
-							}
-						/>
-						:
+					{ (loading || initialLoading) ? this.onload() :
 						<div>
+							{feed && currentPage >= 0 &&
+								feed.map((item, index) => (
+								<ArticleBox final={index == feed.length -1 ? true:false} detail={item} key={index} />
+							))}
 
-							{loading ?  this.onload() :
-								<div>
-									{feed && currentPage >= 0 &&
-										feed.map((item, index) => (
-											<ArticleBox final={index == feed.length -1 ? true:false} detail={item} key={index} />
-										))}
-								</div>
+							{ (isEmpty) &&
+								<EmptyStory
+									title="No Story, yet"
+									description={
+										<div>
+											There are no stories in this publisher right now. Wanna back to
+											<Link
+												to="/"
+												style={{
+													color: theme.accentColor,
+													padding: '0 0.5em 0 0.5em'
+												}}>
+												home
+											</Link>
+											?
+										</div>
+									}
+								/>
 							}
+							
+							{ (!isEmpty && !(totalPages > currentPage && currentPage >= 0)) &&
+
+								<EmptyStory
+									title="No More Story"
+									description={
+										<div>
+											There are no more stories in this page. Go back to
+											<Link
+												to={"/stories/all?type=" + this.state.type  + "&sort="+ this.state.sort + "&page=1"}
+												style={{
+													color: theme.accentColor,
+													padding: '0 0.5em 0 0.5em'
+												}}>
+												first page
+											</Link>
+											?
+										</div>
+									}
+									hideButton={true}
+								/>
+
+							}
+
 
 							<Page>
-								{!loading && totalPages > 0 && ((totalPages > currentPage && currentPage >= 0) ?
+								{ (totalPages > currentPage && currentPage >= 0) &&
 									<Pagination
                                         hideFirstAndLastPageLinks={utils.isMobile() ? false : true}
                                         hidePreviousAndNextPageLinks={utils.isMobile() ? true : false}
@@ -282,31 +309,11 @@ export default class AllStoriesPage extends React.Component {
                                         totalPages={totalPages}
                                         onChange={this.changePage}
                                     />
-									:
-									<EmptyStory
-										title="No More Story"
-										description={
-											<div>
-												There are no more stories in this page. Go back to
-												<Link
-													to={"/stories/all?type=" + this.state.type  + "&sort="+ this.state.sort + "&page=1"}
-													style={{
-														color: theme.accentColor,
-														padding: '0 0.5em 0 0.5em'
-													}}>
-													first page
-												</Link>
-												?
-											</div>
-										}
-										hideButton={true}
-									/>)
 								}
 							</Page>
-						</div>}
-
-                </Main>
-
+						</div>
+					}
+				</Main>
             </Content>
 
 			<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="600" />
