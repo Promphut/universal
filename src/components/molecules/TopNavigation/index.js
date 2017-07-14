@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
-import remove from 'lodash/remove'
+import _ from 'lodash'
 import api from '../../../services/api'
 
 const Container = styled.div`
@@ -86,9 +86,8 @@ const Line = styled.div`
 `
 const TopNavigation = ({ menu, children }) => {
 	let cols = menu && menu.column ? menu.column : []
-
-	remove(cols, col => {
-		return col.slug == 'news'
+	_.remove(cols, col => {
+		return col.slug == 'news' || _.indexOf(children, col.slug) !== -1
 	})
 
 	let stories_cols = []

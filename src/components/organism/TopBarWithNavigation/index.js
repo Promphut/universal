@@ -97,7 +97,7 @@ class TopBarWithNavigation extends React.Component {
 		let child = []
 		api.getChildren().then(cols => {
 			cols.forEach(col => {
-				child.push(col._id)
+				child.push(col.slug)
 			})
 			this.setState({ child })
 		})

@@ -236,8 +236,6 @@ class ColumnPage extends React.Component {
 			})
 
 			if (colIds.length === 0) colIds = colId
-
-			console.log('colIds', colIds)
 			api
 				.getFeed(
 					'article',
