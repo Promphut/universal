@@ -312,19 +312,12 @@ class LeftMenu extends React.Component {
 		if (nextProps.open != this.props.open) {
 			if (!nextProps.open) {
 				setTimeout(function() {
-<<<<<<< HEAD
 					self.setState({display:'none'})
 					document.getElementsByTagName('body')[0].style.overflow = 'auto'
 				}, 300);
 			}else{
 					this.setState({display:'block'})
 					document.getElementsByTagName('body')[0].style.overflow = 'hidden'
-=======
-					self.setState({ display: 'none' })
-				}, 500)
-			} else {
-				this.setState({ display: 'block' })
->>>>>>> a793fc8a9c4ba8afa3289bc4a9cdf7bddaec564a
 			}
 		}
 		if (utils.isMobile()) {
