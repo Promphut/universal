@@ -305,7 +305,7 @@ export default class UserStory extends React.Component {
 		api
 			.getUserFromUsername(username)
 			.then(user => {
-				this.setState({ user: user }, done)
+				this.setState({ user: user , currentPage : 0}, done)
 			})
 			.catch(err => {
 				utils.notFound(this.props.history, err)
@@ -319,7 +319,7 @@ export default class UserStory extends React.Component {
 		api
 			.getUserFromUserId(uid)
 			.then(user => {
-				this.setState({ user: user }, done)
+				this.setState({ user: user , currentPage : 0}, done)
 			})
 			.catch(err => {
 				utils.notFound(this.props.history, err)
@@ -401,7 +401,8 @@ showFullDescription = () => {
 		} else if (nextProps.match.params.uid != this.props.match.params.uid) {
 			this.getUserFromUid(nextProps.match.params.uid, this.loadFeed)
 		} else if(nextProps.location.search != this.props.location.search){
-			this.setState({currentPage : utils.querystring('page',nextProps.location) - 1},()=>{
+			this.setState({currentPage : utils.querystring('page',nextProps.location) ? utils.querystring('page',nextProps.location) - 1 : 0}
+			,()=>{
 				document.body.scrollTop = document.documentElement.scrollTop = 0
 				this.loadFeed()
 			})

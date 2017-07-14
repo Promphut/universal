@@ -67,6 +67,11 @@ const Content = styled.div`
 
 	padding-top: ${props => props.paddingTop}
 `
+const Content2 = styled.div`
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+`
 
 const Share = styled.div`
 	flex: 1 120px;
@@ -92,6 +97,17 @@ const Main = styled.div`
 	margin-top: 40px;
 	min-height: calc(100vh - ${props => (props.isMobile ? '261px' : '261px')});
 
+	@media (max-width: 480px) {
+		margin-top: 10px;
+		flex:0 100%;
+		max-width: 100%;
+		padding:0 15px 0 15px;
+	}
+`
+const Main2 = styled.div`
+	flex: 8 850px;
+	max-width: 850px;
+	margin-top: 20px;
 	@media (max-width: 480px) {
 		margin-top: 10px;
 		flex:0 100%;
@@ -222,15 +238,15 @@ class StoryPage extends React.Component {
 		})
 		window.addEventListener('scroll', this.handleScroll)
 
-		Request.get(
-			'https://graph.facebook.com/?id=' +
-				config.FRONTURL +
-				this.props.location.pathname
-		).end((er, res) => {
-			const fb = res ? res.body.share.share_count : 0
-			//console.log(res.body)
-			this.setState({ fb })
-		})
+		// Request.get(
+		// 	'https://graph.facebook.com/?id=' +
+		// 		config.FRONTURL +
+		// 		this.props.location.pathname
+		// ).end((er, res) => {
+		// 	const fb = res ? res.body.share.share_count : 0
+		// 	//console.log(res.body)
+		// 	this.setState({ fb })
+		// })
 	}
 
 	componentWillUnmount() {
@@ -328,7 +344,7 @@ class StoryPage extends React.Component {
 							<Share ref="share" style={{ zIndex: '50' }}>
 								<Stick topOffset={100}>
 									<ShareSideBar
-										shareCount={story.shares ? story.shares.total + fb : 0 + fb}
+										shareCount={story.shares && story.shares.total}
 									/>
 								</Stick>
 							</Share>
@@ -353,16 +369,17 @@ class StoryPage extends React.Component {
 
 						</Content>
 
-						<Content>
-							<Main>
+						<Content2>
+							<Share/>
+							<Main2>
 									<LikeBoxContainer
 										dangerouslySetInnerHTML={{
 											__html: `<div class="fb-page" data-href="https://www.facebook.com/${config.FACEBOOK}" data-tabs="timeline" data-width="${likeBoxSize}" data-height="300" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/${config.FACEBOOK}/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/${config.FACEBOOK}/">${config.NAME}</a></blockquote></div>`
 										}}
 									/>
-							</Main>
-							<Aside></Aside>
-						</Content>
+							</Main2>
+							<Aside/>
+						</Content2>
 
 						<Content>
 							{recommends.length != 0 &&
@@ -371,7 +388,7 @@ class StoryPage extends React.Component {
 
 						{utils.isMobile() && <ShareBottom url={config.FRONTURL+story.url} sid={story.id}/>}
 
-						{!utils.isMobile && nextStoryContainer}
+						{!utils.isMobile() && nextStoryContainer}
 
 						{/* <BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="1800" /> */}
 						<Footer isStoryPage={true} />

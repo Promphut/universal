@@ -1,6 +1,6 @@
 {
   "name": "ThePublisher",
-  "version": "1.4.0",
+  "version": "1.5.1",
   "private": true,
   "main": "dist/server",
   "scripts": {
@@ -80,12 +80,11 @@
     "webpack-blocks-split-vendor": "^0.2.1",
     "webpack-child-config-plugin": "^0.1.1",
     "webpack-dev-server": "^2.3.0",
+    "webpack-md5-hash": "^0.0.5",
     "webpack-node-externals": "^1.5.4",
     "webpack-spawn-plugin": "^0.1.2"
   },
   "dependencies": {
-    "@webpack-blocks/css-modules": "^0.4.0",
-    "@webpack-blocks/extract-text2": "^0.4.0",
     "blueimp-canvas-to-blob": "^3.7.0",
     "blueimp-file-upload": "^9.17.0",
     "blueimp-file-upload-expressjs": "git+https://github.com/ochawin/blueimp-file-upload-expressjs",

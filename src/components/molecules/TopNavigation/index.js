@@ -2,7 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
-import remove from 'lodash/remove'
+import _ from 'lodash'
+import api from '../../../services/api'
 
 const Container = styled.div`
 	display:flex;
@@ -57,7 +58,6 @@ const DropdownBox = styled.div`
 
 const DropdownFlex = styled.div`
 	display: flex;
-  flex-flow: row wrap;
 `
 
 const DropdownCol = styled.div`
@@ -70,6 +70,7 @@ const DropdownRow = styled(NavLink)`
 	display: block;
 	color: #222;
 	padding: 7px;
+	min-width: 140px;
 	max-width: 225px;
 	white-space: initial;
 
@@ -83,37 +84,36 @@ const Line = styled.div`
 	height: 1px;
 	margin: 0px 15px;
 `
-const TopNavigation = ({ menu }) => {
+const TopNavigation = ({ menu, children }) => {
 	let cols = menu && menu.column ? menu.column : []
-
-	remove(cols, col => {
-		return col.slug == 'news'
+	_.remove(cols, col => {
+		return col.slug == 'news' || _.indexOf(children, col.slug) !== -1
 	})
 
 	let stories_cols = []
-		const s_colsNumber = Math.ceil(cols.length / 7)
-		for (let i = 0; i < s_colsNumber; i++) {
-			let stories_rows = []
-			for (let j = i * 7; j < i * 7 + 7; j++) {
-				if (cols[j]) {
-					stories_rows.push(
-						<DropdownRow
-							key={j}
-							exact
-							to={'/stories/' + cols[j].slug + '?page=1'}
-							activeClassName="active"
-							className="nunito-font">
-							{cols[j].name}
-						</DropdownRow>
-					)
-				}
+	const s_colsNumber = Math.ceil(cols.length / 7)
+	for (let i = 0; i < s_colsNumber; i++) {
+		let stories_rows = []
+		for (let j = i * 7; j < i * 7 + 7; j++) {
+			if (cols[j]) {
+				stories_rows.push(
+					<DropdownRow
+						key={j}
+						exact
+						to={'/stories/' + cols[j].slug + '?page=1'}
+						activeClassName="active"
+						className="nunito-font">
+						{cols[j].name}
+					</DropdownRow>
+				)
 			}
-			stories_cols.push(
-				<DropdownCol key={i}>
-					{stories_rows}
-				</DropdownCol>
-			)
 		}
+		stories_cols.push(
+			<DropdownCol key={i}>
+				{stories_rows}
+			</DropdownCol>
+		)
+	}
 	return (
 		<Container>
 			<NavLink2

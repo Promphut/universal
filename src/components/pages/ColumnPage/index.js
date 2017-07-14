@@ -184,7 +184,9 @@ class ColumnPage extends React.Component {
 		},
 		isMobile: false,
 
-		currentPage: utils.querystring('page',this.props.location) ? utils.querystring('page',this.props.location) - 1 : 0,
+		currentPage: utils.querystring('page', this.props.location)
+			? utils.querystring('page', this.props.location) - 1
+			: 0,
 		feedCount: 1,
 		feed: [],
 		totalPages: 0,
@@ -192,7 +194,9 @@ class ColumnPage extends React.Component {
 		loading: false
 	}
 
-	FEED_LIMIT = utils.isMobile() ? config.FEED_LIMIT_MOBILE*2 : config.FEED_LIMIT;
+	FEED_LIMIT = utils.isMobile()
+		? config.FEED_LIMIT_MOBILE * 2
+		: config.FEED_LIMIT
 
 	static contextTypes = {
 		setting: PropTypes.object
@@ -214,7 +218,7 @@ class ColumnPage extends React.Component {
 		</Onload>
 	)
 
-	loadFeed = () => {	
+	loadFeed = () => {
 		if (this.state.column._id == null) return
 		// ensure this method is called only once at a time
 		if (this.state.loading === true) return
@@ -225,24 +229,43 @@ class ColumnPage extends React.Component {
 		let colId = this.state.column._id
 		//console.log('page', page)
 
-		api.getFeed('article', { status: 1, column: colId }, 'latest', null, currentPage, this.FEED_LIMIT)
-			.then(result => {
-				this.setState(
-					{
-						feed: result.feed,
-						feedCount: result.feed.length!=0 ? (result.count['1'] ? result.count['1'] : 0 ): 0,
-						totalPages: result.feed.length!=0 ? utils.getTotalPages(this.FEED_LIMIT, result.count['1']) : 0,
-					},
-					() => {
-						this.setState({loading:false})
-					}
-				)
+		let colIds = []
+		api.getChildrenFromParent(colId).then(res => {
+			res.forEach(col => {
+				colIds.push(col._id)
 			})
-	
+
+			if (colIds.length === 0) colIds = colId
+			api
+				.getFeed(
+					'article',
+					{ status: 1, column: colIds },
+					'latest',
+					null,
+					currentPage,
+					this.FEED_LIMIT
+				)
+				.then(result => {
+					this.setState(
+						{
+							feed: result.feed,
+							feedCount: result.feed.length != 0
+								? result.count['1'] ? result.count['1'] : 0
+								: 0,
+							totalPages: result.feed.length != 0
+								? utils.getTotalPages(this.FEED_LIMIT, result.count['1'])
+								: 0
+						},
+						() => {
+							this.setState({ loading: false })
+						}
+					)
+				})
+		})
 	}
 
 	changePage = e => {
-		this.props.history.push({ search: "?page=" + e })
+		this.props.history.push({ search: '?page=' + e })
 	}
 
 	getColumnFromSlug = (columnSlug, done = () => {}) => {
@@ -251,7 +274,7 @@ class ColumnPage extends React.Component {
 		api
 			.getColumnFromSlug(columnSlug)
 			.then(col => {
-				this.setState({ column: col }, done)
+				this.setState({ column: col, currentPage: 0 }, done)
 			})
 			.catch(err => {
 				utils.notFound(this.props.history, err)
@@ -270,20 +293,37 @@ class ColumnPage extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.match.params.columnSlug != this.props.match.params.columnSlug) {
+		if (
+			nextProps.match.params.columnSlug != this.props.match.params.columnSlug
+		) {
 			this.getColumnFromSlug(nextProps.match.params.columnSlug, this.loadFeed)
-		} else if(nextProps.location.search != this.props.location.search){
-			this.setState({currentPage : utils.querystring('page',nextProps.location) - 1},()=>{
-				document.body.scrollTop = document.documentElement.scrollTop = 0
-				this.loadFeed()
-			})
+		} else if (nextProps.location.search != this.props.location.search) {
+			this.setState(
+				{
+					currentPage: utils.querystring('page', nextProps.location)
+						? utils.querystring('page', nextProps.location) - 1
+						: 0
+				},
+				() => {
+					document.body.scrollTop = document.documentElement.scrollTop = 0
+					this.loadFeed()
+				}
+			)
 		}
 	}
 
 	render() {
 		let { keywords, channels, theme } = this.context.setting.publisher
 		const BGImgSize = (utils.isMobile() ? 100 : 280) + 60
-		let { column, isMobile, feedCount, feed, currentPage, totalPages, loading } = this.state
+		let {
+			column,
+			isMobile,
+			feedCount,
+			feed,
+			currentPage,
+			totalPages,
+			loading
+		} = this.state
 		//let {count, loadOffset, isInfiniteLoading, latestStories, isMobile} = this.state
 		var head = (
 			<Head>
@@ -304,10 +344,7 @@ class ColumnPage extends React.Component {
 					<meta name="description" content={column.shortDesc} />
 				</Helmet>
 				<div style={{}}>
-					<TopBarWithNavigation
-						 
-						onLoading={this.props.onLoading}
-					/>
+					<TopBarWithNavigation onLoading={this.props.onLoading} />
 				</div>
 
 				<Cover
@@ -347,50 +384,69 @@ class ColumnPage extends React.Component {
 								/>
 							</Main>
 						: <Main>
-								{totalPages > 0 && totalPages > currentPage && currentPage >= 0
-									&&  <div>
-												<TextLine className="sans-font hidden-mob">LATEST STORIES</TextLine>
-												<Dash className="hidden-mob" style={{ margin: '5px 0 10px 0' }} />
-											</div>
-								}
-								{loading ?  this.onload() : 
+								{totalPages > 0 &&
+									totalPages > currentPage &&
+									currentPage >= 0 &&
 									<div>
-										{feed && currentPage >= 0 &&
-											feed.map((item, index) => (
-												<ArticleBox final={index == feed.length -1 ? true:false} detail={item} key={index} />
-											))}
-									</div> 
-								}
-								<Page>
-									{totalPages > 0 && ((totalPages > currentPage && currentPage >= 0) ?
-										<Pagination
-											hideFirstAndLastPageLinks={utils.isMobile() ? false : true}
-											hidePreviousAndNextPageLinks={utils.isMobile() ? true : false}
-											boundaryPagesRange={utils.isMobile() ? 0 : 1}
-											currentPage={currentPage + 1}
-											totalPages={totalPages}
-											onChange={this.changePage}
+										<TextLine className="sans-font hidden-mob">
+											LATEST STORIES
+										</TextLine>
+										<Dash
+											className="hidden-mob"
+											style={{ margin: '5px 0 10px 0' }}
 										/>
-										:
-										<EmptyStory
-											title="No More Story"
-											description={
-												<div>
-													There are no more stories in this page. Go back to
-													<Link
-														to={"/stories/" + this.state.column.slug + "?page=1"}
-														style={{
-															color: theme.accentColor,
-															padding: '0 0.5em 0 0.5em'
-														}}>
-														first page
-													</Link>of this column
-													?
-												</div>
-											}
-											hideButton={true}
-										/>)
-									}
+									</div>}
+								{loading
+									? this.onload()
+									: <div>
+											{feed &&
+												currentPage >= 0 &&
+												feed.map((item, index) => (
+													<ArticleBox
+														final={index == feed.length - 1 ? true : false}
+														detail={item}
+														key={index}
+													/>
+												))}
+										</div>}
+								<Page>
+									{!loading &&
+										totalPages > 0 &&
+										(totalPages > currentPage && currentPage >= 0
+											? <Pagination
+													hideFirstAndLastPageLinks={
+														utils.isMobile() ? false : true
+													}
+													hidePreviousAndNextPageLinks={
+														utils.isMobile() ? true : false
+													}
+													boundaryPagesRange={utils.isMobile() ? 0 : 1}
+													currentPage={currentPage + 1}
+													totalPages={totalPages}
+													onChange={this.changePage}
+												/>
+											: <EmptyStory
+													title="No More Story"
+													description={
+														<div>
+															There are no more stories in this page. Go back to
+															<Link
+																to={
+																	'/stories/' +
+																		this.state.column.slug +
+																		'?page=1'
+																}
+																style={{
+																	color: theme.accentColor,
+																	padding: '0 0.5em 0 0.5em'
+																}}>
+																first page
+															</Link>of this column
+															?
+														</div>
+													}
+													hideButton={true}
+												/>)}
 								</Page>
 							</Main>}
 					<Aside>

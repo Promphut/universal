@@ -133,13 +133,16 @@ const Center = styled.div`
 const Right = styled.div`
 	float: right;
 	position: relative;
-	top: -106px;
+	top: -120px;
 	padding:0 20px;
 	z-index:10;
 	display:flex;
 	align-items:center;
+	height:60px;
 	@media (max-width: 480px) {
 		padding:0 15px;
+		display:flex;
+		position:static;
 	}
 `
 
@@ -191,6 +194,9 @@ const ContainerCenter = styled.div`
 	height:100%;
 	display:flex;
 	justify-content: center;
+	@media (max-width: 480px) {
+		display:none;
+	}
 `
 const fadeOut = keyframes`
   0% {
@@ -268,7 +274,7 @@ class TopBar extends React.Component {
 	}
 
 	componentDidMount() {
-		if (this.props.onScroll)
+		if (this.props.onScroll){}
 			window.addEventListener('scroll', this.handleScroll)
 
 		//console.log(this.role)
@@ -280,7 +286,7 @@ class TopBar extends React.Component {
 		let top = e.srcElement.body.scrollTop / 500
 		this.setState({ scroll: top })
 		
-		if(this.props.article){
+		if(this.props.article&&utils.isMobile()){
 			const prevTop = this.state.nowTop
 			const nowTop = e.srcElement.body.scrollTop
 			const diff = nowTop - prevTop
@@ -355,7 +361,7 @@ class TopBar extends React.Component {
 					open={this.state.open}
 					className={
 						'menu-font ' +
-							(!scrolling && transparent && hasCover && !isMobile? 'transparent' : '')
+							(!scrolling && transparent && hasCover? 'transparent' : '')
 					}>
 					<Left>
 						<HamburgerWrapper onClick={() => this.openPop('left')}>
@@ -386,11 +392,11 @@ class TopBar extends React.Component {
 						</LogoWrapper>
 					</Left>
 
-					<ContainerCenter>
+					{!isMobile&&<ContainerCenter>
 						<Center className={transparent ? 'hide' : ''}>
 							{this.props.children}
 						</Center>
-					</ContainerCenter>
+					</ContainerCenter>}
 
 					{status == 'LOGGEDIN' &&
 						<Right>
