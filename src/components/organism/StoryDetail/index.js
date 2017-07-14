@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom'
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon';
-import {EditorCss,WriterAndDate,WritedBy,TagBox,CommentBox,CommentUser,RecommendArticle,FromColumn, FbShareButton, ImageShare,ShareButtom,} from 'components'
+import {EditorCss,WriterAndDate,WritedBy,TagBox,CommentBox,CommentUser,RecommendArticle,FromColumn, FbShareButton, ImageShare,ShareBottom,} from 'components'
 import RaisedButton from 'material-ui/RaisedButton';
 import api from '../../../services/api'
 import utils from '../../../services/utils'
@@ -202,7 +202,7 @@ class StoryDetail extends React.Component {
 
 
   render(){
-    var {story} = this.props
+    var {story,id} = this.props
     var s = story
     //console.log(s)
     const isMobile = utils.isMobile()
@@ -213,7 +213,7 @@ class StoryDetail extends React.Component {
     //console.log(s)
 
     return (
-      <Wraper>
+      <Wraper id={id}>
         <ImageShare sid={s&&s._id}/>
         <Head className='title-font'>{s.ptitle||'NEXT EMPIRE'}</Head>
         <WriterAndDate readTime={s.readTime} writer={s.writer} column={s.column} published={s.published}/>
@@ -225,7 +225,11 @@ class StoryDetail extends React.Component {
         </Share>}
 
         {isMobile && <Share style={{marginBottom:'19px'}}>
-          <FbShareButton  button={<ShareButton style={{width:'86px', height:'28px'}}><b className="fa fa-facebook fa-1x" aria-hidden="true" style={{color:'white', fontWeight: 'bold',paddingRight:'10px',fontSize: '11px'}}></b><b aria-hidden="true" style={{color:'white', fontWeight: 'bold', fontFamily: 'Helvetica, Arial, sans-serif',fontSize: '14px'}}>   Share</b></ShareButton>} />
+          <FbShareButton  button={<ShareButton style={{width:'86px', height:'28px', display:'flex', alignItems:'center'}}> 
+              <b className="fa fa-facebook fa-1x" aria-hidden="true" style={{flex:'1', display:'flex', justifyContent:'flex-end', color:'white', fontWeight: 'normal',paddingRight:'10px',fontSize: '11.2px'}}></b>
+              <b aria-hidden="true" style={{flex:'0 0.5px', display:'flex', justifyContent:'flex-start', alignItems:'center', color:'rgba(255, 255, 255, 0.7)', fontWeight: 'lighter', fontFamily: 'Helvetica, Arial, sans-serif',fontSize: '15px'}}>|</b>
+              <b aria-hidden="true" style={{flex:'2', display:'flex', justifyContent:'center', color:'white', fontWeight: 'bold', fontFamily: 'Helvetica, Arial, sans-serif',fontSize: '12px'}}>{this.props.share&&this.props.share.fb}</b>
+          </ShareButton>} />
           <Blank style={{width: '10px'}}></Blank>
           <div dangerouslySetInnerHTML={{ __html: `<div class="fb-save" data-uri="${config.FRONTURL+s.url}"></div>` }}></div>
         </Share>}
@@ -254,7 +258,11 @@ class StoryDetail extends React.Component {
         </Share>}
 
         {isMobile && <Share style={{marginBottom:'19px'}}>
-          <FbShareButton  button={<ShareButton style={{width:'86px', height:'28px'}}><b className="fa fa-facebook fa-1x" aria-hidden="true" style={{color:'white', fontWeight: 'bold',paddingRight:'10px',fontSize: '11px'}}></b><b aria-hidden="true" style={{color:'white', fontWeight: 'bold', fontFamily: 'Helvetica, Arial, sans-serif',fontSize: '14px'}}>   Share</b></ShareButton>} />
+          <FbShareButton  button={<ShareButton style={{width:'86px', height:'28px', display:'flex'}}> 
+              <b className="fa fa-facebook fa-1x" aria-hidden="true" style={{flex:'1', display:'flex', justifyContent:'flex-end', color:'white', fontWeight: 'normal',paddingRight:'10px',fontSize: '11.2px'}}></b>
+              <b aria-hidden="true" style={{flex:'0 0.5px', display:'flex', justifyContent:'flex-start', alignItems:'center', color:'rgba(255, 255, 255, 0.7)', fontWeight: 'normal', fontFamily: 'Helvetica, Arial, sans-serif',fontSize: '15px'}}>|</b>
+              <b aria-hidden="true" style={{flex:'2', display:'flex', justifyContent:'center', color:'white', fontWeight: 'bold', fontFamily: 'Helvetica, Arial, sans-serif',fontSize: '12px'}}>{this.props.share&&this.props.share.fb}</b>
+          </ShareButton>} />
           <Blank style={{width: '10px'}}></Blank>
           <div dangerouslySetInnerHTML={{ __html: `<div class="fb-save" data-uri="${config.FRONTURL+s.url}"></div>` }}></div>
         </Share>}
@@ -273,8 +281,6 @@ class StoryDetail extends React.Component {
             </Flex>
           </ContentInfoContainer>
         </div>}
-
-        {utils.isMobile() && <ShareButtom />}
 
         {/* NEXT ITERATION
         <NoComment>5 Comments</NoComment>

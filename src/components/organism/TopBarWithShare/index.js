@@ -32,7 +32,7 @@ const Container = styled.div`
 	position: absolute;
 
 
-  animation: ${props=> props.open ? slideIn : slideOut} 0.2s forwards;
+  animation: ${props=> props.open ? slideIn : slideOut} 0.1s forwards;
 	display: flex;
 
 	flex-flow: row nowrap;
@@ -179,21 +179,23 @@ class TopBarWithShare extends React.Component {
 		const prevTop = this.state.scroll
 		const nowTop = e.srcElement.body.scrollTop
 		const diff = nowTop - prevTop
-		const speed = 120
+		//const speed = 120
+		//console.log(nowTop,prevTop,diff)
 		// const prevTop = this.state.scroll
 		// const nowTop = e.srcElement.body.scrollTop
 		// const diff = nowTop - prevTop
 		//
-		let topOpacity = this.state.topOpacity - (diff / speed)
+		// let topOpacity = this.state.topOpacity - (diff / speed)
 		// if (topOpacity > 1.5) topOpacity = 1.5
 		// if (topOpacity < -1) topOpacity = -1
 
-		//this.setState({topOpacity: topOpacity, scroll: nowTop})
-		//this.setState({scroll: nowTop})
-
-		if (nowTop<120&&!diff > 0) {this.setState({open: true, topOpacity: topOpacity, scroll: nowTop})
-		}else if (diff > 0) {this.setState({open: true, topOpacity: topOpacity, scroll: nowTop})
-		}else this.setState({open: false, topOpacity: topOpacity, scroll: nowTop})
+		// this.setState({ scroll: nowTop})
+		// this.setState({scroll: nowTop})
+		if(Math.abs(diff)>5){
+			if (nowTop<120&&!diff > 0) {this.setState({open: true,  scroll: nowTop})
+			}else if (diff > 0) {this.setState({open: true,  scroll: nowTop})
+			}else this.setState({open: false, scroll: nowTop})
+		}
 
 	}
 
@@ -272,8 +274,8 @@ class TopBarWithShare extends React.Component {
 		}
 
 	  return (
-	    <Wrapper topOpacity={topOpacity}>
-				<Container className={'menu-font ' + ((!scrolling && transparent && hasCover) ? 'transparent' : '')} topOpacity={topOpacity} open={open}>
+	    <Wrapper >
+				<Container className={'menu-font ' + ((!scrolling && transparent && hasCover) ? 'transparent' : '')}  open={open}>
 					<Left>
 			      <HamburgerWrapper onClick={() => this.openPop('left')}>
 			        <Hamburger className="material-icons" style={!scrolling && transparent && hasCover ? {color:'#FFF'} : {}}>menu</Hamburger>

@@ -119,7 +119,7 @@ class TopBarWithNavigation extends React.Component {
 		}
 	  	return (
 			<Stick className={this.props.className} fixed={(articleMobile && hasCover) ? !scrolling : ''}>
-				{articleMobile ?
+				{/* {articleMobile ?
 					<TopBarWithShare
 						onScroll={this.handleScroll}
 						scrolling={scrolling}
@@ -132,7 +132,7 @@ class TopBarWithNavigation extends React.Component {
 						hasCover={hasCover}
 						share={share}
 					> {children}
-					</TopBarWithShare> :
+					</TopBarWithShare> : */}
 					<TopBar
 						onScroll={this.handleScroll}
 						scrolling={scrolling}
@@ -144,9 +144,10 @@ class TopBarWithNavigation extends React.Component {
 						editButton={editButton}
 						hasCover={hasCover}
 						onLoading={this.props.onLoading}
+						article={article}
 					> {children}
 					</TopBar>
-				}
+				{/* } */}
 			</Stick>
 	  	)
 	}

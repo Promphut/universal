@@ -105,13 +105,6 @@
   dependencies:
     webpack-merge "^2.3.1"
 
-"@webpack-blocks/css-modules@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@webpack-blocks/css-modules/-/css-modules-0.4.0.tgz#10ee59f33d72d3f51e8dbf910753347e31a1a872"
-  dependencies:
-    css-loader "^0.25.0"
-    style-loader "^0.13.1"
-
 "@webpack-blocks/dev-server2@^0.4.0":
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/@webpack-blocks/dev-server2/-/dev-server2-0.4.0.tgz#fafb16c3cbc04ac5189c13d6a66c7b470b6d2775"
@@ -119,13 +112,6 @@
     "@webpack-blocks/webpack-common" "^0.4.0"
     webpack "^2.2.0"
     webpack-dev-server "^2.2.0"
-
-"@webpack-blocks/extract-text2@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@webpack-blocks/extract-text2/-/extract-text2-0.4.0.tgz#99e100abb1f789c5c91c0c2dbad5fa3aa8d15a8a"
-  dependencies:
-    "@webpack-blocks/webpack-common" "^0.4.0"
-    extract-text-webpack-plugin "^2.0.0-rc.0"
 
 "@webpack-blocks/webpack-common@^0.4.0":
   version "0.4.0"
@@ -3375,7 +3361,7 @@ extglob@^0.3.1:
   dependencies:
     is-extglob "^1.0.0"
 
-extract-text-webpack-plugin@^2.0.0-rc.0, extract-text-webpack-plugin@^2.1.0:
+extract-text-webpack-plugin@^2.1.0:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/extract-text-webpack-plugin/-/extract-text-webpack-plugin-2.1.2.tgz#756ef4efa8155c3681833fbc34da53b941746d6c"
   dependencies:
@@ -7917,17 +7903,11 @@ strip-json-comments@~2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
 
-style-loader@0.13.1:
+style-loader@0.13.1, style-loader@^0.13.1:
   version "0.13.1"
   resolved "https://registry.yarnpkg.com/style-loader/-/style-loader-0.13.1.tgz#468280efbc0473023cd3a6cd56e33b5a1d7fc3a9"
   dependencies:
     loader-utils "^0.2.7"
-
-style-loader@^0.13.1:
-  version "0.13.2"
-  resolved "https://registry.yarnpkg.com/style-loader/-/style-loader-0.13.2.tgz#74533384cf698c7104c7951150b49717adc2f3bb"
-  dependencies:
-    loader-utils "^1.0.2"
 
 style-loader@^0.17.0:
   version "0.17.0"

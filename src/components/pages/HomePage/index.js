@@ -152,6 +152,7 @@ const SeemoreContainer = styled.div`
 	justify-content: center;
 	@media (max-width:480px) {
 		margin-bottom: 26px;
+		padding-bottom:26px;
   	}
 `
 
@@ -376,6 +377,9 @@ class HomePage extends React.Component {
 						{utils.isMobile() &&
 							<SwipeableViews
 								index={selectTab}
+								animateHeight={true}
+								disableLazyLoading={true}
+								style={{overflow:'hidden'}}
 								onChangeIndex={this.handleChangeTab}
 								className="hidden-des">
 								{/*<div className='story'>

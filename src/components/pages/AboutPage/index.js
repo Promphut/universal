@@ -11,7 +11,7 @@ import { Helmet } from 'react-helmet'
 import api from '../../../services/api'
 import config from '../../../config'
 import moment from 'moment'
-import Request from 'superagent'
+import utils from '../../../services/utils'
 
 const Wrapper = styled(EditorCss)`
 
@@ -60,15 +60,13 @@ class AboutPage extends React.Component {
 		const from = config.FROMDATE
 		const to = moment().utcOffset('+07:00').format('YYYYMMDD')
 
-		Request.get('https://graph.facebook.com/?id='+config.FRONTURL+this.props.location.pathname)
-		.end((er,res)=>{
-			this.setState({fb:res.body.share.share_count})
-		})
-		Request.get('https://share.yandex.ru/gpp.xml?url='+config.FRONTURL+this.props.location.pathname)
-		.end((er,res)=>{
-			//console.log(res)
-			this.setState({twt:res})
-		})
+    utils.FBShareCount(config.FRONTURL).then((res)=>this.setState({fb:res}))
+
+		// Request.get('https://share.yandex.ru/gpp.xml?url='+config.FRONTURL)
+		// .end((er,res)=>{
+		// 	//console.log(res)
+		// 	this.setState({twt:res})
+		// })
 
 	}
 

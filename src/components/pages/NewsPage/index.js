@@ -129,11 +129,13 @@ const Line = styled.div`
 `
 
 const Latest = styled.div`
-  margin:30px 0 0 0;
+	margin:30px 0 0 0;
+	padding-bottom:30px;
 `
 
 const Trending = styled.div`
 	margin:30px 0 0 0;
+	padding-bottom:30px;
 `
 
 const Head = styled.div`
@@ -394,7 +396,11 @@ class NewsPage extends React.Component {
 
 						<SwipeableViews
 							index={selectTab}
+							disableLazyLoading={true}
+							animateHeight={true}
+							style={{overflow:'hidden'}}
 							onChangeIndex={this.handleChangeTab}>
+							
 							<Latest>
 								<InfiniteScroll
 									loadMore={this.loadFeed()}

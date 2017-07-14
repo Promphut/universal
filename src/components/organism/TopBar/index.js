@@ -64,8 +64,27 @@ const Container = styled.div`
 	width: 100%;
 	transition: .1s;
 	position: absolute;
-
+	
 	display: inline;
+
+	animation: ${props=> props.open ? slideIn : slideOut} 0.1s forwards;
+`
+const slideOut = keyframes`
+	from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0%);
+  }
+`
+
+const slideIn = keyframes`
+	from {
+    transform: translateY(0%);
+  }
+  to {
+    transform: translateY(-100%);
+  }
 `
 
 const Left = styled.div`
@@ -114,13 +133,16 @@ const Center = styled.div`
 const Right = styled.div`
 	float: right;
 	position: relative;
-	top: -106px;
+	top: -120px;
 	padding:0 20px;
 	z-index:10;
 	display:flex;
 	align-items:center;
+	height:60px;
 	@media (max-width: 480px) {
 		padding:0 15px;
+		display:flex;
+		position:static;
 	}
 `
 
@@ -148,6 +170,9 @@ const Edit = styled(Link)`
 	&:hover{
 		cursor:pointer;
 	}
+	@media (max-width: 480px) {
+		display:none;
+	}
 `
 const LogoGif = styled(BGImg)`
 	width:60px;
@@ -169,6 +194,9 @@ const ContainerCenter = styled.div`
 	height:100%;
 	display:flex;
 	justify-content: center;
+	@media (max-width: 480px) {
+		display:none;
+	}
 `
 const fadeOut = keyframes`
   0% {
@@ -231,7 +259,8 @@ class TopBar extends React.Component {
 			alertLeft: false,
 			alertRight: false,
 			scroll: 0,
-			lock: false
+			lock: false,
+			nowTop:0
 		}
 	}
 
@@ -256,6 +285,17 @@ class TopBar extends React.Component {
 
 		let top = e.srcElement.body.scrollTop / 500
 		this.setState({ scroll: top })
+		
+		if(this.props.article){
+			const prevTop = this.state.nowTop
+			const nowTop = e.srcElement.body.scrollTop
+			const diff = nowTop - prevTop
+			if(Math.abs(diff)>5){
+				if (nowTop<120&&!diff > 0) {this.setState({open: true,  nowTop})
+				}else if (diff > 0) {this.setState({open: true,  nowTop})
+				}else this.setState({open: false, nowTop})
+			}
+		}
 	}
 
 	openPop = side => {
@@ -294,8 +334,9 @@ class TopBar extends React.Component {
 		let { alertLeft, alertRight, scroll } = this.state
 		let status = this.props.status || 'UNLOGGEDIN',
 			{ scrolling, user, menu, transparent, editButton, hasCover } = this.props
+		var isMobile = utils.isMobile()
 
-		let logoStyle = utils.isMobile()
+		let logoStyle = isMobile
 			? {
 					...logoStyleBase,
 					display: 'none'
@@ -303,7 +344,7 @@ class TopBar extends React.Component {
 			: {
 					...logoStyleBase
 				}
-		let logoStyleMobile = utils.isMobile()
+		let logoStyleMobile = isMobile
 			? {
 					...logoStyleBase
 				}
@@ -317,9 +358,10 @@ class TopBar extends React.Component {
 		return (
 			<Wrapper scroll={scroll}>
 				<Container
+					open={this.state.open}
 					className={
 						'menu-font ' +
-							(!scrolling && transparent && hasCover ? 'transparent' : '')
+							(!scrolling && transparent && hasCover && !isMobile? 'transparent' : '')
 					}>
 					<Left>
 						<HamburgerWrapper onClick={() => this.openPop('left')}>
@@ -350,11 +392,11 @@ class TopBar extends React.Component {
 						</LogoWrapper>
 					</Left>
 
-					<ContainerCenter>
+					{!isMobile&&<ContainerCenter>
 						<Center className={transparent ? 'hide' : ''}>
 							{this.props.children}
 						</Center>
-					</ContainerCenter>
+					</ContainerCenter>}
 
 					{status == 'LOGGEDIN' &&
 						<Right>
