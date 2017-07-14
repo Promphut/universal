@@ -179,7 +179,9 @@ const Dash = styled.div`
 `
 class ColumnPage extends React.Component {
 
-	FEED_LIMIT = utils.isMobile() ? config.FEED_LIMIT_MOBILE*2 : config.FEED_LIMIT;
+	FEED_LIMIT = utils.isMobile()
+		? config.FEED_LIMIT_MOBILE * 2
+		: config.FEED_LIMIT
 
 	static contextTypes = {
 		setting: PropTypes.object
@@ -227,6 +229,13 @@ class ColumnPage extends React.Component {
 		let currentPage = this.state.currentPage
 		let colId = this.state.column._id
 
+		let colIds = []
+		api.getChildrenFromParent(colId).then(res => {
+			res.forEach(col => {
+				colIds.push(col._id)
+			})
+
+		if (colIds.length === 0) colIds = colId
 		api.getFeed('article', { status: 1, column: colId }, 'latest', null, currentPage, this.FEED_LIMIT)
 			.then(result => {
 				this.setState(
@@ -241,11 +250,11 @@ class ColumnPage extends React.Component {
 					}
 				)
 			})
-	
+		})
 	}
 
 	changePage = e => {
-		this.props.history.push({ search: "?page=" + e })
+		this.props.history.push({ search: '?page=' + e })
 	}
 
 	getColumnFromSlug = (columnSlug, done = () => {}) => {
@@ -314,10 +323,7 @@ class ColumnPage extends React.Component {
 					<meta name="description" content={column.shortDesc} />
 				</Helmet>
 				<div style={{}}>
-					<TopBarWithNavigation
-						 
-						onLoading={this.props.onLoading}
-					/>
+					<TopBarWithNavigation onLoading={this.props.onLoading} />
 				</div>
 
 				<Cover

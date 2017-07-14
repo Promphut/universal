@@ -18,7 +18,7 @@ const Container = styled.div`
   top:0;
   left:0;
 	z-index:100;
-	animation: ${props => (props.open ? displayBlock : displayNone)} 0.5s forwards;
+	animation: ${props => (props.open ? displayBlock : displayNone)} 0.3s forwards;
   @media (max-width:480px){
     width: 100vw;
     .mobile{
@@ -40,7 +40,7 @@ const Container2 = styled.div`
   left:0;
 	z-index:101;
   background:rgba(0,0,0,0.8);
-  animation: ${props => (props.open ? fadeOut : fadeIn)} 0.5s forwards;
+  animation: ${props => (props.open ? fadeOut : fadeIn)} 0.3s forwards;
   @media (max-width:480px){
     width: 100vw;
   }
@@ -109,7 +109,7 @@ const Nav = styled.nav`
 	overflow-x: hidden;
 	overflow-y: auto;
 	z-index:102;
-  animation: ${props => (props.open ? slideOut : slideIn)} 0.6s forwards;
+  animation: ${props => (props.open ? slideOut : slideIn)} 0.4s forwards;
   background: rgba(255, 255, 255, 0.85);
 
 	& hr {
@@ -138,7 +138,7 @@ const Nav = styled.nav`
 	}
 
   @media(max-width:480px){
-    width: 100vw;
+    width: 85vw;
     & ul {
       font-size: 20px;
     }
@@ -254,9 +254,11 @@ class RightMenu extends React.Component {
 			if(!nextProps.open){
 				setTimeout(function() {
 					self.setState({display:'none'})
-				}, 500);
+					document.getElementsByTagName('body')[0].style.overflow = 'auto'
+				}, 300);
 			}else{
 					this.setState({display:'block'})
+					document.getElementsByTagName('body')[0].style.overflow = 'hidden'
 			}
 		}
 	}

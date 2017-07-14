@@ -274,7 +274,7 @@ class TopBar extends React.Component {
 	}
 
 	componentDidMount() {
-		if (this.props.onScroll)
+		if (this.props.onScroll){}
 			window.addEventListener('scroll', this.handleScroll)
 
 		//console.log(this.role)
@@ -286,7 +286,7 @@ class TopBar extends React.Component {
 		let top = e.srcElement.body.scrollTop / 500
 		this.setState({ scroll: top })
 		
-		if(this.props.article){
+		if(this.props.article&&utils.isMobile()){
 			const prevTop = this.state.nowTop
 			const nowTop = e.srcElement.body.scrollTop
 			const diff = nowTop - prevTop
@@ -361,7 +361,7 @@ class TopBar extends React.Component {
 					open={this.state.open}
 					className={
 						'menu-font ' +
-							(!scrolling && transparent && hasCover && !isMobile? 'transparent' : '')
+							(!scrolling && transparent && hasCover? 'transparent' : '')
 					}>
 					<Left>
 						<HamburgerWrapper onClick={() => this.openPop('left')}>

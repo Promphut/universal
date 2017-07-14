@@ -97,7 +97,7 @@ class App2 extends React.Component {
 
 	componentWillMount() {
 		//console.log('COOK', this.props.cookies)
-		//global.cookies = this.props.cookies
+		global.cookies = this.props.cookies
 	}
 
 	componentDidMount() {
