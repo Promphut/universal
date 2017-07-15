@@ -302,6 +302,7 @@ export default class UserStory extends React.Component {
 			feedCount: 0,
 			feed: [],
 			totalPages: 0,
+			isNormalUser: true,
 			isEmpty: false,
 
 			loading: false,
@@ -326,7 +327,7 @@ export default class UserStory extends React.Component {
 		if (this.state.user._id == null) return
 		// ensure this method is called only once at a time
 		if (this.state.loading === true) return
-		
+
 		this.state.loading = true
 
 		let currentPage = this.state.currentPage
@@ -366,6 +367,16 @@ export default class UserStory extends React.Component {
 		api.getUserFromUserId(uid)
 			.then(user => {
 				this.setState({ user: user}, done)
+			})
+			.catch(err => {
+				utils.notFound(this.props.history, err)
+			})
+	}
+
+	checkIsNormalUser = (uid, done = () => {}) => {
+		api.getPublisherWriters()
+			.then(writers => {
+				this.setState({isNormalUser : isEmpty(_.find(writers, function(o) { return o.id === _.toString(uid); }))})
 			})
 			.catch(err => {
 				utils.notFound(this.props.history, err)
@@ -439,12 +450,14 @@ export default class UserStory extends React.Component {
 				this.loadFeed()
 			})
 		}
+
+		this.checkIsNormalUser(this.state.user.id)
 	}
 
 	render () {
 		if (!isEmpty(this.state.user)) {
 			let { theme } = this.context.setting.publisher
-			let { user, isMobile, feedCount, feed, currentPage, totalPages, loading, showDescription, isEmpty } = this.state
+			let { user, isMobile, feedCount, feed, currentPage, totalPages, loading, showDescription, isEmpty, isNormalUser } = this.state
 			let FeedPack = currentPage < 0 ? "" : "Loading"
 
 			if (feed && currentPage >= 0) {
@@ -457,7 +470,7 @@ export default class UserStory extends React.Component {
 			return (
 				<Wrapper>
 					{!utils.isMobile() && <TopBarWithNavigation className="hidden-mob" />}
-					{auth.hasRoles(['ADMIN', 'EDITOR']) ?
+					{!isNormalUser ?
 						// Admin
 						<EditorProfilePictureSection userProfileImage = {user.pic.medium}>
 							<TopBarContainer>
@@ -517,8 +530,8 @@ export default class UserStory extends React.Component {
 						</UserProfileSection>
 					}
 
-					<UserInfoSection role={auth.hasRoles(['ADMIN', 'EDITOR'])? 'admin' : 'user'}>
-						{auth.hasRoles(['ADMIN', 'EDITOR']) &&
+					<UserInfoSection role={isNormalUser ? 'user' : 'admin'}>
+						{!isNormalUser &&
 							<Card>
 								<CardTitle>{user.display}</CardTitle>
 								<CardSubtitle>{user.intro}</CardSubtitle>
@@ -546,7 +559,7 @@ export default class UserStory extends React.Component {
 						</SeeMoreDescriptionSection>
 					} */}
 
-					{auth.hasRoles(['ADMIN', 'EDITOR']) &&
+					{!isNormalUser &&
 						<ArticleSection>
 
 							<ArticleHeader>
@@ -559,7 +572,7 @@ export default class UserStory extends React.Component {
 						</ArticleSection>
 					}
 
-					{auth.hasRoles(['ADMIN', 'EDITOR']) &&
+					{!isNormalUser &&
 						<ArticleWrapper>
 							<Content>
 								<Main>

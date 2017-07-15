@@ -17,9 +17,10 @@ const SocialButton = styled.a `
   color: ${props =>
     props.enabled && props.colorPack === 'light' ? '#F4F4F4' :
     props.enabled && props.colorPack === 'dark' ? '#8E8E8E' :
-    !props.enabled && props.colorPack === 'light' ? '#334560' :
+    !props.enabled && props.colorPack === 'light' ? '#ffffff' :
     !props.enabled && props.colorPack === 'dark' ? '#F4F4F4' : '#F4F4F4'};
 	text-decoration: none;
+	opacity: ${props => !props.enabled && props.colorPack === 'light' ? '0.5' : '1'};
 
 	&:last-child {
 			margin-right: 0px;
