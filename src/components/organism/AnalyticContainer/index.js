@@ -10,7 +10,7 @@ const AnalyticMainContainer = styled.div `
 
 const RuleText = [
     'Adding at least 1 image in the content.',
-    'The focus word density must be less than 2%.',
+    'The focus word density must be around 2%.',
     'The text must contain more than 1,500 characters.',
     'Consider using unused focus word.',
     'Adding at least 1 link in the content.',
@@ -39,8 +39,10 @@ export default class AnalyticContainer extends React.Component {
 
     var rules = [
       { status: this.atLeastImgTag(html), text: RuleText[0]},
-      { status: this.focusWordDensityChecker(html, focusWord), text: RuleText[1]},
-      { status: this.numberOfWordsChecker(html), text: RuleText[2]},
+      { status: this.focusWordDensityChecker(html, focusWord).result, 
+        text: `The focus word density is ${this.focusWordDensityChecker(html, focusWord).density.toFixed(2)}% (should be between 1.75% to 2.25%)`},
+      { status: this.numberOfWordsChecker(html).result, 
+        text: `The text contains ${this.numberOfWordsChecker(html).noOfWord} characters (should be more than 1,500 characters)`},
       /*{ status: this.focusWordAvailablityChecker(this.props.focusWord), text: RuleText[3]},*/
       { status: this.linkTagChecker(html), text: RuleText[4]},
       { status: this.titleFocusWordChecker(title, focusWord), text: RuleText[5]},
@@ -76,19 +78,18 @@ export default class AnalyticContainer extends React.Component {
    // Rule 2 : Check for focus word density at least 2% return the score (0: < 1%, 1 >2%, 2 > 1%)
   focusWordDensityChecker (content, focusWord) {
     var density = utils.analyticsDensityFocusWord(focusWord,content)
-
-    if (density > 2 || density == 0) return 0
-    else if (density > 0 && density < 1.5) return 1
-    return 2
+    if (density > 3 || density >=0 && density < 1) return {result:0,density}
+    else if (density >= 1 && density < 1.75 || density > 2.25 && density <= 3 ) return {result:1,density}
+    return {result:2,density}
   }
 
    // Rule 3 : Check for number of char must greater than 1500 return the score (0: < 1000, 1 >= 1500, 2 > 1000)
   numberOfWordsChecker (content) {
     var noOfWord = utils.analyticsCharCount(content)
 
-    if (noOfWord < 1000) return 0
-    else if (noOfWord >= 1000 && noOfWord < 1500) return 1
-    return 2
+    if (noOfWord < 1000) return {result:0,noOfWord}
+    else if (noOfWord >= 1000 && noOfWord < 1500) return {result:1,noOfWord}
+    return  {result:2,noOfWord}
   }
 
    //Rule 4 Used focus word return the score (0 : used focusWord , 1 : focusWord is available)
