@@ -354,6 +354,7 @@ export default class UserStory extends React.Component {
 
 		api.getUserFromUsername(username)
 			.then(user => {
+				this.checkIsNormalUser(user.id)
 				this.setState({ user: user}, done)
 			})
 			.catch(err => {
@@ -366,6 +367,7 @@ export default class UserStory extends React.Component {
 
 		api.getUserFromUserId(uid)
 			.then(user => {
+				this.checkIsNormalUser(user.id)
 				this.setState({ user: user}, done)
 			})
 			.catch(err => {
@@ -450,8 +452,6 @@ export default class UserStory extends React.Component {
 				this.loadFeed()
 			})
 		}
-
-		this.checkIsNormalUser(this.state.user.id)
 	}
 
 	render () {
