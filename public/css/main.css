@@ -493,7 +493,8 @@ textarea {
 /*# sourceMappingURL=normalize.min.css.map */
 /* Main Stylesheet Goes Here!*/
 body {
-  color: #222; }
+  color: #222;
+  overflow-y: auto; }
 
 * {
   -webkit-box-sizing: border-box;
