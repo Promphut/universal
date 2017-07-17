@@ -124,6 +124,9 @@ class App2 extends React.Component {
 		//console.log("RECEIVE2", nextProps.location.hash, nextProps.location.action)
 		//console.log('componentWillReceiveProps', nextProps.history, nextProps.location, this.props.location)
 		//let isFirstTime = !nextProps.location.key && !this.props.location.key
+		if (nextProps.location.pathname !== this.props.location.pathname)	{
+			document.getElementsByTagName('body')[0].style.overflow = 'auto'
+		}
 
 		if (nextProps.history.action === 'PUSH') {
 			//this.timer = setTimeout(() => this.progress(10), 100); //loading
