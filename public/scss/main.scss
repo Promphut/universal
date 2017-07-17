@@ -35,6 +35,7 @@ progress,sub,sup{vertical-align:baseline}button,hr,input{overflow:visible}html{f
 
 body {
   color:#222;
+  overflow-y: auto;
 }
 * {
   -webkit-box-sizing: border-box;
