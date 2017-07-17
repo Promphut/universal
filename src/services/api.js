@@ -242,8 +242,8 @@ api.signup = (data) => {
 
 */
 api.getFeed = (type, filter, sort, sortby, page, limit, option) => {
-	console.log('filter', filter)
-	console.log('filter', JSON.stringify(filter))
+	// console.log('filter', filter)
+	// console.log('filter', JSON.stringify(filter))
 	let token
 	if(option && option.onlyAuthorized) token = auth.getToken()
 	//console.log(token)

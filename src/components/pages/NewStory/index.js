@@ -200,6 +200,7 @@ class NewStory extends React.Component {
     column:null,
     contentType:'NEWS',
     html: '',
+    highglight: '',
 
     focusWord: '',
     tag:[],
@@ -465,8 +466,8 @@ class NewStory extends React.Component {
 
         this.setState({
           saveStatus:'saving...',
-          html: el,
-          focusWord: focusWord
+          html:el,
+          highlight,
         })
 
         api.updateStory(sid, s)
@@ -726,7 +727,7 @@ class NewStory extends React.Component {
   render(){
     let {chooseLayout,layout,open,anchorEl,column,contentType,tag,addTag,searchText,
       columnList,contentTypeList,sid,alert,alertWhere,alertConfirm,alertDesc,saveStatus,
-      title,publishStatus, story, slug,metaTitle,metaDesc,hintDesc,html,focusWord} = this.state
+      title,publishStatus, story, slug,metaTitle,metaDesc,hintDesc,html,focusWord,highlight} = this.state
     const dataSourceConfig = {text: 'text',value: 'value',id:'id'};
     let {theme} = this.context.setting.publisher
 
@@ -946,7 +947,7 @@ class NewStory extends React.Component {
         </div>
         <Paper ref='paper'  id='paper' />
         <Divider/>
-				<AnalyticContainer html={html} focusWord={focusWord} title={title} />
+				<AnalyticContainer content={html} focusWord={focusWord} title={title} highlight={highlight} />
       </Container>
     )
   }

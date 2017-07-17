@@ -165,7 +165,7 @@ const Nav = styled.nav`
 
   @media (max-width:480px){
 		overflow-y: auto;
-    width: 100vw;
+    width: 85vw;
     & ul li .arrow {
       font-size: 28px !important;
       line-height: 40px;

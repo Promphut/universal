@@ -103,7 +103,7 @@ class UserSettingProfile extends React.Component {
     setting: PropTypes.object
   }
 
-  fetechUser = (e) => {
+  fetchUser = (e) => {
     if(e) e.preventDefault()
 
     api.getUser()
@@ -179,7 +179,7 @@ class UserSettingProfile extends React.Component {
   }
 
   componentDidMount(){
-    this.fetechUser()
+    this.fetchUser()
   }
 
   render(){
@@ -314,7 +314,7 @@ class UserSettingProfile extends React.Component {
         </div>
         <div className='sans-font' style={{overflow:'hidden',marginTop:'30px'}}>
           <PrimaryButton label='Save' type='submit' style={{float:'left',margin:'0 20px 0 0'}}/>
-          <SecondaryButton label='Reset' onClick={this.fetechUser} style={{float:'left',margin:'0 20px 0 0'}}/>
+          <SecondaryButton label='Reset' onClick={this.fetchUser} style={{float:'left',margin:'0 20px 0 0'}}/>
           <TextStatus style={{color:error?'#D8000C':theme.accentColor}} className='hidden-mob'>{textStatus}</TextStatus>
         </div>
       </Container>

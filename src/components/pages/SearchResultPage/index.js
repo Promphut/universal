@@ -185,8 +185,8 @@ export default class SearchResultPage extends React.Component {
 		      result: result.stories,
 					isLoading: false,
 					isChanging: false,
-					feedCount: result.stories.length!=0 ? (result.count['1'] ? result.count['1'] : 0) : 0,
-					totalPages: result.stories.length!=0 ? (utils.getTotalPages(this.FEED_LIMIT, result.count['1'])) : 0,
+					feedCount: result.count['1'] ? result.count['1'] : 0,
+					totalPages: result.count['1'] ? (utils.getTotalPages(this.FEED_LIMIT, result.count['1'])) : 0,
 		    });
 		  })
 		}
@@ -240,7 +240,7 @@ export default class SearchResultPage extends React.Component {
             </FilterContainer>
 						
 						{ isChanging ? this.onload() :
-            <SearchResultBox type={type} result={result} isLoading={isLoading}/>
+            	<SearchResultBox type={type} result={result} isLoading={isLoading} page={currentPage}/>
 						}
 						{ !isChanging && totalPages > 0 && ((totalPages > currentPage && currentPage >= 0) ?
 
