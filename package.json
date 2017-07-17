@@ -67,6 +67,7 @@
     "opn-cli": "^3.1.0",
     "postcss-loader": "^2.0.6",
     "raw-loader": "^0.5.1",
+    "react-loadable": "^4.0.3",
     "react-test-renderer": "^15.5.4",
     "rimraf": "^2.6.1",
     "sass-loader": "^6.0.6",
@@ -85,6 +86,7 @@
     "webpack-spawn-plugin": "^0.1.2"
   },
   "dependencies": {
+    "babel-plugin-import-inspector": "^2.0.0",
     "blueimp-canvas-to-blob": "^3.7.0",
     "blueimp-file-upload": "^9.17.0",
     "blueimp-file-upload-expressjs": "git+https://github.com/ochawin/blueimp-file-upload-expressjs",
@@ -93,6 +95,7 @@
     "express": "^4.15.2",
     "history": "^4.6.1",
     "html-to-text": "git+https://github.com/stepboom/node-html-to-text",
+    "import-inspector": "^2.0.0",
     "jimp": "^0.2.28",
     "jquery": "^3.2.1",
     "jquery-ui-bundle": "^1.12.1",
@@ -118,6 +121,7 @@
     "react-infinite-scroller": "^1.0.10",
     "react-modal": "^1.6.5",
     "react-onclickoutside": "^5.10.0",
+    "react-router": "^4.1.2",
     "react-router-dom": "^4.1.1",
     "react-router-server": "^4.2.1",
     "react-rte": "^0.11.0",
