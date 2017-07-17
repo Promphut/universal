@@ -215,7 +215,7 @@ const client = createConfig([
   ]) : env(process.env.NODE_ENV, [
     splitVendor({ exclude: [/lodash/, /offline-plugin\/runtime\.js/] }),
     
-    process.env.NODE_ENV==='production' && addPlugins([
+    process.env.NODE_ENV==='production' ? addPlugins([
       new webpack.optimize.UglifyJsPlugin({
         compress: {
           warnings: false
@@ -225,7 +225,7 @@ const client = createConfig([
       new webpack.LoaderOptionsPlugin({
         minimize: true
       }),
-    ]),
+    ]) : () => {},
   ]),
 ])
 
