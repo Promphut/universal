@@ -343,9 +343,9 @@ class ColumnPage extends React.Component {
 					<meta name="keywords" content={keywords} />
 					<meta name="description" content={column.shortDesc} />
 				</Helmet>
-				<div style={{}}>
-					<TopBarWithNavigation onLoading={this.props.onLoading} />
-				</div>
+				<TopBarWithNavigation
+					onLoading={this.props.onLoading}
+				/>
 
 				<Cover
 					style={{ display: 'flex', alignItems: 'center' }}
