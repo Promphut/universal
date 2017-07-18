@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
+import Loadable from 'react-loadable'
+import {inspect, report} from 'import-inspector'
 
 import { Link } from 'react-router-dom'
 import TextField from 'material-ui/TextField'
@@ -113,6 +115,10 @@ const PaginationContainer = styled.div `
 		margin-bottom: 20px;
   }
 `
+// report(import("./SearchResultBox"), {
+//   serverSideRequirePath: path.join("/Users/arnonpuitrakul/Project/internship/ThePublisher/src/components/organism/SearchResultBox/index.js"),
+//   webpackRequireWeakId: () => require.resolveWeak("./SearchResultBox"),
+// });
 
 export default class SearchResultPage extends React.Component {
 
@@ -141,7 +147,7 @@ export default class SearchResultPage extends React.Component {
 			</div>
 		</Onload>
 	)
-	
+
 	FEED_LIMIT = utils.isMobile() ? config.FEED_LIMIT_MOBILE*2 : config.FEED_LIMIT;
 
 	componentWillMount () {
@@ -238,7 +244,7 @@ export default class SearchResultPage extends React.Component {
               <Link to={"/search/news?keyword=" + keyword + "&page=1"}><FilterItem mobile = {utils.isMobile()} select={type === 'news'}>NEWS</FilterItem></Link> */}
               {/* <Link to={"/search/video/" + this.state.keyword}><FilterItem select={this.state.type === 'video'}>VIDEO</FilterItem></Link> */}
             </FilterContainer>
-						
+
 						{ isChanging ? this.onload() :
             	<SearchResultBox type={type} result={result} isLoading={isLoading} page={currentPage}/>
 						}
