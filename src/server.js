@@ -3,7 +3,7 @@ import 'babel-polyfill'
 // require.extensions['.css'] = () => {
 //   return null
 // }
-// allow self signed cert for dev mode 
+// allow self signed cert for dev mode
 if (process.env.NODE_ENV === 'development') {
 	process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 	require('longjohn')
@@ -18,6 +18,8 @@ import { StaticRouter } from 'react-router'
 import { renderToString } from 'react-router-server'
 import { CookiesProvider } from 'react-cookie'
 import cookiesMiddleware from 'universal-cookie-express'
+import { AsyncComponentProvider, createAsyncContext } from 'react-async-component'
+import asyncBootstrapper from 'react-async-bootstrapper'
 //import forceSSL from 'express-force-ssl'
 import http from 'http'
 import https from 'https'
@@ -32,10 +34,14 @@ import api from './services/api'
 import sm from 'sitemap'
 
 const renderApp = ({ cookies, context, location, sheet, setting }) => {
+	const asyncContext = createAsyncContext()
+
 	const app = sheet.collectStyles(
 		<CookiesProvider cookies={cookies}>
 			<StaticRouter context={context} location={location}>
-				<App2 setting={setting}/>
+				<AsyncComponentProvider asyncContext={asyncContext}>
+					<App2 setting={setting}/>
+				</AsyncComponentProvider>
 				{/*<AppRoutes/>*/}
 				{/*<AppRoutes currentlocation = {req.url}/>*/}
 			</StaticRouter>
@@ -55,7 +61,7 @@ const extractMeta = (setting, url) => {
 		url : url
 	}
 
-	if(setting.publisher.name) 
+	if(setting.publisher.name)
 		meta.name = setting.publisher.name + (setting.publisher.tagline ? ' | ' + setting.publisher.tagline : '')
 
 	let path = url.split('/')
@@ -261,15 +267,15 @@ app.get('/sitemap.xml', (req, res)=> {
 app.get('/robots.txt', (req, res) => {
 	let robotTxt = ''
 
-	if(process.env.NODE_ENV === 'production') 
-		robotTxt = 
+	if(process.env.NODE_ENV === 'production')
+		robotTxt =
 `User-agent: *
 Disallow: /me/*
 Disallow: /editor
 Disallow: /editor/*
 Sitemap: ${FRONTURL}/sitemap.xml`
-	else 
-		robotTxt = 
+	else
+		robotTxt =
 `User-agent: *
 Disallow: /
 Sitemap: ${FRONTURL}/sitemap.xml`
@@ -319,7 +325,7 @@ app.use((req, res, next) => {
 			//console.log("META", meta)
 			renderApp({ cookies:req.universalCookies, context, location, sheet, setting })
 			.then(({ html: content }) => {
-				if (context.status) { 
+				if (context.status) {
 					res.status(context.status)
 				}
 				if (context.url) {
@@ -332,7 +338,7 @@ app.use((req, res, next) => {
 
 		})
 		.catch(next)
-		
+
 	})
 
 	// getMeta(req.url).then((meta)=>{

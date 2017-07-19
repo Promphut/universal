@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components'
-import Loadable from 'react-loadable'
-import {inspect, report} from 'import-inspector'
+import { asyncComponent } from 'react-async-component'
 
 import { Link } from 'react-router-dom'
 import TextField from 'material-ui/TextField'
@@ -115,10 +114,10 @@ const PaginationContainer = styled.div `
 		margin-bottom: 20px;
   }
 `
-// report(import("./SearchResultBox"), {
-//   serverSideRequirePath: path.join("/Users/arnonpuitrakul/Project/internship/ThePublisher/src/components/organism/SearchResultBox/index.js"),
-//   webpackRequireWeakId: () => require.resolveWeak("./SearchResultBox"),
-// });
+
+const SearchResultBoxAsync = asyncComponent({
+  resolve: () => import(/* webpackChunkName: 'SearchResultBox' */ '../../organism/SearchResultBox/index.js'),
+});
 
 export default class SearchResultPage extends React.Component {
 
@@ -246,7 +245,7 @@ export default class SearchResultPage extends React.Component {
             </FilterContainer>
 
 						{ isChanging ? this.onload() :
-            	<SearchResultBox type={type} result={result} isLoading={isLoading} page={currentPage}/>
+            	<SearchResultBoxAsync type={type} result={result} isLoading={isLoading} page={currentPage}/>
 						}
 						{ !isChanging && totalPages > 0 && ((totalPages > currentPage && currentPage >= 0) ?
 

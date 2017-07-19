@@ -4,7 +4,8 @@
       "modules": false
     }],
     "react",
-    "stage-2"
+    "stage-2",
+    "stage-3",
   ],
   "plugins": [
     "react-hot-loader/babel",
