@@ -178,21 +178,10 @@ const Dash = styled.div`
   background-color:${props => props.theme.accentColor};
 `
 class ColumnPage extends React.Component {
-	state = {
-		column: {
-			cover: {}
-		},
-		isMobile: false,
 
-		currentPage: utils.querystring('page',this.props.location) ? utils.querystring('page',this.props.location) - 1 : 0,
-		feedCount: 1,
-		feed: [],
-		totalPages: 0,
-
-		loading: false
-	}
-
-	FEED_LIMIT = utils.isMobile() ? config.FEED_LIMIT_MOBILE*2 : config.FEED_LIMIT;
+	FEED_LIMIT = utils.isMobile()
+		? config.FEED_LIMIT_MOBILE * 2
+		: config.FEED_LIMIT
 
 	static contextTypes = {
 		setting: PropTypes.object
@@ -200,6 +189,22 @@ class ColumnPage extends React.Component {
 
 	constructor(props) {
 		super(props)
+
+		this.state = {
+			column: {
+				cover: {}
+			},
+			isMobile: false,
+
+			currentPage: utils.querystring('page',this.props.location) ? utils.querystring('page',this.props.location) - 1 : 0,
+			feedCount: 0,
+			feed: [],
+			totalPages: 0,
+			isEmpty: false,
+
+			loading: false,
+			initialLoading: true,
+		}
 	}
 
 	onload = () => (
@@ -214,44 +219,50 @@ class ColumnPage extends React.Component {
 		</Onload>
 	)
 
-	loadFeed = () => {	
+	loadFeed = () => {
 		if (this.state.column._id == null) return
 		// ensure this method is called only once at a time
 		if (this.state.loading === true) return
+		
 		this.state.loading = true
-		//console.log('LOAD FEED1')
 
 		let currentPage = this.state.currentPage
 		let colId = this.state.column._id
-		//console.log('page', page)
 
+		let colIds = []
+		api.getChildrenFromParent(colId).then(res => {
+			res.forEach(col => {
+				colIds.push(col._id)
+			})
+
+		if (colIds.length === 0) colIds = colId
 		api.getFeed('article', { status: 1, column: colId }, 'latest', null, currentPage, this.FEED_LIMIT)
 			.then(result => {
 				this.setState(
 					{
 						feed: result.feed,
-						feedCount: result.feed.length!=0 ? (result.count['1'] ? result.count['1'] : 0 ): 0,
-						totalPages: result.feed.length!=0 ? utils.getTotalPages(this.FEED_LIMIT, result.count['1']) : 0,
+						feedCount: result.count['1'] ? result.count['1'] : 0,
+						totalPages: result.count['1'] ? utils.getTotalPages(this.FEED_LIMIT, result.count['1']) : 0,
+						isEmpty: result.count['total']==0 || (!result.count['1'])
 					},
 					() => {
-						this.setState({loading:false})
+						this.setState({loading:false,initialLoading:false})
 					}
 				)
 			})
-	
+		})
 	}
 
 	changePage = e => {
-		this.props.history.push({ search: "?page=" + e })
+		this.props.history.push({ search: '?page=' + e })
 	}
 
 	getColumnFromSlug = (columnSlug, done = () => {}) => {
 		if (!columnSlug) utils.notFound(this.props.history)
 		
-		api
-			.getColumnFromSlug(columnSlug)
+		api.getColumnFromSlug(columnSlug)
 			.then(col => {
-				this.setState({ column: col , currentPage : 0}, done)
+				this.setState({ column: col}, done)
 			})
 			.catch(err => {
 				utils.notFound(this.props.history, err)
@@ -263,7 +274,6 @@ class ColumnPage extends React.Component {
 	}
 
 	componentDidMount() {
-		//this.handleInfiniteLoad()
 		this.setState({
 			isMobile: utils.isMobile()
 		})
@@ -271,10 +281,16 @@ class ColumnPage extends React.Component {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.match.params.columnSlug != this.props.match.params.columnSlug) {
-			this.getColumnFromSlug(nextProps.match.params.columnSlug, this.loadFeed)
+			this.setState({
+				currentPage : utils.querystring('page',nextProps.location) ? utils.querystring('page',nextProps.location) - 1 : 0,
+				feed : [],
+			}, ()=> {
+				this.getColumnFromSlug(nextProps.match.params.columnSlug, this.loadFeed)
+			})
 		} else if(nextProps.location.search != this.props.location.search){
 			this.setState({
 				currentPage : utils.querystring('page',nextProps.location) ? utils.querystring('page',nextProps.location) - 1 : 0,
+				feed : [],
 			},()=>{
 				document.body.scrollTop = document.documentElement.scrollTop = 0
 				this.loadFeed()
@@ -285,8 +301,8 @@ class ColumnPage extends React.Component {
 	render() {
 		let { keywords, channels, theme } = this.context.setting.publisher
 		const BGImgSize = (utils.isMobile() ? 100 : 280) + 60
-		let { column, isMobile, feedCount, feed, currentPage, totalPages, loading } = this.state
-		//let {count, loadOffset, isInfiniteLoading, latestStories, isMobile} = this.state
+		let { column, isMobile, feedCount, feed, currentPage, totalPages, loading, initialLoading, isEmpty } = this.state
+
 		var head = (
 			<Head>
 				<div className="row">
@@ -297,6 +313,7 @@ class ColumnPage extends React.Component {
 				<ColumnDetail>{column.shortDesc}</ColumnDetail>
 			</Head>
 		)
+
 		return (
 			<Wrapper>
 				<Helmet>
@@ -321,47 +338,62 @@ class ColumnPage extends React.Component {
 				</Cover>
 
 				<Content isMobile={isMobile}>
-					{feedCount <= 0
-						? <Main>
-								<StoryMenu
-									style={{ padding: '15px 0 15px 0', margin: '0 0 50px 0' }}
-									next={column.name}
-								/>
-								<EmptyStory
-									title="No Story, yet"
-									description={
-										<div>
-											There are no stories in this column right now. Wanna back to see
-											<Link
-												to="/stories/columns"
-												style={{
-													color: theme.accentColor,
-													padding: '0 0.5em 0 0.5em'
-												}}>
-												other columns
-											</Link>
-											?
-										</div>
-									}
-								/>
-							</Main>
-						: <Main>
-								{totalPages > 0 && totalPages > currentPage && currentPage >= 0
-									&&  <div>
-												<TextLine className="sans-font hidden-mob">LATEST STORIES</TextLine>
-												<Dash className="hidden-mob" style={{ margin: '5px 0 10px 0' }} />
+					<Main>
+						<div>
+							<TextLine className="sans-font hidden-mob">LATEST STORIES</TextLine>
+							<Dash className="hidden-mob" style={{ margin: '5px 0 10px 0' }} />
+						</div>
+
+						{ (loading || initialLoading) ? this.onload() :
+							<div>
+								{(feed && currentPage >= 0) &&
+									feed.map((item, index) => (
+									<ArticleBox final={index == feed.length -1 ? true:false} detail={item} key={index} />
+								))}
+
+								{ (isEmpty) &&
+									<EmptyStory
+										title="No Story, yet"
+										description={
+											<div>
+												There are no stories in this column right now. Wanna back to see
+												<Link
+													to="/stories/columns"
+													style={{
+														color: theme.accentColor,
+														padding: '0 0.5em 0 0.5em'
+													}}>
+													other columns
+												</Link>
+												?
 											</div>
+										}
+									/>
 								}
-								{loading ?  this.onload() : 
-									<div>
-										{feed && currentPage >= 0 &&
-											feed.map((item, index) => (
-												<ArticleBox final={index == feed.length -1 ? true:false} detail={item} key={index} />
-											))}
-									</div> 
+
+								{ (!isEmpty && !(totalPages > currentPage && currentPage >= 0)) &&
+									<EmptyStory
+										title="No More Story"
+										description={
+											<div>
+												There are no more stories in this page. Go back to
+												<Link
+													to={"/stories/" + this.state.column.slug + "?page=1"}
+													style={{
+														color: theme.accentColor,
+														padding: '0 0.5em 0 0.5em'
+													}}>
+													first page
+												</Link>of this column
+												?
+											</div>
+										}
+										hideButton={true}
+									/>
 								}
+
 								<Page>
-									{!loading && totalPages > 0 && ((totalPages > currentPage && currentPage >= 0) ?
+									{ (totalPages > currentPage && currentPage >= 0) &&
 										<Pagination
 											hideFirstAndLastPageLinks={utils.isMobile() ? false : true}
 											hidePreviousAndNextPageLinks={utils.isMobile() ? true : false}
@@ -370,33 +402,18 @@ class ColumnPage extends React.Component {
 											totalPages={totalPages}
 											onChange={this.changePage}
 										/>
-										:
-										<EmptyStory
-											title="No More Story"
-											description={
-												<div>
-													There are no more stories in this page. Go back to
-													<Link
-														to={"/stories/" + this.state.column.slug + "?page=1"}
-														style={{
-															color: theme.accentColor,
-															padding: '0 0.5em 0 0.5em'
-														}}>
-														first page
-													</Link>of this column
-													?
-												</div>
-											}
-											hideButton={true}
-										/>)
 									}
 								</Page>
-							</Main>}
+							</div>
+						}
+					</Main>
+
 					<Aside>
 						<Stick topOffset={70} style={{ zIndex: '0' }}>
 							<TrendingSideBar />
 						</Stick>
 					</Aside>
+
 				</Content>
 
 				<BackToTop scrollStepInPx="200" delayInMs="16.66" showOnTop="600" />

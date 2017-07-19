@@ -12,7 +12,7 @@ const LargeBox = styled.div`
   @media (max-width:480px) {
     height:auto;
     padding:16px 0 16px 0;
-    border-bottom:1px solid #E2E2E2;
+    border-bottom:${props => (props.final ? '' : '1px solid #E2E2E2')};
     display:${props => (props.head ? 'block' : 'flex')};
   }
 @media (min-width: 768px) and (max-width: 992px) {
@@ -178,7 +178,7 @@ class TopStory extends React.Component {
 	}
 
 	render() {
-		var { style, swift, className, large, head } = this.props
+		var { style, swift, className, large, head, final} = this.props
 		var {
 			cover,
 			writer,
@@ -239,6 +239,7 @@ class TopStory extends React.Component {
 					large={large}
 					style={{ ...style }}
 					className={' ' + className}
+					final={final}
 					onMouseOver={this.hover}
 					onMouseLeave={this.leave}>
 					<Box1 large={large}>

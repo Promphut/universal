@@ -138,7 +138,7 @@ const Nav = styled.nav`
 	}
 
   @media(max-width:480px){
-    width: 100vw;
+    width: 85vw;
     & ul {
       font-size: 20px;
     }

@@ -140,7 +140,7 @@ class TopHome extends React.Component {
 						</div>
 						<div style={{ display: 'flex' }}>
 							{trendingStories.length != 0 &&
-								<TopStory detail={trendingStories[5]} />}
+								<TopStory detail={trendingStories[5]} final={true} />}
 							<MiniBoxDark className="hidden-mob">
 								<div style={{ width: 30 }}>
 									<FbShareButton

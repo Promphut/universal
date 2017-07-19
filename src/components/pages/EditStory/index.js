@@ -206,6 +206,7 @@ class EditStory extends React.Component {
       column:null,
       contentType:'NEWS',
       html: '',
+      highlight: '',
 
       focusWord: '',
       tag:[],
@@ -347,7 +348,8 @@ class EditStory extends React.Component {
       //console.log(allContents.paper.value)
       this.setState({
         saveStatus:'Saving...',
-        html:el
+        html:el,
+        highlight,
       })
 
       let s = {
@@ -381,7 +383,6 @@ class EditStory extends React.Component {
       publisher:parseInt(config.PID),
       focusWord:focusWord,
       html:allContents.paper.value,
-      status:1,
       format: (columnList.find(col => col._id == column).name == 'news' 
       || columnList.find(col => col._id == column).name =='News') ? 'NEWS' : 'ARTICLE',
       meta:story.meta,
@@ -389,7 +390,7 @@ class EditStory extends React.Component {
     }
 
     if(story.status == 0) {
-      s[status] = 1;
+      s.status = 1;
     }
 
     if(column) s.column = column
@@ -563,7 +564,6 @@ class EditStory extends React.Component {
   getStoryDetail = (story) => {
     //let story = this.props.match.params.story
     //console.log('getStoryDetail', story.contentType)
-    //console.log(story)
     if(story){
       this.setState({
         story:story,
@@ -574,7 +574,8 @@ class EditStory extends React.Component {
         column: story.column ? story.column._id : null,
         contentType: story.contentType ? story.contentType : 'NEWS',
         focusWord: story.focusWord,
-        html: story.html
+        html: story.html,
+        highlight: story.highlight,
       })
 
       this.editor.setContent(story.html || '')
@@ -756,7 +757,7 @@ class EditStory extends React.Component {
   render(){
     let {chooseLayout,layout,open,anchorEl,column,contentType,tag,addTag,searchText,
       columnList,contentTypeList,sid,alert,alertWhere,alertConfirm,alertDesc,saveStatus,
-      title,publishStatus,story,slug,metaTitle,metaDesc,html,focusWord,status} = this.state
+      title,publishStatus,story,slug,metaTitle,metaDesc,html,focusWord,status,highlight,} = this.state
 
     const dataSourceConfig = {text: 'text', value: 'value', id:'id'};
 
@@ -936,7 +937,7 @@ class EditStory extends React.Component {
         </div>
         <Paper ref='paper' id='paper'></Paper>
         <Divider/>
-				<AnalyticContainer html={html} focusWord={focusWord} title={title} />
+				<AnalyticContainer content={html} focusWord={focusWord} title={title} highlight={highlight}/>
       </Container>
 	)
     }
