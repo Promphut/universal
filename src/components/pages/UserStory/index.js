@@ -203,8 +203,15 @@ const ProfileDescription = styled.p `
 	font-weight: lighter;
 	font-family: 'CS PraJad';
 	font-size: 16px;
-	height: ${props => props.showDescription? 'auto' : '30%'};
+	height: ${props => props.showDescription ? 'auto' : '170px'};
 	display: block;
+	white-space: wrap;
+	overflow: hidden;
+	>span{
+		position:relative;
+		top: ${props => props.showDescription ? '0px' : '-170px'};
+		z-inde:-1;
+	}
 `
 
 const Blur = styled.div`
@@ -220,9 +227,11 @@ const Blur = styled.div`
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff', GradientType=0 );
 	position:relative;
 	width:100%;
-	min-height:170px;
+	max-height:170px;
+	height:100%;
+	top:0px;
+	z-index:1;
 	opacity: ${props => props.showDescription ? 0 : 1};
-	margin-top:-280px;
 	@media (min-width: 768px) and (max-width: 992px) {
 		margin-top:-70px;
 		height:70px;
@@ -237,7 +246,6 @@ const ProfileDescriptionSeeMore = styled.button `
 	font-size: 12px;
 	z-index: 10;
 	padding: 2px 32px 2px 32px;
-	margin-top:10px;
 	align-self: flex-end;
 `
 
@@ -546,8 +554,14 @@ export default class UserStory extends React.Component {
 						}
 
 						<ProfileDescription showDescription={showDescription}>
-							{/* <Blur showDescription={showDescription}/> */}
-							{user.shortDesc}
+							{/* {user.shortDesc}  */}							
+							<Blur showDescription={showDescription}>
+								<ProfileDescriptionSeeMore onClick={this.showFullDescription}>อ่านต่อ</ProfileDescriptionSeeMore>
+							</Blur> 
+							<span>URL Blocked: This redirect failed because the redirect URI is not whitelisted in the app’s Client OAuth Settings. Make sure Client and Web OAuth Login are on and add all your app domains as Valid OAuth Redirect URIs.
+							URL Blocked: This redirect failed because the redirect URI is not whitelisted in the app’s Client OAuth Settings. Make sure Client and Web OAuth Login are on and add all your app domains as Valid OAuth Redirect URIs.
+							URL Blocked: This redirect failed because the redirect URI is not whitelisted in the app’s Client OAuth Settings. Make sure Client and Web OAuth Login are on and add all your app domains as Valid OAuth Redirect URIs.  
+							</span>
 						</ProfileDescription>
 
 
