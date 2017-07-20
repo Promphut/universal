@@ -109,7 +109,7 @@ class SearchButton extends React.Component {
 
 
     componentDidMount() {
-		document.getElementById("bt").addEventListener('click', this.handleClick)
+		document.getElementById("SearchBarButton").addEventListener('click', this.handleClick)
 	}
 
     componentWillReceiveProps(nextProps) {
@@ -128,15 +128,15 @@ class SearchButton extends React.Component {
                 <MuiThemeProvider muiTheme={(!this.props.scrolling && this.props.transparent && this.props.hasCover) || theme.barTone=='dark' ? muiTheme2 : muiTheme}>
                     <ButtonContainer mar= {utils.isMobile() ? '8px' : '32px'}>
                         {utils.isMobile() ?
-                            <Link to ="/search/stories?keyword="><SearchButtonIcon id="bt" className="fa fa-search" aria-hidden="true"></SearchButtonIcon></Link>
+                            <Link to ="/search/stories?keyword="><SearchButtonIcon id="SearchBarButton" className="fa fa-search" aria-hidden="true"></SearchButtonIcon></Link>
                             :
                             <Button>
-                                <SearchButtonIcon scrolling={this.props.scrolling} transparent={this.props.transparent} hasCover={this.props.hasCover} id="bt" className="fa fa-search" aria-hidden="true"></SearchButtonIcon>
+                                <SearchButtonIcon scrolling={this.props.scrolling} transparent={this.props.transparent} hasCover={this.props.hasCover} id="SearchBarButton" className="fa fa-search" aria-hidden="true"></SearchButtonIcon>
                             </Button>
                         }
                         {this.state.focus &&
                             <TextField
-                                id="textField"
+                                id="SearchBarTextField"
                                 hintText="Search Stories"
                                 hintStyle={getStyles('hintStyle',theme.barTone, this.props.scrolling, this.props.transparent, this.props.hasCover)}
                                 inputStyle={getStyles('inputStyle',theme.barTone,theme.barTone, this.props.scrolling, this.props.transparent, this.props.hasCover)}

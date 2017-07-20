@@ -119,10 +119,10 @@ componentWillReceiveProps(nextProps){
         <Container>
           <BoxButton>
             <Link to='#' onClick={this.checkBack} className='hidden-mob'>
-              <BackButton style={{float:'left'}} />
+              <BackButton id="AuthBackButton" style={{float:'left'}} />
             </Link>
             <Link to='#' onClick={this.checkBack} className='hidden-des'>
-              <BackButton style={{float:'left'}} />
+              <BackButton id="AuthBackButton" style={{float:'left'}} />
             </Link>
           </BoxButton>
           {statePage==1&&<EmailSignUp onSubmit={this.checkEmail} />}

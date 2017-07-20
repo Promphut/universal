@@ -89,6 +89,7 @@ class EmailSignUp extends React.Component{
         <Head >Enter your Email</Head>
         <InputBox onSubmit={(e)=>onSubmit(e,this.state.email)}>
           <TextField
+            id="EmailField"
             floatingLabelText="Email"
             type="email"
             fullWidth={true}
@@ -101,6 +102,7 @@ class EmailSignUp extends React.Component{
           />
           <div style={{...styles.btnCon}}>
             <RaisedButton
+              id="ConfirmEmailButton"
               label="Next"
               labelPosition="after"
               labelColor='white'
@@ -110,7 +112,7 @@ class EmailSignUp extends React.Component{
               type='submit'
             />
           </div>
-          <Text>Already have ab account? <LinkUnderLine to='/signin'> Sign In</LinkUnderLine> </Text>
+          <Text>Already have an account? <LinkUnderLine to='/signin'> Sign In</LinkUnderLine> </Text>
         </InputBox>
       </Box>
     )

@@ -70,7 +70,7 @@ const extractMeta = (setting, url) => {
 			if(col.cover && col.cover.medium) meta.cover = col.cover.medium
 			if(col.url) meta.url = col.url
 			return meta
-		}).catch((err)=>{return Promise.resolve(meta)})
+		}).catch((err)=>{return {status: 404}})
 	} else if (path[1] === 'stories' && !(path[2].startsWith('all')||path[2].startsWith('columns'))) {
 		// 2. Story case
 			if(path.length>4 && path[4]) {
@@ -83,7 +83,7 @@ const extractMeta = (setting, url) => {
 					if(s.cover) meta.cover = s.cover.large || s.cover.medium
 					if(s.url) meta.url = s.url
 					return meta
-				}).catch((err)=>{return Promise.resolve(meta)})
+				}).catch((err)=>{return {status: 404}})
 			}else return Promise.resolve(meta)
 	} else if (path[1] && path[1].substring(0, 1) === '@') {
 		// 3. User case with username
@@ -98,7 +98,7 @@ const extractMeta = (setting, url) => {
 			if(u.desc) meta.desc = u.desc
 			if(u.url) meta.url = u.url
 			return meta
-		}).catch((err)=>{return Promise.resolve(meta)})
+		}).catch((err)=>{return {status: 404}})
 	} else if (path[1] === 'u') {
 		// 4. User case with user id
 		let uid
@@ -113,7 +113,13 @@ const extractMeta = (setting, url) => {
 			if(u.desc) meta.desc = u.desc
 			if(u.url) meta.url = u.url
 			return meta
-		}).catch((err)=>{return Promise.resolve(meta)})
+		}).catch((err)=>{return {status: 404}})
+	} else if (path[1] === 'tags'){
+		// 5. Tags case
+		let tag = path[2]
+		return api.getTagFromTagSlug(decodeURIComponent(tag))
+		.then()
+		.catch((err)=>{return {status: 404}})
 	}
 	else return Promise.resolve(meta)
 }
@@ -319,6 +325,9 @@ app.use((req, res, next) => {
 			//console.log("META", meta)
 			renderApp({ cookies:req.universalCookies, context, location, sheet, setting })
 			.then(({ html: content }) => {
+				if (meta.status == 404){
+					return res.redirect('/404')
+				}
 				if (context.status) { 
 					res.status(context.status)
 				}
