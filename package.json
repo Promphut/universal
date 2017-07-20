@@ -113,6 +113,8 @@
     "prop-types": "^15.5.8",
     "query-string": "^4.3.4",
     "react": "^15.5.4",
+    "react-async-bootstrapper": "^1.1.1",
+    "react-async-component": "^1.0.0-beta.3",
     "react-color": "^2.11.1",
     "react-cookie": "^2.0.8",
     "react-copy-to-clipboard": "^4.2.3",

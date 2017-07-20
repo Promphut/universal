@@ -77,6 +77,7 @@ const resolveModules = modules => () => ({
 const base = () => group([
   setOutput({
     filename: process.env.NODE_ENV==='development' ? '[name].js' : '[name].[chunkhash].js',
+    chunkFilename: '[name].js',
     path: outputPath,
     publicPath
   }),
@@ -118,6 +119,7 @@ const server = createConfig([
   }),
   setOutput({
     filename: '../[name].js',
+    chunkFilename: '[name].bundle.js',
     libraryTarget: 'commonjs2'
   }),
 
@@ -214,7 +216,7 @@ const client = createConfig([
     ])
   ]) : env(process.env.NODE_ENV, [
     splitVendor({ exclude: [/lodash/, /offline-plugin\/runtime\.js/] }),
-    
+
     process.env.NODE_ENV==='production' ? addPlugins([
       new webpack.optimize.UglifyJsPlugin({
         compress: {

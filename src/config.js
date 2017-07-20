@@ -21,13 +21,13 @@ const config = {
     FEED_LIMIT: 15,
     FEED_LIMIT_MOBILE: 5,
     ROLES: {
-      MEMBER: 0, 
-      EDITOR: 1, 
-      WRITER: 2, 
+      MEMBER: 0,
+      EDITOR: 1,
+      WRITER: 2,
       ADMIN: 3
     },
     ANALYTIC: {
-      FBAPPID: '406151426419674',
+      FBAPPID: '140137096570931',
       TAGMGRID: 'GTM-MCM6KWJ',
       CHARTBEATUID: 65098,
       QUANTCASTACC: 'p-uSc6wXBs-FJmv',
@@ -38,7 +38,7 @@ const config = {
   },
   development: {
     ANALYTIC: {
-      FBAPPID: '407326816302135',
+      FBAPPID: '292566221211882',
     },
     DOMAIN:     'localhost',
     FRONTURL:     'http://localhost:3000',
