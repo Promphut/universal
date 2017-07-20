@@ -20,7 +20,8 @@
     "build:copy": "copyfiles public/* public/**/* dist",
     "prebuild": "npm run build:clean && npm run build:copy",
     "build": "webpack -p",
-    "test:auth": "node src/test/auth.js"
+    "test:auth": "node src/test/auth.js",
+    "test:share": "node src/test/share.js"
   },
   "jest": {
     "moduleDirectories": [
