@@ -158,7 +158,7 @@ class SignUp extends React.Component {
         {/*<Text >ไม่พลาดทุกเรื่องราวการเงินดีๆ สมัครสมาชิค</Text>*/}
         <InputBox onSubmit={this.signup} ref='signupForm'>
           <TextField
-            
+            id="SignUpEmailField"
             hintText="Email"
             floatingLabelText="Email"
             type="email"
@@ -170,6 +170,7 @@ class SignUp extends React.Component {
             onChange={this.handleChange}
           /><br />
           <TextField
+            id="SignUpPasswordField"
             autoFocus
             hintText="Password must be at least 6 characters"
             floatingLabelText="Password"
@@ -182,6 +183,7 @@ class SignUp extends React.Component {
             onChange={this.handleChange}
           /><br />
           <TextField
+            id="SignUpPasswordAgainField"
             hintText="Password Again"
             floatingLabelText="Password"
             type="password"
@@ -193,7 +195,7 @@ class SignUp extends React.Component {
             value={password2}
             onChange={this.handleChange}
           /><br />
-          <div style={{...styles.btnCon,width:'120px'}}><PrimaryButton label='Sign Up' type='submit' style={{width:'120px'}}/></div>
+          <div style={{...styles.btnCon,width:'120px'}}><PrimaryButton id="ConfirmSignUp" label='Sign Up' type='submit' style={{width:'120px'}}/></div>
         </InputBox>
       </Box>
     )

@@ -19,7 +19,8 @@
     "build:clean": "rimraf \"dist/!(.git*|Procfile)**\"",
     "build:copy": "copyfiles public/* public/**/* dist",
     "prebuild": "npm run build:clean && npm run build:copy",
-    "build": "webpack -p"
+    "build": "webpack -p",
+    "test:auth": "node src/test/auth.js"
   },
   "jest": {
     "moduleDirectories": [
@@ -49,6 +50,7 @@
     "cross-env": "^5.0.0",
     "css-loader": "^0.28.1",
     "delay": "^2.0.0",
+    "electron": "^1.6.11",
     "enzyme": "^2.7.0",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.0.1",
@@ -62,6 +64,7 @@
     "imports-loader": "^0.7.1",
     "jest-cli": "^19.0.0",
     "longjohn": "^0.2.12",
+    "nightmare": "^2.10.0",
     "node-sass": "^4.5.3",
     "offline-plugin": "^4.8.1",
     "opn-cli": "^3.1.0",
@@ -110,6 +113,8 @@
     "prop-types": "^15.5.8",
     "query-string": "^4.3.4",
     "react": "^15.5.4",
+    "react-async-bootstrapper": "^1.1.1",
+    "react-async-component": "^1.0.0-beta.3",
     "react-color": "^2.11.1",
     "react-cookie": "^2.0.8",
     "react-copy-to-clipboard": "^4.2.3",

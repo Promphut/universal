@@ -319,7 +319,7 @@ class RightMenu extends React.Component {
 				<Nav open={open}>
 					<div className="menu menu-font">
 						{auth.hasRoles(['ADMIN', 'EDITOR']) &&
-							<Link to={'/editor'} className='hidden-mob'>
+							<Link id="EditorModeButton" to={'/editor'} className='hidden-mob'>
 								<EditMode className="nunito-font">
 									<FontIcon
 										className="material-icons"
@@ -362,12 +362,12 @@ class RightMenu extends React.Component {
 						<Divider />
 						<ul>
 							<li>
-								<Link style={hiddenMobile} to="/me/stories" onClick={close}>
+								<Link id="MyStoriesButton" style={hiddenMobile} to="/me/stories" onClick={close}>
 									My Stories
 								</Link>
 							</li>
 							<li>
-								<Link style={linkStyle} to="/me/settings" onClick={close}>
+								<Link id="EditProfileButton" style={linkStyle} to="/me/settings" onClick={close}>
 									{isMobile
 										? <FontIcon
 												style={{ paddingRight: '25px' }}
@@ -383,6 +383,7 @@ class RightMenu extends React.Component {
 						<ul>
 							<li>
 								<Link
+								  id="SettingsButton"
 									style={linkStyle}
 									to="/me/settings/account"
 									onClick={close}>
@@ -397,7 +398,7 @@ class RightMenu extends React.Component {
 								</Link>
 							</li>
 							<li>
-								<Link style={linkStyle} to="/logout">
+								<Link id="LogOutButton" style={linkStyle} to="/logout">
 									{isMobile
 										? <FontIcon
 												style={{ paddingRight: '25px' }}

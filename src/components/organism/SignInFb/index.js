@@ -153,7 +153,7 @@ class SignInFb extends React.Component {
       <Box>
         <Head className='hidden-mob'>Sign In</Head>
         <div style={styles.btnCon}>
-          <a href={config.BACKURL+'/auth/facebook?publisher='+config.PID+'&nextpathname='+encodeURIComponent(this.props.nextPathname)}>
+          <a id="SignInFacebookButton" href={config.BACKURL+'/auth/facebook?publisher='+config.PID+'&nextpathname='+encodeURIComponent(this.props.nextPathname)}>
             <RaisedButton
               label=" Sign In with facebook"
               labelPosition="after"
@@ -168,6 +168,7 @@ class SignInFb extends React.Component {
         {/*<Text style={{marginTop:'20px',fontFamily:'Nunito'}}>Or <LinkUnderLine to="#" className='hidden-mob' onClick={this.props.emailSignIn}>Sign In with an E-mail</LinkUnderLine></Text>*/}
         <InputBox onSubmit={this.signin} ref='signinForm' >
           <TextField
+            id="SignInEmailField"
             floatingLabelText="Email"
             type="email"
             value={email}
@@ -179,6 +180,7 @@ class SignInFb extends React.Component {
             hintStyle={{color:'#222'}}
           /><br />
           <TextField
+            id="SignInPasswordField"
             floatingLabelText="Password"
             type="password"
             value={password}
@@ -191,6 +193,7 @@ class SignInFb extends React.Component {
           /><br />
           <div style={{width:307,margin:'57px auto 0 auto'}}>
             <RaisedButton
+              id="SignInButton"
               label=" Sign In"
               labelPosition="after"
               type='submit'
@@ -203,7 +206,7 @@ class SignInFb extends React.Component {
         </InputBox>
         <Div className='row' style={{display:'block',overflow:'auto'}}>
           <NewLink to="/forget" style={{float:'left'}}>Forget Password?</NewLink>
-          <NewLink to="/signup" style={{float:'right'}}>Sign Up</NewLink>
+          <NewLink id="SignUpButton" to="/signup" style={{float:'right'}}>Sign Up</NewLink>
         </Div>
       </Box>
     )

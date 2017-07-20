@@ -3,7 +3,7 @@ import 'babel-polyfill'
 // require.extensions['.css'] = () => {
 //   return null
 // }
-// allow self signed cert for dev mode 
+// allow self signed cert for dev mode
 if (process.env.NODE_ENV === 'development') {
 	process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 	require('longjohn')
@@ -18,6 +18,8 @@ import { StaticRouter } from 'react-router'
 import { renderToString } from 'react-router-server'
 import { CookiesProvider } from 'react-cookie'
 import cookiesMiddleware from 'universal-cookie-express'
+import { AsyncComponentProvider, createAsyncContext } from 'react-async-component'
+import asyncBootstrapper from 'react-async-bootstrapper'
 //import forceSSL from 'express-force-ssl'
 import http from 'http'
 import https from 'https'
@@ -32,10 +34,14 @@ import api from './services/api'
 import sm from 'sitemap'
 
 const renderApp = ({ cookies, context, location, sheet, setting }) => {
+	const asyncContext = createAsyncContext()
+
 	const app = sheet.collectStyles(
 		<CookiesProvider cookies={cookies}>
 			<StaticRouter context={context} location={location}>
-				<App2 setting={setting}/>
+				<AsyncComponentProvider asyncContext={asyncContext}>
+					<App2 setting={setting}/>
+				</AsyncComponentProvider>
 				{/*<AppRoutes/>*/}
 				{/*<AppRoutes currentlocation = {req.url}/>*/}
 			</StaticRouter>
@@ -55,7 +61,7 @@ const extractMeta = (setting, url) => {
 		url : url
 	}
 
-	if(setting.publisher.name) 
+	if(setting.publisher.name)
 		meta.name = setting.publisher.name + (setting.publisher.tagline ? ' | ' + setting.publisher.tagline : '')
 
 	let path = url.split('/')
@@ -70,7 +76,7 @@ const extractMeta = (setting, url) => {
 			if(col.cover && col.cover.medium) meta.cover = col.cover.medium
 			if(col.url) meta.url = col.url
 			return meta
-		}).catch((err)=>{return Promise.resolve(meta)})
+		}).catch((err)=>{return {status: 404}})
 	} else if (path[1] === 'stories' && !(path[2].startsWith('all')||path[2].startsWith('columns'))) {
 		// 2. Story case
 			if(path.length>4 && path[4]) {
@@ -83,7 +89,7 @@ const extractMeta = (setting, url) => {
 					if(s.cover) meta.cover = s.cover.large || s.cover.medium
 					if(s.url) meta.url = s.url
 					return meta
-				}).catch((err)=>{return Promise.resolve(meta)})
+				}).catch((err)=>{return {status: 404}})
 			}else return Promise.resolve(meta)
 	} else if (path[1] && path[1].substring(0, 1) === '@') {
 		// 3. User case with username
@@ -98,7 +104,7 @@ const extractMeta = (setting, url) => {
 			if(u.desc) meta.desc = u.desc
 			if(u.url) meta.url = u.url
 			return meta
-		}).catch((err)=>{return Promise.resolve(meta)})
+		}).catch((err)=>{return {status: 404}})
 	} else if (path[1] === 'u') {
 		// 4. User case with user id
 		let uid
@@ -113,7 +119,13 @@ const extractMeta = (setting, url) => {
 			if(u.desc) meta.desc = u.desc
 			if(u.url) meta.url = u.url
 			return meta
-		}).catch((err)=>{return Promise.resolve(meta)})
+		}).catch((err)=>{return {status: 404}})
+	} else if (path[1] === 'tags'){
+		// 5. Tags case
+		let tag = path[2]
+		return api.getTagFromTagSlug(decodeURIComponent(tag))
+		.then()
+		.catch((err)=>{return {status: 404}})
 	}
 	else return Promise.resolve(meta)
 }
@@ -261,15 +273,15 @@ app.get('/sitemap.xml', (req, res)=> {
 app.get('/robots.txt', (req, res) => {
 	let robotTxt = ''
 
-	if(process.env.NODE_ENV === 'production') 
-		robotTxt = 
+	if(process.env.NODE_ENV === 'production')
+		robotTxt =
 `User-agent: *
 Disallow: /me/*
 Disallow: /editor
 Disallow: /editor/*
 Sitemap: ${FRONTURL}/sitemap.xml`
-	else 
-		robotTxt = 
+	else
+		robotTxt =
 `User-agent: *
 Disallow: /
 Sitemap: ${FRONTURL}/sitemap.xml`
@@ -319,6 +331,9 @@ app.use((req, res, next) => {
 			//console.log("META", meta)
 			renderApp({ cookies:req.universalCookies, context, location, sheet, setting })
 			.then(({ html: content }) => {
+				if (meta.status == 404){
+					return res.redirect('/404')
+				}
 				if (context.status) { 
 					res.status(context.status)
 				}
@@ -332,7 +347,7 @@ app.use((req, res, next) => {
 
 		})
 		.catch(next)
-		
+
 	})
 
 	// getMeta(req.url).then((meta)=>{

@@ -12,9 +12,10 @@ let styles={
   }
 }
 
-const BackButton = ({style,labelStyle,className})=>{
+const BackButton = ({id,style,labelStyle,className})=>{
   return(
     <FlatButton
+      id={id}
       className={'bakBTN '+className}
       label='Back'
       labelStyle={{...styles.labelBtn,...labelStyle}}

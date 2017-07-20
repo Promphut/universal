@@ -419,6 +419,7 @@ class TopBar extends React.Component {
 								<HideOnTablet>
 									<Link to="/me/stories/new">
 										<PrimaryButton
+											id="TopNewStoryButton"
 											label="Story"
 											labelStyle={{ textTransform: 'none'}}
 											iconName="add"
@@ -428,6 +429,7 @@ class TopBar extends React.Component {
 								</HideOnTablet>}
 
 							<Avatar
+								id="RightMenuButton"
 								src={user.pic.medium}
 								size={30}
 								style={avatarStyle}
@@ -439,6 +441,7 @@ class TopBar extends React.Component {
 							<SearchButton />
 							<NotLogin>
 								<RaisedButton
+									id="SignInPageButton"
 									label=" Sign In"
 									labelColor={theme.accentColor}
 									labelStyle={{top:'-2px'}}
