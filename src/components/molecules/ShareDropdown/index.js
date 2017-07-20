@@ -100,7 +100,7 @@ class ShareDropdown extends React.Component {
     const button = (
       <div onMouseLeave={this.onNotHover}>
         <div onMouseEnter={() => this.onHover(0)}>
-          <FbShareButton url={config.FRONTURL+this.props.url} button={
+          <FbShareButton id= "dropdownFb" url={config.FRONTURL+this.props.url} button={
             <FlatButton
               label={buttons[0]}
               labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
@@ -115,7 +115,7 @@ class ShareDropdown extends React.Component {
             />*/}
         </div>
         <div onMouseEnter={() => this.onHover(1)}>
-          <TwtShareButton url={config.FRONTURL+this.props.url} button={
+          <TwtShareButton id= "dropdownTwt" url={config.FRONTURL+this.props.url} button={
             <FlatButton
               label={buttons[1]}
               labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
@@ -125,7 +125,7 @@ class ShareDropdown extends React.Component {
         </div>
 
         <div onMouseEnter={() => this.onHover(2)}>
-          <InShareButton url={config.FRONTURL+this.props.url} button={
+          <InShareButton id= "dropdownIn" url={config.FRONTURL+this.props.url} button={
             <FlatButton
               label={buttons[2]}
               labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
@@ -135,7 +135,7 @@ class ShareDropdown extends React.Component {
         </div>
 
         <div onMouseEnter={() => this.onHover(3)} style={{marginTop:'-3px'}}>
-          <LineShareButton url={config.FRONTURL+this.props.url} button={
+          <LineShareButton id= "dropdownLine" url={config.FRONTURL+this.props.url} button={
             <FlatButton
               label={buttons[3]}
               labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
@@ -145,7 +145,7 @@ class ShareDropdown extends React.Component {
         </div>
 
         <div onMouseEnter={() => this.onHover(4)}>
-          <CopyToClipboard text={config.FRONTURL+this.props.url} onCopy={this.onStoryCopied}>
+          <CopyToClipboard id= "dropdownCopy" text={config.FRONTURL+this.props.url} onCopy={this.onStoryCopied}>
             <FlatButton
               label={buttons[4]}
               labelStyle={{fontWeight: 'bold', fontSize: '15px', color: theme.primaryColor, fontFamily:"'Nunito', 'Mitr'", textTransform:'none'}}
@@ -163,7 +163,7 @@ class ShareDropdown extends React.Component {
     )
 
     return(
-      <Dropdown className={this.props.className} button={buttonDropdown} float='right' marginMobile='0px 0px 0px -160px' margin='0px 0px 0px -160px'>
+      <Dropdown id = {this.props.id} className={this.props.className} button={buttonDropdown} float='right' marginMobile='0px 0px 0px -160px' margin='0px 0px 0px -160px'>
         {button}
       </Dropdown>
     )

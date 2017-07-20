@@ -324,6 +324,7 @@ class HomePage extends React.Component {
 									{feed.length != 0 &&
 										feed.map((item, index) => (
 											<ArticleBox
+												id={index == 0 ? "FirstAricle":""}
 												final={index == feed.length - 1 ? true : false}
 												detail={item}
 												key={index}

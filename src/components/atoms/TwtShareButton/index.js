@@ -8,6 +8,7 @@ import { withRouter } from 'react-router'
 class TwtShareButton extends React.Component {
 	static propTypes = {
 		button: PropTypes.node.isRequired,
+		id: PropTypes.string,
 		hashtags: PropTypes.string, // optional, a string comma seperated, default is publisher name
 		sid: PropTypes.number, // optional, default will try to pick sid from url, unless storyinsight won't be saved.
 		url: PropTypes.string // optional, default is this window.location url. If url presented with /:sid, no need to input sid, it will auto get from the url.
@@ -83,7 +84,7 @@ class TwtShareButton extends React.Component {
 		if(hashtags==null) hashtags = config.NAME*/
 
 		return (
-			<div onClick={this.handleTwtShare} style={{...this.props.style}}>
+			<div id={this.props.id} onClick={this.handleTwtShare} style={{...this.props.style}}>
 				{this.props.button}
 			</div>
 		)

@@ -240,7 +240,8 @@ class StoryDetail extends React.Component {
 
 				{!isMobile &&
 					<Share style={{ marginBottom: '32px' }}>
-						<FbShareButton
+						<FbShareButton 
+						  id = "StoryDetailTopFb"
 							button={
 								<ShareButton>
 									<b
@@ -276,6 +277,7 @@ class StoryDetail extends React.Component {
 				{isMobile &&
 					<Share style={{ marginBottom: '19px' }}>
 						<FbShareButton
+							id = "StoryDetailTopFb"
 							button={
 								<ShareButton
 									style={{
@@ -322,7 +324,7 @@ class StoryDetail extends React.Component {
 											fontFamily: 'Helvetica, Arial, sans-serif',
 											fontSize: '12px'
 										}}>
-										{(this.props.share && this.props.share.fb) + this.state.fb}
+										{utils.numberFormat((this.props.share && this.props.share.fb) + this.state.fb)}
 									</b>
 								</ShareButton>
 							}
@@ -362,6 +364,7 @@ class StoryDetail extends React.Component {
 				{!isMobile &&
 					<Share style={{ marginBottom: '32px' }}>
 						<FbShareButton
+						  id = "StoryDetailBottomFb"
 							button={
 								<ShareButton>
 									<b
@@ -397,6 +400,7 @@ class StoryDetail extends React.Component {
 				{isMobile &&
 					<Share style={{ marginBottom: '19px' }}>
 						<FbShareButton
+							id = "StoryDetailBottomFb"
 							button={
 								<ShareButton
 									style={{ width: '86px', height: '28px', display: 'flex' }}>
@@ -438,7 +442,7 @@ class StoryDetail extends React.Component {
 											fontFamily: 'Helvetica, Arial, sans-serif',
 											fontSize: '12px'
 										}}>
-										{(this.props.share && this.props.share.fb) + this.state.fb}
+										{utils.numberFormat((this.props.share && this.props.share.fb) + this.state.fb)}
 									</b>
 								</ShareButton>
 							}

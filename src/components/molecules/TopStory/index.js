@@ -159,7 +159,8 @@ const Inner = styled.div`
 
 class TopStory extends React.Component {
 	static contextTypes = {
-		setting: PropTypes.object
+		setting: PropTypes.object,
+  	id: PropTypes.string
 	}
 
 	constructor(props) {
@@ -213,6 +214,7 @@ class TopStory extends React.Component {
 						<Inner>
 							<HName className="sans-font" style={{}}>TOP STORIES</HName>
 							<SName
+								id ={this.props.id}
 								data-hover2={hover}
 								to={this.props.detail && url}
 								className="nunito-font">
@@ -234,7 +236,7 @@ class TopStory extends React.Component {
 			)
 		} else {
 			return (
-				<LargeBox
+				<LargeBox 
 					head={head}
 					large={large}
 					style={{ ...style }}
@@ -258,7 +260,7 @@ class TopStory extends React.Component {
 						/>
 						<Inner head={head}>
 							<HName className="sans-font" style={{}}>TOP STORIES</HName>
-							<SName data-hover2={hover} to={url} className="nunito-font">
+							<SName id ={this.props.id} data-hover2={hover} to={url} className="nunito-font">
 								{truncate(ptitle ? ptitle : '', { length: 60, separator: '' })}
 							</SName>
 						</Inner>

@@ -8,6 +8,7 @@ import { withRouter } from 'react-router'
 class FbShareButton extends React.Component {
 	static propTypes = {
 		button: PropTypes.node.isRequired,
+		id: PropTypes.string,
 		hashtag: PropTypes.string, // optional, default is publisher name
 		sid: PropTypes.number, // optional, default will try to pick sid from url, unless storyinsight won't be saved.
 		url: PropTypes.string // optional, default is this window.location url. If url presented with /:sid, no need to input sid, it will auto get from the url.
@@ -81,7 +82,7 @@ class FbShareButton extends React.Component {
 
 	render(){
 		return (
-			<div onClick={this.handleFbShare} style={{...this.props.style}}>
+			<div id={this.props.id} onClick={this.handleFbShare} style={{...this.props.style}}>
 				{this.props.button}
 			</div>
 		)

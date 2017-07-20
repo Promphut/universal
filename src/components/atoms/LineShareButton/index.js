@@ -8,6 +8,7 @@ import { withRouter } from 'react-router'
 class LineShareButton extends React.Component {
 	static propTypes = {
 		button: PropTypes.node.isRequired,
+		id: PropTypes.string,
 		hashtags: PropTypes.string, // optional, a string comma seperated, default is publisher name
 		sid: PropTypes.number, // optional, default will try to pick sid from url, unless storyinsight won't be saved.
 		url: PropTypes.string // optional, default is this window.location url. If url presented with /:sid, no need to input sid, it will auto get from the url.
@@ -62,7 +63,7 @@ class LineShareButton extends React.Component {
 		return <a href={utils.getLineUrl(url)} target="_blank" ref={(_a) => {this.a = _a}}>{this.props.button}</a>;*/
 
 		return (
-			<div onClick={this.handleLineShare} style={{...this.props.style}}>
+			<div id={this.props.id} onClick={this.handleLineShare} style={{...this.props.style}}>
 				{this.props.button}
 			</div>
 		)

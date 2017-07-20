@@ -149,7 +149,7 @@ const Box1 = styled.div`
   }
 `
 
-const ArticleBox = ({ detail, style, final }, context) => {
+const ArticleBox = ({ detail, style, final ,id}, context) => {
 	let {
 		ptitle,
 		cover,
@@ -199,7 +199,7 @@ const ArticleBox = ({ detail, style, final }, context) => {
 					<Div className="sans-font" style={{ margin: '0 0 7px 0', flex: 20 }}>
 						{readTime + ' min read'}
 					</Div>
-          <ShareDropdown buttonSize={16} url={url} className='hidden-mob'/>
+          <ShareDropdown id={id} buttonSize={16} url={url} className='hidden-mob'/>
 				</div>
 				<NameLink to={url} className="nunito-font" style={{ marginTop: '5px' }}>
           
