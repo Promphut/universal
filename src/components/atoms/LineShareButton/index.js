@@ -53,7 +53,7 @@ class LineShareButton extends React.Component {
 
 		if(!url) url = config.FRONTURL + this.props.location.pathname
 		
-		window.open(utils.getLineUrl(url),'_blank');
+		window.open(utils.getLineUrl(utils.appendUTM(url, {medium:'social', source:'line'})),'_blank');
 	}
 
 	render(){

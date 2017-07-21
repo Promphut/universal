@@ -64,7 +64,6 @@ utils.getTweetUrl = (url, hashtags) => {
 }
 
 utils.getLinkedInUrl = (url) => {
-	//console.log("TWT", url, hashtags)
 	return (
 		'https://www.linkedin.com/shareArticle?mini=true&url=' +
 		encodeURIComponent(url)
@@ -72,7 +71,6 @@ utils.getLinkedInUrl = (url) => {
 }
 
 utils.getLineUrl = (url) => {
-	//console.log("TWT", url, hashtags)
 	return (
 		'https://timeline.line.me/social-plugin/share?url=' +
 		encodeURIComponent(url)
@@ -83,7 +81,7 @@ utils.getLineUrl = (url) => {
 // utm: {source, medium, campaign, content}
 utils.appendUTM = (url, utm) => {
 	if (!utm) return url
-	return (
+	var utmUrl = 
 		url +
 		'?' +
 		(utm
@@ -98,7 +96,7 @@ utils.appendUTM = (url, utm) => {
 		(utm && utm.content
 			? 'utm_content=' + encodeURIComponent(utm.content) + '&'
 			: '')
-	)
+	return (utmUrl.substr(0, utmUrl.lastIndexOf("&")==-1 ? utmUrl.length : utmUrl.lastIndexOf("&")))
 }
 
 utils.getTrailingSid = url => {

@@ -53,7 +53,7 @@ class InShareButton extends React.Component {
 
 		if(!url) url = config.FRONTURL + this.props.location.pathname
 
-		window.open(utils.getLinkedInUrl(url),'_blank');
+		window.open(utils.getLinkedInUrl(utils.appendUTM(url, {medium:'social', source:'linkedin'})),'_blank');
 	}
 
 	render(){

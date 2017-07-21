@@ -97,6 +97,7 @@ class FbShareButton extends React.Component {
 		// Get sid
 		//console.log(this.props.url)
 		let url = config.FRONTURL + this.props.location.pathname
+		url = utils.appendUTM(url, {medium:'social', source:'facebook'})
 		FB.ui({
 			method: 'share',
 			display:'dialog',
