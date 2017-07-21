@@ -345,6 +345,7 @@ class StoryPage extends React.Component {
 								<Stick topOffset={100}>
 									<ShareSideBar
 										shareCount={story.shares && story.shares.total}
+										url={config.FRONTURL+story.url}
 									/>
 								</Stick>
 							</Share>

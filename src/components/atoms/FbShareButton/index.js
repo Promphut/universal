@@ -96,7 +96,7 @@ class FbShareButton extends React.Component {
 	handleFbShare3 = (e) => {
 		// Get sid
 		//console.log(this.props.url)
-		let url = config.FRONTURL + this.props.location.pathname
+		let url = this.getUrl2() //config.FRONTURL + this.props.location.pathname
 		url = utils.appendUTM(url, {medium:'social', source:'facebook'})
 		FB.ui({
 			method: 'share',
@@ -105,10 +105,11 @@ class FbShareButton extends React.Component {
 			hashtag: '#'+config.NAME,
 			href: url,
 		}, function(response){
-			let sid = this.props.sid
-			if(sid==null) sid = utils.getTrailingSid(this.props.url)
-			if(sid!=null) api.incStoryInsight(sid, 'share', 'share_fb')
+
 		})
+		// let sid = this.props.sid
+		// if(sid==null) sid = utils.getTrailingSid(this.props.url)
+		// if(sid!=null) api.incStoryInsight(sid, 'share', 'share_fb')
 		//console.log(sid)
 	}
 
