@@ -61,7 +61,7 @@ class ShareSideBar extends React.Component {
       <Div style={this.props.style}>
         <No>{utils.numberFormat(this.props.shareCount+this.state.fb)}</No>
           <div style={{color:'#8F8F8F',fontSize:'16px',fontWeight:'blod',textAlign:'center'}}>shares</div>
-          <FbShareButton id="ShareSideBarFb" button={<CirButton><i className="fa fa-facebook fa-2x" aria-hidden="true" style={{color:'white'}}></i></CirButton>} />
+          <FbShareButton id="ShareSideBarFb" url={config.FRONTURL+window.location.pathname} button={<CirButton><i className="fa fa-facebook fa-2x" aria-hidden="true" style={{color:'white'}}></i></CirButton>} />
           {this.state.status && <TwtShareButton id="ShareSideBarTwt" button={<CirButton style={{backgroundColor:'#60AADE',paddingLeft:'18px'}}><i className="fa  fa-twitter fa-2x" aria-hidden="true" style={{color:'white'}}></i></CirButton>} />}
           {this.state.status && <InShareButton id="ShareSideBarIn" button={<CirButton style={{backgroundColor:'#0077b5',paddingLeft:'18px'}}><i className="fa  fa-linkedin fa-2x" aria-hidden="true" style={{color:'white'}}></i></CirButton>} />}
           {this.state.status && <LineShareButton id="ShareSideBarLine" button={<CirButton style={{backgroundColor:'#00c300',backgroundImage:'url(/pic/line.svg)',backgroundRepeat:'no-repeat' ,backgroundPosition:'center center'}}></CirButton>} />}

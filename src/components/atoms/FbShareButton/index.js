@@ -93,6 +93,23 @@ class FbShareButton extends React.Component {
 		})
 	}
 
+	handleFbShare3 = (e) => {
+		// Get sid
+		let url = encodeURIComponent(this.getUrl2())
+		FB.ui({
+			method: 'share',
+			display:'dialog',
+			mobile_iframe: true,
+			hashtag: '#'+config.NAME,
+			href: url,
+		}, function(response){
+			let sid = this.props.sid
+			if(sid==null) sid = utils.getTrailingSid(this.props.url)
+			if(sid!=null) api.incStoryInsight(sid, 'share', 'share_fb')
+		})
+		//console.log(sid)
+	}
+
 	handleFbShare2 = (e) => {
 		// Get sid
 		let sid = this.props.sid
@@ -105,7 +122,7 @@ class FbShareButton extends React.Component {
 
 	render(){
 		return (
-			<div id={this.props.id} onClick={this.handleFbShare2} style={{...this.props.style}}>
+			<div id={this.props.id} onClick={this.handleFbShare3} style={{...this.props.style}}>
 				{this.props.button}
 			</div>
 		)
