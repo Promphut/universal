@@ -8,6 +8,7 @@ import { withRouter } from 'react-router'
 class InShareButton extends React.Component {
 	static propTypes = {
 		button: PropTypes.node.isRequired,
+		id: PropTypes.string,
 		hashtags: PropTypes.string, // optional, a string comma seperated, default is publisher name
 		sid: PropTypes.number, // optional, default will try to pick sid from url, unless storyinsight won't be saved.
 		url: PropTypes.string // optional, default is this window.location url. If url presented with /:sid, no need to input sid, it will auto get from the url.
@@ -52,7 +53,7 @@ class InShareButton extends React.Component {
 
 		if(!url) url = config.FRONTURL + this.props.location.pathname
 
-		window.open(utils.getLinkedInUrl(url),'_blank');
+		window.open(utils.getLinkedInUrl(utils.appendUTM(url, {medium:'social', source:'linkedin'})),'_blank');
 	}
 
 	render(){
@@ -62,7 +63,7 @@ class InShareButton extends React.Component {
 		return <a href={utils.getLineUrl(url)} target="_blank" ref={(_a) => {this.a = _a}}>{this.props.button}</a>;*/
 
 		return (
-			<div onClick={this.handleInShare} style={{...this.props.style}}>
+			<div id={this.props.id} onClick={this.handleInShare} style={{...this.props.style}}>
 				{this.props.button}
 			</div>
 		)

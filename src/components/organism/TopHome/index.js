@@ -116,7 +116,7 @@ class TopHome extends React.Component {
 			<Content>
 				<Feed>
 					{trendingStories.length != 0 &&
-						<TopStory head={true} swift={true} detail={trendingStories[0]} />}
+						<TopStory id="FirstTrendingStories" head={true} swift={true} detail={trendingStories[0]} />}
 					{trendingStories.length != 0 &&
 						<TopStory swift={true} large={true} detail={trendingStories[1]} />}
 					{/*<TopVideo large={true}></TopVideo>*/}

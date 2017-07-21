@@ -133,6 +133,7 @@ class SignIn extends React.Component {
         <Head>Email Sign In</Head>
         <InputBox onSubmit={this.signin} ref='signinForm'>
           <TextField
+            id="SignInEmailField"
             autoFocus
             hintText="Email"
             floatingLabelText="Email"
@@ -143,6 +144,7 @@ class SignIn extends React.Component {
             errorText={errText0}
           /><br />
           <TextField
+            id="SignInPasswordField"
             hintText="Password Field"
             floatingLabelText="Password"
             type="password"
@@ -151,7 +153,7 @@ class SignIn extends React.Component {
             name='password'
             errorText={errText1}
           /><br />
-          <div style={styles.btnCon}><PrimaryButton label='Sign In' type='submit'/></div>
+          <div id="SignInButton" style={styles.btnCon}><PrimaryButton label='Sign In' type='submit'/></div>
         </InputBox>
         <Div style={{marginBottom:'20px'}}>
           <NewLink to="/forget" style={{float:'left'}}>Forget Password?</NewLink>

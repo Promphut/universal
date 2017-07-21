@@ -8,6 +8,7 @@ import { withRouter } from 'react-router'
 class TwtShareButton extends React.Component {
 	static propTypes = {
 		button: PropTypes.node.isRequired,
+		id: PropTypes.string,
 		hashtags: PropTypes.string, // optional, a string comma seperated, default is publisher name
 		sid: PropTypes.number, // optional, default will try to pick sid from url, unless storyinsight won't be saved.
 		url: PropTypes.string // optional, default is this window.location url. If url presented with /:sid, no need to input sid, it will auto get from the url.
@@ -19,14 +20,14 @@ class TwtShareButton extends React.Component {
 		//this.state = { url:'' }
 	}
 
-	getUrl = (done) => {
+	/*getUrl = (done) => {
 		let url = this.props.url
 		if(!url){
 			url = config.FRONTURL + this.props.location.pathname
 		}
 		api.shorten(url, {medium:'social', source:'twitter'})
 		.then(done)
-	}
+	}*/
 
 	/*componentWillReceiveProps(nextProps){
 		if(nextProps.url && this.props.url != nextProps.url){
@@ -64,14 +65,19 @@ class TwtShareButton extends React.Component {
 
 	handleTwtShare = (e) => {
 		let sid = this.props.sid
-		let url = this.props.url
 		if(sid==null) sid = utils.getTrailingSid(this.props.url)
 		if(sid!=null) api.incStoryInsight(sid, 'share', 'share_twt')
-		this.getUrl(res => {
-			let hashtag = this.props.hashtag
-			if(hashtag==null) hashtag = config.NAME
-			window.open(utils.getTweetUrl(res.url, hashtag),'_blank');
-		})
+		let hashtag = this.props.hashtag
+		if(hashtag==null) hashtag = config.NAME
+		let url = this.props.url
+		if(!url){
+			url = config.FRONTURL + this.props.location.pathname
+		}
+		var win = window.open('about:blank');
+		api.shorten(url, {medium:'social', source:'twitter'})
+			.then(res=>{
+				win.location = utils.getTweetUrl(res.url, hashtag)
+			})
 	}
 
 	render(){
@@ -83,7 +89,7 @@ class TwtShareButton extends React.Component {
 		if(hashtags==null) hashtags = config.NAME*/
 
 		return (
-			<div onClick={this.handleTwtShare} style={{...this.props.style}}>
+			<div id={this.props.id} onClick={this.handleTwtShare} style={{...this.props.style}}>
 				{this.props.button}
 			</div>
 		)

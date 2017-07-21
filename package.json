@@ -19,7 +19,9 @@
     "build:clean": "rimraf \"dist/!(.git*|Procfile)**\"",
     "build:copy": "copyfiles public/* public/**/* dist",
     "prebuild": "npm run build:clean && npm run build:copy",
-    "build": "webpack -p"
+    "build": "webpack -p",
+    "test:auth": "node src/test/auth.js",
+    "test:share": "node src/test/share.js"
   },
   "jest": {
     "moduleDirectories": [
@@ -49,6 +51,7 @@
     "cross-env": "^5.0.0",
     "css-loader": "^0.28.1",
     "delay": "^2.0.0",
+    "electron": "^1.6.11",
     "enzyme": "^2.7.0",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.0.1",
@@ -62,6 +65,7 @@
     "imports-loader": "^0.7.1",
     "jest-cli": "^19.0.0",
     "longjohn": "^0.2.12",
+    "nightmare": "^2.10.0",
     "node-sass": "^4.5.3",
     "offline-plugin": "^4.8.1",
     "opn-cli": "^3.1.0",

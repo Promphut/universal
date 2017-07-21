@@ -172,6 +172,10 @@ const PrimaryButton = (props, context) => {
 		opt.icon = React.createElement('i', newProps, props.icon.children)
 	}
 
+	if(props.id){
+		opt.id = props.id
+	}
+
 	if (props.buttonStyle === 'Flat') {
 		return React.createElement(FlatButton, opt, null)
 	}

@@ -791,7 +791,7 @@ api.shorten = (url, utm) => {
 	.get('https://api-ssl.bitly.com/v3/shorten')
 	.query({
 		access_token: config.ANALYTIC.BITLY,
-		longUrl: url
+		longUrl: encodeURIComponent(url)
 	})
 	.set('Accept','application/json')
 	.then(res => {

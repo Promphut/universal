@@ -8,6 +8,7 @@ import { withRouter } from 'react-router'
 class FbShareButton extends React.Component {
 	static propTypes = {
 		button: PropTypes.node.isRequired,
+		id: PropTypes.string,
 		hashtag: PropTypes.string, // optional, default is publisher name
 		sid: PropTypes.number, // optional, default will try to pick sid from url, unless storyinsight won't be saved.
 		url: PropTypes.string // optional, default is this window.location url. If url presented with /:sid, no need to input sid, it will auto get from the url.
@@ -16,7 +17,6 @@ class FbShareButton extends React.Component {
 	constructor(props) {
 		super(props)
 	}
-
 	getUrl = (done) => {
 		// Get url
 		let url = this.props.url
@@ -26,6 +26,20 @@ class FbShareButton extends React.Component {
 		api.shorten(url, {medium:'social', source:'facebook'})
 		.then(done)
 	}
+
+	getUrl2 = () => {
+		let url = this.props.url
+		if(!url){
+			url = config.FRONTURL + this.props.location.pathname
+		}
+		return url
+	}
+
+	popupwindow(url, title, w, h) {
+		var left = (screen.width/2)-(w/2);
+		var top = (screen.height/2)-(h/2);
+		return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+	} 
 
 	handleFbShare = (e) => {
 		// Get sid
@@ -39,7 +53,7 @@ class FbShareButton extends React.Component {
 			// Set hashtags
 			let hashtag = this.props.hashtag
 			if(hashtag==null) hashtag = '#'+config.NAME
-
+	
 			// FB.login(function(response) {
 			// 		if (response.authResponse) {
 			// 		console.log('Welcome!  Fetching your information.... ');
@@ -79,9 +93,38 @@ class FbShareButton extends React.Component {
 		})
 	}
 
+	handleFbShare3 = (e) => {
+		// Get sid
+		//console.log(this.props.url)
+		let url = config.FRONTURL + this.props.location.pathname
+		url = utils.appendUTM(url, {medium:'social', source:'facebook'})
+		FB.ui({
+			method: 'share',
+			display:'dialog',
+			mobile_iframe: true,
+			hashtag: '#'+config.NAME,
+			href: url,
+		}, function(response){
+			let sid = this.props.sid
+			if(sid==null) sid = utils.getTrailingSid(this.props.url)
+			if(sid!=null) api.incStoryInsight(sid, 'share', 'share_fb')
+		})
+		//console.log(sid)
+	}
+
+	handleFbShare2 = (e) => {
+		// Get sid
+		let sid = this.props.sid
+		if(sid==null) sid = utils.getTrailingSid(this.props.url)
+		let hashtag = this.props.hashtag
+		if(hashtag==null) hashtag = encodeURIComponent('#'+config.NAME)
+		let url = encodeURIComponent(this.getUrl2())
+		this.popupwindow(`https://www.facebook.com/sharer/sharer.php?u=${url}&hashtag=${hashtag}`,'hi',500,400)
+	}
+
 	render(){
 		return (
-			<div onClick={this.handleFbShare} style={{...this.props.style}}>
+			<div id={this.props.id} onClick={this.handleFbShare3} style={{...this.props.style}}>
 				{this.props.button}
 			</div>
 		)
