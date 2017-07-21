@@ -96,7 +96,7 @@ class FbShareButton extends React.Component {
 	handleFbShare3 = (e) => {
 		// Get sid
 		//console.log(this.props.url)
-		let url = encodeURIComponent(this.getUrl2())
+		let url = config.FRONTURL + this.props.location.pathname
 		FB.ui({
 			method: 'share',
 			display:'dialog',
