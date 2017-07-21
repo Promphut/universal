@@ -40,7 +40,7 @@ const Content2 = styled.div`
 	display: flex;
 	flex-flow: row wrap;
 	justify-content:center;
-	min-height: calc(100vh - ${props => (props.isMobile ? '191px' : '456px')});
+	min-height: calc(100vh - ${props => (props.isMobile ? '191px' : '450px')});
 
 	@media (max-width:480px) {
 		display: block;

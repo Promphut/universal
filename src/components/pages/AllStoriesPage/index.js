@@ -24,9 +24,10 @@ const Content = styled.div`
 	flex-flow: row wrap;
 	padding-top: 100px;
 	justify-content:center;
+	min-height: calc(100vh - ${props => (props.isMobile ? '200px' : '302px')});
 	@media (max-width:480px) {
 		display: block;
-		padding: 60px 0 0 0;
+		padding: 80px 0 0 0;
   }
 `
 const Content2 = styled.div`
@@ -154,6 +155,7 @@ export default class AllStoriesPage extends React.Component {
 			feed: [],
 			totalPages: 0,
 			isEmpty: false,
+			isChanging: false,
 
 			loading: false,
 			initialLoading: true,
@@ -189,7 +191,7 @@ export default class AllStoriesPage extends React.Component {
 						isEmpty: result.count['total']==0 || (!result.count['1'])
 					},
 					() => {
-						this.setState({loading:false,initialLoading:false})
+						this.setState({loading:false,initialLoading:false,isChanging:false})
 					}
 				)
 			})
@@ -205,11 +207,8 @@ export default class AllStoriesPage extends React.Component {
 		}
     }
 
-    componentWillMount(){
-        this.getAllFeed()
-    }
-
     componentDidMount() {
+		this.getAllFeed()
         this.setState({
             isMobile: utils.isMobile(),
         })
@@ -219,6 +218,7 @@ export default class AllStoriesPage extends React.Component {
         if(nextProps.location.search != this.props.location.search){
             document.body.scrollTop = document.documentElement.scrollTop = 0
             this.setState({
+				isChanging : true,
 				currentPage : utils.querystring('page',nextProps.location) ? utils.querystring('page',nextProps.location)-1 : 0 ,
 				type: utils.querystring('type',nextProps.location) ? utils.querystring('type',nextProps.location) : 'article',
 				sort: utils.querystring('sort',nextProps.location) ? utils.querystring('sort',nextProps.location) : 'latest' ,
@@ -231,7 +231,7 @@ export default class AllStoriesPage extends React.Component {
 
     render() {
 		let { theme } = this.context.setting.publisher
-		let { isMobile, completed, totalPages, currentPage, loading, feed, feedCount, initialLoading, isEmpty} = this.state
+		let { isMobile, completed, totalPages, currentPage, loading, feed, feedCount, initialLoading, isEmpty, isChanging} = this.state
 
 		return (
         <Wrapper>
@@ -240,8 +240,8 @@ export default class AllStoriesPage extends React.Component {
             <Content isMobile={isMobile}>
 
                 <Main>
-                    <TextLine className="sans-font hidden-mob">{toUpper((this.state.type=='article') ? 'STORIES' : this.state.type)}</TextLine>
-                    <Dash className="hidden-mob" style={{ margin: '5px 0 10px 0' }} />
+                    <TextLine className="sans-font">{toUpper((this.state.type=='article') ? 'STORIES' : this.state.type)}</TextLine>
+                    <Dash style={{ margin: '5px 0 10px 0' }} />
 
                     <FilterContainer>
                         <FilterItem mobile = {utils.isMobile()} onClick={(e) => this.changeSort('latest')} select={this.state.sort === 'latest'}>LATEST</FilterItem>
@@ -300,7 +300,7 @@ export default class AllStoriesPage extends React.Component {
 
 
 							<Page>
-								{ (totalPages > currentPage && currentPage >= 0) &&
+								{ (!isChanging && totalPages > currentPage && currentPage >= 0) &&
 									<Pagination
                                         hideFirstAndLastPageLinks={utils.isMobile() ? false : true}
                                         hidePreviousAndNextPageLinks={utils.isMobile() ? true : false}

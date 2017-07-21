@@ -65,7 +65,7 @@ class Dropdown extends React.Component {
 
   render () {
     return (
-      <DropdownWrapper loat={this.props.float} style={{...this.props.style}} className={this.props.className}>
+      <DropdownWrapper float={this.props.float} style={{...this.props.style}} className={this.props.className}>
         <DropdownButton id={this.props.id} onClick={this.handleClick}>
           {this.props.button}
         </DropdownButton>

@@ -122,7 +122,11 @@ const extractMeta = (setting, url) => {
 		}).catch((err)=>{return {status: 404}})
 	} else if (path[1] === 'tags'){
 		// 5. Tags case
-		let tag = path[2]
+		let tag
+		if(path[2].indexOf("?") != -1)
+			tag = path[2].substring(0,path[2].indexOf("?"))
+		else
+			tag = path[2]
 		return api.getTagFromTagSlug(decodeURIComponent(tag))
 		.then()
 		.catch((err)=>{return {status: 404}})

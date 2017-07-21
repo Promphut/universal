@@ -10,16 +10,19 @@ import {
 	Footer,
 	TagSideBar,
 	EmptyStory,
-	BackToTop
+	BackToTop,
+	Pagination
 } from 'components'
+import { Link } from 'react-router-dom'
 import { findDOMNode as dom } from 'react-dom'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 import FlatButton from 'material-ui/FlatButton'
 import FontIcon from 'material-ui/FontIcon'
 import api from '../../../services/api'
-import InfiniteScroll from 'react-infinite-scroller'
 import CircularProgress from 'material-ui/CircularProgress'
 import utils from '../../../services/utils'
+import config from '../../../config'
 
 const Wrapper = styled.div`
 
@@ -29,7 +32,8 @@ const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
-	padding:50px 0 50px 0;
+	padding:50px 20px 0;
+	min-height: calc(100vh - ${props => (props.isMobile ? '200px' : '320px')});
 `
 
 const Main = styled.div`
@@ -120,20 +124,37 @@ const Onload = styled.div`
 	height:70px;
 	margin:50px 0 50px 0;
 `
+const Page = styled.div`
+    display: flex;
+        flex-flow: row wrap;
+        justify-content: center;
+    padding:20px 0 20px 0;
+`
 
 class TagPage extends React.Component {
-	state = {
-		isMobile: false,
-		tag: {},
 
-		page: 0,
-		feedCount: 1,
-		feed: [],
-		hasMoreFeed: true
+	FEED_LIMIT = utils.isMobile() ? config.FEED_LIMIT_MOBILE*2 : config.FEED_LIMIT;
+
+	static contextTypes = {
+		setting: PropTypes.object
 	}
 
 	constructor(props) {
 		super(props)
+
+		this.state = {
+			isMobile: false,
+			tag: {},
+
+			currentPage: utils.querystring('page',this.props.location) ? utils.querystring('page',this.props.location) - 1 : 0,
+			feedCount: 1,
+			feed: [],
+			totalPages: 0,
+			isEmpty: false,
+
+			loading: false,
+			initialLoading: true,
+		}
 	}
 
 	onload = () => (
@@ -147,56 +168,37 @@ class TagPage extends React.Component {
 			</div>
 		</Onload>
 	)
-	reloadFeed = () => {
-		this.setState(
-			{
-				page: 0,
-				feedCount: 1,
-				feed: [],
-				hasMoreFeed: true
-			},
-			() => {
-				this.loadFeed(this.state.tag._id)()
-			}
-		)
-	}
-	loadFeed = tagId => {
-		return () => {
-			//console.log('LOAD FEED0', tagId, this.loading)
-			if (tagId == null) return
-			// ensure this method is called only once at a time
-			if (this.loading === true) return
-			this.loading = true
-			//console.log('LOAD FEED1')
 
-			let page = this.state.page
-			//console.log('page', page)
+	loadFeed = () => {
+		
+		if (this.state.loading === true) return
+	
+		this.state.loading = true
 
-			api
-				.getFeed('story', { status: 1, tags: tagId }, 'latest', null, page, 15)
-				.then(result => {
-					let feed = this.state.feed.concat(result.feed)
-					this.setState(
-						{
-							page: ++page,
-							feed: feed,
-							feedCount: result.count['1']?result.count['1']:0,
-							hasMoreFeed: feed.length < result.count['1']
-						},
-						() => {
-							this.loading = false
-						}
-					)
-				})
-		}
+		let currentPage = this.state.currentPage
+		let tagId = this.state.tag._id
+
+		api.getFeed('story', { status: 1, tags: tagId }, 'latest', null, currentPage, this.FEED_LIMIT)
+			.then(result => {
+				this.setState(
+					{
+						feed: result.feed,
+						feedCount: result.count['1'] ? result.count['1'] : 0,
+						totalPages: result.count['1'] ? utils.getTotalPages(this.FEED_LIMIT, result.count['1']) : 0,
+						isEmpty: result.count['total']==0 || (!result.count['1'])
+					},
+					() => {
+						this.setState({loading:false,initialLoading:false})
+					}
+				)
+			})
 	}
 
 	getTagFromSlug = (tagSlug, done = () => {}) => {
 		//console.log('PROP', this.props)
 		if (!tagSlug) utils.notFound(this.props.history)
 
-		api
-			.getTagFromTagSlug(tagSlug)
+		api.getTagFromTagSlug(tagSlug)
 			.then(tag => {
 				this.setState({ tag: tag }, done)
 			})
@@ -205,8 +207,12 @@ class TagPage extends React.Component {
 			})
 	}
 
+	changePage = e => {
+        this.props.history.push({ search: "?page=" + e})
+    }
+
 	componentDidMount() {
-		this.getTagFromSlug(this.props.match.params.tagSlug)
+		this.getTagFromSlug(this.props.match.params.tagSlug, this.loadFeed)
 
 		this.setState({
 			isMobile: utils.isMobile()
@@ -214,29 +220,113 @@ class TagPage extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		//console.log('COL', nextProps, this.props)
 		if (nextProps.match.params.tagSlug != this.props.match.params.tagSlug) {
-			//console.log('RELOAD FEED')
-			this.getTagFromSlug(nextProps.match.params.tagSlug, this.reloadFeed)
-			//this.reloadFeed()
-		}
+			this.getTagFromSlug(nextProps.match.params.tagSlug, this.loadFeed)
+		} else if(nextProps.location.search != this.props.location.search){
+            document.body.scrollTop = document.documentElement.scrollTop = 0
+            this.setState({
+				currentPage : utils.querystring('page',nextProps.location) ? utils.querystring('page',nextProps.location)-1 : 0 ,
+				feed: [],
+			},()=>{
+				this.loadFeed()
+            })
+        }
 	}
 
 	render() {
 		//const BGImgSize = (utils.isMobile() ? 100 : 280) + 60
-		let { column, isMobile, tag } = this.state
-		let { feedCount, feed, hasMoreFeed } = this.state
+		let { theme } = this.context.setting.publisher
+		let { column, isMobile, tag, feedCount, feed, isEmpty, currentPage, totalPages, loading, initialLoading } = this.state
 
 		return (
 			<Wrapper>
 				<TopBarWithNavigation
-					
 					onLoading={this.props.onLoading}
 				/>
 
-				<Content>
+				<Content isMobile={isMobile}>
+					<Main>
+						<TextLine
+							className="sans-font"
+							style={{ border: 'none', marginTop: '60px' }}>
+							tag
+						</TextLine>
+						<TagName
+							className="nunito-font"
+							style={{ margin: '10px 0 50px 0' }}>
+							{tag.name}
+						</TagName>
 
-					{feedCount <= 0
+						{ (loading || initialLoading) ? this.onload() :
+							<div>
+								{ (feed && currentPage >= 0) &&
+									<TextLine className="sans-font">Latest</TextLine>
+								}
+
+								{ (feed && currentPage >= 0) &&
+									feed.map((item, index) => (
+									<ArticleBox final={index == feed.length -1 ? true:false} detail={item} key={index} />))
+								}
+
+								{ (isEmpty) &&
+									<EmptyStory
+										title="No Story, yet"
+										description={
+											<div>
+												There are no stories in this tag right now. Wanna back to
+												<Link
+													to="/"
+													style={{
+														color: theme.accentColor,
+														padding: '0 0.5em 0 0.5em'
+													}}>
+													home
+												</Link>
+												?
+											</div>
+										}
+									/>
+								}
+
+								{ (!isEmpty && !(totalPages > currentPage && currentPage >= 0)) &&
+									<EmptyStory
+										title="No More Story"
+										description={
+											<div>
+												There are no more stories in this tag. Go back to
+												<Link
+													to={"/tags/" + this.state.tag.slug  + "?page=1"}
+													style={{
+														color: theme.accentColor,
+														padding: '0 0.5em 0 0.5em'
+													}}>
+													first page
+												</Link>
+												?
+											</div>
+										}
+										hideButton={true}
+									/>
+								}
+
+								<Page>
+									{ (totalPages > currentPage && currentPage >= 0) &&
+										<Pagination
+											hideFirstAndLastPageLinks={utils.isMobile() ? false : true}
+											hidePreviousAndNextPageLinks={utils.isMobile() ? true : false}
+											boundaryPagesRange={utils.isMobile() ? 0 : 1}
+											currentPage={currentPage + 1}
+											totalPages={totalPages}
+											onChange={this.changePage}
+										/>
+									}
+								</Page>
+							</div>
+						}
+					</Main>
+				
+
+					{/* {feedCount <= 0
 						? <Main>
 								<TextLine
 									className="sans-font"
@@ -278,7 +368,7 @@ class TagPage extends React.Component {
 										))}
 									</div>
 								</InfiniteScroll>
-							</Main>}
+							</Main>} */}
 
 					<Aside>
 						<TagSideBar style={{ marginTop:'50px'}} />
