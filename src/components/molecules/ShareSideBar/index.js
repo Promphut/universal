@@ -61,10 +61,10 @@ class ShareSideBar extends React.Component {
       <Div style={this.props.style}>
         <No>{utils.numberFormat(this.props.shareCount+this.state.fb)}</No>
           <div style={{color:'#8F8F8F',fontSize:'16px',fontWeight:'blod',textAlign:'center'}}>shares</div>
-          <FbShareButton id="ShareSideBarFb" button={<CirButton><i className="fa fa-facebook fa-2x" aria-hidden="true" style={{color:'white'}}></i></CirButton>} />
-          {this.state.status && <TwtShareButton id="ShareSideBarTwt" button={<CirButton style={{backgroundColor:'#60AADE',paddingLeft:'18px'}}><i className="fa  fa-twitter fa-2x" aria-hidden="true" style={{color:'white'}}></i></CirButton>} />}
-          {this.state.status && <InShareButton id="ShareSideBarIn" button={<CirButton style={{backgroundColor:'#0077b5',paddingLeft:'18px'}}><i className="fa  fa-linkedin fa-2x" aria-hidden="true" style={{color:'white'}}></i></CirButton>} />}
-          {this.state.status && <LineShareButton id="ShareSideBarLine" button={<CirButton style={{backgroundColor:'#00c300',backgroundImage:'url(/pic/line.svg)',backgroundRepeat:'no-repeat' ,backgroundPosition:'center center'}}></CirButton>} />}
+          <FbShareButton id="ShareSideBarFb" url={this.props.url} button={<CirButton><i className="fa fa-facebook fa-2x" aria-hidden="true" style={{color:'white'}}></i></CirButton>} />
+          {this.state.status && <TwtShareButton url={this.props.url} id="ShareSideBarTwt" button={<CirButton style={{backgroundColor:'#60AADE',paddingLeft:'18px'}}><i className="fa  fa-twitter fa-2x" aria-hidden="true" style={{color:'white'}}></i></CirButton>} />}
+          {this.state.status && <InShareButton url={this.props.url} id="ShareSideBarIn" button={<CirButton style={{backgroundColor:'#0077b5',paddingLeft:'18px'}}><i className="fa  fa-linkedin fa-2x" aria-hidden="true" style={{color:'white'}}></i></CirButton>} />}
+          {this.state.status && <LineShareButton url={this.props.url} id="ShareSideBarLine" button={<CirButton style={{backgroundColor:'#00c300',backgroundImage:'url(/pic/line.svg)',backgroundRepeat:'no-repeat' ,backgroundPosition:'center center'}}></CirButton>} />}
           <div id="ShareSideBarMore" onClick={this.ToggleButton}>
           {this.state.status && <CirButton style={{backgroundColor:'#C7C7C7',paddingLeft:'18px',paddingBottom:'10px'}}><i className="fa fa-times fa-2x" aria-hidden="true" style={{color:'white'}}></i></CirButton>}
           {!this.state.status && <CirButton style={{backgroundColor:'#C7C7C7',paddingLeft:'18px',paddingBottom:'1px'}}><i className="fa fa-ellipsis-h fa-2x" aria-hidden="true" style={{color:'white'}}></i></CirButton>}

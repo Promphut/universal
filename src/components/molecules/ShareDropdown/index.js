@@ -45,6 +45,7 @@ class ShareDropdown extends React.Component {
   }
 
   render() {
+    //console.log(this.props.url)
     let {theme} = this.context.setting.publisher
     const buttonStyle = {
       color: theme.primaryColor,
