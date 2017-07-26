@@ -306,7 +306,7 @@ class HomePage extends React.Component {
 			<Wrapper>
 				{!isEmpty(pub) && !utils.isMobile() && <BgWithLogo data={pub} />}
 
-				<TopBarWithNavigation onLoading={this.props.onLoading} />
+				<TopBarWithNavigation special={true} onLoading={this.props.onLoading} />
 
 				<TopHome />
 
