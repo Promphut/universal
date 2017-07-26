@@ -9,6 +9,9 @@
     "env:prod": "cross-env NODE_ENV=production",
     "env:test": "cross-env NODE_ENV=test",
     "test": "jest",
+    "test:app2": "jest App2.test.js --",
+    "test:auth": "node src/test/auth.js",
+    "test:share": "node src/test/share.js",
     "coverage": "npm test -- --coverage",
     "postcoverage": "opn coverage/lcov-report/index.html",
     "lint": "eslint src private webpack.config.js",
@@ -19,9 +22,7 @@
     "build:clean": "rimraf \"dist/!(.git*|Procfile)**\"",
     "build:copy": "copyfiles public/* public/**/* dist",
     "prebuild": "npm run build:clean && npm run build:copy",
-    "build": "webpack -p",
-    "test:auth": "node src/test/auth.js",
-    "test:share": "node src/test/share.js"
+    "build": "webpack -p"
   },
   "jest": {
     "moduleDirectories": [

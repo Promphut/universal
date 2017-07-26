@@ -72,6 +72,16 @@ const UserInfoContainer = styled.div `
 	margin-bottom: 0px;
 `
 
+const UserInfoContainerDesktop = styled.div `
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	padding-top: 160px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+`
+
 const UserInfoPrimaryText = styled.h1 `
 	margin-top: 16px;
 	margin-bottom: 0px;
@@ -109,6 +119,17 @@ const UserInfoSection = styled.div `
 	width: 100%;
 	background-color: ${props => props.role === 'admin' ? '#fafafa' : 'white' };
 	padding-bottom: 24px;
+`
+
+const UserInfoSectionDesktop = styled.div `
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	padding-top: 40px;
+	margin-top: 0px;
+	margin-bottom: 0px;
 `
 
 const SeeMoreDescriptionSection = UserInfoSection.extend `
@@ -203,15 +224,32 @@ const ProfileDescription = styled.p `
 	font-weight: lighter;
 	font-family: 'CS PraJad';
 	font-size: 16px;
-	height: ${props => props.showDescription ? 'auto' : '170px'};
+	height: ${props => props.showDescription ? 'auto' : '100px'};
 	display: block;
 	white-space: wrap;
 	overflow: hidden;
 	>span{
 		position:relative;
-		top: ${props => props.showDescription ? '0px' : '-170px'};
-		z-inde:-1;
+		top: ${props => props.showDescription ? '0px' : '-100px'};
+		z-index:0;
 	}
+`
+
+const ProfileDescriptionDesktop = styled.p `
+	width: 610px;
+	margin: 40px auto 80px auto;
+	padding: 32px 0 32px 0;
+	text-align: center;
+	color: #222222;
+	font-weight: lighter;
+	font-family: 'CS PraJad';
+	font-size: 16px;
+	display: block;
+	white-space: wrap;
+	overflow: hidden;
+	border-width: 1px 0 1px 0;
+	border-style: solid;
+	border-color: #E2E2E2;
 `
 
 const Blur = styled.div`
@@ -227,7 +265,7 @@ const Blur = styled.div`
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff', GradientType=0 );
 	position:relative;
 	width:100%;
-	max-height:170px;
+	max-height:100px;
 	height:100%;
 	top:0px;
 	z-index:1;
@@ -363,7 +401,7 @@ export default class UserStory extends React.Component {
 		api.getUserFromUsername(username)
 			.then(user => {
 				this.checkIsNormalUser(user.id)
-				this.setState({ user: user}, done)
+				this.setState({ user: user, showDescription : user.shortDesc.length < 500 &&false}, done)
 			})
 			.catch(err => {
 				utils.notFound(this.props.history, err)
@@ -376,7 +414,7 @@ export default class UserStory extends React.Component {
 		api.getUserFromUserId(uid)
 			.then(user => {
 				this.checkIsNormalUser(user.id)
-				this.setState({ user: user}, done)
+				this.setState({ user: user, showDescription : user.shortDesc.length < 500 &&false}, done)
 			})
 			.catch(err => {
 				utils.notFound(this.props.history, err)
@@ -477,10 +515,12 @@ export default class UserStory extends React.Component {
 
 			return (
 				<Wrapper>
-					{!utils.isMobile() && <TopBarWithNavigation className="hidden-mob" />}
-					{!isNormalUser ?
+					<TopBarWithNavigation className="hidden-mob" />
+					
+					{utils.isMobile() ? 
+						!isNormalUser  ?
 						// Admin
-						<EditorProfilePictureSection userProfileImage = {user.pic.medium}>
+						<EditorProfilePictureSection userProfileImage = {user.pic.large}>
 							<TopBarContainer>
 
 								<TopBarLeftItem>
@@ -524,48 +564,65 @@ export default class UserStory extends React.Component {
 							<UserInfoContainer>
 
 								<UserAvatarContainer>
-									<UserAvatar src={user.pic.medium} size={95} />
+									<UserAvatar src={user.pic.large} size={95} />
 								</UserAvatarContainer>
 
 								<UserInfoPrimaryText>{user.display}</UserInfoPrimaryText>
 								<UserInfoSecondaryText>{user.intro}</UserInfoSecondaryText>
 
 								<SocialButtonContainer>
-									<UserSocialBar colorPack={"light"} channels={{}}/>
+									<UserSocialBar colorPack={theme.barTone} channels={user.channels}/>
 								</SocialButtonContainer>
 
 							</UserInfoContainer>
 						</UserProfileSection>
+					:
+						<UserInfoContainerDesktop>
+							<UserAvatarContainer>
+								<UserAvatar src={user.pic.large} size={300} />
+							</UserAvatarContainer>
+						</UserInfoContainerDesktop>
 					}
+					{/*----------------------------------------------------------------------------*/}
+					{utils.isMobile() ? 
+						<UserInfoSection role={isNormalUser ? 'user' : 'admin'}>
+							{!isNormalUser &&
+								<Card>
+									<CardTitle>{user.display}</CardTitle>
+									<CardSubtitle>{user.intro}</CardSubtitle>
 
-					<UserInfoSection role={isNormalUser ? 'user' : 'admin'}>
-						{!isNormalUser &&
-							<Card>
-								<CardTitle>{user.display}</CardTitle>
-								<CardSubtitle>{user.intro}</CardSubtitle>
+									<Dash MarginTop="16px"/>
 
-								<Dash MarginTop="16px"/>
+									<SocialButtonContainer>
+										<UserSocialBar colorPack={theme.barTone} channels={user.channels}/>
+									</SocialButtonContainer>
 
-								<SocialButtonContainer>
-									<UserSocialBar ColorPack="dark" channels={{}}/>
-								</SocialButtonContainer>
+								</Card>
+							}
 
-							</Card>
-						}
+							<ProfileDescription showDescription={showDescription}>
+								{/* {user.shortDesc}  */}							
+								<Blur showDescription={showDescription} descLength={user.shortDesc.length}>
+									<ProfileDescriptionSeeMore onClick={this.showFullDescription}>อ่านต่อ</ProfileDescriptionSeeMore>
+								</Blur> 
+								<span>{user.shortDesc}{user.shortDesc}{user.shortDesc}{user.shortDesc}{user.shortDesc}</span>
+							</ProfileDescription>
 
-						<ProfileDescription showDescription={showDescription}>
-							{/* {user.shortDesc}  */}							
-							<Blur showDescription={showDescription}>
-								<ProfileDescriptionSeeMore onClick={this.showFullDescription}>อ่านต่อ</ProfileDescriptionSeeMore>
-							</Blur> 
-							<span>URL Blocked: This redirect failed because the redirect URI is not whitelisted in the app’s Client OAuth Settings. Make sure Client and Web OAuth Login are on and add all your app domains as Valid OAuth Redirect URIs.
-							URL Blocked: This redirect failed because the redirect URI is not whitelisted in the app’s Client OAuth Settings. Make sure Client and Web OAuth Login are on and add all your app domains as Valid OAuth Redirect URIs.
-							URL Blocked: This redirect failed because the redirect URI is not whitelisted in the app’s Client OAuth Settings. Make sure Client and Web OAuth Login are on and add all your app domains as Valid OAuth Redirect URIs.  
-							</span>
-						</ProfileDescription>
+						</UserInfoSection>
+						:
+						<UserInfoSectionDesktop>
+							<CardTitle>{user.display}</CardTitle>
+							<CardSubtitle>{user.intro}</CardSubtitle>
 
-
-					</UserInfoSection>
+							<SocialButtonContainer>
+								<UserSocialBar colorPack={theme.barTone} channels={user.channels}/>
+							</SocialButtonContainer>
+							
+							<ProfileDescriptionDesktop>
+								{user.shortDesc}
+							</ProfileDescriptionDesktop>
+						</UserInfoSectionDesktop>
+					}
 
 					{/* {!showDescription &&
 						<SeeMoreDescriptionSection showDescription={showDescription}>
@@ -574,22 +631,17 @@ export default class UserStory extends React.Component {
 					} */}
 
 					{!isNormalUser &&
-						<ArticleSection>
-
-							<ArticleHeader>
-								<ArticleCount>{feedCount} </ArticleCount>
-								{feedCount > 1 ? 'STORIES' : 'STORY'}
-							</ArticleHeader>
-
-							<Dash MarginTop="6px"/>
-
-						</ArticleSection>
-					}
-
-					{!isNormalUser &&
 						<ArticleWrapper>
 							<Content>
 								<Main>
+
+									<ArticleHeader>
+										<ArticleCount>{feedCount} </ArticleCount>
+										{feedCount > 1 ? 'STORIES' : 'STORY'}
+									</ArticleHeader>
+
+									<Dash MarginTop="6px"/>
+
 									{loading ? this.onload() :
 										<div>
 											{FeedPack}

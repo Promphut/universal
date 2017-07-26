@@ -167,6 +167,7 @@ const News = styled.div`
 
 const SeemoreContainer = styled.div`
 	margin-top: 26px;
+	margin-bottom: 1px;
 	width: 100%;
 	display: flex;
 	justify-content: center;

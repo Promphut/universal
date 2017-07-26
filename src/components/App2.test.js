@@ -1,11 +1,10 @@
 import Request from 'superagent'
 import config from '../config'
-import auth from '../services/auth'
 
 //console.log(config)
 
-var FRONTURL = 'http://localhost:3000'
-var BACKURL = 'https://localhost:4000'
+var FRONTURL = process.argv[3] ? process.argv[3] : 'http://localhost:3000'
+var BACKURL = FRONTURL.substr('localhost')!=-1 ? 'https://localhost:4000' : 'https://api.thesolar.co'
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -13,7 +12,7 @@ function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-describe.skip('Page Availability', () => {
+describe('Page Availability', () => {
 
     it('Homepage', async () => {
         await Request
@@ -254,7 +253,7 @@ describe.skip('Page Availability', () => {
 
 })
 
-describe.skip('Private Route - Not Login', () => {
+describe('Private Route - Not Login', () => {
     
     it('EditorPage', async () => {
         await Request
@@ -301,18 +300,9 @@ describe.skip('Private Route - Not Login', () => {
             })
     })
 
-    it.skip('EditStoryPage', async () => {
-        await Request
-            .get(FRONTURL + '/editor')
-            .then(res => {
-                expect(res.status).toBe(200)
-                expect(res.redirects[0]).toBe(FRONTURL + '/signin')
-            })
-    })
-
 })
 
-describe.skip('404 Redirect', () => {
+describe('404 Redirect', () => {
 
     it('Wrong Column Name', async () => {
         await Request
@@ -376,7 +366,7 @@ describe.skip('404 Redirect', () => {
 
 })
 
-describe.only('Get Config', () => {
+describe('Get Config', () => {
     it('Check Config', async () =>  {
         var setting = await Request
             .get(BACKURL + '/publishers/' + config.PID + '/setting')

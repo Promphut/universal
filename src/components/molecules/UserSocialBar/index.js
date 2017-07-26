@@ -27,7 +27,12 @@ const SocialButton = styled.a `
 	}
 
 	&:hover {
-		color: ${props => props.enabled? props.theme.accentColor: props.colorPack} !important;
+    color: ${props => 
+    !utils.isMobile() ? props.enabled? props.theme.accentColor: props.colorPack :
+    props.enabled && props.colorPack === 'light' ? '#F4F4F4' :
+    props.enabled && props.colorPack === 'dark' ? '#8E8E8E' :
+    !props.enabled && props.colorPack === 'light' ? '#ffffff' :
+    !props.enabled && props.colorPack === 'dark' ? '#F4F4F4' : '#F4F4F4'};} !important;
 	}
 `
 
