@@ -41,6 +41,7 @@ class TopBarWithNavigation extends React.Component {
 
 		this.state = {
 			scrolling: false,
+			fixed:false,
 			status: 'LOADING',
 			child: []
 		}
@@ -58,7 +59,10 @@ class TopBarWithNavigation extends React.Component {
 
 	handleScroll = e => {
 		//console.log('HAHAH')
-		let top = e.srcElement.body.scrollTop, scrolling = this.state.scrolling
+		let top = e.srcElement.body.scrollTop, scrolling = this.state.scrolling, fixed = this.state.fixed
+
+		if (top > 350 && !fixed) this.setState({ fixed: true })
+		else if (top <= 350 && fixed) this.setState({ fixed: false })
 
 		if (top > 60 && !scrolling) this.setState({ scrolling: true })
 		else if (top <= 60 && scrolling) this.setState({ scrolling: false })
@@ -105,7 +109,7 @@ class TopBarWithNavigation extends React.Component {
 
 	render() {
 		let { theme } = this.context.setting.publisher
-		let { scrolling, scroll, status, child } = this.state
+		let { scrolling, scroll, status, child, fixed } = this.state
 		let {
 			title,
 			article,
@@ -134,12 +138,27 @@ class TopBarWithNavigation extends React.Component {
 		} else if (!notShowNav) {
 			children = <TopNavigation menu={this.menu} children={child} />
 		}
-		return (
-			<Stick
+
+			return (
+				<Stick
 				className={this.props.className}
-				fixed={articleMobile && hasCover ? !scrolling : ''}>
-				{/* {articleMobile ?
-					<TopBarWithShare
+				fixed={articleMobile && hasCover ? !scrolling : ''}
+				special={!this.props.speicial && fixed}>
+					{/* {articleMobile ?
+						<TopBarWithShare
+							onScroll={this.handleScroll}
+							scrolling={scrolling}
+							status={status}
+							title={title}
+							user={this.user}
+							menu={this.menu}
+							transparent={transparent}
+							editButton={editButton}
+							hasCover={hasCover}
+							share={share}
+						> {children}
+						</TopBarWithShare> : */}
+					<TopBar
 						onScroll={this.handleScroll}
 						scrolling={scrolling}
 						status={status}
@@ -149,26 +168,13 @@ class TopBarWithNavigation extends React.Component {
 						transparent={transparent}
 						editButton={editButton}
 						hasCover={hasCover}
-						share={share}
-					> {children}
-					</TopBarWithShare> : */}
-				<TopBar
-					onScroll={this.handleScroll}
-					scrolling={scrolling}
-					status={status}
-					title={title}
-					user={this.user}
-					menu={this.menu}
-					transparent={transparent}
-					editButton={editButton}
-					hasCover={hasCover}
-					onLoading={this.props.onLoading}
-					article={article}>
-					{' '}{children}
-				</TopBar>
-				{/* } */}
-			</Stick>
-		)
+						onLoading={this.props.onLoading}
+						article={article}>
+						{' '}{children}
+					</TopBar>
+					{/* } */}
+				</Stick>
+			)
 	}
 }
 
