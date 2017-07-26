@@ -103,7 +103,7 @@ class UserSettingProfile extends React.Component {
     setting: PropTypes.object
   }
 
-  maximumCharacter = 140
+  maximumCharacter = 1200
 
   fetchUser = (e) => {
     if(e) e.preventDefault()
@@ -161,7 +161,7 @@ class UserSettingProfile extends React.Component {
     const name = e.target.name
     if(name=='shortDesc'){
       var val = e.target.value.split('')
-      if(val.length>=maximumCharacter){
+      if(val.length>=this.maximumCharacter){
         this.setState({
           errText:'Maximun characters'
         })
@@ -225,7 +225,7 @@ class UserSettingProfile extends React.Component {
               hintText={`Your description max to ${this.maximumCharacter} characters`}
               floatingLabelFixed={true}
               rows={1}
-              rowsMax={4}
+              rowsMax={20}
               name='shortDesc'
               errorText={errText}
               value={user.shortDesc}
@@ -239,7 +239,7 @@ class UserSettingProfile extends React.Component {
               floatingLabelText="Description"
               floatingLabelFixed={true}
               rows={1}
-              rowsMax={4}
+              rowsMax={20}
               name='shortDesc'
               errorText={errText}
               value={user.shortDesc}

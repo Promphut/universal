@@ -37,12 +37,13 @@ const Onload = styled.div`
 `
 
 const NoArticleHeader = styled.h2 `
+	width: 100%;
+	margin-top: 30px;
+	text-align: center;
 	font-family: 'Mitr';
 	font-size: 16px;
 	color: #222222;
 	font-weight: normal;
-	margin: auto;
-
 `
 
 const UserAvatar = styled(Avatar)`
@@ -401,7 +402,7 @@ export default class UserStory extends React.Component {
 		api.getUserFromUsername(username)
 			.then(user => {
 				this.checkIsNormalUser(user.id)
-				this.setState({ user: user, showDescription : user.shortDesc.length < 500 &&false}, done)
+				this.setState({ user: user, showDescription : user.shortDesc.length < 500}, done)
 			})
 			.catch(err => {
 				utils.notFound(this.props.history, err)
@@ -414,7 +415,7 @@ export default class UserStory extends React.Component {
 		api.getUserFromUserId(uid)
 			.then(user => {
 				this.checkIsNormalUser(user.id)
-				this.setState({ user: user, showDescription : user.shortDesc.length < 500 &&false}, done)
+				this.setState({ user: user, showDescription : user.shortDesc.length < 500}, done)
 			})
 			.catch(err => {
 				utils.notFound(this.props.history, err)
@@ -422,9 +423,9 @@ export default class UserStory extends React.Component {
 	}
 
 	checkIsNormalUser = (uid, done = () => {}) => {
-		api.getPublisherWriters()
-			.then(writers => {
-				this.setState({isNormalUser : isEmpty(_.find(writers, function(o) { return o.id === _.toString(uid); }))})
+		api.getPublisherNormalUsers(uid)
+			.then(result => {
+				this.setState({isNormalUser : result.isNormal})
 			})
 			.catch(err => {
 				utils.notFound(this.props.history, err)
@@ -520,7 +521,7 @@ export default class UserStory extends React.Component {
 					{utils.isMobile() ? 
 						!isNormalUser  ?
 						// Admin
-						<EditorProfilePictureSection userProfileImage = {user.pic.large}>
+						<EditorProfilePictureSection userProfileImage = {user.pic.large ? user.pic.large : user.pic.medium}>
 							<TopBarContainer>
 
 								<TopBarLeftItem>
@@ -564,7 +565,7 @@ export default class UserStory extends React.Component {
 							<UserInfoContainer>
 
 								<UserAvatarContainer>
-									<UserAvatar src={user.pic.large} size={95} />
+									<UserAvatar src={user.pic.large ? user.pic.large : user.pic.medium} size={95} />
 								</UserAvatarContainer>
 
 								<UserInfoPrimaryText>{user.display}</UserInfoPrimaryText>
@@ -579,7 +580,7 @@ export default class UserStory extends React.Component {
 					:
 						<UserInfoContainerDesktop>
 							<UserAvatarContainer>
-								<UserAvatar src={user.pic.large} size={300} />
+								<UserAvatar src={user.pic.large ? user.pic.large : user.pic.medium} size={300} />
 							</UserAvatarContainer>
 						</UserInfoContainerDesktop>
 					}
@@ -605,7 +606,7 @@ export default class UserStory extends React.Component {
 								<Blur showDescription={showDescription} descLength={user.shortDesc.length}>
 									<ProfileDescriptionSeeMore onClick={this.showFullDescription}>อ่านต่อ</ProfileDescriptionSeeMore>
 								</Blur> 
-								<span>{user.shortDesc}{user.shortDesc}{user.shortDesc}{user.shortDesc}{user.shortDesc}</span>
+								<span>{user.shortDesc}</span>
 							</ProfileDescription>
 
 						</UserInfoSection>
