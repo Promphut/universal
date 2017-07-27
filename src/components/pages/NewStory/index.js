@@ -474,7 +474,7 @@ class NewStory extends React.Component {
         .then(story => {
           this.setState({
             status: this.SAVE_STATUS.UNDIRTIED,
-            saveStatus:"Saved "+ moment(story.updated).calendar(),
+            saveStatus:"Saved "+ moment(new Date()).calendar(),
             slug:story.slug,
             metaTitle:story.meta&&story.meta.title,
             metaDesc:story.meta&&story.meta.desc

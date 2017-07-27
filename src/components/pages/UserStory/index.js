@@ -9,6 +9,7 @@ import {
 	BackToTop,
 	Pagination,
 	UserSocialBar,
+	WriterTopStories,
 } from 'components'
 import { findDOMNode as dom } from 'react-dom'
 import { Link } from 'react-router-dom'
@@ -28,6 +29,16 @@ import auth from '../../../services/auth'
 const Wrapper = styled.div `
 	display: flex;
 	flex-direction: column;
+	background-color: ${props=>props.haveBg ? '#FAFAFA' : '#FFFFFF'};
+`
+
+const ContentWrapper = styled.div`
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: stretch;
+	min-height: calc(100vh - 250px)
 `
 
 const Onload = styled.div`
@@ -50,10 +61,9 @@ const UserAvatar = styled(Avatar)`
 	margin-right: 20px;
 	float: left;
 	@media (max-width: 480px) {
-		height: 80px !important;
-		width: 80px !important;
+		height: 100px !important;
+		width: 100px !important;
 		float: none;
-		border: 2px solid #FFF;
 		margin-right: 0px;
 	}
 `
@@ -101,13 +111,28 @@ const UserInfoSecondaryText = styled.h2 `
 	margin-bottom: 0;
 `
 
+const UserBlockWrapper = styled.div`
+	flex:1 345px;
+	max-width: 345px;
+	background-color: #FAFAFA;
+	margin-top: ${props => props.mobile ? '0' : '60px'};
+`
+
+const DetailBlockWrapper = styled.div`
+	flex:1 709px;
+	max-width: 709px;
+	margin-left: 56px;
+	margin-top: ${props => props.mobile ? '0' : '60px'};
+`
+
 const EditorProfilePictureSection = styled.div `
 	background-image: url(${props => props.userProfileImage});
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: 100%;
 	height: 250px;
-	width: 100%;
+	width: ${props => props.mobile ? '100%' : '345px'};
+	margin-top: 0px;
 `
 
 const UserProfileSection = EditorProfilePictureSection.extend `
@@ -118,7 +143,7 @@ const UserProfileSection = EditorProfilePictureSection.extend `
 
 const UserInfoSection = styled.div `
 	width: 100%;
-	background-color: ${props => props.role === 'admin' ? '#fafafa' : 'white' };
+	background-color: ${props => props.role === 'admin' ? '#FAFAFA' : 'white' };
 	padding-bottom: 24px;
 `
 
@@ -174,7 +199,7 @@ const TopBarRightItem = TopBarItem.extend `
 `
 
 const Card = styled.div `
-	width: 90%;
+	width: ${props => props.mobile ? '90%' : '313px'};
 	z-index: 3;
 	margin: -16px auto 0 auto;
 	padding: 20px 16px 24px 16px;
@@ -184,6 +209,19 @@ const Card = styled.div `
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	justify-content: center;
+`
+
+const CardNormal = styled.div `
+	width: 810px;
+	margin-top: 116px;
+	margin-bottom: 56px;
+	padding: 40px;
+	box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.1);
+	border-radius: 8px;
+	background: #FFFFFF;
+	display: flex;
+	align-items: flex-start;
 	justify-content: center;
 `
 
@@ -225,6 +263,7 @@ const ProfileDescription = styled.p `
 	font-weight: lighter;
 	font-family: 'CS PraJad';
 	font-size: 16px;
+	min-height: 100px;
 	height: ${props => props.showDescription ? 'auto' : '100px'};
 	display: block;
 	white-space: wrap;
@@ -237,32 +276,30 @@ const ProfileDescription = styled.p `
 `
 
 const ProfileDescriptionDesktop = styled.p `
-	width: 610px;
-	margin: 40px auto 80px auto;
-	padding: 32px 0 32px 0;
-	text-align: center;
+	width: 100%;
+	height: ${props => props.showDescription ? 'auto' : '115px'};
+	margin: 56px 0 24px 0;
+	margin-bottom: ${props => props.showDescription ? '0' : '24px'};
 	color: #222222;
 	font-weight: lighter;
-	font-family: 'CS PraJad';
+	font-family: 'Roboto';
 	font-size: 16px;
+	line-height: 23px;
 	display: block;
 	white-space: wrap;
 	overflow: hidden;
-	border-width: 1px 0 1px 0;
-	border-style: solid;
-	border-color: #E2E2E2;
 `
 
 const Blur = styled.div`
 	display: ${props => props.showDescription ? 'none' : 'flex'};
 	justify-content: center;
 	background: rgba(255,255,255,0);
-	background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(250,250,250,1) 95%, rgba(250,250,250,1) 100%);
-	background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(250,250,250,0)), color-stop(95%, rgba(250,250,250,1)), color-stop(100%, rgba(255,255,255,1)));
-	background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(250,250,250,1) 95%, rgba(250,250,250,1) 100%);
-	background: -o-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(250,250,250,1) 95%, rgba(250,250,250,1) 100%);
-	background: -ms-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(250,250,250,1) 95%, rgba(250,250,250,1) 100%);
-	background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(250,250,250,1) 95%, rgba(250,250,250,1) 100%);
+	background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 95%, rgba(255,255,255,1) 100%);
+	background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(255,255,255,0)), color-stop(95%, rgba(255,255,255,1)), color-stop(100%, rgba(255,255,255,1)));
+	background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 95%, rgba(255,255,255,1) 100%);
+	background: -o-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 95%, rgba(255,255,255,1) 100%);
+	background: -ms-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 95%, rgba(255,255,255,1) 100%);
+	background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 95%, rgba(255,255,255,1) 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff', GradientType=0 );
 	position:relative;
 	width:100%;
@@ -280,12 +317,23 @@ const Blur = styled.div`
 const ProfileDescriptionSeeMore = styled.button `
 	font-family: Mitr;
 	border: 0.5px solid #C4C4C4;
-	background-color: #fafafa;
+	background-color: #FFFFFF;
 	border-radius: 100px;
 	font-size: 12px;
 	z-index: 10;
 	padding: 2px 32px 2px 32px;
 	align-self: flex-end;
+	&:hover{
+		cursor:pointer;
+		border: 0.5px solid ${props => props.theme.accentColor};
+		color: ${props => props.theme.accentColor};
+  	}
+`
+const SeeMoreWrapper = styled.div`
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
 `
 
 const ArticleHeader = styled.div `
@@ -301,6 +349,7 @@ const ArticleCount = styled.span `
 `
 
 const ArticleWrapper = styled.div `
+  	margin-top: ${props => props.mobile ? '0px' : '56px'};
 `
 
 const Page = styled.div`
@@ -510,176 +559,299 @@ export default class UserStory extends React.Component {
 			if (feed && currentPage >= 0) {
 				FeedPack = []
 				feed.map((item, index) => (
-					FeedPack.push(<ArticleBox final={index == feed.length -1 ? true:false} detail={item} key={index}/>)
+					FeedPack.push(<ArticleBox isUserPage={true} final={index == feed.length -1 ? true:false} detail={item} key={index}/>)
 				))
 			}
 
-			return (
-				<Wrapper>
-					<TopBarWithNavigation className="hidden-mob" />
-					
-					{utils.isMobile() ? 
-						!isNormalUser  ?
-						// Admin
-						<EditorProfilePictureSection userProfileImage = {user.pic.large ? user.pic.large : user.pic.medium}>
-							<TopBarContainer>
 
-								<TopBarLeftItem>
-									<FontIcon onClick={this.checkBack} style = {{color:'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)'}} className="material-icons hidden-des">
-										chevron_left
-									</FontIcon>
-								</TopBarLeftItem>
+		let WriterUserBlock = (
+			<UserBlockWrapper mobile = {utils.isMobile()}>
+				<EditorProfilePictureSection userProfileImage = {user.pic.large ? user.pic.large : user.pic.medium}>
+					<TopBarContainer>
 
-								<TopBarRightItem>
-									<Link to = "/me/settings">
-										<FontIcon style = {{color:'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)'}} className="material-icons hidden-des">
-											border_color
-										</FontIcon>
-									</Link>
-								</TopBarRightItem>
+						<TopBarLeftItem className="hidden-des"> 
+							<FontIcon onClick={this.checkBack} style = {{color:'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)'}} className="material-icons hidden-des">
+								chevron_left
+							</FontIcon>
+						</TopBarLeftItem>
 
-							</TopBarContainer>
-						</EditorProfilePictureSection>
+						<TopBarRightItem className="hidden-des">
+							<Link to = "/me/settings">
+								<FontIcon style = {{color:'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)'}} className="material-icons hidden-des">
+									border_color
+								</FontIcon>
+							</Link>
+						</TopBarRightItem>
 
-					:
-						// Registered User
-						<UserProfileSection>
-							<TopBarContainer>
+					</TopBarContainer>
+				</EditorProfilePictureSection>
+				<Card  mobile = {utils.isMobile()}>
+					<CardTitle>{user.display}</CardTitle>
+					<CardSubtitle>{user.intro}</CardSubtitle>
 
-								<TopBarLeftItem>
-									<FontIcon onClick={this.checkBack} style = {{color:'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)'}} className="material-icons hidden-des">
-										chevron_left
-									</FontIcon>
-								</TopBarLeftItem>
+					<Dash MarginTop="16px"/>
 
-								<TopBarRightItem>
-									<Link to ="/me/settings">
-										<FontIcon style = {{color:'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)'}} className="material-icons hidden-des">
-											border_color
-										</FontIcon>
-									</Link>
-								</TopBarRightItem>
+					<SocialButtonContainer>
+						<UserSocialBar colorPack={theme.barTone} channels={user.channels}/>
+					</SocialButtonContainer>
 
-							</TopBarContainer>
+				</Card>
+				<WriterTopStories uid={user._id}/>
+			</UserBlockWrapper>
+		)
 
-							<UserInfoContainer>
+		let WriterDetailBlock = (
+			<DetailBlockWrapper mobile = {utils.isMobile()}>
+				<ProfileDescriptionDesktop showDescription={showDescription}>						
+					{user.shortDesc}
+				</ProfileDescriptionDesktop>
+				
+				{!showDescription &&
+					<SeeMoreWrapper> 
+						<ProfileDescriptionSeeMore onClick={this.showFullDescription}>อ่านต่อ</ProfileDescriptionSeeMore>
+					</SeeMoreWrapper>
+				}
 
-								<UserAvatarContainer>
-									<UserAvatar src={user.pic.large ? user.pic.large : user.pic.medium} size={95} />
-								</UserAvatarContainer>
+				<ArticleWrapper>
+					<Content>
+						<Main>
 
-								<UserInfoPrimaryText>{user.display}</UserInfoPrimaryText>
-								<UserInfoSecondaryText>{user.intro}</UserInfoSecondaryText>
+							<ArticleHeader>
+								<ArticleCount>{feedCount} </ArticleCount>
+								{feedCount > 1 ? 'STORIES' : 'STORY'}
+							</ArticleHeader>
 
-								<SocialButtonContainer>
-									<UserSocialBar colorPack={theme.barTone} channels={user.channels}/>
-								</SocialButtonContainer>
+							<Dash MarginTop="6px"/>
 
-							</UserInfoContainer>
-						</UserProfileSection>
-					:
-						<UserInfoContainerDesktop>
-							<UserAvatarContainer>
-								<UserAvatar src={user.pic.large ? user.pic.large : user.pic.medium} size={300} />
-							</UserAvatarContainer>
-						</UserInfoContainerDesktop>
-					}
-					{/*----------------------------------------------------------------------------*/}
-					{utils.isMobile() ? 
-						<UserInfoSection role={isNormalUser ? 'user' : 'admin'}>
-							{!isNormalUser &&
-								<Card>
-									<CardTitle>{user.display}</CardTitle>
-									<CardSubtitle>{user.intro}</CardSubtitle>
-
-									<Dash MarginTop="16px"/>
-
-									<SocialButtonContainer>
-										<UserSocialBar colorPack={theme.barTone} channels={user.channels}/>
-									</SocialButtonContainer>
-
-								</Card>
+							{loading ? this.onload() :
+								<div>
+									{FeedPack}
+									{ (isEmpty) &&
+										<NoArticleHeader>ยังไม่มีบทความ</NoArticleHeader>
+									}
+									{(!isEmpty && !(totalPages > currentPage && currentPage >= 0)) &&
+										<NoArticleHeader>ไม่มีข้อมูลในหน้านี้ กลับไปยัง
+											<Link
+												to={user.url+"?page=1"}
+												style={{
+													color: theme.accentColor,
+													padding: '0 0.5em 0 0.5em'
+												}}>
+												หน้าแรก
+											</Link>
+										</NoArticleHeader>
+									}
+									<Page>
+										{ (totalPages > currentPage && currentPage >= 0) &&
+											<Pagination
+												hideFirstAndLastPageLinks={utils.isMobile() ? false : true}
+												hidePreviousAndNextPageLinks={utils.isMobile() ? true : false}
+												boundaryPagesRange={utils.isMobile() ? 0 : 1}
+												currentPage={currentPage + 1}
+												totalPages={totalPages}
+												onChange={this.changePage}
+											/>
+										}
+									</Page>
+								</div>
 							}
+						</Main>
+					</Content>
+				</ArticleWrapper>
 
-							<ProfileDescription showDescription={showDescription}>
-								{/* {user.shortDesc}  */}							
-								<Blur showDescription={showDescription} descLength={user.shortDesc.length}>
-									<ProfileDescriptionSeeMore onClick={this.showFullDescription}>อ่านต่อ</ProfileDescriptionSeeMore>
-								</Blur> 
-								<span>{user.shortDesc}</span>
-							</ProfileDescription>
+			</DetailBlockWrapper>
+		)
 
-						</UserInfoSection>
-						:
-						<UserInfoSectionDesktop>
-							<CardTitle>{user.display}</CardTitle>
-							<CardSubtitle>{user.intro}</CardSubtitle>
+		let NormalUserDesktopBlock = (
+			<CardNormal>
+				<div style={{width:'120px'}}>
+				<UserAvatarContainer>
+					<UserAvatar src={user.pic.large ? user.pic.large : user.pic.medium} size={120} />
+				</UserAvatarContainer>
+				</div>
+				<div style={{width:'570px',marginLeft:'40px'}}>
+					<CardTitle>{user.display}</CardTitle>
+					<CardSubtitle style={{textAlign:'left'}}>{user.intro}</CardSubtitle>
+
+					<SocialButtonContainer>
+						<UserSocialBar colorPack={theme.barTone} channels={user.channels}/>
+					</SocialButtonContainer>
+
+					<ProfileDescriptionDesktop style={{marginTop:'40px',paddingTop:'24px',borderTop:'1px solid #E2E2E2',height:'auto'}}>
+						{user.shortDesc}
+					</ProfileDescriptionDesktop>
+				</div>
+			</CardNormal>
+		)
+
+		let MobileBlock1 = (
+			<Wrapper>
+				<EditorProfilePictureSection mobile = {utils.isMobile()} userProfileImage = {user.pic.large ? user.pic.large : user.pic.medium}>
+					<TopBarContainer>
+
+						<TopBarLeftItem className="hidden-des"> 
+							<FontIcon onClick={this.checkBack} style = {{color:'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)'}} className="material-icons hidden-des">
+								chevron_left
+						</FontIcon>
+						</TopBarLeftItem>
+
+						<TopBarRightItem className="hidden-des">
+							<Link to = "/me/settings">
+								<FontIcon style = {{color:'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)'}} className="material-icons hidden-des">
+									border_color
+								</FontIcon>
+							</Link>
+						</TopBarRightItem>
+
+					</TopBarContainer>
+				</EditorProfilePictureSection>
+				 <UserInfoSection role={isNormalUser ? 'user' : 'admin'}>
+					<Card mobile = {utils.isMobile()}>
+						<CardTitle>{user.display}</CardTitle>
+						<CardSubtitle>{user.intro}</CardSubtitle>
+
+						<Dash MarginTop="16px"/>
+
+						<SocialButtonContainer>
+							<UserSocialBar colorPack={theme.barTone} channels={user.channels}/>
+						</SocialButtonContainer>
+
+					</Card>
+
+					<ProfileDescription showDescription={showDescription}>						
+						<Blur showDescription={showDescription} descLength={user.shortDesc.length}>
+							<ProfileDescriptionSeeMore onClick={this.showFullDescription}>อ่านต่อ</ProfileDescriptionSeeMore>
+						</Blur> 
+						<span style={{fontFamily: 'Roboto'}}>{user.shortDesc}</span>
+					</ProfileDescription>
+				</UserInfoSection>
+		
+				<ArticleWrapper mobile={utils.isMobile()}>
+					<Content>
+						<Main>
+
+							<ArticleHeader>
+								<ArticleCount>{feedCount} </ArticleCount>
+								{feedCount > 1 ? 'STORIES' : 'STORY'}
+							</ArticleHeader>
+
+							<Dash MarginTop="6px"/>
+
+							{loading ? this.onload() :
+								<div>
+									{FeedPack}
+									{ (isEmpty) &&
+										<NoArticleHeader>ยังไม่มีบทความ</NoArticleHeader>
+									}
+									{(!isEmpty && !(totalPages > currentPage && currentPage >= 0)) &&
+										<NoArticleHeader>ไม่มีข้อมูลในหน้านี้ กลับไปยัง
+											<Link
+												to={user.url+"?page=1"}
+												style={{
+													color: theme.accentColor,
+													padding: '0 0.5em 0 0.5em'
+												}}>
+												หน้าแรก
+											</Link>
+										</NoArticleHeader>
+									}
+									<Page>
+										{ (totalPages > currentPage && currentPage >= 0) &&
+											<Pagination
+												hideFirstAndLastPageLinks={utils.isMobile() ? false : true}
+												hidePreviousAndNextPageLinks={utils.isMobile() ? true : false}
+												boundaryPagesRange={utils.isMobile() ? 0 : 1}
+												currentPage={currentPage + 1}
+												totalPages={totalPages}
+												onChange={this.changePage}
+											/>
+										}
+									</Page>
+								</div>
+							}
+						</Main>
+					</Content>
+				</ArticleWrapper>
+			</Wrapper>
+			)
+
+			let MobileBlock2 = (
+				<Wrapper>
+					<UserProfileSection style={{width:'100%'}}>
+							<TopBarContainer>
+
+							<TopBarLeftItem>
+								<FontIcon onClick={this.checkBack} style = {{color:'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)'}} className="material-icons hidden-des">
+									chevron_left
+								</FontIcon>
+							</TopBarLeftItem>
+
+							<TopBarRightItem>
+								<Link to ="/me/settings">
+									<FontIcon style = {{color:'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)'}} className="material-icons hidden-des">
+										border_color
+									</FontIcon>
+								</Link>
+							</TopBarRightItem>
+
+						</TopBarContainer>
+
+						<UserInfoContainer>
+
+							<UserAvatarContainer>
+								<UserAvatar  src={user.pic.large ? user.pic.large : user.pic.medium} size={100} />
+							</UserAvatarContainer>
+
+							<UserInfoPrimaryText>{user.display}</UserInfoPrimaryText>
+							<UserInfoSecondaryText>{user.intro}</UserInfoSecondaryText>
 
 							<SocialButtonContainer>
-								<UserSocialBar colorPack={theme.barTone} channels={user.channels}/>
+								<UserSocialBar colorPack={'light'} channels={user.channels}/>
 							</SocialButtonContainer>
-							
-							<ProfileDescriptionDesktop>
-								{user.shortDesc}
-							</ProfileDescriptionDesktop>
-						</UserInfoSectionDesktop>
-					}
 
-					{/* {!showDescription &&
-						<SeeMoreDescriptionSection showDescription={showDescription}>
+						</UserInfoContainer> 
+					</UserProfileSection>
+
+					<UserInfoSection role={isNormalUser ? 'user' : 'admin'}>
+
+					<ProfileDescription showDescription={showDescription}>						
+						<Blur showDescription={showDescription} descLength={user.shortDesc.length}>
 							<ProfileDescriptionSeeMore onClick={this.showFullDescription}>อ่านต่อ</ProfileDescriptionSeeMore>
-						</SeeMoreDescriptionSection>
-					} */}
+						</Blur> 
+						<span style={{fontFamily: 'Roboto'}}>{user.shortDesc}</span>
+					</ProfileDescription>
 
-					{!isNormalUser &&
-						<ArticleWrapper>
-							<Content>
-								<Main>
+					</UserInfoSection>
+				</Wrapper>
 
-									<ArticleHeader>
-										<ArticleCount>{feedCount} </ArticleCount>
-										{feedCount > 1 ? 'STORIES' : 'STORY'}
-									</ArticleHeader>
+			)
 
-									<Dash MarginTop="6px"/>
+			return (
+				<Wrapper haveBg={!utils.isMobile() && isNormalUser}>
+					<TopBarWithNavigation className="hidden-mob" />
+						{ (utils.isMobile() && isNormalUser) &&
+							<div style={{minHeight: 'calc(100vh - 200px)'}}>	
+								{MobileBlock2}
+							</div>
+						}
+						{ (utils.isMobile() && !isNormalUser) &&
+							<div>
+								{MobileBlock1}
+							</div>
+						}
+						{ (!utils.isMobile() && !isNormalUser) &&
+							<ContentWrapper>
+								{WriterUserBlock}
+								{WriterDetailBlock}
+							</ContentWrapper>
+						}
+						{ (!utils.isMobile() && isNormalUser) &&
+							<ContentWrapper>
+								{NormalUserDesktopBlock}
+							</ContentWrapper>
+						}
 
-									{loading ? this.onload() :
-										<div>
-											{FeedPack}
-											{ (isEmpty) &&
-												<NoArticleHeader>ยังไม่มีบทความ</NoArticleHeader>
-											}
-											{(!isEmpty && !(totalPages > currentPage && currentPage >= 0)) &&
-												<NoArticleHeader>ไม่มีข้อมูลในหน้านี้ กลับไปยัง
-													<Link
-														to={user.url+"?page=1"}
-														style={{
-															color: theme.accentColor,
-															padding: '0 0.5em 0 0.5em'
-														}}>
-														หน้าแรก
-													</Link>
-												</NoArticleHeader>
-											}
-											<Page>
-												{ (totalPages > currentPage && currentPage >= 0) &&
-													<Pagination
-														hideFirstAndLastPageLinks={utils.isMobile() ? false : true}
-														hidePreviousAndNextPageLinks={utils.isMobile() ? true : false}
-														boundaryPagesRange={utils.isMobile() ? 0 : 1}
-														currentPage={currentPage + 1}
-														totalPages={totalPages}
-														onChange={this.changePage}
-													/>
-												}
-											</Page>
-										</div>
-									}
-								</Main>
-							</Content>
-						</ArticleWrapper>
-					}
-					<Footer/>
+					<Footer isUserPage={true}/>
 				</Wrapper>
 			)
 		}

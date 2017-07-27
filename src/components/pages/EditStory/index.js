@@ -371,7 +371,7 @@ class EditStory extends React.Component {
       .then(story => {
           this.setState({
             status: this.SAVE_STATUS.UNDIRTIED,
-            saveStatus:"Saved "+ moment(story.updated).calendar(),
+            saveStatus:"Saved "+ moment(new Date()).calendar(),
           })
       })
     }

@@ -22,6 +22,10 @@ const Container = styled.div`
     width:100%;
     height:230px;
   }
+  .imgWidthUser{
+    width:100%;
+    height:157px;
+  }
   .des-hidden{
     display:block;
   }
@@ -136,8 +140,8 @@ const Box = styled.div`
   }
 `
 const Box1 = styled.div`
-  flex:1 444px;
-  min-width:444px;
+  flex:1 300px;
+  min-width:300px;
   @media (max-width:480px) {
     display:block;
     min-width:100%;
@@ -149,7 +153,7 @@ const Box1 = styled.div`
   }
 `
 
-const ArticleBox = ({ detail, style, final ,id}, context) => {
+const ArticleBox = ({ detail, style, final ,id, isUserPage}, context) => {
 	let {
 		ptitle,
 		cover,
@@ -182,7 +186,7 @@ const ArticleBox = ({ detail, style, final ,id}, context) => {
 				<BGImg
 					url={url}
 					src={cover.medium&&cover.medium||cover.small}
-					className="imgWidth"
+					className={isUserPage ? "imgWidthUser" : "imgWidth"}
 				/>
 			</Box1>
 			<Box>
@@ -198,13 +202,20 @@ const ArticleBox = ({ detail, style, final ,id}, context) => {
 					/>
 					<Div className="sans-font" style={{ margin: '0 0 7px 0', flex: 20 }}>
 						{readTime + ' min read'}
+            {isUserPage ?
+            <strong>
+              &nbsp;/&nbsp;
+              <ColumnLink to={column && column.url}>
+                {column.name}
+              </ColumnLink>
+					</strong> : ''}
 					</Div>
           <ShareDropdown id={id} buttonSize={16} url={url} className='hidden-mob'/>
 				</div>
 				<NameLink to={url} className="nunito-font" style={{ marginTop: '5px' }}>
           
 					{truncate(ptitle, {
-						length: 90,
+						length: isUserPage ? 70 : 90,
 						separator: ''
 					})}
 				</NameLink>
@@ -215,6 +226,7 @@ const ArticleBox = ({ detail, style, final ,id}, context) => {
 						separator: ''
 					})}
 				</Div>
+        { !isUserPage &&
 				<Div className="nunito-font by">
 					by
 					{' '}
@@ -232,6 +244,7 @@ const ArticleBox = ({ detail, style, final ,id}, context) => {
 						</ColumnLink>
 					</strong>
 				</Div>
+        }
 			</Box>
 		</Container>
 	)
