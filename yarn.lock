@@ -1731,6 +1731,10 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
+cropperjs@^0.8.0:
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/cropperjs/-/cropperjs-0.8.1.tgz#3dc01813e2f6d1df2c8909e1ce092146c692548e"
+
 cross-env@4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/cross-env/-/cross-env-4.0.0.tgz#16083862d08275a4628b0b243b121bedaa55dd80"
@@ -5969,6 +5973,13 @@ react-copy-to-clipboard@^5.0.0:
     copy-to-clipboard "^3"
     prop-types "^15.5.8"
 
+react-cropper@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/react-cropper/-/react-cropper-0.12.0.tgz#4b1e7f947e476d72d60ef9b228d9a308fe5be8b5"
+  dependencies:
+    cropperjs "^0.8.0"
+    prop-types "^15.5.8"
+
 react-deep-force-update@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/react-deep-force-update/-/react-deep-force-update-2.0.1.tgz#4f7f6c12c3e7de42f345992a3c518236fa1ecad3"
@@ -6075,6 +6086,13 @@ react-transition-group@^1.1.2:
 react-tree-walker@^2.1.1:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/react-tree-walker/-/react-tree-walker-2.1.2.tgz#005a5d1415952349003b72c63f87ac2630e1c45a"
+
+react-ultimate-pagination@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-ultimate-pagination/-/react-ultimate-pagination-1.0.2.tgz#d63237dfb75d92cb016c0e47e4c639707f933ac1"
+  dependencies:
+    prop-types "^15.0.0"
+    ultimate-pagination "1.0.0"
 
 react@15.5.4, react@^15.0.0:
   version "15.5.4"
@@ -7004,6 +7022,10 @@ uglify-to-browserify@~1.0.0:
 uid-number@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/uid-number/-/uid-number-0.0.6.tgz#0ea10e8035e8eb5b8e4449f06da1c730663baa81"
+
+ultimate-pagination@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/ultimate-pagination/-/ultimate-pagination-1.0.0.tgz#1f9f5465678d7410159d5a172c2013465e9bd85f"
 
 underscore.string@^3.2.3:
   version "3.3.4"
