@@ -17,7 +17,7 @@ import utils from '../../services/utils';
 
 import { Route, Switch, Link, Redirect } from 'react-router-dom';
 
-import { Footer } from '../Footer';
+import Footer from '../Footer';
 import Test from '../Test';
 // import theme from './themes/default'
 if (process.env.BROWSER) {
