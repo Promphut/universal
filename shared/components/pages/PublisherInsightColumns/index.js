@@ -1,15 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
-import { PublisherInsight } from '../../../components';
+import { asyncComponent } from 'react-async-component';
 
-const Container = styled.div`
-  width: 100%;
-`;
-
-const PublisherInsightColumns = () => (
-  <Container>
-    <PublisherInsight title="Column Analytic" insigth="topcolumns" />
-  </Container>
-  );
-
-export default PublisherInsightColumns;
+export default asyncComponent({
+  resolve: () =>
+    System.import(/* webpackChunkName: "publisherinsightcolumns" */ './PublisherInsightColumns'),
+});

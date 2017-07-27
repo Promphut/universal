@@ -1,12 +1,5 @@
-import React from 'react';
-import { ErrorAndNotFound, Status } from '../../../components';
+import { asyncComponent } from 'react-async-component';
 
-const ErrorPage = () => (
-  <Status code={500}>
-    <ErrorAndNotFound title="Something went wrong" smallSize>
-        We have an internal server error. <a href="/">Try again?</a>
-    </ErrorAndNotFound>
-  </Status>
-  );
-
-export default ErrorPage;
+export default asyncComponent({
+  resolve: () => System.import(/* webpackChunkName: "error-page" */ './ErrorPage'),
+});

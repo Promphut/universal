@@ -1,15 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
-import { PublisherInsight } from '../../../components';
+import { asyncComponent } from 'react-async-component';
 
-const Container = styled.div`
-  width: 100%;
-`;
-
-const PublisherInsightStories = () => (
-  <Container>
-    <PublisherInsight title="Story Analytic" insigth="topstories" />
-  </Container>
-  );
-
-export default PublisherInsightStories;
+export default asyncComponent({
+  resolve: () =>
+    System.import(/* webpackChunkName: "publisherinsightstories" */ './PublisherInsightStories'),
+});
