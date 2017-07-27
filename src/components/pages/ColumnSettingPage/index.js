@@ -338,7 +338,6 @@ class ColumnSettingPage extends React.Component {
 			a[0] = { text: 'No column', value: -1 }
 			columns.map((column, index) => {
 				if (
-					column.slug !== 'news' &&
 					column._id !== this.state.selectColumn &&
 					column.parent == null
 				)
@@ -563,7 +562,7 @@ class ColumnSettingPage extends React.Component {
 		api.getPublisherColumns().then(col => {
 			var c = []
 			col.map((val, index) => {
-				if (val.slug != 'news') c[index] = { text: val.name, value: val._id }
+				c[index] = { text: val.name, value: val._id }
 			})
 
 			this.setState({ columnArray: c })
