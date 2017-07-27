@@ -15,6 +15,33 @@ import { withCookies, Cookies } from 'react-cookie';
 import config from '../../config.js';
 import utils from '../../services/utils';
 
+import {
+  HomePage,
+  NewsPage,
+  AllColumn,
+  AboutPage,
+  ContactPage,
+  TagPage,
+  ColumnPage,
+  StoryPage,
+  ForgetPasswordPage,
+  SignInPage,
+  SignUpPage,
+  UserStory,
+  PublisherEditor,
+  UserSetting,
+  PrivateRoute,
+  NotFoundPage,
+  ErrorPage,
+  AllStoriesPage,
+  UserSettingProfile,
+  UserSettingAccount,
+  UserSettingStory,
+  NewStory,
+  EditStory,
+  SearchResultPage,
+} from '../../components';
+
 import { Route, Switch, Link, Redirect } from 'react-router-dom';
 
 import Footer from '../atoms/Footer';
@@ -257,8 +284,125 @@ class App extends React.Component {
 
               <Switch>
 
-                <Route exact path="/" component={Footer} />
-                <Route exact path="/test" component={Test} />
+                <Route exact path="/" component={HomePage} />
+                <Route exact path="/stories/news" component={NewsPage} />
+                <Route exact path="/stories/all" component={AllStoriesPage} />
+                <Route exact path="/stories/columns" component={AllColumn} />
+                <Route exact path="/stories/:columnSlug" component={ColumnPage} />
+                {/* STORY 1: FORMAT is 'NEWS' */}
+                <Route
+                  exact
+                  path="/stories/news/:storySlug/:sid"
+                  render={props => <StoryPage {...props} countView />}
+                />
+                {/* STORY 2: HAVE COLUMN */}
+                <Route
+                  exact
+                  path="/stories/:columnSlug/:storySlug/:sid"
+                  render={props => <StoryPage {...props} countView />}
+                />
+
+                <Route exact path="/search/:type" component={SearchResultPage} />
+
+                <Route exact path="/about" component={AboutPage} />
+                <Route exact path="/contact" component={ContactPage} />
+
+                <Route exact path="/tags/:tagSlug" component={TagPage} />
+
+                <Route exact path="/forget" component={ForgetPasswordPage} />
+                <Route
+                  exact
+                  path="/signin"
+                  render={props => <SignInPage {...props} visible />}
+                />
+                <Route
+                  exact
+                  path="/signup"
+                  render={props => <SignUpPage {...props} visible />}
+                />
+                <Route
+                  exact
+                  path="/logout"
+                  render={(props) => {
+                    auth.logout();
+                    return (
+                      <Redirect
+                        to={{
+                          pathname: '/',
+                        }}
+                      />
+                    );
+                  }}
+                />
+
+                <Route path="/editor" component={PublisherEditor} />
+
+                <PrivateRoute
+                  exact
+                  path="/me/settings"
+                  render={props => <UserSetting {...props}><UserSettingProfile /></UserSetting>}
+                />
+                <PrivateRoute
+                  exact
+                  path="/me/settings/account"
+                  render={props => (
+                    <UserSetting {...props}><UserSettingAccount {...props} /></UserSetting>
+                  )}
+                />
+                <PrivateRoute
+                  exact
+                  path="/me/stories"
+                  render={props => (
+                    <UserSetting {...props}><UserSettingStory {...props} /></UserSetting>
+                  )}
+                />
+                <PrivateRoute
+                  exact
+                  path="/me/stories/new"
+                  hasRoles={['ADMIN', 'WRITER', 'EDITOR']}
+                  render={props => <UserSetting {...props}><NewStory {...props} /></UserSetting>}
+                />
+                <PrivateRoute
+                  exact
+                  path="/me/stories/:sid/edit"
+                  render={props => <UserSetting {...props}><EditStory {...props} /></UserSetting>}
+                />
+
+                {/* STORY 5 PREVIEW DRAFTED STORY */}
+                <Route
+                  exact
+                  path="/me/stories/:sid"
+                  render={props => <StoryPage {...props} countView={false} />}
+                />
+
+                <Route
+                  exact
+                  path="/u/:uid"
+                  render={props => <UserStory {...props} uid={props.match.params.uid} />}
+                />
+                {/* STORY 4 NO COLUMN AND NO USERNAME */}
+                <Route
+                  exact
+                  path="/u/:uid/stories/:storySlug/:sid"
+                  render={props => <StoryPage {...props} countView />}
+                />
+
+                <Route
+                  exact
+                  path="/@:username"
+                  render={props => <UserStory {...props} username={props.match.params.username} />}
+                />
+                {/* STORY 3 NO COLUMN */}
+                <Route
+                  exact
+                  path="/@:username/stories/:storySlug/:sid"
+                  render={props => <StoryPage {...props} countView />}
+                />
+
+                <Route exact path="/error" component={ErrorPage} />
+
+                <Route exact path="/404" component={NotFoundPage} />
+                <Route component={NotFoundPage} />
 
               </Switch>
 
