@@ -90,9 +90,9 @@ const base = () => group([
   }),
   addPlugins([
     new webpack.ProgressPlugin(),
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    //new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new OfflinePlugin({
-      safeToUseOptionalCaches: true,
+      //safeToUseOptionalCaches: true,
       ServiceWorker: {
         events: true
       },
@@ -215,7 +215,8 @@ const client = createConfig([
       }),
     ])
   ]) : env(process.env.NODE_ENV, [
-    splitVendor({ exclude: [/lodash/, /offline-plugin\/runtime\.js/] }),
+    //splitVendor({ exclude: [/lodash/, /offline-plugin\/runtime\.js/] }),
+    splitVendor(),
 
     process.env.NODE_ENV==='production' ? addPlugins([
       new webpack.optimize.UglifyJsPlugin({

@@ -18,8 +18,7 @@ import { StaticRouter } from 'react-router'
 import { renderToString } from 'react-router-server'
 import { CookiesProvider } from 'react-cookie'
 import cookiesMiddleware from 'universal-cookie-express'
-import { AsyncComponentProvider, createAsyncContext } from 'react-async-component'
-import asyncBootstrapper from 'react-async-bootstrapper'
+
 //import forceSSL from 'express-force-ssl'
 import http from 'http'
 import https from 'https'
@@ -34,14 +33,11 @@ import api from './services/api'
 import sm from 'sitemap'
 
 const renderApp = ({ cookies, context, location, sheet, setting }) => {
-	const asyncContext = createAsyncContext()
 
 	const app = sheet.collectStyles(
 		<CookiesProvider cookies={cookies}>
 			<StaticRouter context={context} location={location}>
-				<AsyncComponentProvider asyncContext={asyncContext}>
-					<App2 setting={setting}/>
-				</AsyncComponentProvider>
+				<App2 setting={setting}/>
 				{/*<AppRoutes/>*/}
 				{/*<AppRoutes currentlocation = {req.url}/>*/}
 			</StaticRouter>
@@ -338,7 +334,7 @@ app.use((req, res, next) => {
 				if (meta.status == 404){
 					return res.redirect('/404')
 				}
-				if (context.status) { 
+				if (context.status) {
 					res.status(context.status)
 				}
 				if (context.url) {
