@@ -1,26 +1,30 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
-import styled from 'styled-components'
-import { BGImg, ShareDropdown } from '../../../components'
-import Avatar from 'material-ui/Avatar'
-import FontIcon from 'material-ui/FontIcon'
-import Popover from 'material-ui/Popover'
-import Menu from 'material-ui/Menu'
-import MenuItem from 'material-ui/MenuItem'
-import moment from 'moment'
-import truncate from 'lodash/truncate'
-import utils from '../../../services/utils'
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import { BGImg, ShareDropdown } from '../../../components';
+import Avatar from 'material-ui/Avatar';
+import FontIcon from 'material-ui/FontIcon';
+import Popover from 'material-ui/Popover';
+import Menu from 'material-ui/Menu';
+import MenuItem from 'material-ui/MenuItem';
+import moment from 'moment';
+import truncate from 'lodash/truncate';
+import utils from '../../../services/utils';
 
 const Container = styled.div`
   width:100%;
   padding:30px 0 30px 0;
-  border-bottom: ${props => props.hr ? '' : '1px solid #e2e2e2'} ;
+  border-bottom: ${props => (props.hr ? '' : '1px solid #e2e2e2')} ;
   overflow:hidden;
   display:flex;
   .imgWidth{
     width:100%;
     height:230px;
+  }
+  .imgWidthUser{
+    width:100%;
+    height:157px;
   }
   .des-hidden{
     display:block;
@@ -56,7 +60,7 @@ const Container = styled.div`
       height:178px;
     }
   }
-`
+`;
 
 const Div = styled.div`
   color:#8E8E8E;
@@ -64,7 +68,7 @@ const Div = styled.div`
   @media (max-width:480px) {
     font-size:12px;
   }
-`
+`;
 
 const NameLink = styled(Link)`
   display: block;
@@ -79,7 +83,7 @@ const NameLink = styled(Link)`
   @media (max-width:480px) {
     font-size:15px;
   }
-`
+`;
 const WriterLink = styled(Link)`
   color: #8E8E8E;
   opacity: .8;
@@ -90,7 +94,7 @@ const WriterLink = styled(Link)`
     opacity: 1;
   }
 
-`
+`;
 const ColumnLink = styled(Link)`
   color: ${props => props.theme.accentColor};
   opacity: .8;
@@ -100,7 +104,7 @@ const ColumnLink = styled(Link)`
     color: ${props => props.theme.accentColor};
     opacity: 1;
   }
-`
+`;
 const ByLink = styled(Link)`
   color: ${props => props.color};
   opacity: .8;
@@ -110,7 +114,7 @@ const ByLink = styled(Link)`
     color: ${props => props.color};
     opacity: 1;
   }
-`
+`;
 
 const BoxText = styled.div`
   float:left;
@@ -121,7 +125,7 @@ const BoxText = styled.div`
     padding-left:0px;
     margin-top:10px;
   }
-`
+`;
 
 const Box = styled.div`
   flex:1;
@@ -134,10 +138,10 @@ const Box = styled.div`
     padding:0px;
     padding-top:5px;
   }
-`
+`;
 const Box1 = styled.div`
-  flex:1 444px;
-  min-width:444px;
+  flex:1 300px;
+  min-width:300px;
   @media (max-width:480px) {
     display:block;
     min-width:100%;
@@ -147,98 +151,107 @@ const Box1 = styled.div`
     flex:1 340px;
     min-width:340px;
   }
-`
+`;
 
-const ArticleBox = ({ detail, style, final }, context) => {
-	let {
-		ptitle,
-		cover,
-		writer,
-		column,
-		votes,
-		comments,
-		updated,
-		url,
-		readTime,
-		contentShort,
-		created,
-		published
-	} = detail
-	var { theme } = context.setting.publisher
+const ArticleBox = ({ detail, style, final, id, isUserPage }, context) => {
+  let {
+    ptitle,
+    cover,
+    writer,
+    column,
+    votes,
+    comments,
+    updated,
+    url,
+    readTime,
+    contentShort,
+    created,
+    published,
+  } = detail;
+  var { theme } = context.setting.publisher;
 
-	let writherDisplay = ''
-	if (writer && writer.display) {
-		writherDisplay = writer.display ? writer.display : ''
-	}
+  let writherDisplay = '';
+  if (writer && writer.display) {
+    writherDisplay = writer.display ? writer.display : '';
+  }
 
-	return (
-		<Container hr={final} style={{ ...style }} height={(screen.width - 32) / 1.91}>
-    <ShareDropdown buttonSize={16} url={url} className='hidden-des'/>
-			<Box1 style={{ flex: '1' }}>
-				<Div className="sans-font" style={{ margin: '0 0 8px 0' }}>
-					{utils.dateFormat(published)}
-				</Div>
+  return (
+    <Container hr={final} style={{ ...style }} height={(screen.width - 32) / 1.91}>
+      <ShareDropdown buttonSize={16} url={url} className="hidden-des" />
+      <Box1 style={{ flex: '1' }}>
+        <Div className="sans-font" style={{ margin: '0 0 8px 0' }}>
+          {utils.dateFormat(published)}
+        </Div>
 
-				<BGImg
-					url={url}
-					src={cover.medium&&cover.medium||cover.small}
-					className="imgWidth"
-				/>
-			</Box1>
-			<Box>
-				<div className="row" style={{ overflow: 'hidden', display: 'flex' }}>
-					<div
-						style={{
-							width: '16px',
-							height: '1px',
-							background: '#8E8E8E',
-							flex: 1,
-							margin: '10px 10px 0 0'
-						}}
-					/>
-					<Div className="sans-font" style={{ margin: '0 0 7px 0', flex: 20 }}>
-						{readTime + ' min read'}
-					</Div>
-          <ShareDropdown buttonSize={16} url={url} className='hidden-mob'/>
-				</div>
-				<NameLink to={url} className="nunito-font" style={{ marginTop: '5px' }}>
+        <BGImg
+          url={url}
+          src={(cover.medium && cover.medium) || cover.small}
+          className={isUserPage ? 'imgWidthUser' : 'imgWidth'}
+        />
+      </Box1>
+      <Box>
+        <div className="row" style={{ overflow: 'hidden', display: 'flex' }}>
+          <div
+            style={{
+              width: '16px',
+              height: '1px',
+              background: '#8E8E8E',
+              flex: 1,
+              margin: '10px 10px 0 0',
+            }}
+          />
+          <Div className="sans-font" style={{ margin: '0 0 7px 0', flex: 20 }}>
+            {`${readTime} min read`}
+            {isUserPage
+              ? <strong>
+                  &nbsp;/&nbsp;
+                  <ColumnLink to={column && column.url}>
+                    {column.name}
+                  </ColumnLink>
+              </strong>
+              : ''}
+          </Div>
+          <ShareDropdown id={id} buttonSize={16} url={url} className="hidden-mob" />
+        </div>
+        <NameLink to={url} className="nunito-font" style={{ marginTop: '5px' }}>
 
-					{truncate(ptitle, {
-						length: 90,
-						separator: ''
-					})}
-				</NameLink>
+          {truncate(ptitle, {
+            length: isUserPage ? 70 : 90,
+            separator: '',
+          })}
+        </NameLink>
 
-				<Div className="nunito-font" style={{ marginTop: '10px' }}>
-					{truncate(contentShort, {
-						length: 200,
-						separator: ''
-					})}
-				</Div>
-				<Div className="nunito-font by">
-					by
-					{' '}
-					<strong>
-						<WriterLink to={writer && writer.url}>
-							{' '}{writer.display}{' '}
-						</WriterLink>
-					</strong>
-					{' '}
-					in
-					{' '}
-					<strong>
-						<ColumnLink to={column && column.url}>
-							{column.name}
-						</ColumnLink>
-					</strong>
-				</Div>
-			</Box>
-		</Container>
-	)
-}
+        <Div className="nunito-font" style={{ marginTop: '10px' }}>
+          {truncate(contentShort, {
+            length: 200,
+            separator: '',
+          })}
+        </Div>
+        {!isUserPage &&
+          <Div className="nunito-font by">
+            by
+            {' '}
+            <strong>
+              <WriterLink to={writer && writer.url}>
+                {' '}{writer.display}{' '}
+              </WriterLink>
+            </strong>
+            {' '}
+            in
+            {' '}
+            <strong>
+              <ColumnLink to={column && column.url}>
+                {column.name}
+              </ColumnLink>
+            </strong>
+          </Div>}
+      </Box>
+    </Container>
+  );
+};
 
 ArticleBox.contextTypes = {
-	setting: PropTypes.object
-}
+  setting: PropTypes.object,
+};
 
-export default ArticleBox
+export default ArticleBox;

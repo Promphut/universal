@@ -9,6 +9,7 @@ import {
   BackToTop,
   Pagination,
   UserSocialBar,
+  WriterTopStories,
 } from '../../../components';
 import { findDOMNode as dom } from 'react-dom';
 import { Link } from 'react-router-dom';
@@ -28,6 +29,16 @@ import auth from '../../../services/auth';
 const Wrapper = styled.div`
 	display: flex;
 	flex-direction: column;
+	background-color: ${props => (props.haveBg ? '#FAFAFA' : '#FFFFFF')};
+`;
+
+const ContentWrapper = styled.div`
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: stretch;
+	min-height: calc(100vh - 250px)
 `;
 
 const Onload = styled.div`
@@ -37,22 +48,22 @@ const Onload = styled.div`
 `;
 
 const NoArticleHeader = styled.h2`
+	width: 100%;
+	margin-top: 30px;
+	text-align: center;
 	font-family: 'Mitr';
 	font-size: 16px;
 	color: #222222;
 	font-weight: normal;
-	margin: auto;
-
 `;
 
 const UserAvatar = styled(Avatar)`
 	margin-right: 20px;
 	float: left;
 	@media (max-width: 480px) {
-		height: 80px !important;
-		width: 80px !important;
+		height: 100px !important;
+		width: 100px !important;
 		float: none;
-		border: 2px solid #FFF;
 		margin-right: 0px;
 	}
 `;
@@ -68,6 +79,16 @@ const UserInfoContainer = styled.div`
 	align-items: center;
 	flex-direction: column;
 	padding-top: 56px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+`;
+
+const UserInfoContainerDesktop = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	padding-top: 160px;
 	margin-top: 0px;
 	margin-bottom: 0px;
 `;
@@ -90,13 +111,28 @@ const UserInfoSecondaryText = styled.h2`
 	margin-bottom: 0;
 `;
 
+const UserBlockWrapper = styled.div`
+	flex:1 345px;
+	max-width: 345px;
+	background-color: #FAFAFA;
+	margin-top: ${props => (props.mobile ? '0' : '60px')};
+`;
+
+const DetailBlockWrapper = styled.div`
+	flex:1 709px;
+	max-width: 709px;
+	margin-left: 56px;
+	margin-top: ${props => (props.mobile ? '0' : '60px')};
+`;
+
 const EditorProfilePictureSection = styled.div`
 	background-image: url(${props => props.userProfileImage});
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: 100%;
 	height: 250px;
-	width: 100%;
+	width: ${props => (props.mobile ? '100%' : '345px')};
+	margin-top: 0px;
 `;
 
 const UserProfileSection = EditorProfilePictureSection.extend`
@@ -107,8 +143,19 @@ const UserProfileSection = EditorProfilePictureSection.extend`
 
 const UserInfoSection = styled.div`
 	width: 100%;
-	background-color: ${props => (props.role === 'admin' ? '#fafafa' : 'white')};
+	background-color: ${props => (props.role === 'admin' ? '#FAFAFA' : 'white')};
 	padding-bottom: 24px;
+`;
+
+const UserInfoSectionDesktop = styled.div`
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	padding-top: 40px;
+	margin-top: 0px;
+	margin-bottom: 0px;
 `;
 
 const SeeMoreDescriptionSection = UserInfoSection.extend`
@@ -152,7 +199,7 @@ const TopBarRightItem = TopBarItem.extend`
 `;
 
 const Card = styled.div`
-	width: 90%;
+	width: ${props => (props.mobile ? '90%' : '313px')};
 	z-index: 3;
 	margin: -16px auto 0 auto;
 	padding: 20px 16px 24px 16px;
@@ -162,6 +209,19 @@ const Card = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	justify-content: center;
+`;
+
+const CardNormal = styled.div`
+	width: 810px;
+	margin-top: 116px;
+	margin-bottom: 56px;
+	padding: 40px;
+	box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.1);
+	border-radius: 8px;
+	background: #FFFFFF;
+	display: flex;
+	align-items: flex-start;
 	justify-content: center;
 `;
 
@@ -203,31 +263,47 @@ const ProfileDescription = styled.p`
 	font-weight: lighter;
 	font-family: 'CS PraJad';
 	font-size: 16px;
-	height: ${props => (props.showDescription ? 'auto' : '170px')};
+	min-height: 100px;
+	height: ${props => (props.showDescription ? 'auto' : '100px')};
 	display: block;
 	white-space: wrap;
 	overflow: hidden;
 	>span{
 		position:relative;
-		top: ${props => (props.showDescription ? '0px' : '-170px')};
-		z-inde:-1;
+		top: ${props => (props.showDescription ? '0px' : '-100px')};
+		z-index:0;
 	}
+`;
+
+const ProfileDescriptionDesktop = styled.p`
+	width: 100%;
+	height: ${props => (props.showDescription ? 'auto' : '115px')};
+	margin: 56px 0 24px 0;
+	margin-bottom: ${props => (props.showDescription ? '0' : '24px')};
+	color: #222222;
+	font-weight: lighter;
+	font-family: 'Roboto';
+	font-size: 16px;
+	line-height: 23px;
+	display: block;
+	white-space: wrap;
+	overflow: hidden;
 `;
 
 const Blur = styled.div`
 	display: ${props => (props.showDescription ? 'none' : 'flex')};
 	justify-content: center;
 	background: rgba(255,255,255,0);
-	background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(250,250,250,1) 95%, rgba(250,250,250,1) 100%);
-	background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(250,250,250,0)), color-stop(95%, rgba(250,250,250,1)), color-stop(100%, rgba(255,255,255,1)));
-	background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(250,250,250,1) 95%, rgba(250,250,250,1) 100%);
-	background: -o-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(250,250,250,1) 95%, rgba(250,250,250,1) 100%);
-	background: -ms-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(250,250,250,1) 95%, rgba(250,250,250,1) 100%);
-	background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(250,250,250,1) 95%, rgba(250,250,250,1) 100%);
+	background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 95%, rgba(255,255,255,1) 100%);
+	background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(255,255,255,0)), color-stop(95%, rgba(255,255,255,1)), color-stop(100%, rgba(255,255,255,1)));
+	background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 95%, rgba(255,255,255,1) 100%);
+	background: -o-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 95%, rgba(255,255,255,1) 100%);
+	background: -ms-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 95%, rgba(255,255,255,1) 100%);
+	background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 95%, rgba(255,255,255,1) 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff', GradientType=0 );
 	position:relative;
 	width:100%;
-	max-height:170px;
+	max-height:100px;
 	height:100%;
 	top:0px;
 	z-index:1;
@@ -241,12 +317,23 @@ const Blur = styled.div`
 const ProfileDescriptionSeeMore = styled.button`
 	font-family: Mitr;
 	border: 0.5px solid #C4C4C4;
-	background-color: #fafafa;
+	background-color: #FFFFFF;
 	border-radius: 100px;
 	font-size: 12px;
 	z-index: 10;
 	padding: 2px 32px 2px 32px;
 	align-self: flex-end;
+	&:hover{
+		cursor:pointer;
+		border: 0.5px solid ${props => props.theme.accentColor};
+		color: ${props => props.theme.accentColor};
+  	}
+`;
+const SeeMoreWrapper = styled.div`
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
 `;
 
 const ArticleHeader = styled.div`
@@ -262,6 +349,7 @@ const ArticleCount = styled.span`
 `;
 
 const ArticleWrapper = styled.div`
+  	margin-top: ${props => (props.mobile ? '0px' : '56px')};
 `;
 
 const Page = styled.div`
@@ -366,7 +454,7 @@ export default class UserStory extends React.Component {
       .getUserFromUsername(username)
       .then((user) => {
         this.checkIsNormalUser(user.id);
-        this.setState({ user }, done);
+        this.setState({ user, showDescription: user.shortDesc.length < 500 }, done);
       })
       .catch((err) => {
         utils.notFound(this.props.history, err);
@@ -380,7 +468,7 @@ export default class UserStory extends React.Component {
       .getUserFromUserId(uid)
       .then((user) => {
         this.checkIsNormalUser(user.id);
-        this.setState({ user }, done);
+        this.setState({ user, showDescription: user.shortDesc.length < 500 }, done);
       })
       .catch((err) => {
         utils.notFound(this.props.history, err);
@@ -389,11 +477,9 @@ export default class UserStory extends React.Component {
 
   checkIsNormalUser = (uid, done = () => {}) => {
     api
-      .getPublisherWriters()
-      .then((writers) => {
-        this.setState({
-          isNormalUser: isEmpty(_.find(writers, o => o.id === _.toString(uid))),
-        });
+      .getPublisherNormalUsers(uid)
+      .then((result) => {
+        this.setState({ isNormalUser: result.isNormal });
       })
       .catch((err) => {
         utils.notFound(this.props.history, err);
@@ -504,172 +590,342 @@ export default class UserStory extends React.Component {
       if (feed && currentPage >= 0) {
         FeedPack = [];
         feed.map((item, index) =>
-          FeedPack.push(<ArticleBox final={index == feed.length - 1} detail={item} key={index} />),
+          FeedPack.push(
+            <ArticleBox
+              isUserPage
+              final={index == feed.length - 1}
+              detail={item}
+              key={index}
+            />,
+          ),
         );
       }
 
-      return (
+      let WriterUserBlock = (
+        <UserBlockWrapper mobile={utils.isMobile()}>
+          <EditorProfilePictureSection
+            userProfileImage={user.pic.large ? user.pic.large : user.pic.medium}
+          >
+            <TopBarContainer>
+
+              <TopBarLeftItem className="hidden-des">
+                <FontIcon
+                  onClick={this.checkBack}
+                  style={{ color: 'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' }}
+                  className="material-icons hidden-des"
+                >
+                  chevron_left
+                </FontIcon>
+              </TopBarLeftItem>
+
+              <TopBarRightItem className="hidden-des">
+                <Link to="/me/settings">
+                  <FontIcon
+                    style={{ color: 'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' }}
+                    className="material-icons hidden-des"
+                  >
+                    border_color
+                  </FontIcon>
+                </Link>
+              </TopBarRightItem>
+
+            </TopBarContainer>
+          </EditorProfilePictureSection>
+          <Card mobile={utils.isMobile()}>
+            <CardTitle>{user.display}</CardTitle>
+            <CardSubtitle>{user.intro}</CardSubtitle>
+
+            <Dash MarginTop="16px" />
+
+            <SocialButtonContainer>
+              <UserSocialBar colorPack={theme.barTone} channels={user.channels} />
+            </SocialButtonContainer>
+
+          </Card>
+          <WriterTopStories uid={user._id} />
+        </UserBlockWrapper>
+      );
+
+      let WriterDetailBlock = (
+        <DetailBlockWrapper mobile={utils.isMobile()}>
+          <ProfileDescriptionDesktop showDescription={showDescription}>
+            {user.shortDesc}
+          </ProfileDescriptionDesktop>
+
+          {!showDescription &&
+            <SeeMoreWrapper>
+              <ProfileDescriptionSeeMore onClick={this.showFullDescription}>
+                อ่านต่อ
+              </ProfileDescriptionSeeMore>
+            </SeeMoreWrapper>}
+
+          <ArticleWrapper>
+            <Content>
+              <Main>
+
+                <ArticleHeader>
+                  <ArticleCount>{feedCount} </ArticleCount>
+                  {feedCount > 1 ? 'STORIES' : 'STORY'}
+                </ArticleHeader>
+
+                <Dash MarginTop="6px" />
+
+                {loading
+                  ? this.onload()
+                  : <div>
+                    {FeedPack}
+                    {isEmpty && <NoArticleHeader>ยังไม่มีบทความ</NoArticleHeader>}
+                    {!isEmpty &&
+                        !(totalPages > currentPage && currentPage >= 0) &&
+                        <NoArticleHeader>
+                          ไม่มีข้อมูลในหน้านี้ กลับไปยัง
+                          <Link
+                            to={`${user.url}?page=1`}
+                            style={{
+                              color: theme.accentColor,
+                              padding: '0 0.5em 0 0.5em',
+                            }}
+                          >
+                            หน้าแรก
+                          </Link>
+                        </NoArticleHeader>}
+                    <Page>
+                      {totalPages > currentPage &&
+                          currentPage >= 0 &&
+                          <Pagination
+                            hideFirstAndLastPageLinks={!utils.isMobile()}
+                            hidePreviousAndNextPageLinks={!!utils.isMobile()}
+                            boundaryPagesRange={utils.isMobile() ? 0 : 1}
+                            currentPage={currentPage + 1}
+                            totalPages={totalPages}
+                            onChange={this.changePage}
+                          />}
+                    </Page>
+                  </div>}
+              </Main>
+            </Content>
+          </ArticleWrapper>
+
+        </DetailBlockWrapper>
+      );
+
+      let NormalUserDesktopBlock = (
+        <CardNormal>
+          <div style={{ width: '120px' }}>
+            <UserAvatarContainer>
+              <UserAvatar src={user.pic.large ? user.pic.large : user.pic.medium} size={120} />
+            </UserAvatarContainer>
+          </div>
+          <div style={{ width: '570px', marginLeft: '40px' }}>
+            <CardTitle>{user.display}</CardTitle>
+            <CardSubtitle style={{ textAlign: 'left' }}>{user.intro}</CardSubtitle>
+
+            <SocialButtonContainer>
+              <UserSocialBar colorPack={theme.barTone} channels={user.channels} />
+            </SocialButtonContainer>
+
+            <ProfileDescriptionDesktop
+              style={{
+                marginTop: '40px',
+                paddingTop: '24px',
+                borderTop: '1px solid #E2E2E2',
+                height: 'auto',
+              }}
+            >
+              {user.shortDesc}
+            </ProfileDescriptionDesktop>
+          </div>
+        </CardNormal>
+      );
+
+      let MobileBlock1 = (
         <Wrapper>
-          {!utils.isMobile() && <TopBarWithNavigation className="hidden-mob" />}
-          {!isNormalUser
-            ? // Admin
-              <EditorProfilePictureSection userProfileImage={user.pic.medium}>
-                <TopBarContainer>
+          <EditorProfilePictureSection
+            mobile={utils.isMobile()}
+            userProfileImage={user.pic.large ? user.pic.large : user.pic.medium}
+          >
+            <TopBarContainer>
 
-                  <TopBarLeftItem>
-                    <FontIcon
-                      onClick={this.checkBack}
-                      style={{ color: 'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' }}
-                      className="material-icons hidden-des"
-                    >
-                      chevron_left
-                    </FontIcon>
-                  </TopBarLeftItem>
+              <TopBarLeftItem className="hidden-des">
+                <FontIcon
+                  onClick={this.checkBack}
+                  style={{ color: 'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' }}
+                  className="material-icons hidden-des"
+                >
+                  chevron_left
+                </FontIcon>
+              </TopBarLeftItem>
 
-                  <TopBarRightItem>
-                    <Link to="/me/settings">
-                      <FontIcon
-                        style={{ color: 'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' }}
-                        className="material-icons hidden-des"
-                      >
-                        border_color
-                      </FontIcon>
-                    </Link>
-                  </TopBarRightItem>
+              <TopBarRightItem className="hidden-des">
+                <Link to="/me/settings">
+                  <FontIcon
+                    style={{ color: 'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' }}
+                    className="material-icons hidden-des"
+                  >
+                    border_color
+                  </FontIcon>
+                </Link>
+              </TopBarRightItem>
 
-                </TopBarContainer>
-              </EditorProfilePictureSection>
-            : // Registered User
-              <UserProfileSection>
-                <TopBarContainer>
-
-                  <TopBarLeftItem>
-                    <FontIcon
-                      onClick={this.checkBack}
-                      style={{ color: 'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' }}
-                      className="material-icons hidden-des"
-                    >
-                      chevron_left
-                    </FontIcon>
-                  </TopBarLeftItem>
-
-                  <TopBarRightItem>
-                    <Link to="/me/settings">
-                      <FontIcon
-                        style={{ color: 'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' }}
-                        className="material-icons hidden-des"
-                      >
-                        border_color
-                      </FontIcon>
-                    </Link>
-                  </TopBarRightItem>
-
-                </TopBarContainer>
-
-                <UserInfoContainer>
-
-                  <UserAvatarContainer>
-                    <UserAvatar src={user.pic.medium} size={95} />
-                  </UserAvatarContainer>
-
-                  <UserInfoPrimaryText>{user.display}</UserInfoPrimaryText>
-                  <UserInfoSecondaryText>{user.intro}</UserInfoSecondaryText>
-
-                  <SocialButtonContainer>
-                    <UserSocialBar colorPack={'light'} channels={{}} />
-                  </SocialButtonContainer>
-
-                </UserInfoContainer>
-              </UserProfileSection>}
-
+            </TopBarContainer>
+          </EditorProfilePictureSection>
           <UserInfoSection role={isNormalUser ? 'user' : 'admin'}>
-            {!isNormalUser &&
-              <Card>
-                <CardTitle>{user.display}</CardTitle>
-                <CardSubtitle>{user.intro}</CardSubtitle>
+            <Card mobile={utils.isMobile()}>
+              <CardTitle>{user.display}</CardTitle>
+              <CardSubtitle>{user.intro}</CardSubtitle>
 
-                <Dash MarginTop="16px" />
+              <Dash MarginTop="16px" />
 
-                <SocialButtonContainer>
-                  <UserSocialBar ColorPack="dark" channels={{}} />
-                </SocialButtonContainer>
+              <SocialButtonContainer>
+                <UserSocialBar colorPack={theme.barTone} channels={user.channels} />
+              </SocialButtonContainer>
 
-              </Card>}
+            </Card>
 
             <ProfileDescription showDescription={showDescription}>
-              {/* {user.shortDesc}  */}
-              <Blur showDescription={showDescription}>
+              <Blur showDescription={showDescription} descLength={user.shortDesc.length}>
                 <ProfileDescriptionSeeMore onClick={this.showFullDescription}>
                   อ่านต่อ
                 </ProfileDescriptionSeeMore>
               </Blur>
-              <span>
-                URL Blocked: This redirect failed because the redirect URI is not whitelisted in the app’s Client OAuth Settings. Make sure Client and Web OAuth Login are on and add all your app domains as Valid OAuth Redirect URIs.
-                URL Blocked: This redirect failed because the redirect URI is not whitelisted in the app’s Client OAuth Settings. Make sure Client and Web OAuth Login are on and add all your app domains as Valid OAuth Redirect URIs.
-                URL Blocked: This redirect failed because the redirect URI is not whitelisted in the app’s Client OAuth Settings. Make sure Client and Web OAuth Login are on and add all your app domains as Valid OAuth Redirect URIs.
-              </span>
+              <span style={{ fontFamily: 'Roboto' }}>{user.shortDesc}</span>
+            </ProfileDescription>
+          </UserInfoSection>
+
+          <ArticleWrapper mobile={utils.isMobile()}>
+            <Content>
+              <Main>
+
+                <ArticleHeader>
+                  <ArticleCount>{feedCount} </ArticleCount>
+                  {feedCount > 1 ? 'STORIES' : 'STORY'}
+                </ArticleHeader>
+
+                <Dash MarginTop="6px" />
+
+                {loading
+                  ? this.onload()
+                  : <div>
+                    {FeedPack}
+                    {isEmpty && <NoArticleHeader>ยังไม่มีบทความ</NoArticleHeader>}
+                    {!isEmpty &&
+                        !(totalPages > currentPage && currentPage >= 0) &&
+                        <NoArticleHeader>
+                          ไม่มีข้อมูลในหน้านี้ กลับไปยัง
+                          <Link
+                            to={`${user.url}?page=1`}
+                            style={{
+                              color: theme.accentColor,
+                              padding: '0 0.5em 0 0.5em',
+                            }}
+                          >
+                            หน้าแรก
+                          </Link>
+                        </NoArticleHeader>}
+                    <Page>
+                      {totalPages > currentPage &&
+                          currentPage >= 0 &&
+                          <Pagination
+                            hideFirstAndLastPageLinks={!utils.isMobile()}
+                            hidePreviousAndNextPageLinks={!!utils.isMobile()}
+                            boundaryPagesRange={utils.isMobile() ? 0 : 1}
+                            currentPage={currentPage + 1}
+                            totalPages={totalPages}
+                            onChange={this.changePage}
+                          />}
+                    </Page>
+                  </div>}
+              </Main>
+            </Content>
+          </ArticleWrapper>
+        </Wrapper>
+      );
+
+      let MobileBlock2 = (
+        <Wrapper>
+          <UserProfileSection style={{ width: '100%' }}>
+            <TopBarContainer>
+
+              <TopBarLeftItem>
+                <FontIcon
+                  onClick={this.checkBack}
+                  style={{ color: 'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' }}
+                  className="material-icons hidden-des"
+                >
+                  chevron_left
+                </FontIcon>
+              </TopBarLeftItem>
+
+              <TopBarRightItem>
+                <Link to="/me/settings">
+                  <FontIcon
+                    style={{ color: 'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' }}
+                    className="material-icons hidden-des"
+                  >
+                    border_color
+                  </FontIcon>
+                </Link>
+              </TopBarRightItem>
+
+            </TopBarContainer>
+
+            <UserInfoContainer>
+
+              <UserAvatarContainer>
+                <UserAvatar src={user.pic.large ? user.pic.large : user.pic.medium} size={100} />
+              </UserAvatarContainer>
+
+              <UserInfoPrimaryText>{user.display}</UserInfoPrimaryText>
+              <UserInfoSecondaryText>{user.intro}</UserInfoSecondaryText>
+
+              <SocialButtonContainer>
+                <UserSocialBar colorPack={'light'} channels={user.channels} />
+              </SocialButtonContainer>
+
+            </UserInfoContainer>
+          </UserProfileSection>
+
+          <UserInfoSection role={isNormalUser ? 'user' : 'admin'}>
+
+            <ProfileDescription showDescription={showDescription}>
+              <Blur showDescription={showDescription} descLength={user.shortDesc.length}>
+                <ProfileDescriptionSeeMore onClick={this.showFullDescription}>
+                  อ่านต่อ
+                </ProfileDescriptionSeeMore>
+              </Blur>
+              <span style={{ fontFamily: 'Roboto' }}>{user.shortDesc}</span>
             </ProfileDescription>
 
           </UserInfoSection>
+        </Wrapper>
+      );
 
-          {/* {!showDescription &&
-						<SeeMoreDescriptionSection showDescription={showDescription}>
-							<ProfileDescriptionSeeMore onClick={this.showFullDescription}>อ่านต่อ</ProfileDescriptionSeeMore>
-						</SeeMoreDescriptionSection>
-					} */}
+      return (
+        <Wrapper haveBg={!utils.isMobile() && isNormalUser}>
+          <TopBarWithNavigation className="hidden-mob" />
+          {utils.isMobile() &&
+            isNormalUser &&
+            <div style={{ minHeight: 'calc(100vh - 200px)' }}>
+              {MobileBlock2}
+            </div>}
+          {utils.isMobile() &&
+            !isNormalUser &&
+            <div>
+              {MobileBlock1}
+            </div>}
+          {!utils.isMobile() &&
+            !isNormalUser &&
+            <ContentWrapper>
+              {WriterUserBlock}
+              {WriterDetailBlock}
+            </ContentWrapper>}
+          {!utils.isMobile() &&
+            isNormalUser &&
+            <ContentWrapper>
+              {NormalUserDesktopBlock}
+            </ContentWrapper>}
 
-          {!isNormalUser &&
-            <ArticleSection>
-
-              <ArticleHeader>
-                <ArticleCount>{feedCount} </ArticleCount>
-                {feedCount > 1 ? 'STORIES' : 'STORY'}
-              </ArticleHeader>
-
-              <Dash MarginTop="6px" />
-
-            </ArticleSection>}
-
-          {!isNormalUser &&
-            <ArticleWrapper>
-              <Content>
-                <Main>
-                  {loading
-                    ? this.onload()
-                    : <div>
-                      {FeedPack}
-                      {isEmpty && <NoArticleHeader>ยังไม่มีบทความ</NoArticleHeader>}
-                      {!isEmpty &&
-                          !(totalPages > currentPage && currentPage >= 0) &&
-                          <NoArticleHeader>
-                            ไม่มีข้อมูลในหน้านี้ กลับไปยัง
-                            <Link
-                              to={`${user.url}?page=1`}
-                              style={{
-                                color: theme.accentColor,
-                                padding: '0 0.5em 0 0.5em',
-                              }}
-                            >
-                              หน้าแรก
-                            </Link>
-                          </NoArticleHeader>}
-                      <Page>
-                        {totalPages > currentPage &&
-                            currentPage >= 0 &&
-                            <Pagination
-                              hideFirstAndLastPageLinks={!utils.isMobile()}
-                              hidePreviousAndNextPageLinks={!!utils.isMobile()}
-                              boundaryPagesRange={utils.isMobile() ? 0 : 1}
-                              currentPage={currentPage + 1}
-                              totalPages={totalPages}
-                              onChange={this.changePage}
-                            />}
-                      </Page>
-                    </div>}
-                </Main>
-              </Content>
-            </ArticleWrapper>}
-          <Footer />
+          <Footer isUserPage />
         </Wrapper>
       );
     }

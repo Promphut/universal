@@ -2,10 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { LogoLink } from '../../../components';
 import FontIcon from 'material-ui/FontIcon';
-import { withRouter } from 'react-router';
-
+import auth from '../../../services/auth';
+import api from '../../../services/api';
 import utils from '../../../services/utils';
+import { withRouter } from 'react-router';
 
 const Container = styled.div`
 	padding: 40px 0px 40px 0px;
@@ -134,11 +136,17 @@ class Footer extends React.Component {
     super(props);
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    let token = utils.querystring('token', this.props.location) || auth.getToken();
+    api.getCookieAndToken(token).then((result) => {
+      auth.setCookieAndToken(result);
+      this.menu = result.menu;
+    });
+  }
 
   render() {
-    console.log(this.context.setting);
     let mar = this.props.isStoryPage ? '120px' : '56px';
+    mar = this.props.isUserPage ? '0px' : mar;
     let { theme, channels } = this.context.setting.publisher;
     let theSolarLogoFileName = null;
 
@@ -162,33 +170,33 @@ class Footer extends React.Component {
               <MobileColumnItem margin={16}>
                 <ColumnItemContainer>
                   {channels &&
-                    <SocialContent>
-                      {channels.fb &&
+                  <SocialContent>
+              {channels.fb &&
                         <SocialContentItem>
                           <SocialLink href={utils.getFbUrl(channels.fb)} target="_blank">
                             <SocialIcon className="fa fa-facebook fa-2x" aria-hidden="true" />
                           </SocialLink>
                         </SocialContentItem>}
-                      {channels.twt &&
+              {channels.twt &&
                         <SocialContentItem>
                           <SocialLink href={utils.getTwtUrl(channels.twt)} target="_blank">
                             <SocialIcon className="fa fa-twitter fa-2x" aria-hidden="true" />
                           </SocialLink>
                         </SocialContentItem>}
-                      {channels.yt &&
+              {channels.yt &&
                         <SocialContentItem>
                           <SocialLink href={utils.getYtUrl(channels.yt)} target="_blank">
                             <SocialIcon className="fa fa-youtube-play fa-2x" aria-hidden="true" />
                           </SocialLink>
                         </SocialContentItem>}
-                      {channels.ig &&
+              {channels.ig &&
                         <SocialContentItem>
                           <SocialLink href={utils.getIgUrl(channels.ig)} target="_blank">
                             <SocialIcon className="fa fa-instagram fa-2x" aria-hidden="true" />
                           </SocialLink>
                         </SocialContentItem>}
 
-                    </SocialContent>}
+            </SocialContent>}
                 </ColumnItemContainer>
               </MobileColumnItem>
 
@@ -222,17 +230,15 @@ class Footer extends React.Component {
           <Column width={1.5}>
             <ColumnHeader>STORIES</ColumnHeader>
             <ColumnItemContainer>
-              <ColumnItem><InnerLink to="/stories/กองทุนไหนดี">กองทุนไหนดี</InnerLink></ColumnItem>
+              <ColumnItem><InnerLink to="/stories/transform">Transform</InnerLink></ColumnItem>
               <ColumnItem>
-                <InnerLink to="/stories/อัศวินกองทุน">อัศวินกองทุน</InnerLink>
+                <InnerLink to="/stories/next-big-thing">Next Big Thing</InnerLink>
               </ColumnItem>
               <ColumnItem>
-                <InnerLink to="/stories/krungsri-plan-your-money">
-                  Krungsri Plan Your Money
-                </InnerLink>
+                <InnerLink to="/stories/next-business">Next Business</InnerLink>
               </ColumnItem>
               <ColumnItem>
-                <InnerLink to="/stories/aommoney-ideas">aomMONEY IDEAS</InnerLink>
+                <InnerLink to="/stories/thought-leader">Thought Leader</InnerLink>
               </ColumnItem>
             </ColumnItemContainer>
           </Column>
