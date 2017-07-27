@@ -7,8 +7,12 @@ var nightmare = Nightmare({
         }
     });
 
+var FRONTURL = process.argv[2] ? process.argv[2] : 'http://localhost:3000'
+var user = ['ochawin@likemeinc.com','nightmaretest@gmail.com', 'naoise.solomon@gmail.com']
+var password = ['12345678','nightmaretest', 'thisistestuser55678*']
+
 nightmare
-    .goto('http://localhost:3000')
+    .goto(FRONTURL)
     .evaluate(function () {
          window.resizeTo(screen.width, screen.height)
     })
@@ -18,7 +22,10 @@ nightmare
     
     .wait(5000)
     .click("#ShareSideBarFb")
-    .wait(5000)
+    .evaluate(function () {
+         window.open('http://www.google.com','_blank')
+    })
+    .wait(10000)
     .click("#ShareSideBarMore")
     .wait(5000)
     .click("#ShareSideBarTwt")

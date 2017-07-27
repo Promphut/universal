@@ -365,6 +365,15 @@ api.getPublisherWriters = () => {
 	}, api.err)
 }
 
+api.getPublisherNormalUsers = (uid) => {
+	return Request
+	.get(config.BACKURL+'/publishers/'+config.PID+'/isNormalUser/'+uid)
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body
+	}, api.err)
+}
+
 api.deleteStory = (sid) => {
 	let token = auth.getToken()
 	if(!token) return api.userNotFoundPromise()
