@@ -6,6 +6,8 @@ import FontIcon from 'material-ui/FontIcon';
 import utils from '../../services/utils';
 import { withRouter } from 'react-router';
 
+import Template from '../Template';
+
 const Container = styled.div`
   width:100%;
   height:500px;
@@ -25,9 +27,11 @@ class Test extends React.Component {
 
   render() {
     return (
-      <Container className="sans-font">
-        <h1>Test</h1>
-      </Container>
+      <Template ChildComponent = {
+        <Container className="sans-font">
+          <h1>Test</h1>
+        </Container>
+      }/>
     );
   }
 }
