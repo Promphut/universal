@@ -724,3 +724,7 @@ a:hover {
   src: url("/fonts/csprajad-webfont.woff2") format("woff2"), url("/fonts/csprajad-webfont.woff") format("woff");
   font-weight: normal;
   font-style: normal; }
+
+.size-full {
+  width: 100%;
+  height: inherit; }

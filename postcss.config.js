@@ -1,8 +1,5 @@
+/* eslint-disable import/no-extraneous-dependencies */
+// PostCSS-Loader config options
 module.exports = {
-  plugins: {
-     'postcss-import': {},
-     'postcss-cssnext': {
-		browsers: ['last 2 versions', '> 5%'],
-		},
-	},
+  plugins: [require('postcss-simple-vars'), require('postcss-cssnext'), require('postcss-import')],
 };
