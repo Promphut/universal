@@ -6,10 +6,15 @@ import BrowserRouter from 'react-router-dom/BrowserRouter';
 import asyncBootstrapper from 'react-async-bootstrapper';
 import { AsyncComponentProvider } from 'react-async-component';
 
-import './polyfills';
+import { basename } from '../shared/config.js';
+import { CookiesProvider } from 'react-cookie';
+
+// import './polyfills';
 
 import ReactHotLoader from './components/ReactHotLoader';
-import DemoApp from '../shared/components/DemoApp';
+
+import App from '../shared/components/App';
+import api from '../shared/services/api';
 
 // Get the DOM Element that will host our React application.
 const container = document.querySelector('#app');
@@ -29,24 +34,30 @@ const asyncComponentsRehydrateState = window.__ASYNC_COMPONENTS_REHYDRATE_STATE_
 function renderApp(TheApp) {
   // Firstly, define our full application component, wrapping the given
   // component app with a browser based version of react router.
-  const app = (
+  const app = setting => (
     <ReactHotLoader>
-      <AsyncComponentProvider rehydrateState={asyncComponentsRehydrateState}>
-        <BrowserRouter forceRefresh={!supportsHistory}>
-          <TheApp />
-        </BrowserRouter>
-      </AsyncComponentProvider>
+      <CookiesProvider>
+        <AsyncComponentProvider rehydrateState={asyncComponentsRehydrateState}>
+          <BrowserRouter forceRefresh={!supportsHistory}>
+            <TheApp setting={setting} />
+          </BrowserRouter>
+        </AsyncComponentProvider>
+      </CookiesProvider>
     </ReactHotLoader>
   );
 
   // We use the react-async-component in order to support code splitting of
   // our bundle output. It's important to use this helper.
   // @see https://github.com/ctrlplusb/react-async-component
-  asyncBootstrapper(app).then(() => render(app, container));
+  asyncBootstrapper(app).then(() => {
+    api.getPublisherSetting().then((setting) => {
+      render(app(setting), container);
+    });
+  });
 }
 
 // Execute the first render of our app.
-renderApp(DemoApp);
+renderApp(App);
 
 // This registers our service worker for asset caching and offline support.
 // Keep this as the last item, just in case the code execution failed (thanks
@@ -58,7 +69,7 @@ if (process.env.BUILD_FLAG_IS_DEV === 'true' && module.hot) {
   // Accept changes to this file for hot reloading.
   module.hot.accept('./index.js');
   // Any changes to our App will cause a hotload re-render.
-  module.hot.accept('../shared/components/DemoApp', () => {
-    renderApp(require('../shared/components/DemoApp').default);
+  module.hot.accept('../shared/components/App', () => {
+    renderApp(require('../shared/components/App').default);
   });
 }

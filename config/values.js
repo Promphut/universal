@@ -27,12 +27,12 @@ const values = {
   },
 
   // The host on which the server should run.
-  host: EnvVars.string('HOST', '0.0.0.0'),
+  host: EnvVars.string('HOST', 'localhost'),
   // The port on which the server should run.
   port: EnvVars.number('PORT', 1337),
 
   // The port on which the client bundle development server should run.
-  clientDevServerPort: EnvVars.number('CLIENT_DEV_PORT', 9331),
+  clientDevServerPort: EnvVars.number('CLIENT_DEV_PORT', 7331),
 
   // This is an example environment variable which is used within the react
   // application to demonstrate the usage of environment variables across
@@ -107,7 +107,7 @@ const values = {
 
   // Do you want to included source maps for optimised builds of the client
   // bundle?
-  includeSourceMapsForOptimisedClientBundle: false,
+  includeSourceMapsForOptimisedClientBundle: true,
 
   // These extensions are tried when resolving src files for our bundles..
   bundleSrcTypes: ['js', 'jsx', 'json'],

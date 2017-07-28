@@ -367,20 +367,22 @@ export default function webpackConfigFactory(buildOptions) {
                 // get interpretted and for the current configuration this will mean
                 // that it will kill our webpack treeshaking feature as the modules
                 // transpilation has not been disabled within in.
-                babelrc: true,
+                babelrc: false,
 
                 presets: [
                   // JSX
                   'react',
+                  'es2015',
                   // Stage 3 javascript syntax.
                   // "Candidate: complete spec and initial browser implementations."
                   // Add anything lower than stage 3 at your own risk. :)
+                  'stage-2',
                   'stage-3',
                   // For our client bundles we transpile all the latest ratified
                   // ES201X code into ES5, safe for browsers.  We exclude module
                   // transilation as webpack takes care of this for us, doing
                   // tree shaking in the process.
-                  ifClient(['env', { es2015: { modules: true } }]),
+                  // ifClient(['env', { es2015: { modules: true } }]),
                   // For a node bundle we use the specific target against
                   // babel-preset-env so that only the unsupported features of
                   // our target node version gets transpiled.
@@ -396,6 +398,8 @@ export default function webpackConfigFactory(buildOptions) {
                   // Adding this will give us the path to our components in the
                   // react dev tools.
                   ifDev('transform-react-jsx-source'),
+
+                  ifProd('transform-react-remove-prop-types'),
                   // Replaces the React.createElement function with one that is
                   // more optimized for production.
                   // NOTE: Symbol needs to be polyfilled. Ensure this feature
