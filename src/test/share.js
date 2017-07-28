@@ -1,16 +1,20 @@
+var argv = require('yargs').argv
 var Nightmare = require('nightmare');
 
 var nightmare = Nightmare({ 
-        show: true ,
-        switches: {
-          'ignore-certificate-errors': true
-        }
-    });
+    show: true ,
+    switches: {
+      'ignore-certificate-errors': true
+    }
+});
 
-var FRONTURL = process.argv[2] ? process.argv[2] : 'http://localhost:3000'
-var user = ['ochawin@likemeinc.com','nightmaretest@gmail.com', 'naoise.solomon@gmail.com']
-var password = ['12345678','nightmaretest', 'thisistestuser55678*']
+const user = ['ochawinwin@gmail.com','nightmaretest@gmail.com', 'naoise.solomon@gmail.com'],
+      password = ['12345678','nightmaretest', 'thisistestuser55678*']
 
+const FRONTURL = argv.fronturl || 'http://localhost:3000',
+      ISLOCALHOST = FRONTURL.indexOf('localhost')!==-1,
+      BACKURL = argv.backurl || (ISLOCALHOST ? 'https://localhost:4000' : 'https://api.thesolar.co')
+      
 nightmare
     .goto(FRONTURL)
     .evaluate(function () {

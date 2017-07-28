@@ -7,7 +7,9 @@ Promise = require('bluebird')
 var find = require('lodash/find')
 var should = require('chai').should()
 var Request = require('superagent')
-var Nightmare = require('nightmare');
+var Nightmare = require('nightmare')
+var argv = require('yargs').argv
+var config = require('../config')
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -17,10 +19,12 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
    * User[2] = FB User
    */
 
-var user = ['ochawinwin@gmail.com','nightmaretest@gmail.com', 'naoise.solomon@gmail.com']
-var password = ['12345678','nightmaretest', 'thisistestuser55678*']
-var FRONTURL = process.argv[process.argv.length-1] || 'http://localhost:3000'
-var BACKURL = FRONTURL.indexOf('localhost')!==-1 ? 'https://localhost:4000' : 'https://api.thesolar.co'
+const user = ['ochawinwin@gmail.com','nightmaretest@gmail.com', 'naoise.solomon@gmail.com'],
+      password = ['12345678','nightmaretest', 'thisistestuser55678*']
+
+const FRONTURL = argv.fronturl || 'http://localhost:3000',
+      ISLOCALHOST = FRONTURL.indexOf('localhost')!==-1,
+      BACKURL = argv.backurl || (ISLOCALHOST ? 'https://localhost:4000' : 'https://api.thesolar.co')
 
 //console.log('ARG', process.argv, FRONTURL, BACKURL)
 
@@ -120,53 +124,35 @@ describe('Check signin', function() {
     .catch(done)
   })
 
+  if(!ISLOCALHOST){ // no need to check fb signin for localhost
+    it('should sign in with facebook', function(done) {
+      nm.goto(FRONTURL)
+      .wait('#SignInPageButton')
+      .click("#SignInPageButton")
 
-  it('should sign in with facebook', function(done) {
-    nm.goto(FRONTURL)
-    .wait('#SignInPageButton')
-    .click("#SignInPageButton")
+      .wait('#SignInFacebookButton')
+      .click("#SignInFacebookButton")
 
-    .wait('#SignInFacebookButton')
-    .click("#SignInFacebookButton")
+      // go to facebook.com to login
+      .wait("#email")
+      .insert('#email', user[2])
+      .insert('#pass', password[2])
+      .click("#loginbutton")
 
-    // go to facebook.com to login
-    .wait("#email")
-    .insert('#email', user[2])
-    .insert('#pass', password[2])
-    .click("#loginbutton")
-
-    // redirect back to homepage
-    .wait('#RightMenuButton')
-    .exists("#RightMenuButton")
-    .then(exist => {
-      exist.should.be.true 
-      return nm.end()
+      // redirect back to homepage
+      .wait('#RightMenuButton')
+      .exists("#RightMenuButton")
+      .then(exist => {
+        exist.should.be.true 
+        return nm.end()
+      })
+      .then(() => {done()})
+      .catch(done)
     })
-    .then(() => {done()})
-    .catch(done)
-  })
+  }
 })
 
-// /*SIGN UP
-// *
-// */
-// /*CASE 1 : SIGN UP WITH USED EMAIL----------------------------------------------------------------------------------*/
-// .goto(FRONTURL)
 
-// .click("#SignInPageButton")
-// .wait("#SignUpButton")
-// .wait(1000)
-
-// .click("#SignUpButton")
-// .wait(2000)
-
-// .insert("#EmailField",user[0])
-// .click("#ConfirmEmailButton")
-// .wait(2000)
-
-// .click("#AuthBackButton")
-// .wait("#SignUpButton")
-// .wait(1000)
 describe('Check signup', function(){
   let nm 
   beforeEach(function(){
@@ -200,28 +186,21 @@ describe('Check signup', function(){
     // will ask for FB sign up button click
     .wait('#ContinueSignUpButton')
     .click('#ContinueSignUpButton')
-    .wait('#RightMenuButton')
-    .exists("#RightMenuButton")
+
+    // already on facebook.com sign up dialog ?
+    .wait("#loginbutton")
+    .exists("#loginbutton")
+
     .then(exist => {
       exist.should.be.true 
       return nm.end()
     })
     .then(() => {done()})
     .catch(done)
-
-     // redirect back to homepage
-    // .wait('#RightMenuButton')
-    // .exists("#RightMenuButton")
-    // .then(exist => {
-    //   exist.should.be.true 
-    //   return nm.end()
-    // })
-    // .then(() => {done()})
-    // .catch(done)
   })
 
   // available for v1.5.1
-  it.skip('should sign up with available email', function(done){
+  it('should sign up with available email', function(done){
     // firstly, clear out last time "nightmare" mock user
     Request.post(BACKURL + '/auth')
     .send({username : user[0], password : password[0]})
@@ -236,6 +215,9 @@ describe('Check signup', function(){
         //console.log('HAHA2', res.body)
 
         nm.goto(FRONTURL)
+        .wait('#SignInPageButton')
+        .click("#SignInPageButton")
+
         .wait('#SignUpButton')
         .click("#SignUpButton")
 

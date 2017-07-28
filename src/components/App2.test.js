@@ -1,12 +1,12 @@
 import Request from 'superagent'
 import config from '../config'
+var argv = require('yargs').argv
 
-//console.log(config)
-
-var FRONTURL = process.argv[3]==='--' || !process.argv[3] ? 'http://localhost:3000' : process.argv[3]  
-var BACKURL = FRONTURL.substr('localhost')!=-1 ? 'https://localhost:4000' : 'https://api.thesolar.co'
-console.log('F B', process.argv, FRONTURL, BACKURL)
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+const FRONTURL = argv.fronturl || 'http://localhost:3000',
+      ISLOCALHOST = FRONTURL.indexOf('localhost')!==-1,
+      BACKURL = argv.backurl || (ISLOCALHOST ? 'https://localhost:4000' : 'https://api.thesolar.co')
 
 function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));

@@ -144,6 +144,7 @@
     "styled-tools": "^0.1.4",
     "superagent": "^3.5.2",
     "universal-cookie": "^2.0.8",
-    "universal-cookie-express": "^2.0.5"
+    "universal-cookie-express": "^2.0.5",
+    "yargs": "^8.0.2"
   }
 }

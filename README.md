@@ -23,5 +23,5 @@
 
 # Test:
 - Page Request Test using Jest : npm run test:app2 <FRONTURL>
-- Authentication Test using Nightmare : npm run test:auth OR npm run test:auth -- --FRONTURL <FRONTURL> 
-- Share Test using Nightmare : npm run test:share OR npm run test:share -- --FRONTURL <FRONTURL>
+- Authentication Test using Nightmare : npm run test:auth OR npm run test:auth -- --fronturl=<FRONTURL> --backurl=<BACKURL> (default is localhost 3000 and 4000)
+- Share Test using Nightmare : npm run test:share OR npm run test:share -- --fronturl=<FRONTURL> --backurl=<BACKURL> (default is localhost 3000 and 4000)
