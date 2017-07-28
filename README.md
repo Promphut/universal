@@ -22,6 +22,6 @@
 	e.g. on nextempire production server: NODE_ENV=production PORT=5000 forever start -c 'node .' ./
 
 # Test:
-- npm run test <FRONTURL> (Page Request Test using Jest)
-- npm run test:auth <FRONTURL> (Authentication Test using Nightmare)
-- npm run test:share <FRONTURL> (Share Test using Nightmare)
+- Page Request Test using Jest : npm run test:app2 <FRONTURL>
+- Authentication Test using Nightmare : npm run test:auth OR npm run test:auth -- --FRONTURL <FRONTURL> 
+- Share Test using Nightmare : npm run test:share OR npm run test:share -- --FRONTURL <FRONTURL>

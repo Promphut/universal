@@ -432,5 +432,5 @@ if (process.env.NODE_ENV === 'development') {
 	  passphrase: 'thepublisher'
 	}
 	const secureServer = https.createServer(ssl_options, app)
-	startListen(secureServer, 'https://localhost', port+100)
+	startListen(secureServer, 'https://localhost', parseInt(port)+100)
 }

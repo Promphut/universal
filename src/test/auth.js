@@ -1,12 +1,13 @@
 var auth = require('../services/auth')
+//var chai = require('chai')
+//var chaiAsPromised = require('chai-as-promised')
+//chai.use(chaiAsPromised)
+//var should = chai.should()
+Promise = require('bluebird')
+var find = require('lodash/find')
+var should = require('chai').should()
 var Request = require('superagent')
-var Nightmare = require('nightmare');		
-var nightmare = Nightmare({ 
-        show: true ,
-        switches: {
-          'ignore-certificate-errors': true
-        }
-      });
+var Nightmare = require('nightmare');
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -16,187 +17,281 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
    * User[2] = FB User
    */
 
-var user = ['ochawin@likemeinc.com','nightmaretest@gmail.com', 'naoise.solomon@gmail.com']
+var user = ['ochawinwin@gmail.com','nightmaretest@gmail.com', 'naoise.solomon@gmail.com']
 var password = ['12345678','nightmaretest', 'thisistestuser55678*']
-var FRONTURL = process.argv[2] ? process.argv[2] : 'http://localhost:3000'
-var BACKURL = FRONTURL.substr('localhost')!=-1 ? 'https://localhost:4000' : 'https://api.thesolar.co'
-var token
+var FRONTURL = process.argv[process.argv.length-1] || 'http://localhost:3000'
+var BACKURL = FRONTURL.indexOf('localhost')!==-1 ? 'https://localhost:4000' : 'https://api.thesolar.co'
 
-/*Request.post(BACKURL + '/auth')
-  .send({username : user[0], password : password[0]})
-  .set('Accept', 'application/json')
-  .then(res => {
-    token = res.body.token
+//console.log('ARG', process.argv, FRONTURL, BACKURL)
+
+// STILL NOT FINISH, HAVE TO MOVE NONG BOOM'S TEST INTO THIS MOCHA TEST
+describe('Check signin', function() {
+  let nm 
+  beforeEach(function(){
+    nm = Nightmare({ 
+      show: true ,
+      switches: {
+        'ignore-certificate-errors': true
+      },
+      Promise: Promise
+    });
   })
-  .then(()=> Request
-      .delete(BACKURL+'/users/' + user[1])
-      .query({token: token})
+
+  it('should sign in with correct email', function(done) {
+    nm.goto(FRONTURL)
+    .wait('#SignInPageButton')
+    .click("#SignInPageButton")
+
+    .wait('#SignInEmailField')
+    .insert('#SignInEmailField',user[0])
+    .insert('#SignInPasswordField', password[0])
+    .click('#SignInButton')
+
+    // 1. signed in, should redirect to homepage with right menu button existed
+    .wait('#RightMenuButton')
+    .exists('#RightMenuButton')
+    .then(exist => { 
+      exist.should.be.true 
+
+      // 2. should be able to reload homepage, also with right menu button existed
+      return nm
+      .goto(FRONTURL)
+      .wait('#RightMenuButton')
+      .exists("#RightMenuButton")
+    })
+    .then(exist => {
+      exist.should.be.true 
+
+      // 3. after signed in, should present cookie
+      return nm.cookies.get({
+        path: '/',
+        secure: true
+      })
+      .then(cookies => {
+        should.exist( find(cookies, {name:'token'}) )
+        should.exist( find(cookies, {name:'user'}) )
+        should.exist( find(cookies, {name:'roles'}) )
+
+        // 4. sign out, should appear sign in button on homepage
+        return nm
+        .click('#RightMenuButton')
+        .click("#LogOutButton")
+        .goto(FRONTURL)
+        .wait('#SignInPageButton')
+        .exists('#SignInPageButton')
+      })
+    })
+    .then(exist => {
+      exist.should.be.true
+
+      // 5. after logged out cookie should not exist
+      return nm.cookies.get({
+        path: '/',
+        secure: true
+      })
+      .then(cookies => {
+        should.not.exist( find(cookies, {name:'token'}) )
+
+        return nm.end()
+      })
+    })
+    .then(() => {done()})
+    .catch(done)
+  })
+
+
+  it('should unable to sign in with incorrect credential', function(done) {
+    nm.goto(FRONTURL)
+    .wait('#SignInPageButton')
+    .click("#SignInPageButton")
+
+    .wait('#SignInEmailField')
+    .insert('#SignInEmailField',user[1])
+    .insert('#SignInPasswordField', password[0])
+    .click('#SignInButton')
+    .wait(1000)
+    .url()
+    .then(url => {
+      url.should.have.string('/signin')
+
+      return nm.end()
+    })
+    .then(() => {done()})
+    .catch(done)
+  })
+
+
+  it('should sign in with facebook', function(done) {
+    nm.goto(FRONTURL)
+    .wait('#SignInPageButton')
+    .click("#SignInPageButton")
+
+    .wait('#SignInFacebookButton')
+    .click("#SignInFacebookButton")
+
+    // go to facebook.com to login
+    .wait("#email")
+    .insert('#email', user[2])
+    .insert('#pass', password[2])
+    .click("#loginbutton")
+
+    // redirect back to homepage
+    .wait('#RightMenuButton')
+    .exists("#RightMenuButton")
+    .then(exist => {
+      exist.should.be.true 
+      return nm.end()
+    })
+    .then(() => {done()})
+    .catch(done)
+  })
+})
+
+// /*SIGN UP
+// *
+// */
+// /*CASE 1 : SIGN UP WITH USED EMAIL----------------------------------------------------------------------------------*/
+// .goto(FRONTURL)
+
+// .click("#SignInPageButton")
+// .wait("#SignUpButton")
+// .wait(1000)
+
+// .click("#SignUpButton")
+// .wait(2000)
+
+// .insert("#EmailField",user[0])
+// .click("#ConfirmEmailButton")
+// .wait(2000)
+
+// .click("#AuthBackButton")
+// .wait("#SignUpButton")
+// .wait(1000)
+describe('Check signup', function(){
+  let nm 
+  beforeEach(function(){
+    nm = Nightmare({ 
+      show: true ,
+      switches: {
+        'ignore-certificate-errors': true
+      },
+      Promise: Promise
+    });
+  })
+
+  it('should sign up with used email', function(done){
+    nm.goto(FRONTURL)
+    .wait('#SignInPageButton')
+    .click("#SignInPageButton")
+
+    .wait("#SignUpButton")
+    .click("#SignUpButton")
+
+    // sign up page, enter username
+    .wait("#EmailField")
+    .insert("#EmailField",user[0])
+    .click("#ConfirmEmailButton")
+
+    // // will ask for pwd
+    // .wait('input[name="password"]')
+    // .insert('input[name="password"]', password[0])
+    // .click('button[type="submit"]')
+
+    // will ask for FB sign up button click
+    .wait('#ContinueSignUpButton')
+    .click('#ContinueSignUpButton')
+    .wait('#RightMenuButton')
+    .exists("#RightMenuButton")
+    .then(exist => {
+      exist.should.be.true 
+      return nm.end()
+    })
+    .then(() => {done()})
+    .catch(done)
+
+     // redirect back to homepage
+    // .wait('#RightMenuButton')
+    // .exists("#RightMenuButton")
+    // .then(exist => {
+    //   exist.should.be.true 
+    //   return nm.end()
+    // })
+    // .then(() => {done()})
+    // .catch(done)
+  })
+
+  // available for v1.5.1
+  it.skip('should sign up with available email', function(done){
+    // firstly, clear out last time "nightmare" mock user
+    Request.post(BACKURL + '/auth')
+    .send({username : user[0], password : password[0]})
+    .set('Accept', 'application/json')
+    .then(res => {
+      //console.log('HAHA1', res.body)  
+      Request
+      .delete(BACKURL + '/users/' + encodeURIComponent(user[1]))
+      .send({token: res.body.token})
       .set('Accept','application/json')
       .then(res => {
+        //console.log('HAHA2', res.body)
+
+        nm.goto(FRONTURL)
+        .wait('#SignUpButton')
+        .click("#SignUpButton")
+
+        .wait('#EmailField')
+        .insert("#EmailField",user[1])
+        .click("#ConfirmEmailButton")
+
+        .wait('#SignUpPasswordField')
+        .insert("#SignUpPasswordField",password[1])
+        .insert("#SignUpPasswordAgainField",password[1])
+        .click("#ConfirmSignUp")
+
+        // redirect back to homepage
+        .wait('#RightMenuButton')
+        .exists("#RightMenuButton")
+        .then(exist => {
+          exist.should.be.true 
+          return nm.end()
+        })
+        .then(() => {done()})
+        .catch(done)
       })
-    ).then(*/
-  nightmare
-  .goto(FRONTURL)
-  .wait(2000)
-
-  /*SIGN IN
-  *
-  */
-  /*CASE 1 : SIGN IN WITH CORRECT EMAIL-----------------------------------------------------------------------------*/
-  .click("#SignInPageButton")
-  .wait(2000)
-
-  .insert('#SignInEmailField',user[0])
-  .insert('#SignInPasswordField', password[0])
-  .click('#SignInButton')
-  .wait(2000)
-  
-  .click("#RightMenuButton")
-  .wait(2000)
-  .click("#LogOutButton")
-  .wait(2000)
-
-  /*CASE 2 : SIGN IN WITH WRONG EMAIL/PASSWORD-----------------------------------------------------------------------------*/
-  .click("#SignInPageButton")
-  .wait(2000)
-
-  .insert('#SignInEmailField',user[1])
-  .insert('#SignInPasswordField', password[0])
-  .click('#SignInButton')
-  .wait(2000)
-
-  /*CASE 3 : SIGN IN WITH FB-----------------------------------------------------------------------------*/
-
-  .click("#SignInFacebookButton")
-  .wait(2000)
-  .wait("#email")
-
-  .insert('#email', user[2])
-  .insert('#pass', password[2])
-  .click("#loginbutton")
-  .wait(5000)
-
-  .click("#RightMenuButton")
-  .wait(2000)
-  .click("#LogOutButton")
-  .wait(2000)
-
-  /*CASE 3 : LOGGED IN WITH FB & SIGN IN WITH FB-----------------------------------------------------------------------------*/
-  .goto('https://wwww.facebook.com')
-  .insert('#email', user[2])
-  .insert('#pass', password[2])
-  .click("#loginbutton")
-  .wait(5000)
-
-  .click("#SignInPageButton")
-  .wait(2000)
-
-  .click("#SignInFacebookButton")
-  .wait(5000)
-
-  .click("#RightMenuButton")
-  .wait(2000)
-  .click("#LogOutButton")
-  .wait(2000)
-
-  /*SIGN UP
-  *
-  */
-  /*CASE 1 : SIGN UP WITH USED EMAIL----------------------------------------------------------------------------------*/
-  .goto(FRONTURL)
-
-  .click("#SignInPageButton")
-  .wait("#SignUpButton")
-  .wait(1000)
-
-  .click("#SignUpButton")
-  .wait(2000)
-
-  .insert("#EmailField",user[0])
-  .click("#ConfirmEmailButton")
-  .wait(2000)
-
-  .click("#AuthBackButton")
-  .wait("#SignUpButton")
-  .wait(1000)
-
-  /*CASE 2 : SIGN UP WITH AVAILABLE EMAIL----------------------------------------------------------------------------------*/
-
-  .click("#SignUpButton")
-  .wait(2000)
-
-  .insert("#EmailField",user[1])
-  .click("#ConfirmEmailButton")
-  .wait(2000)
-
-  .insert("#SignUpPasswordField",password[1])
-  .insert("#SignUpPasswordAgainField",password[1])
-  .click("#ConfirmSignUp")
-  .wait(3000)
-
-  .click("#RightMenuButton")
-  .wait(2000)
-  .click("#LogOutButton")
-  .wait(2000)
-
-  /*CASE 3 : SIGN IN AGAIN-------------------------------------------------------------------------------------------------------------*/
-  
-  .click("#SignInPageButton")  
-  .insert('#SignInEmailField',user[1])
-  .insert('#SignInPasswordField', password[1])
-  .click('#SignInButton')
-  .wait(3000)
-
-  .click("#RightMenuButton")
-  .wait(2000)
-  .click("#LogOutButton")
-  .wait(2000)
-
-  /*EDITOR AVAILABILITY
-  *
-  */
-  .click("#SignInPageButton")
-  .wait(2000)
-
-  .insert('#SignInEmailField',user[0])
-  .insert('#SignInPasswordField', password[0])
-  .click('#SignInButton')
-  .wait(2000)
-
-  .click("#TopNewStoryButton")
-  .wait(2000)
-  .back()
-  .wait(2000)
-
-  .click("#RightMenuButton")
-  .wait(2000)
-  .click("#EditorModeButton")
-  .wait(2000)
-
-  // /*OTHER OPTION-------------------------------------*/
-  
-    // .click("#RightMenuButton")
-    // .wait(2000)
-    // .click("#MyStoriesButton")
-    // .wait(2000)
-
-    // .click("#RightMenuButton")
-    // .wait(2000)
-    // .click("#EditProfileButton")
-    // .wait(2000)
-
-    // .click("#RightMenuButton")
-    // .wait(2000)
-    // .click("#SettingsButton")
-    // .wait(2000)
-
-  /*FINISH -----------------------------------------------------------------------------------------*/
-
-  .end()
-  .then(function () {
-    console.log('Finished');
+    })
   })
-  .catch(function (error) {
-    console.error('Finished With Error', error);
-  })//)
-      
+
+  it('should able to use editor mode', function(done){
+    // sign in first
+    nm.goto(FRONTURL)
+    .wait("#SignInPageButton")
+    .click("#SignInPageButton")
+
+    .wait('#SignInEmailField')
+    .insert('#SignInEmailField',user[0])
+    .insert('#SignInPasswordField', password[0])
+    .click('#SignInButton')
+
+    // 1. should be able to click new story button
+    .wait('#TopNewStoryButton')
+    .click('#TopNewStoryButton')
+    .url()
+    .then(url => {
+      url.should.have.string('/me/stories/new')
+
+      // 2. should be able to go to editor mode
+      return nm.wait('#RightMenuButton')
+      .click("#RightMenuButton")
+      .wait('#EditorModeButton')
+      .click('#EditorModeButton')
+      .url()
+      .then(url => {
+        url.should.have.string('/editor')
+
+        return nm.end()
+      })
+    })
+    .then(() => {done()})
+    .catch(done)
+  })
+})

@@ -136,7 +136,7 @@ class SignIn2 extends React.Component {
         <Head >You already have an account</Head>
         <Text className='sans-font' style={{marginBottom:'0px'}}>
           <span style={{color:'#222'}}>{user.email} </span>is signed up<br/>
-          with {pub.name} by Facebook.<br/>
+          with {pub.name} by Email.<br/>
           Do you want to continue log in with this account?
         </Text>
         <div style={{width:'70px',margin:'40px auto 20px auto'}}><Avatar src={user.pic.medium} size={70}/></div>
@@ -156,6 +156,7 @@ class SignIn2 extends React.Component {
           <NewLink to="/forget" style={{float:'left'}}>Forget Password?</NewLink>
           <div style={{...styles.btnCon}}>
             <RaisedButton
+              id="ContinueSignUpButton"
               label="Next"
               labelPosition="after"
               labelColor='white'

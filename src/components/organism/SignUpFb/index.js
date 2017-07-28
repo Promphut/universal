@@ -80,6 +80,7 @@ class SignUpFb extends React.Component {
   render(){
     var {user} = this.props
     var {pub} = this.state
+    let nextPathname = this.props.nextPathname 
 
     return(
       <Box>
@@ -92,8 +93,9 @@ class SignUpFb extends React.Component {
         <div style={{width:'70px',margin:'40px auto 20px auto'}}><Avatar src={user.pic.medium} size={70}/></div>
         <Text className='sans-font' style={{color:"#222",margin:'30px'}}>{user.display}</Text>
         <div style={styles.btnCon}>
-          <a href={config.BACKURL+'/auth/facebook?publisher='+config.PID+'&nextpathname='+encodeURIComponent(this.props.nextPathname)}>
+          <a href={config.BACKURL+'/auth/facebook?publisher=' + config.PID + (nextPathname ? '&nextpathname='+encodeURIComponent(nextPathname) : '')}>
             <RaisedButton
+              id="ContinueSignUpButton"
               label="Sign Up with facebook"
               labelPosition="after"
               labelColor='white'

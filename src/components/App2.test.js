@@ -3,9 +3,9 @@ import config from '../config'
 
 //console.log(config)
 
-var FRONTURL = process.argv[3] ? process.argv[3] : 'http://localhost:3000'
+var FRONTURL = process.argv[3]==='--' || !process.argv[3] ? 'http://localhost:3000' : process.argv[3]  
 var BACKURL = FRONTURL.substr('localhost')!=-1 ? 'https://localhost:4000' : 'https://api.thesolar.co'
-
+console.log('F B', process.argv, FRONTURL, BACKURL)
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 function timeout(ms) {
@@ -371,6 +371,7 @@ describe('Get Config', () => {
         var setting = await Request
             .get(BACKURL + '/publishers/' + config.PID + '/setting')
             .then((res) => {
+                //console.log('CONFIG', config.PID, config.NAME, res.body.publisher.name, BACKURL)
                 return res.body
             })
 
