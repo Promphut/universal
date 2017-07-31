@@ -128,14 +128,12 @@ function HTML(props) {
         <script dangerouslySetInnerHTML={{ __html: quantcast.headScript }} />
 
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css"
-        />
-        <link
+        {/* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css" /> */}
+        <link rel="stylesheet" href="/css/main.css" />
+        {/* <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Mitr|Nunito|PT+Sans|PT+Serif:400,700,700i|Roboto|Roboto+Slab"
-        />
+        /> */}
       </head>
       <body>
         <noscript dangerouslySetInnerHTML={{ __html: ggTag.iframe }} />

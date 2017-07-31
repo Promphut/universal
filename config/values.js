@@ -107,7 +107,7 @@ const values = {
 
   // Do you want to included source maps for optimised builds of the client
   // bundle?
-  includeSourceMapsForOptimisedClientBundle: true,
+  includeSourceMapsForOptimisedClientBundle: false,
 
   // These extensions are tried when resolving src files for our bundles..
   bundleSrcTypes: ['js', 'jsx', 'json'],
