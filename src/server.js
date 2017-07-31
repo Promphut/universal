@@ -48,13 +48,18 @@ const renderApp = ({ cookies, context, location, sheet, setting }) => {
 }
 
 const extractMeta = (setting, url) => {
+	//console.log(setting)
 	let meta = {
 		name: '',
 		keywords: setting.publisher.keywords || '',
 		desc: setting.publisher.desc || '',
 		cover : COVER || '',
 		analytic: ANALYTIC.FBAPPID || '',
-		url : url
+		url : url,
+		logo: setting.publisher.theme.slogo,
+		publisher: setting.publisher.name,
+		writer: setting.publisher.name,
+		datePublished: new Date()
 	}
 
 	if(setting.publisher.name)
@@ -80,10 +85,13 @@ const extractMeta = (setting, url) => {
 				return api.getStoryFromSid(sid)
 				.then(res => {
 					let s = res.story
+					//console.log(s)
 					if(s.ptitle) meta.name = s.ptitle + ' | ' + setting.publisher.name
 					if(s.contentShort) meta.desc = s.contentShort
 					if(s.cover) meta.cover = s.cover.large || s.cover.medium
 					if(s.url) meta.url = s.url
+					if(s.writer) meta.writer = s.writer.display
+					if(s.published) meta.datePublished = s.published 
 					return meta
 				}).catch((err)=>{return {status: 404}})
 			}else return Promise.resolve(meta)
