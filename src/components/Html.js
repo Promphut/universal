@@ -190,6 +190,12 @@ const Html = ({ styles, assets, content, meta }) => {
         <script dangerouslySetInnerHTML={{ __html: quantcast.headScript }} />
         
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ld }}></script>
+      </head>
+      <body {...bodyAttrs}>
+        <noscript dangerouslySetInnerHTML={{ __html: ggTag.iframe }}></noscript>
+        <div id="fb-root"></div>
+        <script dangerouslySetInnerHTML={{ __html: facebookSdk }} />
+
         <div itemScope itemType="http://schema.org/NewsArticle" className='h1-for-seo'>
             <h1 itemProp="headline">{name}</h1>
             <h2 className='h1-for-seo'>{desc}</h2>
@@ -211,13 +217,6 @@ const Html = ({ styles, assets, content, meta }) => {
                 <span itemProp="name">{publisher}</span>
             </div>
         </div> 
-      </head>
-      <body {...bodyAttrs}>
-        <noscript dangerouslySetInnerHTML={{ __html: ggTag.iframe }}></noscript>
-        <div id="fb-root"></div>
-        <script dangerouslySetInnerHTML={{ __html: facebookSdk }} />
-
-
         <main id="app" dangerouslySetInnerHTML={{ __html: content }} />
 
         {assets.js.map(path => <script key={path} src={path} />)}

@@ -205,17 +205,7 @@ const renderHtml = ({ content, sheet, meta }) => {
 }
 
 const app = express()
-const sitemap = sm.createSitemap({
-	hostname: FRONTURL,
-	cacheTime: 600000,        // 600 sec - cache purge period
-	urls: [
-		{ url: '/',  changefreq: 'daily', priority: 0.5 ,img: COVER},
-		{ url: '/stories/news',  changefreq: 'daily',  priority: 0.3 },
-		{ url: '/stories/columns',  changefreq: 'weekly',  priority: 0.2 },
-		{ url: '/about'},
-		{ url: '/contact'}
-	]
-})
+
 //app.use(forceSSL)
 app.use(basename, express.static(path.resolve(process.cwd(), 'dist/public'),{maxAge: "7d"}))
 app.use(cookiesMiddleware())
@@ -269,13 +259,34 @@ app.post('/upload/img',
 // 	}
 // )
 app.get('/sitemap.xml', (req, res)=> {
-  sitemap.toXML( function (err, xml) {
-      if (err) {
-        return res.status(500).end();
-      }
-      res.header('Content-Type', 'application/xml');
-      res.send( xml );
-  });
+
+	api.getPublisherSetting().then(setting=>{
+		var column = []
+		setting.menu.column.map((val,inx)=>{
+			column.push({url:'/stories/columns/'+val.slug , changefreq : 'daily', priority : 0.8})
+		})
+		const sitemap = sm.createSitemap({
+			hostname: FRONTURL,
+			cacheTime: 600000,        // 600 sec - cache purge period
+			urls: [
+				{ url: '/',  changefreq: 'daily', priority: 1 ,img: COVER},
+				{ url: '/stories/news',  changefreq: 'daily',  priority: 0.8 },
+				{ url: '/stories/all',  changefreq: 'daily',  priority: 0.8 },
+				...column,
+				{ url: '/stories/columns',  changefreq: 'weekly',  priority: 0.5 },
+				{ url: '/about'},
+				{ url: '/contact'}
+			]
+		})
+		sitemap.toXML( function (err, xml) {
+				if (err) {
+					return res.status(500).end();
+				}
+				res.header('Content-Type', 'application/xml');
+				res.send( xml );
+		});
+	})
+		
 });
 
 app.get('/robots.txt', (req, res) => {
