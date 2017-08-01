@@ -1,19 +1,19 @@
 import Request from 'superagent'
 import config from '../config'
-import auth from '../services/auth'
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 //console.log(config)
 
-var FRONTURL = 'http://localhost:3000'
-var BACKURL = 'https://localhost:4000'
-
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+const   FRONTURL = process.argv[3]==='--' || !process.argv[3] ? 'http://localhost:3000' : process.argv[3],
+        BACKURL = FRONTURL.indexOf('localhost')!==-1 ? 'https://localhost:4000' : 'https://api.thesolar.co'
+//console.log('F B', process.argv, FRONTURL, BACKURL)
 
 function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-describe.skip('Page Availability', () => {
+describe('Page Availability 1', () => {
 
     it('Homepage', async () => {
         await Request
@@ -69,24 +69,32 @@ describe.skip('Page Availability', () => {
         await Promise.all([Promises])
 
     })
+})
 
+
+describe('Page Availability 2', () => {
     it('NewsPage', async () => {
 
         let page = 0
         let feeds = []
         let totalPages = 0
         
-        while(true){
-            var results = await Request
-                .get(BACKURL + '/publishers/' + config.PID + '/feed?type=news&page=' + page)
-                .then(res => {
-                    return res.body
-                })
-            feeds = feeds.concat(results.feed)
-            if(results.feed.length < 15)
-                break
-            page++
-        }
+        // while(true){
+        //     var results = await Request
+        //         .get(BACKURL + '/publishers/' + config.PID + '/feed?type=news&page=' + page)
+        //         .then(res => {
+        //             return res.body
+        //         })
+        //     feeds = feeds.concat(results.feed)
+        //     if(results.feed.length < 15)
+        //         break
+        //     page++
+        // }
+        feeds = await Request
+            .get(BACKURL + '/publishers/' + config.PID + '/feed?type=news&page=0&limit=3')
+            .then(res => {
+                return res.body.feed
+            })
 
         var Promises = []
 
@@ -114,17 +122,22 @@ describe.skip('Page Availability', () => {
         let feeds = []
         let totalPages = 0
         
-        while(true){
-            var results = await Request
-                .get(BACKURL + '/publishers/' + config.PID + '/feed?type=article&page=' + page)
-                .then(res => {
-                    return res.body
-                })
-            feeds = feeds.concat(results.feed)
-            if(results.feed.length < 15)
-                break
-            page++
-        }
+        // while(true){
+        //     var results = await Request
+        //         .get(BACKURL + '/publishers/' + config.PID + '/feed?type=article&page=' + page)
+        //         .then(res => {
+        //             return res.body
+        //         })
+        //     feeds = feeds.concat(results.feed)
+        //     if(results.feed.length < 15)
+        //         break
+        //     page++
+        // }
+        feeds = await Request
+            .get(BACKURL + '/publishers/' + config.PID + '/feed?type=article&page=0&limit=3')
+            .then(res => {
+                return res.body.feed
+            })
 
         var Promises = []
 
@@ -174,13 +187,17 @@ describe.skip('Page Availability', () => {
                 expect(res.status).toBe(200)
             })
     })
+})
 
+
+describe('Page Availability 3', () => {
     it('TagPage', async () => {
 
         var tags = await Request
             .get(BACKURL + '/publishers/' + config.PID + '/tags')
             .then( res => { 
-                return res.body.tags
+                //console.log('TAGS', res.body.tags.slice(0,4), config.PID)
+                return res.body.tags.slice(0,4)
             })
         
         var Promises = []
@@ -251,10 +268,10 @@ describe.skip('Page Availability', () => {
                 expect(err.status).toBe(404)
             })
     })
-
 })
 
-describe.skip('Private Route - Not Login', () => {
+
+describe('Private Route - Not Login', () => {
     
     it('EditorPage', async () => {
         await Request
@@ -301,18 +318,9 @@ describe.skip('Private Route - Not Login', () => {
             })
     })
 
-    it.skip('EditStoryPage', async () => {
-        await Request
-            .get(FRONTURL + '/editor')
-            .then(res => {
-                expect(res.status).toBe(200)
-                expect(res.redirects[0]).toBe(FRONTURL + '/signin')
-            })
-    })
-
 })
 
-describe.skip('404 Redirect', () => {
+describe('404 Redirect', () => {
 
     it('Wrong Column Name', async () => {
         await Request
@@ -376,15 +384,16 @@ describe.skip('404 Redirect', () => {
 
 })
 
-describe.only('Get Config', () => {
+describe('Get Config', () => {
     it('Check Config', async () =>  {
         var setting = await Request
             .get(BACKURL + '/publishers/' + config.PID + '/setting')
             .then((res) => {
+                //console.log('CONFIG', config.PID, config.NAME, res.body.publisher.name, BACKURL)
                 return res.body
             })
 
-        expect(setting.publisher.name).toEqual(config.NAME)
+        expect(setting.publisher.name.replace(' ','')).toEqual(config.NAME.replace(' ','')) //ignore space
 
     })
 })

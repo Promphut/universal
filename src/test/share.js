@@ -1,14 +1,22 @@
+var argv = require('yargs').argv
 var Nightmare = require('nightmare');
 
 var nightmare = Nightmare({ 
-        show: true ,
-        switches: {
-          'ignore-certificate-errors': true
-        }
-    });
+    show: true ,
+    switches: {
+      'ignore-certificate-errors': true
+    }
+});
 
+const user = ['ochawinwin@gmail.com','nightmaretest@gmail.com', 'naoise.solomon@gmail.com'],
+      password = ['12345678','nightmaretest', 'thisistestuser55678*']
+
+const FRONTURL = argv.fronturl || 'http://localhost:3000',
+      ISLOCALHOST = FRONTURL.indexOf('localhost')!==-1,
+      BACKURL = argv.backurl || (ISLOCALHOST ? 'https://localhost:4000' : 'https://api.thesolar.co')
+      
 nightmare
-    .goto('http://localhost:3000')
+    .goto(FRONTURL)
     .evaluate(function () {
          window.resizeTo(screen.width, screen.height)
     })
@@ -18,7 +26,10 @@ nightmare
     
     .wait(5000)
     .click("#ShareSideBarFb")
-    .wait(5000)
+    .evaluate(function () {
+         window.open('http://www.google.com','_blank')
+    })
+    .wait(10000)
     .click("#ShareSideBarMore")
     .wait(5000)
     .click("#ShareSideBarTwt")

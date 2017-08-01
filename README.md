@@ -20,3 +20,8 @@
 - NODE_ENV=production PORT=5000 npm run build
 - NODE_ENV=production node . 
 	e.g. on nextempire production server: NODE_ENV=production PORT=5000 forever start -c 'node .' ./
+
+# Test:
+- Page Request Test using Jest : npm run test:app2 <FRONTURL>
+- Authentication Test using Nightmare : npm run test:auth OR npm run test:auth -- --fronturl=<FRONTURL> --backurl=<BACKURL> (default is localhost 3000 and 4000)
+- Share Test using Nightmare : npm run test:share OR npm run test:share -- --fronturl=<FRONTURL> --backurl=<BACKURL> (default is localhost 3000 and 4000)

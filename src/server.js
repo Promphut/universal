@@ -48,13 +48,18 @@ const renderApp = ({ cookies, context, location, sheet, setting }) => {
 }
 
 const extractMeta = (setting, url) => {
+	//console.log(setting)
 	let meta = {
 		name: '',
 		keywords: setting.publisher.keywords || '',
 		desc: setting.publisher.desc || '',
 		cover : COVER || '',
 		analytic: ANALYTIC.FBAPPID || '',
-		url : url
+		url : url,
+		logo: setting.publisher.theme.slogo,
+		publisher: setting.publisher.name,
+		writer: setting.publisher.name,
+		datePublished: new Date()
 	}
 
 	if(setting.publisher.name)
@@ -80,10 +85,13 @@ const extractMeta = (setting, url) => {
 				return api.getStoryFromSid(sid)
 				.then(res => {
 					let s = res.story
+					//console.log(s)
 					if(s.ptitle) meta.name = s.ptitle + ' | ' + setting.publisher.name
 					if(s.contentShort) meta.desc = s.contentShort
 					if(s.cover) meta.cover = s.cover.large || s.cover.medium
 					if(s.url) meta.url = s.url
+					if(s.writer) meta.writer = s.writer.display
+					if(s.published) meta.datePublished = s.published 
 					return meta
 				}).catch((err)=>{return {status: 404}})
 			}else return Promise.resolve(meta)
@@ -197,17 +205,7 @@ const renderHtml = ({ content, sheet, meta }) => {
 }
 
 const app = express()
-const sitemap = sm.createSitemap({
-	hostname: FRONTURL,
-	cacheTime: 600000,        // 600 sec - cache purge period
-	urls: [
-		{ url: '/',  changefreq: 'daily', priority: 0.5 ,img: COVER},
-		{ url: '/stories/news',  changefreq: 'daily',  priority: 0.3 },
-		{ url: '/stories/columns',  changefreq: 'weekly',  priority: 0.2 },
-		{ url: '/about'},
-		{ url: '/contact'}
-	]
-})
+
 //app.use(forceSSL)
 app.use(basename, express.static(path.resolve(process.cwd(), 'dist/public'),{maxAge: "7d"}))
 app.use(cookiesMiddleware())
@@ -261,13 +259,34 @@ app.post('/upload/img',
 // 	}
 // )
 app.get('/sitemap.xml', (req, res)=> {
-  sitemap.toXML( function (err, xml) {
-      if (err) {
-        return res.status(500).end();
-      }
-      res.header('Content-Type', 'application/xml');
-      res.send( xml );
-  });
+
+	api.getPublisherSetting().then(setting=>{
+		var column = []
+		setting.menu.column.map((val,inx)=>{
+			column.push({url:'/stories/columns/'+val.slug , changefreq : 'daily', priority : 0.8})
+		})
+		const sitemap = sm.createSitemap({
+			hostname: FRONTURL,
+			cacheTime: 600000,        // 600 sec - cache purge period
+			urls: [
+				{ url: '/',  changefreq: 'daily', priority: 1 ,img: COVER},
+				{ url: '/stories/news',  changefreq: 'daily',  priority: 0.8 },
+				{ url: '/stories/all',  changefreq: 'daily',  priority: 0.8 },
+				...column,
+				{ url: '/stories/columns',  changefreq: 'weekly',  priority: 0.5 },
+				{ url: '/about'},
+				{ url: '/contact'}
+			]
+		})
+		sitemap.toXML( function (err, xml) {
+				if (err) {
+					return res.status(500).end();
+				}
+				res.header('Content-Type', 'application/xml');
+				res.send( xml );
+		});
+	})
+		
 });
 
 app.get('/robots.txt', (req, res) => {
@@ -432,5 +451,5 @@ if (process.env.NODE_ENV === 'development') {
 	  passphrase: 'thepublisher'
 	}
 	const secureServer = https.createServer(ssl_options, app)
-	startListen(secureServer, 'https://localhost', port+100)
+	startListen(secureServer, 'https://localhost', parseInt(port)+100)
 }

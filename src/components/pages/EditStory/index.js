@@ -363,11 +363,15 @@ class EditStory extends React.Component {
       if(column) s.column = column
       s.contentType = contentType
 
+      if(story.status == 1){
+      s.status = 3;
+      }
+
       api.updateStory(sid, s)
       .then(story => {
           this.setState({
             status: this.SAVE_STATUS.UNDIRTIED,
-            saveStatus:"Saved "+ moment(story.updated).calendar(),
+            saveStatus:"Saved "+ moment(new Date()).calendar(),
           })
       })
     }

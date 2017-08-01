@@ -149,7 +149,8 @@ class Footer extends React.Component {
   }
 
   render() {
-	let mar = this.props.isStoryPage ? '120px' : '56px';
+	let mar = this.props.isStoryPage ? '120px' : '56px'
+	mar = this.props.isUserPage ? '0px' : mar
     let {theme, channels} = this.context.setting.publisher
 		let theSolarLogoFileName = null
 

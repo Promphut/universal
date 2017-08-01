@@ -115,7 +115,12 @@ class SearchButton extends React.Component {
     componentWillReceiveProps(nextProps) {
         if(this.state.redirect)
             this.setState({redirect : false, text : ''})
-	}
+    }
+    focusUsernameInputField = input => {
+        if (input) {
+            setTimeout(() => input.focus(), 100);
+        }
+    }
 
     render() {
         let { theme } = this.context.setting.publisher
@@ -155,7 +160,7 @@ class SearchButton extends React.Component {
                                     } else if (ev.key === 'Enter') this.setState({text: ''})
                                 }}
                                 onBlur={text ? ()=>{} : this.handleFocus}
-                                autoFocus
+                                ref={this.focusUsernameInputField}
                             />}
                     </ButtonContainer>
                 </MuiThemeProvider>

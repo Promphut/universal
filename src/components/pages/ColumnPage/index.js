@@ -283,14 +283,14 @@ class ColumnPage extends React.Component {
 		if (nextProps.match.params.columnSlug != this.props.match.params.columnSlug) {
 			this.setState({
 				currentPage : utils.querystring('page',nextProps.location) ? utils.querystring('page',nextProps.location) - 1 : 0,
-				feed : [],
+				initialLoading: true,
 			}, ()=> {
 				this.getColumnFromSlug(nextProps.match.params.columnSlug, this.loadFeed)
 			})
 		} else if(nextProps.location.search != this.props.location.search){
 			this.setState({
 				currentPage : utils.querystring('page',nextProps.location) ? utils.querystring('page',nextProps.location) - 1 : 0,
-				feed : [],
+				initialLoading: true,
 			},()=>{
 				document.body.scrollTop = document.documentElement.scrollTop = 0
 				this.loadFeed()

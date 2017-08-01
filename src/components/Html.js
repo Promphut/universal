@@ -121,11 +121,34 @@ const ggWebfont =
     s.parentNode.insertBefore(wf, s);
   })();`
 
+
 const Html = ({ styles, assets, content, meta }) => {
   const helmet = Helmet.rewind()
   const htmlAttrs = helmet.htmlAttributes.toComponent()
   const bodyAttrs = helmet.bodyAttributes.toComponent()
-  var {name, keywords, desc, cover, analytic, url} = meta
+  var {name, keywords, desc, cover, analytic, url, writer, datePublished, publisher, logo} = meta
+  const ld = `{
+    "@context": "http://schema.org/",
+    "@type": "NewsArticle",
+    "headline": ${name},
+    "datePublished": ${datePublished},
+    "description": ${desc},
+    "image": {
+      "@type": "ImageObject",
+      "height": 628,
+      "width": 1200,
+      "url": ${cover}
+    },
+    "author": ${writer},
+    "publisher": {
+      "@type": "Organization",
+      "logo": {
+        "@type": "ImageObject",
+        "url": ${logo}
+      },
+      "name": ${publisher}
+    },
+  }`
   //console.log('meta',meta)
   return (
     <html {...htmlAttrs}>
@@ -166,15 +189,34 @@ const Html = ({ styles, assets, content, meta }) => {
 
         <script dangerouslySetInnerHTML={{ __html: quantcast.headScript }} />
         
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ld }}></script>
       </head>
       <body {...bodyAttrs}>
         <noscript dangerouslySetInnerHTML={{ __html: ggTag.iframe }}></noscript>
         <div id="fb-root"></div>
         <script dangerouslySetInnerHTML={{ __html: facebookSdk }} />
 
-        <h1 className='h1-for-seo'>{name}</h1>
-        <h2 className='h1-for-seo'>{desc}</h2>
-        <h3 className='h1-for-seo'>{keywords}</h3>
+        <div itemScope itemType="http://schema.org/NewsArticle" className='h1-for-seo'>
+            <h1 itemProp="headline">{name}</h1>
+            <h2 className='h1-for-seo'>{desc}</h2>
+            <h3 className='h1-for-seo'>{keywords}</h3>
+            <span itemProp="datePublished" content={datePublished}></span>
+            <span itemProp="description">{desc}</span><br/>
+            <div itemProp="image" itemScope itemType="http://schema.org/ImageObject">
+                <meta itemProp="height" content="628"/>
+                <meta itemProp="width" content="1200"/>
+                <meta itemProp="url" content={cover}/>
+                <img src={cover} alt={name}/>
+            </div>
+            <span itemProp="author">{writer}</span><br/>
+            <div itemProp="publisher" itemScope itemType="http://schema.org/Organization">
+                <div itemProp="logo" itemScope itemType="http://schema.org/ImageObject">
+                    <meta itemProp="url" content={logo}/>
+                    <img src={logo} alt={name}/>
+                </div>
+                <span itemProp="name">{publisher}</span>
+            </div>
+        </div> 
         <main id="app" dangerouslySetInnerHTML={{ __html: content }} />
 
         {assets.js.map(path => <script key={path} src={path} />)}
