@@ -76,7 +76,7 @@ const NameLink = styled(Link)`
   font-weight:bold;
   font-size:18px;
   transition: .1s;
-  
+
   &:hover{
     color: ${props => props.theme.accentColor};
   }
@@ -182,7 +182,7 @@ const ArticleBox = ({ detail, style, final ,id, isUserPage}, context) => {
 				<Div className="sans-font" style={{ margin: '0 0 8px 0' }}>
 					{utils.dateFormat(published)}
 				</Div>
-        
+
 				<BGImg
 					url={url}
 					src={cover.medium&&cover.medium||cover.small}
@@ -213,7 +213,7 @@ const ArticleBox = ({ detail, style, final ,id, isUserPage}, context) => {
           <ShareDropdown id={id} buttonSize={16} url={url} className='hidden-mob'/>
 				</div>
 				<NameLink to={url} className="nunito-font" style={{ marginTop: '5px' }}>
-          
+
 					{truncate(ptitle, {
 						length: isUserPage ? 70 : 90,
 						separator: ''

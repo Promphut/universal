@@ -569,7 +569,7 @@ export default class UserStory extends React.Component {
 				<EditorProfilePictureSection userProfileImage = {user.pic.large ? user.pic.large : user.pic.medium}>
 					<TopBarContainer>
 
-						<TopBarLeftItem className="hidden-des"> 
+						<TopBarLeftItem className="hidden-des">
 							<FontIcon onClick={this.checkBack} style = {{color:'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)'}} className="material-icons hidden-des">
 								chevron_left
 							</FontIcon>
@@ -602,12 +602,12 @@ export default class UserStory extends React.Component {
 
 		let WriterDetailBlock = (
 			<DetailBlockWrapper mobile = {utils.isMobile()}>
-				<ProfileDescriptionDesktop showDescription={showDescription}>						
+				<ProfileDescriptionDesktop showDescription={showDescription}>
 					{user.shortDesc}
 				</ProfileDescriptionDesktop>
-				
+
 				{!showDescription &&
-					<SeeMoreWrapper> 
+					<SeeMoreWrapper>
 						<ProfileDescriptionSeeMore onClick={this.showFullDescription}>อ่านต่อ</ProfileDescriptionSeeMore>
 					</SeeMoreWrapper>
 				}
@@ -689,7 +689,7 @@ export default class UserStory extends React.Component {
 				<EditorProfilePictureSection mobile = {utils.isMobile()} userProfileImage = {user.pic.large ? user.pic.large : user.pic.medium}>
 					<TopBarContainer>
 
-						<TopBarLeftItem className="hidden-des"> 
+						<TopBarLeftItem className="hidden-des">
 							<FontIcon onClick={this.checkBack} style = {{color:'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)'}} className="material-icons hidden-des">
 								chevron_left
 						</FontIcon>
@@ -718,14 +718,14 @@ export default class UserStory extends React.Component {
 
 					</Card>
 
-					<ProfileDescription showDescription={showDescription}>						
+					<ProfileDescription showDescription={showDescription}>
 						<Blur showDescription={showDescription} descLength={user.shortDesc.length}>
 							<ProfileDescriptionSeeMore onClick={this.showFullDescription}>อ่านต่อ</ProfileDescriptionSeeMore>
-						</Blur> 
+						</Blur>
 						<span style={{fontFamily: 'Roboto'}}>{user.shortDesc}</span>
 					</ProfileDescription>
 				</UserInfoSection>
-		
+
 				<ArticleWrapper mobile={utils.isMobile()}>
 					<Content>
 						<Main>
@@ -809,15 +809,15 @@ export default class UserStory extends React.Component {
 								<UserSocialBar colorPack={'light'} channels={user.channels}/>
 							</SocialButtonContainer>
 
-						</UserInfoContainer> 
+						</UserInfoContainer>
 					</UserProfileSection>
 
 					<UserInfoSection role={isNormalUser ? 'user' : 'admin'}>
 
-					<ProfileDescription showDescription={showDescription}>						
+					<ProfileDescription showDescription={showDescription}>
 						<Blur showDescription={showDescription} descLength={user.shortDesc.length}>
 							<ProfileDescriptionSeeMore onClick={this.showFullDescription}>อ่านต่อ</ProfileDescriptionSeeMore>
-						</Blur> 
+						</Blur>
 						<span style={{fontFamily: 'Roboto'}}>{user.shortDesc}</span>
 					</ProfileDescription>
 
@@ -830,7 +830,7 @@ export default class UserStory extends React.Component {
 				<Wrapper haveBg={!utils.isMobile() && isNormalUser}>
 					<TopBarWithNavigation className="hidden-mob" />
 						{ (utils.isMobile() && isNormalUser) &&
-							<div style={{minHeight: 'calc(100vh - 200px)'}}>	
+							<div style={{minHeight: 'calc(100vh - 200px)'}}>
 								{MobileBlock2}
 							</div>
 						}
