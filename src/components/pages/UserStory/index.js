@@ -9,7 +9,7 @@ import {
 	BackToTop,
 	Pagination,
 	UserSocialBar,
-	WriterTopStories,
+	WriterTopStories
 } from 'components'
 import { findDOMNode as dom } from 'react-dom'
 import { Link } from 'react-router-dom'
@@ -26,10 +26,10 @@ import utils from '../../../services/utils'
 import config from '../../../config'
 import auth from '../../../services/auth'
 
-const Wrapper = styled.div `
+const Wrapper = styled.div`
 	display: flex;
 	flex-direction: column;
-	background-color: ${props=>props.haveBg ? '#FAFAFA' : '#FFFFFF'};
+	background-color: ${props => (props.haveBg ? '#FAFAFA' : '#FFFFFF')};
 `
 
 const ContentWrapper = styled.div`
@@ -47,7 +47,7 @@ const Onload = styled.div`
 	margin:50px 0 50px 0;
 `
 
-const NoArticleHeader = styled.h2 `
+const NoArticleHeader = styled.h2`
 	width: 100%;
 	margin-top: 30px;
 	text-align: center;
@@ -68,12 +68,12 @@ const UserAvatar = styled(Avatar)`
 	}
 `
 
-const UserAvatarContainer = styled.div `
+const UserAvatarContainer = styled.div`
 	text-align: center;
 	margin-bottom: 0;
 `
 
-const UserInfoContainer = styled.div `
+const UserInfoContainer = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -83,7 +83,7 @@ const UserInfoContainer = styled.div `
 	margin-bottom: 0px;
 `
 
-const UserInfoContainerDesktop = styled.div `
+const UserInfoContainerDesktop = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -93,7 +93,7 @@ const UserInfoContainerDesktop = styled.div `
 	margin-bottom: 0px;
 `
 
-const UserInfoPrimaryText = styled.h1 `
+const UserInfoPrimaryText = styled.h1`
 	margin-top: 16px;
 	margin-bottom: 0px;
 	color: white;
@@ -102,7 +102,7 @@ const UserInfoPrimaryText = styled.h1 `
 	font-family: 'Roboto';
 `
 
-const UserInfoSecondaryText = styled.h2 `
+const UserInfoSecondaryText = styled.h2`
 	color: white;
 	font-weight: lighter;
 	font-size: 14px;
@@ -115,39 +115,39 @@ const UserBlockWrapper = styled.div`
 	flex:1 345px;
 	max-width: 345px;
 	background-color: #FAFAFA;
-	margin-top: ${props => props.mobile ? '0' : '60px'};
+	margin-top: ${props => (props.mobile ? '0' : '60px')};
 `
 
 const DetailBlockWrapper = styled.div`
 	flex:1 709px;
 	max-width: 709px;
 	margin-left: 56px;
-	margin-top: ${props => props.mobile ? '0' : '60px'};
+	margin-top: ${props => (props.mobile ? '0' : '60px')};
 `
 
-const EditorProfilePictureSection = styled.div `
+const EditorProfilePictureSection = styled.div`
 	background-image: url(${props => props.userProfileImage});
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: 100%;
 	height: 250px;
-	width: ${props => props.mobile ? '100%' : '345px'};
+	width: ${props => (props.mobile ? '100%' : '345px')};
 	margin-top: 0px;
 `
 
-const UserProfileSection = EditorProfilePictureSection.extend `
+const UserProfileSection = EditorProfilePictureSection.extend`
 	background-color: ${props => props.theme.primaryColor};
 	height: auto;
 	padding-bottom: 20px;
 `
 
-const UserInfoSection = styled.div `
+const UserInfoSection = styled.div`
 	width: 100%;
-	background-color: ${props => props.role === 'admin' ? '#FAFAFA' : 'white' };
+	background-color: ${props => (props.role === 'admin' ? '#FAFAFA' : 'white')};
 	padding-bottom: 24px;
 `
 
-const UserInfoSectionDesktop = styled.div `
+const UserInfoSectionDesktop = styled.div`
 	width: 100%;
 	display: flex;
 	justify-content: center;
@@ -158,7 +158,7 @@ const UserInfoSectionDesktop = styled.div `
 	margin-bottom: 0px;
 `
 
-const SeeMoreDescriptionSection = UserInfoSection.extend `
+const SeeMoreDescriptionSection = UserInfoSection.extend`
 	height: 100%;
 	padding-top: 0;
 	padding-bottom: 10px;
@@ -167,12 +167,12 @@ const SeeMoreDescriptionSection = UserInfoSection.extend `
 	align-content: center;
 `
 
-const ArticleSection = styled.div `
+const ArticleSection = styled.div`
 	background-color: white;
 	padding: 16px 16px 16px 16px;
 `
 
-const TopBarContainer = styled.div `
+const TopBarContainer = styled.div`
 	position: relative;
 	top:8px;
 	display: flex;
@@ -182,24 +182,24 @@ const TopBarContainer = styled.div `
 	width: 100%
 `
 
-const TopBarItem = styled.div `
+const TopBarItem = styled.div`
 	flex: 0;
 `
 
-const TopBarLeftItem = TopBarItem.extend `
+const TopBarLeftItem = TopBarItem.extend`
 	align-self: flex-start;
 	margin-left: 8px;
 	font-size: 16px;
 `
 
-const TopBarRightItem = TopBarItem.extend `
+const TopBarRightItem = TopBarItem.extend`
 	align-self: flex-end;
 	margin-right: 8px;
 	font-size: 20px;
 `
 
-const Card = styled.div `
-	width: ${props => props.mobile ? '90%' : '313px'};
+const Card = styled.div`
+	width: ${props => (props.mobile ? '90%' : '313px')};
 	z-index: 3;
 	margin: -16px auto 0 auto;
 	padding: 20px 16px 24px 16px;
@@ -212,7 +212,7 @@ const Card = styled.div `
 	justify-content: center;
 `
 
-const CardNormal = styled.div `
+const CardNormal = styled.div`
 	width: 810px;
 	margin-top: 116px;
 	margin-bottom: 56px;
@@ -225,7 +225,7 @@ const CardNormal = styled.div `
 	justify-content: center;
 `
 
-const CardTitle = styled.h1 `
+const CardTitle = styled.h1`
 	font-family: Roboto;
 	font-weight: bold;
 	font-size: 18px;
@@ -233,7 +233,7 @@ const CardTitle = styled.h1 `
 	margin: 0;
 `
 
-const CardSubtitle = styled.h2 `
+const CardSubtitle = styled.h2`
 	font-family: Roboto;
 	font-weight: normal;
 	font-size: 14px;
@@ -247,15 +247,15 @@ const Dash = styled.div`
   margin-top: ${props => props.MarginTop};
   width:30px;
   height:4px;
-  background-color:${props=>props.theme.accentColor};
+  background-color:${props => props.theme.accentColor};
 `
 
-const SocialButtonContainer = styled.div `
+const SocialButtonContainer = styled.div`
 	margin-top: 20px;
 	margin-bottom: 0px;
 `
 
-const ProfileDescription = styled.p `
+const ProfileDescription = styled.p`
 	width: 90%;
 	margin: 20px auto 0 auto;
 	text-align: center;
@@ -264,22 +264,22 @@ const ProfileDescription = styled.p `
 	font-family: 'CS PraJad';
 	font-size: 16px;
 	min-height: 100px;
-	height: ${props => props.showDescription ? 'auto' : '100px'};
+	height: ${props => (props.showDescription ? 'auto' : '100px')};
 	display: block;
 	white-space: wrap;
 	overflow: hidden;
 	>span{
 		position:relative;
-		top: ${props => props.showDescription ? '0px' : '-100px'};
+		top: ${props => (props.showDescription ? '0px' : '-100px')};
 		z-index:0;
 	}
 `
 
-const ProfileDescriptionDesktop = styled.p `
+const ProfileDescriptionDesktop = styled.p`
 	width: 100%;
-	height: ${props => props.showDescription ? 'auto' : '115px'};
+	height: ${props => (props.showDescription ? 'auto' : '115px')};
 	margin: 56px 0 24px 0;
-	margin-bottom: ${props => props.showDescription ? '0' : '24px'};
+	margin-bottom: ${props => (props.showDescription ? '0' : '24px')};
 	color: #222222;
 	font-weight: lighter;
 	font-family: 'Roboto';
@@ -291,7 +291,7 @@ const ProfileDescriptionDesktop = styled.p `
 `
 
 const Blur = styled.div`
-	display: ${props => props.showDescription ? 'none' : 'flex'};
+	display: ${props => (props.showDescription ? 'none' : 'flex')};
 	justify-content: center;
 	background: rgba(255,255,255,0);
 	background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 95%, rgba(255,255,255,1) 100%);
@@ -307,14 +307,14 @@ const Blur = styled.div`
 	height:100%;
 	top:0px;
 	z-index:1;
-	opacity: ${props => props.showDescription ? 0 : 1};
+	opacity: ${props => (props.showDescription ? 0 : 1)};
 	@media (min-width: 768px) and (max-width: 992px) {
 		margin-top:-70px;
 		height:70px;
   }
 `
 
-const ProfileDescriptionSeeMore = styled.button `
+const ProfileDescriptionSeeMore = styled.button`
 	font-family: Mitr;
 	border: 0.5px solid #C4C4C4;
 	background-color: #FFFFFF;
@@ -336,20 +336,20 @@ const SeeMoreWrapper = styled.div`
 	justify-content: center;
 `
 
-const ArticleHeader = styled.div `
+const ArticleHeader = styled.div`
 	margin: 0 auto 6px auto;
 	color: #222222;
 	font-weight: bold;
 	font-size: 18px;
 `
 
-const ArticleCount = styled.span `
+const ArticleCount = styled.span`
 	color: #222222;
 	font-size: 25px;
 `
 
-const ArticleWrapper = styled.div `
-  	margin-top: ${props => props.mobile ? '0px' : '56px'};
+const ArticleWrapper = styled.div`
+  	margin-top: ${props => (props.mobile ? '0px' : '56px')};
 `
 
 const Page = styled.div`
@@ -377,11 +377,10 @@ const Main = styled.div`
 	}
 `
 
-
-
 export default class UserStory extends React.Component {
-
-	FEED_LIMIT = utils.isMobile() ? config.FEED_LIMIT_MOBILE*2 : config.FEED_LIMIT;
+	FEED_LIMIT = utils.isMobile()
+		? config.FEED_LIMIT_MOBILE * 2
+		: config.FEED_LIMIT
 
 	static contextTypes = {
 		setting: PropTypes.object
@@ -394,7 +393,9 @@ export default class UserStory extends React.Component {
 			user: null,
 			isMobile: false,
 
-			currentPage: utils.querystring('page',this.props.location) ? utils.querystring('page',this.props.location) - 1 : 0,
+			currentPage: utils.querystring('page', this.props.location)
+				? utils.querystring('page', this.props.location) - 1
+				: 0,
 			feedCount: 0,
 			feed: [],
 			totalPages: 0,
@@ -403,7 +404,7 @@ export default class UserStory extends React.Component {
 
 			loading: false,
 
-			showDescription: false,
+			showDescription: false
 		}
 	}
 
@@ -429,17 +430,27 @@ export default class UserStory extends React.Component {
 		let currentPage = this.state.currentPage
 		let uid = this.state.user._id
 
-		api.getFeed('story', { writer: uid, status: 1 }, 'latest', null, currentPage, this.FEED_LIMIT)
+		api
+			.getFeed(
+				'story',
+				{ writer: uid, status: 1 },
+				'latest',
+				null,
+				currentPage,
+				this.FEED_LIMIT
+			)
 			.then(result => {
 				this.setState(
 					{
 						feed: result.feed,
 						feedCount: result.count['1'] ? result.count['1'] : 0,
-						totalPages: result.count['1'] ? utils.getTotalPages(this.FEED_LIMIT, result.count['1']) : 0,
-						isEmpty: result.count['total']==0 || (!result.count['1'])
+						totalPages: result.count['1']
+							? utils.getTotalPages(this.FEED_LIMIT, result.count['1'])
+							: 0,
+						isEmpty: result.count['total'] == 0 || !result.count['1']
 					},
 					() => {
-						this.setState({loading : false})
+						this.setState({ loading: false })
 					}
 				)
 			})
@@ -448,10 +459,17 @@ export default class UserStory extends React.Component {
 	getUserFromUsername = (username, done = () => {}) => {
 		if (!username) utils.notFound(this.props.history)
 
-		api.getUserFromUsername(username)
+		api
+			.getUserFromUsername(username)
 			.then(user => {
+				let showDescription = false
+				if ((user.shortDesc && user.shortDesc.length < 500) || !user.shortDesc)
+					showDescription = true
+
+				console.log('test', showDescription)
+
 				this.checkIsNormalUser(user.id)
-				this.setState({ user: user, showDescription : user.shortDesc.length < 500}, done)
+				this.setState({ user: user, showDescription }, done)
 			})
 			.catch(err => {
 				utils.notFound(this.props.history, err)
@@ -461,10 +479,17 @@ export default class UserStory extends React.Component {
 	getUserFromUid = (uid, done = () => {}) => {
 		if (uid == null) utils.notFound(this.props.history)
 
-		api.getUserFromUserId(uid)
+		api
+			.getUserFromUserId(uid)
 			.then(user => {
+				let showDescription = false
+				if ((user.shortDesc && user.shortDesc.length < 500) || !user.shortDesc)
+					showDescription = true
+
+				console.log('testtttt', showDescription)
+
 				this.checkIsNormalUser(user.id)
-				this.setState({ user: user, showDescription : user.shortDesc.length < 500}, done)
+				this.setState({ user: user, showDescription }, done)
 			})
 			.catch(err => {
 				utils.notFound(this.props.history, err)
@@ -472,9 +497,10 @@ export default class UserStory extends React.Component {
 	}
 
 	checkIsNormalUser = (uid, done = () => {}) => {
-		api.getPublisherNormalUsers(uid)
+		api
+			.getPublisherNormalUsers(uid)
 			.then(result => {
-				this.setState({isNormalUser : result.isNormal})
+				this.setState({ isNormalUser: result.isNormal })
 			})
 			.catch(err => {
 				utils.notFound(this.props.history, err)
@@ -482,7 +508,7 @@ export default class UserStory extends React.Component {
 	}
 
 	changePage = e => {
-		this.props.history.push({ search: "?page=" + e })
+		this.props.history.push({ search: '?page=' + e })
 	}
 
 	checkBack = e => {
@@ -503,6 +529,10 @@ export default class UserStory extends React.Component {
 
 	componentDidMount() {
 		let username, uid
+
+		console.log('username', this.props.match.params.username)
+		console.log('uid', this.props.match.params.uid)
+
 		if ((username = this.props.match.params.username)) {
 			this.getUserFromUsername(username, this.loadFeed)
 		} else if ((uid = this.props.match.params.uid)) {
@@ -513,282 +543,392 @@ export default class UserStory extends React.Component {
 			isMobile: utils.isMobile()
 		})
 
-		let token = utils.querystring('token', this.props.location) || auth.getToken()
+		let token =
+			utils.querystring('token', this.props.location) || auth.getToken()
 
-		api.getCookieAndToken(token)
-		.then(result => {
+		api.getCookieAndToken(token).then(result => {
 			this.setState({
-				loggedUser : result.user,
-				roles : result.roles,
+				loggedUser: result.user,
+				roles: result.roles
 			})
 		})
 	}
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.match.params.username != this.props.match.params.username) {
-			this.setState({
-				currentPage : utils.querystring('page',nextProps.location) ? utils.querystring('page',nextProps.location) - 1 : 0,
-				feed : [],
-			},()=>{
-				this.getUserFromUsername(nextProps.match.params.username, this.loadFeed)
-			})
+			this.setState(
+				{
+					currentPage: utils.querystring('page', nextProps.location)
+						? utils.querystring('page', nextProps.location) - 1
+						: 0,
+					feed: []
+				},
+				() => {
+					this.getUserFromUsername(
+						nextProps.match.params.username,
+						this.loadFeed
+					)
+				}
+			)
 		} else if (nextProps.match.params.uid != this.props.match.params.uid) {
-			this.setState({
-				currentPage : utils.querystring('page',nextProps.location) ? utils.querystring('page',nextProps.location) - 1 : 0,
-				feed : [],
-			},()=>{
-				this.getUserFromUid(nextProps.match.params.uid, this.loadFeed)
-			})
-		} else if(nextProps.location.search != this.props.location.search){
-			this.setState({
-				currentPage : utils.querystring('page',nextProps.location) ? utils.querystring('page',nextProps.location) - 1 : 0,
-				feed : [],
-			},()=>{
-				document.body.scrollTop = document.documentElement.scrollTop = 0
-				this.loadFeed()
-			})
+			this.setState(
+				{
+					currentPage: utils.querystring('page', nextProps.location)
+						? utils.querystring('page', nextProps.location) - 1
+						: 0,
+					feed: []
+				},
+				() => {
+					this.getUserFromUid(nextProps.match.params.uid, this.loadFeed)
+				}
+			)
+		} else if (nextProps.location.search != this.props.location.search) {
+			this.setState(
+				{
+					currentPage: utils.querystring('page', nextProps.location)
+						? utils.querystring('page', nextProps.location) - 1
+						: 0,
+					feed: []
+				},
+				() => {
+					document.body.scrollTop = document.documentElement.scrollTop = 0
+					this.loadFeed()
+				}
+			)
 		}
 	}
 
-	render () {
+	render() {
 		if (!isEmpty(this.state.user)) {
 			let { theme } = this.context.setting.publisher
-			let { user, isMobile, feedCount, feed, currentPage, totalPages, loading, showDescription, isEmpty, isNormalUser } = this.state
-			let FeedPack = currentPage < 0 ? "" : "Loading"
+			let {
+				user,
+				isMobile,
+				feedCount,
+				feed,
+				currentPage,
+				totalPages,
+				loading,
+				showDescription,
+				isEmpty,
+				isNormalUser
+			} = this.state
+			let FeedPack = currentPage < 0 ? '' : 'Loading'
 
 			if (feed && currentPage >= 0) {
 				FeedPack = []
-				feed.map((item, index) => (
-					FeedPack.push(<ArticleBox isUserPage={true} final={index == feed.length -1 ? true:false} detail={item} key={index}/>)
-				))
+				feed.map((item, index) =>
+					FeedPack.push(
+						<ArticleBox
+							isUserPage={true}
+							final={index == feed.length - 1 ? true : false}
+							detail={item}
+							key={index}
+						/>
+					)
+				)
 			}
 
+			let descLength = user.shortDesc ? user.shortDesc.length : 0
 
-		let WriterUserBlock = (
-			<UserBlockWrapper mobile = {utils.isMobile()}>
-				<EditorProfilePictureSection userProfileImage = {user.pic.large ? user.pic.large : user.pic.medium}>
-					<TopBarContainer>
+			let WriterUserBlock = (
+				<UserBlockWrapper mobile={utils.isMobile()}>
+					<EditorProfilePictureSection
+						userProfileImage={
+							user.pic.large ? user.pic.large : user.pic.medium
+						}>
+						<TopBarContainer>
 
-						<TopBarLeftItem className="hidden-des">
-							<FontIcon onClick={this.checkBack} style = {{color:'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)'}} className="material-icons hidden-des">
-								chevron_left
-							</FontIcon>
-						</TopBarLeftItem>
-
-						<TopBarRightItem className="hidden-des">
-							<Link to = "/me/settings">
-								<FontIcon style = {{color:'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)'}} className="material-icons hidden-des">
-									border_color
+							<TopBarLeftItem className="hidden-des">
+								<FontIcon
+									onClick={this.checkBack}
+									style={{
+										color: 'white',
+										textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)'
+									}}
+									className="material-icons hidden-des">
+									chevron_left
 								</FontIcon>
-							</Link>
-						</TopBarRightItem>
+							</TopBarLeftItem>
 
-					</TopBarContainer>
-				</EditorProfilePictureSection>
-				<Card  mobile = {utils.isMobile()}>
-					<CardTitle>{user.display}</CardTitle>
-					<CardSubtitle>{user.intro}</CardSubtitle>
+							<TopBarRightItem className="hidden-des">
+								<Link to="/me/settings">
+									<FontIcon
+										style={{
+											color: 'white',
+											textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)'
+										}}
+										className="material-icons hidden-des">
+										border_color
+									</FontIcon>
+								</Link>
+							</TopBarRightItem>
 
-					<Dash MarginTop="16px"/>
-
-					<SocialButtonContainer>
-						<UserSocialBar colorPack={theme.barTone} channels={user.channels}/>
-					</SocialButtonContainer>
-
-				</Card>
-				<WriterTopStories uid={user._id}/>
-			</UserBlockWrapper>
-		)
-
-		let WriterDetailBlock = (
-			<DetailBlockWrapper mobile = {utils.isMobile()}>
-				<ProfileDescriptionDesktop showDescription={showDescription}>
-					{user.shortDesc}
-				</ProfileDescriptionDesktop>
-
-				{!showDescription &&
-					<SeeMoreWrapper>
-						<ProfileDescriptionSeeMore onClick={this.showFullDescription}>อ่านต่อ</ProfileDescriptionSeeMore>
-					</SeeMoreWrapper>
-				}
-
-				<ArticleWrapper>
-					<Content>
-						<Main>
-
-							<ArticleHeader>
-								<ArticleCount>{feedCount} </ArticleCount>
-								{feedCount > 1 ? 'STORIES' : 'STORY'}
-							</ArticleHeader>
-
-							<Dash MarginTop="6px"/>
-
-							{loading ? this.onload() :
-								<div>
-									{FeedPack}
-									{ (isEmpty) &&
-										<NoArticleHeader>ยังไม่มีบทความ</NoArticleHeader>
-									}
-									{(!isEmpty && !(totalPages > currentPage && currentPage >= 0)) &&
-										<NoArticleHeader>ไม่มีข้อมูลในหน้านี้ กลับไปยัง
-											<Link
-												to={user.url+"?page=1"}
-												style={{
-													color: theme.accentColor,
-													padding: '0 0.5em 0 0.5em'
-												}}>
-												หน้าแรก
-											</Link>
-										</NoArticleHeader>
-									}
-									<Page>
-										{ (totalPages > currentPage && currentPage >= 0) &&
-											<Pagination
-												hideFirstAndLastPageLinks={utils.isMobile() ? false : true}
-												hidePreviousAndNextPageLinks={utils.isMobile() ? true : false}
-												boundaryPagesRange={utils.isMobile() ? 0 : 1}
-												currentPage={currentPage + 1}
-												totalPages={totalPages}
-												onChange={this.changePage}
-											/>
-										}
-									</Page>
-								</div>
-							}
-						</Main>
-					</Content>
-				</ArticleWrapper>
-
-			</DetailBlockWrapper>
-		)
-
-		let NormalUserDesktopBlock = (
-			<CardNormal>
-				<div style={{width:'120px'}}>
-				<UserAvatarContainer>
-					<UserAvatar src={user.pic.large ? user.pic.large : user.pic.medium} size={120} />
-				</UserAvatarContainer>
-				</div>
-				<div style={{width:'570px',marginLeft:'40px'}}>
-					<CardTitle>{user.display}</CardTitle>
-					<CardSubtitle style={{textAlign:'left'}}>{user.intro}</CardSubtitle>
-
-					<SocialButtonContainer>
-						<UserSocialBar colorPack={theme.barTone} channels={user.channels}/>
-					</SocialButtonContainer>
-
-					<ProfileDescriptionDesktop style={{marginTop:'40px',paddingTop:'24px',borderTop:'1px solid #E2E2E2',height:'auto'}}>
-						{user.shortDesc}
-					</ProfileDescriptionDesktop>
-				</div>
-			</CardNormal>
-		)
-
-		let MobileBlock1 = (
-			<Wrapper>
-				<EditorProfilePictureSection mobile = {utils.isMobile()} userProfileImage = {user.pic.large ? user.pic.large : user.pic.medium}>
-					<TopBarContainer>
-
-						<TopBarLeftItem className="hidden-des">
-							<FontIcon onClick={this.checkBack} style = {{color:'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)'}} className="material-icons hidden-des">
-								chevron_left
-						</FontIcon>
-						</TopBarLeftItem>
-
-						<TopBarRightItem className="hidden-des">
-							<Link to = "/me/settings">
-								<FontIcon style = {{color:'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)'}} className="material-icons hidden-des">
-									border_color
-								</FontIcon>
-							</Link>
-						</TopBarRightItem>
-
-					</TopBarContainer>
-				</EditorProfilePictureSection>
-				 <UserInfoSection role={isNormalUser ? 'user' : 'admin'}>
-					<Card mobile = {utils.isMobile()}>
+						</TopBarContainer>
+					</EditorProfilePictureSection>
+					<Card mobile={utils.isMobile()}>
 						<CardTitle>{user.display}</CardTitle>
 						<CardSubtitle>{user.intro}</CardSubtitle>
 
-						<Dash MarginTop="16px"/>
+						<Dash MarginTop="16px" />
 
 						<SocialButtonContainer>
-							<UserSocialBar colorPack={theme.barTone} channels={user.channels}/>
+							<UserSocialBar
+								colorPack={theme.barTone}
+								channels={user.channels}
+							/>
 						</SocialButtonContainer>
 
 					</Card>
+					<WriterTopStories uid={user._id} />
+				</UserBlockWrapper>
+			)
 
-					<ProfileDescription showDescription={showDescription}>
-						<Blur showDescription={showDescription} descLength={user.shortDesc.length}>
-							<ProfileDescriptionSeeMore onClick={this.showFullDescription}>อ่านต่อ</ProfileDescriptionSeeMore>
-						</Blur>
-						<span style={{fontFamily: 'Roboto'}}>{user.shortDesc}</span>
-					</ProfileDescription>
-				</UserInfoSection>
+			let WriterDetailBlock = (
+				<DetailBlockWrapper mobile={utils.isMobile()}>
+					<ProfileDescriptionDesktop showDescription={showDescription}>
+						{user.shortDesc ? user.shortDesc : ''}
+					</ProfileDescriptionDesktop>
 
-				<ArticleWrapper mobile={utils.isMobile()}>
-					<Content>
-						<Main>
+					{!showDescription &&
+						<SeeMoreWrapper>
+							<ProfileDescriptionSeeMore onClick={this.showFullDescription}>
+								อ่านต่อ
+							</ProfileDescriptionSeeMore>
+						</SeeMoreWrapper>}
 
-							<ArticleHeader>
-								<ArticleCount>{feedCount} </ArticleCount>
-								{feedCount > 1 ? 'STORIES' : 'STORY'}
-							</ArticleHeader>
+					<ArticleWrapper>
+						<Content>
+							<Main>
 
-							<Dash MarginTop="6px"/>
+								<ArticleHeader>
+									<ArticleCount>{feedCount} </ArticleCount>
+									{feedCount > 1 ? 'STORIES' : 'STORY'}
+								</ArticleHeader>
 
-							{loading ? this.onload() :
-								<div>
-									{FeedPack}
-									{ (isEmpty) &&
-										<NoArticleHeader>ยังไม่มีบทความ</NoArticleHeader>
-									}
-									{(!isEmpty && !(totalPages > currentPage && currentPage >= 0)) &&
-										<NoArticleHeader>ไม่มีข้อมูลในหน้านี้ กลับไปยัง
-											<Link
-												to={user.url+"?page=1"}
-												style={{
-													color: theme.accentColor,
-													padding: '0 0.5em 0 0.5em'
-												}}>
-												หน้าแรก
-											</Link>
-										</NoArticleHeader>
-									}
-									<Page>
-										{ (totalPages > currentPage && currentPage >= 0) &&
-											<Pagination
-												hideFirstAndLastPageLinks={utils.isMobile() ? false : true}
-												hidePreviousAndNextPageLinks={utils.isMobile() ? true : false}
-												boundaryPagesRange={utils.isMobile() ? 0 : 1}
-												currentPage={currentPage + 1}
-												totalPages={totalPages}
-												onChange={this.changePage}
-											/>
-										}
-									</Page>
-								</div>
-							}
-						</Main>
-					</Content>
-				</ArticleWrapper>
-			</Wrapper>
+								<Dash MarginTop="6px" />
+
+								{loading
+									? this.onload()
+									: <div>
+											{FeedPack}
+											{isEmpty &&
+												<NoArticleHeader>ยังไม่มีบทความ</NoArticleHeader>}
+											{!isEmpty &&
+												!(totalPages > currentPage && currentPage >= 0) &&
+												<NoArticleHeader>
+													ไม่มีข้อมูลในหน้านี้ กลับไปยัง
+													<Link
+														to={user.url + '?page=1'}
+														style={{
+															color: theme.accentColor,
+															padding: '0 0.5em 0 0.5em'
+														}}>
+														หน้าแรก
+													</Link>
+												</NoArticleHeader>}
+											<Page>
+												{totalPages > currentPage &&
+													currentPage >= 0 &&
+													<Pagination
+														hideFirstAndLastPageLinks={
+															utils.isMobile() ? false : true
+														}
+														hidePreviousAndNextPageLinks={
+															utils.isMobile() ? true : false
+														}
+														boundaryPagesRange={utils.isMobile() ? 0 : 1}
+														currentPage={currentPage + 1}
+														totalPages={totalPages}
+														onChange={this.changePage}
+													/>}
+											</Page>
+										</div>}
+							</Main>
+						</Content>
+					</ArticleWrapper>
+
+				</DetailBlockWrapper>
+			)
+
+			let NormalUserDesktopBlock = (
+				<CardNormal>
+					<div style={{ width: '120px' }}>
+						<UserAvatarContainer>
+							<UserAvatar
+								src={user.pic.large ? user.pic.large : user.pic.medium}
+								size={120}
+							/>
+						</UserAvatarContainer>
+					</div>
+					<div style={{ width: '570px', marginLeft: '40px' }}>
+						<CardTitle>{user.display}</CardTitle>
+						<CardSubtitle style={{ textAlign: 'left' }}>
+							{user.intro}
+						</CardSubtitle>
+
+						<SocialButtonContainer>
+							<UserSocialBar
+								colorPack={theme.barTone}
+								channels={user.channels}
+							/>
+						</SocialButtonContainer>
+
+						<ProfileDescriptionDesktop
+							style={{
+								marginTop: '40px',
+								paddingTop: '24px',
+								borderTop: '1px solid #E2E2E2',
+								height: 'auto'
+							}}>
+							{user.shortDesc ? user.shortDesc : ''}
+						</ProfileDescriptionDesktop>
+					</div>
+				</CardNormal>
+			)
+
+			let MobileBlock1 = (
+				<Wrapper>
+					<EditorProfilePictureSection
+						mobile={utils.isMobile()}
+						userProfileImage={
+							user.pic.large ? user.pic.large : user.pic.medium
+						}>
+						<TopBarContainer>
+
+							<TopBarLeftItem className="hidden-des">
+								<FontIcon
+									onClick={this.checkBack}
+									style={{
+										color: 'white',
+										textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)'
+									}}
+									className="material-icons hidden-des">
+									chevron_left
+								</FontIcon>
+							</TopBarLeftItem>
+
+							<TopBarRightItem className="hidden-des">
+								<Link to="/me/settings">
+									<FontIcon
+										style={{
+											color: 'white',
+											textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)'
+										}}
+										className="material-icons hidden-des">
+										border_color
+									</FontIcon>
+								</Link>
+							</TopBarRightItem>
+
+						</TopBarContainer>
+					</EditorProfilePictureSection>
+					<UserInfoSection role={isNormalUser ? 'user' : 'admin'}>
+						<Card mobile={utils.isMobile()}>
+							<CardTitle>{user.display}</CardTitle>
+							<CardSubtitle>{user.intro}</CardSubtitle>
+
+							<Dash MarginTop="16px" />
+
+							<SocialButtonContainer>
+								<UserSocialBar
+									colorPack={theme.barTone}
+									channels={user.channels}
+								/>
+							</SocialButtonContainer>
+
+						</Card>
+
+						<ProfileDescription showDescription={showDescription}>
+							<Blur showDescription={showDescription} descLength={descLength}>
+								<ProfileDescriptionSeeMore onClick={this.showFullDescription}>
+									อ่านต่อ
+								</ProfileDescriptionSeeMore>
+							</Blur>
+							<span style={{ fontFamily: 'Roboto' }}>
+								{user.shortDesc ? user.shortDesc : ''}
+							</span>
+						</ProfileDescription>
+					</UserInfoSection>
+
+					<ArticleWrapper mobile={utils.isMobile()}>
+						<Content>
+							<Main>
+
+								<ArticleHeader>
+									<ArticleCount>{feedCount} </ArticleCount>
+									{feedCount > 1 ? 'STORIES' : 'STORY'}
+								</ArticleHeader>
+
+								<Dash MarginTop="6px" />
+
+								{loading
+									? this.onload()
+									: <div>
+											{FeedPack}
+											{isEmpty &&
+												<NoArticleHeader>ยังไม่มีบทความ</NoArticleHeader>}
+											{!isEmpty &&
+												!(totalPages > currentPage && currentPage >= 0) &&
+												<NoArticleHeader>
+													ไม่มีข้อมูลในหน้านี้ กลับไปยัง
+													<Link
+														to={user.url + '?page=1'}
+														style={{
+															color: theme.accentColor,
+															padding: '0 0.5em 0 0.5em'
+														}}>
+														หน้าแรก
+													</Link>
+												</NoArticleHeader>}
+											<Page>
+												{totalPages > currentPage &&
+													currentPage >= 0 &&
+													<Pagination
+														hideFirstAndLastPageLinks={
+															utils.isMobile() ? false : true
+														}
+														hidePreviousAndNextPageLinks={
+															utils.isMobile() ? true : false
+														}
+														boundaryPagesRange={utils.isMobile() ? 0 : 1}
+														currentPage={currentPage + 1}
+														totalPages={totalPages}
+														onChange={this.changePage}
+													/>}
+											</Page>
+										</div>}
+							</Main>
+						</Content>
+					</ArticleWrapper>
+				</Wrapper>
 			)
 
 			let MobileBlock2 = (
 				<Wrapper>
-					<UserProfileSection style={{width:'100%'}}>
-							<TopBarContainer>
+					<UserProfileSection style={{ width: '100%' }}>
+						<TopBarContainer>
 
 							<TopBarLeftItem>
-								<FontIcon onClick={this.checkBack} style = {{color:'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)'}} className="material-icons hidden-des">
+								<FontIcon
+									onClick={this.checkBack}
+									style={{
+										color: 'white',
+										textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)'
+									}}
+									className="material-icons hidden-des">
 									chevron_left
 								</FontIcon>
 							</TopBarLeftItem>
 
 							<TopBarRightItem>
-								<Link to ="/me/settings">
-									<FontIcon style = {{color:'white', textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)'}} className="material-icons hidden-des">
+								<Link to="/me/settings">
+									<FontIcon
+										style={{
+											color: 'white',
+											textShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)'
+										}}
+										className="material-icons hidden-des">
 										border_color
 									</FontIcon>
 								</Link>
@@ -799,14 +939,17 @@ export default class UserStory extends React.Component {
 						<UserInfoContainer>
 
 							<UserAvatarContainer>
-								<UserAvatar  src={user.pic.large ? user.pic.large : user.pic.medium} size={100} />
+								<UserAvatar
+									src={user.pic.large ? user.pic.large : user.pic.medium}
+									size={100}
+								/>
 							</UserAvatarContainer>
 
 							<UserInfoPrimaryText>{user.display}</UserInfoPrimaryText>
 							<UserInfoSecondaryText>{user.intro}</UserInfoSecondaryText>
 
 							<SocialButtonContainer>
-								<UserSocialBar colorPack={'light'} channels={user.channels}/>
+								<UserSocialBar colorPack={'light'} channels={user.channels} />
 							</SocialButtonContainer>
 
 						</UserInfoContainer>
@@ -814,49 +957,51 @@ export default class UserStory extends React.Component {
 
 					<UserInfoSection role={isNormalUser ? 'user' : 'admin'}>
 
-					<ProfileDescription showDescription={showDescription}>
-						<Blur showDescription={showDescription} descLength={user.shortDesc.length}>
-							<ProfileDescriptionSeeMore onClick={this.showFullDescription}>อ่านต่อ</ProfileDescriptionSeeMore>
-						</Blur>
-						<span style={{fontFamily: 'Roboto'}}>{user.shortDesc}</span>
-					</ProfileDescription>
+						<ProfileDescription showDescription={showDescription}>
+							<Blur showDescription={showDescription} descLength={descLength}>
+								<ProfileDescriptionSeeMore onClick={this.showFullDescription}>
+									อ่านต่อ
+								</ProfileDescriptionSeeMore>
+							</Blur>
+							<span style={{ fontFamily: 'Roboto' }}>
+								{user.shortDesc ? user.shortDesc : ''}
+							</span>
+						</ProfileDescription>
 
 					</UserInfoSection>
 				</Wrapper>
-
 			)
 
 			return (
 				<Wrapper haveBg={!utils.isMobile() && isNormalUser}>
 					<TopBarWithNavigation className="hidden-mob" />
-						{ (utils.isMobile() && isNormalUser) &&
-							<div style={{minHeight: 'calc(100vh - 200px)'}}>
-								{MobileBlock2}
-							</div>
-						}
-						{ (utils.isMobile() && !isNormalUser) &&
-							<div>
-								{MobileBlock1}
-							</div>
-						}
-						{ (!utils.isMobile() && !isNormalUser) &&
-							<ContentWrapper>
-								{WriterUserBlock}
-								{WriterDetailBlock}
-							</ContentWrapper>
-						}
-						{ (!utils.isMobile() && isNormalUser) &&
-							<ContentWrapper>
-								{NormalUserDesktopBlock}
-							</ContentWrapper>
-						}
+					{utils.isMobile() &&
+						isNormalUser &&
+						<div style={{ minHeight: 'calc(100vh - 200px)' }}>
+							{MobileBlock2}
+						</div>}
+					{utils.isMobile() &&
+						!isNormalUser &&
+						<div>
+							{MobileBlock1}
+						</div>}
+					{!utils.isMobile() &&
+						!isNormalUser &&
+						<ContentWrapper>
+							{WriterUserBlock}
+							{WriterDetailBlock}
+						</ContentWrapper>}
+					{!utils.isMobile() &&
+						isNormalUser &&
+						<ContentWrapper>
+							{NormalUserDesktopBlock}
+						</ContentWrapper>}
 
-					<Footer isUserPage={true}/>
+					<Footer isUserPage={true} />
 				</Wrapper>
 			)
-		}
-		else {
-			return (<Wrapper></Wrapper>)
+		} else {
+			return <Wrapper />
 		}
 	}
 }
