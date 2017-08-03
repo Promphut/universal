@@ -466,8 +466,6 @@ export default class UserStory extends React.Component {
 				if ((user.shortDesc && user.shortDesc.length < 500) || !user.shortDesc)
 					showDescription = true
 
-				console.log('test', showDescription)
-
 				this.checkIsNormalUser(user.id)
 				this.setState({ user: user, showDescription }, done)
 			})
@@ -485,8 +483,6 @@ export default class UserStory extends React.Component {
 				let showDescription = false
 				if ((user.shortDesc && user.shortDesc.length < 500) || !user.shortDesc)
 					showDescription = true
-
-				console.log('testtttt', showDescription)
 
 				this.checkIsNormalUser(user.id)
 				this.setState({ user: user, showDescription }, done)
@@ -529,9 +525,6 @@ export default class UserStory extends React.Component {
 
 	componentDidMount() {
 		let username, uid
-
-		console.log('username', this.props.match.params.username)
-		console.log('uid', this.props.match.params.uid)
 
 		if ((username = this.props.match.params.username)) {
 			this.getUserFromUsername(username, this.loadFeed)
