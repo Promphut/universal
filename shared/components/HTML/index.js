@@ -117,23 +117,41 @@ const ggWebfont = `WebFontConfig = {
  * The is the HTML shell for our React Application.
  */
 function HTML(props) {
-  const { htmlAttributes, headerElements, bodyElements, appBodyString, styleTags } = props;
-
+  const { htmlAttributes, headerElements, bodyElements, appBodyString, styleTags, meta } = props;
+  const { name, keywords, desc, cover, analytic, url } = meta
   return (
     <html {...htmlAttributes}>
       <head>
-        {headerElements}
-        {styleTags}
+        <title>{name}</title>
+        <meta charSet="UTF-8" />
+        <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="manifest" href="manifest.json" />
+        <meta name="title" content={name} />
+        <meta name="keywords" content={keywords} />
+        <meta name="description" content={desc} />
+        <meta property="og:site_name" content={config.FRONTURL} />
+        <meta property="og:title" content={name} />
+        <meta property="og:url" content={config.FRONTURL+url} />
+        <meta property="og:type" content="article" />
+        <meta property="og:image" content={cover}/>
+        <meta property="og:keywords" content={keywords} />
+        <meta property="og:description" content={desc} />
+        <meta property="twitter:card" content={cover} />
+        <meta property="twitter:image:alt" content={name} />
+        <meta property="fb:app_id" content={analytic} />
+        <meta property="og:image:width" content='1200' />
+        <meta property="og:image:height" content='628' />
+
         <script dangerouslySetInnerHTML={{ __html: ggTag.headScript }} />
         <script dangerouslySetInnerHTML={{ __html: quantcast.headScript }} />
 
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-        {/* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css" /> */}
-        <link rel="stylesheet" href="/css/main.css" />
-        {/* <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Mitr|Nunito|PT+Sans|PT+Serif:400,700,700i|Roboto|Roboto+Slab"
-        /> */}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css" /> 
+        {/* <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mitr|Nunito|PT+Sans|PT+Serif:400,700,700i|Roboto|Roboto+Slab"/> */}
+        {/* <link rel="stylesheet" href="/css/main.css" />    */}
+        {headerElements}
+        {styleTags}
       </head>
       <body>
         <noscript dangerouslySetInnerHTML={{ __html: ggTag.iframe }} />

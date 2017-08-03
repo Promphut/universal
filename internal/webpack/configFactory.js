@@ -83,6 +83,7 @@ export default function webpackConfigFactory(buildOptions) {
         // The source entry file for the bundle.
         path.resolve(appRootDir.get(), bundleConfig.srcEntryFile),
       ]),
+    
     },
 
     // Bundle output configuration.
@@ -169,16 +170,16 @@ export default function webpackConfigFactory(buildOptions) {
 
       // This is required for the modernizr-loader
       // @see https://github.com/peerigon/modernizr-loader
-      modules: [].concat("shared", ['node_modules']),
+      //modules: [].concat("shared", ['node_modules']),
       alias: {
         modernizr$: path.resolve(appRootDir.get(), './.modernizrrc'),
-        'load-image': 'blueimp-load-image/js/load-image.js',
-        'load-image-meta': 'blueimp-load-image/js/load-image-meta.js',
-        'load-image-exif': 'blueimp-load-image/js/load-image-exif.js',
-        'canvas-to-blob': 'blueimp-canvas-to-blob/js/canvas-to-blob.js',
-        'jquery-ui/ui/widget': 'blueimp-file-upload/js/vendor/jquery.ui.widget.js',
-        'jquery-ui/widget': 'blueimp-file-upload/js/vendor/jquery.ui.widget.js',
-        'load-image-scale': 'blueimp-file-upload/js/jquery.fileupload-image.js'
+        // 'load-image': 'blueimp-load-image/js/load-image.js',
+        // 'load-image-meta': 'blueimp-load-image/js/load-image-meta.js',
+        // 'load-image-exif': 'blueimp-load-image/js/load-image-exif.js',
+        // 'canvas-to-blob': 'blueimp-canvas-to-blob/js/canvas-to-blob.js',
+        // 'jquery-ui/ui/widget': 'blueimp-file-upload/js/vendor/jquery.ui.widget.js',
+        // 'jquery-ui/widget': 'blueimp-file-upload/js/vendor/jquery.ui.widget.js',
+        // 'load-image-scale': 'blueimp-file-upload/js/jquery.fileupload-image.js'
       },
     },
 
@@ -233,7 +234,39 @@ export default function webpackConfigFactory(buildOptions) {
             entryOnly: false,
           }),
       ),
+      // ifClient(()=>
+      //   new webpack.optimize.CommonsChunkPlugin({
+      //       name: 'static',
+      //       filename: '[name]-[chunkhash].js',
+      //       minChunks(module, count) {
+      //           var context = module.context;
+      //           return context && context.indexOf('node_modules') >= 0;
+      //       },
+      //   }),
+      // ),
 
+      //catch all - anything used in more than one place
+      // ifClient(()=>
+      //   new webpack.optimize.CommonsChunkPlugin({
+      //       filename: 'used-twice.js',
+      //       async: 'used-twice',
+      //       minChunks(module, count) {
+      //           return count >= 2;
+      //       },
+      //   }),
+      // ),    
+      
+      // ifClient(()=>
+      //   new webpack.optimize.CommonsChunkPlugin({
+      //       name: 'jquery',
+      //       filename: 'editor-plugin.js',
+      //       minChunks(module, count) {
+      //           var context = module.context;
+      //           var targets = ['jquery', 'jquery-ui-bundle', 'd3', 'medium-editor']
+      //           return context && context.indexOf('node_modules') >= 0 && targets.find(t => new RegExp('\\\\' + t + '\\\\', 'i').test(context));
+      //       },
+      //   }),
+      // ),
       // We use this so that our generated [chunkhash]'s are only different if
       // the content for our respective chunks have changed.  This optimises
       // our long term browser caching strategy for our client bundle, avoiding
@@ -434,24 +467,27 @@ export default function webpackConfigFactory(buildOptions) {
           loaders: [
             'classnames-loader',
             'style-loader',
-            {
-              path: 'css-loader',
-              // Include sourcemaps for dev experience++.
-              query: {
-                sourceMap: true,
-                modules: true,
-                importLoaders: 1,
-                localIdentName,
-              },
-            },
-            { path: 'postcss-loader' },
-            {
-              path: 'sass-loader',
-              options: {
-                outputStyle: 'expanded',
-                sourceMap: true,
-              },
-            },
+            'css-loader',
+            'postcss-loader',
+            'sass-loader'
+            // {
+            //   path: 'css-loader',
+            //   // Include sourcemaps for dev experience++.
+            //   query: {
+            //     sourceMap: true,
+            //     modules: true,
+            //     importLoaders: 1,
+            //     localIdentName,
+            //   },
+            // },
+            // { path: 'postcss-loader' },
+            // {
+            //   path: 'sass-loader',
+            //   options: {
+            //     outputStyle: 'expanded',
+            //     sourceMap: true,
+            //   },
+            // },
           ],
         }),
       ),

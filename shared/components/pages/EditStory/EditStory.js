@@ -34,13 +34,12 @@ import config from '../../../config';
 import pullAllWith from 'lodash/pullAllWith';
 import isEqual from 'lodash/isEqual';
 import utils from '../../../services/utils';
-import $ from 'jquery';
 
-var MediumEditor = {};
-if (process.env.BROWSER) {
-  MediumEditor = require('medium-editor');
-  window.MediumInsert = require('medium-editor-insert-plugin').MediumInsert;
-}
+// var MediumEditor = {};
+// if (process.env.BROWSER) {
+//   MediumEditor = require('medium-editor');
+//   window.MediumInsert = require('medium-editor-insert-plugin').MediumInsert;
+// }
 
 const Container = styled(EditorCss)`
   width:855px;
@@ -635,117 +634,6 @@ class EditStory extends React.Component {
   }
 
   componentDidMount() {
-    // this.editor.setContent(this.state.story)
-    this.editor = new MediumEditor('#paper', {
-      toolbar: {
-        buttons: [
-          { name: 'bold', contentDefault: '<span class="fa fa-bold" ></span>' },
-          { name: 'italic', contentDefault: '<span class="fa fa-italic" ></span>' },
-          { name: 'underline', contentDefault: '<span class="fa fa-underline" ></span>' },
-          {
-            name: 'h1',
-            action: 'append-h2',
-            aria: 'Header',
-            tagNames: ['h2'],
-            style: { prop: 'font-size', value: '28px' },
-            contentDefault: '<span class="fa fa-header" style="font-size:24px"><span>',
-            classList: ['custom-class-h1'],
-            attrs: { 'data-custom-attr': 'attr-value-h1' },
-          },
-          {
-            name: 'h2',
-            action: 'append-h3',
-            aria: 'Subheader',
-            tagNames: ['h3'],
-            contentDefault: '<span class="fa fa-header" style="font-size:14px"><span>',
-            classList: ['custom-class-h2'],
-            attrs: { 'data-custom-attr': 'attr-value-h2' },
-          },
-          { name: 'quote', contentDefault: '<span class="fa fa-quote-left" ></span>' },
-          { name: 'anchor', contentDefault: '<span class="fa fa-link" ></span>' },
-          { name: 'unorderedlist', contentDefault: '<span class="fa fa-list-ul" ></span>' },
-          { name: 'justifyLeft', contentDefault: '<span class="fa fa-align-left" ></span>' },
-          { name: 'justifyCenter', contentDefault: '<span class="fa fa-align-center" ></span>' },
-          { name: 'justifyRight', contentDefault: '<span class="fa fa-align-right" ></span>' },
-        ],
-      },
-      targetBlank: true,
-      placeholder: {
-        text: 'Write a story ...',
-      },
-    });
-
-    $('#paper').mediumInsert({
-      editor: this.editor,
-      addons: {
-        images: {
-          captionPlaceholder: 'Type caption for image',
-          fileUploadOptions: {
-            // (object) File upload configuration. See https://github.com/blueimp/jQuery-File-Upload/wiki/Options
-            // url: config.BACKURL+'/publisher/11/upload/img', // (string) A relative path to an upload script
-            url: '/upload/img',
-            maxChunkSize: 10000000,
-            maxFileSize: 10000000,
-            preview: false,
-            paramName: 'image',
-            acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i, // (regexp) Regexp of accepted file types
-            submit(e, data) {
-              // console.log("e,",e,'data',data)
-              $('.medium-insert-active').append(
-                '<div class="container-loader"><div class="loader"></div></div>',
-              );
-            },
-          },
-          uploadCompleted($el, data) {
-            console.log(data.files);
-            $('.container-loader').remove();
-          },
-          styles: {
-            grid: {
-              label: '',
-            },
-          },
-          actions: {},
-        },
-        embeds: {
-          label: '<span class="fa fa-code"></span>',
-          styles: {
-            wide: {
-              label: '<span class="fa fa-align-center"></span>',
-            },
-            left: {
-              label: '<span class="fa fa-align-justify"></span>',
-            },
-            right: {
-              label: '',
-            },
-          },
-          parseOnPaste: true,
-          oembedProxy: null,
-        },
-      },
-    });
-
-    this.editor2 = new MediumEditor('#highlight', {
-      toolbar: {
-        buttons: [
-          { name: 'bold', contentDefault: '<span class="fa fa-bold" ></span>' },
-          { name: 'italic', contentDefault: '<span class="fa fa-italic" ></span>' },
-          { name: 'underline', contentDefault: '<span class="fa fa-underline" ></span>' },
-          { name: 'anchor', contentDefault: '<span class="fa fa-link" ></span>' },
-          { name: 'unorderedlist', contentDefault: '<span class="fa fa-list-ul" ></span>' },
-          { name: 'orderedlist', contentDefault: '<span class="fa fa-list-ol" ></span>' },
-        ],
-      },
-      targetBlank: true,
-      placeholder: {
-        text: 'Highlight',
-      },
-    });
-
-    this.editor.subscribe('editableInput', this.handleEditableInput);
-    this.editor2.subscribe('editableInput', this.handleEditableInput);
-
     this.interval = setInterval(this.autoSave, 3000);
 
     this.getTags();

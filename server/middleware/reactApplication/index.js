@@ -10,6 +10,7 @@ import config from '../../../config';
 
 import ServerHTML from './ServerHTML';
 import App from '../../../shared/components/App';
+import ExtractMeta from './ExtractMetaData'
 
 import { ServerStyleSheet } from 'styled-components';
 
@@ -70,12 +71,16 @@ export default function reactApplicationMiddleware(request, response, next) {
       .getPublisherSetting()
       .then((setting) => {
         if (!setting || !setting.publisher) return next(new Error('Cannot get publisher setting.'));
+      ExtractMeta(setting, request.url)
+      .then(meta => {
 
         const appString = renderToString(app(setting));
         const styleTags = sheet.getStyleElement();
         // Generate the html response.
+
         const html = renderToStaticMarkup(
           <ServerHTML
+            meta={meta}
             reactAppString={appString}
             nonce={nonce}
             helmet={Helmet.rewind()}
@@ -102,7 +107,7 @@ export default function reactApplicationMiddleware(request, response, next) {
                 200,
           )
           .send(`<!DOCTYPE html>${html}`);
-      })
-      .catch(next);
+        }).catch(next)
+      }).catch(next);
   });
 }

@@ -19,7 +19,6 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { findDOMNode as dom } from 'react-dom';
 import api from '../../../services/api';
-import { StickyContainer, Sticky } from 'react-sticky';
 import { Helmet } from 'react-helmet';
 import config from '../../../config';
 import utils from '../../../services/utils';

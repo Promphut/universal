@@ -40,7 +40,7 @@ function scriptTag(jsFilePath) {
 // COMPONENT
 
 function ServerHTML(props) {
-  const { asyncComponentsState, helmet, nonce, reactAppString, styleTags } = props;
+  const { asyncComponentsState, helmet, nonce, reactAppString, styleTags, meta } = props;
 
   // Creates an inline script definition that is protected by the nonce.
   const inlineScript = body => (
@@ -97,6 +97,7 @@ function ServerHTML(props) {
         <KeyedComponent key={idx}>{x}</KeyedComponent>
       ))}
       styleTags={styleTags}
+      meta={meta}
       bodyElements={bodyElements.map((x, idx) => <KeyedComponent key={idx}>{x}</KeyedComponent>)}
       appBodyString={reactAppString}
     />

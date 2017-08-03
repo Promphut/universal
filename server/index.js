@@ -13,11 +13,13 @@ import errorHandlers from './middleware/errorHandlers';
 import config from '../config';
 import cookiesMiddleware from 'universal-cookie-express';
 import cors from 'cors';
-import { basename } from '../shared/config.js';
 
 import http from 'http';
 import https from 'https';
 import fs from 'fs';
+
+import { FRONTURL, port, host, basename, ANALYTIC, COVER, amazonAccessKey, secretKey, PID } from '../shared/config.js'
+import api from '../shared/services/api';
 
 if (process.env.NODE_ENV === 'development') {
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
@@ -56,6 +58,109 @@ app.use(config('bundles.client.webPath'), clientBundle);
 // Note: these will be served off the root (i.e. '/') of our application.
 app.use(express.static(pathResolve(appRootDir.get(), config('publicAssetsPath'))));
 
+
+var options = {
+    tmpDir: './public/uploads/tmp',
+    uploadUrl:  '/thepublisher/publishers/'+PID+'/',
+		imageTypes:  /\.(gif|jpe?g|png)/i,
+		useSSL: true,
+    imageVersions :{
+        maxWidth : 730,
+        maxHeight : 'auto'
+    },
+    accessControl: {
+        allowOrigin: '*',
+        allowMethods: 'OPTIONS, HEAD, GET, POST, PUT, DELETE',
+        allowHeaders: 'Content-Type, Content-Range, Content-Disposition'
+    },
+		storage : {
+			type : 'aws',
+			aws : {
+					accessKeyId :  amazonAccessKey,
+					secretAccessKey : secretKey ,
+					//bucketName : 'thepublisher/publishers/'+PID,
+					bucketName : 'thepublisher',
+					acl:'public-read',
+					region: 'ap-southeast-1',
+					path: 'publishers/'+PID+'/',
+					expiresInMilliseconds:99999999,
+					getSignedUrl: false
+			}
+    }
+};
+
+var uploader = require('blueimp-file-upload-expressjs')(options);
+
+app.post('/upload/img',
+	(req,res)=>{
+		uploader.post(req, res, function (err,obj) {
+			//console.log('HAHA', err, obj)
+			res.send(JSON.stringify(obj));
+		});
+	}
+)
+
+// app.delete('/upload/img',
+// 	(req,res)=>{
+// 		uploader.delete(req, res, function (err,obj) {
+// 				res.send(JSON.stringify(obj));
+// 		});
+// 	}
+// )
+// app.get('/sitemap.xml', (req, res)=> {
+//   sitemap.toXML( function (err, xml) {
+//       if (err) {
+//         return res.status(500).end();
+//       }
+//       res.header('Content-Type', 'application/xml');
+//       res.send( xml );
+//   });
+// });
+
+app.get('/robots.txt', (req, res) => {
+	let robotTxt = ''
+
+	if(process.env.NODE_ENV === 'production')
+		robotTxt =
+`User-agent: *
+Disallow: /me/*
+Disallow: /editor
+Disallow: /editor/*
+Sitemap: ${FRONTURL}/sitemap.xml`
+	else
+		robotTxt =
+`User-agent: *
+Disallow: /
+Sitemap: ${FRONTURL}/sitemap.xml`
+
+	res.send(robotTxt)
+})
+
+app.get(['/feed', '/feed/rss', '/rss'],(req,res) => {
+	let type = req.query.type || 'article'
+	api.getFeed(type.toLowerCase() ,{ status: 1 },'latest',null,null,20,{'rss' :true}).then(result => {
+		res.set('Content-Type', 'text/xml');
+		res.send(result.xml)
+	})
+})
+
+app.get(['/feed/atom', '/atom'],(req,res) => {
+	let type = req.query.type || 'article'
+	api.getFeed(type.toLowerCase(),{ status: 1 },'latest',null,null,20,{'atom' :true}).then(result => {
+		res.set('Content-Type', 'text/xml');
+		res.send(result.xml)
+	})
+})
+
+app.get(['/linetoday', '/feed/linetoday'],(req,res) => {
+	let type = req.query.type || 'article'
+	api.getFeed(type.toLowerCase(),{ status: 1 },'latest',null,null,20,{'line' :true}).then(result => {
+		res.set('Content-Type', 'text/xml');
+		res.send(result.xml)
+	})
+})
+
+
 // The React application middleware.
 app.get('*', reactApplication);
 
@@ -92,7 +197,7 @@ function startListen(_server, _url, _port) {
 
     let addr = _server.address();
     let bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
-    console.info(`Server is running at ${boldBlue(`${_url}:${_port}${basename}/`)}`);
+    console.info(`Server is running at ${boldBlue(`${_url}:${_port}/`)}`);
   });
 }
 

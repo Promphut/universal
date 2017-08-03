@@ -14,6 +14,7 @@ import LinearProgress from 'material-ui/LinearProgress';
 import { withCookies, Cookies } from 'react-cookie';
 import config from '../../config.js';
 import utils from '../../services/utils';
+import { Route, Switch, Link, Redirect } from 'react-router-dom';
 
 import {
   HomePage,
@@ -42,14 +43,7 @@ import {
   SearchResultPage,
 } from '../../components';
 
-import { Route, Switch, Link, Redirect } from 'react-router-dom';
-
-import Footer from '../atoms/Footer';
-import Test from '../Test';
-// import theme from './themes/default'
-if (process.env.BROWSER) {
-  require('../../../public/scss/main.scss');
-}
+import'../../../public/scss/main.scss';
 
 // injectGlobal`
 // `
@@ -201,7 +195,7 @@ class App extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // FB.XFBML.parse()
+    FB.XFBML.parse()
     clearTimeout(this.timer);
   }
 

@@ -8,17 +8,11 @@ import MenuItem from 'material-ui/MenuItem';
 import api from '../../../services/api';
 import { Helmet } from 'react-helmet';
 
-var MediumEditor = {};
-if (process.env.BROWSER) {
-  require('jquery-ui-bundle');
-  require('blueimp-file-upload/js/vendor/jquery.ui.widget.js');
-  require('blueimp-file-upload/js/jquery.iframe-transport.js');
-  require('blueimp-file-upload/js/jquery.fileupload.js');
-  require('blueimp-file-upload/js/jquery.fileupload-image.js');
-
-  MediumEditor = require('medium-editor');
-  window.MediumInsert = require('medium-editor-insert-plugin').MediumInsert;
-}
+// var MediumEditor = {};
+// if (process.env.BROWSER) {
+//   MediumEditor = require('medium-editor');
+//   window.MediumInsert = require('medium-editor-insert-plugin').MediumInsert;
+// }
 
 const Container = styled(EditorCss)`
   width:100%;
@@ -162,82 +156,7 @@ class PublisherAbout extends React.Component {
   }
 
   componentDidMount() {
-    this.editor = new MediumEditor('#paper', {
-      toolbar: {
-        buttons: [
-          { name: 'bold', contentDefault: '<span class="fa fa-bold" ></span>' },
-          {
-            name: 'italic',
-            contentDefault: '<span class="fa fa-italic" ></span>',
-          },
-          {
-            name: 'underline',
-            contentDefault: '<span class="fa fa-underline" ></span>',
-          },
-          {
-            name: 'h1',
-            action: 'append-h2',
-            aria: 'Header',
-            tagNames: ['h2'],
-            style: { prop: 'font-size', value: '28px' },
-            contentDefault: '<span class="fa fa-header" style="font-size:24px"><span>',
-            classList: ['custom-class-h1'],
-            attrs: { 'data-custom-attr': 'attr-value-h1' },
-          },
-          {
-            name: 'h2',
-            action: 'append-h3',
-            aria: 'Subheader',
-            tagNames: ['h3'],
-            contentDefault: '<span class="fa fa-header" style="font-size:14px"><span>',
-            classList: ['custom-class-h2'],
-            attrs: { 'data-custom-attr': 'attr-value-h2' },
-          },
-          {
-            name: 'quote',
-            contentDefault: '<span class="fa fa-quote-left" ></span>',
-          },
-          {
-            name: 'anchor',
-            contentDefault: '<span class="fa fa-link" ></span>',
-          },
-          {
-            name: 'justifyLeft',
-            contentDefault: '<span class="fa fa-align-left" ></span>',
-          },
-          {
-            name: 'justifyCenter',
-            contentDefault: '<span class="fa fa-align-center" ></span>',
-          },
-          {
-            name: 'justifyRight',
-            contentDefault: '<span class="fa fa-align-right" ></span>',
-          },
-        ],
-      },
-      targetBlank: true,
-      placeholder: {
-        text: 'Describe yourself',
-      },
-    });
-
-    $('#paper').mediumInsert({
-      editor: this.editor,
-      addons: {
-        images: {},
-        embeds: {
-          label: '<span class="fa fa-code"></span>',
-          parseOnPaste: true,
-          oembedProxy: null,
-        },
-      },
-    });
-
-    this.editor.subscribe('editableInput', this.handleEditableInput);
-    // initialize editor content
-    this.setAboutUs(this.aboutUs);
-
-    // this.editor.setContent(this.state.aboutUs || '')
+    
   }
 
   render() {

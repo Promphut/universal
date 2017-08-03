@@ -23,9 +23,7 @@
     "test:coverage": "jest --coverage"
   },
   "lint-staged": {
-    "*.js": [
-
-    ]
+    "*.js": []
   },
   "jest": {
     "collectCoverageFrom": [
@@ -61,10 +59,7 @@
   "homepage": "https://github.com/ctrlplusb/react-universally#readme",
   "dependencies": {
     "app-root-dir": "1.0.2",
-    "blueimp-canvas-to-blob": "^3.7.0",
-    "blueimp-file-upload": "^9.17.0",
     "blueimp-file-upload-expressjs": "git+https://github.com/ochawin/blueimp-file-upload-expressjs",
-    "blueimp-load-image": "^2.12.2",
     "classnames": "2.2.5",
     "colors": "1.1.2",
     "compression": "1.6.2",
@@ -77,12 +72,8 @@
     "hpp": "0.2.2",
     "html-to-text": "git+https://github.com/stepboom/node-html-to-text",
     "jest-cli": "^20.0.4",
-    "jquery": "^3.2.1",
-    "jquery-ui-bundle": "^1.12.1",
     "lodash": "^4.17.4",
     "material-ui": "^0.18.7",
-    "medium-editor": "^5.23.0",
-    "medium-editor-insert-plugin": "^2.4.1",
     "modernizr": "3.5.0",
     "moment": "^2.18.1",
     "normalize.css": "^7.0.0",
@@ -102,7 +93,6 @@
     "react-onclickoutside": "^6.4.0",
     "react-router-dom": "4.1.1",
     "react-slick": "^0.14.11",
-    "react-sticky": "^6.0.1",
     "react-swipeable-views": "^0.12.5",
     "react-tap-event-plugin": "^2.0.1",
     "react-ultimate-pagination": "^1.0.2",
