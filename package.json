@@ -1,7 +1,7 @@
 {
-  "name": "react-universally",
-  "version": "13.0.0",
-  "description": "A starter kit for universal react applications.",
+  "name": "ThePublisher",
+  "version": "1.5.7",
+  "private": true,
   "main": "build/server/index.js",
   "engines": {
     "node": ">=6"
@@ -14,16 +14,9 @@
     "clean": "cross-env babel-node internal/scripts/clean",
     "deploy": "babel-node internal/scripts/deploy",
     "develop": "cross-env DEPLOYMENT=development babel-node internal/development",
-    "lint": "eslint client server shared config internal",
-    "precommit": "lint-staged",
-    "preinstall": "node internal/scripts/preinstall",
-    "prepush": "jest",
     "start": "cross-env NODE_ENV=production node build/server",
     "test": "jest",
     "test:coverage": "jest --coverage"
-  },
-  "lint-staged": {
-    "*.js": []
   },
   "jest": {
     "collectCoverageFrom": [
@@ -39,24 +32,6 @@
       "\\.(scss)$": "identity-obj-proxy"
     }
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ctrlplusb/react-universally.git"
-  },
-  "keywords": [
-    "react",
-    "boilerplate",
-    "starter kit",
-    "universal",
-    "javascript",
-    "express",
-    "webpack"
-  ],
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ctrlplusb/react-universally/issues"
-  },
-  "homepage": "https://github.com/ctrlplusb/react-universally#readme",
   "dependencies": {
     "app-root-dir": "1.0.2",
     "blueimp-file-upload-expressjs": "git+https://github.com/ochawin/blueimp-file-upload-expressjs",
