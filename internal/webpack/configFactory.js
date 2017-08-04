@@ -83,7 +83,6 @@ export default function webpackConfigFactory(buildOptions) {
         // The source entry file for the bundle.
         path.resolve(appRootDir.get(), bundleConfig.srcEntryFile),
       ]),
-    
     },
 
     // Bundle output configuration.
@@ -234,36 +233,13 @@ export default function webpackConfigFactory(buildOptions) {
             entryOnly: false,
           }),
       ),
+
       // ifClient(()=>
       //   new webpack.optimize.CommonsChunkPlugin({
-      //       name: 'static',
-      //       filename: '[name]-[chunkhash].js',
+      //       names:['vender'],
       //       minChunks(module, count) {
       //           var context = module.context;
       //           return context && context.indexOf('node_modules') >= 0;
-      //       },
-      //   }),
-      // ),
-
-      //catch all - anything used in more than one place
-      // ifClient(()=>
-      //   new webpack.optimize.CommonsChunkPlugin({
-      //       filename: 'used-twice.js',
-      //       async: 'used-twice',
-      //       minChunks(module, count) {
-      //           return count >= 2;
-      //       },
-      //   }),
-      // ),    
-      
-      // ifClient(()=>
-      //   new webpack.optimize.CommonsChunkPlugin({
-      //       name: 'jquery',
-      //       filename: 'editor-plugin.js',
-      //       minChunks(module, count) {
-      //           var context = module.context;
-      //           var targets = ['jquery', 'jquery-ui-bundle', 'd3', 'medium-editor']
-      //           return context && context.indexOf('node_modules') >= 0 && targets.find(t => new RegExp('\\\\' + t + '\\\\', 'i').test(context));
       //       },
       //   }),
       // ),
