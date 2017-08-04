@@ -14,7 +14,7 @@
     "clean": "cross-env babel-node internal/scripts/clean",
     "deploy": "babel-node internal/scripts/deploy",
     "develop": "cross-env DEPLOYMENT=development babel-node internal/development",
-    "start": "cross-env NODE_ENV=production node build/server",
+    "start": "node build/server",
     "test": "jest",
     "test:coverage": "jest --coverage"
   },
