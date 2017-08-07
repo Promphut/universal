@@ -6,47 +6,42 @@ import FlatButton from 'material-ui/FlatButton'
 import { Link } from 'react-router-dom'
 import api from '../../../services/api'
 
-const Container = styled.div`
-`
+const Container = styled.div``
 
-const SubContainer = styled.div`
-	padding: 32px
-`
+const SubContainer = styled.div`padding: 32px;`
 
 const Header = styled.div`
 	margin: 0;
 	padding: 0;
-  height: 80px;
+	height: 80px;
 	width: 100%;
-  background: #F4F4F4;
-  display: flex;
+	background: #f4f4f4;
+	display: flex;
 `
 
 const Title = styled.div`
-  display: flex;
-  flex: 1;
-  align-items: center;
-  font-family: 'Nunito', 'Mitr';
-  font-size: 22px;
-  font-weight: bold;
-  padding-left: 32px;
+	display: flex;
+	flex: 1;
+	align-items: center;
+	font-family: 'Nunito', 'Mitr';
+	font-size: 22px;
+	font-weight: bold;
+	padding-left: 32px;
 `
 
 const GraphGap = styled.div`
-  height: 30px;
-  background: #F4F4F4;
-  border-top: 1px solid #E2E2E2;
-  border-bottom: 1px solid #E2E2E2;
+	height: 30px;
+	background: #f4f4f4;
+	border-top: 1px solid #e2e2e2;
+	border-bottom: 1px solid #e2e2e2;
 `
 
 const TopHeader = styled.div`
-  font-weight: bold;
-  font-size: 18px;
+	font-weight: bold;
+	font-size: 18px;
 `
 
-const ButtonWrapper = styled.div`
-  width: 100%;
-`
+const ButtonWrapper = styled.div`width: 100%;`
 
 let styles = {
 	button: {
@@ -89,10 +84,10 @@ class PublisherDashboardPage extends React.Component {
 
 	getInsight = (insigth, limit, subaction, filter, sort, current) => {
 		api
-		.getViewInsight(insigth, subaction, filter, sort, limit, current)
-		.then(data => {
-			this.setState({ [insigth]: data })
-		})
+			.getViewInsight(insigth, subaction, filter, sort, limit, current)
+			.then(data => {
+				this.setState({ [insigth]: data })
+			})
 	}
 
 	componentDidMount() {
