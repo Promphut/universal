@@ -10,17 +10,17 @@
 # Staging NextEmpire:
 - NODE_ENV=staging PORT=5000 npm run build
 - NODE_ENV=staging npm run start 
-	e.g. on test server: NODE_ENV=staging PORT=5000 forever start -c 'npm run start'
+	e.g. on test server: NODE_ENV=staging PORT=5000 forever start -c 'npm run start' ./
 
 # Staging Aommoney:
 - NODE_ENV=staging PORT=5500 npm run build
-- NODE_ENV=staging 'npm run start' 
-	e.g. on test server: NODE_ENV=staging PORT=5500 forever start -c 'npm run start'
+- NODE_ENV=staging npm run start
+	e.g. on test server: NODE_ENV=staging PORT=5500 forever start -c 'npm run start' ./
 
 # Production:
 - NODE_ENV=production PORT=5000 npm run build
-- NODE_ENV=production node . 
-	e.g. on nextempire production server: NODE_ENV=production PORT=5000 forever start -c 'npm run start'
+- NODE_ENV=production npm run start
+	e.g. on nextempire production server: NODE_ENV=production PORT=5000 forever start -c 'npm run start' ./
 
 # Test:
 - Page Request Test using Jest : npm run test:app2 <FRONTURL>

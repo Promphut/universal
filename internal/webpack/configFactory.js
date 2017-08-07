@@ -515,7 +515,7 @@ export default function webpackConfigFactory(buildOptions) {
                   use: [
                     `css-loader?modules=1&importLoaders=1&localIdentName=${localIdentName}`,
                     'postcss-loader',
-                    'sass-loader?outputStyle=expanded',
+                    'sass-loader',
                   ],
                 }),
               ],
