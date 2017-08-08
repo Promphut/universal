@@ -59,44 +59,14 @@ app.use(config('bundles.client.webPath'), clientBundle);
 app.use(express.static(pathResolve(appRootDir.get(), config('publicAssetsPath'))));
 
 
-var options = {
-    tmpDir: './public/uploads/tmp',
-    uploadUrl:  '/thepublisher/publishers/'+PID+'/',
-		imageTypes:  /\.(gif|jpe?g|png)/i,
-		useSSL: true,
-    imageVersions :{
-        maxWidth : 730,
-        maxHeight : 'auto'
-    },
-    accessControl: {
-        allowOrigin: '*',
-        allowMethods: 'OPTIONS, HEAD, GET, POST, PUT, DELETE',
-        allowHeaders: 'Content-Type, Content-Range, Content-Disposition'
-    },
-		storage : {
-			type : 'aws',
-			aws : {
-					accessKeyId :  amazonAccessKey,
-					secretAccessKey : secretKey ,
-					//bucketName : 'thepublisher/publishers/'+PID,
-					bucketName : 'thepublisher',
-					acl:'public-read',
-					region: 'ap-southeast-1',
-					path: 'publishers/'+PID+'/',
-					expiresInMilliseconds:99999999,
-					getSignedUrl: false
-			}
-    }
-};
 
-var uploader = require('blueimp-file-upload-expressjs')(options);
 
 app.post('/upload/img',
 	(req,res)=>{
-		uploader.post(req, res, function (err,obj) {
-			//console.log('HAHA', err, obj)
-			res.send(JSON.stringify(obj));
-		});
+		// uploader.post(req, res, function (err,obj) {
+		// 	//console.log('HAHA', err, obj)
+		// 	res.send(JSON.stringify(obj));
+		// });
 	}
 )
 

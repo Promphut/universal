@@ -34,12 +34,7 @@ import config from '../../../config';
 import pullAllWith from 'lodash/pullAllWith';
 import isEqual from 'lodash/isEqual';
 import utils from '../../../services/utils';
-
-// var MediumEditor = {};
-// if (process.env.BROWSER) {
-//   MediumEditor = require('medium-editor');
-//   window.MediumInsert = require('medium-editor-insert-plugin').MediumInsert;
-// }
+import TinyMCE from 'react-tinymce';
 
 const Container = styled(EditorCss)`
   width:855px;
@@ -620,6 +615,10 @@ class EditStory extends React.Component {
       });
   }
 
+  handleEditorChange = () =>{
+    console.log("test editor")
+  }
+
   componentWillReceiveProps(nextProps) {
     // console.log('COL', nextProps, this.props)
     if (nextProps.match.params.sid != this.props.match.params.sid) {
@@ -646,9 +645,6 @@ class EditStory extends React.Component {
 
   componentWillUnmount() {
     clearInterval(this.interval);
-
-    this.editor.destroy();
-    this.editor2.destroy();
   }
 
   render() {
@@ -1014,7 +1010,16 @@ class EditStory extends React.Component {
             <Highlight ref="highlight" id="highlight" />
           </HighlightBox>
         </div>
-        <Paper ref="paper" id="paper" />
+        <Paper ref="paper" id="paper" >
+          <TinyMCE
+            content="<p>This is the initial content of the editor</p>"
+            config={{
+              plugins: 'link image code',
+              toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code'
+            }}
+            onChange={this.handleEditorChange}
+          />
+        </Paper>
         <Divider />
         <AnalyticContainer
           content={html}
