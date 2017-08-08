@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { TopBarWithNavigation,Footer } from 'components'
+import { TopBarWithNavigation,Footer } from '../../../components'
 // Main Controller Style Goes Here!
 const Wrapper = styled.div `
 `
