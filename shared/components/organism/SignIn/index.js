@@ -1,5 +1,5 @@
 import { asyncComponent } from 'react-async-component';
 
 export default asyncComponent({
-  resolve: () => System.import(/* webpackChunkName: "sign-in" */ './SignIn'),
+  resolve: () => System.import(/* webpackChunkName: "sign-in" */ './SignIN'),
 });
