@@ -126,6 +126,7 @@ class SignIn extends React.Component {
     }
   };
 
+  
   render() {
     let { onClick, style } = this.props,
       { errText0, errText1, errText2 } = this.state;
