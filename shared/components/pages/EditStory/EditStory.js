@@ -34,7 +34,8 @@ import config from '../../../config';
 import pullAllWith from 'lodash/pullAllWith';
 import isEqual from 'lodash/isEqual';
 import utils from '../../../services/utils';
-import TinyMCE from 'react-tinymce';
+// import TinyMCE from 'react-tinymce';
+// require('../../../../node_modules/tinymce/tinymce.min.js')
 
 const Container = styled(EditorCss)`
   width:855px;
@@ -45,7 +46,7 @@ const Container = styled(EditorCss)`
     font-size:42px;
   }
 `;
-const Paper = styled.div`
+const Paper = styled.textarea`
   position:relative;
   width:100%;
   margin-top:60px;
@@ -615,7 +616,7 @@ class EditStory extends React.Component {
       });
   }
 
-  handleEditorChange = () =>{
+  handleEditorChange = (e) =>{
     console.log("test editor")
   }
 
@@ -623,28 +624,33 @@ class EditStory extends React.Component {
     // console.log('COL', nextProps, this.props)
     if (nextProps.match.params.sid != this.props.match.params.sid) {
       // console.log('RELOAD FEED')
-      this.checkCanEditStory(nextProps.match.params.sid);
+      //this.checkCanEditStory(nextProps.match.params.sid);
       // this.reloadFeed()
     }
   }
 
   componentWillMount() {
-    this.checkCanEditStory(parseInt(this.props.match.params.sid));
+    //this.checkCanEditStory(parseInt(this.props.match.params.sid));
   }
 
   componentDidMount() {
-    this.interval = setInterval(this.autoSave, 3000);
+    //this.interval = setInterval(this.autoSave, 3000);
 
-    this.getTags();
-    this.getColumns();
-    this.getContentType();
-
+    // this.getTags();
+    // this.getColumns();
+    // this.getContentType();
+    
+    utils.loadscript('https://cloud.tinymce.com/stable/tinymce.min.js',()=>{
+      tinymce.init({
+        selector: '#paper'
+      });
+    })
     // this.getStoryDetail()
     // this.getStoryTags()
   }
 
   componentWillUnmount() {
-    clearInterval(this.interval);
+    //clearInterval(this.interval);
   }
 
   render() {
@@ -1010,16 +1016,7 @@ class EditStory extends React.Component {
             <Highlight ref="highlight" id="highlight" />
           </HighlightBox>
         </div>
-        <Paper ref="paper" id="paper" >
-          <TinyMCE
-            content="<p>This is the initial content of the editor</p>"
-            config={{
-              plugins: 'link image code',
-              toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code'
-            }}
-            onChange={this.handleEditorChange}
-          />
-        </Paper>
+        <Paper ref="paper" id="paper" />
         <Divider />
         <AnalyticContainer
           content={html}

@@ -222,4 +222,20 @@ utils.FBShareCount = (url) => {
     })
     .catch(er => Promise.resolve(0));
 };
+
+utils.loadscript = (src, callback) => {
+  var script = document.createElement('script'),
+      loaded;
+  script.setAttribute('src', src);
+  if (callback) {
+    script.onreadystatechange = script.onload = function() {
+      if (!loaded) {
+        callback();
+      }
+      loaded = true;
+    };
+  }
+  document.getElementsByTagName('body')[0].appendChild(script);
+}
+
 module.exports = utils;

@@ -137,8 +137,12 @@ function HTML(props) {
         <meta property="og:image" content={cover}/>
         <meta property="og:keywords" content={keywords} />
         <meta property="og:description" content={desc} />
-        <meta property="twitter:card" content={cover} />
-        <meta property="twitter:image:alt" content={name} />
+        <meta name="twitter:card" content="summary" />
+        {/* <meta name="twitter:site" content={name} /> */}
+        <meta name="twitter:title" content={name} />
+        <meta name="twitter:description" content={desc} />
+        <meta name="twitter:image" content={cover} />
+        <meta name="twitter:image:alt" content={name} />
         <meta property="fb:app_id" content={analytic} />
         <meta property="og:image:width" content='1200' />
         <meta property="og:image:height" content='628' />
