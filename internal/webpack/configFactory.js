@@ -164,12 +164,13 @@ export default function webpackConfigFactory(buildOptions) {
     ),
 
     resolve: {
+      // modulesDirectories: ['node_modules'],
       // These extensions are tried when resolving a file.
       extensions: config('bundleSrcTypes').map(ext => `.${ext}`),
 
       // This is required for the modernizr-loader
       // @see https://github.com/peerigon/modernizr-loader
-      //modules: [].concat("shared", ['node_modules']),
+      // modules: [].concat("shared", ['node_modules']),
       alias: {
         modernizr$: path.resolve(appRootDir.get(), './.modernizrrc'),
         // 'load-image': 'blueimp-load-image/js/load-image.js',
@@ -220,6 +221,12 @@ export default function webpackConfigFactory(buildOptions) {
       },
     }),
     plugins: removeNil([
+      ifClient(() => 
+        new webpack.ProvidePlugin({
+          $: "jquery",
+          jQuery: "jquery"
+        })
+      ),
       // This grants us source map support, which combined with our webpack
       // source maps will give us nice stack traces for our node executed
       // bundles.

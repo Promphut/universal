@@ -34,10 +34,23 @@ import config from '../../../config';
 import pullAllWith from 'lodash/pullAllWith';
 import isEqual from 'lodash/isEqual';
 import utils from '../../../services/utils';
+//var CKEditor = require('react-ckeditor-wrapper');
 // import TinyMCE from 'react-tinymce';
 // require('../../../../node_modules/tinymce/tinymce.min.js')
+// Require Editor JS files.
+// import $ from 'jquery'
+import 'froala-editor/js/froala_editor.pkgd.min.js';
 
-const Container = styled(EditorCss)`
+// Require Editor CSS files.
+import 'froala-editor/css/froala_style.min.css';
+import 'froala-editor/css/froala_editor.pkgd.min.css';
+
+// Require Font Awesome.
+//import 'font-awesome/css/font-awesome.css';
+
+import FroalaEditor from 'react-froala-wysiwyg';
+//const Container = styled(EditorCss)`
+const Container = styled.div`
   width:855px;
   padding:60px;
   border-bottom:1px solid #E2E2E2;
@@ -46,7 +59,7 @@ const Container = styled(EditorCss)`
     font-size:42px;
   }
 `;
-const Paper = styled.textarea`
+const Paper = styled.div`
   position:relative;
   width:100%;
   margin-top:60px;
@@ -67,6 +80,9 @@ const Highlight = styled.div`
   width:100%;
   background-color:white;
   padding:20px;
+  &:focus{
+    outline: none;
+  }
 `;
 const HighlightText = styled.span`
   position:relative;
@@ -226,7 +242,20 @@ class EditStory extends React.Component {
 
       status: this.SAVE_STATUS.INITIAL,
       settingSlideIndex: 0,
+      renderEditor:false,
+      content: 'content',
+      model: 'Example text'
     };
+  }
+  config = {
+    placeholderText: 'Edit Your Content Here!',
+    charCounterCount: false
+  }
+
+  handleModelChange =  (model) => {
+    this.setState({
+      model: model
+    });
   }
 
   chooseNews = () => {
@@ -616,8 +645,8 @@ class EditStory extends React.Component {
       });
   }
 
-  handleEditorChange = (e) =>{
-    console.log("test editor")
+  updateContent = (value) => {
+      this.setState({content:value})
   }
 
   componentWillReceiveProps(nextProps) {
@@ -640,11 +669,18 @@ class EditStory extends React.Component {
     // this.getColumns();
     // this.getContentType();
     
-    utils.loadscript('https://cloud.tinymce.com/stable/tinymce.min.js',()=>{
-      tinymce.init({
-        selector: '#paper'
-      });
-    })
+    // utils.loadscript('https://cloud.tinymce.com/stable/tinymce.min.js',()=>{
+    //   tinymce.init({
+    //     selector: '#paper', 
+    //     selection_toolbar: 'bold italic | quicklink h2 h3 blockquote',  
+    //     plugins: "media mediaembed",
+    //     mediaembed_max_width: 450
+    //   });
+    //   tinymce.init({
+    //     selector: '#highlight',
+    //     selection_toolbar: 'bold italic | quicklink h2 h3 blockquote'
+    //   });
+    // })
     // this.getStoryDetail()
     // this.getStoryTags()
   }
@@ -682,6 +718,7 @@ class EditStory extends React.Component {
       focusWord,
       status,
       highlight,
+      renderEditor
     } = this.state;
 
     const dataSourceConfig = { text: 'text', value: 'value', id: 'id' };
@@ -1016,7 +1053,14 @@ class EditStory extends React.Component {
             <Highlight ref="highlight" id="highlight" />
           </HighlightBox>
         </div>
-        <Paper ref="paper" id="paper" />
+        <Paper ref="paper" id="paper">
+            <FroalaEditor
+              tag='textarea'
+              config={this.config}
+              model={this.state.model}
+              onModelChange={this.handleModelChange}
+            />
+        </Paper>    
         <Divider />
         <AnalyticContainer
           content={html}
