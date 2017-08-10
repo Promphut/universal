@@ -34,21 +34,15 @@ import config from '../../../config';
 import pullAllWith from 'lodash/pullAllWith';
 import isEqual from 'lodash/isEqual';
 import utils from '../../../services/utils';
-//var CKEditor = require('react-ckeditor-wrapper');
-// import TinyMCE from 'react-tinymce';
-// require('../../../../node_modules/tinymce/tinymce.min.js')
-// Require Editor JS files.
-// import $ from 'jquery'
+
 import 'froala-editor/js/froala_editor.pkgd.min.js';
 
 // Require Editor CSS files.
 import 'froala-editor/css/froala_style.min.css';
 import 'froala-editor/css/froala_editor.pkgd.min.css';
 
-// Require Font Awesome.
-//import 'font-awesome/css/font-awesome.css';
-
 import FroalaEditor from 'react-froala-wysiwyg';
+
 //const Container = styled(EditorCss)`
 const Container = styled.div`
   width:855px;
