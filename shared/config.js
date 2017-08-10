@@ -37,7 +37,7 @@ const config = {
       bucket : 'thepublisher',
       acl:'public-read',
       region: 'ap-southeast-1',
-      keyStart: 'publishers/stories/',
+      keyStart: 'publishers/11/',
       accessKey : 'AKIAJKZV2MRFEBXGXVTQ',
       secretKey : "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"
     }

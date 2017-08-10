@@ -280,17 +280,17 @@ class EditStory extends React.Component {
         toolbarInline: true,
         videoEditButtons: ['videoAlign', 'videoDisplay', 'videoSize'],
         videoInsertButtons: ['videoBack', '|', 'videoByURL', 'videoEmbed'],
-        imageUploadToS3 :{
-          bucket: config.aws.bucket,
-          region: config.aws.region,
-          keyStart: config.aws.keyStart,
-          params: {
-            acl: config.aws.acl, // ACL according to Amazon Documentation.
-            AWSAccessKeyId: config.aws.accessKey, // Access Key from Amazon.
-            policy: 'POLICY_STRING', // Policy string computed in the backend.
-            signature: '', // Signature computed in the backend.
-          }
-        }
+        // imageUploadToS3 :{
+        //   bucket: config.aws.bucket,
+        //   keyStart: config.aws.keyStart,
+        //   region: 's3-'+config.aws.region,
+        //   params: {
+        //     acl: config.aws.acl, // ACL according to Amazon Documentation.
+        //     AWSAccessKeyId: config.aws.accessKey, // Access Key from Amazon.
+        //     policy: 'POLICY_STRING', // Policy string computed in the backend.
+        //     signature: '', // Signature computed in the backend.
+        //   }
+        // }
       }
 		}
 	}
@@ -717,10 +717,12 @@ class EditStory extends React.Component {
 
 	componentDidMount() {
     api.getSignature().then((res)=>{
-      let config= this.state.config
-      config.imageUploadToS3 = merge(res,this.state.config.imageUploadToS3)
-      console.log(config)
-      this.setState({config})
+      let config= this.state.froalaConfig
+      config.imageUploadToS3 = res
+      // console.log(config)
+      this.setState({froalaConfig:config},()=>{
+        this.setState({renderEditor:true})
+      })
     })
 		//this.interval = setInterval(this.autoSave, 3000);
 		// this.getTags();
@@ -1200,12 +1202,12 @@ class EditStory extends React.Component {
 						<Highlight ref="highlight" id="highlight" />
 					</HighlightBox>
 				</div>
-				<FroalaEditor
+        {renderEditor&&<FroalaEditor
 					tag="textarea"
 					config={this.state.froalaConfig}
 					model={this.state.model}
 					onModelChange={this.handleModelChange}
-				/>
+				/>}
 				<Divider />
 				<AnalyticContainer
 					content={html}
