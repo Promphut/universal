@@ -62,6 +62,27 @@ const Container = styled.div`
   .fr-element > p > a {
     color:${props => props.theme.accentColor};
   }
+
+  .fr-element > ol > li > a,
+  .fr-element > ul > li > a {
+    color:${props => props.theme.accentColor};
+  }
+
+  .fr-element > hr {
+    width: 100px;
+    margin: 50px auto;
+    border-top: 3px solid ${props => props.theme.accentColor};
+  }
+
+  .fr-view blockquote {
+    border-left: 3px solid ${props => props.theme.accentColor};
+    padding-left: 20px;
+    margin: 40px 0px;
+    line-height: 40px;
+    font-family: 'PT Serif','Mitr';
+    font-size: 20px;
+    color: #222;
+  }
 `
 
 const HighlightBox = styled.div`
@@ -239,13 +260,11 @@ class EditStory extends React.Component {
 			status: this.SAVE_STATUS.INITIAL,
 			settingSlideIndex: 0,
 			renderEditor: false,
-			content: 'content',
-			model: ''
+			content: 'content'
 		}
 	}
 
 	froalaConfig = {
-		charCounterCount: false,
 		imageEditButtons: ['imageAlign', 'imageDisplay', 'imageAlt', 'imageSize'],
 		imageInsertButtons: ['imageBack', '|', 'imageUpload', 'imageByURL'],
 		inlineStyles: {
@@ -257,7 +276,7 @@ class EditStory extends React.Component {
 		},
 		linkEditButtons: ['linkOpen', 'linkEdit', 'linkRemove'],
 		linkInsertButtons: ['linkBack'],
-		placeholderText: 'เริ่มเขียนบทความ',
+		placeholderText: 'เขียนบทความ...',
 		quickInsertButtons: ['image', 'ul', 'ol', 'hr'],
 		tabSpaces: 4,
 		toolbarButtons: [
@@ -282,10 +301,31 @@ class EditStory extends React.Component {
 		videoInsertButtons: ['videoBack', '|', 'videoByURL', 'videoEmbed']
 	}
 
-	handleModelChange = model => {
-		this.setState({
-			model: model
-		})
+	froalaConfigHighlight = {
+		charCounterCount: false,
+		linkEditButtons: ['linkOpen', 'linkEdit', 'linkRemove'],
+		linkInsertButtons: ['linkBack'],
+		placeholderText: '',
+		quickInsertButtons: ['ul', 'ol'],
+		tabSpaces: 4,
+		toolbarButtons: [
+			'undo',
+			'|',
+			'bold',
+			'italic',
+			'underline',
+			'|',
+			'insertLink'
+		],
+		toolbarInline: true
+	}
+
+	handleModelChangeHtml = html => {
+		this.setState({ html })
+	}
+
+	handleModelChangeHighlight = highlight => {
+		this.setState({ highlight })
 	}
 
 	chooseNews = () => {
@@ -384,7 +424,16 @@ class EditStory extends React.Component {
 	}
 
 	autoSave = () => {
-		let { sid, title, column, contentType, focusWord, story } = this.state
+		let {
+			sid,
+			title,
+      column,
+      html,
+			contentType,
+			focusWord,
+			story,
+			highlight
+		} = this.state
 
 		if (this.state.status === this.SAVE_STATUS.DIRTIED) {
 			const images = [].slice.call(
@@ -397,20 +446,14 @@ class EditStory extends React.Component {
 				})
 			}
 
-			let allContents = this.editor.serialize()
-			let el = allContents.paper.value
-			let highlight = this.editor2.serialize().highlight.value
-			// console.log(allContents.paper.value)
 			this.setState({
 				saveStatus: 'Saving...',
-				html: el,
-				highlight
 			})
 
 			let s = {
 				title,
 				publisher: parseInt(config.PID),
-				html: el,
+				html,
 				focusWord,
 				meta: story.meta,
 				highlight
@@ -439,16 +482,16 @@ class EditStory extends React.Component {
 			title,
 			focusWord,
 			columnList,
-			story
+			story,
+      highlight,
+      html
 		} = this.state
-		let allContents = this.editor.serialize()
-		let highlight = this.editor2.serialize().highlight.value
 
 		let s = {
 			title,
 			publisher: parseInt(config.PID),
 			focusWord,
-			html: allContents.paper.value,
+			html,
 			format: columnList.find(col => col._id == column).name == 'news' ||
 				columnList.find(col => col._id == column).name == 'News'
 				? 'NEWS'
@@ -647,9 +690,6 @@ class EditStory extends React.Component {
 				html: story.html,
 				highlight: story.highlight
 			})
-
-			this.editor.setContent(story.html || '')
-			this.editor2.setContent(story.highlight || '')
 		}
 	}
 	getStoryTags = sid => {
@@ -1175,17 +1215,24 @@ class EditStory extends React.Component {
 					value={title}
 					onChange={this.titleChanged}
 				/>
-				<div>
+				<div style={{ margin: '40px 0px 45px' }}>
 					<HighlightText>HIGHLIGHT</HighlightText>
 					<HighlightBox>
-						<Highlight ref="highlight" id="highlight" />
+						<Highlight ref="highlight" id="highlight">
+							<FroalaEditor
+								tag="textarea"
+								config={this.froalaConfigHighlight}
+								model={highlight}
+								onModelChange={this.handleModelChangeHighlight}
+							/>
+						</Highlight>
 					</HighlightBox>
 				</div>
 				<FroalaEditor
 					tag="textarea"
 					config={this.froalaConfig}
-					model={this.state.model}
-					onModelChange={this.handleModelChange}
+					model={html}
+					onModelChange={this.handleModelChangeHtml}
 				/>
 				<Divider />
 				<AnalyticContainer
