@@ -13,13 +13,14 @@ import errorHandlers from './middleware/errorHandlers';
 import config from '../config';
 import cookiesMiddleware from 'universal-cookie-express';
 import cors from 'cors';
-
 import http from 'http';
 import https from 'https';
 import fs from 'fs';
 
-import { FRONTURL, port, host, basename, ANALYTIC, COVER, amazonAccessKey, secretKey, PID } from '../shared/config.js'
+import { FRONTURL, port, host, basename, ANALYTIC, COVER, aws , PID } from '../shared/config.js'
 import api from '../shared/services/api';
+
+import FroalaEditor from './wysiwyg-editor-node-sdk/lib/froalaEditor.js';
 
 if (process.env.NODE_ENV === 'development') {
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
@@ -57,35 +58,6 @@ app.use(config('bundles.client.webPath'), clientBundle);
 // Configure static serving of our "public" root http path static files.
 // Note: these will be served off the root (i.e. '/') of our application.
 app.use(express.static(pathResolve(appRootDir.get(), config('publicAssetsPath'))));
-
-
-
-
-app.post('/upload/img',
-	(req,res)=>{
-		// uploader.post(req, res, function (err,obj) {
-		// 	//console.log('HAHA', err, obj)
-		// 	res.send(JSON.stringify(obj));
-		// });
-	}
-)
-
-// app.delete('/upload/img',
-// 	(req,res)=>{
-// 		uploader.delete(req, res, function (err,obj) {
-// 				res.send(JSON.stringify(obj));
-// 		});
-// 	}
-// )
-// app.get('/sitemap.xml', (req, res)=> {
-//   sitemap.toXML( function (err, xml) {
-//       if (err) {
-//         return res.status(500).end();
-//       }
-//       res.header('Content-Type', 'application/xml');
-//       res.send( xml );
-//   });
-// });
 
 app.get('/robots.txt', (req, res) => {
 	let robotTxt = ''
@@ -130,6 +102,11 @@ app.get(['/linetoday', '/feed/linetoday'],(req,res) => {
 	})
 })
 
+app.get('/get_signature', function (req, res) {
+  var configs = {aws}
+  var s3Hash = FroalaEditor.S3.getHash(configs);
+  res.send(s3Hash);
+});
 
 // The React application middleware.
 app.get('*', reactApplication);

@@ -34,6 +34,7 @@ import config from '../../../config';
 import pullAllWith from 'lodash/pullAllWith';
 import isEqual from 'lodash/isEqual';
 import utils from '../../../services/utils';
+import merge from 'lodash/merge';
 
 import 'froala-editor/js/froala_editor.pkgd.min.js';
 
@@ -42,6 +43,7 @@ import 'froala-editor/css/froala_style.min.css';
 import 'froala-editor/css/froala_editor.pkgd.min.css';
 
 import FroalaEditor from 'react-froala-wysiwyg';
+// import FroalaEditorImg from 'react-froala-wysiwyg';
 
 //const Container = styled(EditorCss)`
 const Container = styled.div`
@@ -238,18 +240,31 @@ class EditStory extends React.Component {
       settingSlideIndex: 0,
       renderEditor:false,
       content: 'content',
-      model: 'Example text'
+      model: 'Example text',
+      config:{
+        placeholderText: 'Edit Your Content Here!',
+        imageUploadToS3 :{
+          bucket: config.aws.bucket,
+          region: config.aws.region,
+          keyStart: config.aws.keyStart,
+          params: {
+            acl: config.aws.acl, // ACL according to Amazon Documentation.
+            AWSAccessKeyId: config.aws.accessKey, // Access Key from Amazon.
+            policy: 'POLICY_STRING', // Policy string computed in the backend.
+            signature: '', // Signature computed in the backend.
+          }
+        }
+      }
     };
   }
-  config = {
-    placeholderText: 'Edit Your Content Here!',
-    charCounterCount: false
-  }
+
+
 
   handleModelChange =  (model) => {
     this.setState({
       model: model
     });
+    console.log(model)
   }
 
   chooseNews = () => {
@@ -658,7 +673,12 @@ class EditStory extends React.Component {
 
   componentDidMount() {
     //this.interval = setInterval(this.autoSave, 3000);
-
+    api.getSignature().then((res)=>{
+      let config= this.state.config
+      config.imageUploadToS3 = merge(res,this.state.config.imageUploadToS3)
+      console.log(config)
+      this.setState({config})
+    })
     // this.getTags();
     // this.getColumns();
     // this.getContentType();
@@ -1048,12 +1068,12 @@ class EditStory extends React.Component {
           </HighlightBox>
         </div>
         <Paper ref="paper" id="paper">
-            <FroalaEditor
-              tag='textarea'
-              config={this.config}
-              model={this.state.model}
-              onModelChange={this.handleModelChange}
-            />
+          <FroalaEditor
+            tag='textarea'
+            config={this.state.config}
+            model={this.state.model}
+            onModelChange={this.handleModelChange}
+          />
         </Paper>    
         <Divider />
         <AnalyticContainer
