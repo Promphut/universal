@@ -688,14 +688,13 @@ class EditStory extends React.Component {
 	}
 
 	componentDidMount() {
-		api.getSignature().then(res => {
-			let config = this.state.froalaConfig
+    api.getSignature(this.props.match.params.sid).then((res)=>{
+      let config= this.state.froalaConfig
 			config.imageUploadToS3 = res
-			// console.log(config)
-			this.setState({ froalaConfig: config }, () => {
-				this.setState({ renderEditor: true })
-			})
-		})
+      this.setState({froalaConfig:config},()=>{
+        this.setState({renderEditor:true})
+      })
+    })
 		//this.interval = setInterval(this.autoSave, 3000);
 		// this.getTags();
 		// this.getColumns();
