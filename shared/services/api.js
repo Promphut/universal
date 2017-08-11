@@ -883,9 +883,9 @@ api.getChildrenFromParent = (parent) => {
 	}, api.err)
 }
 
-api.getSignature = () => {
+api.getSignature = (sid) => {
 	return Request
-	.get('/get_signature')
+	.get('/get_signature/'+sid)
 	.set('Accept','application/json')
 	.then(res => {
 		return res.body

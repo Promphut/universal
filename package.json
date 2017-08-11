@@ -42,6 +42,7 @@
     "d3": "^4.10.0",
     "dotenv": "4.0.0",
     "express": "4.15.2",
+    "froala-editor": "^2.6.4",
     "helmet": "3.5.0",
     "hpp": "0.2.2",
     "html-to-text": "git+https://github.com/stepboom/node-html-to-text",

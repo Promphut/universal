@@ -282,13 +282,11 @@ class EditStory extends React.Component {
         videoInsertButtons: ['videoBack', '|', 'videoByURL', 'videoEmbed'],
         // imageUploadToS3 :{
         //   bucket: config.aws.bucket,
-        //   keyStart: config.aws.keyStart,
+        //   keyStart: '/'+config.aws.keyStart+'/11/',
         //   region: 's3-'+config.aws.region,
         //   params: {
         //     acl: config.aws.acl, // ACL according to Amazon Documentation.
         //     AWSAccessKeyId: config.aws.accessKey, // Access Key from Amazon.
-        //     policy: 'POLICY_STRING', // Policy string computed in the backend.
-        //     signature: '', // Signature computed in the backend.
         //   }
         // }
       }
@@ -716,10 +714,9 @@ class EditStory extends React.Component {
 	}
 
 	componentDidMount() {
-    api.getSignature().then((res)=>{
+    api.getSignature(this.props.match.params.sid).then((res)=>{
       let config= this.state.froalaConfig
-      config.imageUploadToS3 = res
-      // console.log(config)
+			config.imageUploadToS3 = res
       this.setState({froalaConfig:config},()=>{
         this.setState({renderEditor:true})
       })
