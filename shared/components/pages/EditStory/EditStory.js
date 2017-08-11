@@ -691,37 +691,18 @@ class EditStory extends React.Component {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.match.params.sid != this.props.match.params.sid) {
-<<<<<<< HEAD
-
-=======
 			this.checkCanEditStory(nextProps.match.params.sid)
->>>>>>> f056ce03115425a9d6d8f84d682f9fc0428ab6e0
 		}
 	}
 
 	componentWillMount() {
-<<<<<<< HEAD
-
-=======
 		this.checkCanEditStory(parseInt(this.props.match.params.sid))
->>>>>>> f056ce03115425a9d6d8f84d682f9fc0428ab6e0
 	}
 
 	componentDidMount() {
 		api.getSignature(this.props.match.params.sid).then(res => {
 			let config = this.state.froalaConfig
 			config.imageUploadToS3 = res
-<<<<<<< HEAD
-      this.setState({froalaConfig:config},()=>{
-        this.setState({renderEditor:true})
-      })
-    })
-
-	}
-
-	componentWillUnmount() {
-		clearInterval(this.interval);
-=======
 			this.setState({ froalaConfig: config }, () => {
 				this.setState({ renderEditor: true })
 			})
@@ -736,7 +717,6 @@ class EditStory extends React.Component {
 
 	componentWillUnmount() {
 		clearInterval(this.interval)
->>>>>>> f056ce03115425a9d6d8f84d682f9fc0428ab6e0
 	}
 
 	render() {
