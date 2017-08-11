@@ -283,7 +283,6 @@ class EditStory extends React.Component {
 
 			status: this.SAVE_STATUS.INITIAL,
 			settingSlideIndex: 0,
-			renderEditor: false,
 			content: 'content'
 		}
 	}
@@ -646,8 +645,7 @@ class EditStory extends React.Component {
 
 	getStoryDetail = story => {
 		if (story) {
-			console.log('story', story)
-
+			//console.log('story', story)
 			this.setState({
 				story,
 				title: story.title,
@@ -700,13 +698,6 @@ class EditStory extends React.Component {
 	}
 
 	componentDidMount() {
-		api.getSignature(this.props.match.params.sid).then(res => {
-			let config = this.state.froalaConfig
-			config.imageUploadToS3 = res
-			this.setState({ froalaConfig: config }, () => {
-				this.setState({ renderEditor: true })
-			})
-		})
 
 		this.interval = setInterval(this.autoSave, 3000)
 
@@ -747,8 +738,7 @@ class EditStory extends React.Component {
 			html,
 			focusWord,
 			status,
-			highlight,
-			renderEditor
+			highlight
 		} = this.state
 
 		const dataSourceConfig = { text: 'text', value: 'value', id: 'id' }
@@ -1178,8 +1168,7 @@ class EditStory extends React.Component {
 						</Highlight>
 					</HighlightBox>
 				</div>
-				 {renderEditor && 
-						<FroalaEditor model={html} onModelChange={this.handleModelChangeHtml} />} 
+						<FroalaEditor model={html} onModelChange={this.handleModelChangeHtml} /> 
 				<Divider />
 				<AnalyticContainer
 					content={html}

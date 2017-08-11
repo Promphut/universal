@@ -68,10 +68,10 @@ class NewStory extends React.Component {
     var s = {
       publisher: config.PID, 		
       status: 0,
-      format: this.state.layout
+      format: this.state.layout,
+      html:"<p>Write a story</p>"
     }
     api.createStory(s).then((story) => {
-      // console.log(story)
       this.props.history.push("/me/stories/"+story._id+"/edit")
     });
   };
