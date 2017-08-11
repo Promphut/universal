@@ -106,20 +106,20 @@ const EditorCss = styled.div`
     padding: 1em 0; }
   .medium-editor-insert-plugin .medium-insert-buttons {
     position: absolute;
-    color: ${props=>props.theme.accentColor};
+    color: ${props => props.theme.accentColor};
     font-size: 0.9em;
     left:-50px;}
     .medium-editor-insert-plugin .medium-insert-buttons button {
       position: relative;
       display: block;
       cursor: pointer;
-      color: ${props=>props.theme.accentColor};
+      color: ${props => props.theme.accentColor};
       background: #fff;
       width: 45px;
       height: 45px;
       box-sizing: border-box;
       border-radius: 50%;
-      border: 2px solid ${props=>props.theme.accentColor};
+      border: 2px solid ${props => props.theme.accentColor};
       /*line-height: 30px;*/
       left:-58px;
       top:-18px;
@@ -173,7 +173,7 @@ const EditorCss = styled.div`
   cursor: move; }
 
 .medium-insert-image-active {
-  outline: 2px solid ${props=>props.theme.accentColor}; }
+  outline: 2px solid ${props => props.theme.accentColor}; }
 
 .medium-insert-images-toolbar {
   display: none; }
@@ -200,7 +200,7 @@ const EditorCss = styled.div`
 
 .medium-insert-embeds-input {
   position: relative;
-  color: ${props=>props.theme.accentColor};
+  color: ${props => props.theme.accentColor};
   z-index: 1;
   text-align: left; }
 
@@ -214,7 +214,7 @@ const EditorCss = styled.div`
     color: #ccc; }
 
 .medium-insert-embeds-selected .medium-insert-embed {
-  outline: 2px solid ${props=>props.theme.accentColor}; }
+  outline: 2px solid ${props => props.theme.accentColor}; }
 
 .medium-insert-embeds-toolbar {
   display: none; }
@@ -240,11 +240,9 @@ const EditorCss = styled.div`
     font-size: 18px;
   }
   #paper p {
-    font-family: 'cs_prajad','PT Sans', sans-serif;
-    font-size: 18px;
-    margin:12px 0 12px 0;
-    line-height:1.5;
-    clear:both;
+		font-family: 'cs_prajad','PT Sans', sans-serif;
+		font-size: 18px;
+		color: #222;
   }
   #paper h2 {
     font-family: 'PT Serif', 'Mitr';
@@ -255,28 +253,34 @@ const EditorCss = styled.div`
   #paper h3 {
     font-family: 'PT Serif', 'Mitr';
     font-size: 20px;
-    font-weight:normal;
-    color:#222;
+    font-weight: normal;
+    color #222;
   }
-  #paper a {
-    color:${props=>props.theme.accentColor};
-    &:hover{
-      cursor:pointer;
+  #paper a,
+  #paper p > a {
+    color: ${props => props.theme.accentColor};
+    &:hover {
+      cursor: pointer;
     }
   }
   #paper ul > li {
     font-family: 'cs_prajad','PT Sans', sans-serif;
     font-size: 18px;
-    margin:10px 0 10px 0;
+    margin: 10px 0 10px 0;
+  }
+  #paper > hr {
+		width: 100px;
+		margin: 50px auto;
+		border-top: 3px solid ${props => props.theme.accentColor};
   }
   #paper blockquote {
-    font-size: 20px;
-    font-family: 'PT Serif', 'Mitr';
-    font-weight:normal;
-    color:#222;
-    border-left: 3px solid ${props=>props.theme.accentColor};
-    padding-left:20px;
-    display:inline-block;
+		border-left: 3px solid ${props => props.theme.accentColor};
+		padding-left: 20px;
+		margin: 40px 0px;
+		line-height: 40px;
+		font-family: 'PT Serif','Mitr';
+		font-size: 20px;
+		color: #222;
   }
   @media (max-width: 480px) {
     #paper h2 {

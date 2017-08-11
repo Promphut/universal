@@ -43,26 +43,49 @@ const Container = styled.div`
 	border-bottom: 1px solid #E2E2E2;
 
 	h1 {
-	color: ${props => props.theme.primaryColor};
-	font-size: 42px;
+		font-size: 42px;
+		color: ${props => props.theme.primaryColor};
 	}
-
-	.fr-element > p {
-		font-family: 'PT Sans', 'CS Prajad';
-		font-size: 18px;
+	
+	.fr-element h2 {
+		font-family: 'PT Serif','Mitr';
+		font-size: 28px;
+    	font-weight: bold;
+		color: #222;
+	}
+	
+	.fr-element h3 {
+		font-family: 'PT Serif','Mitr';
+		font-size: 20px;
+    	font-weight: normal;
 		color: #222;
 	}
 
-	.fr-element > p > a {
-		color: ${props => props.theme.accentColor};
+	.fr-element p {
+		font-family: 'cs_prajad','PT Sans', sans-serif;
+		font-size: 18px;
+		color: #222;
+	}
+	
+	.fr-element ol > li,
+	.fr-element ul > li {
+    	font-family: 'cs_prajad','PT Sans', sans-serif;
+    	font-size: 18px;
+    	margin: 10px 0 10px 0;
 	}
 
-	.fr-element > ol > li > a,
-	.fr-element > ul > li > a {
+	.fr-element a ,
+	.fr-element p > a {
+  		font-family: 'cs_prajad','PT Sans', sans-serif;
+		font-size: 18px;
 		color: ${props => props.theme.accentColor};
+		
+		&:hover {
+			cursor: pointer;
+		}
 	}
 
-	.fr-element > hr {
+	.fr-element hr {
 		width: 100px;
 		margin: 50px auto;
 		border-top: 3px solid ${props => props.theme.accentColor};
@@ -373,11 +396,11 @@ class EditStory extends React.Component {
 			sid,
 			title,
 			column,
-			html,
 			contentType,
 			focusWord,
 			story,
-			highlight
+			highlight,
+			html
 		} = this.state
 
 		if (this.state.status === this.SAVE_STATUS.DIRTIED) {
@@ -603,12 +626,14 @@ class EditStory extends React.Component {
 				desc
 			}
 		}
+
 		api.updateStory(sid, s).then(story => {
 			this.setState({
 				story
 			})
 		})
 	}
+
 	resetMeta = () => {
 		var s = this.state.story
 		// console.log(s)
@@ -620,9 +645,9 @@ class EditStory extends React.Component {
 	}
 
 	getStoryDetail = story => {
-		// let story = this.props.match.params.story
-		// console.log('getStoryDetail', story.contentType)
 		if (story) {
+			console.log('story', story)
+
 			this.setState({
 				story,
 				title: story.title,
@@ -637,9 +662,8 @@ class EditStory extends React.Component {
 			})
 		}
 	}
+
 	getStoryTags = sid => {
-		// console.log('PROPS', this.props)
-		// var sid = this.props.match.params.story.id
 		api.getStoryTags(sid).then(tags => {
 			let result = []
 			tags.map((tag, i) => {
@@ -648,7 +672,6 @@ class EditStory extends React.Component {
 			this.setState({
 				addTag: result
 			})
-			// console.log(tags)
 		})
 	}
 
@@ -660,63 +683,40 @@ class EditStory extends React.Component {
 
 				this.getStoryDetail(result.story)
 				this.getStoryTags(sid)
-				// nextState.params.story = result.story
-				// nextState.params.canEditStory = result.canEditStory
-				// console.log('getStoryFromSid', result)
-				// next()
 			})
 			.catch(err => {
 				utils.toError(this.props.history, err)
 			})
 	}
 
-	updateContent = value => {
-		this.setState({ content: value })
-	}
-
 	componentWillReceiveProps(nextProps) {
-		// console.log('COL', nextProps, this.props)
 		if (nextProps.match.params.sid != this.props.match.params.sid) {
-			// console.log('RELOAD FEED')
-			//this.checkCanEditStory(nextProps.match.params.sid);
-			// this.reloadFeed()
+			this.checkCanEditStory(nextProps.match.params.sid)
 		}
 	}
 
 	componentWillMount() {
-		//this.checkCanEditStory(parseInt(this.props.match.params.sid));
+		this.checkCanEditStory(parseInt(this.props.match.params.sid))
 	}
 
 	componentDidMount() {
-    api.getSignature(this.props.match.params.sid).then((res)=>{
-      let config= this.state.froalaConfig
+		api.getSignature(this.props.match.params.sid).then(res => {
+			let config = this.state.froalaConfig
 			config.imageUploadToS3 = res
-      this.setState({froalaConfig:config},()=>{
-        this.setState({renderEditor:true})
-      })
-    })
-		//this.interval = setInterval(this.autoSave, 3000);
-		// this.getTags();
-		// this.getColumns();
-		// this.getContentType();
-		// utils.loadscript('https://cloud.tinymce.com/stable/tinymce.min.js',()=>{
-		//   tinymce.init({
-		//     selector: '#paper',
-		//     selection_toolbar: 'bold italic | quicklink h2 h3 blockquote',
-		//     plugins: "media mediaembed",
-		//     mediaembed_max_width: 450
-		//   });
-		//   tinymce.init({
-		//     selector: '#highlight',
-		//     selection_toolbar: 'bold italic | quicklink h2 h3 blockquote'
-		//   });
-		// })
-		// this.getStoryDetail()
-		// this.getStoryTags()
+			this.setState({ froalaConfig: config }, () => {
+				this.setState({ renderEditor: true })
+			})
+		})
+
+		this.interval = setInterval(this.autoSave, 3000)
+
+		this.getTags()
+		this.getColumns()
+		this.getContentType()
 	}
 
 	componentWillUnmount() {
-		//clearInterval(this.interval);
+		clearInterval(this.interval)
 	}
 
 	render() {
