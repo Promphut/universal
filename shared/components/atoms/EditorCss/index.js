@@ -207,7 +207,7 @@ const EditorCss = styled.div`
 .medium-insert-embeds-placeholder {
   position: relative; }
   .medium-insert-embeds-placeholder:after {
-    position: absolute;
+    position: abso lute;
     top: 0;
     left: 0;
     content: attr(data-placeholder);

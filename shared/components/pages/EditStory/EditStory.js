@@ -96,6 +96,9 @@ const Container = styled.div`
 		padding-left: 20px;
 		margin: 40px 0px;
 		line-height: 40px;
+	}
+
+	.fr-view blockquote > p {
 		font-family: 'PT Serif','Mitr';
 		font-size: 20px;
 		color: #222;
@@ -698,7 +701,6 @@ class EditStory extends React.Component {
 	}
 
 	componentDidMount() {
-
 		this.interval = setInterval(this.autoSave, 3000)
 
 		this.getTags()
@@ -1168,7 +1170,7 @@ class EditStory extends React.Component {
 						</Highlight>
 					</HighlightBox>
 				</div>
-						<FroalaEditor model={html} onModelChange={this.handleModelChangeHtml} /> 
+				<FroalaEditor model={html} onModelChange={this.handleModelChangeHtml} />
 				<Divider />
 				<AnalyticContainer
 					content={html}

@@ -13,21 +13,24 @@ class FroalaEditor extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			renderEditor:false,
-			froalaConfig:{
-				imageEditButtons: ['imageAlign', 'imageDisplay', 'imageAlt', 'imageSize'],
+			renderEditor: false,
+			froalaConfig: {
+				imageDefaultWidth: 736,
+				imageEditButtons: ['imageReplace', 'imageAlt'],
 				imageInsertButtons: ['imageBack', '|', 'imageUpload', 'imageByURL'],
+				imageMove: false,
+				imageResize: false,
 				inlineStyles: {
-					Caption: "font-family: 'PT Sans', 'cs_prajad'; font-size: 16px; color: #8e8e8e;",
+					Caption: "font-family: 'PT Sans', 'cs_prajad'; font-size: 16px; color: #8e8e8e; line-height: .5;",
 					Source: "font-family:'PT Sans', 'cs_prajad'; font-size: 16px; color: #8e8e8e;",
-					'Image source': "font-family: 'PT Sans', 'cs_prajad'; font-size: 14px; color: #CCC; font-style: italic;"
+					'Image source': "font-family: 'PT Sans', 'cs_prajad'; font-size: 14px; color: #CCC; font-style: italic; line-height: .1;"
 				},
 				linkEditButtons: ['linkOpen', 'linkEdit', 'linkRemove'],
 				linkInsertButtons: ['linkBack'],
 				paragraphFormat: {
-					N: 'Normal',
 					H2: 'Head',
-					H3: 'Subhead'
+					H3: 'Subhead',
+					N: 'Normal'
 				},
 				placeholderText: 'เขียนบทความ...',
 				quickInsertButtons: ['image', 'ul', 'ol', 'hr'],
@@ -39,7 +42,7 @@ class FroalaEditor extends React.Component {
 					'italic',
 					'underline',
 					'|',
-					'paragraphStyle',
+					'paragraphFormat',
 					'inlineStyle',
 					'align',
 					'quote',
@@ -51,10 +54,13 @@ class FroalaEditor extends React.Component {
 					'help'
 				],
 				toolbarInline: true,
-				videoEditButtons: ['videoAlign', 'videoDisplay', 'videoSize'],
-				videoInsertButtons: ['videoBack', '|', 'videoByURL', 'videoEmbed']
+				videoDefaultWidth: 736,
+				videoEditButtons: ['videoReplace'],
+				videoInsertButtons: ['videoBack', '|', 'videoByURL', 'videoEmbed'],
+				videoMove: false,
+				videoResize: true
 			},
-			froalaConfigHighlight:{
+			froalaConfigHighlight: {
 				charCounterCount: false,
 				linkEditButtons: ['linkOpen', 'linkEdit', 'linkRemove'],
 				linkInsertButtons: ['linkBack'],
@@ -74,7 +80,7 @@ class FroalaEditor extends React.Component {
 			}
 		}
 	}
-	
+
 	componentDidMount() {
 		api.getSignature(this.props.match.params.sid).then(res => {
 			// console.log(this.props.match.params.sid)
@@ -86,14 +92,16 @@ class FroalaEditor extends React.Component {
 			})
 		})
 	}
-	
 
 	render() {
 		return (
-			this.state.renderEditor&&<Froala
+			this.state.renderEditor &&
+			<Froala
 				tag="textarea"
 				config={
-					this.props.highlight ? this.state.froalaConfigHighlight : this.state.froalaConfig
+					this.props.highlight
+						? this.state.froalaConfigHighlight
+						: this.state.froalaConfig
 				}
 				model={this.props.model}
 				onModelChange={this.props.onModelChange}
