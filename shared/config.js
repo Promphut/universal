@@ -33,8 +33,14 @@ const config = {
       QUANTCASTACC: 'p-uSc6wXBs-FJmv',
       BITLY: '45602029bdf37773b3c3887a281ed9b7e13c5622' // infographicthailand
     },
-    amazonAccessKey : 'AKIAJKZV2MRFEBXGXVTQ',
-    secretKey : "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"
+    aws : {
+      bucket : 'thepublisher',
+      acl:'public-read',
+      region: 'ap-southeast-1',
+      keyStart: 'publishers/11/',
+      accessKey : 'AKIAJKZV2MRFEBXGXVTQ',
+      secretKey : "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"
+    }
   },
   development: {
     ANALYTIC: {

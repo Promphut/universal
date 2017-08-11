@@ -15,6 +15,7 @@ const cspConfig = {
       "'self'",
       // If you use Base64 encoded images (i.e. inlined images), then you will
       // need the following:
+      'blob:',
       'data: https:',
       'data: http:',
     ],

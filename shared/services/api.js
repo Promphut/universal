@@ -883,5 +883,14 @@ api.getChildrenFromParent = (parent) => {
 	}, api.err)
 }
 
+api.getSignature = () => {
+	return Request
+	.get('/get_signature')
+	.set('Accept','application/json')
+	.then(res => {
+		return res.body
+	}, api.err)
+}
+
 module.exports = api
 

@@ -10,7 +10,8 @@ import {
 	Alert,
 	MenuList,
 	EditorCss,
-	AnalyticContainer
+	AnalyticContainer,
+	FroalaEditor
 } from '../../../components'
 import { findDOMNode as dom } from 'react-dom'
 import TextField from 'material-ui/TextField'
@@ -34,152 +35,150 @@ import config from '../../../config'
 import pullAllWith from 'lodash/pullAllWith'
 import isEqual from 'lodash/isEqual'
 import utils from '../../../services/utils'
+import merge from 'lodash/merge'
 
-import 'froala-editor/js/froala_editor.pkgd.min.js'
-
-// Require Editor CSS files.
-import 'froala-editor/css/froala_style.min.css'
-import 'froala-editor/css/froala_editor.pkgd.min.css'
-import FroalaEditor from 'react-froala-wysiwyg'
-
-//const Container = styled(EditorCss)`
 const Container = styled.div`
-  width:855px;
-  padding:60px;
-  border-bottom:1px solid #E2E2E2;
+	width: 855px;
+	padding: 60px;
+	border-bottom: 1px solid #E2E2E2;
 
-  h1{
-    color:${props => props.theme.primaryColor};
-    font-size:42px;
-  }
+	h1 {
+	color: ${props => props.theme.primaryColor};
+	font-size: 42px;
+	}
 
-  .fr-element > p {
-    font-family: 'PT Sans', 'CS Prajad';
-    font-size: 18px;
-    color: #222;
-  }
+	.fr-element > p {
+		font-family: 'PT Sans', 'CS Prajad';
+		font-size: 18px;
+		color: #222;
+	}
 
-  .fr-element > p > a {
-    color:${props => props.theme.accentColor};
-  }
+	.fr-element > p > a {
+		color: ${props => props.theme.accentColor};
+	}
 
-  .fr-element > ol > li > a,
-  .fr-element > ul > li > a {
-    color:${props => props.theme.accentColor};
-  }
+	.fr-element > ol > li > a,
+	.fr-element > ul > li > a {
+		color: ${props => props.theme.accentColor};
+	}
 
-  .fr-element > hr {
-    width: 100px;
-    margin: 50px auto;
-    border-top: 3px solid ${props => props.theme.accentColor};
-  }
+	.fr-element > hr {
+		width: 100px;
+		margin: 50px auto;
+		border-top: 3px solid ${props => props.theme.accentColor};
+	}
 
-  .fr-view blockquote {
-    border-left: 3px solid ${props => props.theme.accentColor};
-    padding-left: 20px;
-    margin: 40px 0px;
-    line-height: 40px;
-    font-family: 'PT Serif','Mitr';
-    font-size: 20px;
-    color: #222;
-  }
+	.fr-view blockquote {
+		border-left: 3px solid ${props => props.theme.accentColor};
+		padding-left: 20px;
+		margin: 40px 0px;
+		line-height: 40px;
+		font-family: 'PT Serif','Mitr';
+		font-size: 20px;
+		color: #222;
+	}
 `
 
 const HighlightBox = styled.div`
-  width:100%;
-  padding:2px;
-  background: linear-gradient(135deg,  ${props => props.theme.primaryColor} 0%, ${props => props.theme.accentColor} 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  width: 100%;
+  padding: 2px;
+  background: linear-gradient(135deg, ${props => props.theme.primaryColor} 0%, ${props => props.theme.accentColor} 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 `
 const Highlight = styled.div`
-  position:relative;
-  top:0;
-  left:0;
-  width:100%;
-  background-color:white;
-  padding:20px;
-  &:focus{
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  padding: 20px;
+
+  &:focus {
     outline: none;
   }
 `
 const HighlightText = styled.span`
-  position:relative;
-  top:10px;
-  left:20px;
-  z-index:5;
-  color:${props => props.theme.primaryColor};
-  text-align:center;
-  padding:0 9px;
-  font-size:14px;
-  font-weight:bold;
-  font-family:'PT Sans';
-  background:white;
-  border-left:2px solid ${props => props.theme.accentColor};
-  border-right:2px solid ${props => props.theme.accentColor};
+  position: relative;
+  top: 10px;
+  left: 20px;
+  z-index: 5;
+  color: ${props => props.theme.primaryColor};
+  text-align: center;
+  padding: 0 9px;
+  font-size: 14px;
+  font-weight: bold;
+  font-family: 'PT Sans';
+  background: white;
+  border-left: 2px solid ${props => props.theme.accentColor};
+  border-right: 2px solid ${props => props.theme.accentColor};
 `
 const Title = styled.textarea`
-  margin:15px 0 0 0;
-  font-size:36px;
-  font-weight:bold;
-  height:105px;
-  overflowY:hidden;
-  color:#222;
-  width:100%;
+  margin: 15px 0 0 0;
+  font-size: 36px;
+  font-weight: bold;
+  height: 105px;
+  overflowY: hidden;
+  color: #222;
+  width: 100%;
   outline: none;
-  border:none;
+  border: none;
   resize: none;
-  &:focus{
+
+  &:focus {
     outline: none;
   }
 `
 
 const Divider = styled.div`
-  width:100%;
-  min-height:1px;
-  margin:30px 0 30px 0;
-  background-color:#bfbfbf;
+  width: 100%;
+  min-height: 1px;
+  margin: 30px 0 30px 0;
+  background-color: #bfbfbf;
 `
 
 const TextStatus = styled.div`
-  font-size:15px;
-  font-style:italic;
-  color:${props => props.theme.accentColor};
-  display:inline;
-  float:right;
-  padding:12px 20px 12px 20px;
+  font-size: 15px;
+  font-style: italic;
+  color: ${props => props.theme.accentColor};
+  display: inline;
+  float: right;
+  padding: 12px 20px 12px 20px;
 `
 const Layout = styled.div`
-  width:307px;
-  height:439px;
-  background-position:center;
-  background-size:cover;
-  margin:0 auto 0 auto;
-  &:hover{
-    cursor:pointer;
+  width: 307px;
+  height: 439px;
+  background-position: center;
+  background-size: cover;
+  margin: 0 auto 0 auto;
+
+  &:hover {
+    cursor: pointer;
     box-shadow: 0 0 10px ${props => props.theme.primaryColor};
   }
 `
 const Label = styled.div`
-  color:#222;
-  font-size:14px;
-  display:inline;
-  font-weight:bold;
+  color: #222;
+  font-size: 14px;
+  display: inline;
+  font-weight: bold;
 `
 const Label2 = styled.div`
-  color:#222;
-  font-size:19px;
-  margin:20px auto 20px auto;
-  font-weight:bold;
-  width:50px;
+  color: #222;
+  font-size: 19px;
+  margin: 20px auto 20px auto;
+  font-weight: bold;
+  width: 50px;
 `
 const Delete = styled.div`
-  color:#bfbfbf;
-  font-size:14px;
-  text-decoration:underline;
-  &:hover{
+  color: #bfbfbf;
+  font-size: 14px;
+  text-decoration: underline;
+
+  &:hover {
     cursor:pointer;
     color:#222;
   }
 `
+
 const BasicSetting = styled.div`
 `
 
@@ -219,9 +218,11 @@ class EditStory extends React.Component {
 		DIRTIED: 1,
 		UNDIRTIED: 2
 	}
+
 	static contextTypes = {
 		setting: PropTypes.object
 	}
+
 	constructor(props) {
 		super(props)
 
@@ -262,62 +263,6 @@ class EditStory extends React.Component {
 			renderEditor: false,
 			content: 'content'
 		}
-	}
-
-	froalaConfig = {
-		imageEditButtons: ['imageAlign', 'imageDisplay', 'imageAlt', 'imageSize'],
-		imageInsertButtons: ['imageBack', '|', 'imageUpload', 'imageByURL'],
-		inlineStyles: {
-			Head: "font-family: 'PT Serif','Mitr'; font-size: 28px; color: #222;",
-			Subhead: "font-family: 'PT Serif','Mitr'; font-size: 24px; color: #222;",
-			Caption: "font-family: 'PT Sans', 'CS Prajad'; font-size: 16px; color: #8e8e8e;",
-			Source: "font-family:'PT Sans', 'CS Prajad'; font-size: 16px; color: #8e8e8e;",
-			'Image source': "font-family: 'PT Sans', 'CS Prajad'; font-size: 14px; color: #CCC; font-style: italic;"
-		},
-		linkEditButtons: ['linkOpen', 'linkEdit', 'linkRemove'],
-		linkInsertButtons: ['linkBack'],
-		placeholderText: 'เขียนบทความ...',
-		quickInsertButtons: ['image', 'ul', 'ol', 'hr'],
-		tabSpaces: 4,
-		toolbarButtons: [
-			'undo',
-			'|',
-			'bold',
-			'italic',
-			'underline',
-			'|',
-			'inlineStyle',
-			'align',
-			'quote',
-			'|',
-			'insertLink',
-			'insertImage',
-			'insertVideo',
-			'|',
-			'help'
-		],
-		toolbarInline: true,
-		videoEditButtons: ['videoAlign', 'videoDisplay', 'videoSize'],
-		videoInsertButtons: ['videoBack', '|', 'videoByURL', 'videoEmbed']
-	}
-
-	froalaConfigHighlight = {
-		charCounterCount: false,
-		linkEditButtons: ['linkOpen', 'linkEdit', 'linkRemove'],
-		linkInsertButtons: ['linkBack'],
-		placeholderText: '',
-		quickInsertButtons: ['ul', 'ol'],
-		tabSpaces: 4,
-		toolbarButtons: [
-			'undo',
-			'|',
-			'bold',
-			'italic',
-			'underline',
-			'|',
-			'insertLink'
-		],
-		toolbarInline: true
 	}
 
 	handleModelChangeHtml = html => {
@@ -427,8 +372,8 @@ class EditStory extends React.Component {
 		let {
 			sid,
 			title,
-      column,
-      html,
+			column,
+			html,
 			contentType,
 			focusWord,
 			story,
@@ -447,7 +392,7 @@ class EditStory extends React.Component {
 			}
 
 			this.setState({
-				saveStatus: 'Saving...',
+				saveStatus: 'Saving...'
 			})
 
 			let s = {
@@ -483,8 +428,8 @@ class EditStory extends React.Component {
 			focusWord,
 			columnList,
 			story,
-      highlight,
-      html
+			highlight,
+			html
 		} = this.state
 
 		let s = {
@@ -743,6 +688,14 @@ class EditStory extends React.Component {
 	}
 
 	componentDidMount() {
+		api.getSignature().then(res => {
+			let config = this.state.froalaConfig
+			config.imageUploadToS3 = res
+			// console.log(config)
+			this.setState({ froalaConfig: config }, () => {
+				this.setState({ renderEditor: true })
+			})
+		})
 		//this.interval = setInterval(this.autoSave, 3000);
 		// this.getTags();
 		// this.getColumns();
@@ -800,7 +753,6 @@ class EditStory extends React.Component {
 		} = this.state
 
 		const dataSourceConfig = { text: 'text', value: 'value', id: 'id' }
-
 		let { theme } = this.context.setting.publisher
 
 		let contentTypeId = 0
@@ -1220,20 +1172,16 @@ class EditStory extends React.Component {
 					<HighlightBox>
 						<Highlight ref="highlight" id="highlight">
 							<FroalaEditor
-								tag="textarea"
-								config={this.froalaConfigHighlight}
 								model={highlight}
 								onModelChange={this.handleModelChangeHighlight}
+								highlight={true}
 							/>
 						</Highlight>
 					</HighlightBox>
 				</div>
-				<FroalaEditor
-					tag="textarea"
-					config={this.froalaConfig}
-					model={html}
-					onModelChange={this.handleModelChangeHtml}
-				/>
+				{/* {renderEditor && */}
+				<FroalaEditor model={html} onModelChange={this.handleModelChangeHtml} />
+				{/* } */}
 				<Divider />
 				<AnalyticContainer
 					content={html}
