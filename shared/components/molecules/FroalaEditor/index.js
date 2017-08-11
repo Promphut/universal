@@ -17,14 +17,17 @@ class FroalaEditor extends React.Component {
 		imageEditButtons: ['imageAlign', 'imageDisplay', 'imageAlt', 'imageSize'],
 		imageInsertButtons: ['imageBack', '|', 'imageUpload', 'imageByURL'],
 		inlineStyles: {
-			Head: "font-family: 'PT Serif','Mitr'; font-size: 28px; color: #222;",
-			Subhead: "font-family: 'PT Serif','Mitr'; font-size: 24px; color: #222;",
-			Caption: "font-family: 'PT Sans', 'CS Prajad'; font-size: 16px; color: #8e8e8e;",
-			Source: "font-family:'PT Sans', 'CS Prajad'; font-size: 16px; color: #8e8e8e;",
-			'Image source': "font-family: 'PT Sans', 'CS Prajad'; font-size: 14px; color: #CCC; font-style: italic;"
+			Caption: "font-family: 'PT Sans', 'cs_prajad'; font-size: 16px; color: #8e8e8e;",
+			Source: "font-family:'PT Sans', 'cs_prajad'; font-size: 16px; color: #8e8e8e;",
+			'Image source': "font-family: 'PT Sans', 'cs_prajad'; font-size: 14px; color: #CCC; font-style: italic;"
 		},
 		linkEditButtons: ['linkOpen', 'linkEdit', 'linkRemove'],
 		linkInsertButtons: ['linkBack'],
+		paragraphFormat: {
+			N: 'Normal',
+			H2: 'Head',
+			H3: 'Subhead'
+		},
 		placeholderText: 'เขียนบทความ...',
 		quickInsertButtons: ['image', 'ul', 'ol', 'hr'],
 		tabSpaces: 4,
@@ -35,6 +38,7 @@ class FroalaEditor extends React.Component {
 			'italic',
 			'underline',
 			'|',
+			'paragraphStyle',
 			'inlineStyle',
 			'align',
 			'quote',
