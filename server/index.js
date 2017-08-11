@@ -20,7 +20,7 @@ import fs from 'fs';
 import { FRONTURL, port, host, basename, ANALYTIC, COVER, aws , PID } from '../shared/config.js'
 import api from '../shared/services/api';
 
-import FroalaEditor from '../public/wysiwyg-editor-node-sdk/lib/froalaEditor.js';
+import FroalaEditor from '../node_modules/wysiwyg-editor-node-sdk/lib/froalaEditor.js';
 
 if (process.env.NODE_ENV === 'development') {
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
