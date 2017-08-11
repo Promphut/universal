@@ -172,6 +172,7 @@ function HTML(props) {
         />
         <noscript dangerouslySetInnerHTML={{ __html: quantcast.noscript }} />
         <script src="https://use.fontawesome.com/3df470c471.js" />
+        <script id="fr-fek">try{(function (k){localStorage.FEK=k;t=document.getElementById('fr-fek');t.parentNode.removeChild(t);})('SG-7vlaszhphI-7A5B-21q==')}catch(e){}</script>
       </body>
     </html>
   );
