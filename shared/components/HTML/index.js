@@ -113,7 +113,7 @@ const ggWebfont = `WebFontConfig = {
     s.parentNode.insertBefore(wf, s);
   })();`;
 
-const Froala = "try{(function (k){localStorage.FEK=k;t=document.getElementById('fr-fek');t.parentNode.removeChild(t);})('SG-7vlaszhphI-7A5B-21q==')}catch(e){}"
+const froala = "try{(function (k){localStorage.FEK=k;t=document.getElementById('fr-fek');t.parentNode.removeChild(t);})('SG-7vlaszhphI-7A5B-21q==')}catch(e){}"
 /**
  * The is the HTML shell for our React Application.
  */
@@ -173,7 +173,7 @@ function HTML(props) {
         />
         <noscript dangerouslySetInnerHTML={{ __html: quantcast.noscript }} />
         <script src="https://use.fontawesome.com/3df470c471.js" />
-        <script id="fr-fek"  dangerouslySetInnerHTML={{ __html:Froala}}></script>
+        <script id="fr-fek"  dangerouslySetInnerHTML={{ __html:froala}}></script>
       </body>
     </html>
   );
