@@ -113,9 +113,7 @@ const ggWebfont = `WebFontConfig = {
     s.parentNode.insertBefore(wf, s);
   })();`;
 
-  var Froala = `
-  try{(function (k){localStorage.FEK=k;t=document.getElementById('fr-fek');t.parentNode.removeChild(t);})('SG-7vlaszhphI-7A5B-21q==')}catch(e){}
-  `
+const Froala = "try{(function (k){localStorage.FEK=k;t=document.getElementById('fr-fek');t.parentNode.removeChild(t);})('SG-7vlaszhphI-7A5B-21q==')}catch(e){}"
 /**
  * The is the HTML shell for our React Application.
  */

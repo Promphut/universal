@@ -546,7 +546,7 @@ export default function webpackConfigFactory(buildOptions) {
           use: ifProdClient(
             ExtractTextPlugin.extract({
               fallback: 'style-loader',
-              use: ['css-loader', 'postcss-loader'],
+              use: ['css-loader', 'postcss-loader', 'classnames-loader'],
             }),
             [...ifNode(['css-loader/locals'], ['style-loader', 'css-loader']), 'postcss-loader'],
           ),

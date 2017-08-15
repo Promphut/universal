@@ -1,5 +1,5 @@
 import { asyncComponent } from 'react-async-component';
 
 export default asyncComponent({
-  resolve: () => System.import(/* webpackChunkName: "editstory" */ './EditStory'),
+  resolve: () => System.import(/* webpackChunkName: "edit-story" */ './EditStory'),
 });
