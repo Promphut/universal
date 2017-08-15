@@ -40,6 +40,16 @@ const config = {
       keyStart: 'stories/',
       accessKey : 'AKIAJKZV2MRFEBXGXVTQ',
       secretKey : "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"
+    },
+    get meta () {
+      return { 
+        name:this.NAME, 
+        keywords:this.NAME, 
+        desc:'', 
+        cover:this.COVER, 
+        analytic:'', 
+        url:this.FRONTURL
+      }
     }
   },
   development: {

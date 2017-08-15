@@ -541,16 +541,16 @@ export default function webpackConfigFactory(buildOptions) {
         ),
 
         // Dont CSS modules on css files from node_modules folder
-        ifElse(isClient || isServer)({
-          test: /node_modules.*\.css$/,
-          use: ifProdClient(
-            ExtractTextPlugin.extract({
-              fallback: 'style-loader',
-              use: ['css-loader', 'postcss-loader', 'classnames-loader'],
-            }),
-            [...ifNode(['css-loader/locals'], ['style-loader', 'css-loader']), 'postcss-loader'],
-          ),
-        }),
+        // ifElse(isClient || isServer)({
+        //   test: /node_modules.*\.css$/,
+        //   use: ifProdClient(
+        //     ExtractTextPlugin.extract({
+        //       fallback: 'style-loader',
+        //       use: ['css-loader', 'postcss-loader'],
+        //     }),
+        //     [...ifNode(['css-loader/locals'], ['style-loader', 'css-loader']), 'postcss-loader'],
+        //   ),
+        // }),
 
         // ASSETS (Images/Fonts/etc)
         // This is bound to our server/client bundles as we only expect to be
