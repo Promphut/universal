@@ -360,5 +360,27 @@ const EditorCss = styled.div`
   .fr-quick-insert{
     display:none;
   }
+
+  .fr-image-left {
+    float: left !important;
+    width: 60% !important;
+    margin-right: 20px !important;
+  }
+  
+  .fr-image-center {
+    margin: auto !important;
+    width: auto !important;
+  }
+  
+  .fr-image-right {
+    float: right !important;
+    width: 60% !important;
+    margin-left: 20px !important;
+  }
+  
+  .fr-image-full {
+    width: 100% !important;
+    height: inherit !important;
+  }
 `
 export default EditorCss
