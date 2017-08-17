@@ -37,7 +37,7 @@ import isEqual from 'lodash/isEqual'
 import utils from '../../../services/utils'
 import merge from 'lodash/merge'
 
-const Container = styled.div`
+const Container = styled(EditorCss)`
 	width: 855px;
 	padding: 60px;
 	border-bottom: 1px solid #E2E2E2;
@@ -1161,7 +1161,7 @@ class EditStory extends React.Component {
 				<div style={{ margin: '40px 0px 45px' }}>
 					<HighlightText>HIGHLIGHT</HighlightText>
 					<HighlightBox>
-						<Highlight ref="highlight" id="highlight">
+						<Highlight>
 							<FroalaEditor
 								model={highlight}
 								onModelChange={this.handleModelChangeHighlight}
