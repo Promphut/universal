@@ -9,6 +9,9 @@ import 'froala-editor/js/froala_editor.pkgd.min.js'
 import 'froala-editor/css/froala_style.min.css'
 import 'froala-editor/css/froala_editor.pkgd.min.css'
 
+// Custom plugins
+import './alert.js'
+
 class FroalaEditor extends React.Component {
 	constructor(props) {
 		super(props)
@@ -33,7 +36,6 @@ class FroalaEditor extends React.Component {
 					N: 'Normal'
 				},
 				placeholderText: 'เขียนบทความ...',
-				quickInsertButtons: ['image', 'ul', 'ol', 'hr'],
 				tabSpaces: 4,
 				toolbarButtons: [
 					'undo',
@@ -45,6 +47,8 @@ class FroalaEditor extends React.Component {
 					'paragraphFormat',
 					'inlineStyle',
 					'align',
+					'formatOL',
+					'formatUL',
 					'quote',
 					'|',
 					'insertLink',
@@ -54,6 +58,7 @@ class FroalaEditor extends React.Component {
 					'help'
 				],
 				toolbarInline: true,
+				toolbarVisibleWithoutSelection: true,
 				videoDefaultWidth: 736,
 				videoEditButtons: ['videoReplace'],
 				videoInsertButtons: ['videoBack', '|', 'videoByURL', 'videoEmbed'],
@@ -65,7 +70,6 @@ class FroalaEditor extends React.Component {
 				linkEditButtons: ['linkOpen', 'linkEdit', 'linkRemove'],
 				linkInsertButtons: ['linkBack'],
 				placeholderText: '',
-				quickInsertButtons: ['ul', 'ol'],
 				tabSpaces: 4,
 				toolbarButtons: [
 					'undo',
@@ -74,11 +78,24 @@ class FroalaEditor extends React.Component {
 					'italic',
 					'underline',
 					'|',
+					'formatOL',
+					'formatUL',
+					'|',
 					'insertLink'
 				],
-				toolbarInline: true
+				toolbarInline: true,
+				toolbarVisibleWithoutSelection: true
 			}
 		}
+	}
+
+	componentWillMount() {
+		const script = document.createElement('script')
+
+		script.src = 'https://use.typekit.net/foobar.js'
+		script.async = true
+
+		document.body.appendChild(script)
 	}
 
 	componentDidMount() {
