@@ -33,7 +33,7 @@ class FroalaEditor extends React.Component {
 					N: 'Normal',
 				},
 				placeholderText: 'เขียนบทความ...',
-				quickInsertButtons: ['image', 'ul', 'ol', 'hr'],
+				quickInsertButtons: false,
 				tabSpaces: 4,
 				toolbarButtons: [
 					'bold',
@@ -60,7 +60,7 @@ class FroalaEditor extends React.Component {
 				linkEditButtons: ['linkOpen', 'linkEdit', 'linkRemove'],
 				linkInsertButtons: ['linkBack'],
 				placeholderText: '',
-				quickInsertButtons: ['ul', 'ol'],
+				quickInsertButtons: false,
 				tabSpaces: 4,
 				toolbarButtons: [
 					'undo',

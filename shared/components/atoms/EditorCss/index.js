@@ -356,6 +356,9 @@ const EditorCss = styled.div`
 		font-family: 'PT Serif','Mitr';
 		font-size: 20px;
 		color: #222;
-	}
+  }
+  .fr-quick-insert{
+    display:none;
+  }
 `
 export default EditorCss
