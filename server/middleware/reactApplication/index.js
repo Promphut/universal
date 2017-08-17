@@ -71,9 +71,11 @@ export default function reactApplicationMiddleware(request, response, next) {
       .getPublisherSetting()
       .then((setting) => {
         if (!setting || !setting.publisher) return next(new Error('Cannot get publisher setting.'));
-      ExtractMeta(setting, request.url)
+      ExtractMeta(request,response,setting, request.url)
       .then(meta => {
-
+        if (meta.status == 404){
+					return response.redirect('/404')
+				}
         const appString = renderToString(app(setting));
         const styleTags = sheet.getStyleElement();
         // Generate the html response.

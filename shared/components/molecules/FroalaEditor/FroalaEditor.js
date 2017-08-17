@@ -18,28 +18,26 @@ class FroalaEditor extends React.Component {
 		this.state = {
 			renderEditor: false,
 			froalaConfig: {
-				imageDefaultWidth: 736,
-				imageEditButtons: ['imageReplace', 'imageAlt'],
+				imageEditButtons: ['imageAlign','|', 'imageLink', 'linkOpen', 'linkEdit', 'linkRemove', 'imageAlt'],
 				imageInsertButtons: ['imageBack', '|', 'imageUpload', 'imageByURL'],
-				imageMove: false,
 				imageResize: false,
+				imageDefaultAlign: 'center',
+				imageOutputSize: true,
 				inlineStyles: {
 					Caption: "font-family: 'PT Sans', 'cs_prajad'; font-size: 16px; color: #8e8e8e; line-height: .5;",
 					Source: "font-family:'PT Sans', 'cs_prajad'; font-size: 16px; color: #8e8e8e;",
-					'Image source': "font-family: 'PT Sans', 'cs_prajad'; font-size: 14px; color: #CCC; font-style: italic; line-height: .1;"
+					// 'Image source': "font-family: 'PT Sans', 'cs_prajad'; font-size: 14px; color: #CCC; font-style: italic; line-height: .1;"
 				},
 				linkEditButtons: ['linkOpen', 'linkEdit', 'linkRemove'],
 				linkInsertButtons: ['linkBack'],
 				paragraphFormat: {
 					H2: 'Head',
 					H3: 'Subhead',
-					N: 'Normal'
+					N: 'Normal',
 				},
 				placeholderText: 'เขียนบทความ...',
 				tabSpaces: 4,
 				toolbarButtons: [
-					'undo',
-					'|',
 					'bold',
 					'italic',
 					'underline',
@@ -54,15 +52,12 @@ class FroalaEditor extends React.Component {
 					'insertLink',
 					'insertImage',
 					'insertVideo',
-					'|',
-					'help'
 				],
 				toolbarInline: true,
 				toolbarVisibleWithoutSelection: true,
 				videoDefaultWidth: 736,
 				videoEditButtons: ['videoReplace'],
 				videoInsertButtons: ['videoBack', '|', 'videoByURL', 'videoEmbed'],
-				videoMove: false,
 				videoResize: true
 			},
 			froalaConfigHighlight: {
