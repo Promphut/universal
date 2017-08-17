@@ -39,14 +39,14 @@ const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
-	padding: 40px 0 0 0;
+	padding: 100px 0 0 0;
 	min-height: calc(100vh - ${props => (props.isMobile ? '261px' : '261px')});
 
 	@media (max-width:480px) {
-		padding: 0;
+		padding: 16px 0 0 0;
   }
 	@media (min-width: 768px) and (max-width: 992px) {
-		padding: 20px 0 0 0;
+		padding: 80px 0 0 0;
   }
 
 `;
@@ -93,12 +93,18 @@ const Dash = styled.div`
   width:30px;
   height:4px;
   background-color:${props => props.theme.accentColor};
+  @media (max-width:480px) {
+    width:20px;
+  }
 `;
 
 const TextLine = styled.div`
   color:${props => props.theme.primaryColor};
   font-size:28px;
   font-weight:bold;
+  @media (max-width:480px) {
+    font-size:14px;
+  }
 `;
 const Onload = styled.div`
 	width:100%;
@@ -134,7 +140,10 @@ const Tagline = styled.div`
 	margin:0 auto 0 auto;
 	width:600px;
 	text-align:center;
-	color:white;
+  color:white;
+  @media (max-width:480px) {
+    font-size:14px;
+  }
 `;
 const Img = styled.img`
 	width:749px;
@@ -153,7 +162,7 @@ const SeemoreContainer = styled.div`
 	@media (max-width:480px) {
 		margin-bottom: 26px;
 		padding-bottom:26px;
-  	}
+  }
 `;
 
 const styles = {
@@ -239,7 +248,7 @@ class HomePage extends React.Component {
     let page = this.state.page;
     // console.log('page', page)
 
-    api.getFeed('article', { status: 1 }, 'latest', null, page, this.FEED_LIMIT).then((result) => {
+    api.getFeed('stories', { status: 1 }, 'latest', null, page, this.FEED_LIMIT).then((result) => {
       let feed = this.state.feed.concat(result.feed);
       this.setState(
         {
@@ -254,15 +263,6 @@ class HomePage extends React.Component {
       );
     });
   };
-
-  // getPublisher = () => {
-  // 	api.getPublisher().then(pub => {
-  // 		this.publisher = pub
-
-  // 		this.setState({})
-  // 	})
-  // }
-
   handleChangeTab = (e) => {
     this.setState({ selectTab: e });
   };
@@ -272,14 +272,9 @@ class HomePage extends React.Component {
       isMobile: utils.isMobile(),
       completed: 100,
     });
-    // this.interval = setInterval(()=>{
-    // 	this.setState({
-    // 		animate:!this.state.animate
-    // 	})
-    // },10000)
   }
   componentWillUnmount() {
-    // clearInterval(this.interval)
+
   }
 
   render() {
@@ -288,23 +283,19 @@ class HomePage extends React.Component {
     let pub = this.context.setting.publisher;
     let { theme } = this.context.setting.publisher;
 
-    // console.log(this.state.feedCount)
-    // if(feed.length==0) return <div></div>
-
     return (
       <Wrapper>
         {!isEmpty(pub) && !utils.isMobile() && <BgWithLogo data={pub} />}
 
         <TopBarWithNavigation onLoading={this.props.onLoading} />
 
-        <TopHome />
+        {isMobile&&<TopHome />}
 
         {/* <TopVideoHome className='hidden-mob'></TopVideoHome> */}
         <Content isMobile={isMobile}>
           <Main>
-            <TextLine className="sans-font hidden-mob">LATEST STORIES</TextLine>
-            <Dash className="hidden-mob" style={{ margin: '5px 0 10px 0' }} />
-            {!isMobile &&
+            <TextLine className="sans-font">LATEST</TextLine>
+            <Dash style={{ margin: '5px 0 10px 0' }} />
               <InfiniteScroll
                 loadMore={this.loadFeed()}
                 hasMore={hasMoreFeed}
@@ -316,15 +307,14 @@ class HomePage extends React.Component {
                       <ArticleBox final={index == feed.length - 1} detail={item} key={index} />
                     ))}
                 </div>
-              </InfiniteScroll>}
+              </InfiniteScroll>
 
             {!hasMoreFeed &&
-              !isMobile &&
               <SeemoreContainer>
                 <SeeMore url={'/stories/all?type=article&sort=latest&page=1'} />
               </SeemoreContainer>}
 
-            <Tabs
+            {/* <Tabs
               style={{ width: '100%' }}
               tabItemContainerStyle={{ ...styles.tabs }}
               inkBarStyle={{ background: theme.accentColor, height: 3 }}
@@ -348,16 +338,12 @@ class HomePage extends React.Component {
                 label="News"
                 value={1}
               />
-              {/* <Tab
-			                  buttonStyle={{...styles.tab,color: selectTab == 2 ? '#222' : '#c4c4c4'}}
-			                  label="Video"
-			                  value={2}
-			                /> */}
-            </Tabs>
+
+            </Tabs> */}
 
             {/* <Line /> */}
 
-            {utils.isMobile() &&
+            {/* {utils.isMobile() &&
               <SwipeableViews
                 index={selectTab}
                 animateHeight
@@ -366,11 +352,7 @@ class HomePage extends React.Component {
                 onChangeIndex={this.handleChangeTab}
                 className="hidden-des"
               >
-                {/* <div className='story'>
-								{feed && utils.isMobile() && feed.map((story, index) => (
-									<ArticleBox detail={story} key={index}/>
-								))}
-							</div> */}
+
                 <div>
                   <InfiniteScroll
                     loadMore={this.loadFeed()}
@@ -395,10 +377,7 @@ class HomePage extends React.Component {
                   <TopNewsHome />
                 </div>
 
-                {/* <div className='video'>
-
-							</div> */}
-              </SwipeableViews>}
+              </SwipeableViews>} */}
           </Main>
           <Aside>
             <Stick topOffset={100}>

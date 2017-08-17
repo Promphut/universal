@@ -85,7 +85,7 @@ class TopHome extends React.Component {
 
   getFeed = () => {
     // - Fetching latestStories
-    api.getFeed('article', { status: 1 }, 'trending', null, 0, 6).then((result) => {
+    api.getFeed('stories', { status: 1 }, 'trending', null, 0, 3).then((result) => {
       if (result) {
         this.setState({
           trendingStories: result.feed,
@@ -108,9 +108,9 @@ class TopHome extends React.Component {
     var { style, swift, className, large } = this.props;
     var { hover, trendingStories } = this.state;
     // console.log(trendingStories)
-    if (trendingStories.length < 6) {
-      return <div style={{ height: 70 }} />;
-    }
+    // if (trendingStories.length < 3) {
+    //   return <div style={{ height: 70 }} />;
+    // }
     return (
       <Content>
         <Feed>
@@ -121,19 +121,19 @@ class TopHome extends React.Component {
           {/* <TopVideo large={true}></TopVideo> */}
         </Feed>
         <Feed>
-          {trendingStories.length != 0 && <TopStory detail={trendingStories[2]} />}
-          {trendingStories.length != 0 && <TopStory detail={trendingStories[3]} large />}
+          {trendingStories.length != 0 && <TopStory detail={trendingStories[2]} final />}
+          {/* {trendingStories.length != 0 && <TopStory className="hidden-mob" detail={trendingStories[3]} large />} */}
           {/* <TopVideo large={true} swift={true}></TopVideo> */}
         </Feed>
-        <Feed>
+        {/* <Feed>
           <div style={{ flex: 3 }}>
             <div style={{ display: 'flex' }}>
               {trendingStories.length != 0 &&
-              <TopStory detail={trendingStories[4]} swift large />}
+              <TopStory className="hidden-mob" detail={trendingStories[4]} swift large />}
             </div>
             <div style={{ display: 'flex' }}>
               {trendingStories.length != 0 &&
-              <TopStory detail={trendingStories[5]} final />}
+              <TopStory className="hidden-mob" detail={trendingStories[5]} final />}
               <MiniBoxDark className="hidden-mob">
                 <div style={{ width: 30 }}>
                   <FbShareButton
@@ -170,7 +170,7 @@ class TopHome extends React.Component {
           <div className="hidden-mob" style={{ flex: 2, display: 'flex' }}>
             <TopNewsHome />
           </div>
-        </Feed>
+        </Feed> */}
       </Content>
     );
   }

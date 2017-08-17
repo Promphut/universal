@@ -20,14 +20,11 @@ const Container = styled.div`
   display:flex;
   .imgWidth{
     width:100%;
-    height:230px;
+    height:153px;
   }
   .imgWidthUser{
     width:100%;
     height:157px;
-  }
-  .des-hidden{
-    display:block;
   }
   .by{
     margin-top:auto;
@@ -43,9 +40,6 @@ const Container = styled.div`
     padding:16px 0 16px 0;
     margin-left:auto;
     margin-right:auto;
-    .mob-hidden{
-      display:none !important;
-    }
     .imgWidth{
       width:100%;
       height:${props => props.height}px;
@@ -66,6 +60,14 @@ const Div = styled.div`
   color:#8E8E8E;
   font-size:14px;
   @media (max-width:480px) {
+    font-size:12px;
+  }
+`;
+const ReadTime = styled.div`
+  color:#8E8E8E;
+  font-size:14px;
+  @media (max-width:480px) {
+    display:block;
     font-size:12px;
   }
 `;
@@ -99,7 +101,7 @@ const ColumnLink = styled(Link)`
   color: ${props => props.theme.accentColor};
   opacity: .8;
   transition: .1s;
-
+  font-weight:bold;
   &:hover {
     color: ${props => props.theme.accentColor};
     opacity: 1;
@@ -131,7 +133,7 @@ const Box = styled.div`
   flex:1;
   display:flex;
   flex-direction:column;
-  padding:25px 0 0 20px;
+  padding:0 0 0 20px;
   @media (max-width:480px) {
     margin:5px;
     display:block;
@@ -140,18 +142,33 @@ const Box = styled.div`
   }
 `;
 const Box1 = styled.div`
-  flex:1 300px;
-  min-width:300px;
+  flex:0 350px;
+  min-width:350px;
   @media (max-width:480px) {
     display:block;
     min-width:100%;
     width:100%;
   }
   @media (min-width: 768px) and (max-width: 992px) {
-    flex:1 340px;
+    flex:0 340px;
     min-width:340px;
   }
 `;
+const MiniLine = styled.div`
+  width:12px;
+  height:1px;
+  background:#8E8E8E;
+  margin:3px 8px 0 0;
+  display:inline-block;
+`
+const Dot = styled.div`
+  width:3px;
+  height:3px;
+  background:#C4C4C4;
+  border-radius:50%;
+  margin:6px 8px 0 8px;
+  display:inline-block;
+`
 
 const ArticleBox = ({ detail, style, final, id, isUserPage }, context) => {
   let {
@@ -178,10 +195,19 @@ const ArticleBox = ({ detail, style, final, id, isUserPage }, context) => {
   return (
     <Container hr={final} style={{ ...style }} height={(screen.width - 32) / 1.91}>
       <ShareDropdown buttonSize={16} url={url} className="hidden-des" />
-      <Box1 style={{ flex: '1' }}>
-        <Div className="sans-font" style={{ margin: '0 0 8px 0' }}>
-          {utils.dateFormat(published)}
-        </Div>
+      <Box1>
+        <div className="row hidden-des">
+          <MiniLine/>
+          <Div className="sans-font" style={{ margin: '0 0 8px 0',display:"inline" }}>
+            {utils.dateFormat(published)}
+          </Div>
+          <Dot/>
+          <Div className="sans-font" style={{ display:"inline" }}>
+            <ColumnLink to={column && column.url}>
+              {column.name}
+            </ColumnLink>
+          </Div>
+        </div>
 
         <BGImg
           url={url}
@@ -190,45 +216,29 @@ const ArticleBox = ({ detail, style, final, id, isUserPage }, context) => {
         />
       </Box1>
       <Box>
-        <div className="row" style={{ overflow: 'hidden', display: 'flex' }}>
-          <div
-            style={{
-              width: '16px',
-              height: '1px',
-              background: '#8E8E8E',
-              flex: 1,
-              margin: '10px 10px 0 0',
-            }}
-          />
-          <Div className="sans-font" style={{ margin: '0 0 7px 0', flex: 20 }}>
-            {`${readTime} min read`}
-            {isUserPage
-              ? <strong>
-                  &nbsp;/&nbsp;
-                  <ColumnLink to={column && column.url}>
-                    {column.name}
-                  </ColumnLink>
-              </strong>
-              : ''}
+        <div className="row hidden-mob">
+          <Div className="sans-font" style={{ margin: '0 0 7px 0', flex: 1 }}>
+            <ColumnLink to={column && column.url}>
+              {column.name}
+            </ColumnLink>
           </Div>
           <ShareDropdown id={id} buttonSize={16} url={url} className="hidden-mob" />
         </div>
         <NameLink to={url} className="nunito-font" style={{ marginTop: '5px' }}>
-
           {truncate(ptitle, {
-            length: isUserPage ? 70 : 90,
+            length: isUserPage ? 70 : 80,
             separator: '',
           })}
         </NameLink>
-
-        <Div className="nunito-font" style={{ marginTop: '10px' }}>
+        <Div className="nunito-font hidden-mob" style={{ marginTop: '10px' }}>
           {truncate(contentShort, {
-            length: 200,
+            length: 100,
             separator: '',
           })}
         </Div>
-        {!isUserPage &&
-          <Div className="nunito-font by">
+        <div className='row  by' style={{justifyContent:'space-between'}}>
+          {!isUserPage &&
+          <Div className="nunito-font">
             by
             {' '}
             <strong>
@@ -236,15 +246,11 @@ const ArticleBox = ({ detail, style, final, id, isUserPage }, context) => {
                 {' '}{writer.display}{' '}
               </WriterLink>
             </strong>
-            {' '}
-            in
-            {' '}
-            <strong>
-              <ColumnLink to={column && column.url}>
-                {column.name}
-              </ColumnLink>
-            </strong>
           </Div>}
+          <ReadTime className="sans-font">
+            {`${readTime} min read`}
+          </ReadTime>
+        </div>     
       </Box>
     </Container>
   );
