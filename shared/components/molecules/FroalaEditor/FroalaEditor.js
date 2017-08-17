@@ -9,23 +9,27 @@ import 'froala-editor/js/froala_editor.pkgd.min.js'
 import 'froala-editor/css/froala_style.min.css'
 import 'froala-editor/css/froala_editor.pkgd.min.css'
 
-// Custom plugins
-import './alert.js'
-
 class FroalaEditor extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
 			renderEditor: false,
 			froalaConfig: {
-				imageEditButtons: ['imageAlign','|', 'imageLink', 'linkOpen', 'linkEdit', 'linkRemove', 'imageAlt'],
+				imageEditButtons: [
+					'imageAlign',
+					'imageAlt',
+					'|',
+					'imageLink',
+					'linkOpen',
+					'linkEdit',
+					'linkRemove'
+				],
 				imageInsertButtons: ['imageBack', '|', 'imageUpload', 'imageByURL'],
 				imageResize: false,
 				imageDefaultAlign: 'center',
-				imageOutputSize: true,
 				inlineStyles: {
 					Caption: "font-family: 'PT Sans', 'cs_prajad'; font-size: 16px; color: #8e8e8e; line-height: .5;",
-					Source: "font-family:'PT Sans', 'cs_prajad'; font-size: 16px; color: #8e8e8e;",
+					Reference: "font-family:'PT Sans', 'cs_prajad'; font-size: 16px; color: #8e8e8e;"
 					// 'Image source': "font-family: 'PT Sans', 'cs_prajad'; font-size: 14px; color: #CCC; font-style: italic; line-height: .1;"
 				},
 				linkEditButtons: ['linkOpen', 'linkEdit', 'linkRemove'],
@@ -33,9 +37,30 @@ class FroalaEditor extends React.Component {
 				paragraphFormat: {
 					H2: 'Head',
 					H3: 'Subhead',
-					N: 'Normal',
+					N: 'Normal'
 				},
 				placeholderText: 'เขียนบทความ...',
+				pluginsEnabled: [
+					align,
+					charCounter,
+					draggable,
+					entities,
+					file,
+					image,
+					imageManager,
+					inlineStyle,
+					lineBreaker,
+					link,
+					lists,
+					paragraphFormat,
+					paragraphStyle,
+					quote,
+					save,
+					table,
+					url,
+					video,
+					wordPaste
+				],
 				tabSpaces: 4,
 				toolbarButtons: [
 					'bold',
@@ -45,18 +70,21 @@ class FroalaEditor extends React.Component {
 					'paragraphFormat',
 					'inlineStyle',
 					'align',
+					'quote',
+					'-',
 					'formatOL',
 					'formatUL',
-					'quote',
 					'|',
 					'insertLink',
 					'insertImage',
 					'insertVideo',
+					'insertTable',
+					'insertHR'
 				],
 				toolbarInline: true,
 				toolbarVisibleWithoutSelection: true,
 				videoDefaultWidth: 736,
-				videoEditButtons: ['videoReplace'],
+				videoEditButtons: ['videoAlign'],
 				videoInsertButtons: ['videoBack', '|', 'videoByURL', 'videoEmbed'],
 				videoResize: true
 			},
@@ -67,8 +95,6 @@ class FroalaEditor extends React.Component {
 				placeholderText: '',
 				tabSpaces: 4,
 				toolbarButtons: [
-					'undo',
-					'|',
 					'bold',
 					'italic',
 					'underline',
@@ -82,15 +108,6 @@ class FroalaEditor extends React.Component {
 				toolbarVisibleWithoutSelection: true
 			}
 		}
-	}
-
-	componentWillMount() {
-		const script = document.createElement('script')
-
-		script.src = 'https://use.typekit.net/foobar.js'
-		script.async = true
-
-		document.body.appendChild(script)
 	}
 
 	componentDidMount() {
