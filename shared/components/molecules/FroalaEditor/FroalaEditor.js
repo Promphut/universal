@@ -29,7 +29,7 @@ class FroalaEditor extends React.Component {
 				imageDefaultAlign: 'center',
 				inlineStyles: {
 					Caption: "font-family: 'PT Sans', 'cs_prajad'; font-size: 16px; color: #8e8e8e; line-height: .5;",
-					Reference: "font-family:'PT Sans', 'cs_prajad'; font-size: 16px; color: #8e8e8e;"
+					Source: "font-family:'PT Sans', 'cs_prajad'; font-size: 16px; color: #8e8e8e;"
 					// 'Image source': "font-family: 'PT Sans', 'cs_prajad'; font-size: 14px; color: #CCC; font-style: italic; line-height: .1;"
 				},
 				linkEditButtons: ['linkOpen', 'linkEdit', 'linkRemove'],
@@ -40,40 +40,20 @@ class FroalaEditor extends React.Component {
 					N: 'Normal'
 				},
 				placeholderText: 'เขียนบทความ...',
-				pluginsEnabled: [
-					align,
-					charCounter,
-					draggable,
-					entities,
-					file,
-					image,
-					imageManager,
-					inlineStyle,
-					lineBreaker,
-					link,
-					lists,
-					paragraphFormat,
-					paragraphStyle,
-					quote,
-					save,
-					table,
-					url,
-					video,
-					wordPaste
-				],
+				quickInsertButtons: [],
 				tabSpaces: 4,
 				toolbarButtons: [
 					'bold',
 					'italic',
 					'underline',
 					'|',
-					'paragraphFormat',
-					'inlineStyle',
 					'align',
-					'quote',
-					'-',
 					'formatOL',
 					'formatUL',
+					'quote',
+					'-',
+					'paragraphFormat',
+					'inlineStyle',
 					'|',
 					'insertLink',
 					'insertImage',
@@ -93,17 +73,9 @@ class FroalaEditor extends React.Component {
 				linkEditButtons: ['linkOpen', 'linkEdit', 'linkRemove'],
 				linkInsertButtons: ['linkBack'],
 				placeholderText: '',
+				quickInsertButtons: [],
 				tabSpaces: 4,
-				toolbarButtons: [
-					'bold',
-					'italic',
-					'underline',
-					'|',
-					'formatOL',
-					'formatUL',
-					'|',
-					'insertLink'
-				],
+				toolbarButtons: ['bold', 'italic', 'underline', '|', 'insertLink'],
 				toolbarInline: true,
 				toolbarVisibleWithoutSelection: true
 			}
