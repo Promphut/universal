@@ -295,5 +295,67 @@ const EditorCss = styled.div`
       margin: 0 !important; 
     }
   }
+  
+  h1 {
+		font-size: 42px;
+		color: ${props => props.theme.primaryColor};
+	}
+	
+	.fr-element h2 {
+		font-family: 'PT Serif','Mitr';
+		font-size: 28px;
+    	font-weight: bold;
+		color: #222;
+	}
+	
+	.fr-element h3 {
+		font-family: 'PT Serif','Mitr';
+		font-size: 20px;
+    	font-weight: normal;
+		color: #222;
+	}
+
+	.fr-element p {
+		font-family: 'cs_prajad','PT Sans', sans-serif;
+		font-size: 18px;
+		color: #222;
+	}
+	
+	.fr-element ol > li,
+	.fr-element ul > li {
+    	font-family: 'cs_prajad','PT Sans', sans-serif;
+    	font-size: 18px;
+    	margin: 10px 0 10px 0;
+	}
+
+	.fr-element a ,
+	.fr-element p > a {
+  		font-family: 'cs_prajad','PT Sans', sans-serif;
+		font-size: 18px;
+		color: ${props => props.theme.accentColor};
+		
+		&:hover {
+			cursor: pointer;
+		}
+	}
+
+	.fr-element hr {
+		width: 100px;
+		margin: 50px auto;
+		border-top: 3px solid ${props => props.theme.accentColor};
+	}
+
+	.fr-view blockquote {
+		border-left: 3px solid ${props => props.theme.accentColor};
+		padding-left: 20px;
+		margin: 40px 0px;
+		line-height: 40px;
+	}
+
+	.fr-view blockquote > p {
+		font-family: 'PT Serif','Mitr';
+		font-size: 20px;
+		color: #222;
+	}
 `
 export default EditorCss
