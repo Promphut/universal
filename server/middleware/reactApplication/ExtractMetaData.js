@@ -1,7 +1,7 @@
 import api from '../../../shared/services/api';
 import { FRONTURL, port, host, basename, ANALYTIC, COVER, amazonAccessKey, secretKey, PID } from '../../../shared/config.js'
 
-const ExtractMeta = (setting, url) => {
+const ExtractMeta = (request,response,setting, url) => {
 	let meta = {
 		name: '',
 		keywords: setting.publisher.keywords || '',
@@ -33,6 +33,7 @@ const ExtractMeta = (setting, url) => {
 				let sid = path[4]
 				return api.getStoryFromSid(sid)
 				.then(res => {
+					if(res.story.publisher._id!=setting.publisher._id) return {status: 404}
 					let s = res.story
 					if(s.ptitle) meta.name = s.ptitle + ' | ' + setting.publisher.name
 					if(s.contentShort) meta.desc = s.contentShort
