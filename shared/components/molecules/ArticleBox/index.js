@@ -158,7 +158,7 @@ const MiniLine = styled.div`
   width:12px;
   height:1px;
   background:#8E8E8E;
-  margin:3px 8px 0 0;
+  margin:3px 8px 6px 0;
   display:inline-block;
 `
 const Dot = styled.div`
@@ -166,7 +166,7 @@ const Dot = styled.div`
   height:3px;
   background:#C4C4C4;
   border-radius:50%;
-  margin:6px 8px 0 8px;
+  margin:6px 8px 6px 8px;
   display:inline-block;
 `
 
