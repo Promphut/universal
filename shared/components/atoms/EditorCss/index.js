@@ -418,5 +418,11 @@ const EditorCss = styled.div`
   .fr-view table tr:nth-child(even) {
     background: #FAFAFA;
   }
+  
+  .fr-selected-cell,
+  .fr-selected-cell {
+    border: 1px solid ${props => props.theme.primaryColor} !important;
+    background: #EAEAEA;
+  }
 `
 export default EditorCss
