@@ -10,7 +10,6 @@ import 'froala-editor/css/froala_style.min.css'
 import 'froala-editor/css/froala_editor.pkgd.min.css'
 
 import './custom.js'
-import './myQuickInsert.js'
 
 class FroalaEditor extends React.Component {
 	constructor(props) {
@@ -46,9 +45,6 @@ class FroalaEditor extends React.Component {
 				},
 				placeholderText: 'เขียนบทความ...',
 				quickInsertButtons: false,
-<<<<<<< HEAD
-				myQuickInsertButtons: ["image", "video"],
-=======
 				tableEditButtons: [
 					'tableHeader',
 					'tableRemove',
@@ -61,7 +57,6 @@ class FroalaEditor extends React.Component {
 					'tableCellVerticalAlign',
 					'tableCellHorizontalAlign'
 				],
->>>>>>> bd9917624cb8e576462d4311a858742dabfe3655
 				tabSpaces: 4,
 				toolbarButtons: [
 					'bold',
