@@ -123,12 +123,14 @@ class TrendingSideBar extends React.Component {
 			storyNumber = this.props.storyNumber
 		}
 
-		if(sid) api.getFeed('story', { status: 1 }, 'trending', null, 0, storyNumber,{omit : [sid]}).then(result => {
-			this.setState({ popular: result.feed })
-		})
-		else api.getFeed('story', { status: 1 }, 'trending', null, 0, storyNumber).then(result => {
-			this.setState({ popular: result.feed })
-		})
+		if(sid){ api.getFeed('story', { status: 1 }, 'trending', null, 0, storyNumber,{omit : [sid]}).then(result => {
+				this.setState({ popular: result.feed })
+			})
+		}	
+		else{ api.getFeed('story', { status: 1 }, 'trending', null, 0, storyNumber).then(result => {
+				this.setState({ popular: result.feed })
+			})
+		}
 	}
 
 	componentDidMount() {
