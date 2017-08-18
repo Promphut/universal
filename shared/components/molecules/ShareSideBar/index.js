@@ -52,14 +52,13 @@ class ShareSideBar extends React.Component {
 		// .end((er,res)=>{
 		// 	this.setState({fb:res.body.share.share_count})
     // })
-    utils.FBShareCount(config.FRONTURL+window.location.pathname).then((res)=>this.setState({fb:res}))
     //console.log()
 	}
 
   render() {
     return (
       <Div style={this.props.style}>
-        <No>{utils.numberFormat(this.props.shareCount+this.state.fb)}</No>
+        <No>{utils.numberFormat(this.props.shareCount)}</No>
           <div style={{color:'#8F8F8F',fontSize:'16px',fontWeight:'blod',textAlign:'center'}}>shares</div>
           <FbShareButton  button={<CirButton><i className="fa fa-facebook fa-2x" aria-hidden="true" style={{color:'white'}}></i></CirButton>} />
           {this.state.status && <TwtShareButton button={<CirButton style={{backgroundColor:'#60AADE',paddingLeft:'18px'}}><i className="fa  fa-twitter fa-2x" aria-hidden="true" style={{color:'white'}}></i></CirButton>} />}

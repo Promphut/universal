@@ -251,6 +251,7 @@ class StoryPage extends React.Component {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.location.pathname != this.props.location.pathname) {
+      utils.FBShareCount(config.FRONTURL+nextProps.location.pathname).then((res)=>this.setState({fb:res}))      
 			this.getStoryFromSid(nextProps.match.params.sid, () => {
 				this.getRecommendStories()
 				// this.findDescription()
@@ -344,7 +345,7 @@ class StoryPage extends React.Component {
 					<Content paddingTop={hasCover ? '0px' : '60px'}>
 						<Share ref="share" style={{ zIndex: '50' }}>
 							<Stick topOffset={100}>
-								<ShareSideBar shareCount={story.shares && story.shares.total} />
+								<ShareSideBar shareCount={story.shares && story.shares.total+fb} />
 							</Stick>
 						</Share>
 
