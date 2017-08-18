@@ -326,14 +326,14 @@ const EditorCss = styled.div`
 	.fr-element h2 {
 		font-family: 'PT Serif','Mitr';
 		font-size: 28px;
-    	font-weight: bold;
+    font-weight: bold;
 		color: #222;
 	}
 	
 	.fr-element h3 {
 		font-family: 'PT Serif','Mitr';
 		font-size: 20px;
-    	font-weight: normal;
+    font-weight: normal;
 		color: #222;
 	}
 
@@ -352,8 +352,6 @@ const EditorCss = styled.div`
 
 	.fr-element a ,
 	.fr-element p > a {
-  	font-family: 'cs_prajad','PT Sans', sans-serif;
-		font-size: 18px;
 		color: ${props => props.theme.accentColor};
 		
 		&:hover {
