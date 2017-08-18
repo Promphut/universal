@@ -66,10 +66,12 @@ class NewStory extends React.Component {
 	}
 	selectedLayout = () => {
 		var s = {
-			publisher: config.PID,
+			title:'',
+			publisher:parseInt(config.PID),
 			status: 0,
 			format: this.state.layout,
-			html: ''
+			html: '',
+			writer:''
 		}
 		api.createStory(s).then(story => {
 			this.props.history.push('/me/stories/' + story._id + '/edit')
