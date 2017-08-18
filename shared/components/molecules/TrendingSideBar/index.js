@@ -118,7 +118,15 @@ class TrendingSideBar extends React.Component {
 
 	getPopular = (sid) => {
 		// sort will be changed to 'trending' later when implemented
-		api.getFeed('story', { status: 1 }, 'trending', null, 0, 3,{omit : [sid]}).then(result => {
+		var snumber =  3 
+		if(this.props.storiesNumber) snumber = storiesNumber
+
+		if(sid)
+		api.getFeed('story', { status: 1 }, 'trending', null, 0, snumber,{omit : [sid]}).then(result => {
+			this.setState({ popular: result.feed })
+		})
+		else
+		api.getFeed('story', { status: 1 }, 'trending', null, 0, snumber).then(result => {
 			this.setState({ popular: result.feed })
 		})
 	}
