@@ -228,6 +228,7 @@ class StoryPage extends React.Component {
 	}
 
 	componentDidMount() {
+    utils.FBShareCount(config.FRONTURL+this.props.location.pathname).then((res)=>this.setState({fb:res}))              
 		this.getStoryFromSid(this.props.match.params.sid, () => {
 			this.getRecommendStories()
 			// this.findDescription()
