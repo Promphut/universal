@@ -15,6 +15,7 @@ import './myQuickInsert.js'
 class FroalaEditor extends React.Component {
 	constructor(props) {
 		super(props)
+
 		this.state = {
 			renderEditor: false,
 			froalaConfig: {
@@ -45,7 +46,22 @@ class FroalaEditor extends React.Component {
 				},
 				placeholderText: 'เขียนบทความ...',
 				quickInsertButtons: false,
+<<<<<<< HEAD
 				myQuickInsertButtons: ["image", "video"],
+=======
+				tableEditButtons: [
+					'tableHeader',
+					'tableRemove',
+					'|',
+					'tableRows',
+					'tableColumns',
+					'-',
+					'tableCells',
+					'tableCellBackground',
+					'tableCellVerticalAlign',
+					'tableCellHorizontalAlign'
+				],
+>>>>>>> bd9917624cb8e576462d4311a858742dabfe3655
 				tabSpaces: 4,
 				toolbarButtons: [
 					'bold',

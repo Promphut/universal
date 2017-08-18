@@ -282,6 +282,28 @@ const EditorCss = styled.div`
 		font-size: 20px;
 		color: #222;
   }
+
+  #paper table {
+    border-collapse: collapse;
+    word-wrap: break-word;
+    table-layout: fixed;
+  }
+
+  #paper table td,
+  #paper table th {
+		font-family: 'cs_prajad','PT Sans', sans-serif;
+    border: 1px solid ${props => props.theme.primaryColor};
+  }
+
+  #paper table th {
+    background:  ${props => props.theme.primaryColor};
+    color: #FFF;
+  }
+
+  #paper table tr:nth-child(even) {
+    background: #FAFAFA;
+  }
+
   @media (max-width: 480px) {
     #paper h2 {
       font-size: 24px;
@@ -304,14 +326,14 @@ const EditorCss = styled.div`
 	.fr-element h2 {
 		font-family: 'PT Serif','Mitr';
 		font-size: 28px;
-    	font-weight: bold;
+    font-weight: bold;
 		color: #222;
 	}
 	
 	.fr-element h3 {
 		font-family: 'PT Serif','Mitr';
 		font-size: 20px;
-    	font-weight: normal;
+    font-weight: normal;
 		color: #222;
 	}
 
@@ -330,8 +352,6 @@ const EditorCss = styled.div`
 
 	.fr-element a ,
 	.fr-element p > a {
-  		font-family: 'cs_prajad','PT Sans', sans-serif;
-		font-size: 18px;
 		color: ${props => props.theme.accentColor};
 		
 		&:hover {
@@ -378,9 +398,31 @@ const EditorCss = styled.div`
     margin-left: 20px !important;
   }
   
-  .fr-image-full {
-    width: 100% !important;
-    height: inherit !important;
+  .fr-view table {
+    border-collapse: collapse;
+    word-wrap: break-word;
+    table-layout: fixed;
+  }
+
+  .fr-view table td,
+  .fr-view table th {
+		font-family: 'cs_prajad','PT Sans', sans-serif;
+    border: 1px solid ${props => props.theme.primaryColor};
+  }
+
+  .fr-view table th {
+    background:  ${props => props.theme.primaryColor};
+    color: #FFF;
+  }
+
+  .fr-view table tr:nth-child(even) {
+    background: #FAFAFA;
+  }
+  
+  .fr-selected-cell,
+  .fr-selected-cell {
+    border: 1px solid ${props => props.theme.primaryColor} !important;
+    background: #EAEAEA;
   }
 `
 export default EditorCss
