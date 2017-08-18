@@ -16,6 +16,7 @@ import cors from 'cors';
 import http from 'http';
 import https from 'https';
 import fs from 'fs';
+import sm from 'sitemap'
 
 import { FRONTURL, port, host, basename, ANALYTIC, COVER, aws , PID } from '../shared/config.js'
 import api from '../shared/services/api';
@@ -58,6 +59,35 @@ app.use(config('bundles.client.webPath'), clientBundle);
 // Configure static serving of our "public" root http path static files.
 // Note: these will be served off the root (i.e. '/') of our application.
 app.use(express.static(pathResolve(appRootDir.get(), config('publicAssetsPath'))));
+
+app.get('/sitemap.xml', (req, res)=> {
+  api.getPublisherSetting().then(setting=>{
+    var column = []
+    setting.menu.column.map((val,inx)=>{
+      column.push({url:'/stories/columns/'+val.slug , changefreq : 'daily', priority : 0.8})
+    })
+    const sitemap = sm.createSitemap({
+      hostname: FRONTURL,
+      cacheTime: 600000,        // 600 sec - cache purge period
+      urls: [
+        { url: '/',  changefreq: 'daily', priority: 1 ,img: COVER},
+        { url: '/stories/news',  changefreq: 'daily',  priority: 0.8 },
+        { url: '/stories/all',  changefreq: 'daily',  priority: 0.8 },
+        ...column,
+        { url: '/stories/columns',  changefreq: 'weekly',  priority: 0.5 },
+        { url: '/about'},
+        { url: '/contact'}
+      ]
+    })
+    sitemap.toXML( function (err, xml) {
+        if (err) {
+          return res.status(500).end();
+        }
+        res.header('Content-Type', 'application/xml');
+        res.send( xml );
+    });
+  })  
+});
 
 app.get('/robots.txt', (req, res) => {
 	let robotTxt = ''

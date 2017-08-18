@@ -175,10 +175,9 @@ function HTML(props) {
         <script dangerouslySetInnerHTML={{ __html: quantcast.headScript }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ld }}></script>
 
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css" /> 
+        {/* <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" /> */}
+        {/* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css" />  */}
         {/* <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mitr|Nunito|PT+Sans|PT+Serif:400,700,700i|Roboto|Roboto+Slab"/> */}
-        {/* <link rel="stylesheet" href="/css/main.css" />    */}
         {headerElements}
         {styleTags}
       </head>
