@@ -229,11 +229,11 @@ class EditStory extends React.Component {
 	}
 
 	handleModelChangeHtml = html => {
-		this.setState({ html })
+		this.setState({ html,saveStatus: 'Unsave',status: this.SAVE_STATUS.DIRTIED, })
 	}
 
 	handleModelChangeHighlight = highlight => {
-		this.setState({ highlight })
+		this.setState({ highlight,saveStatus: 'Unsave',status: this.SAVE_STATUS.DIRTIED, })
 	}
 
 	chooseNews = () => {
@@ -345,12 +345,13 @@ class EditStory extends React.Component {
 
 		if (this.state.status === this.SAVE_STATUS.DIRTIED) {
 			const images = [].slice.call(
-				dom(this.refs.paper).getElementsByTagName('img')
+				document.getElementsByClassName('fr-wrapper')[1].getElementsByTagName('img')
 			)
 
 			if (images) {
 				images.map((value, index) => {
-					value.setAttribute('alt', title)
+					if(!value.getAttribute('alt'))
+						value.setAttribute('alt', title)
 				})
 			}
 
@@ -1108,7 +1109,7 @@ class EditStory extends React.Component {
 						</Highlight>
 					</HighlightBox>
 				</div>
-				<FroalaEditor model={html} onModelChange={this.handleModelChangeHtml} />
+				<FroalaEditor ref="paper" model={html} onModelChange={this.handleModelChangeHtml} />
 				<Divider />
 				<AnalyticContainer
 					content={html}

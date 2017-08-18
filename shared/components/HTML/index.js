@@ -114,12 +114,35 @@ const ggWebfont = `WebFontConfig = {
   })();`;
 
 const froala = "try{(function (k){localStorage.FEK=k;t=document.getElementById('fr-fek');t.parentNode.removeChild(t);})('SG-7vlaszhphI-7A5B-21q==')}catch(e){}"
+
 /**
  * The is the HTML shell for our React Application.
  */
 function HTML(props) {
   const { htmlAttributes, headerElements, bodyElements, appBodyString, styleTags, meta } = props;
-  const { name, keywords, desc, cover, analytic, url } = meta
+  const { name, keywords, desc, cover, analytic, url, writer, datePublished, publisher, logo } = meta
+  const ld = `{
+    "@context": "http://schema.org/",
+    "@type": "NewsArticle",
+    "headline": ${name},
+    "datePublished": ${datePublished},
+    "description": ${desc},
+    "image": {
+      "@type": "ImageObject",
+      "height": 628,
+      "width": 1200,
+      "url": ${cover}
+    },
+    "author": ${writer},
+    "publisher": {
+      "@type": "Organization",
+      "logo": {
+        "@type": "ImageObject",
+        "url": ${logo}
+      },
+      "name": ${publisher}
+    },
+  }`
   return (
     <html {...htmlAttributes}>
       <head>
@@ -150,6 +173,7 @@ function HTML(props) {
 
         <script dangerouslySetInnerHTML={{ __html: ggTag.headScript }} />
         <script dangerouslySetInnerHTML={{ __html: quantcast.headScript }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ld }}></script>
 
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css" /> 
@@ -162,6 +186,27 @@ function HTML(props) {
         <noscript dangerouslySetInnerHTML={{ __html: ggTag.iframe }} />
         <div id="fb-root" />
         <script dangerouslySetInnerHTML={{ __html: facebookSdk }} />
+        <div itemScope itemType="http://schema.org/NewsArticle" className='h1-for-seo' style={{visibility:'hidden'}}>
+            <h1 itemProp="headline">{name}</h1>
+            <h2 className='h1-for-seo'>{desc}</h2>
+            <h3 className='h1-for-seo'>{keywords}</h3>
+            <span itemProp="datePublished" content={datePublished}></span>
+            <span itemProp="description">{desc}</span><br/>
+            <div itemProp="image" itemScope itemType="http://schema.org/ImageObject">
+                <meta itemProp="height" content="628"/>
+                <meta itemProp="width" content="1200"/>
+                <meta itemProp="url" content={cover}/>
+                <img src={cover} alt={name}/>
+            </div>
+            <span itemProp="author">{writer}</span><br/>
+            <div itemProp="publisher" itemScope itemType="http://schema.org/Organization">
+                <div itemProp="logo" itemScope itemType="http://schema.org/ImageObject">
+                    <meta itemProp="url" content={logo}/>
+                    <img src={logo} alt={name}/>
+                </div>
+                <span itemProp="name">{publisher}</span>
+            </div>
+        </div> 
 
         <div id="app" dangerouslySetInnerHTML={{ __html: appBodyString }} />
         {bodyElements}
