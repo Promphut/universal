@@ -155,7 +155,7 @@ export default class AllStoriesPage extends React.Component {
     this.state = {
       type: utils.querystring('type', this.props.location)
         ? utils.querystring('type', this.props.location)
-        : 'article',
+        : 'stories',
       sort: utils.querystring('sort', this.props.location)
         ? utils.querystring('sort', this.props.location)
         : 'latest',

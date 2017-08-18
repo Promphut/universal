@@ -20,11 +20,7 @@ const Container = styled.div`
   display:flex;
   .imgWidth{
     width:100%;
-    height:153px;
-  }
-  .imgWidthUser{
-    width:100%;
-    height:157px;
+    height:183px;
   }
   .by{
     margin-top:auto;
@@ -212,7 +208,7 @@ const ArticleBox = ({ detail, style, final, id, isUserPage }, context) => {
         <BGImg
           url={url}
           src={(cover.medium && cover.medium) || cover.small}
-          className={isUserPage ? 'imgWidthUser' : 'imgWidth'}
+          className='imgWidth'
         />
       </Box1>
       <Box>
@@ -226,13 +222,13 @@ const ArticleBox = ({ detail, style, final, id, isUserPage }, context) => {
         </div>
         <NameLink to={url} className="nunito-font" style={{ marginTop: '5px' }}>
           {truncate(ptitle, {
-            length: isUserPage ? 70 : 80,
+            length: isUserPage ? 70 : 90,
             separator: '',
           })}
         </NameLink>
         <Div className="nunito-font hidden-mob" style={{ marginTop: '10px' }}>
           {truncate(contentShort, {
-            length: 100,
+            length: 130,
             separator: '',
           })}
         </Div>

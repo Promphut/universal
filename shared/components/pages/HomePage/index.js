@@ -14,6 +14,7 @@ import {
   BgWithLogo,
   Stick,
   SeeMore,
+  HighlightHome
 } from '../../../components';
 import styled from 'styled-components';
 import api from '../../../services/api';
@@ -289,13 +290,14 @@ class HomePage extends React.Component {
 
         <TopBarWithNavigation onLoading={this.props.onLoading} />
 
+        {/* {!isMobile&&<HighlightHome/>} */}
         {isMobile&&<TopHome />}
 
         {/* <TopVideoHome className='hidden-mob'></TopVideoHome> */}
         <Content isMobile={isMobile}>
           <Main>
             <TextLine className="sans-font">LATEST</TextLine>
-            <Dash style={{ margin: '5px 0 10px 0' }} />
+            <Dash style={{ margin: '5px 0 0 0' }} />
               <InfiniteScroll
                 loadMore={this.loadFeed()}
                 hasMore={hasMoreFeed}
@@ -311,7 +313,7 @@ class HomePage extends React.Component {
 
             {!hasMoreFeed &&
               <SeemoreContainer>
-                <SeeMore url={'/stories/all?type=article&sort=latest&page=1'} />
+                <SeeMore url={'/stories/all?type=stories&sort=latest&page=1'} />
               </SeemoreContainer>}
 
             {/* <Tabs

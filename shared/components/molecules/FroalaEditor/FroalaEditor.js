@@ -10,6 +10,7 @@ import 'froala-editor/css/froala_style.min.css'
 import 'froala-editor/css/froala_editor.pkgd.min.css'
 
 import './custom.js'
+import './myQuickInsert.js'
 
 class FroalaEditor extends React.Component {
 	constructor(props) {
@@ -44,6 +45,7 @@ class FroalaEditor extends React.Component {
 				},
 				placeholderText: 'เขียนบทความ...',
 				quickInsertButtons: false,
+				myQuickInsertButtons: ["image", "video"],
 				tabSpaces: 4,
 				toolbarButtons: [
 					'bold',
