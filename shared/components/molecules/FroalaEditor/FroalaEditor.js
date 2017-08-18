@@ -14,6 +14,7 @@ import './custom.js'
 class FroalaEditor extends React.Component {
 	constructor(props) {
 		super(props)
+
 		this.state = {
 			renderEditor: false,
 			froalaConfig: {
@@ -44,6 +45,18 @@ class FroalaEditor extends React.Component {
 				},
 				placeholderText: 'เขียนบทความ...',
 				quickInsertButtons: false,
+				tableEditButtons: [
+					'tableHeader',
+					'tableRemove',
+					'|',
+					'tableRows',
+					'tableColumns',
+					'-',
+					'tableCells',
+					'tableCellBackground',
+					'tableCellVerticalAlign',
+					'tableCellHorizontalAlign'
+				],
 				tabSpaces: 4,
 				toolbarButtons: [
 					'bold',
