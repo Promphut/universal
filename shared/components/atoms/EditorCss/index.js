@@ -281,6 +281,9 @@ const EditorCss = styled.div`
 		padding-left: 20px;
 		margin: 40px 0px;
 		line-height: 40px;
+  }
+
+	#paper blockquote > p {
 		font-family: 'PT Serif','Mitr';
 		font-size: 20px;
 		color: #222;
@@ -403,7 +406,7 @@ const EditorCss = styled.div`
   }
 
   .fr-image-full {
-    margin: auto !important;
+    margin: auto c;
     width: 100% !important;
   }
   
@@ -432,6 +435,20 @@ const EditorCss = styled.div`
   .fr-selected-cell {
     border: 1px solid ${props => props.theme.primaryColor} !important;
     background: #EAEAEA;
+  }
+
+  .fr-text-caption {
+    font-family: 'PT Sans', 'cs_prajad' !important;
+    font-size: 16px !important;
+    color: #8e8e8e !important;
+    line-height: .5 !important;
+  }
+  
+  .fr-text-source,
+  .fr-text-source > a {
+    font-family:'PT Sans', 'cs_prajad' !important;
+    font-size: 16px !important;
+    color: #8e8e8e !important;
   }
 `
 export default EditorCss
