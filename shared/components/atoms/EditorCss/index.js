@@ -244,6 +244,9 @@ const EditorCss = styled.div`
 		font-size: 18px;
 		color: #222;
   }
+  #paper p > img {
+    width: 100%;
+  }
   #paper h2 {
     font-family: 'PT Serif', 'Mitr';
     font-size: 28px;
@@ -390,12 +393,18 @@ const EditorCss = styled.div`
   .fr-image-center {
     margin: auto !important;
     width: auto !important;
+    max-width: 100% !importants;
   }
   
   .fr-image-right {
     float: right !important;
     width: 60% !important;
     margin-left: 20px !important;
+  }
+
+  .fr-image-full {
+    margin: auto !important;
+    width: 100% !important;
   }
   
   .fr-view table {
