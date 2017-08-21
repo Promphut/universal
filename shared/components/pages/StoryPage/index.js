@@ -200,16 +200,37 @@ class StoryPage extends React.Component {
 
 	getStoryFromSid = (sid, done = () => {}) => {
 		if (sid == null) utils.notFound(this.props.history)
-
 		api
 			.getStoryFromSid(sid, auth.getToken(), this.props.countView)
 			.then(result => {
+				this.checkFBShareCount(result.story._id, result.story.shares.fb)
 				this.setState({
 					story: result.story
 				})
 			})
 			.catch(err => {
 				utils.toError(this.props.history, err)
+			})
+	}
+
+	checkFBShareCount = (sid, FBShareInsight) => {
+		utils
+			// .FBShareCount(config.FRONTURL + this.props.location.pathname)
+			.FBShareCount('https://nextempire.co' + this.props.location.pathname)
+			.then(FBShareUpdate => {
+				if (FBShareInsight < FBShareUpdate) {
+					if (sid != null)
+						api.incStoryInsight(
+							sid,
+							'share',
+							'share_fb',
+							FBShareUpdate - FBShareInsight
+						)
+
+					this.setState({ fb: FBShareUpdate })
+				} else {
+					this.setState({ fb: 0 })
+				}
 			})
 	}
 
@@ -223,12 +244,10 @@ class StoryPage extends React.Component {
 			this.setState({
 				showTopbarTitle: false
 			})
-		} else {
 		}
 	}
 
 	componentDidMount() {
-    utils.FBShareCount(config.FRONTURL+this.props.location.pathname).then((res)=>this.setState({fb:res}))              
 		this.getStoryFromSid(this.props.match.params.sid, () => {
 			this.getRecommendStories()
 			// this.findDescription()
@@ -252,7 +271,6 @@ class StoryPage extends React.Component {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.location.pathname != this.props.location.pathname) {
-      utils.FBShareCount(config.FRONTURL+nextProps.location.pathname).then((res)=>this.setState({fb:res}))      
 			this.getStoryFromSid(nextProps.match.params.sid, () => {
 				this.getRecommendStories()
 				// this.findDescription()
@@ -346,7 +364,9 @@ class StoryPage extends React.Component {
 					<Content paddingTop={hasCover ? '0px' : '60px'}>
 						<Share ref="share" style={{ zIndex: '50' }}>
 							<Stick topOffset={100}>
-								<ShareSideBar shareCount={story.shares && story.shares.total+fb} />
+								<ShareSideBar
+									shareCount={story.shares && story.shares.total + fb}
+								/>
 							</Stick>
 						</Share>
 

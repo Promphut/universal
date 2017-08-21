@@ -280,7 +280,11 @@ const EditorCss = styled.div`
 		border-left: 3px solid ${props => props.theme.accentColor};
 		padding-left: 20px;
 		margin: 40px 0px;
-		line-height: 40px;
+    line-height: 40px;
+    
+		font-family: 'PT Serif','Mitr';
+		font-size: 20px;
+		color: #222;
   }
 
 	#paper blockquote > p {
