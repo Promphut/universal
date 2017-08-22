@@ -244,9 +244,11 @@ const EditorCss = styled.div`
 		font-size: 18px;
 		color: #222;
   }
-  #paper p > img {
+  #paper p > img,
+  #paper p > a > img {
     width: 100%;
   }
+
   #paper h2 {
     font-family: 'PT Serif', 'Mitr';
     font-size: 28px;
