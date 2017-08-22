@@ -34,6 +34,9 @@ const Content = styled.div`
 	.margin-bottom{
 		margin-bottom:2px;
 	}
+	.activePos{
+		background-color:${props=>props.theme.accentColor};
+	}
 `;
 
 const Container = styled.div`
@@ -128,7 +131,7 @@ const Dash = styled.div`
 	width:10px;
 	background-color:white;
 	height:4px;
-	margin:4px 0 4px 0;
+	margin:6px 0 6px 0;
 	&:hover{
 		cursor:pointer;
 	}
@@ -137,56 +140,76 @@ class HighlightHome extends React.Component {
 	static contextTypes = {
 		setting: PropTypes.object
 	}
+	static defaultProps = {
+		autoPlay:true,
+		delay:5,
+		numbersOfSlide:5
+  }
 
 	constructor(props) {
 		super(props)
 
 		this.state = {
-			stories:[]
+			stories:[],
+			active:0
 		}
 	}
-
+	move = (pos) =>{
+		if(pos=='down'){
+			if(this.state.active<this.props.numbersOfSlide-1) {var ind = this.state.active+1}
+			else{var ind = 0}
+			this.setState({active:ind})
+		}else{
+			if(this.state.active>0) {var ind = this.state.active-1}
+			else{var ind = this.props.numbersOfSlide-1}
+			this.setState({active:ind})
+		}
+	}
+	autoPlay = () =>{
+		var self = this
+		this.interval = setInterval(()=>{
+			if(self.state.active<self.props.numbersOfSlide-1) {var ind = self.state.active+1}
+			else{var ind = 0}
+			self.setState({active:ind})
+		},self.props.delay*1000)
+	}
+	renderDot = (ar) =>{
+		return ar.map((val,inx)=>
+		<Dash 
+			key={inx}
+			className={this.state.active==inx&&'activePos'} 
+			onMouseOver={()=>this.setState({active:inx})}
+		/>)
+	}
 	componentDidMount() {
-		api.getFeed('stories', { status: 1 }, 'trending', null, 0, 5).then((result) => {
+		api.getFeed('stories', { status: 1 }, 'trending', null, 0, this.props.numbersOfSlide).then((result) => {
       if (result) {
         this.setState({
           stories: result.feed,
-        });
+				});
+				if(this.props.autoPlay){this.autoPlay()}
       }
     });
   }
-
-	renderDot = (ar) =>{
-		return ar.map((val,inx)=><Dash/>)
+	componentWillUnmount() {
+		clearInterval(this.interval)
 	}
+	
 	render() {
-		// var { style, swift, className, large, head, final} = this.props
-		// var {
-		// 	cover,
-		// 	writer,
-		// 	column,
-		// 	votes,
-		// 	comments,
-		// 	updated,
-		// 	url,
-		// 	readTime,
-		// 	contentShort,
-		// 	ptitle
-		// } = this.props.detail
 		var { stories } = this.state
 		if(stories){
-			var s1 = stories[0]
+			var s1 = stories[this.state.active]
 			var s2 = stories[1]
 		}
     return (
 			<Content>	
 				<Container>  
-					<Img src="/tmp/story-list/1486591796200-GettyImages-591802466.jpeg" />
+					<Img src={s1&&s1.cover.large} />
 					<BoxText>
 						<InnerBox>
 							<Hl>Highlight</Hl>	
-							<Title to='#'>{s1&&truncate(s1.ptitle,{ length: 60, separator: '' })}</Title>
-							<More to='#'>อ่านต่อ<i className="fa fa-arrow-right" aria-hidden="true"></i></More>
+							<Title to={s1?s1.url:'/'}>{s1&&truncate(s1.ptitle,{ length: 60, separator: '' })}</Title>
+							<More to={s1?s1.url:'/'}>อ่านต่อ<i className="fa fa-arrow-right" aria-hidden="true"></i></More>
 						</InnerBox>
 						<Pos>
 							<Top></Top>
@@ -194,8 +217,8 @@ class HighlightHome extends React.Component {
 								{this.renderDot(stories)}
 							</Center>						
 							<Bottom>
-								<Button className='margin-bottom'><i className="fa fa-angle-up" aria-hidden="true"></i></Button>
-								<Button><i className="fa fa-angle-down" aria-hidden="true"></i></Button>
+								<Button onClick={()=>this.move('up')} className='margin-bottom'><i className="fa fa-angle-up" aria-hidden="true"></i></Button>
+								<Button onClick={()=>this.move('down')} ><i className="fa fa-angle-down" aria-hidden="true"></i></Button>
 							</Bottom>
 						</Pos>							
 					</BoxText>                     

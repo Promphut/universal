@@ -38,7 +38,7 @@ const Column = styled.div`
 const Con = styled.div`
   width:100%;
   display:flex;
-  margin:20px 0 0 0;
+	margin:20px 0 0 0;
 `
 
 const Name = styled(Link)`
@@ -63,9 +63,9 @@ const Img = styled.div`
 `
 
 const Line = styled.div`
-  width:150px;
+  width:100%;
   height:1px;
-  background-color:#c4c4c4;
+  background-color:#E2E2E2;
   margin:20px auto 0 auto;
 `
 const Dash = styled.div`
@@ -102,7 +102,7 @@ const TrendingSideBarInner = ({ style, detail, index }) => {
 					{truncate(ptitle, { length: 90, separator: '' })}
 				</Name>
 			</Con>
-			{index != 3 && <Line />}
+			<Line />
 		</div>
 	)
 }
@@ -118,7 +118,7 @@ class TrendingSideBar extends React.Component {
 
 	getPopular = (sid) => {
 		// sort will be changed to 'trending' later when implemented
-		let storyNumber = 4
+		let storyNumber = 5
 		if (this.props.storyNumber !== undefined) {
 			storyNumber = this.props.storyNumber
 		}
