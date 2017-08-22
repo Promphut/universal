@@ -43,6 +43,10 @@ class FroalaEditor extends React.Component {
 					H3: 'Subhead',
 					N: 'Normal'
 				},
+				paragraphStyles: {
+					'fr-text-caption': 'Caption',
+					'fr-text-source': 'Source'
+				},
 				placeholderText: 'เขียนบทความ...',
 				quickInsertButtons: false,
 				tableEditButtons: [
@@ -69,7 +73,7 @@ class FroalaEditor extends React.Component {
 					'insertHR',
 					'-',
 					'paragraphFormat',
-					'inlineStyle',
+					'paragraphStyle',
 					'quote',
 					'|',
 					'insertLink',
