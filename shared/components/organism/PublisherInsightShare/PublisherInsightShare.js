@@ -18,6 +18,8 @@ import moment from 'moment'
 import api from '../../../services/api'
 import isObject from 'lodash/isObject'
 
+import 'react-datepicker/dist/react-datepicker.css'
+
 const Container = styled.div`
 `
 
