@@ -281,7 +281,8 @@ const EditorCss = styled.div`
   #paper blockquote {
 		border-left: 3px solid ${props => props.theme.accentColor};
 		padding-left: 20px;
-		margin: 40px 0px;
+    margin: 40px 0px;
+    margin-left: 32px;
     line-height: 40px;
     
 		font-family: 'PT Serif','Mitr';
@@ -305,11 +306,13 @@ const EditorCss = styled.div`
   #paper table th {
 		font-family: 'cs_prajad','PT Sans', sans-serif;
     border: 1px solid ${props => props.theme.primaryColor};
+    padding: 8px;
   }
 
   #paper table th {
     background:  ${props => props.theme.primaryColor};
     color: #FFF;
+    padding: 10px auto;
   }
 
   #paper table tr:nth-child(even) {
@@ -381,6 +384,7 @@ const EditorCss = styled.div`
 		border-left: 3px solid ${props => props.theme.accentColor};
 		padding-left: 20px;
 		margin: 40px 0px;
+    margin-left: 32px;
 		line-height: 40px;
 	}
 
@@ -426,23 +430,25 @@ const EditorCss = styled.div`
   .fr-view table th {
 		font-family: 'cs_prajad','PT Sans', sans-serif;
     border: 1px solid ${props => props.theme.primaryColor};
+    padding: 8px;
   }
 
   .fr-view table th {
     background:  ${props => props.theme.primaryColor};
     color: #FFF;
+    padding: 10px auto;
   }
 
   .fr-view table tr:nth-child(even) {
     background: #FAFAFA;
   }
   
-  .fr-selected-cell,
   .fr-selected-cell {
     border: 1px solid ${props => props.theme.primaryColor} !important;
-    background: #EAEAEA;
+    background: #FFFFFF;
+    filter: invert(15%) !important;
   }
-
+  
   .fr-text-caption {
     font-family: 'PT Sans', 'cs_prajad' !important;
     font-size: 16px !important;

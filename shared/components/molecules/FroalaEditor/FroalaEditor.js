@@ -12,6 +12,10 @@ import 'froala-editor/css/froala_editor.pkgd.min.css'
 import './custom.js'
 
 class FroalaEditor extends React.Component {
+	static contextTypes = {
+		setting: PropTypes.object
+	}
+
 	constructor(props) {
 		super(props)
 
@@ -49,6 +53,7 @@ class FroalaEditor extends React.Component {
 				},
 				placeholderText: 'เขียนบทความ...',
 				quickInsertButtons: false,
+				tableColors: ['#EAEAEA', 'REMOVE'],
 				tableEditButtons: [
 					'tableHeader',
 					'tableRemove',
@@ -112,10 +117,19 @@ class FroalaEditor extends React.Component {
 	}
 
 	componentDidMount() {
+		const { theme } = this.context.setting.publisher
+		let config = this.state.froalaConfig
+		config.tableColors = [
+			theme.secondaryColor,
+			theme.accentColor,
+			'#EAEAEA',
+			'REMOVE'
+		]
+
 		api.getSignature(this.props.match.params.sid).then(res => {
 			// console.log(this.props.match.params.sid)
 			// console.log(res)
-			let config = this.state.froalaConfig
+
 			config.imageUploadToS3 = res
 			this.setState(
 				{
