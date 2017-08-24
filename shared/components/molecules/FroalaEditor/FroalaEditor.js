@@ -36,7 +36,7 @@ class FroalaEditor extends React.Component {
 				imageResize: false,
 				imageDefaultAlign: 'center',
 				inlineStyles: {
-					Caption: "font-family: 'PT Sans', 'cs_prajad'; font-size: 16px; color: #8e8e8e; line-height: .5;",
+					Caption: "font-family: 'PT Sans', 'cs_prajad'; font-size: 16px; color: #8e8e8e;",
 					Source: "font-family:'PT Sans', 'cs_prajad'; font-size: 16px; color: #8e8e8e;"
 					// 'Image source': "font-family: 'PT Sans', 'cs_prajad'; font-size: 14px; color: #CCC; font-style: italic; line-height: .1;"
 				},
