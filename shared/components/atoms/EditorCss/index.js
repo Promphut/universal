@@ -406,7 +406,7 @@ const EditorCss = styled.div`
   .fr-image-center {
     margin: auto !important;
     width: auto !important;
-    max-width: 100% !importants;
+    max-width: 100% !important;
   }
   
   .fr-image-right {
