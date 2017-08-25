@@ -1,6 +1,6 @@
 {
   "name": "ThePublisher",
-  "version": "1.5.7",
+  "version": "2.0.0",
   "private": true,
   "main": "build/server/index.js",
   "engines": {
