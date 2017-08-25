@@ -5,7 +5,7 @@ import 'babel-polyfill'
 // }
 // allow self signed cert for dev mode
 if (process.env.NODE_ENV === 'development') {
-	process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+	process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 	require('longjohn')
 }
 import path from 'path'
@@ -24,7 +24,17 @@ import http from 'http'
 import https from 'https'
 import fs from 'fs'
 
-import { FRONTURL, port, host, basename, ANALYTIC, COVER, amazonAccessKey, secretKey, PID } from 'config'
+import {
+	FRONTURL,
+	port,
+	host,
+	basename,
+	ANALYTIC,
+	COVER,
+	amazonAccessKey,
+	secretKey,
+	PID
+} from 'config'
 //import AppRoutes from 'components/routes'
 import App2 from 'components/App2'
 import Html from 'components/Html'
@@ -33,11 +43,10 @@ import api from './services/api'
 import sm from 'sitemap'
 
 const renderApp = ({ cookies, context, location, sheet, setting }) => {
-
 	const app = sheet.collectStyles(
 		<CookiesProvider cookies={cookies}>
 			<StaticRouter context={context} location={location}>
-				<App2 setting={setting}/>
+				<App2 setting={setting} />
 				{/*<AppRoutes/>*/}
 				{/*<AppRoutes currentlocation = {req.url}/>*/}
 			</StaticRouter>
@@ -53,89 +62,110 @@ const extractMeta = (setting, url) => {
 		name: '',
 		keywords: setting.publisher.keywords || '',
 		desc: setting.publisher.desc || '',
-		cover : COVER || '',
+		cover: COVER || '',
 		analytic: ANALYTIC.FBAPPID || '',
-		url : url,
+		url: url,
 		logo: setting.publisher.theme.slogo,
 		publisher: setting.publisher.name,
 		writer: setting.publisher.name,
 		datePublished: new Date()
 	}
 
-	if(setting.publisher.name)
-		meta.name = setting.publisher.name + (setting.publisher.tagline ? ' | ' + setting.publisher.tagline : '')
+	if (setting.publisher.name)
+		meta.name =
+			setting.publisher.name +
+			(setting.publisher.tagline ? ' | ' + setting.publisher.tagline : '')
 
 	let path = url.split('/')
 
-	if (path[1] === 'stories' && !(path[2].startsWith('all')||path[2].startsWith('columns')) && !path[3]) {
+	if (
+		path[1] === 'stories' &&
+		!(path[2].startsWith('all') || path[2].startsWith('columns')) &&
+		!path[3]
+	) {
 		// 1. Column case
 		let slug = decodeURIComponent(path[2])
-		return api.getColumnFromSlug(slug)
-		.then(col => {
-			if(col.name) meta.name = col.name + ' | ' + setting.publisher.name
-			if(col.shortDesc) meta.desc = col.shortDesc
-			if(col.cover && col.cover.medium) meta.cover = col.cover.medium
-			if(col.url) meta.url = col.url
-			return meta
-		}).catch((err)=>{return {status: 404}})
-	} else if (path[1] === 'stories' && !(path[2].startsWith('all')||path[2].startsWith('columns'))) {
+		return api
+			.getColumnFromSlug(slug)
+			.then(col => {
+				if (col.name) meta.name = col.name + ' | ' + setting.publisher.name
+				if (col.shortDesc) meta.desc = col.shortDesc
+				if (col.cover && col.cover.medium) meta.cover = col.cover.medium
+				if (col.url) meta.url = col.url
+				return meta
+			})
+			.catch(err => {
+				return { status: 404 }
+			})
+	} else if (
+		path[1] === 'stories' &&
+		!(path[2].startsWith('all') || path[2].startsWith('columns'))
+	) {
 		// 2. Story case
-			if(path.length>4 && path[4]) {
-				let sid = path[4]
-				return api.getStoryFromSid(sid)
+		if (path.length > 4 && path[4]) {
+			let sid = path[4]
+			return api
+				.getStoryFromSid(sid)
 				.then(res => {
 					let s = res.story
 					//console.log(s)
-					if(s.ptitle) meta.name = s.ptitle + ' | ' + setting.publisher.name
-					if(s.contentShort) meta.desc = s.contentShort
-					if(s.cover) meta.cover = s.cover.large || s.cover.medium
-					if(s.url) meta.url = s.url
-					if(s.writer) meta.writer = s.writer.display
-					if(s.published) meta.datePublished = s.published 
+					if (s.ptitle) meta.name = s.ptitle + ' | ' + setting.publisher.name
+					if (s.contentShort) meta.desc = s.contentShort
+					if (s.cover) meta.cover = s.cover.large || s.cover.medium
+					if (s.url) meta.url = s.url
+					if (s.writer) meta.writer = s.writer.display
+					if (s.published) meta.datePublished = s.published
 					return meta
-				}).catch((err)=>{return {status: 404}})
-			}else return Promise.resolve(meta)
+				})
+				.catch(err => {
+					return { status: 404 }
+				})
+		} else return Promise.resolve(meta)
 	} else if (path[1] && path[1].substring(0, 1) === '@') {
 		// 3. User case with username
 		let user
-		if(path[1].indexOf("?") != -1)
-			user = decodeURIComponent(path[1].substring(1,path[1].indexOf("?")))
-		else
-			user = decodeURIComponent(path[1].substring(1))
-		return api.getUserFromUsername(user)
-		.then(u => {
-			if(u.display) meta.name = u.display + ' | ' + setting.publisher.name
-			if(u.desc) meta.desc = u.desc
-			if(u.url) meta.url = u.url
-			return meta
-		}).catch((err)=>{return {status: 404}})
+		if (path[1].indexOf('?') != -1)
+			user = decodeURIComponent(path[1].substring(1, path[1].indexOf('?')))
+		else user = decodeURIComponent(path[1].substring(1))
+		return api
+			.getUserFromUsername(user)
+			.then(u => {
+				if (u.display) meta.name = u.display + ' | ' + setting.publisher.name
+				if (u.desc) meta.desc = u.desc
+				if (u.url) meta.url = u.url
+				return meta
+			})
+			.catch(err => {
+				return { status: 404 }
+			})
 	} else if (path[1] === 'u') {
 		// 4. User case with user id
 		let uid
-		if(path[2].indexOf("?") != -1)
-			uid = path[2].substring(path[2].indexOf("?"))
-		else
-			uid = path[2]
-		path[2].substring(1,path[1].indexOf("?"))
-		return api.getUser(uid)
-		.then(u => {
-			if(u.display) meta.name = u.display + ' | ' + setting.publisher.name
-			if(u.desc) meta.desc = u.desc
-			if(u.url) meta.url = u.url
-			return meta
-		}).catch((err)=>{return {status: 404}})
-	} else if (path[1] === 'tags'){
+		if (path[2].indexOf('?') != -1)
+			uid = path[2].substring(path[2].indexOf('?'))
+		else uid = path[2]
+		path[2].substring(1, path[1].indexOf('?'))
+		return api
+			.getUser(uid)
+			.then(u => {
+				if (u.display) meta.name = u.display + ' | ' + setting.publisher.name
+				if (u.desc) meta.desc = u.desc
+				if (u.url) meta.url = u.url
+				return meta
+			})
+			.catch(err => {
+				return { status: 404 }
+			})
+	} else if (path[1] === 'tags') {
 		// 5. Tags case
 		let tag
-		if(path[2].indexOf("?") != -1)
-			tag = path[2].substring(0,path[2].indexOf("?"))
-		else
-			tag = path[2]
-		return api.getTagFromTagSlug(decodeURIComponent(tag))
-		.then()
-		.catch((err)=>{return {status: 404}})
-	}
-	else return Promise.resolve(meta)
+		if (path[2].indexOf('?') != -1)
+			tag = path[2].substring(0, path[2].indexOf('?'))
+		else tag = path[2]
+		return api.getTagFromTagSlug(decodeURIComponent(tag)).then().catch(err => {
+			return { status: 404 }
+		})
+	} else return Promise.resolve(meta)
 }
 
 // const getMeta = (u) => {
@@ -207,49 +237,50 @@ const renderHtml = ({ content, sheet, meta }) => {
 const app = express()
 
 //app.use(forceSSL)
-app.use(basename, express.static(path.resolve(process.cwd(), 'dist/public'),{maxAge: "7d"}))
+app.use(
+	basename,
+	express.static(path.resolve(process.cwd(), 'dist/public'), { maxAge: '7d' })
+)
 app.use(cookiesMiddleware())
 
 var options = {
-    tmpDir: './public/uploads/tmp',
-    uploadUrl:  '/thepublisher/publishers/'+PID+'/',
-		imageTypes:  /\.(gif|jpe?g|png)/i,
-		useSSL: true,
-    imageVersions :{
-        maxWidth : 730,
-        maxHeight : 'auto'
-    },
-    accessControl: {
-        allowOrigin: '*',
-        allowMethods: 'OPTIONS, HEAD, GET, POST, PUT, DELETE',
-        allowHeaders: 'Content-Type, Content-Range, Content-Disposition'
-    },
-		storage : {
-			type : 'aws',
-			aws : {
-					accessKeyId :  amazonAccessKey,
-					secretAccessKey : secretKey ,
-					//bucketName : 'thepublisher/publishers/'+PID,
-					bucketName : 'thepublisher',
-					acl:'public-read',
-					region: 'ap-southeast-1',
-					path: 'publishers/'+PID+'/',
-					expiresInMilliseconds:99999999,
-					getSignedUrl: false
-			}
-    }
-};
-
-var uploader = require('blueimp-file-upload-expressjs')(options);
-
-app.post('/upload/img',
-	(req,res)=>{
-		uploader.post(req, res, function (err,obj) {
-			//console.log('HAHA', err, obj)
-			res.send(JSON.stringify(obj));
-		});
+	tmpDir: './public/uploads/tmp',
+	uploadUrl: '/thepublisher/publishers/' + PID + '/',
+	imageTypes: /\.(gif|jpe?g|png)/i,
+	useSSL: true,
+	imageVersions: {
+		maxWidth: 730,
+		maxHeight: 'auto'
+	},
+	accessControl: {
+		allowOrigin: '*',
+		allowMethods: 'OPTIONS, HEAD, GET, POST, PUT, DELETE',
+		allowHeaders: 'Content-Type, Content-Range, Content-Disposition'
+	},
+	storage: {
+		type: 'aws',
+		aws: {
+			accessKeyId: amazonAccessKey,
+			secretAccessKey: secretKey,
+			//bucketName : 'thepublisher/publishers/'+PID,
+			bucketName: 'thepublisher',
+			acl: 'public-read',
+			region: 'ap-southeast-1',
+			path: 'publishers/' + PID + '/',
+			expiresInMilliseconds: 99999999,
+			getSignedUrl: false
+		}
 	}
-)
+}
+
+var uploader = require('blueimp-file-upload-expressjs')(options)
+
+app.post('/upload/img', (req, res) => {
+	uploader.post(req, res, function(err, obj) {
+		//console.log('HAHA', err, obj)
+		res.send(JSON.stringify(obj))
+	})
+})
 
 // app.delete('/upload/img',
 // 	(req,res)=>{
@@ -258,78 +289,90 @@ app.post('/upload/img',
 // 		});
 // 	}
 // )
-app.get('/sitemap.xml', (req, res)=> {
-
-	api.getPublisherSetting().then(setting=>{
+app.get('/sitemap.xml', (req, res) => {
+	api.getPublisherSetting().then(setting => {
 		var column = []
-		setting.menu.column.map((val,inx)=>{
-			column.push({url:'/stories/columns/'+val.slug , changefreq : 'daily', priority : 0.8})
+		setting.menu.column.map((val, inx) => {
+			column.push({
+				url: '/stories/columns/' + val.slug,
+				changefreq: 'daily',
+				priority: 0.8
+			})
 		})
 		const sitemap = sm.createSitemap({
 			hostname: FRONTURL,
-			cacheTime: 600000,        // 600 sec - cache purge period
+			cacheTime: 600000, // 600 sec - cache purge period
 			urls: [
-				{ url: '/',  changefreq: 'daily', priority: 1 ,img: COVER},
-				{ url: '/stories/news',  changefreq: 'daily',  priority: 0.8 },
-				{ url: '/stories/all',  changefreq: 'daily',  priority: 0.8 },
+				{ url: '/', changefreq: 'daily', priority: 1, img: COVER },
+				{ url: '/stories/news', changefreq: 'daily', priority: 0.8 },
+				{ url: '/stories/all', changefreq: 'daily', priority: 0.8 },
 				...column,
-				{ url: '/stories/columns',  changefreq: 'weekly',  priority: 0.5 },
-				{ url: '/about'},
-				{ url: '/contact'}
+				{ url: '/stories/columns', changefreq: 'weekly', priority: 0.5 },
+				{ url: '/about' },
+				{ url: '/contact' }
 			]
 		})
-		sitemap.toXML( function (err, xml) {
-				if (err) {
-					return res.status(500).end();
-				}
-				res.header('Content-Type', 'application/xml');
-				res.send( xml );
-		});
+		sitemap.toXML(function(err, xml) {
+			if (err) {
+				return res.status(500).end()
+			}
+			res.header('Content-Type', 'application/xml')
+			res.send(xml)
+		})
 	})
-		
-});
+})
 
 app.get('/robots.txt', (req, res) => {
 	let robotTxt = ''
 
-	if(process.env.NODE_ENV === 'production')
-		robotTxt =
-`User-agent: *
+	if (process.env.NODE_ENV === 'production')
+		robotTxt = `User-agent: *
 Disallow: /me/*
 Disallow: /editor
 Disallow: /editor/*
 Sitemap: ${FRONTURL}/sitemap.xml`
 	else
-		robotTxt =
-`User-agent: *
+		robotTxt = `User-agent: *
 Disallow: /
 Sitemap: ${FRONTURL}/sitemap.xml`
 
 	res.send(robotTxt)
 })
 
-app.get(['/feed', '/feed/rss', '/rss'],(req,res) => {
+app.get(['/feed', '/feed/rss', '/rss'], (req, res) => {
 	let type = req.query.type || 'article'
-	api.getFeed(type.toLowerCase() ,{ status: 1 },'latest',null,null,20,{'rss' :true}).then(result => {
-		res.set('Content-Type', 'text/xml');
-		res.send(result.xml)
-	})
+	api
+		.getFeed(type.toLowerCase(), { status: 1 }, 'latest', null, null, 20, {
+			rss: true
+		})
+		.then(result => {
+			res.set('Content-Type', 'text/xml')
+			res.send(result.xml)
+		})
 })
 
-app.get(['/feed/atom', '/atom'],(req,res) => {
+app.get(['/feed/atom', '/atom'], (req, res) => {
 	let type = req.query.type || 'article'
-	api.getFeed(type.toLowerCase(),{ status: 1 },'latest',null,null,20,{'atom' :true}).then(result => {
-		res.set('Content-Type', 'text/xml');
-		res.send(result.xml)
-	})
+	api
+		.getFeed(type.toLowerCase(), { status: 1 }, 'latest', null, null, 20, {
+			atom: true
+		})
+		.then(result => {
+			res.set('Content-Type', 'text/xml')
+			res.send(result.xml)
+		})
 })
 
-app.get(['/linetoday', '/feed/linetoday'],(req,res) => {
+app.get(['/linetoday', '/feed/linetoday'], (req, res) => {
 	let type = req.query.type || 'article'
-	api.getFeed(type.toLowerCase(),{ status: 1 },'latest',null,null,20,{'line' :true}).then(result => {
-		res.set('Content-Type', 'text/xml');
-		res.send(result.xml)
-	})
+	api
+		.getFeed(type.toLowerCase(), { status: 1 }, 'latest', null, null, 20, {
+			line: true
+		})
+		.then(result => {
+			res.set('Content-Type', 'text/xml')
+			res.send(result.xml)
+		})
 })
 
 app.use((req, res, next) => {
@@ -341,32 +384,36 @@ app.use((req, res, next) => {
 	const context = {}
 	const sheet = new ServerStyleSheet()
 
-	api.getPublisherSetting()
-	.then(setting => {
-		if(!setting || !setting.publisher) return next(new Error('Cannot get publisher setting.'))
+	api.getPublisherSetting().then(setting => {
+		if (!setting || !setting.publisher)
+			return next(new Error('Cannot get publisher setting.'))
 		//console.log('SETTING', setting)
 		extractMeta(setting, location)
-		.then(meta => {
-			//console.log("META", meta)
-			renderApp({ cookies:req.universalCookies, context, location, sheet, setting })
-			.then(({ html: content }) => {
-				if (meta.status == 404){
-					return res.redirect('/404')
-				}
-				if (context.status) {
-					res.status(context.status)
-				}
-				if (context.url) {
-					res.redirect(context.url)
-				} else {
-					res.send(renderHtml({ content, sheet, meta }))
-				}
+			.then(meta => {
+				//console.log("META", meta)
+				renderApp({
+					cookies: req.universalCookies,
+					context,
+					location,
+					sheet,
+					setting
+				})
+					.then(({ html: content }) => {
+						if (meta.status == 404) {
+							return res.redirect('/404')
+						}
+						if (context.status) {
+							res.status(context.status)
+						}
+						if (context.url) {
+							res.redirect(context.url)
+						} else {
+							res.send(renderHtml({ content, sheet, meta }))
+						}
+					})
+					.catch(next)
 			})
 			.catch(next)
-
-		})
-		.catch(next)
-
 	})
 
 	// getMeta(req.url).then((meta)=>{
@@ -390,7 +437,14 @@ app.use((err, req, res, next) => {
 	const sheet = new ServerStyleSheet()
 	const content = renderToStaticMarkup(sheet.collectStyles(<ErrorPage />))
 
-	var meta = {name:'',keywords:'',desc:'',cover:'',analytic:'',url:''}
+	var meta = {
+		name: '',
+		keywords: '',
+		desc: '',
+		cover: '',
+		analytic: '',
+		url: ''
+	}
 
 	res.status(500).send(renderHtml({ content, sheet, meta }))
 
@@ -399,44 +453,40 @@ app.use((err, req, res, next) => {
 	next(err)
 })
 
-function startListen(_server, _url, _port){
-	_server.listen(_port);
+function startListen(_server, _url, _port) {
+	_server.listen(_port)
 
 	_server.on('error', err => {
 		if (err.syscall !== 'listen') {
-			throw err;
+			throw err
 		}
 
-		let bind = typeof _port === 'string'
-			? 'Pipe ' + _port
-			: 'Port ' + _port;
+		let bind = typeof _port === 'string' ? 'Pipe ' + _port : 'Port ' + _port
 
 		// handle specific listen errors with friendly messages
 		switch (err.code) {
 			case 'EACCES':
-				console.error(bind + ' requires elevated privileges');
-				process.exit(1);
-				break;
+				console.error(bind + ' requires elevated privileges')
+				process.exit(1)
+				break
 			case 'EADDRINUSE':
-				console.error(bind + ' is already in use');
-				process.exit(1);
-				break;
+				console.error(bind + ' is already in use')
+				process.exit(1)
+				break
 			default:
-				throw err;
+				throw err
 		}
-	});
+	})
 
 	_server.on('listening', () => {
 		const boldBlue = text => `\u001b[1m\u001b[34m${text}\u001b[39m\u001b[22m`
 
-		let addr = _server.address();
-		let bind = typeof addr === 'string'
-			? 'pipe ' + addr
-			: 'port ' + addr.port;
+		let addr = _server.address()
+		let bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port
 		console.info(
 			`Server is running at ${boldBlue(`${_url}:${_port}${basename}/`)}`
 		)
-	});
+	})
 }
 
 const server = http.createServer(app)
@@ -446,10 +496,10 @@ startListen(server, 'http://localhost', port)
 // For production / test, nginx'll handle this
 if (process.env.NODE_ENV === 'development') {
 	const ssl_options = {
-	  key: fs.readFileSync('./private/keys/localhost.key'),
-	  cert: fs.readFileSync('./private/keys/localhost.crt'),
-	  passphrase: 'thepublisher'
+		key: fs.readFileSync('./private/keys/localhost.key'),
+		cert: fs.readFileSync('./private/keys/localhost.crt'),
+		passphrase: 'thepublisher'
 	}
 	const secureServer = https.createServer(ssl_options, app)
-	startListen(secureServer, 'https://localhost', parseInt(port)+100)
+	startListen(secureServer, 'https://localhost', parseInt(port) + 100)
 }

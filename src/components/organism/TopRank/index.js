@@ -1,5 +1,5 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import {
 	Table,
@@ -11,8 +11,7 @@ import {
 } from 'material-ui/Table'
 import FontIcon from 'material-ui/FontIcon'
 
-const Container = styled.div`
-`
+const Container = styled.div``
 
 const Bold = styled(Link)`
 	font-weight: bold;
@@ -24,9 +23,9 @@ const Bold = styled(Link)`
 `
 
 const Trend = styled.div`
- font-size: 14px;
- color: #C4C4C4;
- margin-top: 7px;
+	font-size: 14px;
+	color: #c4c4c4;
+	margin-top: 7px;
 `
 
 const styles = {
@@ -67,7 +66,7 @@ const styles = {
 }
 
 class TopRank extends React.Component {
-	toShortNumber = (number) => {
+	toShortNumber = number => {
 		if (number > 1000000000) {
 			number = Math.floor(number / 1000000000) + 'B'
 		} else if (number > 1000000) {
@@ -79,7 +78,7 @@ class TopRank extends React.Component {
 		return number
 	}
 
-	numberWithCommas = (number) => {
+	numberWithCommas = number => {
 		return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 	}
 
@@ -120,12 +119,10 @@ class TopRank extends React.Component {
 	render() {
 		const { insight } = this.props
 		const { entries, summary } = this.props.data
-		//console.log(entries)
 
 		return (
 			<Container>
 				<Table selectable={false}>
-
 					<TableHeader displaySelectAll={false} adjustForCheckbox={false}>
 						<TableRow className="sans-font">
 							<TableHeaderColumn style={{ width: '30%' }} />
@@ -147,7 +144,8 @@ class TopRank extends React.Component {
 					<TableBody displayRowCheckbox={false}>
 						<TableRow
 							className="sans-font"
-							style={{ height: '36px', background: '#F4F4F4' }}>
+							style={{ height: '36px', background: '#F4F4F4' }}
+						>
 							<TableRowColumn style={styles.tableTotalName}>
 								Total View
 							</TableRowColumn>
@@ -165,46 +163,45 @@ class TopRank extends React.Component {
 							</TableRowColumn>
 						</TableRow>
 
-						{entries && entries.map((entry, index) => (
-							<TableRow className="sans-font" key={index}>
-								{insight == 'topstories'
-									&& <TableRowColumn style={styles.tableTextBodyName}>
-											<Bold to={entry.story.url?entry.story.url:'/'}>{index + 1}. {entry.story&&entry.story.title}</Bold>
-											{entry.story.writer &&entry.story.writer.display}
-										</TableRowColumn>
-									}
-								{insight == 'topcolumns'
-									&& <TableRowColumn style={styles.tableTextBodyName}>
-											<Bold to={entry.column.url?entry.column.url:'/'}>{index + 1}. {entry.column&&entry.column.name}</Bold>
-										</TableRowColumn>
-									}
-								{insight == 'topwriters'
-									&& <TableRowColumn style={styles.tableTextBodyName}>
-											<Bold to={entry.writer.url?entry.writer.url:'/'}>{index + 1}. {entry.writer &&entry.writer.display}</Bold>
-										</TableRowColumn>
-									}
+						{entries &&
+							entries.map((entry, index) =>
+								<TableRow className="sans-font" key={index}>
+									{insight == 'topstories' &&
+										<TableRowColumn style={styles.tableTextBodyName}>
+											<Bold to={entry.story.url ? entry.story.url : '/'}>
+												{index + 1}. {entry.story && entry.story.title}
+											</Bold>
+											{entry.story.writer && entry.story.writer.display}
+										</TableRowColumn>}
+									{insight == 'topcolumns' &&
+										<TableRowColumn style={styles.tableTextBodyName}>
+											<Bold to={entry.column.url ? entry.column.url : '/'}>
+												{index + 1}. {entry.column && entry.column.name}
+											</Bold>
+										</TableRowColumn>}
+									{insight == 'topwriters' &&
+										<TableRowColumn style={styles.tableTextBodyName}>
+											<Bold to={entry.writer.url ? entry.writer.url : '/'}>
+												{index + 1}. {entry.writer && entry.writer.display}
+											</Bold>
+										</TableRowColumn>}
 
-								{this.renderTableRowColumn(
-									entry.pastSevenDays,
-									entry.aWeekAgo
-								)}
-								{this.renderTableRowColumn(
-									entry.aWeekAgo,
-									entry.twoWeeksAgo
-								)}
-								{this.renderTableRowColumn(
-									entry.twoWeeksAgo,
-									entry.twoWeeksAgo
-								)}
+									{this.renderTableRowColumn(
+										entry.pastSevenDays,
+										entry.aWeekAgo
+									)}
+									{this.renderTableRowColumn(entry.aWeekAgo, entry.twoWeeksAgo)}
+									{this.renderTableRowColumn(
+										entry.twoWeeksAgo,
+										entry.twoWeeksAgo
+									)}
 
-								<TableRowColumn style={styles.tableTextBody}>
-									{entry.overall
-										? this.numberWithCommas(entry.overall)
-										: '-'}
-									<Trend>&nbsp;</Trend>
-								</TableRowColumn>
-							</TableRow>
-						))}
+									<TableRowColumn style={styles.tableTextBody}>
+										{entry.overall ? this.numberWithCommas(entry.overall) : '-'}
+										<Trend>&nbsp;</Trend>
+									</TableRowColumn>
+								</TableRow>
+							)}
 					</TableBody>
 				</Table>
 			</Container>
