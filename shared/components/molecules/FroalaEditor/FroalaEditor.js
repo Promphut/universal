@@ -125,15 +125,6 @@ class FroalaEditor extends React.Component {
 	}
 
 	componentDidMount() {
-
-		const { theme } = this.context.setting.publisher
-		let config = this.state.froalaConfig
-		config.tableColors = [
-			theme.secondaryColor,
-			theme.accentColor,
-			'#EAEAEA',
-			'REMOVE'
-		]
 	}
 
 	render() {
