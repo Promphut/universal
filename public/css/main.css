@@ -518,10 +518,7 @@ a:hover {
 .h1-for-seo {
   visibility: hidden;
   z-index: -100;
-  position: fixed;
-  width: 80%;
-  top: 0px;
-  left: 0px; }
+  position: absolute; }
 
 /* FOR DESKTOP AND TABLET */
 @media (min-width: 481px) {
@@ -727,3 +724,16 @@ a:hover {
   src: url("/fonts/csprajad-webfont.woff2") format("woff2"), url("/fonts/csprajad-webfont.woff") format("woff");
   font-weight: normal;
   font-style: normal; }
+
+/* froala */
+
+.fr-element > p {
+  font-family: 'PT Sans', 'CS Prajad';
+  font-size: 18px;
+  color: #222;
+}
+
+/* aomMONEY */
+.size-full {
+  width: 100%;
+  height: inherit; }

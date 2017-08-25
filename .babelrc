@@ -1,32 +1,19 @@
+// We use the .babelrc here to help transpile our tools and support tooling
+// (such as testing libs).
+// I would recommend that you keep this file in feature parity with
+// the config/babelConfigResolver. That way you get to use the same level of
+// javascript syntax across the entire project.
+// It's nice not having to worry/think about what level of javascript syntax
+// is supported for each context.
 {
   "presets": [
-    ["env", {
-      "modules": false
-    }],
-    "react",
-    "stage-2"
+    ["env", { "targets": { "node": true } }],
+    "es2015",
+    "stage-2",
+    "stage-3",
+    "react"
   ],
   "plugins": [
-    "react-hot-loader/babel",
-    ["import-inspector", {
-      "serverSideRequirePath": true,
-    }]
-  ],
-  "env": {
-    "development": {
-      "plugins": [
-        "transform-es2015-modules-commonjs"
-      ]
-    },
-    "test": {
-      "plugins": [
-        "transform-es2015-modules-commonjs"
-      ]
-    },
-    "production": {
-      "plugins": [
-        "transform-react-remove-prop-types"
-      ]
-    }
-  }
+    "transform-es2015-modules-commonjs"
+  ]
 }
