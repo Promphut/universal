@@ -68,12 +68,6 @@ class FroalaEditor extends React.Component {
 			'tableCellVerticalAlign',
 			'tableCellHorizontalAlign'
 		],
-		tableColors:[
-			this.context.setting.publisher.theme.secondaryColor,
-			this.context.setting.publisher.theme.accentColor,
-			'#EAEAEA',
-			'REMOVE'
-		],
 		tabSpaces: 4,
 		toolbarButtons: [
 			'bold',
@@ -128,13 +122,20 @@ class FroalaEditor extends React.Component {
 	}
 
 	render() {
+		var newConfig = this.froalaConfig
+		newConfig.tableColors = [
+			this.context.setting.publisher.theme.secondaryColor,
+			this.context.setting.publisher.theme.accentColor,
+			'#EAEAEA',
+			'REMOVE'
+		]
 		return (
 			<Froala
 				tag="textarea"
 				config={
 					this.props.highlight
 						? this.froalaConfigHighlight
-						: this.froalaConfig
+						: newConfig
 				}
 				model={this.props.model}
 				onModelChange={this.props.onModelChange}
