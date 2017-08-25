@@ -1,0 +1,16 @@
+{
+  "name": "Aommoney",
+  "short_name": "aomMONEY",
+  "description": "เว็บไซต์ที่ให้ความรู้ทางด้านการเงินอันดับหนึ่งของประเทศ",
+  "lang": "th-TH",
+  "orientation": "portrait",
+  "start_url": "/",
+  "background_color": "#07B4B6",
+  "theme_color": "#07B4B6",
+  "display": "standalone",
+  "icons": [{
+    "src": "logo.png",
+    "sizes": "256x256",
+    "type": "image/png"
+  }]
+}
