@@ -13,6 +13,10 @@ import 'froala-editor/css/froala_editor.pkgd.min.css'
 import './custom.js'
 
 class FroalaEditor extends React.Component {
+	static contextTypes = {
+		setting: PropTypes.object
+	}
+
 	constructor(props) {
 		super(props)
 
@@ -63,6 +67,12 @@ class FroalaEditor extends React.Component {
 			'tableCellBackground',
 			'tableCellVerticalAlign',
 			'tableCellHorizontalAlign'
+		],
+		tableColors:[
+			this.context.setting.publisher.theme.secondaryColor,
+			this.context.setting.publisher.theme.accentColor,
+			'#EAEAEA',
+			'REMOVE'
 		],
 		tabSpaces: 4,
 		toolbarButtons: [
@@ -116,6 +126,14 @@ class FroalaEditor extends React.Component {
 
 	componentDidMount() {
 
+		const { theme } = this.context.setting.publisher
+		let config = this.state.froalaConfig
+		config.tableColors = [
+			theme.secondaryColor,
+			theme.accentColor,
+			'#EAEAEA',
+			'REMOVE'
+		]
 	}
 
 	render() {
