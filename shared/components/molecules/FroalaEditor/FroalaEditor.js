@@ -94,7 +94,7 @@ class FroalaEditor extends React.Component {
 		videoEditButtons: ['videoAlign'],
 		videoInsertButtons: ['videoBack', '|', 'videoByURL', 'videoEmbed'],
 		videoResize: true,
-		imageUploadURL: BACKURL+`/stories/${this.props.match.params.sid}/image`,
+		imageUploadURL: this.props.imgURL?this.props.imgURL:`${BACKURL}/stories/${this.props.match.params.sid}/image`,
 		imageUploadParam: 'image'
 	}
 	froalaConfigHighlight =  {

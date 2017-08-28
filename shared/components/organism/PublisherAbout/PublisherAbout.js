@@ -1,18 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { PrimaryButton, SecondaryButton, EditorCss } from '../../../components';
+import { PrimaryButton, SecondaryButton, EditorCss, FroalaEditor } from '../../../components';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import api from '../../../services/api';
 import { Helmet } from 'react-helmet';
-
-// var MediumEditor = {};
-// if (process.env.BROWSER) {
-//   MediumEditor = require('medium-editor');
-//   window.MediumInsert = require('medium-editor-insert-plugin').MediumInsert;
-// }
+import {BACKURL } from '../../../config'
 
 const Container = styled(EditorCss)`
   width:100%;
@@ -86,6 +81,7 @@ class PublisherAbout extends React.Component {
     textStatus: '',
     error: false,
     status: this.SAVE_STATUS.INITIAL,
+    html: this.props.aboutUs
   };
   static contextTypes = {
     setting: PropTypes.object,
@@ -93,66 +89,45 @@ class PublisherAbout extends React.Component {
   constructor(props) {
     super(props);
 
-    this.aboutUs = props.aboutUs;
   }
 
-  setAboutUs = (aboutUs) => {
-    this.aboutUs = aboutUs;
-    if (aboutUs) this.editor.setContent(aboutUs);
-  };
-
   resetData = () => {
-    if (this.props.aboutUs) this.editor.setContent(this.aboutUs); // this.editor.setContent(this.props.aboutUs)
+    if (this.props.aboutUs) this.setState({html:this.props.aboutUs})
   };
 
   updateAboutUs = (e) => {
     if (e) e.preventDefault();
+    api
+      .updatePublisher({
+        aboutUs: this.state.html,
+      })
+      .then((pub) => {
+        this.aboutUs = pub.aboutUs;
 
-    let { paper } = this.editor.serialize();
-
-    if (paper && paper.value) {
-      api
-        .updatePublisher({
-          aboutUs: paper.value,
-        })
-        .then((pub) => {
-          this.aboutUs = pub.aboutUs;
-
-          this.setState({
-            textStatus: 'Saved successfully',
-            error: false,
-          });
-        })
-        .catch((err) => {
-          this.setState({
-            textStatus: err.message,
-            error: true,
-          });
+        this.setState({
+          textStatus: 'Saved successfully',
+          error: false,
         });
-    }
+      })
+      .catch((err) => {
+        this.setState({
+          textStatus: err.message,
+          error: true,
+        });
+      });
   };
 
-  handleEditableInput = (e, editable) => {
-    if (this.state.status === this.SAVE_STATUS.INITIAL) {
-      this.setState({
-        status: this.SAVE_STATUS.UNDIRTIED,
-        saveStatus: '',
-      });
-    } else {
-      this.setState({
-        status: this.SAVE_STATUS.DIRTIED,
-        textStatus: 'Unsave',
-      });
-    }
-  };
+  handleModelChangeHtml = html => {
+		this.setState({ html,saveStatus: 'Unsave',status: this.SAVE_STATUS.DIRTIED, })
+	}
 
   componentWillReceiveProps(nextProps) {
     // this.editor.setContent(nextProps.aboutUs || '')
-    this.setAboutUs(nextProps.aboutUs || '');
+    // this.setAboutUs(nextProps.aboutUs || '');
   }
 
   componentWillUnmount() {
-    this.editor.destroy();
+
   }
 
   componentDidMount() {
@@ -160,25 +135,17 @@ class PublisherAbout extends React.Component {
   }
 
   render() {
-    let { error, textStatus, aboutUs } = this.state;
-    let { theme } = this.context.setting.publisher;
+    let { error, textStatus, aboutUs, html } = this.state;
+    let { theme,id } = this.context.setting.publisher;
 
     return (
       <Container>
-        {/* <Helmet>
-					<link
-						rel="stylesheet"
-						href="/css/medium-editor.css"
-						type="text/css"
-					/>
-					<link rel="stylesheet" href="/css/tim.css" type="text/css" />
-				</Helmet> */}
         <div className="head sans-font">About Us</div>
         <br />
         <Flex>
           <Edit>
             <div style={{ margin: '10px 0 20px 40px' }}>
-              <Paper id="paper" />
+              <FroalaEditor ref="paper" imgURL={`${BACKURL}/publishers/${id}/about/image`} model={html} onModelChange={this.handleModelChangeHtml} />
             </div>
           </Edit>
         </Flex>
