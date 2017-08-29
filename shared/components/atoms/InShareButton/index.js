@@ -43,26 +43,26 @@ class InShareButton extends React.Component {
 		} 
 	}*/
 
-	handleInShare = (e) => {
+	handleInShare = e => {
 		let sid = this.props.sid
 		let url = this.props.url
-	
-		if(sid==null) sid = utils.getTrailingSid(this.props.url)
-		if(sid!=null) api.incStoryInsight(sid, 'share', 'share_linkedin')
 
-		if(!url) url = config.FRONTURL + this.props.location.pathname
+		if (sid == null) sid = utils.getTrailingSid(this.props.url)
+		if (sid != null) api.incStoryInsight(sid, 'share', 'share_linkedin', 1)
 
-		window.open(utils.getLinkedInUrl(url),'_blank');
+		if (!url) url = config.FRONTURL + this.props.location.pathname
+
+		window.open(utils.getLinkedInUrl(url), '_blank')
 	}
 
-	render(){
+	render() {
 		// Set url
 		/*let url = this.state.url
 		
 		return <a href={utils.getLineUrl(url)} target="_blank" ref={(_a) => {this.a = _a}}>{this.props.button}</a>;*/
 
 		return (
-			<div onClick={this.handleInShare} style={{...this.props.style}}>
+			<div onClick={this.handleInShare} style={{ ...this.props.style }}>
 				{this.props.button}
 			</div>
 		)

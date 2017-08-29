@@ -746,7 +746,7 @@ api.sendContactEmail = (contactCat, message) => {
 
 // sid and action is mandatory
 // subaction is optional
-api.incStoryInsight = (sid, action, subaction, inc = 1) => {
+api.incStoryInsight = (sid, action, subaction, inc = 0) => {
 	if (sid == null) return Promise.reject(new Error('sid is required.'))
 	if (action == null) return Promise.reject(new Error('action is required.'))
 
@@ -759,6 +759,8 @@ api.incStoryInsight = (sid, action, subaction, inc = 1) => {
 		'/' +
 		action
 	if (subaction != null) url += '/' + subaction
+
+	console.log('inc', inc)
 
 	return Request.post(url)
 		.set('Accept', 'application/json')

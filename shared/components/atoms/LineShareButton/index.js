@@ -43,26 +43,26 @@ class LineShareButton extends React.Component {
 		} 
 	}*/
 
-	handleLineShare = (e) => {
+	handleLineShare = e => {
 		let sid = this.props.sid
 		let url = this.props.url
 
-		if(sid==null) sid = utils.getTrailingSid(this.props.url)
-		if(sid!=null) api.incStoryInsight(sid, 'share', 'share_line')
+		if (sid == null) sid = utils.getTrailingSid(this.props.url)
+		if (sid != null) api.incStoryInsight(sid, 'share', 'share_line', 1)
 
-		if(!url) url = config.FRONTURL + this.props.location.pathname
-		
-		window.open(utils.getLineUrl(url),'_blank');
+		if (!url) url = config.FRONTURL + this.props.location.pathname
+
+		window.open(utils.getLineUrl(url), '_blank')
 	}
 
-	render(){
+	render() {
 		// Set url
 		/*let url = this.state.url
 		
 		return <a href={utils.getLineUrl(url)} target="_blank" ref={(_a) => {this.a = _a}}>{this.props.button}</a>;*/
 
 		return (
-			<div onClick={this.handleLineShare} style={{...this.props.style}}>
+			<div onClick={this.handleLineShare} style={{ ...this.props.style }}>
 				{this.props.button}
 			</div>
 		)
