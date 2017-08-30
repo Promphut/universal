@@ -12,7 +12,8 @@ const ExtractMeta = (request,response,setting, url) => {
 		logo: setting.publisher.theme.slogo,
 		publisher: setting.publisher.name,
 		writer: setting.publisher.name,
-		datePublished: new Date()
+		datePublished: new Date(),
+		story:null
 	}
 
 	if(setting.publisher.name)
@@ -44,7 +45,8 @@ const ExtractMeta = (request,response,setting, url) => {
 					if(s.cover) meta.cover = s.cover.large || s.cover.medium
 					if(s.url) meta.url = s.url
 					if(s.writer) meta.writer = s.writer.display
-					if(s.published) meta.datePublished = s.published 
+					if(s.published) meta.datePublished = s.published
+					meta.story = s 
 					return meta
 				}).catch((err)=>{return {status: 404}})
 			}else return Promise.resolve(meta)

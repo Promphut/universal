@@ -7,7 +7,15 @@ import FontIcon from 'material-ui/FontIcon'
 import RaisedButton from 'material-ui/RaisedButton'
 import { withRouter } from 'react-router'
 
-import { LogoLink, PrimaryButton, SecondaryButton, LeftMenu, RightMenu, BGImg, SearchButton } from '../../../components'
+import {
+	LogoLink,
+	PrimaryButton,
+	SecondaryButton,
+	LeftMenu,
+	RightMenu,
+	BGImg,
+	SearchButton
+} from '../../../components'
 
 // Imported Utils
 import auth from '../../../services/auth'
@@ -62,7 +70,7 @@ const Container = styled.div`
 
 	display: inline;
 
-	animation: ${props=> props.open ? slideIn : slideOut} 0.1s forwards;
+	animation: ${props => (props.open ? slideIn : slideOut)} 0.1s forwards;
 `
 const slideOut = keyframes`
 	from {
@@ -255,7 +263,7 @@ class TopBar extends React.Component {
 			alertRight: false,
 			scroll: 0,
 			lock: false,
-			nowTop:0
+			nowTop: 0
 		}
 	}
 
@@ -269,8 +277,9 @@ class TopBar extends React.Component {
 	}
 
 	componentDidMount() {
-		if (this.props.onScroll){}
-			window.addEventListener('scroll', this.handleScroll)
+		if (this.props.onScroll) {
+		}
+		window.addEventListener('scroll', this.handleScroll)
 
 		//console.log(this.role)
 	}
@@ -281,14 +290,16 @@ class TopBar extends React.Component {
 		let top = e.srcElement.body.scrollTop / 500
 		this.setState({ scroll: top })
 
-		if(this.props.article&&utils.isMobile()){
+		if (this.props.article && utils.isMobile()) {
 			const prevTop = this.state.nowTop
 			const nowTop = e.srcElement.body.scrollTop
 			const diff = nowTop - prevTop
-			if(Math.abs(diff)>5){
-				if (nowTop<120&&!diff > 0) {this.setState({open: true,  nowTop})
-				}else if (diff > 0) {this.setState({open: true,  nowTop})
-				}else this.setState({open: false, nowTop})
+			if (Math.abs(diff) > 5) {
+				if (nowTop < 120 && !diff > 0) {
+					this.setState({ open: true, nowTop })
+				} else if (diff > 0) {
+					this.setState({ open: true, nowTop })
+				} else this.setState({ open: false, nowTop })
 			}
 		}
 	}
@@ -328,7 +339,15 @@ class TopBar extends React.Component {
 		let { theme } = this.context.setting.publisher
 		let { alertLeft, alertRight, scroll } = this.state
 		let status = this.props.status || 'UNLOGGEDIN',
-			{ scrolling, user, menu, transparent, editButton, hasCover } = this.props
+			{
+				scrolling,
+				user,
+				menu,
+				transparent,
+				editButton,
+				hasCover,
+				canEditStory
+			} = this.props
 		var isMobile = utils.isMobile()
 
 		let logoStyle = isMobile
@@ -356,8 +375,9 @@ class TopBar extends React.Component {
 					open={this.state.open}
 					className={
 						'menu-font ' +
-							(!scrolling && transparent && hasCover? 'transparent' : '')
-					}>
+							(!scrolling && transparent && hasCover ? 'transparent' : '')
+					}
+				>
 					<Left>
 						<HamburgerWrapper onClick={() => this.openPop('left')}>
 							<Hamburger
@@ -366,7 +386,8 @@ class TopBar extends React.Component {
 									!scrolling && transparent && hasCover
 										? { color: 'white' }
 										: {}
-								}>
+								}
+							>
 								menu
 							</Hamburger>
 						</HamburgerWrapper>
@@ -380,23 +401,27 @@ class TopBar extends React.Component {
 							</Link>
 
 							<Link to="/">
-								<Logo
-									src={theme.logo}
-								/>
+								<Logo src={theme.logo} />
 							</Link>
 						</LogoWrapper>
 					</Left>
 
-					{!isMobile&&<ContainerCenter>
-						<Center className={transparent ? 'hide' : ''}>
-							{this.props.children}
-						</Center>
-					</ContainerCenter>}
+					{!isMobile &&
+						<ContainerCenter>
+							<Center className={transparent ? 'hide' : ''}>
+								{this.props.children}
+							</Center>
+						</ContainerCenter>}
 
 					{status == 'LOGGEDIN' &&
 						<Right>
-							<SearchButton scrolling={scrolling} transparent={transparent} hasCover={hasCover}/>
+							<SearchButton
+								scrolling={scrolling}
+								transparent={transparent}
+								hasCover={hasCover}
+							/>
 							{this.role &&
+								canEditStory &&
 								editButton &&
 								<Edit
 									className="nunito-font"
@@ -406,7 +431,8 @@ class TopBar extends React.Component {
 											? '#FFF'
 											: '#222'
 									}}
-									to={editButton}>
+									to={editButton}
+								>
 									Edit Story
 								</Edit>}
 
@@ -415,7 +441,7 @@ class TopBar extends React.Component {
 									<Link to="/me/stories/new">
 										<PrimaryButton
 											label="Story"
-											labelStyle={{ textTransform: 'none'}}
+											labelStyle={{ textTransform: 'none' }}
 											iconName="add"
 											style={buttonStyle}
 										/>
@@ -436,10 +462,19 @@ class TopBar extends React.Component {
 								<RaisedButton
 									label=" Sign In"
 									labelColor={theme.accentColor}
-									labelStyle={{top:'-2px'}}
+									labelStyle={{ top: '-2px' }}
 									onClick={this.signup}
-									style={{display:'block',borderRadius:'20px',boxShadow:'none',background:'none'}}
-									buttonStyle={{background:'none',border:'2px solid '+theme.accentColor,borderRadius:'20px'}}
+									style={{
+										display: 'block',
+										borderRadius: '20px',
+										boxShadow: 'none',
+										background: 'none'
+									}}
+									buttonStyle={{
+										background: 'none',
+										border: '2px solid ' + theme.accentColor,
+										borderRadius: '20px'
+									}}
 								/>
 							</NotLogin>
 						</Right>}

@@ -144,7 +144,7 @@ function HTML(props) {
     },
   }`
   return (
-    <html {...htmlAttributes}>
+    <html lang="th" {...htmlAttributes}>
       <head>
         <title>{name}</title>
         <meta charSet="UTF-8" />

@@ -201,9 +201,9 @@ class StoryDetail extends React.Component {
 
   componentDidMount() {
     this.getStoryTags(this.props.story._id);
-    utils
-      .FBShareCount(config.FRONTURL + window.location.pathname)
-      .then(res => this.setState({ fb: res }));
+    // utils
+    //   .FBShareCount(config.FRONTURL + window.location.pathname)
+    //   .then(res => this.setState({ fb: res }));
   }
 
   componentWillReceiveProps(nextProps) {

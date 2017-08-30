@@ -155,6 +155,7 @@ class StoryPage extends React.Component {
 		recommends: [],
 		description: '',
 		showTopbarTitle: false,
+		canEditStory: false,
 		story: {},
 		fb: 0
 	}
@@ -204,7 +205,9 @@ class StoryPage extends React.Component {
 			.getStoryFromSid(sid, auth.getToken(), this.props.countView)
 			.then(result => {
 				this.checkFBShareCount(result.story._id, result.story.shares.fb)
+
 				this.setState({
+					canEditStory: result.canEditStory,
 					story: result.story
 				})
 			})
@@ -217,13 +220,15 @@ class StoryPage extends React.Component {
 		utils
 			.FBShareCount(config.FRONTURL + this.props.location.pathname)
 			.then(FBShareUpdate => {
-				const diff = FBShareUpdate - FBShareInsight
-				if (diff > 0) {
-					if (sid != null) api.incStoryInsight(sid, 'share', 'share_fb', diff)
+				if (typeof FBShareUpdate === 'number') {
+					const diff = FBShareUpdate - FBShareInsight
+					if (typeof diff === 'number' && diff > 0) {
+						if (sid != null) api.incStoryInsight(sid, 'share', 'share_fb', diff)
 
-					// this.setState({ fb: FBShareUpdate })
-				} else {
-					// this.setState({ fb: 0 })
+						this.setState({ fb: FBShareUpdate })
+					} else {
+						this.setState({ fb: 0 })
+					}
 				}
 			})
 	}
@@ -242,10 +247,12 @@ class StoryPage extends React.Component {
 	}
 
 	componentDidMount() {
-		this.getStoryFromSid(this.props.match.params.sid, () => {
-			this.getRecommendStories()
-			// this.findDescription()
-		})
+		if(!this.props.story){
+			this.getStoryFromSid(this.props.match.params.sid, () => {
+				this.getRecommendStories()
+				// this.findDescription()
+			})
+		}
 		window.addEventListener('scroll', this.handleScroll)
 
 		// Request.get(
@@ -275,7 +282,14 @@ class StoryPage extends React.Component {
 	render() {
 		const isMobile = utils.isMobile()
 		let { keywords, channels } = this.context.setting.publisher
-		let { recommends, description, showTopbarTitle, story, fb } = this.state
+		let {
+			recommends,
+			description,
+			showTopbarTitle,
+			canEditStory,
+			story,
+			fb
+		} = this.state
 		let likeBoxSize = 500
 		// console.log(story.shares)
 		let hasCover = false
@@ -334,6 +348,7 @@ class StoryPage extends React.Component {
 						editButton={`/me/stories/${story.id}/edit`}
 						hasCover={hasCover}
 						share={story.shares && story.shares}
+						canEditStory={canEditStory}
 					/>
 
 					{story.cover.medium !=
@@ -367,7 +382,7 @@ class StoryPage extends React.Component {
 						<Main ref={'TT'} isMobile={isMobile}>
 							<StoryDetail
 								share={story.shares && story.shares}
-								story={story}
+								story={this.props.story||story}
 								id="storyDetail"
 							/>
 						</Main>

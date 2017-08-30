@@ -213,8 +213,14 @@ utils.FBShareCount = url => {
 	}
 
 	return Request.get(`https://graph.facebook.com/?id=${url}`)
-		.then(res => res.body.share.share_count)
-		.catch(er => Promise.resolve(0))
+		.then(res => {
+			if (res.status === 200) {
+				return res.body.share.share_count
+			}
+		})
+		.catch(er => {
+			Promise.resolve(0)
+		})
 }
 
 utils.loadscript = (src, callback) => {
