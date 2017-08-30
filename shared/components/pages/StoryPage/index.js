@@ -155,7 +155,7 @@ class StoryPage extends React.Component {
 		recommends: [],
 		description: '',
 		showTopbarTitle: false,
-		story: this.props.story||{},
+		story:{},
 		fb: 0
 	}
 	static contextTypes = {
@@ -369,7 +369,7 @@ class StoryPage extends React.Component {
 						<Main ref={'TT'} isMobile={isMobile}>
 							<StoryDetail
 								share={story.shares && story.shares}
-								story={story}
+								story={this.props.story||story}
 								id="storyDetail"
 							/>
 						</Main>
