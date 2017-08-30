@@ -73,7 +73,7 @@ class App extends React.Component {
   }
 
   getChildContext() {
-    // console.log('CHILD', this.props.setting)
+    // console.log('CHILD', this.props)
     return { setting: this.props.setting };
   }
 
@@ -366,7 +366,7 @@ class App extends React.Component {
                 <Route
                   exact
                   path="/me/stories/:sid"
-                  render={props => <StoryPage {...props} countView={false} />}
+                  render={props => <StoryPage {...props} countView={false} story={this.props.story&&this.props.story} />}
                 />
 
                 <Route

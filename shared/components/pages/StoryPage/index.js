@@ -155,7 +155,7 @@ class StoryPage extends React.Component {
 		recommends: [],
 		description: '',
 		showTopbarTitle: false,
-		story: {},
+		story: this.props.story||{},
 		fb: 0
 	}
 	static contextTypes = {
@@ -247,10 +247,12 @@ class StoryPage extends React.Component {
 	}
 
 	componentDidMount() {
-		this.getStoryFromSid(this.props.match.params.sid, () => {
-			this.getRecommendStories()
-			// this.findDescription()
-		})
+		if(!this.props.story){
+			this.getStoryFromSid(this.props.match.params.sid, () => {
+				this.getRecommendStories()
+				// this.findDescription()
+			})
+		}
 		window.addEventListener('scroll', this.handleScroll)
 
 		// Request.get(

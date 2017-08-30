@@ -53,12 +53,12 @@ export default function reactApplicationMiddleware(request, response, next) {
   const reactRouterContext = {};
 
   // Declare our React application.
-  const app = setting =>
+  const app = (setting,story) =>
     sheet.collectStyles(
       <AsyncComponentProvider asyncContext={asyncComponentsContext}>
         <CookiesProvider cookies={cookies}>
           <StaticRouter location={request.url} context={reactRouterContext}>
-            <App setting={setting} />
+            <App setting={setting} story={story} />
           </StaticRouter>
         </CookiesProvider>
       </AsyncComponentProvider>,
@@ -76,7 +76,7 @@ export default function reactApplicationMiddleware(request, response, next) {
         if (meta.status == 404){
 					return response.redirect('/404')
 				}
-        const appString = renderToString(app(setting));
+        const appString = renderToString(app(setting,meta.story));
         const styleTags = sheet.getStyleElement();
         // Generate the html response.
 
