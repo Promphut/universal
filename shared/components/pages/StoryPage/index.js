@@ -247,10 +247,12 @@ class StoryPage extends React.Component {
 	}
 
 	componentDidMount() {
-		this.getStoryFromSid(this.props.match.params.sid, () => {
-			this.getRecommendStories()
-			// this.findDescription()
-		})
+		if(!this.props.story){
+			this.getStoryFromSid(this.props.match.params.sid, () => {
+				this.getRecommendStories()
+				// this.findDescription()
+			})
+		}
 		window.addEventListener('scroll', this.handleScroll)
 
 		// Request.get(
@@ -380,7 +382,7 @@ class StoryPage extends React.Component {
 						<Main ref={'TT'} isMobile={isMobile}>
 							<StoryDetail
 								share={story.shares && story.shares}
-								story={story}
+								story={this.props.story||story}
 								id="storyDetail"
 							/>
 						</Main>

@@ -11,9 +11,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {PrimaryButton} from '../../../components'
 import config from '../../../config'
 
-if (process.env.BROWSER) {
-  require('cropperjs/dist/cropper.css')
-}
+import 'cropperjs/dist/cropper.css'
 
 const Container = styled.div`
   min-width:50px;
