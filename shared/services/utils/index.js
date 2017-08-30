@@ -213,25 +213,7 @@ utils.FBShareCount = url => {
 	}
 
 	return Request.get(`https://graph.facebook.com/?id=${url}`)
-		.then(res => {
-			let share = res.body.share.share_count
-
-			const urls = url.split('/')
-			let index = 0
-			url = ''
-			urls.forEach(u => {
-				if (index === 4) {
-					url += 'aommoney-guru-column/'
-				} else {
-					url += u
-					url += '/'
-				}
-			})
-
-			return Request.get(`https://graph.facebook.com/?id=${url}`)
-				.then(res2 => share + res.body.share.share_count)
-				.catch(er => Promise.resolve(0))
-		})
+		.then(res => res.body.share.share_count)
 		.catch(er => Promise.resolve(0))
 }
 

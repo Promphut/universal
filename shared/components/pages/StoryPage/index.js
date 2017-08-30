@@ -217,18 +217,13 @@ class StoryPage extends React.Component {
 		utils
 			.FBShareCount(config.FRONTURL + this.props.location.pathname)
 			.then(FBShareUpdate => {
-				if (FBShareInsight < FBShareUpdate) {
-					if (sid != null)
-						api.incStoryInsight(
-							sid,
-							'share',
-							'share_fb',
-							FBShareUpdate - FBShareInsight
-						)
+				const diff = FBShareUpdate - FBShareInsight
+				if (diff > 0) {
+					if (sid != null) api.incStoryInsight(sid, 'share', 'share_fb', diff)
 
-					this.setState({ fb: FBShareUpdate })
+					// this.setState({ fb: FBShareUpdate })
 				} else {
-					this.setState({ fb: 0 })
+					// this.setState({ fb: 0 })
 				}
 			})
 	}

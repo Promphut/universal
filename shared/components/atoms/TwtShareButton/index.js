@@ -66,7 +66,7 @@ class TwtShareButton extends React.Component {
 	handleTwtShare = e => {
 		let sid = this.props.sid
 		if (sid == null) sid = utils.getTrailingSid(this.props.url)
-		if (sid != null) api.incStoryInsight(sid, 'share', 'share_twt')
+		if (sid != null) api.incStoryInsight(sid, 'share', 'share_twt', 1)
 		let hashtag = this.props.hashtag
 		if (hashtag == null) hashtag = config.NAME
 		let url = this.props.url
