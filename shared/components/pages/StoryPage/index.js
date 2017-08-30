@@ -155,6 +155,7 @@ class StoryPage extends React.Component {
 		recommends: [],
 		description: '',
 		showTopbarTitle: false,
+		canEditStory: false,
 		story: {},
 		fb: 0
 	}
@@ -204,7 +205,9 @@ class StoryPage extends React.Component {
 			.getStoryFromSid(sid, auth.getToken(), this.props.countView)
 			.then(result => {
 				this.checkFBShareCount(result.story._id, result.story.shares.fb)
+
 				this.setState({
+					canEditStory: result.canEditStory,
 					story: result.story
 				})
 			})
@@ -275,7 +278,14 @@ class StoryPage extends React.Component {
 	render() {
 		const isMobile = utils.isMobile()
 		let { keywords, channels } = this.context.setting.publisher
-		let { recommends, description, showTopbarTitle, story, fb } = this.state
+		let {
+			recommends,
+			description,
+			showTopbarTitle,
+			canEditStory,
+			story,
+			fb
+		} = this.state
 		let likeBoxSize = 500
 		// console.log(story.shares)
 		let hasCover = false
@@ -334,6 +344,7 @@ class StoryPage extends React.Component {
 						editButton={`/me/stories/${story.id}/edit`}
 						hasCover={hasCover}
 						share={story.shares && story.shares}
+						canEditStory={canEditStory}
 					/>
 
 					{story.cover.medium !=
