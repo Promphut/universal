@@ -17,6 +17,7 @@ import http from 'http';
 import https from 'https';
 import fs from 'fs';
 import sm from 'sitemap'
+import bodyParser from 'body-parser'
 
 import { FRONTURL, port, host, basename, ANALYTIC, COVER, aws , PID } from '../shared/config.js'
 import api from '../shared/services/api';
@@ -35,6 +36,9 @@ app.disable('x-powered-by');
 
 // Security middlewares.
 app.use(...security);
+
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb'}));
 
 // Gzip compress the responses.
 app.use(compression());
