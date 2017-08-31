@@ -246,7 +246,8 @@ const EditorCss = styled.div`
   }
   #paper p > img,
   #paper p > a > img {
-    width: 100%;
+    display: block;
+    margin: auto;
   }
 
   #paper h2 {
@@ -405,8 +406,8 @@ const EditorCss = styled.div`
   
   .fr-image-center {
     margin: auto !important;
-    width: auto !important;
-    max-width: 100% !important;
+    max-width: !important;
+    text-align: center !important;
   }
   
   .fr-image-right {
@@ -416,7 +417,7 @@ const EditorCss = styled.div`
   }
 
   .fr-image-full {
-    margin: auto c;
+    margin: auto;
     width: 100% !important;
   }
   
