@@ -247,7 +247,7 @@ class StoryPage extends React.Component {
 	}
 
 	componentDidMount() {
-		if(!this.props.story){
+		if (!this.props.story) {
 			this.getStoryFromSid(this.props.match.params.sid, () => {
 				this.getRecommendStories()
 				// this.findDescription()
@@ -382,7 +382,7 @@ class StoryPage extends React.Component {
 						<Main ref={'TT'} isMobile={isMobile}>
 							<StoryDetail
 								share={story.shares && story.shares}
-								story={this.props.story||story}
+								story={this.props.story || story}
 								id="storyDetail"
 							/>
 						</Main>
