@@ -1,7 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { EditorCss, TopBarWithNavigation, Footer } from '../../../components'
+import {
+	EditorCss,
+	TopBarWithNavigation,
+	Footer,
+	EditorCollapse
+} from '../../../components'
 
 const Wrapper = styled.div`
 	width:100%;
@@ -22,13 +27,13 @@ const Container = styled(EditorCss)`
 
 const Main = styled.div`
 	width: 731px;
-	background: black;
+	margin-top: 92px;
 `
 
 const Aside = styled.div`
 	width: 334px;
 	margin-left: 37px;
-	background: black;
+	margin-top: 92px;
 `
 
 class NewStory extends React.Component {
@@ -55,7 +60,7 @@ class NewStory extends React.Component {
 						Title
 					</Main>
 					<Aside>
-						Aside
+						<EditorCollapse />
 					</Aside>
 				</Container>
 				<Footer />
