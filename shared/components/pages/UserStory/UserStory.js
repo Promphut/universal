@@ -612,7 +612,7 @@ export default class UserStory extends React.Component {
 							</TopBarLeftItem>
 
 							<TopBarRightItem className="hidden-des">
-								<Link to="/me/settings">
+								{/* <Link to="/me/settings">
 									<FontIcon
 										style={{
 											color: 'white',
@@ -621,7 +621,7 @@ export default class UserStory extends React.Component {
 										className="material-icons hidden-des">
 										border_color
 									</FontIcon>
-								</Link>
+								</Link> */}
 							</TopBarRightItem>
 
 						</TopBarContainer>
@@ -769,7 +769,7 @@ export default class UserStory extends React.Component {
 							</TopBarLeftItem>
 
 							<TopBarRightItem className="hidden-des">
-								<Link to="/me/settings">
+								{/* <Link to="/me/settings">
 									<FontIcon
 										style={{
 											color: 'white',
@@ -778,7 +778,7 @@ export default class UserStory extends React.Component {
 										className="material-icons hidden-des">
 										border_color
 									</FontIcon>
-								</Link>
+								</Link> */}
 							</TopBarRightItem>
 
 						</TopBarContainer>
@@ -882,7 +882,7 @@ export default class UserStory extends React.Component {
 							</TopBarLeftItem>
 
 							<TopBarRightItem>
-								<Link to="/me/settings">
+								{/* <Link to="/me/settings">
 									<FontIcon
 										style={{
 											color: 'white',
@@ -891,7 +891,7 @@ export default class UserStory extends React.Component {
 										className="material-icons hidden-des">
 										border_color
 									</FontIcon>
-								</Link>
+								</Link> */}
 							</TopBarRightItem>
 
 						</TopBarContainer>

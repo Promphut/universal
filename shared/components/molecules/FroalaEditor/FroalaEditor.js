@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Froala from 'react-froala-wysiwyg'
 import api from '../../../services/api'
 import { withRouter } from 'react-router'
-import {BACKURL } from '../../../config'
+import { BACKURL } from '../../../config'
 
 // Require Editor JS and CSS files.
 import 'froala-editor/js/froala_editor.pkgd.min.js'
@@ -20,12 +20,10 @@ class FroalaEditor extends React.Component {
 	constructor(props) {
 		super(props)
 
-		this.state = {
-		}
+		this.state = {}
 	}
 
 	froalaConfig = {
-		imageDefaultWidth: 0,
 		imageEditButtons: [
 			'imageAlignCustom',
 			'imageAlt',
@@ -98,7 +96,7 @@ class FroalaEditor extends React.Component {
 		imageUploadParam: 'image',
 		imageMaxSize: 1024 * 1024 * 10
 	}
-	froalaConfigHighlight =  {
+	froalaConfigHighlight = {
 		charCounterCount: false,
 		linkEditButtons: ['linkOpen', 'linkEdit', 'linkRemove'],
 		linkInsertButtons: ['linkBack'],
@@ -119,8 +117,7 @@ class FroalaEditor extends React.Component {
 		toolbarVisibleWithoutSelection: true
 	}
 
-	componentDidMount() {
-	}
+	componentDidMount() {}
 
 	render() {
 		var newConfig = this.froalaConfig
@@ -133,11 +130,7 @@ class FroalaEditor extends React.Component {
 		return (
 			<Froala
 				tag="textarea"
-				config={
-					this.props.highlight
-						? this.froalaConfigHighlight
-						: newConfig
-				}
+				config={this.props.highlight ? this.froalaConfigHighlight : newConfig}
 				model={this.props.model}
 				onModelChange={this.props.onModelChange}
 			/>

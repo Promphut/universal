@@ -4,7 +4,12 @@ import { withRouter } from 'react-router'
 import truncate from 'lodash/truncate'
 import styled, { keyframes } from 'styled-components'
 
-import { TopBar, TopNavigation, TopBarWithShare, Stick } from '../../../components'
+import {
+	TopBar,
+	TopNavigation,
+	TopBarWithShare,
+	Stick
+} from '../../../components'
 
 // Imported Utils
 import utils from '../../../services/utils'
@@ -116,7 +121,8 @@ class TopBarWithNavigation extends React.Component {
 			editButton,
 			hasCover,
 			showTitle,
-			share
+			share,
+			canEditStory
 		} = this.props
 		let transparent = false
 		let articleMobile = false
@@ -140,7 +146,8 @@ class TopBarWithNavigation extends React.Component {
 		return (
 			<Stick
 				className={this.props.className}
-				fixed={articleMobile && hasCover ? !scrolling : ''}>
+				fixed={articleMobile && hasCover ? !scrolling : ''}
+			>
 				{/* {articleMobile ?
 					<TopBarWithShare
 						onScroll={this.handleScroll}
@@ -166,7 +173,9 @@ class TopBarWithNavigation extends React.Component {
 					editButton={editButton}
 					hasCover={hasCover}
 					onLoading={this.props.onLoading}
-					article={article}>
+					article={article}
+					canEditStory={canEditStory}
+				>
 					{' '}{children}
 				</TopBar>
 				{/* } */}
