@@ -204,7 +204,9 @@ class StoryPage extends React.Component {
 		api
 			.getStoryFromSid(sid, auth.getToken(), this.props.countView)
 			.then(result => {
-				this.checkFBShareCount(result.story._id, result.story.shares.fb)
+				if (result && result.story.shares.fb) {
+					this.checkFBShareCount(result.story._id, result.story.shares.fb)
+				}
 
 				this.setState({
 					canEditStory: result.canEditStory,
@@ -219,6 +221,7 @@ class StoryPage extends React.Component {
 	checkFBShareCount = (sid, FBShareInsight) => {
 		utils
 			.FBShareCount(config.FRONTURL + this.props.location.pathname)
+			// .FBShareCount('https://nextempire.co' + this.props.location.pathname)
 			.then(FBShareUpdate => {
 				if (typeof FBShareUpdate === 'number') {
 					const diff = FBShareUpdate - FBShareInsight

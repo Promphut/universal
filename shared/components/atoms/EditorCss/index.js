@@ -250,6 +250,10 @@ const EditorCss = styled.div`
     margin: auto;
   }
 
+  #paper img {
+    max-width: 100%;
+  }
+
   #paper h2 {
     font-family: 'PT Serif', 'Mitr';
     font-size: 28px;
