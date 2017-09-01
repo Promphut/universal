@@ -760,8 +760,6 @@ api.incStoryInsight = (sid, action, subaction, inc = 0) => {
 		action
 	if (subaction != null) url += '/' + subaction
 
-	console.log('inc', inc)
-
 	return Request.post(url)
 		.set('Accept', 'application/json')
 		.send({
@@ -771,6 +769,17 @@ api.incStoryInsight = (sid, action, subaction, inc = 0) => {
 			return res.body
 		}, api.err)
 }
+
+// api.updateFBshare = (sid, share_fb) => {
+// 	return Request.post(url)
+// 		.set('Accept', 'application/json')
+// 		.send({
+// 			inc
+// 		})
+// 		.then(res => {
+// 			return res.body
+// 		}, api.err)
+// }
 
 api.getPublisherInsight = (pid, action, subaction, period, from, to) => {
 	if (pid == null) return Promise.reject(new Error('pid is required.'))
