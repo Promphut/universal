@@ -17,11 +17,12 @@ import http from 'http';
 import https from 'https';
 import fs from 'fs';
 import sm from 'sitemap'
+import bodyParser from 'body-parser'
 
 import { FRONTURL, port, host, basename, ANALYTIC, COVER, aws , PID } from '../shared/config.js'
 import api from '../shared/services/api';
 
-import FroalaEditor from 'wysiwyg-editor-node-sdk/lib/froalaEditor.js';
+// import FroalaEditor from 'wysiwyg-editor-node-sdk/lib/froalaEditor.js';
 
 if (process.env.NODE_ENV === 'development') {
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
@@ -35,6 +36,9 @@ app.disable('x-powered-by');
 
 // Security middlewares.
 app.use(...security);
+
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb'}));
 
 // Gzip compress the responses.
 app.use(compression());
@@ -132,12 +136,12 @@ app.get(['/linetoday', '/feed/linetoday'],(req,res) => {
 	})
 })
 
-app.get('/get_signature/:sid', function (req, res) {
-  var configs = aws
-  configs.keyStart = aws.keyStart+req.params.sid+'/'
-  var s3Hash = FroalaEditor.S3.getHash(configs);
-  res.send(s3Hash);
-});
+// app.get('/get_signature/:sid', function (req, res) {
+//   var configs = aws
+//   configs.keyStart = aws.keyStart+req.params.sid+'/'
+//   var s3Hash = FroalaEditor.S3.getHash(configs);
+//   res.send(s3Hash);
+// });
 
 // The React application middleware.
 app.get('*', reactApplication);
