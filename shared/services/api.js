@@ -770,16 +770,17 @@ api.incStoryInsight = (sid, action, subaction, inc = 0) => {
 		}, api.err)
 }
 
-// api.updateFBshare = (sid, share_fb) => {
-// 	return Request.post(url)
-// 		.set('Accept', 'application/json')
-// 		.send({
-// 			inc
-// 		})
-// 		.then(res => {
-// 			return res.body
-// 		}, api.err)
-// }
+api.updateFBshare = (sid, share_fb) => {
+	return Request.post(config.BACKURL + '/stories/' + sid + '/shares')
+		.set('Accept', 'application/json')
+		.send({
+			fb: share_fb
+		})
+		.then(res => {
+			// console.log('res api', res)
+			return res.body
+		}, api.err)
+}
 
 api.getPublisherInsight = (pid, action, subaction, period, from, to) => {
 	if (pid == null) return Promise.reject(new Error('pid is required.'))
