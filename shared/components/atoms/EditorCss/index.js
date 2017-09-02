@@ -323,20 +323,6 @@ const EditorCss = styled.div`
   #paper table tr:nth-child(even) {
     background: #FAFAFA;
   }
-
-  @media (max-width: 480px) {
-    #paper h2 {
-      font-size: 24px;
-    }
-    .medium-insert-embeds figure{
-      margin:0 !important;
-    }
-    .medium-insert-embeds iframe, .mediumInsert-embeds iframe {
-      width:100% !important;
-      height:auto !important;
-      margin: 0 !important; 
-    }
-  }
   
   h1 {
 		font-size: 42px;
@@ -410,7 +396,6 @@ const EditorCss = styled.div`
   
   .fr-image-center {
     margin: auto !important;
-    max-width: !important;
     text-align: center !important;
   }
   
@@ -466,6 +451,25 @@ const EditorCss = styled.div`
     font-family:'PT Sans', 'cs_prajad' !important;
     font-size: 16px !important;
     color: #8e8e8e !important;
+  }
+
+  @media (max-width: 480px) {
+    #paper h2 {
+      font-size: 24px;
+    }
+    .medium-insert-embeds figure{
+      margin:0 !important;
+    }
+    .medium-insert-embeds iframe, .mediumInsert-embeds iframe {
+      width:100% !important;
+      height:auto !important;
+      margin: 0 !important; 
+    }
+    .fr-image-center {
+      margin: auto !important;
+      width:100% !important;
+      text-align: center !important;
+    }
   }
 `
 export default EditorCss

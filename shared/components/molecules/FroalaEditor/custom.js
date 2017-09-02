@@ -7,7 +7,7 @@ $.FroalaEditor.RegisterCommand('imageAlignCustom', {
 	refreshAfterCallback: true,
 	options: {
 		left: 'Left',
-		center: 'Center',
+		center: 'Original',
 		right: 'Right',
 		full: 'Full'
 	},
