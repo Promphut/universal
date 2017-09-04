@@ -301,13 +301,8 @@ class StoryPage extends React.Component {
 			if (isMobile) {
 				likeBoxSize = 300
 				nextStoryContainer = (
-					<NextStoryMobile
-						cid={story.column._id}
-						currentID={story._id}
-						format={story.format}
-					/>
+					<NextStoryMobile currentID={story._id}/>
 				)
-
 				if (
 					story.coverMobile.medium !=
 					`${config.BACKURL}/imgs/article_cover_portrait.png`
@@ -316,11 +311,7 @@ class StoryPage extends React.Component {
 				}
 			} else {
 				nextStoryContainer = (
-					<NextStory
-						cid={story.column._id}
-						currentID={story._id}
-						format={story.format}
-					/>
+					<NextStory currentID={story._id} />
 				)
 				if (
 					story.cover.medium !=
