@@ -1112,5 +1112,11 @@ api.getSignature = sid => {
 			return res.body
 		}, api.err)
 }
-
+api.getNextStory = sid =>{
+	return Request.get(`${config.BACKURL}/stories/${sid}/next`)
+	.set('Accept', 'application/json')
+	.then(res => {
+		return res.body
+	}, api.err)
+}
 module.exports = api
