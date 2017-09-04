@@ -218,7 +218,6 @@ class StoryPage extends React.Component {
 	checkFBShareCount = (sid, shares) => {
 		utils
 			.FBShareCount(config.FRONTURL + this.props.location.pathname)
-			// .FBShareCount('https://nextempire.co' + this.props.location.pathname)
 			.then(fb => {
 				const diff = fb - shares.fb
 				if (diff > 0) {
