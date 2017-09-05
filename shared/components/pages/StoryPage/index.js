@@ -25,6 +25,7 @@ import utils from '../../../services/utils'
 import auth from '../../../services/auth'
 import isEmpty from 'lodash/isEmpty'
 import Request from 'superagent'
+import 'froala-editor/css/froala_style.min.css'
 
 const Wrapper = styled.div`
 	 .hidden-des{
@@ -156,8 +157,7 @@ class StoryPage extends React.Component {
 		description: '',
 		showTopbarTitle: false,
 		canEditStory: false,
-		story: {},
-		fb: 0
+		story: {}
 	}
 	static contextTypes = {
 		setting: PropTypes.object
@@ -204,9 +204,7 @@ class StoryPage extends React.Component {
 		api
 			.getStoryFromSid(sid, auth.getToken(), this.props.countView)
 			.then(result => {
-				if (result && result.story.shares.fb) {
-					this.checkFBShareCount(result.story._id, result.story.shares.fb)
-				}
+				this.checkFBShareCount(result.story._id, result.story.shares)
 
 				this.setState({
 					canEditStory: result.canEditStory,
@@ -218,21 +216,24 @@ class StoryPage extends React.Component {
 			})
 	}
 
-	checkFBShareCount = (sid, FBShareInsight) => {
+	checkFBShareCount = (sid, shares) => {
 		utils
 			.FBShareCount(config.FRONTURL + this.props.location.pathname)
-			// .FBShareCount('https://nextempire.co' + this.props.location.pathname)
-			.then(FBShareUpdate => {
-				if (typeof FBShareUpdate === 'number') {
-					const diff = FBShareUpdate - FBShareInsight
-					if (typeof diff === 'number' && diff > 0) {
-						if (sid != null) api.incStoryInsight(sid, 'share', 'share_fb', diff)
-
-						// this.setState({ fb: FBShareUpdate })
-					} else {
-						// this.setState({ fb: 0 })
+			.then(fb => {
+				const diff = fb - shares.fb
+				if (diff > 0) {
+					if (sid != null) {
+						api.incStoryInsight(sid, 'share', 'share_fb', diff)
+						return api.updateFBshare(sid, fb)
 					}
+				} else {
+					return { shares }
 				}
+			})
+			.then(res => {
+				let story = this.state.story
+				story.shares.total = res.shares.total
+				this.setState({ story })
 			})
 	}
 
@@ -290,8 +291,7 @@ class StoryPage extends React.Component {
 			description,
 			showTopbarTitle,
 			canEditStory,
-			story,
-			fb
+			story
 		} = this.state
 		let likeBoxSize = 500
 		// console.log(story.shares)
@@ -302,13 +302,8 @@ class StoryPage extends React.Component {
 			if (isMobile) {
 				likeBoxSize = 300
 				nextStoryContainer = (
-					<NextStoryMobile
-						cid={story.column._id}
-						currentID={story._id}
-						format={story.format}
-					/>
+					<NextStoryMobile currentID={story._id}/>
 				)
-
 				if (
 					story.coverMobile.medium !=
 					`${config.BACKURL}/imgs/article_cover_portrait.png`
@@ -317,11 +312,7 @@ class StoryPage extends React.Component {
 				}
 			} else {
 				nextStoryContainer = (
-					<NextStory
-						cid={story.column._id}
-						currentID={story._id}
-						format={story.format}
-					/>
+					<NextStory currentID={story._id} />
 				)
 				if (
 					story.cover.medium !=
@@ -376,9 +367,7 @@ class StoryPage extends React.Component {
 					<Content paddingTop={hasCover ? '0px' : '60px'}>
 						<Share ref="share" style={{ zIndex: '50' }}>
 							<Stick topOffset={100}>
-								<ShareSideBar
-									shareCount={story.shares && story.shares.total + fb}
-								/>
+								<ShareSideBar shareCount={story.shares && story.shares.total} />
 							</Stick>
 						</Share>
 
