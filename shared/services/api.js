@@ -760,14 +760,24 @@ api.incStoryInsight = (sid, action, subaction, inc = 0) => {
 		action
 	if (subaction != null) url += '/' + subaction
 
-	console.log('inc', inc)
-
 	return Request.post(url)
 		.set('Accept', 'application/json')
 		.send({
 			inc
 		})
 		.then(res => {
+			return res.body
+		}, api.err)
+}
+
+api.updateFBshare = (sid, share_fb) => {
+	return Request.post(config.BACKURL + '/stories/' + sid + '/shares')
+		.set('Accept', 'application/json')
+		.send({
+			fb: share_fb
+		})
+		.then(res => {
+			// console.log('res api', res)
 			return res.body
 		}, api.err)
 }
@@ -1103,5 +1113,11 @@ api.getSignature = sid => {
 			return res.body
 		}, api.err)
 }
-
+api.getNextStory = sid =>{
+	return Request.get(`${config.BACKURL}/stories/${sid}/next`)
+	.set('Accept', 'application/json')
+	.then(res => {
+		return res.body
+	}, api.err)
+}
 module.exports = api

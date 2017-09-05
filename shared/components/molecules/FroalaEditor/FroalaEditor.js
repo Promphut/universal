@@ -88,14 +88,13 @@ class FroalaEditor extends React.Component {
 		],
 		toolbarInline: true,
 		toolbarVisibleWithoutSelection: true,
-		videoDefaultWidth: 736,
+		// videoDefaultWidth: 736,
 		videoEditButtons: ['videoAlign'],
 		videoInsertButtons: ['videoBack', '|', 'videoByURL', 'videoEmbed'],
-		videoResize: true,
-		imageUploadURL: this.props.imgURL
-			? this.props.imgURL
-			: `${BACKURL}/stories/${this.props.match.params.sid}/image`,
-		imageUploadParam: 'image'
+		// videoResize: true,
+		imageUploadURL: this.props.imgURL?this.props.imgURL:`${BACKURL}/stories/${this.props.match.params.sid}/image`,
+		imageUploadParam: 'image',
+		imageMaxSize: 1024 * 1024 * 10
 	}
 	froalaConfigHighlight = {
 		charCounterCount: false,

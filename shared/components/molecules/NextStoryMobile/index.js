@@ -70,21 +70,19 @@ export default class NextStoryMobile extends React.Component {
   }
 
   getNextStory = (sid,cid,format) => {
-    api.getFeed(format, { status: 1, column: cid }, 'popular', null, null, null,{'omit' : [sid],'next':true})
-    .then(result => {
-      //console.log(result)
-      this.setState({nextStory: result.feed})
+    api.getNextStory(sid).then(s=>{
+      this.setState({nextStory:s.nextStory})
     })
   }
 
   componentWillMount() {
-    this.getNextStory(this.props.currentID,this.props.cid,this.props.format)
+    this.getNextStory(this.props.currentID)
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.currentID != nextProps.currentID)
       {
-        this.getNextStory(nextProps.currentID,nextProps.cid,nextProps.format)
+        this.getNextStory(nextProps.currentID)
       }
   }
 
