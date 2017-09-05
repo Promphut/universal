@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import styled from 'styled-components'
-import {OverlayImg} from '../../../components'
+import {BGImg} from '../../../components'
 
 const Container = styled.div`
   width:590px;
@@ -63,17 +63,17 @@ const NameLink = styled(Link)`
   }
 `
 
-const RecommendArticle = ({detail})=>{
-  if(!detail) return (<Container/>)
-
-  let {column,ptitle,writer,votes,comments,url,cover,style,coverMobile} = detail
+const RecommendArticle = ({detail,style})=>{
+  // if(!detail) return (<Container/>)
+  
+  let {column,ptitle,writer,url,cover} = detail
 
   return(
     <Container style={{...style}}>
-      <Link to={url}><OverlayImg src={cover.medium || cover.small} className='imgWidth' alt={ptitle} /></Link>
-      {column && <Div className='sans-font'>in <Column to={column.url}>{column.name}</Column></Div>}
-      <NameLink to={url} className='serif-font'>{ptitle}</NameLink>
-      <Div className='sans-font'>By <Link to={writer.url}><strong>{writer.display}</strong></Link> - {votes ? votes.total : 0} Votes {comments ? comments.count : 0} Comments</Div>
+      <BGImg src={cover.medium} className='imgWidth' alt={ptitle} />
+      <Div className='sans-font'>in <Column to={column.url ||'/'}>{column.name}</Column></Div>
+      <NameLink to={url||'/'} className='serif-font'>{ptitle}</NameLink>
+      <Div className='sans-font'>By <Link to={writer.url||'/'}><strong>{writer.display}</strong></Link></Div>
     </Container>
   )
 }

@@ -80,7 +80,7 @@ export default class NextStory extends React.Component {
 
   getNextStory = (sid) => {
     api.getNextStory(sid).then(s=>{
-      console.log(s)
+      // console.log(s)
       this.setState({nextStory:s.nextStory})
     })
   }

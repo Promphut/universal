@@ -11,7 +11,7 @@ import { GradientOverlay } from '../../../components'
 //   overflow:auto;
 // `
 
-const Filter = styled(GradientOverlay)`
+const Filter = styled.div`
   position:relative;
   display:block;
   overflow: ${props => (props.hidden ? 'hidden' : 'auto')};

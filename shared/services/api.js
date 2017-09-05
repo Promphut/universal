@@ -1120,4 +1120,11 @@ api.getNextStory = sid =>{
 		return res.body
 	}, api.err)
 }
+api.getRecommendStories = sid =>{
+	return Request.get(`${config.BACKURL}/stories/${sid}/recommend`)
+	.set('Accept', 'application/json')
+	.then(res => {
+		return res.body
+	}, api.err)
+}
 module.exports = api

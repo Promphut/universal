@@ -47,19 +47,6 @@ const Wrapper = styled.div`
   }
 `
 
-const GradientOverlay = styled.div`
-	background: -moz-linear-gradient(-45deg,  rgba(202,130,172,0.3) 0%, rgba(49,77,170,0.3) 100%);
-	background: -webkit-linear-gradient(-45deg,  rgba(202,130,172,0.3) 0%,rgba(49,77,170,0.3) 100%);
-	background: linear-gradient(135deg,  rgba(202,130,172,0.3) 0%,rgba(49,77,170,0.3) 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4dca82ac', endColorstr='#4d314daa',GradientType=1 );
-
-	bottom:0;
-	top:0; left:0;
-	right:0;
-	position:absolute;
-	z-index:0
-`
-
 const Content = styled.div`
 	display: flex;
 	flex-flow: row wrap;
@@ -166,40 +153,7 @@ class StoryPage extends React.Component {
 		super(props)
 	}
 
-	getRecommendStories = () => {
-		var { story } = this.state
-		if (story.column) {
-			// Get recommend from column
-			let cid = story.column._id
-
-			api
-				.getFeed('story', { status: 1, column: cid }, 'latest', null, 0, 4, {
-					omit: [this.props.match.params.sid]
-				})
-				.then(result => {
-					// console.log('feed', result.feed.length)
-					this.setState({
-						recommends: result.feed
-					})
-				})
-		} else {
-			// If no column presented, use writer instead
-			let uid = story.writer._id
-
-			api
-				.getFeed('story', { status: 1, writer: uid }, 'latest', null, 0, 4, {
-					omit: [this.props.match.params.sid]
-				})
-				.then(result => {
-					// console.log('feed', result.feed.length)
-					this.setState({
-						recommends: result.feed
-					})
-				})
-		}
-	}
-
-	getStoryFromSid = (sid, done = () => {}) => {
+	getStoryFromSid = (sid) => {
 		if (sid == null) utils.notFound(this.props.history)
 		api
 			.getStoryFromSid(sid, auth.getToken(), this.props.countView)
@@ -252,22 +206,13 @@ class StoryPage extends React.Component {
 
 	componentDidMount() {
 		if (!this.props.story) {
-			this.getStoryFromSid(this.props.match.params.sid, () => {
-				this.getRecommendStories()
-				// this.findDescription()
-			})
+			this.getStoryFromSid(this.props.match.params.sid)
+			api.getRecommendStories(this.props.match.params.sid).then((recommends)=>{
+				// console.log(recommends)
+				this.setState({recommends})
+			})			
 		}
 		window.addEventListener('scroll', this.handleScroll)
-
-		// Request.get(
-		// 	'https://graph.facebook.com/?id=' +
-		// 		config.FRONTURL +
-		// 		this.props.location.pathname
-		// ).end((er, res) => {
-		// 	const fb = res ? res.body.share.share_count : 0
-		// 	//console.log(res.body)
-		// 	this.setState({ fb })
-		// })
 	}
 
 	componentWillUnmount() {
@@ -276,10 +221,11 @@ class StoryPage extends React.Component {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.location.pathname != this.props.location.pathname) {
-			this.getStoryFromSid(nextProps.match.params.sid, () => {
-				this.getRecommendStories()
-				// this.findDescription()
-			})
+			this.getStoryFromSid(nextProps.match.params.sid)
+			api.getRecommendStories(nextProps.match.params.sid).then((recommends)=>{
+				// console.log(recommends)
+				this.setState({recommends})
+			})	
 		}
 	}
 
@@ -297,7 +243,7 @@ class StoryPage extends React.Component {
 		// console.log(story.shares)
 		let hasCover = false
 		let nextStoryContainer = <div />
-
+		if(recommends.length==3) recommends = recommends.pop()
 		if (!isEmpty(story)) {
 			if (isMobile) {
 				likeBoxSize = 300
@@ -407,8 +353,8 @@ class StoryPage extends React.Component {
 					</Content2>
 
 					<Content>
-						{recommends.length != 0 &&
-							<RecommendContainer recommend={recommends} />}
+						{recommends.length > 1 &&
+							<RecommendContainer stories={recommends} />}
 					</Content>
 
 					{utils.isMobile() &&

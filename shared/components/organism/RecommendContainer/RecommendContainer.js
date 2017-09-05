@@ -24,18 +24,24 @@ const Recommend = styled.div`
       margin-left:0px;
     }
 	}
-`;
-const RecommendContainer = ({ style, className, recommend }) => recommend.length <= 1
-    ? <Recommend style={{ ...style }} className={className}>
+`
+// const Row = styled.div`
+//   display:flex;
+//   flex-direction: row;
+//   flex-wrap:wrap;
+//   flex
+// `
+const RecommendContainer = ({ style, className, stories }) => {
+  return(
+    <Recommend style={{ ...style }} className={className}>
       <div className="recommends sans-font">Recommends</div>
       <div className="row center">
-        {recommend.map((data, index) => (
-          <div className="col-lg-6 col-md-6 col-sm-12 mobile" key={index}>
-            <RecommendArticle detail={data} />
-          </div>
-          ))}
+        {stories&&stories.map((data,i)=>(
+          <RecommendArticle detail={data} key={i}/>
+        ))}
       </div>
     </Recommend>
-    : <div />;
+  )
+}
 
 export default RecommendContainer;
