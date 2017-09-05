@@ -453,6 +453,10 @@ const EditorCss = styled.div`
     font-size: 16px !important;
     color: #8e8e8e !important;
   }
+  .fr-video iframe{
+    margin:auto !important;
+    text-align: center !important;
+  }
   @media (max-width: 480px) {
     #paper h2 {
       font-size: 24px;
@@ -468,6 +472,10 @@ const EditorCss = styled.div`
     .fr-image-center {
       margin: auto !important;
       width:100%;
+      text-align: center !important;
+    }
+    .fr-video iframe{
+      width:100% !important;
       text-align: center !important;
     }
   }
