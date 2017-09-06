@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import {
 	EditorCss,
 	TopBarWithNavigation,
-	Footer,
 	EditorCollapse
 } from '../../../components'
 
@@ -18,7 +17,6 @@ const Container = styled(EditorCss)`
 	justify-content: center;
 	width: 1110px;
 	margin: 0 auto;
-	min-height: calc(100vh - 308px);
 	
 	@media(max-width:480px){
 		max-width: 100%;
@@ -63,7 +61,6 @@ class NewStory extends React.Component {
 						<EditorCollapse />
 					</Aside>
 				</Container>
-				<Footer />
 			</Wrapper>
 		)
 	}
