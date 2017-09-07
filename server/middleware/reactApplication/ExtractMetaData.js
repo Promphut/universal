@@ -28,7 +28,7 @@ const ExtractMeta = (request,response,setting, url) => {
 		.then(col => {
 			if(col.name) meta.name = col.name + ' | ' + setting.publisher.name
 			if(col.shortDesc) meta.desc = col.shortDesc
-			if(col.cover && col.cover.medium) meta.cover = col.cover.medium
+			if(col.cover && col.cover.medium) meta.cover = col.cover.medium || '/pic/fbthumbnail.jpg'
 			if(col.url) meta.url = col.url
 			return meta
 		}).catch((err)=>{return {status: 404}})
@@ -42,7 +42,7 @@ const ExtractMeta = (request,response,setting, url) => {
 					let s = res.story
 					if(s.ptitle) meta.name = s.ptitle + ' | ' + setting.publisher.name
 					if(s.contentShort) meta.desc = s.contentShort
-					if(s.cover) meta.cover = s.cover.large || s.cover.medium
+					if(s.cover) meta.cover = s.cover.large || '/pic/fbthumbnail.jpg'
 					if(s.url) meta.url = s.url
 					if(s.writer) meta.writer = s.writer.display
 					if(s.published) meta.datePublished = s.published

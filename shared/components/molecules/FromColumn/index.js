@@ -13,7 +13,8 @@ const Container = styled.div`
 `
 const Contain = styled.div`
   color:#8F8F8F;
-  font-size:17px;
+  font-size:16px;
+  font-family:'Mitr';
   @media (max-width:480px){
     width:280px;
     font-size:14px;
@@ -62,8 +63,8 @@ const FromColumn = ({style, column}) => {
           {column.name}
         </Span1>
       </Div>
-      <Contain className="content-font">
-        {truncate(column.shortDesc, {'length': 95,'separator': ''})}
+      <Contain>
+        {truncate(column.shortDesc, {'length': 90,'separator': ''})}
       </Contain>
     </Container>
   )

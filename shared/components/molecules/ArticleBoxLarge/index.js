@@ -83,7 +83,7 @@ const ArticleBoxLarge = ({detail, style}) => {
   //console.log('URL', url)
   return (
     <Container style={{...style}}>
-      <BGImg url={url} src={cover.medium || cover.small} alt={ptitle || ''} className='imgWidth mob-hidden' />
+      <BGImg url={url} src={cover&&cover.medium || '/pic/fbthumbnail.jpg'} alt={ptitle || ''} className='imgWidth mob-hidden' />
       <BoxText className='sans-font'>
         <DivDes>
           <ShareDropdown />
@@ -92,7 +92,7 @@ const ArticleBoxLarge = ({detail, style}) => {
             <Link to={column.url}>{column.name}</Link></span>
           </Div>}
         </DivDes>
-        <BGImg url={url} src={cover.medium || cover.small} className='imgWidth des-hidden'/>
+        <BGImg url={url} src={cover&&cover.medium || '/pic/fbthumbnail.jpg'} className='imgWidth des-hidden'/>
         <NameLink to={url} style={{marginTop:'15px'}}>{ptitle}</NameLink>
         <div className="row" style={{margin:'10px 0 10px 0'}}>
           <Link to={writer.url}><Avatar src={writer.pic.medium}/></Link>

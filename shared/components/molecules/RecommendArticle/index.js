@@ -4,63 +4,23 @@ import styled from 'styled-components'
 import {BGImg} from '../../../components'
 
 const Container = styled.div`
-  width:590px;
-  margin:30px auto 0 auto;
-  .imgWidth{
-    width:590px;
-    height:290px;
-  }
-  @media (min-width: 768px) and (max-width: 991px) {
-    width: 350px;
-    .imgWidth{
-      width:350px;
-      height:180px;
-    }
-  }
-  @media (min-width: 992px) and (max-width: 1200px) {
-    width: 500px;
-    .imgWidth{
-      width:500px;
-      height:240px;
-    }
-  }
-  @media (max-width:480px){
-    position:relative;
-    width:100%;
-    top:0;
-    left:0;
-    .imgWidth{
-      width:100%;
-      height:164px;
-    }
-  }
+  flex:0 350px;
+  width:350px;
+  margin-top:20px;
 `
-
-const Div = styled.div`
-  color:#8F8F8F;
-  font-size:15px;
-  text-align:center;
-  margin:10px 0 10px 0;
-  @media (max-width:480px){
-    font-size:12px;
-    margin:5px 0 0 0;
-  }
+const Img = styled(BGImg)`
+  width:350px;
+  height:183px;
 `
-
 const Column = styled(Link)`
   font-weight:bold;
 `
-
 const NameLink = styled(Link)`
   display: block;
   color:#222;
-  font-weight:bold;
-  text-align:center;
-  font-size:28px;
-  padding: 0 30px 0 30px;
-  @media (max-width:480px){
-    font-size:18px;
-  }
+  font-size:18px;
+  font-family:'Mitr';
+  padding:12px 0 0 0;
 `
 
 const RecommendArticle = ({detail,style})=>{
@@ -70,10 +30,8 @@ const RecommendArticle = ({detail,style})=>{
 
   return(
     <Container style={{...style}}>
-      <BGImg src={cover.medium} className='imgWidth' alt={ptitle} />
-      <Div className='sans-font'>in <Column to={column.url ||'/'}>{column.name}</Column></Div>
-      <NameLink to={url||'/'} className='serif-font'>{ptitle}</NameLink>
-      <Div className='sans-font'>By <Link to={writer.url||'/'}><strong>{writer.display}</strong></Link></Div>
+      <Img src={cover && cover.medium || '/pic/fbthumbnail.jpg'} alt={ptitle} url={url}/>
+      <NameLink to={url||'/'} >{ptitle}</NameLink>
     </Container>
   )
 }

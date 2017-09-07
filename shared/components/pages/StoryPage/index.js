@@ -239,9 +239,10 @@ class StoryPage extends React.Component {
 			canEditStory,
 			story
 		} = this.state
+
 		let likeBoxSize = 500
 		// console.log(story.shares)
-		let hasCover = false
+		let hasCover = true
 		let nextStoryContainer = <div />
 		if(recommends.length==3) recommends = recommends.pop()
 		if (!isEmpty(story)) {
@@ -250,22 +251,10 @@ class StoryPage extends React.Component {
 				nextStoryContainer = (
 					<NextStoryMobile currentID={story._id}/>
 				)
-				if (
-					story.coverMobile.medium !=
-					`${config.BACKURL}/imgs/article_cover_portrait.png`
-				) {
-					hasCover = true
-				}
 			} else {
 				nextStoryContainer = (
 					<NextStory currentID={story._id} />
 				)
-				if (
-					story.cover.medium !=
-					`${config.BACKURL}/imgs/article_cover_landscape.png`
-				) {
-					hasCover = true
-				}
 			}
 		}
 
@@ -290,26 +279,23 @@ class StoryPage extends React.Component {
 						share={story.shares && story.shares}
 						canEditStory={canEditStory}
 					/>
-
-					{story.cover.medium !=
-						`${config.BACKURL}/imgs/article_cover_landscape.png` &&
-						<BG
-							src={story.cover.large || story.cover.medium}
-							className="hidden-mob"
-							alt={story.title}
-						>
-							<Cover />
-						</BG>}
-					{story.coverMobile.medium !=
-						`${config.BACKURL}/imgs/article_cover_portrait.png` &&
-						<BGImg
-							style={{ width: '100%', height: '85vh' }}
-							src={story.coverMobile.large || story.coverMobile.medium}
-							className="hidden-des"
-							alt={story.title}
-						>
-							<Cover />
-						</BGImg>}
+					
+					<BG
+						src={story.cover && story.cover.large || '/pic/fbthumbnail.jpg'}
+						className="hidden-mob"
+						alt={story.title}
+					>
+						<Cover />
+					</BG>
+					
+					<BGImg
+						style={{ width: '100%', height: '85vh' }}
+						src={story.coverMobile && story.coverMobile.large || '/pic/fbthumbnail.jpg'}
+						className="hidden-des"
+						alt={story.title}
+					>
+						<Cover />
+					</BGImg>
 					<Content paddingTop={hasCover ? '0px' : '60px'}>
 						<Share ref="share" style={{ zIndex: '50' }}>
 							<Stick topOffset={100}>
@@ -323,6 +309,13 @@ class StoryPage extends React.Component {
 								story={this.props.story || story}
 								id="storyDetail"
 							/>
+							{isMobile&&<LikeBoxContainer
+								dangerouslySetInnerHTML={{
+									__html: `<div class="fb-page" data-href="https://www.facebook.com/${config.FACEBOOK}" data-width="${likeBoxSize}" data-height="300" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/${config.FACEBOOK}/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/${config.FACEBOOK}/">${config.NAME}</a></blockquote></div>`
+								}}
+							/>}
+							{recommends.length > 1 &&
+							<RecommendContainer stories={recommends} />}
 						</Main>
 
 						{utils.isMobile() && nextStoryContainer}
@@ -340,8 +333,9 @@ class StoryPage extends React.Component {
 
 					</Content>
 
-					<Content2>
+					{/* <Content2>
 						<Share />
+						
 						<Main2>
 							<LikeBoxContainer
 								dangerouslySetInnerHTML={{
@@ -350,12 +344,7 @@ class StoryPage extends React.Component {
 							/>
 						</Main2>
 						<Aside />
-					</Content2>
-
-					<Content>
-						{recommends.length > 1 &&
-							<RecommendContainer stories={recommends} />}
-					</Content>
+					</Content2> */}
 
 					{utils.isMobile() &&
 						<ShareBottom url={config.FRONTURL + story.url} sid={story.id} />}

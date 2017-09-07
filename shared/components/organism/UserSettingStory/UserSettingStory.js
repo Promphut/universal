@@ -145,7 +145,7 @@ const StoryTitle = ({ style, story, selectStatus }) => {
     <Cont style={{ ...style }}>
       <Link to={url}>
         <OverlayImg
-          src={cover.small || cover.medium}
+          src={cover && cover.medium || '/pic/fbthumbnail.jpg'}
           style={{ width: '87px', height: '52px', float: 'left' }}
           alt={ptitle}
         />
