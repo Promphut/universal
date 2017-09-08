@@ -356,9 +356,7 @@ class ColumnPage extends React.Component {
         <Cover
           style={{ display: 'flex', alignItems: 'center' }}
           src={
-            column.cover.medium != `${config.BACKURL}/imgs/column_cover.png`
-              ? column.cover.medium
-              : null
+            column.cover && column.cover.medium || '/pic/fbthumbnail.jpg'
           }
           alt={column.name}
         >

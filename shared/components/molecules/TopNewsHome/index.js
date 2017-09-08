@@ -197,7 +197,7 @@ class TopNewsHome extends React.Component {
               <BoxInnerInner isMobile={utils.isMobile()}>
                 <Box>
                   <BoxDivMo>
-                    <BG  url={val.url} src={val.cover.small || val.cover.medium} alt={val.ptitle || ''} />
+                    <BG  url={val.url} src={val.cover && val.cover.medium} alt={val.ptitle || ''} />
                   </BoxDivMo>
                   <BoxDiv2Mo>
                     <TextBox>

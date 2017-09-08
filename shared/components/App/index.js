@@ -214,7 +214,7 @@ class App extends React.Component {
 		// console.log('SETTING', this.context.setting.publisher)
 		if (!analytic) analytic = {}
 		let coverMedium
-		if (cover) coverMedium = cover.medium
+		if (cover) coverMedium = cover.medium || '/pic/fbthumbnail.jpg'
 		let title = (name || '') + (tagline ? ` | ${tagline}` : '')
 
 		let { completed } = this.state

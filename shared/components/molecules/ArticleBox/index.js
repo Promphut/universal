@@ -187,6 +187,7 @@ const ArticleBox = ({ detail, style, final, id, isUserPage }, context) => {
   if (writer && writer.display) {
     writherDisplay = writer.display ? writer.display : '';
   }
+  // console.log(cover)
 
   return (
     <Container hr={final} style={{ ...style }} height={(screen.width - 32) / 1.91}>
@@ -207,7 +208,7 @@ const ArticleBox = ({ detail, style, final, id, isUserPage }, context) => {
 
         <BGImg
           url={url}
-          src={(cover.medium && cover.medium) || cover.small}
+          src={cover && cover.medium || '/pic/fbthumbnail.jpg'}
           className='imgWidth'
         />
       </Box1>
