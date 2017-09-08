@@ -18,12 +18,12 @@ import api from '../../../services/api'
 
 const Title = styled.div`
 	color: ${props => (props.theme.barTone == 'light' ? '#222' : '#FFF')};
-	font-size:18px;
-	font-weight:bold;
-	margin:18px 0 0 0;
-	animation:${props => (props.show ? slideIn : slideOut)} 0.5s forwards;
+	font-size: 18px;
+	font-weight: bold;
+	margin: 18px 0 0 0;
+	animation: ${props => (props.show ? slideIn : slideOut)} 0.5s forwards;
 	@media (min-width: 768px) and (max-width: 992px) {
-		display:none;
+		display: none;
   }
 `
 const slideIn = keyframes`
