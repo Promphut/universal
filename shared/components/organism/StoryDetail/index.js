@@ -217,7 +217,7 @@ class StoryDetail extends React.Component {
 		var { story, id } = this.props
 		var s = story
 		// console.log(s)
-		const isMobile = utils.isMobile()
+		const isMobile = this.props.isMobile?this.props.isMobile:utils.isMobile()
 		let { tags } = this.state
 		const columnStyle = isMobile
 			? {
@@ -235,6 +235,7 @@ class StoryDetail extends React.Component {
 					writer={s.writer}
 					column={s.column}
 					published={s.published}
+					isMobile={isMobile}
 				/>
 
 				{!isMobile &&
