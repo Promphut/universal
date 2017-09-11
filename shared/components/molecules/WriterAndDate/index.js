@@ -56,19 +56,20 @@ const Div1 = styled.div`
   }
 `
 
-const WritedAndDate = ({style, writer, column, published,readTime}) => {
+const WritedAndDate = ({style, writer, column, published,readTime,isMobile}) => {
   //let {name,date,column,url} = detail
   //console.log('WritedBy', writer, published)
   //writer = writer || { pic: {} }
+  var isMo = isMobile||utils.isMobile()
   return (
     <Container style={{...style}}>
       <Left>
-        {!utils.isMobile()&&<div>
+        {!isMo&&<div>
           <a href={writer.url || '#'}><Avatar src={writer.pic && writer.pic.medium} size={54} className='imgWidth' style={{float:'left'}}/></a>
         </div>}
         <Contain className="sans-font">
           by <Span1><a href={writer.url || '#'} style={{color:'#222'}}>{writer.display}</a></Span1>,
-          {utils.isMobile()?<span><br/>{moment(published).format('lll')}</span>:<span>{moment(published).format('lll')}</span>}
+          {isMo?<span><br/>{moment(published).format('lll')}</span>:<span>{moment(published).format('lll')}</span>}
           <br/>
           writer of <Link to={column.url}><strong>{column.name}</strong></Link>
           {/*{writer.intro}*/}

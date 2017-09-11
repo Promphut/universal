@@ -40,7 +40,9 @@ import {
 	UserSettingStory,
 	NewStory,
 	EditStory,
-	SearchResultPage
+	SearchResultPage,
+	Preview,
+	PreviewMobile
 } from '../../components'
 
 import '../../../public/scss/main.scss'
@@ -300,7 +302,7 @@ class App extends React.Component {
 								<Route
 									exact
 									path="/stories/:columnSlug/:storySlug/:sid"
-									render={props => <StoryPage {...props} countView />}
+									render={props => <StoryPage {...props} countView story={this.props.story && this.props.story}/>}
 								/>
 
 								<Route
@@ -384,10 +386,18 @@ class App extends React.Component {
 									exact
 									path="/me/stories/:sid"
 									render={props => (
-										<StoryPage
+										<Preview
 											{...props}
-											countView={false}
-											story={this.props.story && this.props.story}
+										/>
+									)}
+								/>
+
+								<Route
+									exact
+									path="/me/stories/:sid/mobile"
+									render={props => (
+										<PreviewMobile
+											{...props}
 										/>
 									)}
 								/>

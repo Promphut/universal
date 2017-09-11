@@ -75,7 +75,8 @@ export default function reactApplicationMiddleware(request, response, next) {
       .then(meta => {
         if (meta.status == 404){
 					return response.redirect('/404')
-				}
+        }
+        // console.log(meta.story)
         const appString = renderToString(app(setting,meta.story));
         const styleTags = sheet.getStyleElement();
         // Generate the html response.

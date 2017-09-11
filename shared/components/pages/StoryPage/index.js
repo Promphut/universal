@@ -258,7 +258,7 @@ class StoryPage extends React.Component {
 			}
 		}
 
-		// console.log('render', story)
+		// console.log(this.props.story)
 		if (isEmpty(story)) return <div ref="TT" />
 		return (
 			<div>
