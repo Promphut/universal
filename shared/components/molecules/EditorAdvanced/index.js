@@ -33,49 +33,16 @@ class EditorAdvanced extends React.Component {
 	constructor(props) {
 		super(props)
 
-		this.state = {
-			slug: '',
-			title: '',
-			desc: '',
-			hint: {
-				slug: '',
-				title: '',
-				desc: ''
-			}
-		}
+		this.state = {}
 	}
 
 	static contextTypes = {
 		setting: PropTypes.object
 	}
 
-	componentWillMount() {
-		const slug = 'slug'
-		const title = 'title'
-		const desc = 'Description Description Description Description'
-		const hint = { slug, title, desc }
-
-		this.setState({ slug, title, desc, hint })
-	}
-
-	changeSlug = (e, slug) => {
-		this.setState({ slug })
-	}
-
-	changeTitle = (e, title) => {
-		this.setState({ title })
-	}
-
-	changeDesc = (e, desc) => {
-		if (desc.length > 140) {
-			desc = desc.slice(0, 140)
-		}
-
-		this.setState({ desc })
-	}
-
 	render() {
-		const { slug, title, desc, hint } = this.state
+		const { story, changeSlug, changeMetaTitle, changeMetaDesc } = this.props
+		const { slug, title, desc, hint } = story
 
 		return (
 			<Container>
@@ -83,8 +50,9 @@ class EditorAdvanced extends React.Component {
 					<Label style={{ minWidth: '75px' }}>URL:</Label>
 					<Label style={{ minWidth: '10px' }}>/</Label>
 					<TextField
-						value={slug}
-						onChange={this.changeSlug}
+						id="slug"
+						value={slug ? slug : ''}
+						onChange={changeSlug}
 						hintText={hint.slug}
 						style={style}
 					/>
@@ -93,8 +61,9 @@ class EditorAdvanced extends React.Component {
 				<TitleContainer>
 					<Label style={{ minWidth: '85px' }}>Title:</Label>
 					<TextField
-						value={title}
-						onChange={this.changeTitle}
+						id="title"
+						value={title ? title : ''}
+						onChange={changeMetaTitle}
 						hintText={hint.title}
 						style={style}
 					/>
@@ -103,8 +72,9 @@ class EditorAdvanced extends React.Component {
 				<DescContainer>
 					<Label style={{ minWidth: '85px' }}>Description:</Label>
 					<TextField
-						value={desc}
-						onChange={this.changeDesc}
+						id="desc"
+						value={desc ? desc : ''}
+						onChange={changeMetaDesc}
 						hintText={hint.desc}
 						style={style}
 						multiLine

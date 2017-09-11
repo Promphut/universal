@@ -11,6 +11,7 @@ import {
 } from '../../../components'
 
 const Container = styled.div`
+	position: fixed;
 `
 
 class EditorCollapse extends React.Component {
@@ -18,52 +19,12 @@ class EditorCollapse extends React.Component {
 		super(props)
 
 		this.state = {
-			select: -1,
-			block: []
+			select: -1
 		}
 	}
 
 	static contextTypes = {
 		setting: PropTypes.object
-	}
-
-	componentWillMount() {
-		const { theme } = this.props
-		let block = []
-
-		block[0] = {
-			header: {
-				title: 'Content Setting',
-				desc: null
-			},
-			body: <EditorContent theme={theme} />
-		}
-
-		block[1] = {
-			header: {
-				title: 'Cover Picture',
-				desc: null
-			},
-			body: <EditorCover theme={theme} />
-		}
-
-		block[2] = {
-			header: {
-				title: 'Tags & Focus Keywords',
-				desc: null
-			},
-			body: <EditorTags theme={theme} />
-		}
-
-		block[3] = {
-			header: {
-				title: 'Advanced Settings',
-				desc: null
-			},
-			body: <EditorAdvanced theme={theme} />
-		}
-
-		this.setState({ block })
 	}
 
 	selectBlock = index => {
@@ -74,20 +35,67 @@ class EditorCollapse extends React.Component {
 	}
 
 	render() {
-		const { select, block } = this.state
+		const {
+			story,
+			menu,
+			changeFormat,
+			changeColumn,
+			changeType,
+			changeFocusWord,
+			changeSlug,
+			changeMetaTitle,
+			changeMetaDesc
+		} = this.props
+		const { select } = this.state
 
 		return (
 			<Container className="nunito-font">
-				{block.map((val, index) => (
-					<CollapseBlock
-						key={index}
-						header={val.header}
-						select={() => this.selectBlock(index)}
-						open={select === index ? true : false}
-					>
-						{val.body}
-					</CollapseBlock>
-				))}
+				<CollapseBlock
+					title="Content Setting"
+					desc={null}
+					select={() => this.selectBlock(0)}
+					open={select === 0 ? true : false}
+				>
+					<EditorContent
+						story={story}
+						menu={menu}
+						changeFormat={changeFormat}
+						changeColumn={changeColumn}
+						changeType={changeType}
+					/>
+				</CollapseBlock>
+
+				<CollapseBlock
+					title="Cover Picture"
+					desc={null}
+					select={() => this.selectBlock(1)}
+					open={select === 1 ? true : false}
+				>
+					<EditorCover story={story} />
+				</CollapseBlock>
+
+				<CollapseBlock
+					title="Tags & Focus Keywords"
+					desc={null}
+					select={() => this.selectBlock(2)}
+					open={select === 2 ? true : false}
+				>
+					<EditorTags story={story} changeFocusWord={changeFocusWord} />
+				</CollapseBlock>
+
+				<CollapseBlock
+					title="Advanced Settings"
+					desc={null}
+					select={() => this.selectBlock(3)}
+					open={select === 3 ? true : false}
+				>
+					<EditorAdvanced
+						story={story}
+						changeSlug={changeSlug}
+						changeMetaTitle={changeMetaTitle}
+						changeMetaDesc={changeMetaDesc}
+					/>
+				</CollapseBlock>
 			</Container>
 		)
 	}

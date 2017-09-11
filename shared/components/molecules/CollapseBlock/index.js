@@ -59,7 +59,7 @@ class CollapseBlock extends React.Component {
 	}
 
 	render() {
-		let { children, header, select, open } = this.props
+		let { children, title, desc, select, open } = this.props
 		const toggle = open ? 'toggleUp' : 'toggleDown'
 
 		return (
@@ -67,10 +67,8 @@ class CollapseBlock extends React.Component {
 				<Toggle className={'material-icons ' + toggle} onClick={select}>
 					keyboard_arrow_down
 				</Toggle>
-				<BlockTitle onClick={select}>{header.title}</BlockTitle>
-				{open
-					? children
-					: header.desc ? <BlockDesc>{header.desc}</BlockDesc> : null}
+				<BlockTitle onClick={select}>{title}</BlockTitle>
+				{open ? children : desc ? <BlockDesc>{desc}</BlockDesc> : null}
 			</Block>
 		)
 	}

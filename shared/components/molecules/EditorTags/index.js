@@ -39,8 +39,7 @@ class EditorTags extends React.Component {
 
 		this.state = {
 			tag: '',
-			tags: [],
-			focusWord: ''
+			tags: []
 		}
 	}
 
@@ -75,10 +74,6 @@ class EditorTags extends React.Component {
 		}
 	}
 
-	changeFocusWord = (e, focusWord) => {
-		this.setState({ focusWord })
-	}
-
 	removeTag = (data, index) => {
 		// var { sid, tag, addTag } = this.state
 		// // console.log(data)
@@ -100,7 +95,11 @@ class EditorTags extends React.Component {
 	}
 
 	render() {
-		const { tag, tags, focusWord } = this.state
+		const { story, changeFocusWord } = this.props
+		const { tag, tags } = this.state
+		const { focusWord } = story
+
+		console.log('focusWorddd', focusWord)
 
 		return (
 			<Container>
@@ -138,8 +137,9 @@ class EditorTags extends React.Component {
 				<FocusWordContainer>
 					<Label>Focus Words:</Label>
 					<TextField
-						value={focusWord}
-						onChange={this.changeFocusWord}
+						id="focusWord"
+						value={focusWord ? focusWord : ''}
+						onChange={changeFocusWord}
 						hintText="ex. ธุรกิจ, การเงิน, ..."
 						style={{ fontSize: '14px', width: '206px' }}
 					/>

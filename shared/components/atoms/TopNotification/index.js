@@ -18,6 +18,7 @@ const Notification = styled.div`
     font-weight: bold;
     color: #FFFFFF;
     transition: .5s;
+    z-index: 9;
 `
 
 const TopNotification = ({ text, show, background }) => {

@@ -18,7 +18,7 @@ const Wrapper = styled.div`
 
 const Container = styled.div`
     display: flex;
-    position: absolute;
+    position: fixed;
     margin: 0;
     padding: 0;
     background: ${props => (props.theme.barTone == 'light' ? 'white' : props.theme.primaryColor)};

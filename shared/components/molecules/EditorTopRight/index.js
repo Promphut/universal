@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import RaisedButton from 'material-ui/RaisedButton'
+import api from '../../../services/api'
+import config from '../../../config'
 
 import { PrimaryButton, EditorDropdown } from '../../../components'
 
@@ -75,7 +77,36 @@ class EditorTopRight extends React.Component {
 		setting: PropTypes.object
 	}
 
-	publish = () => {}
+	publishStory = () => {
+		// let s = {
+		// 	publisher: parseInt(config.PID),
+		// 	title,
+		// 	highlight,
+		// 	html,
+		// 	focusWord,
+		// 	format: columnList.find(col => col._id == column).name == 'news' ||
+		// 		columnList.find(col => col._id == column).name == 'News'
+		// 		? 'NEWS'
+		// 		: 'ARTICLE',
+		// 	meta: story.meta,
+		// }
+		// if (story.status == 0) {
+		// 	s.status = 1
+		// }
+		// if (column) s.column = column
+		// s.contentType = contentType
+		// api
+		// 	.updateStory(sid, s)
+		// 	.then(story => {
+		// 		this.props.history.push(story.url)
+		// 	})
+		// 	.catch(err => {
+		// 		this.setState({
+		// 			publishStatus: err.message,
+		// 			open: false
+		// 		})
+		// 	})
+	}
 
 	toEditor = () => {
 		this.setState({ mode: 'editor' })
@@ -135,7 +166,7 @@ class EditorTopRight extends React.Component {
 								label="Publish"
 								labelStyle={{ textTransform: 'none' }}
 								style={buttonStyle}
-								onClick={this.publish}
+								onClick={this.publishStory}
 							/>
 							<EditorDropdown />
 						</Block>

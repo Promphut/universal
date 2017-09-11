@@ -376,11 +376,7 @@ class App extends React.Component {
 								<PrivateRoute
 									exact
 									path="/me/stories/:sid/edit"
-									render={props => (
-										<UserSetting {...props}>
-											<EditStory {...props} />
-										</UserSetting>
-									)}
+									render={props => <NewStory {...props} />}
 								/>
 
 								{/* STORY 5 PREVIEW DRAFTED STORY */}

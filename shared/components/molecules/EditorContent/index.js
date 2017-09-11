@@ -45,63 +45,37 @@ class EditorContent extends React.Component {
 	constructor(props) {
 		super(props)
 
-		this.state = {
-			content: 'news',
-			column: '',
-			columnList: [],
-			type: '',
-			typeList: []
-		}
+		this.state = {}
 	}
 
 	static contextTypes = {
 		setting: PropTypes.object
 	}
 
-	componentWillMount() {
-		const columnList = [
-			{ _id: 0, name: 'A' },
-			{ _id: 1, name: 'B' },
-			{ _id: 2, name: 'C' }
-		]
-
-		const typeList = ['Ant', 'Bird', 'Cat']
-
-		this.setState({ columnList, typeList })
-	}
-
-	chooseContent = (e, content) => {
-		this.setState({ content })
-	}
-
-	chooseColumn = (e, ind, column) => {
-		this.setState({ column })
-	}
-
-	chooseType = (e, ind, type) => {
-		this.setState({ type })
-	}
-
 	render() {
-		const { theme } = this.props
-		const { content, column, columnList, type, typeList } = this.state
+		const { theme } = this.context.setting.publisher
+		const { story, menu, changeFormat, changeColumn, changeType } = this.props
+		const { columns, types } = menu
+		let { format, column, type } = story
+
+		type = types.indexOf(type)
 
 		return (
 			<Container>
 				<RadioContainer>
 					<RadioButtonGroup
-						name="content"
-						defaultSelected={content}
-						onChange={this.chooseContent}
+						name="format"
+						defaultSelected={format}
+						onChange={changeFormat}
 					>
 						<RadioButton
-							value="news"
+							value="NEWS"
 							label="News"
 							style={RadioButtonStyle}
 							labelStyle={labelStyle}
 						/>
 						<RadioButton
-							value="article"
+							value="ARTICLE"
 							label="Article"
 							style={RadioButtonStyle}
 							labelStyle={labelStyle}
@@ -109,14 +83,14 @@ class EditorContent extends React.Component {
 					</RadioButtonGroup>
 				</RadioContainer>
 
-				{content === 'article'
+				{format === 'ARTICLE'
 					? <SelectContainer>
 							<ColumnContainer>
 								<Label>Column:</Label>
 								<SelectField
 									hintText="Choose Column ..."
 									value={column}
-									onChange={this.chooseColumn}
+									onChange={changeColumn}
 									selectedMenuItemStyle={{
 										color: '#222',
 										background: theme.accentColor
@@ -133,14 +107,17 @@ class EditorContent extends React.Component {
 									menuItemStyle={{ width: '304px' }}
 									underlineStyle={{ display: 'none' }}
 								>
-									{columnList.length != 0 &&
-										columnList.map((data, index) => (
-											<MenuItem
-												key={index}
-												value={data._id}
-												primaryText={data.name}
-											/>
-										))}
+									{columns.length != 0 &&
+										columns.map(
+											(data, index) =>
+												(data.name !== 'news'
+													? <MenuItem
+															key={index}
+															value={data._id}
+															primaryText={data.name}
+														/>
+													: null)
+										)}
 								</SelectField>
 							</ColumnContainer>
 
@@ -149,7 +126,7 @@ class EditorContent extends React.Component {
 								<SelectField
 									hintText="Choose Type ..."
 									value={type}
-									onChange={this.chooseType}
+									onChange={changeType}
 									selectedMenuItemStyle={{
 										color: '#222',
 										background: theme.accentColor
@@ -166,10 +143,17 @@ class EditorContent extends React.Component {
 									menuItemStyle={{ width: '304px' }}
 									underlineStyle={{ display: 'none' }}
 								>
-									{typeList.length != 0 &&
-										typeList.map((data, index) => (
-											<MenuItem key={index} value={index} primaryText={data} />
-										))}
+									{types.length != 0 &&
+										types.map(
+											(data, index) =>
+												(data !== 'NEWS'
+													? <MenuItem
+															key={index}
+															value={index}
+															primaryText={data}
+														/>
+													: null)
+										)}
 								</SelectField>
 							</TypeContainer>
 						</SelectContainer>
