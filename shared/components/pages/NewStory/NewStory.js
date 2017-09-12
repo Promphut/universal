@@ -54,9 +54,10 @@ const TopRight = styled.div`
 	margin-right: 20px;
 `
 
-const SavedTime = styled.div`
+const SaveStatus = styled.div`
 	font-size: 14px;
 	font-weight: normal;
+	transition: .5s;
 `
 
 class NewStory extends React.Component {
@@ -76,7 +77,8 @@ class NewStory extends React.Component {
 			setting: {},
 			menu: {},
 			status: this.SAVE_STATUS.INITIAL,
-			textNotification: 'Story must have title before publishing.',
+			saveStatus: '',
+			textNotification: '',
 			showNotification: false
 		}
 	}
@@ -137,6 +139,8 @@ class NewStory extends React.Component {
 
 	setStory = story => {
 		if (story) {
+			console.log(story)
+
 			const content = {
 				title: story.title ? story.title : '',
 				highlight: story.highlight ? story.highlight : null,
@@ -145,6 +149,7 @@ class NewStory extends React.Component {
 			}
 
 			const setting = {
+				sid: story._id,
 				format: story.format ? story.format : 'NEWS',
 				column: story.column ? story.column._id : null,
 				type: story.contentType ? story.contentType : null,
@@ -156,7 +161,9 @@ class NewStory extends React.Component {
 					slug: story.slug ? story.slug : '',
 					title: story.meta && story.meta.title ? story.meta.title : '',
 					desc: story.meta && story.meta.desc ? story.meta.desc : ''
-				}
+				},
+				cover: story.cover ? story.cover : null,
+				coverMobile: story.coverMobile ? story.coverMobile : null
 			}
 
 			this.setState({ story, content, setting })
@@ -255,21 +262,16 @@ class NewStory extends React.Component {
 		this.setState({ setting })
 	}
 
-	preSave = (format, type) => {
-		const { menu } = this.state
-
-		if (format === 'NEWS') {
-			column = menu.columns.find(col => col.name === 'news')._id
-			type = 'NEWS'
-		}
+	handleSaveStatus = status => {
+		this.setState({ saveStatus: status })
 	}
 
-	showNotification = millsec => {
-		this.setState({ showNotification: true })
+	showNotification = textNotification => {
+		this.setState({ textNotification, showNotification: true })
 
 		setTimeout(() => {
-			this.setState({ showNotification: false })
-		}, millsec)
+			this.setState({ textNotification: '', showNotification: false })
+		}, 5000)
 	}
 
 	render() {
@@ -279,19 +281,29 @@ class NewStory extends React.Component {
 			content,
 			setting,
 			menu,
+			saveStatus,
 			textNotification,
 			showNotification
 		} = this.state
 
 		const topLeft = (
 			<TopLeft>
-				<SavedTime>
-					Saved at 10:30AM
-				</SavedTime>
+				<SaveStatus>
+					{saveStatus}
+				</SaveStatus>
 			</TopLeft>
 		)
 
-		const topRight = <EditorTopRight story={story} />
+		const topRight = (
+			<EditorTopRight
+				story={story}
+				content={content}
+				setting={setting}
+				menu={menu}
+				saveStatus={this.handleSaveStatus}
+				notification={this.showNotification}
+			/>
+		)
 
 		return (
 			<Wrapper>
@@ -306,7 +318,7 @@ class NewStory extends React.Component {
 							changeHtml={this.handleChangeHtml}
 						/>
 					</Main>
-					<Aside onClick={() => this.showNotification(5000)}>
+					<Aside>
 						<EditorCollapse
 							story={setting}
 							menu={menu}

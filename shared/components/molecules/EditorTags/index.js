@@ -5,6 +5,10 @@ import findIndex from 'lodash/findIndex'
 import capitalize from 'lodash/capitalize'
 import TextField from 'material-ui/TextField'
 import Chip from 'material-ui/Chip'
+import Request from 'superagent'
+import api from '../../../services/api'
+import auth from '../../../services/auth'
+import config from '../../../config'
 
 const Container = styled.div`
 `
@@ -39,7 +43,8 @@ class EditorTags extends React.Component {
 
 		this.state = {
 			tag: '',
-			tags: []
+			tags: [],
+			allTags: []
 		}
 	}
 
@@ -47,14 +52,37 @@ class EditorTags extends React.Component {
 		setting: PropTypes.object
 	}
 
-	componentWillMount() {
-		const tags = [
-			{ id: 0, text: 'Dog' },
-			{ id: 1, text: 'Egg' },
-			{ id: 2, text: 'Fish' }
-		]
+	componentDidMount() {
+		const { sid } = this.props.story
 
-		this.setState({ tags })
+		this.getTags()
+		this.getStoryTags(sid)
+	}
+
+	getTags = () => {
+		api.getTags().then(tags => {
+			let allTags = []
+
+			tags.forEach(tag => {
+				allTags.push(tag.slug)
+			})
+
+			this.setState({ allTags })
+		})
+	}
+
+	getStoryTags = sid => {
+		api.getStoryTags(sid).then(tags => {
+			let result = []
+
+			tags.map((tag, i) => {
+				result[i] = { text: tag.name, value: tag._id, id: tag._id }
+			})
+
+			this.setState({
+				tags: result
+			})
+		})
 	}
 
 	changeTag = (e, tag) => {
@@ -63,11 +91,45 @@ class EditorTags extends React.Component {
 
 	enterTag = e => {
 		if (e.charCode === 13) {
-			let { tag, tags } = this.state
-			tag = { id: 0, text: capitalize(tag) } // mock id
+			const { sid } = this.props.story
+			let { tag, tags, allTags } = this.state
 
-			if (tag.text !== '' && findIndex(tags, { text: tag.text }) === -1) {
-				tags.push(tag)
+			if (
+				tag.text !== '' &&
+				findIndex(tags, { text: capitalize(tag.text) }) === -1
+			) {
+				if (allTags.indexOf(tag.toLowerCase()) !== -1) {
+					api.getTagFromTagSlug(tag).then(t => {
+						const id = t._id
+
+						Request.post(
+							`${config.BACKURL}/stories/${sid}/tags/${id}?token=${auth.getToken()}`
+						).end((err, res) => {
+							if (err) throw err
+							else {
+								const result = {
+									text: res.body.tag.name,
+									value: res.body.tag._id,
+									id: res.body.tag._id
+								}
+								tags.push(result)
+
+								this.setState({ tags })
+							}
+						})
+					})
+				} else {
+					api.addTag(capitalize(tag)).then(res => {
+						const result = {
+							text: res.name,
+							value: res._id,
+							id: res._id
+						}
+						tags.push(result)
+
+						this.setState({ tags })
+					})
+				}
 			}
 
 			this.setState({ tag: '', tags })
@@ -75,31 +137,24 @@ class EditorTags extends React.Component {
 	}
 
 	removeTag = (data, index) => {
-		// var { sid, tag, addTag } = this.state
-		// // console.log(data)
-		// Request.delete(
-		// 	`${config.BACKURL}/stories/${sid}/tags/${data.id}?token=${auth.getToken()}`
-		// ).end((err, res) => {
-		// 	if (err) throw err
-		// 	else {
-		// 		var Tag = tag
-		// 		Tag.push(data)
-		// 		var addedTag = addTag
-		// 		addedTag.splice(index, 1)
-		// 		this.setState({
-		// 			tag: Tag,
-		// 			addTag: addedTag
-		// 		})
-		// 	}
-		// })
+		const { sid } = this.props.story
+		const { tags } = this.state
+
+		Request.delete(
+			`${config.BACKURL}/stories/${sid}/tags/${data.id}?token=${auth.getToken()}`
+		).end((err, res) => {
+			if (err) throw err
+			else {
+				tags.splice(index, 1)
+				this.setState({ tags })
+			}
+		})
 	}
 
 	render() {
 		const { story, changeFocusWord } = this.props
 		const { tag, tags } = this.state
 		const { focusWord } = story
-
-		console.log('focusWorddd', focusWord)
 
 		return (
 			<Container>

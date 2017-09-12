@@ -58,7 +58,7 @@ class EditorContent extends React.Component {
 		const { columns, types } = menu
 		let { format, column, type } = story
 
-		type = types.indexOf(type)
+		type = type ? types.indexOf(type) : type
 
 		return (
 			<Container>
