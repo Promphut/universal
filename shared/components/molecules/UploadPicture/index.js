@@ -307,8 +307,8 @@ class UploadPicture extends React.Component {
     return (
       <Container style={{...style,width:width,height:height+20+'px'}}>
         <ConfirmDialog 
-          title='tesfsdfsdf'
-          description='asdsadsadsad svfd sdkg nkfdsg fds'
+          title='Delete Cover Picture?'
+          description='Are you sure you want to delete this picture?'
           onRequestClose={this.handleCloseConfirm}
           open={this.state.open2}
           action={this.deleteImage}

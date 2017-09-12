@@ -6,7 +6,11 @@ import api from '../../../services/api'
 import config from '../../../config'
 import { withRouter } from 'react-router'
 
-import { PrimaryButton, EditorDropdown } from '../../../components'
+import {
+	PrimaryButton,
+	EditorDropdown,
+	ConfirmDialog
+} from '../../../components'
 
 const Container = styled.div`
     display: flex;
@@ -70,7 +74,8 @@ class EditorTopRight extends React.Component {
 
 		this.state = {
 			mode: 'editor',
-			platform: 'desktop'
+			platform: 'desktop',
+			dialog: false
 		}
 	}
 
@@ -161,6 +166,12 @@ class EditorTopRight extends React.Component {
 		})
 	}
 
+	openDialog = () => {
+		let { dialog } = this.state
+
+		this.setState({ dialog: !dialog })
+	}
+
 	changePlatform = platform => {
 		const { preview } = this.props
 
@@ -170,10 +181,18 @@ class EditorTopRight extends React.Component {
 	}
 
 	render() {
-		const { mode, platform } = this.state
+		const { mode, platform, dialog } = this.state
 
 		return (
 			<Container>
+				<ConfirmDialog
+					title="Delete this story?"
+					description="Are you sure you want to delete this story?"
+					onRequestClose={this.openDialog}
+					open={dialog}
+					action={this.deleteStory}
+				/>
+
 				<Block>
 					{mode === 'editor'
 						? <Preview onClick={mode === 'editor' ? this.toPreview : null}>
@@ -219,7 +238,7 @@ class EditorTopRight extends React.Component {
 							/>
 							<EditorDropdown
 								unpublishStory={this.unpublishStory}
-								deleteStory={this.deleteStory}
+								deleteStory={this.openDialog}
 							/>
 						</Block>
 					: <Block>
