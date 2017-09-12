@@ -225,17 +225,18 @@ class UploadPicture extends React.Component {
   }
 
   uploadToServer = () => {
+    this.setState({
+      open: false,
+    })
     api.uploadFile(this.file, this.props.type, config.BACKURL + this.props.path, this.state.data)
     .then(res => {
       this.setState({
-        open: false,
-        msg: 'Upload Completed!',
+        msg: 'Upload',
         err: false
       })
     })
     .catch(err => {
       this.setState({
-        open: false,
         msg: err.message,
         err: true
       })
@@ -247,7 +248,7 @@ class UploadPicture extends React.Component {
     .then(res => {
       this.setState({
         statePreview:false,
-        msg: 'Delete Completed!',
+        msg: 'Deleted',
         err: false
       })
     })
