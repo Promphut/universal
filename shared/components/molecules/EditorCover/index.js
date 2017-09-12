@@ -46,7 +46,7 @@ class EditorCover extends React.Component {
 						ratio={1200 / 628}
 						path={`/stories/${story.sid}/cover`}
 						deleteURL={`/stories/${story.sid}/cover`}
-						src={story.cover && story.cover.medium || '/pic/fbthumbnail.jpg'}
+						src={story.cover && story.cover.medium}
 						width={190}
 						height={110}
 						label={<i className="material-icons icon-desktop" >desktop_mac</i>}
@@ -58,7 +58,7 @@ class EditorCover extends React.Component {
 						ratio={330 / 500}
 						path={`/stories/${story.sid}/covermobile`}
 						deleteURL={`/stories/${story.sid}/covermobile`}
-						src={story.coverMobile && story.coverMobile.medium || '/pic/fbthumbnail.jpg'}
+						src={story.coverMobile && story.coverMobile.medium}
 						width={110}
 						height={110}
 						label={<i className="material-icons icon-desktop" >phone_iphone</i>}
