@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import RaisedButton from 'material-ui/RaisedButton'
 import api from '../../../services/api'
 import config from '../../../config'
+import { withRouter } from 'react-router'
 
 import { PrimaryButton, EditorDropdown } from '../../../components'
 
@@ -78,34 +79,70 @@ class EditorTopRight extends React.Component {
 	}
 
 	publishStory = () => {
-		// let s = {
-		// 	publisher: parseInt(config.PID),
-		// 	title,
-		// 	highlight,
-		// 	html,
-		// 	focusWord,
-		// 	format: columnList.find(col => col._id == column).name == 'news' ||
-		// 		columnList.find(col => col._id == column).name == 'News'
-		// 		? 'NEWS'
-		// 		: 'ARTICLE',
-		// 	meta: story.meta,
-		// }
-		// if (story.status == 0) {
-		// 	s.status = 1
-		// }
-		// if (column) s.column = column
-		// s.contentType = contentType
-		// api
-		// 	.updateStory(sid, s)
-		// 	.then(story => {
-		// 		this.props.history.push(story.url)
-		// 	})
-		// 	.catch(err => {
-		// 		this.setState({
-		// 			publishStatus: err.message,
-		// 			open: false
-		// 		})
-		// 	})
+		let { story, content, setting, menu, notification } = this.props
+		let s = {}
+
+		s.publisher = story.publisher
+		s.title = content.title ? content.title : story.title
+		s.highlight = content.highlight ? content.highlight : story.highlight
+		s.html = content.html ? content.html : story.html
+		s.focusWord = setting.focusWord ? setting.focusWord : story.focusWord
+		s.format = setting.format ? setting.format : story.format
+		s.status = story.status === 0 ? 1 : story.status
+
+		s.meta = { title: '', desc: '' }
+		if (setting && setting.title) s.meta.title = setting.title
+		else if (story.meta && story.meta.title) s.meta.title = story.meta.title
+		else s.meta.title = ''
+
+		if (setting && setting.desc) s.meta.desc = setting.desc
+		else if (story.meta && story.meta.desc) s.meta.desc = story.meta.desc
+		else s.meta.desc = ''
+
+		if (s.format === 'NEWS') {
+			s.column = menu.columns.find(col => col.name === 'news')._id
+			s.contentType = 'NEWS'
+		} else {
+			s.column = setting.column ? setting.column : null
+			s.contentType = setting.type ? setting.type : null
+			s.contentType = s.contentType !== 'OTHER' ? s.contentType : null
+		}
+
+		if (!s.title || s.title === '') {
+			notification('Story must have title before publishing.')
+		} else if (!s.column) {
+			notification('Story must have column before publishing.')
+		} else {
+			api
+				.updateStory(story._id, s)
+				.then(story => {
+					this.props.history.push(story.url)
+				})
+				.catch(err => {
+					notification(err.message)
+				})
+		}
+	}
+
+	unpublishStory = () => {
+		const { story, saveStatus } = this.props
+
+		api
+			.updateStory(story._id, { status: 0 })
+			.then(story => {
+				saveStatus('Story has been unpublished.')
+			})
+			.catch(err => {
+				notification(err.message)
+			})
+	}
+
+	deleteStory = () => {
+		const { story, saveStatus } = this.props
+
+		api.deleteStory(story._id).then(() => {
+			this.props.history.push('/me/stories')
+		})
 	}
 
 	toEditor = () => {
@@ -168,7 +205,10 @@ class EditorTopRight extends React.Component {
 								style={buttonStyle}
 								onClick={this.publishStory}
 							/>
-							<EditorDropdown />
+							<EditorDropdown
+								unpublishStory={this.unpublishStory}
+								deleteStory={this.deleteStory}
+							/>
 						</Block>
 					: <Block>
 							<RaisedButton
@@ -195,4 +235,4 @@ class EditorTopRight extends React.Component {
 	}
 }
 
-export default EditorTopRight
+export default withRouter(EditorTopRight)

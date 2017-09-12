@@ -5,6 +5,7 @@ import api from '../../../services/api'
 import auth from '../../../services/auth'
 import utils from '../../../services/utils'
 import config from '../../../config'
+import moment from 'moment'
 
 import {
 	TopBarEditor,
@@ -54,9 +55,10 @@ const TopRight = styled.div`
 	margin-right: 20px;
 `
 
-const SavedTime = styled.div`
+const SaveStatus = styled.div`
 	font-size: 14px;
 	font-weight: normal;
+	transition: .5s;
 `
 
 class NewStory extends React.Component {
@@ -76,7 +78,8 @@ class NewStory extends React.Component {
 			setting: {},
 			menu: {},
 			status: this.SAVE_STATUS.INITIAL,
-			textNotification: 'Story must have title before publishing.',
+			saveStatus: '',
+			textNotification: '',
 			showNotification: false
 		}
 	}
@@ -111,6 +114,10 @@ class NewStory extends React.Component {
 		this.getTypes()
 	}
 
+	componentDidMount() {
+		this.interval = setInterval(this.autoSave, 3000)
+	}
+
 	componentWillReceiveProps(nextProps) {
 		if (this.props.match.params.sid) {
 			const sid = parseInt(this.props.match.params.sid)
@@ -120,6 +127,10 @@ class NewStory extends React.Component {
 				this.canEditStory(nextSid)
 			}
 		}
+	}
+
+	componentWillUnmount() {
+		clearInterval(this.interval)
 	}
 
 	canEditStory(sid) {
@@ -145,6 +156,7 @@ class NewStory extends React.Component {
 			}
 
 			const setting = {
+				sid: story._id,
 				format: story.format ? story.format : 'NEWS',
 				column: story.column ? story.column._id : null,
 				type: story.contentType ? story.contentType : null,
@@ -156,10 +168,68 @@ class NewStory extends React.Component {
 					slug: story.slug ? story.slug : '',
 					title: story.meta && story.meta.title ? story.meta.title : '',
 					desc: story.meta && story.meta.desc ? story.meta.desc : ''
-				}
+				},
+				cover: story.cover ? story.cover : null,
+				coverMobile: story.coverMobile ? story.coverMobile : null
 			}
 
 			this.setState({ story, content, setting })
+		}
+	}
+
+	autoSave = () => {
+		const { story, content, setting, menu, status } = this.state
+		const title = content.title ? content.title : story.title
+
+		if (status === this.SAVE_STATUS.DIRTIED) {
+			const images = [].slice.call(
+				document
+					.getElementsByClassName('fr-wrapper')[1]
+					.getElementsByTagName('img')
+			)
+
+			if (images) {
+				images.map((value, index) => {
+					if (!value.getAttribute('alt')) value.setAttribute('alt', title)
+				})
+			}
+
+			this.setState({ saveStatus: 'Saving...' })
+
+			let s = {}
+
+			s.publisher = story.publisher
+			s.title = content.title ? content.title : story.title
+			s.highlight = content.highlight ? content.highlight : story.highlight
+			s.html = content.html ? content.html : story.html
+			s.focusWord = setting.focusWord ? setting.focusWord : story.focusWord
+			s.format = setting.format ? setting.format : story.format
+			s.status = story.status === 1 ? 3 : story.status
+
+			s.meta = { title: '', desc: '' }
+			if (setting && setting.title) s.meta.title = setting.title
+			else if (story.meta && story.meta.title) s.meta.title = story.meta.title
+			else s.meta.title = ''
+
+			if (setting && setting.desc) s.meta.desc = setting.desc
+			else if (story.meta && story.meta.desc) s.meta.desc = story.meta.desc
+			else s.meta.desc = ''
+
+			if (s.format === 'NEWS') {
+				s.column = menu.columns.find(col => col.name === 'news')._id
+				s.contentType = 'NEWS'
+			} else {
+				s.column = setting.column ? setting.column : null
+				s.contentType = setting.type ? setting.type : null
+				s.contentType = s.contentType !== 'OTHER' ? s.contentType : null
+			}
+
+			api.updateStory(story._id, s).then(story => {
+				this.setState({
+					status: this.SAVE_STATUS.UNDIRTIED,
+					saveStatus: `Saved ${moment(new Date()).calendar()}`
+				})
+			})
 		}
 	}
 
@@ -187,21 +257,21 @@ class NewStory extends React.Component {
 		let { content } = this.state
 		content.title = e.target.value
 
-		this.setState({ content })
+		this.setState({ content }, this.update)
 	}
 
 	handleChangeHighlight = highlight => {
 		let { content } = this.state
 		content.highlight = highlight
 
-		this.setState({ content })
+		this.setState({ content }, this.update)
 	}
 
 	handleChangeHtml = html => {
 		let { content } = this.state
 		content.html = html
 
-		this.setState({ content })
+		this.setState({ content }, this.update)
 	}
 
 	handleChangeFocusWord = (e, focusWord) => {
@@ -209,42 +279,42 @@ class NewStory extends React.Component {
 		content.focusWord = focusWord
 		setting.focusWord = focusWord
 
-		this.setState({ content, setting })
+		this.setState({ content, setting }, this.update)
 	}
 
 	handleChangeFormat = (e, format) => {
 		let { setting } = this.state
 		setting.format = format
 
-		this.setState({ setting })
+		this.setState({ setting }, this.update)
 	}
 
 	handleChangeColumn = (e, ind, column) => {
 		let { setting } = this.state
 		setting.column = column
 
-		this.setState({ setting })
+		this.setState({ setting }, this.update)
 	}
 
 	handleChangeType = (e, ind, type) => {
 		let { setting, menu } = this.state
 		setting.type = menu.types[type]
 
-		this.setState({ setting })
+		this.setState({ setting }, this.update)
 	}
 
 	handleChangeSlug = (e, slug) => {
 		let { setting } = this.state
 		setting.slug = slug
 
-		this.setState({ setting })
+		this.setState({ setting }, this.update)
 	}
 
 	handleChangeMetaTitle = (e, title) => {
 		let { setting } = this.state
 		setting.title = title
 
-		this.setState({ setting })
+		this.setState({ setting }, this.update)
 	}
 
 	handleChangeMetaDesc = (e, desc) => {
@@ -252,24 +322,26 @@ class NewStory extends React.Component {
 		if (desc.length > 140) desc = desc.slice(0, 140)
 		setting.desc = desc
 
-		this.setState({ setting })
+		this.setState({ setting }, this.update)
 	}
 
-	preSave = (format, type) => {
-		const { menu } = this.state
-
-		if (format === 'NEWS') {
-			column = menu.columns.find(col => col.name === 'news')._id
-			type = 'NEWS'
-		}
+	handleSaveStatus = status => {
+		this.setState({ saveStatus: status })
 	}
 
-	showNotification = millsec => {
-		this.setState({ showNotification: true })
+	update = () => {
+		this.setState({
+			saveStatus: 'Unsave',
+			status: this.SAVE_STATUS.DIRTIED
+		})
+	}
+
+	showNotification = textNotification => {
+		this.setState({ textNotification, showNotification: true })
 
 		setTimeout(() => {
-			this.setState({ showNotification: false })
-		}, millsec)
+			this.setState({ textNotification: '', showNotification: false })
+		}, 5000)
 	}
 
 	render() {
@@ -279,19 +351,29 @@ class NewStory extends React.Component {
 			content,
 			setting,
 			menu,
+			saveStatus,
 			textNotification,
 			showNotification
 		} = this.state
 
 		const topLeft = (
 			<TopLeft>
-				<SavedTime>
-					Saved at 10:30AM
-				</SavedTime>
+				<SaveStatus>
+					{saveStatus}
+				</SaveStatus>
 			</TopLeft>
 		)
 
-		const topRight = <EditorTopRight story={story} />
+		const topRight = (
+			<EditorTopRight
+				story={story}
+				content={content}
+				setting={setting}
+				menu={menu}
+				saveStatus={this.handleSaveStatus}
+				notification={this.showNotification}
+			/>
+		)
 
 		return (
 			<Wrapper>
@@ -306,7 +388,7 @@ class NewStory extends React.Component {
 							changeHtml={this.handleChangeHtml}
 						/>
 					</Main>
-					<Aside onClick={() => this.showNotification(5000)}>
+					<Aside>
 						<EditorCollapse
 							story={setting}
 							menu={menu}

@@ -43,11 +43,9 @@ class EditorDropdown extends React.Component {
 		this.state = {}
 	}
 
-	unpublished = () => {}
-
-	deleteStory = () => {}
-
 	render() {
+		const { unpublishStory, deleteStory } = this.props
+
 		const buttonDropdown = (
 			<FontIcon className="material-icons" style={arrowDown}>
 				keyboard_arrow_down
@@ -70,7 +68,7 @@ class EditorDropdown extends React.Component {
 							display: 'inline-block',
 							marginTop: '8px'
 						}}
-						onClick={this.unpublished}
+						onClick={unpublishStory}
 					/>
 					<Line />
 					<FlatButton
@@ -82,7 +80,7 @@ class EditorDropdown extends React.Component {
 							display: 'inline-block',
 							marginBottom: '8px'
 						}}
-						onClick={this.deleteStory}
+						onClick={deleteStory}
 					/>
 				</DropdownMenu>
 			</Dropdown>

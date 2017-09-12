@@ -34,7 +34,7 @@ const Contain = styled.div`
   }
 `
 
-const Span1 = styled.span`
+const Span1 = styled(Link)`
   color:#222;
   font-weight:bold;
   font-size:19px;
@@ -50,11 +50,11 @@ const WritedBy = ({style, writer, /*column,*/ published}) => {
     <Container style={{...style}}>
 
       <div>
-        <a href={writer.url || '#'}><Avatar src={writer.pic && writer.pic.medium} size={54} className='imgWidth' style={{float:'left',marginTop:'8px'}}/></a>
+        <Link to={writer.url || '#'}><Avatar src={writer.pic && writer.pic.medium} size={54} className='imgWidth' style={{float:'left',marginTop:'8px'}}/></Link>
       </div>
 
       <Contain className="content-font">
-        by <Span1><a href={writer.url || '#'} style={{color:'#222'}}>{writer.display}</a></Span1>
+        by <Span1 to={writer.url || '#'} >{writer.display}</Span1>
         {/*{moment(published).format('lll')} */}
         <br/>
         {/*writer of <Link to={column.url}><strong>{column.name}</strong></Link>*/}
