@@ -137,6 +137,14 @@ class EditorTopRight extends React.Component {
 			})
 	}
 
+	deleteStory = () => {
+		const { story, saveStatus } = this.props
+
+		api.deleteStory(story._id).then(() => {
+			this.props.history.push('/me/stories')
+		})
+	}
+
 	toEditor = () => {
 		this.setState({ mode: 'editor' })
 	}
@@ -197,7 +205,10 @@ class EditorTopRight extends React.Component {
 								style={buttonStyle}
 								onClick={this.publishStory}
 							/>
-							<EditorDropdown />
+							<EditorDropdown
+								unpublishStory={this.unpublishStory}
+								deleteStory={this.deleteStory}
+							/>
 						</Block>
 					: <Block>
 							<RaisedButton
