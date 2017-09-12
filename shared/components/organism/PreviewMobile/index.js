@@ -1,10 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-	TopBarWithNavigation,
-	StoryDetail,
-	BGImg
-} from '../../../components'
+import { TopBarWithNavigation, StoryDetail, BGImg } from '../../../components'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import api from '../../../services/api'
@@ -97,7 +93,7 @@ class PreviewMobile extends React.Component {
 		super(props)
 	}
 
-	getStoryFromSid = (sid) => {
+	getStoryFromSid = sid => {
 		if (sid == null) utils.notFound(this.props.history)
 		api
 			.getStoryFromSid(sid, auth.getToken(), this.props.countView)
@@ -111,65 +107,59 @@ class PreviewMobile extends React.Component {
 				utils.toError(this.props.history, err)
 			})
 	}
-	toggleMobileStatus = ()=>{
-		console.log('isMobile',!this.state.isMobile)
-		this.setState({isMobile:!this.state.isMobile})
+	toggleMobileStatus = () => {
+		console.log('isMobile', !this.state.isMobile)
+		this.setState({ isMobile: !this.state.isMobile })
 	}
 
 	componentDidMount() {
 		if (!this.props.story) {
-			this.getStoryFromSid(this.props.match.params.sid)		
+			this.getStoryFromSid(this.props.match.params.sid)
 		}
-	}
-
-	componentWillUnmount() {
-
-	}
-
-	componentWillReceiveProps(nextProps) {
-
 	}
 
 	render() {
 		const isMobile = true
 		let { keywords, channels } = this.context.setting.publisher
-		let {
-			showTopbarTitle,
-			canEditStory,
-			story
-		} = this.state
+		let { showTopbarTitle, canEditStory, story } = this.state
 
 		let hasCover = true
 		// const Mobile = ({ children }) => <Responsive maxWidth={768} children={children} />;
-		if (isEmpty(story)) {return (<div ref="TT" />)}
-		// else if(story&&isMobile) {return (<PreviewMobile story={story}/>)}
-		else {
+		if (isEmpty(story)) {
+			return <div ref="TT" />
+		} else {
+			// else if(story&&isMobile) {return (<PreviewMobile story={story}/>)}
 			return (
-            <Wrapper>			
-                <BGImg
-                  style={{position:'relative', width: '100%', height: '85vh' }}
-                  src={story.coverMobile && story.coverMobile.large || '/pic/fbthumbnail.jpg'}
-                  alt={story.title}
-                >
-                  <Cover />
-                </BGImg>
-                
-                <Content paddingTop={hasCover ? '0px' : '60px'}>
-                    <Share/>
+				<Wrapper>
+					<BGImg
+						style={{ position: 'relative', width: '100%', height: '420px' }}
+						src={
+							(story.coverMobile && story.coverMobile.large) ||
+								'/pic/fbthumbnail.jpg'
+						}
+						alt={story.title}
+					>
+						<Cover />
+					</BGImg>
 
-                    <Main>
-                        <StoryDetail
-                            share={story.shares && story.shares}
-                            story={this.props.story || story}
-                            isMobile={isMobile}
-                        />
-                    </Main>
+					<Content paddingTop={hasCover ? '0px' : '60px'}>
+						<Share />
 
-                    <Aside/>
-                </Content>
+						<Main>
+							<StoryDetail
+								share={story.shares && story.shares}
+								story={this.props.story || story}
+								isMobile={isMobile}
+								preview={true}
+							/>
+						</Main>
 
-            </Wrapper>
-		)}
+						<Aside />
+					</Content>
+
+				</Wrapper>
+			)
+		}
 	}
 }
 

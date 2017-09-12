@@ -302,7 +302,13 @@ class App extends React.Component {
 								<Route
 									exact
 									path="/stories/:columnSlug/:storySlug/:sid"
-									render={props => <StoryPage {...props} countView story={this.props.story && this.props.story}/>}
+									render={props => (
+										<StoryPage
+											{...props}
+											countView
+											story={this.props.story && this.props.story}
+										/>
+									)}
 								/>
 
 								<Route
@@ -375,6 +381,7 @@ class App extends React.Component {
 									hasRoles={['ADMIN', 'WRITER', 'EDITOR']}
 									render={props => <NewStory {...props} />}
 								/>
+
 								<PrivateRoute
 									exact
 									path="/me/stories/:sid/edit"
@@ -385,21 +392,13 @@ class App extends React.Component {
 								<Route
 									exact
 									path="/me/stories/:sid"
-									render={props => (
-										<Preview
-											{...props}
-										/>
-									)}
+									render={props => <Preview {...props} />}
 								/>
 
 								<Route
 									exact
 									path="/me/stories/:sid/mobile"
-									render={props => (
-										<PreviewMobile
-											{...props}
-										/>
-									)}
+									render={props => <PreviewMobile {...props} />}
 								/>
 
 								<Route

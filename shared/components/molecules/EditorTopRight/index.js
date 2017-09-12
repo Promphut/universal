@@ -146,15 +146,27 @@ class EditorTopRight extends React.Component {
 	}
 
 	toEditor = () => {
-		this.setState({ mode: 'editor' })
+		const { preview } = this.props
+
+		this.setState({ mode: 'editor' }, () => {
+			preview('editor')
+		})
 	}
 
 	toPreview = () => {
-		this.setState({ mode: 'preview' })
+		const { preview } = this.props
+
+		this.setState({ mode: 'preview' }, () => {
+			preview('preview')
+		})
 	}
 
 	changePlatform = platform => {
-		this.setState({ platform })
+		const { preview } = this.props
+
+		this.setState({ platform }, () => {
+			preview(null, platform)
+		})
 	}
 
 	render() {

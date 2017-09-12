@@ -13,7 +13,8 @@ import {
 	EditorCss,
 	EditorMain,
 	EditorCollapse,
-	EditorTopRight
+	EditorTopRight,
+	Preview
 } from '../../../components'
 
 const Wrapper = styled.div`
@@ -77,6 +78,10 @@ class NewStory extends React.Component {
 			content: {},
 			setting: {},
 			menu: {},
+			preview: {
+				mode: 'editor',
+				platform: 'desktop'
+			},
 			status: this.SAVE_STATUS.INITIAL,
 			saveStatus: '',
 			textNotification: '',
@@ -178,7 +183,7 @@ class NewStory extends React.Component {
 	}
 
 	autoSave = () => {
-		const { story, content, setting, menu, status } = this.state
+		let { story, content, setting, menu, status } = this.state
 		const title = content.title ? content.title : story.title
 
 		if (status === this.SAVE_STATUS.DIRTIED) {
@@ -224,8 +229,11 @@ class NewStory extends React.Component {
 				s.contentType = s.contentType !== 'OTHER' ? s.contentType : null
 			}
 
-			api.updateStory(story._id, s).then(story => {
+			api.updateStory(story._id, s).then(_story => {
+				_story.writer = story.writer
+
 				this.setState({
+					story: _story,
 					status: this.SAVE_STATUS.UNDIRTIED,
 					saveStatus: `Saved ${moment(new Date()).calendar()}`
 				})
@@ -329,6 +337,15 @@ class NewStory extends React.Component {
 		this.setState({ saveStatus: status })
 	}
 
+	handlePreview = (mode, platform) => {
+		let { preview } = this.state
+		preview.mode = mode ? mode : preview.mode
+		preview.platform = platform ? platform : preview.platform
+
+		this.autoSave()
+		this.setState({ preview })
+	}
+
 	update = () => {
 		this.setState({
 			saveStatus: 'Unsave',
@@ -345,12 +362,13 @@ class NewStory extends React.Component {
 	}
 
 	render() {
-		const { onLoading } = this.props
+		const { children } = this.props
 		const {
 			story,
 			content,
 			setting,
 			menu,
+			preview,
 			saveStatus,
 			textNotification,
 			showNotification
@@ -372,6 +390,7 @@ class NewStory extends React.Component {
 				menu={menu}
 				saveStatus={this.handleSaveStatus}
 				notification={this.showNotification}
+				preview={this.handlePreview}
 			/>
 		)
 
@@ -379,29 +398,31 @@ class NewStory extends React.Component {
 			<Wrapper>
 				<TopBarEditor left={topLeft} right={topRight} />
 				<TopNotification text={textNotification} show={showNotification} />
-				<Container>
-					<Main>
-						<EditorMain
-							story={content}
-							changeTitle={this.handleChangeTitle}
-							changeHighlight={this.handleChangeHighlight}
-							changeHtml={this.handleChangeHtml}
-						/>
-					</Main>
-					<Aside>
-						<EditorCollapse
-							story={setting}
-							menu={menu}
-							changeFormat={this.handleChangeFormat}
-							changeColumn={this.handleChangeColumn}
-							changeType={this.handleChangeType}
-							changeFocusWord={this.handleChangeFocusWord}
-							changeSlug={this.handleChangeSlug}
-							changeMetaTitle={this.handleChangeMetaTitle}
-							changeMetaDesc={this.handleChangeMetaDesc}
-						/>
-					</Aside>
-				</Container>
+				{preview.mode === 'editor'
+					? <Container>
+							<Main>
+								<EditorMain
+									story={content}
+									changeTitle={this.handleChangeTitle}
+									changeHighlight={this.handleChangeHighlight}
+									changeHtml={this.handleChangeHtml}
+								/>
+							</Main>
+							<Aside>
+								<EditorCollapse
+									story={setting}
+									menu={menu}
+									changeFormat={this.handleChangeFormat}
+									changeColumn={this.handleChangeColumn}
+									changeType={this.handleChangeType}
+									changeFocusWord={this.handleChangeFocusWord}
+									changeSlug={this.handleChangeSlug}
+									changeMetaTitle={this.handleChangeMetaTitle}
+									changeMetaDesc={this.handleChangeMetaDesc}
+								/>
+							</Aside>
+						</Container>
+					: <Preview story={story} platform={preview.platform} />}
 			</Wrapper>
 		)
 	}
