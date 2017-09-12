@@ -8,7 +8,7 @@ import Cropper from 'react-cropper';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
-import {PrimaryButton} from '../../../components'
+import {PrimaryButton,ConfirmDialog} from '../../../components'
 import config from '../../../config'
 
 import 'cropperjs/dist/cropper.css'
@@ -135,7 +135,8 @@ class UploadPicture extends React.Component {
       err:false,
       open:false,
       data:{},
-      previewUrl:''
+      previewUrl:'',
+      open2:false
     }
   }
 
@@ -224,6 +225,14 @@ class UploadPicture extends React.Component {
     this.setState({open: false});
   }
 
+  handleOpenConfirm = () => {
+    this.setState({open2: true});
+  }
+
+  handleCloseConfirm = () => {
+    this.setState({open2: false});
+  }
+
   uploadToServer = () => {
     this.setState({
       open: false,
@@ -244,6 +253,9 @@ class UploadPicture extends React.Component {
   }
 
   deleteImage = () => {
+    this.setState({
+      open2: false,
+    })
     api.deleteImage(this.props.deleteURL)
     .then(res => {
       this.setState({
@@ -294,6 +306,13 @@ class UploadPicture extends React.Component {
 
     return (
       <Container style={{...style,width:width,height:height+20+'px'}}>
+        <ConfirmDialog 
+          title='tesfsdfsdf'
+          description='asdsadsadsad svfd sdkg nkfdsg fds'
+          onRequestClose={this.handleCloseConfirm}
+          open={this.state.open2}
+          action={this.deleteImage}
+        />
         <Dialog
           actions={actions}
           modal={true}
@@ -315,7 +334,7 @@ class UploadPicture extends React.Component {
         {!statePreview&&<Box width={width} height={height} className={className+" menu-font"} id={id} onClick={()=>(dom(this.refs.imageLoader).click())}><Label style={{...labelStyle}}>{label?label:"Upload Picture"}</Label></Box>}
         <Preview width={width} height={height} ref='preview' style={{display:statePreview?'block':'none',backgroundImage:'url('+(preview || src)+')'}}>
           <Filter width={width} height={height} >
-            {deleteURL&&<Delete className="material-icons" style={{fontSize:'14px'}} onClick={this.deleteImage}>close</Delete>}
+            {deleteURL&&<Delete className="material-icons" style={{fontSize:'14px'}} onClick={this.handleOpenConfirm}>close</Delete>}
             <Label style={{...labelStyle,color:'rgba(0,0,0,0.5)'}} onClick={()=>(dom(this.refs.imageLoader).click())} >Edit</Label>
           </Filter>
         </Preview>
