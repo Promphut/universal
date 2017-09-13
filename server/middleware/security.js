@@ -91,7 +91,7 @@ const securityMiddleware = [
 
   // Frameguard mitigates clickjacking attacks by setting the X-Frame-Options header.
   // @see https://helmetjs.github.io/docs/frameguard/
-  helmet.frameguard({ action: 'sameorigin' }),
+  helmet.frameguard('SAMEORIGIN'),
 
   // Sets the X-Download-Options to prevent Internet Explorer from executing
   // downloads in your site’s context.
