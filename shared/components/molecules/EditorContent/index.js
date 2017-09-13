@@ -56,9 +56,10 @@ class EditorContent extends React.Component {
 		const { theme } = this.context.setting.publisher
 		const { story, menu, changeFormat, changeColumn, changeType } = this.props
 		const { columns, types } = menu
-		let { format, column, type } = story
+		let { format, column, contentType } = story
 
-		type = type ? types.indexOf(type) : type
+		column = column._id ? column._id : column ? column : null
+		const type = contentType ? types.indexOf(contentType) : contentType
 
 		return (
 			<Container>

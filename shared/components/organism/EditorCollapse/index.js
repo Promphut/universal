@@ -37,6 +37,7 @@ class EditorCollapse extends React.Component {
 	render() {
 		const {
 			story,
+			prevStory,
 			menu,
 			changeFormat,
 			changeColumn,
@@ -91,6 +92,7 @@ class EditorCollapse extends React.Component {
 				>
 					<EditorAdvanced
 						story={story}
+						prevStory={prevStory}
 						changeSlug={changeSlug}
 						changeMetaTitle={changeMetaTitle}
 						changeMetaDesc={changeMetaDesc}

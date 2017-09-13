@@ -75,8 +75,7 @@ class NewStory extends React.Component {
 		this.state = {
 			publisher: parseInt(config.PID),
 			story: {},
-			content: {},
-			setting: {},
+			prevStory: {},
 			menu: {},
 			preview: {
 				mode: 'editor',
@@ -153,38 +152,20 @@ class NewStory extends React.Component {
 
 	setStory = story => {
 		if (story) {
-			const content = {
-				title: story.title ? story.title : '',
-				highlight: story.highlight ? story.highlight : null,
-				html: story.html ? story.html : '',
-				focusWord: story.focusWord ? story.focusWord : null
-			}
+			story.meta = story.meta ? story.meta : {}
 
-			const setting = {
-				sid: story._id,
-				format: story.format ? story.format : 'NEWS',
-				column: story.column ? story.column._id : null,
-				type: story.contentType ? story.contentType : null,
-				focusWord: story.focusWord ? story.focusWord : '',
+			const prevStory = {
 				slug: story.slug ? story.slug : '',
 				title: story.meta && story.meta.title ? story.meta.title : '',
-				desc: story.meta && story.meta.desc ? story.meta.desc : '',
-				hint: {
-					slug: story.slug ? story.slug : '',
-					title: story.meta && story.meta.title ? story.meta.title : '',
-					desc: story.meta && story.meta.desc ? story.meta.desc : ''
-				},
-				cover: story.cover ? story.cover : null,
-				coverMobile: story.coverMobile ? story.coverMobile : null
+				desc: story.meta && story.meta.desc ? story.meta.desc : ''
 			}
 
-			this.setState({ story, content, setting })
+			this.setState({ story, prevStory })
 		}
 	}
 
 	autoSave = () => {
-		let { story, content, setting, menu, status } = this.state
-		const title = content.title ? content.title : story.title
+		let { story, prevStory, menu, status } = this.state
 
 		if (status === this.SAVE_STATUS.DIRTIED) {
 			const images = [].slice.call(
@@ -194,6 +175,7 @@ class NewStory extends React.Component {
 			)
 
 			if (images) {
+				const title = story.title ? story.title : null
 				images.map((value, index) => {
 					if (!value.getAttribute('alt')) value.setAttribute('alt', title)
 				})
@@ -201,39 +183,24 @@ class NewStory extends React.Component {
 
 			this.setState({ saveStatus: 'Saving...' })
 
-			let s = {}
-
-			s.publisher = story.publisher
-			s.title = content.title ? content.title : story.title
-			s.highlight = content.highlight ? content.highlight : story.highlight
-			s.html = content.html ? content.html : story.html
-			s.focusWord = setting.focusWord ? setting.focusWord : story.focusWord
-			s.format = setting.format ? setting.format : story.format
-			s.status = story.status === 1 ? 3 : story.status
-
-			s.meta = { title: '', desc: '' }
-			if (setting && setting.title) s.meta.title = setting.title
-			else if (story.meta && story.meta.title) s.meta.title = story.meta.title
-			else s.meta.title = ''
-
-			if (setting && setting.desc) s.meta.desc = setting.desc
-			else if (story.meta && story.meta.desc) s.meta.desc = story.meta.desc
-			else s.meta.desc = ''
-
-			if (s.format === 'NEWS') {
-				s.column = menu.columns.find(col => col.name === 'news')._id
-				s.contentType = 'NEWS'
+			story.status = story.status === 1 ? 3 : story.status
+			if (story.format === 'NEWS') {
+				story.column = menu.columns.find(col => col.name === 'news')._id
+				story.contentType = 'NEWS'
 			} else {
-				s.column = setting.column ? setting.column : null
-				s.contentType = setting.type ? setting.type : null
-				s.contentType = s.contentType !== 'OTHER' ? s.contentType : null
+				story.contentType = story.contentType !== 'OTHER'
+					? story.contentType
+					: null
 			}
 
-			api.updateStory(story._id, s).then(_story => {
-				_story.writer = story.writer
+			if (!story.meta.title) story.meta.title = prevStory.title
+			if (!story.meta.desc) story.meta.desc = prevStory.desc
+
+			api.updateStory(story._id, story).then(_story => {
+				story.column = _story.column
 
 				this.setState({
-					story: _story,
+					story,
 					status: this.SAVE_STATUS.UNDIRTIED,
 					saveStatus: `Saved ${moment(new Date()).calendar()}`
 				})
@@ -262,75 +229,74 @@ class NewStory extends React.Component {
 	}
 
 	handleChangeTitle = e => {
-		let { content } = this.state
-		content.title = e.target.value
+		let { story } = this.state
+		story.title = e.target.value
 
-		this.setState({ content }, this.update)
+		this.setState({ story }, this.update)
 	}
 
 	handleChangeHighlight = highlight => {
-		let { content } = this.state
-		content.highlight = highlight
+		let { story } = this.state
+		story.highlight = highlight
 
-		this.setState({ content }, this.update)
+		this.setState({ story }, this.update)
 	}
 
 	handleChangeHtml = html => {
-		let { content } = this.state
-		content.html = html
+		let { story } = this.state
+		story.html = html
 
-		this.setState({ content }, this.update)
+		this.setState({ story }, this.update)
 	}
 
 	handleChangeFocusWord = (e, focusWord) => {
-		let { content, setting } = this.state
-		content.focusWord = focusWord
-		setting.focusWord = focusWord
+		let { story } = this.state
+		story.focusWord = focusWord
 
-		this.setState({ content, setting }, this.update)
+		this.setState({ story }, this.update)
 	}
 
 	handleChangeFormat = (e, format) => {
-		let { setting } = this.state
-		setting.format = format
+		let { story } = this.state
+		story.format = format
 
-		this.setState({ setting }, this.update)
+		this.setState({ story }, this.update)
 	}
 
 	handleChangeColumn = (e, ind, column) => {
-		let { setting } = this.state
-		setting.column = column
+		let { story } = this.state
+		story.column = column
 
-		this.setState({ setting }, this.update)
+		this.setState({ story }, this.update)
 	}
 
 	handleChangeType = (e, ind, type) => {
-		let { setting, menu } = this.state
-		setting.type = menu.types[type]
+		let { story, menu } = this.state
+		story.contentType = menu.types[type]
 
-		this.setState({ setting }, this.update)
+		this.setState({ story }, this.update)
 	}
 
 	handleChangeSlug = (e, slug) => {
-		let { setting } = this.state
-		setting.slug = slug
+		let { story } = this.state
+		story.slug = slug
 
-		this.setState({ setting }, this.update)
+		this.setState({ story }, this.update)
 	}
 
 	handleChangeMetaTitle = (e, title) => {
-		let { setting } = this.state
-		setting.title = title
+		let { story } = this.state
+		story.meta.title = title
 
-		this.setState({ setting }, this.update)
+		this.setState({ story }, this.update)
 	}
 
 	handleChangeMetaDesc = (e, desc) => {
-		let { setting } = this.state
+		let { story } = this.state
 		if (desc.length > 140) desc = desc.slice(0, 140)
-		setting.desc = desc
+		story.meta.desc = desc
 
-		this.setState({ setting }, this.update)
+		this.setState({ story }, this.update)
 	}
 
 	handleSaveStatus = status => {
@@ -365,8 +331,7 @@ class NewStory extends React.Component {
 		const { children } = this.props
 		const {
 			story,
-			content,
-			setting,
+			prevStory,
 			menu,
 			preview,
 			saveStatus,
@@ -385,8 +350,7 @@ class NewStory extends React.Component {
 		const topRight = (
 			<EditorTopRight
 				story={story}
-				content={content}
-				setting={setting}
+				prevStory={prevStory}
 				menu={menu}
 				saveStatus={this.handleSaveStatus}
 				notification={this.showNotification}
@@ -402,7 +366,7 @@ class NewStory extends React.Component {
 					? <Container>
 							<Main>
 								<EditorMain
-									story={content}
+									story={story}
 									changeTitle={this.handleChangeTitle}
 									changeHighlight={this.handleChangeHighlight}
 									changeHtml={this.handleChangeHtml}
@@ -410,7 +374,8 @@ class NewStory extends React.Component {
 							</Main>
 							<Aside>
 								<EditorCollapse
-									story={setting}
+									story={story}
+									prevStory={prevStory}
 									menu={menu}
 									changeFormat={this.handleChangeFormat}
 									changeColumn={this.handleChangeColumn}

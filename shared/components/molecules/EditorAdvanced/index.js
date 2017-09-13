@@ -41,8 +41,15 @@ class EditorAdvanced extends React.Component {
 	}
 
 	render() {
-		const { story, changeSlug, changeMetaTitle, changeMetaDesc } = this.props
-		const { slug, title, desc, hint } = story
+		const {
+			story,
+			prevStory,
+			changeSlug,
+			changeMetaTitle,
+			changeMetaDesc
+		} = this.props
+		const { slug, meta } = story
+		const { title, desc } = meta
 
 		return (
 			<Container>
@@ -53,7 +60,7 @@ class EditorAdvanced extends React.Component {
 						id="slug"
 						value={slug ? slug : ''}
 						onChange={changeSlug}
-						hintText={hint.slug}
+						hintText={prevStory.slug}
 						style={style}
 					/>
 				</UrlContainer>
@@ -64,7 +71,7 @@ class EditorAdvanced extends React.Component {
 						id="title"
 						value={title ? title : ''}
 						onChange={changeMetaTitle}
-						hintText={hint.title}
+						hintText={prevStory.title}
 						style={style}
 					/>
 				</TitleContainer>
@@ -75,7 +82,7 @@ class EditorAdvanced extends React.Component {
 						id="desc"
 						value={desc ? desc : ''}
 						onChange={changeMetaDesc}
-						hintText={hint.desc}
+						hintText={prevStory.desc}
 						style={style}
 						multiLine
 						rows={1}

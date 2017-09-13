@@ -84,42 +84,28 @@ class EditorTopRight extends React.Component {
 	}
 
 	publishStory = () => {
-		let { story, content, setting, menu, notification } = this.props
-		let s = {}
+		let { story, prevStory, menu, notification } = this.props
 
-		s.publisher = story.publisher
-		s.title = content.title ? content.title : story.title
-		s.highlight = content.highlight ? content.highlight : story.highlight
-		s.html = content.html ? content.html : story.html
-		s.focusWord = setting.focusWord ? setting.focusWord : story.focusWord
-		s.format = setting.format ? setting.format : story.format
-		s.status = story.status === 0 ? 1 : story.status
-
-		s.meta = { title: '', desc: '' }
-		if (setting && setting.title) s.meta.title = setting.title
-		else if (story.meta && story.meta.title) s.meta.title = story.meta.title
-		else s.meta.title = ''
-
-		if (setting && setting.desc) s.meta.desc = setting.desc
-		else if (story.meta && story.meta.desc) s.meta.desc = story.meta.desc
-		else s.meta.desc = ''
-
-		if (s.format === 'NEWS') {
-			s.column = menu.columns.find(col => col.name === 'news')._id
-			s.contentType = 'NEWS'
+		story.status = story.status === 0 ? 1 : story.status
+		if (story.format === 'NEWS') {
+			story.column = menu.columns.find(col => col.name === 'news')._id
+			story.contentType = 'NEWS'
 		} else {
-			s.column = setting.column ? setting.column : null
-			s.contentType = setting.type ? setting.type : null
-			s.contentType = s.contentType !== 'OTHER' ? s.contentType : null
+			story.contentType = story.contentType !== 'OTHER'
+				? story.contentType
+				: null
 		}
 
-		if (!s.title || s.title === '') {
+		if (!story.meta.title) story.meta.title = prevStory.title
+		if (!story.meta.desc) story.meta.desc = prevStory.desc
+
+		if (!story.title || story.title === '') {
 			notification('Story must have title before publishing.')
-		} else if (!s.column) {
+		} else if (!story.column) {
 			notification('Story must have column before publishing.')
 		} else {
 			api
-				.updateStory(story._id, s)
+				.updateStory(story._id, story)
 				.then(story => {
 					this.props.history.push(story.url)
 				})

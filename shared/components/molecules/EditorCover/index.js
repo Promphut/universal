@@ -37,34 +37,34 @@ class EditorCover extends React.Component {
 	}
 
 	render() {
-		var {story} = this.props
+		var { story } = this.props
 		return (
 			<Container>
 				<Text>สามารถอัพโหลดได้ทั้งสำหรับ desktop และ mobile</Text>
-				<div className='row'>
+				<div className="row">
 					<UploadPicture
 						ratio={1200 / 628}
-						path={`/stories/${story.sid}/cover`}
-						deleteURL={`/stories/${story.sid}/cover`}
+						path={`/stories/${story._id}/cover`}
+						deleteURL={`/stories/${story._id}/cover`}
 						src={story.cover && story.cover.medium}
 						width={190}
 						height={110}
-						label={<i className="material-icons icon-desktop" >desktop_mac</i>}
-						className='desktop'
+						label={<i className="material-icons icon-desktop">desktop_mac</i>}
+						className="desktop"
 						type="cover"
-						style={{flex:'0 190px'}}
+						style={{ flex: '0 190px' }}
 					/>
 					<UploadPicture
 						ratio={330 / 500}
-						path={`/stories/${story.sid}/covermobile`}
-						deleteURL={`/stories/${story.sid}/covermobile`}
+						path={`/stories/${story._id}/covermobile`}
+						deleteURL={`/stories/${story._id}/covermobile`}
 						src={story.coverMobile && story.coverMobile.medium}
 						width={110}
 						height={110}
-						label={<i className="material-icons icon-desktop" >phone_iphone</i>}
-						className='mobile'
+						label={<i className="material-icons icon-desktop">phone_iphone</i>}
+						className="mobile"
 						type="coverMobile"
-						style={{flex:'0 110px'}}
+						style={{ flex: '0 110px' }}
 					/>
 				</div>
 			</Container>
