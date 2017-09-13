@@ -152,11 +152,25 @@ class EditorTopRight extends React.Component {
 	}
 
 	toPreview = () => {
-		const { preview } = this.props
+		const { story, menu, saving, preview, notification } = this.props
 
-		this.setState({ mode: 'preview' }, () => {
-			preview('preview')
-		})
+		const newsCol = menu.columns.find(col => col.name === 'news')._id
+
+		if (!story.title || story.title === '') {
+			notification('Story must have title before preview.')
+		} else if (
+			!story.column ||
+			story.column === null ||
+			(story.format === 'ARTICLE' && story.column === newsCol)
+		) {
+			notification('Story must have column before preview.')
+		} else if (saving) {
+			notification('Saving...')
+		} else {
+			this.setState({ mode: 'preview' }, () => {
+				preview('preview')
+			})
+		}
 	}
 
 	openDialog = () => {
