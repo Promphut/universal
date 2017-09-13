@@ -234,7 +234,8 @@ class UploadPicture extends React.Component {
 
 	uploadToServer = () => {
 		this.setState({
-			open: false
+      open: false,
+      msg: 'Uploading',
 		})
 		api
 			.uploadFile(
