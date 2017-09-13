@@ -1135,4 +1135,12 @@ api.deleteImage = url =>{
 		return res.body
 	}, api.err)
 }
+api.addStoryTag = (sid,tid) =>{
+	return 	Request.post(`${config.BACKURL}/stories/${sid}/tags/${tid}`)
+	.set('x-access-token', auth.getToken())
+	.set('Accept', 'application/json')	
+	.then(res => {
+		return res.body
+	}, api.err)
+}
 module.exports = api
