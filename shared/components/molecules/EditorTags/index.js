@@ -56,10 +56,10 @@ class EditorTags extends React.Component {
 	}
 
 	componentDidMount() {
-		const { sid } = this.props.story
+		const { _id } = this.props.story
 
 		this.getTags()
-		this.getStoryTags(sid)
+		this.getStoryTags(_id)
 	}
 
 	getTags = () => {
@@ -88,16 +88,16 @@ class EditorTags extends React.Component {
 		})
 	}
 
-	changeTag = (tag) => {
+	changeTag = tag => {
 		this.setState({ tag })
 	}
 
 	removeTag = (data, index) => {
-		const { sid } = this.props.story
+		const { _id } = this.props.story
 		const { tags } = this.state
 
 		Request.delete(
-			`${config.BACKURL}/stories/${sid}/tags/${data.value}?token=${auth.getToken()}`
+			`${config.BACKURL}/stories/${_id}/tags/${data.value}?token=${auth.getToken()}`
 		).end((err, res) => {
 			if (err) throw err
 			else {
@@ -108,43 +108,43 @@ class EditorTags extends React.Component {
 	}
 
 	selectedTag = (sel, index) => {
-		const { sid } = this.props.story
+		const { _id } = this.props.story
 		let { tag, tags, allTags } = this.state
 		var allTagsIndex = findIndex(allTags, { text: capitalize(sel) })
 		var tagsIndex = findIndex(tags, { text: capitalize(sel) })
 		// console.log(sel)
-		if(sel.text&&sel.value){
-			api.addStoryTag(sid,sel.value).then((res)=>{
+		if (sel.text && sel.value) {
+			api.addStoryTag(_id, sel.value).then(res => {
 				const result = {
 					text: res.tag.name,
-					value: res.tag._id,
+					value: res.tag._id
 				}
 				tags.push(result)
 				this.setState({ tags })
 			})
-		}else if(sel!= '' && allTagsIndex != -1 && tagsIndex === -1){
+		} else if (sel != '' && allTagsIndex != -1 && tagsIndex === -1) {
 			var tid = allTags[allTagsIndex].value
-			api.addStoryTag(sid,tid).then((res)=>{
+			api.addStoryTag(_id, tid).then(res => {
 				const result = {
 					text: res.tag.name,
-					value: res.tag._id,
+					value: res.tag._id
 				}
 				tags.push(result)
 				this.setState({ tags })
 			})
-		}else if(sel!= '' && allTagsIndex === -1 && tagsIndex === -1){
+		} else if (sel != '' && allTagsIndex === -1 && tagsIndex === -1) {
 			api.addTag(capitalize(tag)).then(r => {
-				api.addStoryTag(sid,r._id).then((res)=>{
+				api.addStoryTag(_id, r._id).then(res => {
 					const result = {
 						text: res.tag.name,
-						value: res.tag._id,
+						value: res.tag._id
 					}
 					tags.push(result)
 					this.setState({ tags })
 				})
 			})
 		}
-		this.setState({ tag: ''})
+		this.setState({ tag: '' })
 	}
 
 	render() {
@@ -173,17 +173,16 @@ class EditorTags extends React.Component {
 								))
 							: ''}
 					</Chips>
-					{tags.length !== 5
-						&& <AutoComplete
-								hintText="Add up to 5 tags ..."
-								dataSource={pullAllWith(allTags, tags, isEqual)}
-								filter={AutoComplete.fuzzyFilter}
-								onNewRequest={this.selectedTag}
-								onUpdateInput={this.changeTag}
-								openOnFocus
-								searchText={tag}
-							/>
-						}
+					{tags.length !== 5 &&
+						<AutoComplete
+							hintText="Add up to 5 tags ..."
+							dataSource={pullAllWith(allTags, tags, isEqual)}
+							filter={AutoComplete.fuzzyFilter}
+							onNewRequest={this.selectedTag}
+							onUpdateInput={this.changeTag}
+							openOnFocus
+							searchText={tag}
+						/>}
 				</TagContainer>
 
 				<FocusWordContainer>
