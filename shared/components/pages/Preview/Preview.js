@@ -142,7 +142,7 @@ class Preview extends React.Component {
 							</div>
 						: <Content>
 								<Mobile
-									src={`${config.FRONTURL}/me/stories/${story._id}/mobile`}
+									src={`/me/stories/${story._id}/mobile`}
 									width="387px"
 									height="667px"
 								/>

@@ -371,12 +371,12 @@ class UploadPicture extends React.Component {
 							>
 								close
 							</Delete>}
-						<Label
+							{msg != "Uploading" &&<Label
 							style={{ ...labelStyle, color: 'rgba(0,0,0,0.5)' }}
 							onClick={() => dom(this.refs.imageLoader).click()}
-						>
-							Edit
-						</Label>
+							>
+								Edit
+							</Label>}
 					</Filter>
 				</Preview>
 				<Des
