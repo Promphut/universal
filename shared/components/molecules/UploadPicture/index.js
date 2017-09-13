@@ -17,7 +17,6 @@ const Container = styled.div`
   min-width:50px;
   min-height:50px;
 `
-
 const Box = styled.div`
   min-width:50px;
   min-height:50px;
@@ -40,13 +39,11 @@ const Box = styled.div`
     text-decoration:underline;
   }
 `
-
 const Des = styled.div`
   color:#C2C2C2;
   font-size:14px;
   font-style:italic;
 `
-
 const Preview = styled.div`
   position:relative;
   top:0px;
@@ -58,7 +55,6 @@ const Preview = styled.div`
   background-position:center;
   color:#fff;
 `
-
 const Filter = styled.div`
   position:relative;
   top:0px;
@@ -95,7 +91,6 @@ const Delete = styled.i`
     cursor:pointer;
   }
 `
-
 class UploadPicture extends React.Component {
 	static defaultProps = {
 		width: 120,
