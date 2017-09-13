@@ -189,7 +189,10 @@ class NewStory extends React.Component {
 				story.column = newsCol
 				story.contentType = 'NEWS'
 			} else {
-				if (story.column === newsCol || story.column._id === newsCol)
+				if (
+					story.column === newsCol ||
+					(story.column && story.column._id === newsCol)
+				)
 					story.column = null
 				story.contentType = story.contentType !== 'OTHER'
 					? story.contentType

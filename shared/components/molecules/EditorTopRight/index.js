@@ -93,15 +93,15 @@ class EditorTopRight extends React.Component {
 			story.column = newsCol
 			story.contentType = 'NEWS'
 		} else {
-			if (story.column === newsCol || story.column._id === newsCol)
+			if (
+				story.column === newsCol ||
+				(story.column && story.column._id === newsCol)
+			)
 				story.column = null
 			story.contentType = story.contentType !== 'OTHER'
 				? story.contentType
 				: null
 		}
-
-		console.log('story.format', story.format)
-		console.log('story.column', story.column)
 
 		if (!story.meta.title) story.meta.title = prevStory.title
 		if (!story.meta.desc) story.meta.desc = prevStory.desc
