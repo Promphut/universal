@@ -363,7 +363,7 @@ class UploadPicture extends React.Component {
 					}}
 				>
 					<Filter width={width} height={height}>
-						{deleteURL &&
+						{deleteURL && msg != "Uploading" &&
 							<Delete
 								className="material-icons"
 								style={{ fontSize: '14px' }}
