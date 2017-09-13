@@ -203,7 +203,15 @@ class NewStory extends React.Component {
 			api
 				.updateStory(story._id, story)
 				.then(_story => {
-					return api.getColumn(_story.column._id, auth.getToken())
+					if (_story.column && _story.column._id) {
+						return api.getColumn(_story.column._id, auth.getToken())
+					} else {
+						this.setState({
+							story,
+							status: this.SAVE_STATUS.UNDIRTIED,
+							saveStatus: `Saved ${moment(new Date()).calendar()}`
+						})
+					}
 				})
 				.then(column => {
 					story.column = column
