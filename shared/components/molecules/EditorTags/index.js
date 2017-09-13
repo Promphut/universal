@@ -9,6 +9,9 @@ import Request from 'superagent'
 import api from '../../../services/api'
 import auth from '../../../services/auth'
 import config from '../../../config'
+import pullAllWith from 'lodash/pullAllWith'
+import isEqual from 'lodash/isEqual'
+import AutoComplete from 'material-ui/AutoComplete'
 
 const Container = styled.div`
 `
@@ -61,13 +64,13 @@ class EditorTags extends React.Component {
 
 	getTags = () => {
 		api.getTags().then(tags => {
-			let allTags = []
-
-			tags.forEach(tag => {
-				allTags.push(tag.slug)
+			let result = []
+			tags.map((tag, i) => {
+				result[i] = { text: tag.name, value: tag._id }
 			})
-
-			this.setState({ allTags })
+			this.setState({
+				allTags: result
+			})
 		})
 	}
 
@@ -76,7 +79,7 @@ class EditorTags extends React.Component {
 			let result = []
 
 			tags.map((tag, i) => {
-				result[i] = { text: tag.name, value: tag._id, id: tag._id }
+				result[i] = { text: tag.name, value: tag._id }
 			})
 
 			this.setState({
@@ -85,55 +88,8 @@ class EditorTags extends React.Component {
 		})
 	}
 
-	changeTag = (e, tag) => {
+	changeTag = (tag) => {
 		this.setState({ tag })
-	}
-
-	enterTag = e => {
-		if (e.charCode === 13) {
-			const { sid } = this.props.story
-			let { tag, tags, allTags } = this.state
-
-			if (
-				tag.text !== '' &&
-				findIndex(tags, { text: capitalize(tag.text) }) === -1
-			) {
-				if (allTags.indexOf(tag.toLowerCase()) !== -1) {
-					api.getTagFromTagSlug(tag).then(t => {
-						const id = t._id
-
-						Request.post(
-							`${config.BACKURL}/stories/${sid}/tags/${id}?token=${auth.getToken()}`
-						).end((err, res) => {
-							if (err) throw err
-							else {
-								const result = {
-									text: res.body.tag.name,
-									value: res.body.tag._id,
-									id: res.body.tag._id
-								}
-								tags.push(result)
-
-								this.setState({ tags })
-							}
-						})
-					})
-				} else {
-					api.addTag(capitalize(tag)).then(res => {
-						const result = {
-							text: res.name,
-							value: res._id,
-							id: res._id
-						}
-						tags.push(result)
-
-						this.setState({ tags })
-					})
-				}
-			}
-
-			this.setState({ tag: '', tags })
-		}
 	}
 
 	removeTag = (data, index) => {
@@ -141,7 +97,7 @@ class EditorTags extends React.Component {
 		const { tags } = this.state
 
 		Request.delete(
-			`${config.BACKURL}/stories/${sid}/tags/${data.id}?token=${auth.getToken()}`
+			`${config.BACKURL}/stories/${sid}/tags/${data.value}?token=${auth.getToken()}`
 		).end((err, res) => {
 			if (err) throw err
 			else {
@@ -151,9 +107,49 @@ class EditorTags extends React.Component {
 		})
 	}
 
+	selectedTag = (sel, index) => {
+		const { sid } = this.props.story
+		let { tag, tags, allTags } = this.state
+		var allTagsIndex = findIndex(allTags, { text: capitalize(sel) })
+		var tagsIndex = findIndex(tags, { text: capitalize(sel) })
+		// console.log(sel)
+		if(sel.text&&sel.value){
+			api.addStoryTag(sid,sel.value).then((res)=>{
+				const result = {
+					text: res.tag.name,
+					value: res.tag._id,
+				}
+				tags.push(result)
+				this.setState({ tags })
+			})
+		}else if(sel!= '' && allTagsIndex != -1 && tagsIndex === -1){
+			var tid = allTags[allTagsIndex].value
+			api.addStoryTag(sid,tid).then((res)=>{
+				const result = {
+					text: res.tag.name,
+					value: res.tag._id,
+				}
+				tags.push(result)
+				this.setState({ tags })
+			})
+		}else if(sel!= '' && allTagsIndex === -1 && tagsIndex === -1){
+			api.addTag(capitalize(tag)).then(r => {
+				api.addStoryTag(sid,r._id).then((res)=>{
+					const result = {
+						text: res.tag.name,
+						value: res.tag._id,
+					}
+					tags.push(result)
+					this.setState({ tags })
+				})
+			})
+		}
+		this.setState({ tag: ''})
+	}
+
 	render() {
 		const { story, changeFocusWord } = this.props
-		const { tag, tags } = this.state
+		const { tag, tags, allTags } = this.state
 		const { focusWord } = story
 
 		return (
@@ -178,15 +174,16 @@ class EditorTags extends React.Component {
 							: ''}
 					</Chips>
 					{tags.length !== 5
-						? <TextField
-								value={tag}
-								onChange={this.changeTag}
-								onKeyPress={this.enterTag}
-								hintText="|Add up to 5 tags ..."
-								fullWidth={true}
-								style={{ fontSize: '14px' }}
+						&& <AutoComplete
+								hintText="Add up to 5 tags ..."
+								dataSource={pullAllWith(allTags, tags, isEqual)}
+								filter={AutoComplete.fuzzyFilter}
+								onNewRequest={this.selectedTag}
+								onUpdateInput={this.changeTag}
+								openOnFocus
+								searchText={tag}
 							/>
-						: null}
+						}
 				</TagContainer>
 
 				<FocusWordContainer>
