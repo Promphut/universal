@@ -200,15 +200,20 @@ class NewStory extends React.Component {
 			if (!story.meta.title) story.meta.title = prevStory.title
 			if (!story.meta.desc) story.meta.desc = prevStory.desc
 
-			api.updateStory(story._id, story).then(_story => {
-				story.column = _story.column
-
-				this.setState({
-					story,
-					status: this.SAVE_STATUS.UNDIRTIED,
-					saveStatus: `Saved ${moment(new Date()).calendar()}`
+			api
+				.updateStory(story._id, story)
+				.then(_story => {
+					return api.getColumn(_story.column._id, auth.getToken())
 				})
-			})
+				.then(column => {
+					story.column = column
+
+					this.setState({
+						story,
+						status: this.SAVE_STATUS.UNDIRTIED,
+						saveStatus: `Saved ${moment(new Date()).calendar()}`
+					})
+				})
 		}
 	}
 
