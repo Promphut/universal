@@ -110,7 +110,6 @@ class UploadPicture extends React.Component {
     labelStyle: PropTypes.object,
     width: PropTypes.number,
     height: PropTypes.number,
-    label: PropTypes.string,
     type: PropTypes.string,
     src: PropTypes.string,
     path: PropTypes.string,
