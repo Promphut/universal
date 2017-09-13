@@ -184,10 +184,13 @@ class NewStory extends React.Component {
 			this.setState({ saveStatus: 'Saving...' })
 
 			story.status = story.status === 1 ? 3 : story.status
+			const newsCol = menu.columns.find(col => col.name === 'news')._id
 			if (story.format === 'NEWS') {
-				story.column = menu.columns.find(col => col.name === 'news')._id
+				story.column = newsCol
 				story.contentType = 'NEWS'
 			} else {
+				if (story.column === newsCol || story.column._id === newsCol)
+					story.column = null
 				story.contentType = story.contentType !== 'OTHER'
 					? story.contentType
 					: null

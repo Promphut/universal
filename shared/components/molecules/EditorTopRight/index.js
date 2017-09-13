@@ -87,21 +87,28 @@ class EditorTopRight extends React.Component {
 		let { story, prevStory, menu, notification } = this.props
 
 		story.status = story.status === 0 ? 1 : story.status
+
+		const newsCol = menu.columns.find(col => col.name === 'news')._id
 		if (story.format === 'NEWS') {
-			story.column = menu.columns.find(col => col.name === 'news')._id
+			story.column = newsCol
 			story.contentType = 'NEWS'
 		} else {
+			if (story.column === newsCol || story.column._id === newsCol)
+				story.column = null
 			story.contentType = story.contentType !== 'OTHER'
 				? story.contentType
 				: null
 		}
+
+		console.log('story.format', story.format)
+		console.log('story.column', story.column)
 
 		if (!story.meta.title) story.meta.title = prevStory.title
 		if (!story.meta.desc) story.meta.desc = prevStory.desc
 
 		if (!story.title || story.title === '') {
 			notification('Story must have title before publishing.')
-		} else if (!story.column) {
+		} else if (!story.column || story.column === null) {
 			notification('Story must have column before publishing.')
 		} else {
 			api
