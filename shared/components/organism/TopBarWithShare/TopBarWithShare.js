@@ -1,12 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled, {keyframes}  from 'styled-components'
-import {Link} from 'react-router-dom'
+import styled, { keyframes } from 'styled-components'
+import { Link } from 'react-router-dom'
 import Avatar from 'material-ui/Avatar'
 import FontIcon from 'material-ui/FontIcon'
 import { withRouter } from 'react-router'
 
-import { LogoLink, PrimaryButton, SecondaryButton, LeftMenu, ShareButtonTop, ShareDropdownTop, FbShareButton } from '../../../components'
+import {
+	LogoLink,
+	PrimaryButton,
+	SecondaryButton,
+	LeftMenu,
+	ShareButtonTop,
+	ShareDropdownTop,
+	FbShareButton
+} from '../../../components'
 
 // Imported Utils
 import auth from '../../../services/auth'
@@ -16,7 +24,7 @@ const Wrapper = styled.div`
 	.transparent {
 		transition: background 0.2s ease;
 		transition: border 0.2s ease;
-  	background: none;
+		background: none;
 		border: none;
 	}
 `
@@ -24,16 +32,16 @@ const Wrapper = styled.div`
 const Container = styled.div`
 	margin: 0;
 	padding: 0;
-  background: ${props => props.theme.barTone=='light'?'white':props.theme.primaryColor};
-	color: ${props => props.theme.barTone=='light'?'#222':'white'};
-  height: 60px;
-  border-bottom: ${props => props.theme.barTone=='light'?'1px solid #e2e2e2':'none'};
+	background: ${props => (props.theme.barTone == 'light' ? 'white' : props.theme.primaryColor)};
+	color: ${props => (props.theme.barTone == 'light' ? '#222' : 'white')};
+	height: 60px;
+	border-bottom: ${props => (props.theme.barTone == 'light' ? '1px solid #e2e2e2' : 'none')};
 	width: 100%;
 	transition: .1s;
 	position: absolute;
 
 
-  animation: ${props=> props.open ? slideIn : slideOut} 0.1s forwards;
+	animation: ${props => (props.open ? slideIn : slideOut)} 0.1s forwards;
 	display: flex;
 
 	flex-flow: row nowrap;
@@ -47,7 +55,7 @@ const Container = styled.div`
 `
 
 const slideOut = keyframes`
-	from {
+from {
     transform: translateY(-100%);
   }
   to {
@@ -56,7 +64,7 @@ const slideOut = keyframes`
 `
 
 const slideIn = keyframes`
-	from {
+from {
     transform: translateY(0%);
   }
   to {
@@ -70,16 +78,16 @@ const Left = styled.div`
 `
 
 const HamburgerWrapper = styled.a`
-	display: inline-block;
+display: inline-block;
   float: left;
   text-align: center;
-  color: ${props => props.theme.barTone=='light'?'#222':'white'};
+  color: ${props => (props.theme.barTone == 'light' ? '#222' : 'white')};
   padding: 11px 22px 13px;
   cursor: pointer;
 `
 
 const Hamburger = styled.i`
-	color: ${props => props.theme.barTone=='light'?'#222':'white'};
+	color: ${props => (props.theme.barTone == 'light' ? '#222' : 'white')};
 	padding-top:5px;
 `
 
@@ -126,7 +134,7 @@ const NotLogin = styled.div`
 	margin: 9px 20px;
 
 	& * {
-		color: ${props => props.theme.barTone=='light'?'#222':'white'};
+		color: ${props => (props.theme.barTone == 'light' ? '#222' : 'white')};
 	}
 
 	& a:hover {
@@ -150,7 +158,7 @@ class TopBarWithShare extends React.Component {
 		onScroll: PropTypes.func,
 		scrolling: PropTypes.bool,
 		status: PropTypes.string,
-		editButton:PropTypes.string,
+		editButton: PropTypes.string,
 		title: PropTypes.string,
 
 		menu: PropTypes.object,
@@ -174,7 +182,7 @@ class TopBarWithShare extends React.Component {
 		}
 	}
 
-	handleScroll = (e) => {
+	handleScroll = e => {
 		this.props.onScroll(e)
 
 		const prevTop = this.state.scroll
@@ -192,104 +200,151 @@ class TopBarWithShare extends React.Component {
 
 		// this.setState({ scroll: nowTop})
 		// this.setState({scroll: nowTop})
-		if(Math.abs(diff)>5){
-			if (nowTop<120&&!diff > 0) {this.setState({open: true,  scroll: nowTop})
-			}else if (diff > 0) {this.setState({open: true,  scroll: nowTop})
-			}else this.setState({open: false, scroll: nowTop})
+		if (Math.abs(diff) > 5) {
+			if (nowTop < 120 && !diff > 0) {
+				this.setState({ open: true, scroll: nowTop })
+			} else if (diff > 0) {
+				this.setState({ open: true, scroll: nowTop })
+			} else this.setState({ open: false, scroll: nowTop })
 		}
-
 	}
 
-	openPop = (side) => {
+	openPop = side => {
 		if (side === 'left') {
-			this.setState({alertLeft: true})
+			this.setState({ alertLeft: true })
 		} else if (side === 'right') {
-			this.setState({alertRight: true})
+			this.setState({ alertRight: true })
 		}
 	}
 
-	handleRequestClose = (side) => {
+	handleRequestClose = side => {
 		if (side === 'left') {
-			this.setState({alertLeft: false})
+			this.setState({ alertLeft: false })
 		} else if (side === 'right') {
-			this.setState({alertRight: false})
+			this.setState({ alertRight: false })
 		}
 	}
 
-	close = (e,to,side) => {
+	close = (e, to, side) => {
 		e.preventDefault()
 		//console.log(e,to,side)
 		if (side === 'left') {
-			this.setState({alertLeft: false})
+			this.setState({ alertLeft: false })
 		} else if (side === 'right') {
-			this.setState({alertRight: false})
+			this.setState({ alertRight: false })
 		}
-		if(this.props.location.pathname != to) this.props.history.push(to)
+		if (this.props.location.pathname != to) this.props.history.push(to)
 	}
 
 	// signup(){
 	// 	this.props.history.push('/signup')
 	// }
 
-	componentWillMount(){
-		this.role = auth.hasRoles(["ADMIN","EDITOR","WRITER"])
+	componentWillMount() {
+		this.role = auth.hasRoles(['ADMIN', 'EDITOR', 'WRITER'])
 	}
 
 	componentWillUnmount() {
-		if(this.props.onScroll) window.removeEventListener('scroll', this.handleScroll)
-
+		if (this.props.onScroll)
+			window.removeEventListener('scroll', this.handleScroll)
 	}
 
 	componentDidMount() {
-		if(this.props.onScroll) window.addEventListener('scroll', this.handleScroll)
-			//console.log(this.role)
+		if (this.props.onScroll)
+			window.addEventListener('scroll', this.handleScroll)
+		//console.log(this.role)
 	}
 
-	render () {
-		let {theme} = this.context.setting.publisher
-		let {alertLeft, alertRight, topOpacity, open} = this.state
+	render() {
+		let { theme } = this.context.setting.publisher
+		let { alertLeft, alertRight, topOpacity, open } = this.state
 		let status = this.props.status || 'UNLOGGEDIN',
-			{scrolling, user, menu, transparent, editButton, hasCover,share}  = this.props
+			{
+				scrolling,
+				user,
+				menu,
+				transparent,
+				editButton,
+				hasCover,
+				share
+			} = this.props
 
-	  const logoStyleBase = {
-	    display: 'inline-block',
-	    float: 'left',
-	    margin: 'auto'
-	  }
-		const logoStyle = utils.isMobile() ? {
-			...logoStyleBase,
-			display: 'none'
-		} : {
-			...logoStyleBase
+		const logoStyleBase = {
+			display: 'inline-block',
+			float: 'left',
+			margin: 'auto'
 		}
-		const logoStyleMobile = utils.isMobile() ? {
-			...logoStyleBase
-		} : {
-			...logoStyleBase,
-			display: 'none'
-		}
+		const logoStyle = utils.isMobile()
+			? {
+					...logoStyleBase,
+					display: 'none'
+				}
+			: {
+					...logoStyleBase
+				}
+		const logoStyleMobile = utils.isMobile()
+			? {
+					...logoStyleBase
+				}
+			: {
+					...logoStyleBase,
+					display: 'none'
+				}
 
 		const moreStyle = {
-			color: (theme.barTone == 'light' && ((scrolling && transparent) || !hasCover)) ? '#222' : '#FFF',
+			color: theme.barTone == 'light' &&
+				((scrolling && transparent) || !hasCover)
+				? '#222'
+				: '#FFF',
 			padding: '16px 13px'
 		}
 
-	  return (
-	    <Wrapper >
-				<Container className={'menu-font ' + ((!scrolling && transparent && hasCover) ? 'transparent' : '')}  open={open}>
+		return (
+			<Wrapper>
+				<Container
+					className={
+						'menu-font ' +
+							(!scrolling && transparent && hasCover ? 'transparent' : '')
+					}
+					open={open}
+				>
 					<Left>
-			      <HamburgerWrapper onClick={() => this.openPop('left')}>
-			        <Hamburger className="material-icons" style={!scrolling && transparent && hasCover ? {color:'#FFF'} : {}}>menu</Hamburger>
-			      </HamburgerWrapper>
+						<HamburgerWrapper onClick={() => this.openPop('left')}>
+							<Hamburger
+								className="material-icons"
+								style={
+									!scrolling && transparent && hasCover ? { color: '#FFF' } : {}
+								}
+							>
+								menu
+							</Hamburger>
+						</HamburgerWrapper>
 						<LogoWrapper>
-			      	<LogoLink to="/" src={theme.slogo} title={this.props.title} style={logoStyleMobile} />
+							<LogoLink
+								to="/"
+								src={theme.slogo}
+								title={this.props.title}
+								style={logoStyleMobile}
+							/>
 						</LogoWrapper>
 					</Left>
 
 					<Right>
-						<FbShareButton style={{float: 'left'}} button={<ShareButtonTop number={share&&share.fb} barTone={theme.barTone} scrolling={scrolling} hasCover={hasCover}/>} />
+						<FbShareButton
+							style={{ float: 'left' }}
+							button={
+								<ShareButtonTop
+									number={share && share.fb}
+									barTone={theme.barTone}
+									scrolling={scrolling}
+									hasCover={hasCover}
+								/>
+							}
+						/>
 						<ShareDropdownTop>
-							<FontIcon style={moreStyle} className="material-icons" >more_vert</FontIcon>
+							<FontIcon style={moreStyle} className="material-icons">
+								more_vert
+							</FontIcon>
 						</ShareDropdownTop>
 					</Right>
 				</Container>
@@ -298,11 +353,11 @@ class TopBarWithShare extends React.Component {
 					menu={menu}
 					open={alertLeft}
 					close={() => this.handleRequestClose('left')}
-					closeAndLink={(e,to) => this.close(e,to,'left')}
+					closeAndLink={(e, to) => this.close(e, to, 'left')}
 				/>
-	    </Wrapper>
-	  )
+			</Wrapper>
+		)
 	}
 }
 
-export default withRouter(TopBarWithShare);
+export default withRouter(TopBarWithShare)

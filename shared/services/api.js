@@ -1127,4 +1127,12 @@ api.getRecommendStories = sid =>{
 		return res.body
 	}, api.err)
 }
+api.deleteImage = url =>{
+	return Request.delete(`${config.BACKURL}${url}`)
+	.set('x-access-token', auth.getToken())
+	.set('Accept', 'application/json')
+	.then(res => {
+		return res.body
+	}, api.err)
+}
 module.exports = api

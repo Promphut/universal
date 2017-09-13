@@ -24,6 +24,7 @@ class FroalaEditor extends React.Component {
 	}
 
 	froalaConfig = {
+		charCounterCount: false,
 		imageEditButtons: [
 			'imageAlignCustom',
 			'imageAlt',
@@ -92,7 +93,9 @@ class FroalaEditor extends React.Component {
 		videoEditButtons: [],
 		videoInsertButtons: ['videoBack', '|', 'videoByURL', 'videoEmbed'],
 		videoResize: true,
-		imageUploadURL: this.props.imgURL?this.props.imgURL:`${BACKURL}/stories/${this.props.match.params.sid}/image`,
+		imageUploadURL: this.props.imgURL
+			? this.props.imgURL
+			: `${BACKURL}/stories/${this.props.match.params.sid}/image`,
 		imageUploadParam: 'image',
 		imageMaxSize: 1024 * 1024 * 10
 	}

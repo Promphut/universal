@@ -8,7 +8,7 @@ import Cropper from 'react-cropper';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
-import {PrimaryButton} from '../../../components'
+import {PrimaryButton,ConfirmDialog} from '../../../components'
 import config from '../../../config'
 
 import 'cropperjs/dist/cropper.css'
@@ -57,10 +57,6 @@ const Preview = styled.div`
   background-size:cover;
   background-position:center;
   color:#fff;
-  &:hover{
-    cursor:pointer;
-    text-decoration:underline;
-  }
 `
 
 const Filter = styled.div`
@@ -69,24 +65,37 @@ const Filter = styled.div`
   left:0px;
   width:${props => props.width}px;
   height:${props => props.height}px;
-  background:rgba(0,0,0,0.3);
+  background:rgba(255,255,255,0.8);
   text-align:center;
   font-size:14px;
-  color:#fff;
   display:flex;
   align-items:center;
   justify-content:center;
+  border:1px solid #8E8E8E;
+`
+const Label = styled.span`
+  position:relative;
+  font-size:14px;
+  font-family:'Nunito';
+  color:${props=> props.theme.accentColor};
   &:hover{
     cursor:pointer;
     text-decoration:underline;
   }
 `
-
-const Label = styled.span`
-  position:relative;
-  font-size:14px;
-  color:${props=> props.theme.accentColor};
+const Delete = styled.i`
+  width:16px;
+  height:16px;
+  position:absolute;
+  top:3px;
+  right:3px;
+  color:rgba(0,0,0,0.5);
+  font-size:8px;
+  &:hover{
+    cursor:pointer;
+  }
 `
+
 
 class UploadPicture extends React.Component {
   static defaultProps = {
@@ -126,7 +135,8 @@ class UploadPicture extends React.Component {
       err:false,
       open:false,
       data:{},
-      previewUrl:''
+      previewUrl:'',
+      open2:false
     }
   }
 
@@ -215,19 +225,47 @@ class UploadPicture extends React.Component {
     this.setState({open: false});
   }
 
+  handleOpenConfirm = () => {
+    this.setState({open2: true});
+  }
+
+  handleCloseConfirm = () => {
+    this.setState({open2: false});
+  }
+
   uploadToServer = () => {
-    //console.log(this.state.data)
+    this.setState({
+      open: false,
+    })
     api.uploadFile(this.file, this.props.type, config.BACKURL + this.props.path, this.state.data)
     .then(res => {
       this.setState({
-        open: false,
-        msg: 'Upload Completed!',
+        msg: 'Upload',
         err: false
       })
     })
     .catch(err => {
       this.setState({
-        open: false,
+        msg: err.message,
+        err: true
+      })
+    })
+  }
+
+  deleteImage = () => {
+    this.setState({
+      open2: false,
+    })
+    api.deleteImage(this.props.deleteURL)
+    .then(res => {
+      this.setState({
+        statePreview:false,
+        msg: 'Deleted',
+        err: false
+      })
+    })
+    .catch(err => {
+      this.setState({
         msg: err.message,
         err: true
       })
@@ -246,7 +284,7 @@ class UploadPicture extends React.Component {
   render(){
 
     var {msg,statePreview,err,preview,previewUrl} = this.state
-    var {label,style,type,width,height,labelStyle,src,id} = this.props
+    var {label,style,type,width,height,labelStyle,src,id,className,deleteURL} = this.props
     var {theme} = this.context.setting.publisher
 
     //console.log('src', src)
@@ -268,6 +306,13 @@ class UploadPicture extends React.Component {
 
     return (
       <Container style={{...style,width:width,height:height+20+'px'}}>
+        <ConfirmDialog 
+          title='Delete Cover Picture?'
+          description='Are you sure you want to delete this picture?'
+          onRequestClose={this.handleCloseConfirm}
+          open={this.state.open2}
+          action={this.deleteImage}
+        />
         <Dialog
           actions={actions}
           modal={true}
@@ -286,9 +331,12 @@ class UploadPicture extends React.Component {
             viewMode={1}
             crop={this._crop} />
         </Dialog>
-        {!statePreview&&<Box width={width} height={height} className="menu-font" id={id} onClick={()=>(dom(this.refs.imageLoader).click())}><Label style={{...labelStyle}}>{label?label:"Upload Picture"}</Label></Box>}
+        {!statePreview&&<Box width={width} height={height} className={className+" menu-font"} id={id} onClick={()=>(dom(this.refs.imageLoader).click())}><Label style={{...labelStyle}}>{label?label:"Upload Picture"}</Label></Box>}
         <Preview width={width} height={height} ref='preview' style={{display:statePreview?'block':'none',backgroundImage:'url('+(preview || src)+')'}}>
-          <Filter width={width} height={height} onClick={()=>(dom(this.refs.imageLoader).click())} ><Label style={{...labelStyle,color:'#fff'}}>Edit</Label></Filter>
+          <Filter width={width} height={height} >
+            {deleteURL&&<Delete className="material-icons" style={{fontSize:'14px'}} onClick={this.handleOpenConfirm}>close</Delete>}
+            <Label style={{...labelStyle,color:'rgba(0,0,0,0.5)'}} onClick={()=>(dom(this.refs.imageLoader).click())} >Edit</Label>
+          </Filter>
         </Preview>
         <Des className='sans-font' style={{color:err?'#D8000C':'#c2c2c2'}}>{msg}</Des>
         <input type="file" ref="imageLoader" name="imageLoader" onChange={this.upload} style={{visibility:'hidden'}}/>

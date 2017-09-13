@@ -75,7 +75,7 @@ class App extends React.Component {
 	}
 
 	getChildContext() {
-		// console.log('CHILD', this.props)
+		// console.log('CHILD', this.props.setting)
 		return { setting: this.props.setting }
 	}
 
@@ -302,7 +302,13 @@ class App extends React.Component {
 								<Route
 									exact
 									path="/stories/:columnSlug/:storySlug/:sid"
-									render={props => <StoryPage {...props} countView story={this.props.story && this.props.story}/>}
+									render={props => (
+										<StoryPage
+											{...props}
+											countView
+											story={this.props.story && this.props.story}
+										/>
+									)}
 								/>
 
 								<Route
@@ -373,41 +379,26 @@ class App extends React.Component {
 									exact
 									path="/me/stories/new"
 									hasRoles={['ADMIN', 'WRITER', 'EDITOR']}
-									render={props => (
-										<UserSetting {...props}>
-											<NewStory {...props} />
-										</UserSetting>
-									)}
+									render={props => <NewStory {...props} />}
 								/>
+
 								<PrivateRoute
 									exact
 									path="/me/stories/:sid/edit"
-									render={props => (
-										<UserSetting {...props}>
-											<EditStory {...props} />
-										</UserSetting>
-									)}
+									render={props => <NewStory {...props} />}
 								/>
 
 								{/* STORY 5 PREVIEW DRAFTED STORY */}
 								<Route
 									exact
 									path="/me/stories/:sid"
-									render={props => (
-										<Preview
-											{...props}
-										/>
-									)}
+									render={props => <Preview {...props} />}
 								/>
 
 								<Route
 									exact
 									path="/me/stories/:sid/mobile"
-									render={props => (
-										<PreviewMobile
-											{...props}
-										/>
-									)}
+									render={props => <PreviewMobile {...props} />}
 								/>
 
 								<Route
