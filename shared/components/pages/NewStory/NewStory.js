@@ -92,7 +92,7 @@ class NewStory extends React.Component {
 		setting: PropTypes.object
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		const { publisher } = this.state
 
 		if (this.props.match.params.sid) {
@@ -116,9 +116,7 @@ class NewStory extends React.Component {
 
 		this.getColumns()
 		this.getTypes()
-	}
 
-	componentDidMount() {
 		this.interval = setInterval(this.autoSave, 3000)
 	}
 
@@ -184,10 +182,16 @@ class NewStory extends React.Component {
 			this.setState({ saveStatus: 'Saving...' })
 
 			story.status = story.status === 1 ? 3 : story.status
+			const newsCol = menu.columns.find(col => col.name === 'news')._id
 			if (story.format === 'NEWS') {
-				story.column = menu.columns.find(col => col.name === 'news')._id
+				story.column = newsCol
 				story.contentType = 'NEWS'
 			} else {
+				if (
+					story.column === newsCol ||
+					(story.column && story.column._id === newsCol)
+				)
+					story.column = null
 				story.contentType = story.contentType !== 'OTHER'
 					? story.contentType
 					: null
@@ -334,6 +338,7 @@ class NewStory extends React.Component {
 			prevStory,
 			menu,
 			preview,
+			status,
 			saveStatus,
 			textNotification,
 			showNotification
@@ -347,11 +352,13 @@ class NewStory extends React.Component {
 			</TopLeft>
 		)
 
+		const saving = status !== this.SAVE_STATUS.UNDIRTIED ? true : false
 		const topRight = (
 			<EditorTopRight
 				story={story}
 				prevStory={prevStory}
 				menu={menu}
+				saving={saving}
 				saveStatus={this.handleSaveStatus}
 				notification={this.showNotification}
 				preview={this.handlePreview}

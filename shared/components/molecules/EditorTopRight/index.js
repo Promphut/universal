@@ -87,10 +87,17 @@ class EditorTopRight extends React.Component {
 		let { story, prevStory, menu, notification } = this.props
 
 		story.status = story.status === 0 ? 1 : story.status
+
+		const newsCol = menu.columns.find(col => col.name === 'news')._id
 		if (story.format === 'NEWS') {
-			story.column = menu.columns.find(col => col.name === 'news')._id
+			story.column = newsCol
 			story.contentType = 'NEWS'
 		} else {
+			if (
+				story.column === newsCol ||
+				(story.column && story.column._id === newsCol)
+			)
+				story.column = null
 			story.contentType = story.contentType !== 'OTHER'
 				? story.contentType
 				: null
@@ -101,7 +108,7 @@ class EditorTopRight extends React.Component {
 
 		if (!story.title || story.title === '') {
 			notification('Story must have title before publishing.')
-		} else if (!story.column) {
+		} else if (!story.column || story.column === null) {
 			notification('Story must have column before publishing.')
 		} else {
 			api
@@ -145,11 +152,25 @@ class EditorTopRight extends React.Component {
 	}
 
 	toPreview = () => {
-		const { preview } = this.props
+		const { story, menu, saving, preview, notification } = this.props
 
-		this.setState({ mode: 'preview' }, () => {
-			preview('preview')
-		})
+		const newsCol = menu.columns.find(col => col.name === 'news')._id
+
+		if (!story.title || story.title === '') {
+			notification('Story must have title before preview.')
+		} else if (
+			!story.column ||
+			story.column === null ||
+			(story.format === 'ARTICLE' && story.column === newsCol)
+		) {
+			notification('Story must have column before preview.')
+		} else if (saving) {
+			notification('Saving...')
+		} else {
+			this.setState({ mode: 'preview' }, () => {
+				preview('preview')
+			})
+		}
 	}
 
 	openDialog = () => {
