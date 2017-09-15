@@ -75,7 +75,7 @@ const Mobile = styled.iframe`
 	border: none;
 	box-shadow: rgba(143, 143, 143, 0.5) 0px 0px 15px;
 	margin-top: 80px;
-	height: 90vh;
+	height: 85vh;
 `
 
 const Cover = styled.div`

@@ -38,8 +38,8 @@ class FroalaEditor extends React.Component {
 		imageResize: false,
 		imageDefaultAlign: 'center',
 		inlineStyles: {
-			Caption: "font-family: 'PT Sans', 'cs_prajad'; font-size: 16px; color: #8e8e8e; line-height: .5;",
-			Source: "font-family:'PT Sans', 'cs_prajad'; font-size: 16px; color: #8e8e8e;"
+			Caption: "font-family: 'PT Sans', 'cs_prajad'; font-size: 16px; color: #8e8e8e; font-weight: normal;",
+			Source: "font-family:'PT Sans', 'cs_prajad'; font-size: 16px; color: #8e8e8e; font-weight: normal;"
 			// 'Image source': "font-family: 'PT Sans', 'cs_prajad'; font-size: 14px; color: #CCC; font-style: italic; line-height: .1;"
 		},
 		linkEditButtons: ['linkOpen', 'linkEdit', 'linkRemove'],
@@ -49,11 +49,12 @@ class FroalaEditor extends React.Component {
 			H3: 'Subhead',
 			N: 'Normal'
 		},
+		paragraphMultipleStyles: false,
 		paragraphStyles: {
 			'fr-text-caption': 'Caption',
 			'fr-text-source': 'Source'
 		},
-		placeholderText: 'เขียนบทความ...',
+		placeholderText: 'Write ...',
 		quickInsertButtons: false,
 		tableEditButtons: [
 			'tableHeader',
@@ -103,7 +104,7 @@ class FroalaEditor extends React.Component {
 		charCounterCount: false,
 		linkEditButtons: ['linkOpen', 'linkEdit', 'linkRemove'],
 		linkInsertButtons: ['linkBack'],
-		placeholderText: '',
+		placeholderText: 'Write Highlight ...',
 		quickInsertButtons: false,
 		tabSpaces: 4,
 		toolbarButtons: [

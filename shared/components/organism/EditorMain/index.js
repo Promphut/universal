@@ -63,7 +63,7 @@ const Highlight = styled.div`
 const Divider = styled.div`
     width: 100%;
     min-height: 1px;
-    margin: 30px 0px;
+    margin: 80px 0px 56px;
     background-color: #BFBFBF;
 `
 
@@ -86,8 +86,6 @@ class EditorMain extends React.Component {
 	render() {
 		const { story, changeTitle, changeHighlight, changeHtml } = this.props
 		const { title, highlight, html, focusWord } = story
-
-		console.log('story._id', story._id)
 
 		return (
 			<Container>
