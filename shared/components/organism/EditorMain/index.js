@@ -87,6 +87,8 @@ class EditorMain extends React.Component {
 		const { story, changeTitle, changeHighlight, changeHtml } = this.props
 		const { title, highlight, html, focusWord } = story
 
+		console.log('story._id', story._id)
+
 		return (
 			<Container>
 				<Title
@@ -104,13 +106,19 @@ class EditorMain extends React.Component {
 								model={highlight}
 								onModelChange={changeHighlight}
 								highlight={true}
+								sid={story._id}
 							/>
 						</Highlight>
 					</HighlightBox>
 				</HighlightContainer>
 
 				<HtmlContainer>
-					<FroalaEditor ref="paper" model={html} onModelChange={changeHtml} />
+					<FroalaEditor
+						ref="paper"
+						model={html}
+						onModelChange={changeHtml}
+						sid={story._id}
+					/>
 				</HtmlContainer>
 
 				<Divider />
