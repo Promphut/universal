@@ -95,7 +95,7 @@ class FroalaEditor extends React.Component {
 		videoResize: true,
 		imageUploadURL: this.props.imgURL
 			? this.props.imgURL
-			: `${BACKURL}/stories/${this.props.match.params.sid}/image`,
+			: `${BACKURL}/stories/${this.props.sid}/image`,
 		imageUploadParam: 'image',
 		imageMaxSize: 1024 * 1024 * 10
 	}

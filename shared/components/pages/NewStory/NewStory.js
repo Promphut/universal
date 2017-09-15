@@ -153,6 +153,7 @@ class NewStory extends React.Component {
 			story.meta = story.meta ? story.meta : {}
 
 			const prevStory = {
+				column: story.column ? story.column : null,
 				slug: story.slug ? story.slug : '',
 				title: story.meta && story.meta.title ? story.meta.title : '',
 				desc: story.meta && story.meta.desc ? story.meta.desc : ''
@@ -191,7 +192,7 @@ class NewStory extends React.Component {
 					story.column === newsCol ||
 					(story.column && story.column._id === newsCol)
 				)
-					story.column = null
+					story.column = prevStory.column ? prevStory.column : null
 				story.contentType = story.contentType !== 'OTHER'
 					? story.contentType
 					: null
@@ -200,28 +201,17 @@ class NewStory extends React.Component {
 			if (!story.meta.title) story.meta.title = prevStory.title
 			if (!story.meta.desc) story.meta.desc = prevStory.desc
 
-			api
-				.updateStory(story._id, story)
-				.then(_story => {
-					if (_story.column && _story.column._id) {
-						return api.getColumn(_story.column._id, auth.getToken())
-					} else {
-						this.setState({
-							story,
-							status: this.SAVE_STATUS.UNDIRTIED,
-							saveStatus: `Saved ${moment(new Date()).calendar()}`
-						})
-					}
-				})
-				.then(column => {
-					story.column = column
+			api.updateStory(story._id, story).then(_story => {
+				story.column = _story.column
+				story.cover = _story.cover
+				story.coverMobile = _story.coverMobile
 
-					this.setState({
-						story,
-						status: this.SAVE_STATUS.UNDIRTIED,
-						saveStatus: `Saved ${moment(new Date()).calendar()}`
-					})
+				this.setState({
+					story,
+					status: this.SAVE_STATUS.UNDIRTIED,
+					saveStatus: `Saved ${moment(new Date()).calendar()}`
 				})
+			})
 		}
 	}
 
