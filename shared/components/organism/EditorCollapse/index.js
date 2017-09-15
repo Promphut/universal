@@ -1,7 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import capitalize from 'lodash/capitalize'
 import FontIcon from 'material-ui/FontIcon'
+import api from '../../../services/api'
+import { withRouter } from 'react-router'
+
 import {
 	CollapseBlock,
 	EditorAdvanced,
@@ -19,7 +23,8 @@ class EditorCollapse extends React.Component {
 		super(props)
 
 		this.state = {
-			select: -1
+			select: -1,
+			showTags: null
 		}
 	}
 
@@ -27,11 +32,51 @@ class EditorCollapse extends React.Component {
 		setting: PropTypes.object
 	}
 
+	componentDidMount() {
+		const sid = this.props.match.params.sid ? this.props.match.params.sid : null
+
+		if (sid) {
+			api.getStoryTags(sid).then(tags => {
+				let arrayTags = []
+
+				tags.forEach(tag => {
+					arrayTags.push(tag.name)
+				})
+
+				this.setShowTags(arrayTags)
+			})
+		}
+	}
+
 	selectBlock = index => {
 		let { select } = this.state
 		select = select !== index ? index : -1
 
 		this.setState({ select })
+	}
+
+	setTags = tags => {
+		let arrayTags = []
+
+		tags.forEach(tag => {
+			arrayTags.push(tag.text)
+		})
+
+		this.setShowTags(arrayTags)
+	}
+
+	setShowTags = tags => {
+		let showTags = ''
+		let index = 0
+
+		tags.forEach(tag => {
+			if (index !== 0) showTags += ', '
+			showTags += tag
+
+			index++
+		})
+
+		this.setState({ showTags })
 	}
 
 	render() {
@@ -47,13 +92,13 @@ class EditorCollapse extends React.Component {
 			changeMetaTitle,
 			changeMetaDesc
 		} = this.props
-		const { select } = this.state
+		const { select, showTags } = this.state
 
 		return (
 			<Container className="nunito-font">
 				<CollapseBlock
 					title="Content Setting"
-					desc={null}
+					desc={story.format ? capitalize(story.format) : null}
 					select={() => this.selectBlock(0)}
 					open={select === 0 ? true : false}
 				>
@@ -77,16 +122,20 @@ class EditorCollapse extends React.Component {
 
 				<CollapseBlock
 					title="Tags & Focus Keywords"
-					desc={null}
+					desc={showTags}
 					select={() => this.selectBlock(2)}
 					open={select === 2 ? true : false}
 				>
-					<EditorTags story={story} changeFocusWord={changeFocusWord} />
+					<EditorTags
+						story={story}
+						setTags={this.setTags}
+						changeFocusWord={changeFocusWord}
+					/>
 				</CollapseBlock>
 
 				<CollapseBlock
 					title="Advanced Settings"
-					desc={null}
+					desc={story.slug ? story.slug : null}
 					select={() => this.selectBlock(3)}
 					open={select === 3 ? true : false}
 				>
@@ -103,4 +152,4 @@ class EditorCollapse extends React.Component {
 	}
 }
 
-export default EditorCollapse
+export default withRouter(EditorCollapse)

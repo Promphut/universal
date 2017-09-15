@@ -59,7 +59,11 @@ class EditorContent extends React.Component {
 		let { format, column, contentType } = story
 
 		if (column) column = column._id ? column._id : column
-		const type = contentType ? types.indexOf(contentType) : contentType
+		let type = contentType ? types.indexOf(contentType) : contentType
+		column = column === menu.columns.find(col => col.name === 'news')._id
+			? null
+			: column
+		type = type === 0 ? null : type
 
 		return (
 			<Container>

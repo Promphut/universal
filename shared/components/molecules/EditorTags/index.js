@@ -82,9 +82,14 @@ class EditorTags extends React.Component {
 				result[i] = { text: tag.name, value: tag._id }
 			})
 
-			this.setState({
-				tags: result
-			})
+			this.setState(
+				{
+					tags: result
+				},
+				() => {
+					this.props.setTags(result)
+				}
+			)
 		})
 	}
 
@@ -102,7 +107,9 @@ class EditorTags extends React.Component {
 			if (err) throw err
 			else {
 				tags.splice(index, 1)
-				this.setState({ tags })
+				this.setState({ tags }, () => {
+					this.props.setTags(tags)
+				})
 			}
 		})
 	}
@@ -120,7 +127,9 @@ class EditorTags extends React.Component {
 					value: res.tag._id
 				}
 				tags.push(result)
-				this.setState({ tags })
+				this.setState({ tags }, () => {
+					this.props.setTags(tags)
+				})
 			})
 		} else if (sel != '' && allTagsIndex != -1 && tagsIndex === -1) {
 			var tid = allTags[allTagsIndex].value
@@ -130,7 +139,9 @@ class EditorTags extends React.Component {
 					value: res.tag._id
 				}
 				tags.push(result)
-				this.setState({ tags })
+				this.setState({ tags }, () => {
+					this.props.setTags(tags)
+				})
 			})
 		} else if (sel != '' && allTagsIndex === -1 && tagsIndex === -1) {
 			api.addTag(capitalize(tag)).then(r => {
@@ -140,7 +151,9 @@ class EditorTags extends React.Component {
 						value: res.tag._id
 					}
 					tags.push(result)
-					this.setState({ tags })
+					this.setState({ tags }, () => {
+						this.props.setTags(tags)
+					})
 				})
 			})
 		}
@@ -182,6 +195,7 @@ class EditorTags extends React.Component {
 							onUpdateInput={this.changeTag}
 							searchText={tag}
 							menuStyle={{maxHeight:200}}
+							style={{ fontSize: '14px', width: '206px' }}
 						/>}
 				</TagContainer>
 

@@ -51,6 +51,11 @@ class EditorAdvanced extends React.Component {
 		const { slug, meta } = story
 		const { title, desc } = meta
 
+		let errorStyle = { color: '#C2C2C2', fontStyle: 'italic' }
+		if (desc && desc.length === 140) {
+			errorStyle = { color: '#C24444', fontStyle: 'italic' }
+		}
+
 		return (
 			<Container>
 				<UrlContainer>
@@ -88,7 +93,7 @@ class EditorAdvanced extends React.Component {
 						rows={1}
 						rowsMax={4}
 						errorText="140 characters"
-						errorStyle={{ color: '#C2C2C2', fontStyle: 'italic' }}
+						errorStyle={errorStyle}
 					/>
 				</DescContainer>
 			</Container>
