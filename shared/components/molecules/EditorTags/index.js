@@ -180,8 +180,8 @@ class EditorTags extends React.Component {
 							filter={AutoComplete.fuzzyFilter}
 							onNewRequest={this.selectedTag}
 							onUpdateInput={this.changeTag}
-							openOnFocus
 							searchText={tag}
+							menuStyle={{maxHeight:200}}
 						/>}
 				</TagContainer>
 
