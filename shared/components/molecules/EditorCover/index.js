@@ -22,7 +22,7 @@ const Container = styled.div`
 const Text = styled.div`
 	font-size: 12px;
 	color: #8E8E8E;
-	margin: 8px 0 12px 0;
+	margin: 20px 0 12px 0;
 `
 
 class EditorCover extends React.Component {
