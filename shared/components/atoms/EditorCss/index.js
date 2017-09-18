@@ -389,10 +389,6 @@ const EditorCss = styled.div`
 		color: #222;
   }
 
-  .fr-quick-insert{
-    display:none;
-  }
-
   .fr-image-left {
     float: left !important;
     width: 60% !important;
@@ -459,9 +455,21 @@ const EditorCss = styled.div`
     color: #8e8e8e !important;
     font-weight: normal;
   }
+  .fr-video{
+    width:100% !important;
+    position:relative;
+    margin:auto !important;
+    display:block;
+    top:0;
+    left:0;
+  }
   .fr-video iframe{
+    display:block;
     margin:auto !important;
     text-align: center !important;
+  }
+  .fr-sticky-on{
+    padding-top:60px;
   }
   @media (max-width: 480px) {
     #paper h2 {
