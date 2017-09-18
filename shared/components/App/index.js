@@ -243,7 +243,8 @@ class App extends React.Component {
 		}
 		if (navigator.userAgent) context.userAgent = navigator.userAgent
 		let muiTheme = getMuiTheme(context)
-
+		// console.log(this.props.story)
+		// console.log(this)
 		return (
 			<div>
 				<Helmet
@@ -306,7 +307,7 @@ class App extends React.Component {
 										<StoryPage
 											{...props}
 											countView
-											story={this.props.story && this.props.story}
+											story={this.props.story}
 										/>
 									)}
 								/>

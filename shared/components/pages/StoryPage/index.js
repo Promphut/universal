@@ -155,19 +155,18 @@ class StoryPage extends React.Component {
 
 	getStoryFromSid = (sid) => {
 		if (sid == null) utils.notFound(this.props.history)
-		api
-			.getStoryFromSid(sid, auth.getToken(), this.props.countView)
-			.then(result => {
-				this.checkFBShareCount(result.story._id, result.story.shares)
+		api.getStoryFromSid(sid, auth.getToken(), this.props.countView)
+		.then(result => {
+			this.checkFBShareCount(result.story._id, result.story.shares)
 
-				this.setState({
-					canEditStory: result.canEditStory,
-					story: result.story
-				})
+			this.setState({
+				canEditStory: result.canEditStory,
+				story: result.story
 			})
-			.catch(err => {
-				utils.toError(this.props.history, err)
-			})
+		})
+		.catch(err => {
+			utils.toError(this.props.history, err)
+		})
 	}
 
 	checkFBShareCount = (sid, shares) => {
@@ -205,13 +204,11 @@ class StoryPage extends React.Component {
 	}
 
 	componentDidMount() {
-		if (!this.props.story) {
-			this.getStoryFromSid(this.props.match.params.sid)
-			api.getRecommendStories(this.props.match.params.sid).then((recommends)=>{
-				// console.log(recommends)
-				this.setState({recommends})
-			})			
-		}
+		this.getStoryFromSid(this.props.match.params.sid)
+		api.getRecommendStories(this.props.match.params.sid).then((recommends)=>{
+			// console.log(recommends)
+			this.setState({recommends})
+		})			
 		window.addEventListener('scroll', this.handleScroll)
 	}
 
@@ -236,8 +233,7 @@ class StoryPage extends React.Component {
 			recommends,
 			description,
 			showTopbarTitle,
-			canEditStory,
-			story
+			canEditStory
 		} = this.state
 
 		let likeBoxSize = 500
@@ -257,7 +253,11 @@ class StoryPage extends React.Component {
 				)
 			}
 		}
+		var story = {}
+		if(this.props.story&&this.props.story._id==this.props.match.params.sid){ story = this.props.story 
+		}else{ story = this.state.story }
 
+		// let story = this.props.story || this.state.story
 		// console.log(this.props.story)
 		if (isEmpty(story)) return <div ref="TT" />
 		return (
@@ -306,7 +306,7 @@ class StoryPage extends React.Component {
 						<Main ref={'TT'} isMobile={isMobile}>
 							<StoryDetail
 								share={story.shares && story.shares}
-								story={this.props.story || story}
+								story={story}
 								id="storyDetail"
 							/>
 							{isMobile&&<LikeBoxContainer

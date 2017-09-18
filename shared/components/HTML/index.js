@@ -143,6 +143,7 @@ function HTML(props) {
       "name": ${publisher}
     },
   }`
+  // console.log(appBodyString)
   return (
     <html lang="th" {...htmlAttributes}>
       <head>

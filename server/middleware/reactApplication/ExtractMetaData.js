@@ -1,7 +1,7 @@
 import api from '../../../shared/services/api';
 import { FRONTURL, port, host, basename, ANALYTIC, COVER, amazonAccessKey, secretKey, PID } from '../../../shared/config.js'
 
-const ExtractMeta = (request,response,setting, url) => {
+const ExtractMeta = (setting, url) => {
 	let meta = {
 		name: '',
 		keywords: setting.publisher.keywords || '',
