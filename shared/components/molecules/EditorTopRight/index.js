@@ -86,7 +86,7 @@ class EditorTopRight extends React.Component {
 	publishStory = () => {
 		let { story, prevStory, menu, notification } = this.props
 
-		story.status = story.status === 0 ? 1 : story.status
+		story.status = 1
 
 		const newsCol = menu.columns.find(col => col.name === 'news')._id
 		if (story.format === 'NEWS') {
