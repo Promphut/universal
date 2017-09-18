@@ -193,9 +193,9 @@ class EditorTags extends React.Component {
 							filter={AutoComplete.fuzzyFilter}
 							onNewRequest={this.selectedTag}
 							onUpdateInput={this.changeTag}
-							openOnFocus
 							searchText={tag}
-							textFieldStyle={{ fontSize: '14px' }}
+							textFieldStyle={{ fontSize: '14px', width: '300px' }}
+							menuStyle={{ maxHeight: 200 }}
 						/>}
 				</TagContainer>
 
