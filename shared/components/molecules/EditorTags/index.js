@@ -17,7 +17,7 @@ const Container = styled.div`
 `
 
 const TagContainer = styled.div`
-	margin-top: 8px;
+	margin-top: 20px;
 `
 
 const FocusWordContainer = styled.div`
@@ -195,7 +195,7 @@ class EditorTags extends React.Component {
 							onUpdateInput={this.changeTag}
 							openOnFocus
 							searchText={tag}
-							style={{ fontSize: '14px', width: '206px' }}
+							textFieldStyle={{ fontSize: '14px' }}
 						/>}
 				</TagContainer>
 

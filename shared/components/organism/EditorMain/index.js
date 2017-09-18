@@ -1,26 +1,27 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import TextareaAutosize from 'react-textarea-autosize'
 
 import { FroalaEditor, AnalyticContainer } from '../../../components'
 
 const Container = styled.div`
 `
 
-const Title = styled.textarea`
-    font-size: 36px;
-    font-weight: bold;
-    overflow-y: hidden;
+const Title = styled(TextareaAutosize)`
+	font-size: 36px;
+	font-weight: bold;
+	overflow-y: hidden;
 	color: #222;
-	height: 120px;
-    width: 100%;
-    outline: none;
-    border: none;
-    resize: none;
+	min-height: 60px !important;
+	width: 100%;
+	outline: none;
+	border: none;
+	resize: none;
 
-    &:focus {
-      outline: none;
-    }
+	&:focus {
+		outline: none;
+	}	
 `
 
 const HighlightContainer = styled.div`
@@ -94,6 +95,8 @@ class EditorMain extends React.Component {
 					className="serif-font"
 					value={title}
 					onChange={changeTitle}
+					minRows={1}
+					maxRows={3}
 				/>
 
 				<HighlightContainer>

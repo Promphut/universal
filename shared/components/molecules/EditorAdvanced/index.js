@@ -7,6 +7,7 @@ const Container = styled.div`
 `
 
 const UrlContainer = styled.div`
+	margin-top: 20px;
 `
 
 const TitleContainer = styled.div`
