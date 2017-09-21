@@ -55,7 +55,7 @@ class FroalaEditor extends React.Component {
 			'fr-text-source': 'Source'
 		},
 		placeholderText: 'Write ...',
-		quickInsertButtons: false,
+		quickInsertButtons: ['image', 'table', 'hr'],
 		tableEditButtons: [
 			'tableHeader',
 			'tableRemove',
@@ -78,7 +78,7 @@ class FroalaEditor extends React.Component {
 			'formatOL',
 			'formatUL',
 			'insertHR',
-			'-',
+			'|',
 			'paragraphFormat',
 			'paragraphStyle',
 			'quote',
@@ -88,8 +88,8 @@ class FroalaEditor extends React.Component {
 			'insertVideo',
 			'insertTable'
 		],
-		toolbarInline: true,
-		toolbarVisibleWithoutSelection: true,
+		// toolbarInline: true,
+		// toolbarVisibleWithoutSelection: true,
 		videoDefaultWidth: 730,
 		videoEditButtons: [],
 		videoInsertButtons: ['videoBack', '|', 'videoByURL', 'videoEmbed'],

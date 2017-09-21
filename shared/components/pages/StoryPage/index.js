@@ -25,7 +25,7 @@ import utils from '../../../services/utils'
 import auth from '../../../services/auth'
 import isEmpty from 'lodash/isEmpty'
 import Request from 'superagent'
-import 'froala-editor/css/froala_style.min.css'
+
 
 const Wrapper = styled.div`
 	 .hidden-des{
@@ -209,11 +209,11 @@ class StoryPage extends React.Component {
 			// console.log(recommends)
 			this.setState({recommends})
 		})			
-		window.addEventListener('scroll', this.handleScroll)
+		// window.addEventListener('scroll', this.handleScroll)
 	}
 
 	componentWillUnmount() {
-		window.removeEventListener('scroll', this.handleScroll)
+		// window.removeEventListener('scroll', this.handleScroll)
 	}
 
 	componentWillReceiveProps(nextProps) {

@@ -19,6 +19,8 @@ import RaisedButton from 'material-ui/RaisedButton'
 import api from '../../../services/api'
 import utils from '../../../services/utils'
 import config from '../../../config'
+// import 'froala-editor/css/froala_style.min.css'
+// import 'froala-editor/css/froala_editor.pkgd.min.css'
 
 const Share = styled.div`
   display: flex;
