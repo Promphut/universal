@@ -405,6 +405,12 @@ const EditorCss = styled.div`
     text-align: center !important;
   }
   
+  .fr-image-center-medium {
+    margin: auto !important;
+    max-width: 75%!important;
+    text-align: center !important;
+  }
+  
   .fr-image-right {
     float: right !important;
     width: 60% !important;
@@ -480,6 +486,13 @@ const EditorCss = styled.div`
       width:100%;
       text-align: center !important;
     }
+    
+    .fr-image-center-medium {
+      margin: auto !important;
+      max-width: 75%!important;
+      text-align: center !important;
+    }
+  
     .fr-video iframe{
       width:100% !important;
       text-align: center !important;

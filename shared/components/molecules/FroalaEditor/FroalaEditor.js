@@ -98,7 +98,25 @@ class FroalaEditor extends React.Component {
 			? this.props.imgURL
 			: `${BACKURL}/stories/${this.props.sid}/image`,
 		imageUploadParam: 'image',
-		imageMaxSize: 1024 * 1024 * 10
+		imageMaxSize: 1024 * 1024 * 10,
+		events: {
+			'froalaEditor.paste.beforeCleanup': function(e, editor, clipboard_html) {
+				const googleDocRegex = /<b.* id="docs-internal-guid-\S*">/i
+
+				// console.log('clipboard_html', String(clipboard_html))
+
+				// if (
+				// 	String(clipboard_html).match(googleDocRegex) ||
+				// 	clipboard_html != ''
+				// ) {
+				// 	clipboard_html = String(clipboard_html).replace(googleDocRegex, '')
+				// 	clipboard_html = String(clipboard_html).replace('</b>', '')
+				// }
+				// console.log('clipboard_html', String(clipboard_html))
+
+				return clipboard_html
+			}
+		}
 	}
 	froalaConfigHighlight = {
 		charCounterCount: false,
@@ -120,8 +138,6 @@ class FroalaEditor extends React.Component {
 		toolbarInline: true,
 		toolbarVisibleWithoutSelection: true
 	}
-
-	componentDidMount() {}
 
 	render() {
 		var newConfig = this.froalaConfig
