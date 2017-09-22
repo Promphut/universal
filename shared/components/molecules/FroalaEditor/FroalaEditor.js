@@ -137,8 +137,6 @@ class FroalaEditor extends React.Component {
 		toolbarVisibleWithoutSelection: true
 	}
 
-	componentDidMount() {}
-
 	render() {
 		var newConfig = this.froalaConfig
 		newConfig.tableColors = [

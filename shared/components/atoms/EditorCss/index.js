@@ -497,7 +497,7 @@ const EditorCss = styled.div`
     
     .fr-image-center-medium {
       margin: auto !important;
-      max-width: 75%!important;
+      width: 100%;
       text-align: center !important;
     }
   

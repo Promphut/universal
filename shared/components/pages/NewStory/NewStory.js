@@ -355,12 +355,13 @@ class NewStory extends React.Component {
 			</TopLeft>
 		)
 
-		const saving = status !== this.SAVE_STATUS.UNDIRTIED ? true : false
+		const saving = status === this.SAVE_STATUS.DIRTIED ? true : false
 		const topRight = (
 			<EditorTopRight
 				story={story}
 				prevStory={prevStory}
 				menu={menu}
+				status={status}
 				saving={saving}
 				saveStatus={this.handleSaveStatus}
 				notification={this.showNotification}

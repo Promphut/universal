@@ -58,6 +58,7 @@ function alignFull(img) {
 function clearAlign(img) {
 	img.removeClass('fr-image-left')
 	img.removeClass('fr-image-center')
+	img.removeClass('fr-image-center-medium')
 	img.removeClass('fr-image-right')
 	img.removeClass('fr-image-full')
 }
