@@ -99,22 +99,20 @@ class FroalaEditor extends React.Component {
 			: `${BACKURL}/stories/${this.props.sid}/image`,
 		imageUploadParam: 'image',
 		imageMaxSize: 1024 * 1024 * 10,
-		events: {
-			'froalaEditor.paste.beforeCleanup': function(e, editor, clipboard_html) {
-				const googleDocRegex = /<b.* id="docs-internal-guid-\S*">/i
-
-				// console.log('clipboard_html', String(clipboard_html))
-
-				// if (
-				// 	String(clipboard_html).match(googleDocRegex) ||
-				// 	clipboard_html != ''
-				// ) {
-				// 	clipboard_html = String(clipboard_html).replace(googleDocRegex, '')
-				// 	clipboard_html = String(clipboard_html).replace('</b>', '')
-				// }
-				// console.log('clipboard_html', String(clipboard_html))
-
-				return clipboard_html
+		events : {
+			'froalaEditor.paste.beforeCleanup': function (e, editor, clipboard_html) {
+				var $html = $('<div>'+ clipboard_html + '</div>');
+				var $span =  $html.find('span');
+				$span.each(function(i, field) {
+					var style = field.style;
+					var s = style['font-weight']==700
+					var ul = style['text-decoration']=='underline'
+					var fs = style['font-style']=='italic'
+					$(field).html(`${s?'<strong>':''}${fs?'<em>':''}${ul?'<u>':''}${field.innerHTML}${ul?'</u>':''}${fs?'</em>':''}${s?'</strong>':''}`)
+				})
+				var newHTML = $html.html()
+				// console.log(newHTML)
+				return newHTML;
 			}
 		}
 	}
@@ -138,6 +136,8 @@ class FroalaEditor extends React.Component {
 		toolbarInline: true,
 		toolbarVisibleWithoutSelection: true
 	}
+
+	componentDidMount() {}
 
 	render() {
 		var newConfig = this.froalaConfig
