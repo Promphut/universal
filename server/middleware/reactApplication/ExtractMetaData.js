@@ -48,7 +48,7 @@ const ExtractMeta = (setting, url) => {
 					if(s.writer) meta.writer = s.writer.display
 					if(s.published) meta.datePublished = s.published
 					if(s.tags){ s.tags.map((tag,ind)=>{
-							meta.keywords += ind!=s.tags.length-1?tag.name+',':tag.name
+							meta.keywords += ','+tag.name
 						})
 					}
 					meta.story = s 
