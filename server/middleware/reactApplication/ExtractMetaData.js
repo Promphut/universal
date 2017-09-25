@@ -13,7 +13,8 @@ const ExtractMeta = (setting, url) => {
 		publisher: setting.publisher.name,
 		writer: setting.publisher.name,
 		datePublished: new Date(),
-		story:null
+		story:null,
+		color:setting.publisher.theme.primaryColor
 	}
 
 	if(setting.publisher.name)
