@@ -123,7 +123,7 @@ export default class ImageShare extends React.Component {
 	handleMouse = () => {
 		var self = this
 		this.setState(
-			{ imgContainer: document.querySelectorAll('img.ui-sortable-handle') },
+			{ imgContainer: document.querySelectorAll('img.ui-sortable-handle,img.fr-fic') },
 			() => {
 				var eventList = [].forEach.call(this.state.imgContainer, function(e) {
 					e.addEventListener('mouseenter', function(e) {

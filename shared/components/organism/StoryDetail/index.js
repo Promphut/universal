@@ -19,6 +19,8 @@ import RaisedButton from 'material-ui/RaisedButton'
 import api from '../../../services/api'
 import utils from '../../../services/utils'
 import config from '../../../config'
+// import 'froala-editor/css/froala_style.min.css'
+// import 'froala-editor/css/froala_editor.pkgd.min.css'
 
 const Share = styled.div`
   display: flex;
@@ -214,10 +216,12 @@ class StoryDetail extends React.Component {
 	}
 
 	render() {
-		var { story, id } = this.props
+		var { story, id, preview } = this.props
 		var s = story
 		// console.log(s)
-		const isMobile = utils.isMobile()
+		const isMobile = this.props.isMobile
+			? this.props.isMobile
+			: utils.isMobile()
 		let { tags } = this.state
 		const columnStyle = isMobile
 			? {
@@ -229,12 +233,15 @@ class StoryDetail extends React.Component {
 		return (
 			<Wraper id={id}>
 				<ImageShare sid={s && s._id} />
-				<Head className="title-font">{s.ptitle || 'NEXT EMPIRE'}</Head>
+				<Head className="title-font">
+					{!preview ? s.ptitle : s.title || 'NEXT EMPIRE'}
+				</Head>
 				<WriterAndDate
 					readTime={s.readTime}
 					writer={s.writer}
 					column={s.column}
 					published={s.published}
+					isMobile={isMobile}
 				/>
 
 				{!isMobile &&
@@ -338,7 +345,8 @@ class StoryDetail extends React.Component {
 						/>
 					</Share>}
 
-				{s.phighlight &&
+				{!preview &&
+					s.phighlight &&
 					<div>
 						<HighlightText>
 							{s.format == 'NEWS' ? 'SUMMARY' : 'HIGHLIGHTS'}
@@ -350,10 +358,25 @@ class StoryDetail extends React.Component {
 							/>
 						</HighlightBox>
 					</div>}
+
+				{preview &&
+					s.highlight &&
+					<div>
+						<HighlightText>
+							{s.format == 'NEWS' ? 'SUMMARY' : 'HIGHLIGHTS'}
+						</HighlightText>
+						<HighlightBox>
+							<Highlight
+								id="highlight"
+								dangerouslySetInnerHTML={{ __html: s.highlight }}
+							/>
+						</HighlightBox>
+					</div>}
+
 				<Story
 					ref="detail"
 					id="paper"
-					dangerouslySetInnerHTML={{ __html: s.phtml }}
+					dangerouslySetInnerHTML={{ __html: !preview ? s.phtml : s.html }}
 				/>
 				{/* <WritedBy writer={s.writer} column={s.column} published={s.published} /> */}
 

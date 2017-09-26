@@ -40,7 +40,9 @@ import {
 	UserSettingStory,
 	NewStory,
 	EditStory,
-	SearchResultPage
+	SearchResultPage,
+	Preview,
+	PreviewMobile
 } from '../../components'
 
 import '../../../public/scss/main.scss'
@@ -73,7 +75,7 @@ class App extends React.Component {
 	}
 
 	getChildContext() {
-		// console.log('CHILD', this.props)
+		// console.log('CHILD', this.props.setting)
 		return { setting: this.props.setting }
 	}
 
@@ -214,7 +216,7 @@ class App extends React.Component {
 		// console.log('SETTING', this.context.setting.publisher)
 		if (!analytic) analytic = {}
 		let coverMedium
-		if (cover) coverMedium = cover.medium
+		if (cover) coverMedium = cover.medium || '/pic/fbthumbnail.jpg'
 		let title = (name || '') + (tagline ? ` | ${tagline}` : '')
 
 		let { completed } = this.state
@@ -241,7 +243,8 @@ class App extends React.Component {
 		}
 		if (navigator.userAgent) context.userAgent = navigator.userAgent
 		let muiTheme = getMuiTheme(context)
-
+		// console.log(this.props.story)
+		// console.log(this)
 		return (
 			<div>
 				<Helmet
@@ -300,7 +303,13 @@ class App extends React.Component {
 								<Route
 									exact
 									path="/stories/:columnSlug/:storySlug/:sid"
-									render={props => <StoryPage {...props} countView />}
+									render={props => (
+										<StoryPage
+											{...props}
+											countView
+											story={this.props.story}
+										/>
+									)}
 								/>
 
 								<Route
@@ -371,33 +380,26 @@ class App extends React.Component {
 									exact
 									path="/me/stories/new"
 									hasRoles={['ADMIN', 'WRITER', 'EDITOR']}
-									render={props => (
-										<UserSetting {...props}>
-											<NewStory {...props} />
-										</UserSetting>
-									)}
+									render={props => <NewStory {...props} />}
 								/>
+
 								<PrivateRoute
 									exact
 									path="/me/stories/:sid/edit"
-									render={props => (
-										<UserSetting {...props}>
-											<EditStory {...props} />
-										</UserSetting>
-									)}
+									render={props => <NewStory {...props} />}
 								/>
 
 								{/* STORY 5 PREVIEW DRAFTED STORY */}
 								<Route
 									exact
 									path="/me/stories/:sid"
-									render={props => (
-										<StoryPage
-											{...props}
-											countView={false}
-											story={this.props.story && this.props.story}
-										/>
-									)}
+									render={props => <Preview {...props} />}
+								/>
+
+								<Route
+									exact
+									path="/me/stories/:sid/mobile"
+									render={props => <PreviewMobile {...props} />}
 								/>
 
 								<Route

@@ -96,7 +96,7 @@ export default class NextStoryMobile extends React.Component {
           <Link to = {url}>
             <NextStoryHeader>NEXT STORY</NextStoryHeader>
             <Dash/>
-            <Thumbnail src ={cover.medium}/>
+            <Thumbnail src ={cover && cover.medium || '/pic/fbthumbnail.jpg'}/>
           </Link>
 
           <Title>{ptitle && truncate(ptitle, {length: 40, seperator: ''})}</Title>

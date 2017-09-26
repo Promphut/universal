@@ -295,7 +295,7 @@ const EditorCss = styled.div`
 		color: #222;
   }
 
-	#paper blockquote > p {
+	#paper blockquote > * {
 		font-family: 'PT Serif','Mitr';
 		font-size: 20px;
 		color: #222;
@@ -376,16 +376,17 @@ const EditorCss = styled.div`
 		padding-left: 20px;
 		margin: 40px 0px;
     margin-left: 32px;
-		line-height: 40px;
-	}
-
-	.fr-view blockquote > p {
+    line-height: 40px;
+    
 		font-family: 'PT Serif','Mitr';
 		font-size: 20px;
 		color: #222;
-  }
-  .fr-quick-insert{
-    display:none;
+	}
+
+	.fr-view blockquote > * {
+		font-family: 'PT Serif','Mitr';
+		font-size: 20px;
+		color: #222;
   }
 
   .fr-image-left {
@@ -397,6 +398,12 @@ const EditorCss = styled.div`
   .fr-image-center {
     margin: auto !important;
     max-width: 100%!important;
+    text-align: center !important;
+  }
+  
+  .fr-image-center-medium {
+    margin: auto !important;
+    max-width: 75%!important;
     text-align: center !important;
   }
   
@@ -444,7 +451,7 @@ const EditorCss = styled.div`
     font-family: 'PT Sans', 'cs_prajad' !important;
     font-size: 16px !important;
     color: #8e8e8e !important;
-    line-height: 1 !important;
+    font-weight: normal;
   }
   
   .fr-text-source,
@@ -452,10 +459,23 @@ const EditorCss = styled.div`
     font-family:'PT Sans', 'cs_prajad' !important;
     font-size: 16px !important;
     color: #8e8e8e !important;
+    font-weight: normal;
+  }
+  .fr-video{
+    width:100% !important;
+    position:relative;
+    margin:auto !important;
+    display:block;
+    top:0;
+    left:0;
   }
   .fr-video iframe{
+    display:block;
     margin:auto !important;
     text-align: center !important;
+  }
+  .fr-sticky-on{
+    padding-top:60px;
   }
   @media (max-width: 480px) {
     #paper h2 {
@@ -474,6 +494,13 @@ const EditorCss = styled.div`
       width:100%;
       text-align: center !important;
     }
+    
+    .fr-image-center-medium {
+      margin: auto !important;
+      width: 100%;
+      text-align: center !important;
+    }
+  
     .fr-video iframe{
       width:100% !important;
       text-align: center !important;

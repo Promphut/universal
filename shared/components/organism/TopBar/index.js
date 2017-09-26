@@ -99,11 +99,11 @@ const Left = styled.div`
 
 const HamburgerWrapper = styled.a`
 	display: inline-block;
-  float: left;
-  text-align: center;
-  color: ${props => (props.theme.barTone == 'light' ? '#222' : 'white')};
-  padding: 11px 22px 13px;
-  cursor: pointer;
+	float: left;
+	text-align: center;
+	color: ${props => (props.theme.barTone == 'light' ? '#222' : 'white')};
+	padding: 11px 22px 13px;
+	cursor: pointer;
 `
 
 const Hamburger = styled.i`

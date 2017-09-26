@@ -44,3 +44,8 @@ flow-coverage/
 
 # OSX Files
 .DS_Store
+
+# Package-lock.json
+package-lock.json
+
+

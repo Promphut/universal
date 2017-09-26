@@ -24,6 +24,7 @@ class FroalaEditor extends React.Component {
 	}
 
 	froalaConfig = {
+		charCounterCount: false,
 		imageEditButtons: [
 			'imageAlignCustom',
 			'imageAlt',
@@ -37,8 +38,8 @@ class FroalaEditor extends React.Component {
 		imageResize: false,
 		imageDefaultAlign: 'center',
 		inlineStyles: {
-			Caption: "font-family: 'PT Sans', 'cs_prajad'; font-size: 16px; color: #8e8e8e; line-height: .5;",
-			Source: "font-family:'PT Sans', 'cs_prajad'; font-size: 16px; color: #8e8e8e;"
+			Caption: "font-family: 'PT Sans', 'cs_prajad'; font-size: 16px; color: #8e8e8e; font-weight: normal;",
+			Source: "font-family:'PT Sans', 'cs_prajad'; font-size: 16px; color: #8e8e8e; font-weight: normal;"
 			// 'Image source': "font-family: 'PT Sans', 'cs_prajad'; font-size: 14px; color: #CCC; font-style: italic; line-height: .1;"
 		},
 		linkEditButtons: ['linkOpen', 'linkEdit', 'linkRemove'],
@@ -48,12 +49,13 @@ class FroalaEditor extends React.Component {
 			H3: 'Subhead',
 			N: 'Normal'
 		},
+		paragraphMultipleStyles: false,
 		paragraphStyles: {
 			'fr-text-caption': 'Caption',
 			'fr-text-source': 'Source'
 		},
-		placeholderText: 'เขียนบทความ...',
-		quickInsertButtons: false,
+		placeholderText: 'Write ...',
+		quickInsertButtons: ['image', 'table', 'hr'],
 		tableEditButtons: [
 			'tableHeader',
 			'tableRemove',
@@ -76,7 +78,7 @@ class FroalaEditor extends React.Component {
 			'formatOL',
 			'formatUL',
 			'insertHR',
-			'-',
+			'|',
 			'paragraphFormat',
 			'paragraphStyle',
 			'quote',
@@ -86,21 +88,39 @@ class FroalaEditor extends React.Component {
 			'insertVideo',
 			'insertTable'
 		],
-		toolbarInline: true,
-		toolbarVisibleWithoutSelection: true,
+		// toolbarInline: true,
+		// toolbarVisibleWithoutSelection: true,
 		videoDefaultWidth: 730,
 		videoEditButtons: [],
 		videoInsertButtons: ['videoBack', '|', 'videoByURL', 'videoEmbed'],
 		videoResize: true,
-		imageUploadURL: this.props.imgURL?this.props.imgURL:`${BACKURL}/stories/${this.props.match.params.sid}/image`,
+		imageUploadURL: this.props.imgURL
+			? this.props.imgURL
+			: `${BACKURL}/stories/${this.props.sid}/image`,
 		imageUploadParam: 'image',
-		imageMaxSize: 1024 * 1024 * 10
+		imageMaxSize: 1024 * 1024 * 10,
+		events : {
+			'froalaEditor.paste.beforeCleanup': function (e, editor, clipboard_html) {
+				var $html = $('<div>'+ clipboard_html + '</div>');
+				var $span =  $html.find('span');
+				$span.each(function(i, field) {
+					var style = field.style;
+					var s = style['font-weight']==700
+					var ul = style['text-decoration']=='underline'
+					var fs = style['font-style']=='italic'
+					$(field).html(`${s?'<strong>':''}${fs?'<em>':''}${ul?'<u>':''}${field.innerHTML}${ul?'</u>':''}${fs?'</em>':''}${s?'</strong>':''}`)
+				})
+				var newHTML = $html.html()
+				// console.log(newHTML)
+				return newHTML;
+			}
+		}
 	}
 	froalaConfigHighlight = {
 		charCounterCount: false,
 		linkEditButtons: ['linkOpen', 'linkEdit', 'linkRemove'],
 		linkInsertButtons: ['linkBack'],
-		placeholderText: '',
+		placeholderText: 'Write Highlight ...',
 		quickInsertButtons: false,
 		tabSpaces: 4,
 		toolbarButtons: [
@@ -116,8 +136,6 @@ class FroalaEditor extends React.Component {
 		toolbarInline: true,
 		toolbarVisibleWithoutSelection: true
 	}
-
-	componentDidMount() {}
 
 	render() {
 		var newConfig = this.froalaConfig

@@ -58,7 +58,7 @@ const config = {
 			FBAPPID: '292566221211882'
 		},
 		DOMAIN: 'localhost',
-		FRONTURL: 'http://localhost:3000',
+		FRONTURL: 'http://localhost:1337',
 		BACKURL: 'https://localhost:4000',
 		COVER: 'https://localhost:3000/pic/fbthumbnail.jpg'
 	},

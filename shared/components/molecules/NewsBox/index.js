@@ -175,7 +175,7 @@ const NewsBox = ({detail, style, timeline, final}) => {
         <Box hr={final}>
           <ShareDropdown buttonSize={24} url={url} className='hidden-des'/>
           <Time className='hidden-des' style={{display:timeline?'block':'none'}}>{utils.dateFormat(published)}</Time>
-          <BG height={(screen.width - 32) / 1.91} url={url} src={cover.small || cover.medium} alt={ptitle || ''} />
+          <BG height={(screen.width - 32) / 1.91} url={url} src={cover && cover.medium} alt={ptitle || ''} />
           <BoxText>
             <ShareDropdown buttonSize={24} url={url} className='hidden-mob'/>
             <NameLink to={url} className='nunito-font' >{truncate(ptitle, {

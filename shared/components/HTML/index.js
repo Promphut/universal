@@ -120,7 +120,7 @@ const froala = "try{(function (k){localStorage.FEK=k;t=document.getElementById('
  */
 function HTML(props) {
   const { htmlAttributes, headerElements, bodyElements, appBodyString, styleTags, meta } = props;
-  const { name, keywords, desc, cover, analytic, url, writer, datePublished, publisher, logo } = meta
+  const { name, keywords, desc, cover, analytic, url, writer, datePublished, publisher, logo, color } = meta
   const ld = `{
     "@context": "http://schema.org/",
     "@type": "NewsArticle",
@@ -143,6 +143,7 @@ function HTML(props) {
       "name": ${publisher}
     },
   }`
+  // console.log(appBodyString)
   return (
     <html lang="th" {...htmlAttributes}>
       <head>
@@ -154,6 +155,7 @@ function HTML(props) {
         <meta name="title" content={name} />
         <meta name="keywords" content={keywords} />
         <meta name="description" content={desc} />
+        <meta name="theme-color" content={color}/>
         <meta property="og:site_name" content={config.FRONTURL} />
         <meta property="og:title" content={name} />
         <meta property="og:url" content={config.FRONTURL+url} />

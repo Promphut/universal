@@ -34,12 +34,12 @@ const asyncComponentsRehydrateState = window.__ASYNC_COMPONENTS_REHYDRATE_STATE_
 function renderApp(TheApp) {
   // Firstly, define our full application component, wrapping the given
   // component app with a browser based version of react router.
-  const app = setting => (
+  const app = (setting,story) => (
     <ReactHotLoader>
       <CookiesProvider>
         <AsyncComponentProvider rehydrateState={asyncComponentsRehydrateState}>
           <BrowserRouter forceRefresh={!supportsHistory}>
-            <TheApp setting={setting} />
+            <TheApp setting={setting} story={story}/>
           </BrowserRouter>
         </AsyncComponentProvider>
       </CookiesProvider>
@@ -51,7 +51,21 @@ function renderApp(TheApp) {
   // @see https://github.com/ctrlplusb/react-async-component
   asyncBootstrapper(app).then(() => {
     api.getPublisherSetting().then((setting) => {
-      render(app(setting), container);
+      // console.log(window.location)
+      let path = window.location.pathname.split('/')
+      if (path[1] === 'stories' && !(path[2].startsWith('all')||path[2].startsWith('columns'))) {
+          if(path.length>4 && path[4]) {
+            let sid = path[4]
+            return api.getStoryFromSid(sid)
+            .then(res => {
+              render(app(setting,res.story), container);
+            })
+          }else{
+            render(app(setting,null), container);
+          }
+      }else{
+        render(app(setting,null), container);
+      }
     });
   });
 }

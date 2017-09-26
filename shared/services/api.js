@@ -1120,4 +1120,27 @@ api.getNextStory = sid =>{
 		return res.body
 	}, api.err)
 }
+api.getRecommendStories = sid =>{
+	return Request.get(`${config.BACKURL}/stories/${sid}/recommend`)
+	.set('Accept', 'application/json')
+	.then(res => {
+		return res.body
+	}, api.err)
+}
+api.deleteImage = url =>{
+	return Request.delete(`${config.BACKURL}${url}`)
+	.set('x-access-token', auth.getToken())
+	.set('Accept', 'application/json')
+	.then(res => {
+		return res.body
+	}, api.err)
+}
+api.addStoryTag = (sid,tid) =>{
+	return 	Request.post(`${config.BACKURL}/stories/${sid}/tags/${tid}`)
+	.set('x-access-token', auth.getToken())
+	.set('Accept', 'application/json')	
+	.then(res => {
+		return res.body
+	}, api.err)
+}
 module.exports = api

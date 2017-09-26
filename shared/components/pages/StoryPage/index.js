@@ -25,7 +25,7 @@ import utils from '../../../services/utils'
 import auth from '../../../services/auth'
 import isEmpty from 'lodash/isEmpty'
 import Request from 'superagent'
-import 'froala-editor/css/froala_style.min.css'
+
 
 const Wrapper = styled.div`
 	 .hidden-des{
@@ -45,19 +45,6 @@ const Wrapper = styled.div`
 			font-size:16px;
 		}
   }
-`
-
-const GradientOverlay = styled.div`
-	background: -moz-linear-gradient(-45deg,  rgba(202,130,172,0.3) 0%, rgba(49,77,170,0.3) 100%);
-	background: -webkit-linear-gradient(-45deg,  rgba(202,130,172,0.3) 0%,rgba(49,77,170,0.3) 100%);
-	background: linear-gradient(135deg,  rgba(202,130,172,0.3) 0%,rgba(49,77,170,0.3) 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4dca82ac', endColorstr='#4d314daa',GradientType=1 );
-
-	bottom:0;
-	top:0; left:0;
-	right:0;
-	position:absolute;
-	z-index:0
 `
 
 const Content = styled.div`
@@ -166,54 +153,20 @@ class StoryPage extends React.Component {
 		super(props)
 	}
 
-	getRecommendStories = () => {
-		var { story } = this.state
-		if (story.column) {
-			// Get recommend from column
-			let cid = story.column._id
-
-			api
-				.getFeed('story', { status: 1, column: cid }, 'latest', null, 0, 4, {
-					omit: [this.props.match.params.sid]
-				})
-				.then(result => {
-					// console.log('feed', result.feed.length)
-					this.setState({
-						recommends: result.feed
-					})
-				})
-		} else {
-			// If no column presented, use writer instead
-			let uid = story.writer._id
-
-			api
-				.getFeed('story', { status: 1, writer: uid }, 'latest', null, 0, 4, {
-					omit: [this.props.match.params.sid]
-				})
-				.then(result => {
-					// console.log('feed', result.feed.length)
-					this.setState({
-						recommends: result.feed
-					})
-				})
-		}
-	}
-
-	getStoryFromSid = (sid, done = () => {}) => {
+	getStoryFromSid = (sid) => {
 		if (sid == null) utils.notFound(this.props.history)
-		api
-			.getStoryFromSid(sid, auth.getToken(), this.props.countView)
-			.then(result => {
-				this.checkFBShareCount(result.story._id, result.story.shares)
+		api.getStoryFromSid(sid, auth.getToken(), this.props.countView)
+		.then(result => {
+			this.checkFBShareCount(result.story._id, result.story.shares)
 
-				this.setState({
-					canEditStory: result.canEditStory,
-					story: result.story
-				})
+			this.setState({
+				canEditStory: result.canEditStory,
+				story: result.story
 			})
-			.catch(err => {
-				utils.toError(this.props.history, err)
-			})
+		})
+		.catch(err => {
+			utils.toError(this.props.history, err)
+		})
 	}
 
 	checkFBShareCount = (sid, shares) => {
@@ -251,35 +204,25 @@ class StoryPage extends React.Component {
 	}
 
 	componentDidMount() {
-		if (!this.props.story) {
-			this.getStoryFromSid(this.props.match.params.sid, () => {
-				this.getRecommendStories()
-				// this.findDescription()
-			})
-		}
-		window.addEventListener('scroll', this.handleScroll)
-
-		// Request.get(
-		// 	'https://graph.facebook.com/?id=' +
-		// 		config.FRONTURL +
-		// 		this.props.location.pathname
-		// ).end((er, res) => {
-		// 	const fb = res ? res.body.share.share_count : 0
-		// 	//console.log(res.body)
-		// 	this.setState({ fb })
-		// })
+		this.getStoryFromSid(this.props.match.params.sid)
+		api.getRecommendStories(this.props.match.params.sid).then((recommends)=>{
+			// console.log(recommends)
+			this.setState({recommends})
+		})			
+		// window.addEventListener('scroll', this.handleScroll)
 	}
 
 	componentWillUnmount() {
-		window.removeEventListener('scroll', this.handleScroll)
+		// window.removeEventListener('scroll', this.handleScroll)
 	}
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.location.pathname != this.props.location.pathname) {
-			this.getStoryFromSid(nextProps.match.params.sid, () => {
-				this.getRecommendStories()
-				// this.findDescription()
-			})
+			this.getStoryFromSid(nextProps.match.params.sid)
+			api.getRecommendStories(nextProps.match.params.sid).then((recommends)=>{
+				// console.log(recommends)
+				this.setState({recommends})
+			})	
 		}
 	}
 
@@ -290,40 +233,32 @@ class StoryPage extends React.Component {
 			recommends,
 			description,
 			showTopbarTitle,
-			canEditStory,
-			story
+			canEditStory
 		} = this.state
+
 		let likeBoxSize = 500
 		// console.log(story.shares)
-		let hasCover = false
+		let hasCover = true
 		let nextStoryContainer = <div />
-
+		if(recommends.length==3) recommends = recommends.pop()
 		if (!isEmpty(story)) {
 			if (isMobile) {
 				likeBoxSize = 300
 				nextStoryContainer = (
 					<NextStoryMobile currentID={story._id}/>
 				)
-				if (
-					story.coverMobile.medium !=
-					`${config.BACKURL}/imgs/article_cover_portrait.png`
-				) {
-					hasCover = true
-				}
 			} else {
 				nextStoryContainer = (
 					<NextStory currentID={story._id} />
 				)
-				if (
-					story.cover.medium !=
-					`${config.BACKURL}/imgs/article_cover_landscape.png`
-				) {
-					hasCover = true
-				}
 			}
 		}
+		var story = {}
+		if(this.props.story&&this.props.story._id==this.props.match.params.sid){ story = this.props.story 
+		}else{ story = this.state.story }
 
-		// console.log('render', story)
+		// let story = this.props.story || this.state.story
+		// console.log(this.props.story)
 		if (isEmpty(story)) return <div ref="TT" />
 		return (
 			<div>
@@ -344,26 +279,23 @@ class StoryPage extends React.Component {
 						share={story.shares && story.shares}
 						canEditStory={canEditStory}
 					/>
-
-					{story.cover.medium !=
-						`${config.BACKURL}/imgs/article_cover_landscape.png` &&
-						<BG
-							src={story.cover.large || story.cover.medium}
-							className="hidden-mob"
-							alt={story.title}
-						>
-							<Cover />
-						</BG>}
-					{story.coverMobile.medium !=
-						`${config.BACKURL}/imgs/article_cover_portrait.png` &&
-						<BGImg
-							style={{ width: '100%', height: '85vh' }}
-							src={story.coverMobile.large || story.coverMobile.medium}
-							className="hidden-des"
-							alt={story.title}
-						>
-							<Cover />
-						</BGImg>}
+					
+					<BG
+						src={story.cover && story.cover.large || '/pic/fbthumbnail.jpg'}
+						className="hidden-mob"
+						alt={story.title}
+					>
+						<Cover />
+					</BG>
+					
+					<BGImg
+						style={{ width: '100%', height: '85vh' }}
+						src={story.coverMobile && story.coverMobile.large || '/pic/fbthumbnail.jpg'}
+						className="hidden-des"
+						alt={story.title}
+					>
+						<Cover />
+					</BGImg>
 					<Content paddingTop={hasCover ? '0px' : '60px'}>
 						<Share ref="share" style={{ zIndex: '50' }}>
 							<Stick topOffset={100}>
@@ -374,9 +306,16 @@ class StoryPage extends React.Component {
 						<Main ref={'TT'} isMobile={isMobile}>
 							<StoryDetail
 								share={story.shares && story.shares}
-								story={this.props.story || story}
+								story={story}
 								id="storyDetail"
 							/>
+							{isMobile&&<LikeBoxContainer
+								dangerouslySetInnerHTML={{
+									__html: `<div class="fb-page" data-href="https://www.facebook.com/${config.FACEBOOK}" data-width="${likeBoxSize}" data-height="300" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/${config.FACEBOOK}/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/${config.FACEBOOK}/">${config.NAME}</a></blockquote></div>`
+								}}
+							/>}
+							{recommends.length > 1 &&
+							<RecommendContainer stories={recommends} />}
 						</Main>
 
 						{utils.isMobile() && nextStoryContainer}
@@ -394,8 +333,9 @@ class StoryPage extends React.Component {
 
 					</Content>
 
-					<Content2>
+					{/* <Content2>
 						<Share />
+						
 						<Main2>
 							<LikeBoxContainer
 								dangerouslySetInnerHTML={{
@@ -404,12 +344,7 @@ class StoryPage extends React.Component {
 							/>
 						</Main2>
 						<Aside />
-					</Content2>
-
-					<Content>
-						{recommends.length != 0 &&
-							<RecommendContainer recommend={recommends} />}
-					</Content>
+					</Content2> */}
 
 					{utils.isMobile() &&
 						<ShareBottom url={config.FRONTURL + story.url} sid={story.id} />}

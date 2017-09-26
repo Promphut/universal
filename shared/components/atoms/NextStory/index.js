@@ -80,7 +80,7 @@ export default class NextStory extends React.Component {
 
   getNextStory = (sid) => {
     api.getNextStory(sid).then(s=>{
-      console.log(s)
+      // console.log(s)
       this.setState({nextStory:s.nextStory})
     })
   }
@@ -125,7 +125,7 @@ export default class NextStory extends React.Component {
       let {ptitle, cover, url} = this.state.nextStory
       return (
           <Link to = {url || "/"}>
-            <NextStoryContainer scrollOpacity = {this.state.scrollOpacity} imgSrc = {cover && cover.medium}>
+            <NextStoryContainer scrollOpacity = {this.state.scrollOpacity} imgSrc = {cover && cover.medium || '/pic/fbthumbnail.jpg'}>
               <ImgOverlay></ImgOverlay>
               <NextStoryArrow><i className="material-icons">arrow_forward</i></NextStoryArrow>
               <NextStoryHeaderWarpper>

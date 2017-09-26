@@ -122,7 +122,7 @@ class TopNewsSmall extends React.Component {
 				<BG
 					hover={this.state.hover}
 					url={detail && detail.url}
-					src={detail && detail.cover.medium}
+					src={detail.cover && detail.cover.medium}
 					className="imgWidth mob-hidden"
 					style={{ backgroundPosition: 'right' }}>
 					<Cover hover={this.state.hover}>

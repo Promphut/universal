@@ -54,6 +54,7 @@ export default function reactApplicationMiddleware(request, response, next) {
 
   // Declare our React application.
   const app = (setting,story) =>
+    // console.log(story)
     sheet.collectStyles(
       <AsyncComponentProvider asyncContext={asyncComponentsContext}>
         <CookiesProvider cookies={cookies}>
@@ -61,7 +62,7 @@ export default function reactApplicationMiddleware(request, response, next) {
             <App setting={setting} story={story} />
           </StaticRouter>
         </CookiesProvider>
-      </AsyncComponentProvider>,
+      </AsyncComponentProvider>
     );
 
   // Pass our app into the react-async-component helper so that any async
@@ -71,15 +72,16 @@ export default function reactApplicationMiddleware(request, response, next) {
       .getPublisherSetting()
       .then((setting) => {
         if (!setting || !setting.publisher) return next(new Error('Cannot get publisher setting.'));
-      ExtractMeta(request,response,setting, request.url)
+      ExtractMeta(setting, request.url)
       .then(meta => {
         if (meta.status == 404){
 					return response.redirect('/404')
-				}
+        }
+        // console.log(request.url)
         const appString = renderToString(app(setting,meta.story));
         const styleTags = sheet.getStyleElement();
         // Generate the html response.
-
+        // console.log(appString)
         const html = renderToStaticMarkup(
           <ServerHTML
             meta={meta}

@@ -81,7 +81,7 @@ const BoxText = styled.div`
 const TopNews = ({detail, style}) => {
   return (
     <Container style={{...style}}>
-      <BGImg url={detail&&detail.url} src={detail&&detail.cover.medium} className='imgWidth mob-hidden' >
+      <BGImg url={detail&&detail.url} src={detail.cover&&detail.cover.medium} className='imgWidth mob-hidden' >
         <BoxText>
           <NameLink className='nunito-font' to={detail?detail.url:'/'}>
           {truncate(detail&&detail.ptitle, {

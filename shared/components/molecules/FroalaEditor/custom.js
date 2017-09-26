@@ -8,6 +8,7 @@ $.FroalaEditor.RegisterCommand('imageAlignCustom', {
 	options: {
 		left: 'Left',
 		center: 'Original',
+		medium: 'Medium',
 		right: 'Right',
 		full: 'Full'
 	},
@@ -16,6 +17,7 @@ $.FroalaEditor.RegisterCommand('imageAlignCustom', {
 
 		if (val === 'left') alignLeft(img)
 		else if (val === 'center') alignCenter(img)
+		else if (val === 'medium') alignCenterMedium(img)
 		else if (val === 'right') alignRight(img)
 		else if (val === 'full') alignFull(img)
 		this.popups.hide('image.edit')
@@ -35,6 +37,12 @@ function alignCenter(img) {
 	img.addClass('fr-image-center')
 }
 
+function alignCenterMedium(img) {
+	clearAlign(img)
+
+	img.addClass('fr-image-center-medium')
+}
+
 function alignRight(img) {
 	clearAlign(img)
 
@@ -50,6 +58,7 @@ function alignFull(img) {
 function clearAlign(img) {
 	img.removeClass('fr-image-left')
 	img.removeClass('fr-image-center')
+	img.removeClass('fr-image-center-medium')
 	img.removeClass('fr-image-right')
 	img.removeClass('fr-image-full')
 }

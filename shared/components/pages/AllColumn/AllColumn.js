@@ -247,10 +247,8 @@ class AllColumn extends React.Component {
                       onMouseLeave={() => this.onHover(-1)}
                     >
                       <BGImg
-                        src={
-                          data.cover.medium != `${config.BACKURL}/imgs/column_cover.png`
-                            ? data.cover.medium
-                            : null
+                        src={data.cover && data.cover.medium || '/pic/fbthumbnail.jpg'
+                          
                         }
                         className="imgWidth"
                         opacity={hover == index ? 0.4 : 0.3}

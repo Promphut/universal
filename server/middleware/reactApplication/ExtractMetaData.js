@@ -1,7 +1,7 @@
 import api from '../../../shared/services/api';
 import { FRONTURL, port, host, basename, ANALYTIC, COVER, amazonAccessKey, secretKey, PID } from '../../../shared/config.js'
 
-const ExtractMeta = (request,response,setting, url) => {
+const ExtractMeta = (setting, url) => {
 	let meta = {
 		name: '',
 		keywords: setting.publisher.keywords || '',
@@ -13,7 +13,8 @@ const ExtractMeta = (request,response,setting, url) => {
 		publisher: setting.publisher.name,
 		writer: setting.publisher.name,
 		datePublished: new Date(),
-		story:null
+		story:null,
+		color:setting.publisher.theme.primaryColor
 	}
 
 	if(setting.publisher.name)
@@ -28,7 +29,7 @@ const ExtractMeta = (request,response,setting, url) => {
 		.then(col => {
 			if(col.name) meta.name = col.name + ' | ' + setting.publisher.name
 			if(col.shortDesc) meta.desc = col.shortDesc
-			if(col.cover && col.cover.medium) meta.cover = col.cover.medium
+			if(col.cover && col.cover.medium) meta.cover = col.cover.medium || '/pic/fbthumbnail.jpg'
 			if(col.url) meta.url = col.url
 			return meta
 		}).catch((err)=>{return {status: 404}})
@@ -38,15 +39,21 @@ const ExtractMeta = (request,response,setting, url) => {
 				let sid = path[4]
 				return api.getStoryFromSid(sid)
 				.then(res => {
+					//console.log(res.story)
 					if(res.story.publisher._id!=setting.publisher._id) return {status: 404}
 					let s = res.story
-					if(s.ptitle) meta.name = s.ptitle + ' | ' + setting.publisher.name
-					if(s.contentShort) meta.desc = s.contentShort
-					if(s.cover) meta.cover = s.cover.large || s.cover.medium
+					if(s.meta) meta.name = s.meta.title + ' | ' + setting.publisher.name
+					if(s.meta) meta.desc = s.meta.desc
+					if(s.cover) meta.cover = s.cover.large || '/pic/fbthumbnail.jpg'
 					if(s.url) meta.url = s.url
 					if(s.writer) meta.writer = s.writer.display
 					if(s.published) meta.datePublished = s.published
+					if(s.tags){ s.tags.map((tag,ind)=>{
+							meta.keywords += ','+tag.name
+						})
+					}
 					meta.story = s 
+					// console.log(meta.keywords)
 					return meta
 				}).catch((err)=>{return {status: 404}})
 			}else return Promise.resolve(meta)

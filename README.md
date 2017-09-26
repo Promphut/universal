@@ -15,7 +15,7 @@
 # Staging Aommoney:
 - NODE_ENV=staging PORT=5500 npm run build
 - NODE_ENV=staging npm run start
-	e.g. on test server: NODE_ENV=staging PORT=5000 forever start -c 'npm run start' ./
+	e.g. on test server: NODE_ENV=staging PORT=5500 forever start -c 'npm run start' ./
 
 # Production:
 - NODE_ENV=production PORT=5000 npm run build

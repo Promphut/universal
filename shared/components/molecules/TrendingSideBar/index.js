@@ -90,7 +90,7 @@ const TrendingSideBarInner = ({ style, detail, index }) => {
 			<Con style={{ ...style }}>
 				<BGImg
 					url={detail.url}
-					src={cover.small || cover.medium}
+					src={cover && cover.medium || '/pic/fbthumbnail.jpg'}
 					style={{
 						maxWidth: '124px',
 						width: '124px',
