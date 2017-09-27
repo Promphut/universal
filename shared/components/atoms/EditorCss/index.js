@@ -403,7 +403,7 @@ const EditorCss = styled.div`
   
   .fr-image-center-medium {
     margin: auto !important;
-    max-width: 75%!important;
+    width: 75% !important;
     text-align: center !important;
   }
   

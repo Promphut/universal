@@ -144,8 +144,9 @@ class FroalaEditor extends React.Component {
 		let { froalaConfig } = this.state
 
 		if (
-			froalaConfig.imageUploadURL === undefined ||
-			this.props.sid !== nextProps.sid
+			nextProps.sid &&
+			(froalaConfig.imageUploadURL === undefined ||
+				this.props.sid !== nextProps.sid)
 		) {
 			froalaConfig.imageUploadURL = this.props.imgURL
 				? this.props.imgURL
@@ -168,13 +169,18 @@ class FroalaEditor extends React.Component {
 
 		return (
 			<div>
-			{ sid ? <Froala
-				tag="textarea"
-				config={this.props.highlight ? this.state.froalaConfigHighlight : newConfig}
-				model={this.props.model}
-				onModelChange={this.props.onModelChange}
-				/> : null
-			}
+				{newConfig.imageUploadURL !== undefined
+					? <Froala
+							tag="textarea"
+							config={
+								this.props.highlight
+									? this.state.froalaConfigHighlight
+									: newConfig
+							}
+							model={this.props.model}
+							onModelChange={this.props.onModelChange}
+						/>
+					: null}
 			</div>
 		)
 	}
