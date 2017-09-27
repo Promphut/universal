@@ -21,7 +21,7 @@ class FroalaEditor extends React.Component {
 		super(props)
 
 		this.state = {
-			froalaConfig = {
+			froalaConfig: {
 				charCounterCount: false,
 				imageEditButtons: [
 					'imageAlignCustom',
@@ -95,7 +95,11 @@ class FroalaEditor extends React.Component {
 				imageUploadParam: 'image',
 				imageMaxSize: 1024 * 1024 * 10,
 				events: {
-					'froalaEditor.paste.beforeCleanup': function(e, editor, clipboard_html) {
+					'froalaEditor.paste.beforeCleanup': function(
+						e,
+						editor,
+						clipboard_html
+					) {
 						var $html = $('<div>' + clipboard_html + '</div>')
 						var $span = $html.find('span')
 						$span.each(function(i, field) {
@@ -113,7 +117,7 @@ class FroalaEditor extends React.Component {
 					}
 				}
 			},
-			froalaConfigHighlight = {
+			froalaConfigHighlight: {
 				charCounterCount: false,
 				linkEditButtons: ['linkOpen', 'linkEdit', 'linkRemove'],
 				linkInsertButtons: ['linkBack'],
@@ -137,29 +141,41 @@ class FroalaEditor extends React.Component {
 	}
 
 	componentWillReceiveProps = nextProps => {
-		if (this.props.sid !== nextProps.sid) {
-			this.froalaConfig.imageUploadURL = this.props.imgURL
+		let { froalaConfig } = this.state
+
+		if (
+			froalaConfig.imageUploadURL === undefined ||
+			this.props.sid !== nextProps.sid
+		) {
+			froalaConfig.imageUploadURL = this.props.imgURL
 				? this.props.imgURL
 				: `${BACKURL}/stories/${nextProps.sid}/image`
+
+			this.setState({ froalaConfig })
 		}
 	}
 
-
 	render() {
-		var newConfig = this.froalaConfig
+		const { sid } = this.props
+
+		let newConfig = this.state.froalaConfig
 		newConfig.tableColors = [
 			this.context.setting.publisher.theme.secondaryColor,
 			this.context.setting.publisher.theme.accentColor,
 			'#EAEAEA',
 			'REMOVE'
 		]
+
 		return (
-			<Froala
+			<div>
+			{ sid ? <Froala
 				tag="textarea"
-				config={this.props.highlight ? this.froalaConfigHighlight : newConfig}
+				config={this.props.highlight ? this.state.froalaConfigHighlight : newConfig}
 				model={this.props.model}
 				onModelChange={this.props.onModelChange}
-			/>
+				/> : null
+			}
+			</div>
 		)
 	}
 }
