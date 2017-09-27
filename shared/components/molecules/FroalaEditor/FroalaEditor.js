@@ -23,6 +23,14 @@ class FroalaEditor extends React.Component {
 		this.state = {}
 	}
 
+	componentWillReceiveProps = nextProps => {
+		if (this.props.sid !== nextProps.sid) {
+			this.froalaConfig.imageUploadURL = this.props.imgURL
+				? this.props.imgURL
+				: `${BACKURL}/stories/${this.props.sid}/image`
+		}
+	}
+
 	froalaConfig = {
 		charCounterCount: false,
 		imageEditButtons: [
@@ -94,25 +102,24 @@ class FroalaEditor extends React.Component {
 		videoEditButtons: [],
 		videoInsertButtons: ['videoBack', '|', 'videoByURL', 'videoEmbed'],
 		videoResize: true,
-		imageUploadURL: this.props.imgURL
-			? this.props.imgURL
-			: `${BACKURL}/stories/${this.props.sid}/image`,
 		imageUploadParam: 'image',
 		imageMaxSize: 1024 * 1024 * 10,
-		events : {
-			'froalaEditor.paste.beforeCleanup': function (e, editor, clipboard_html) {
-				var $html = $('<div>'+ clipboard_html + '</div>');
-				var $span =  $html.find('span');
+		events: {
+			'froalaEditor.paste.beforeCleanup': function(e, editor, clipboard_html) {
+				var $html = $('<div>' + clipboard_html + '</div>')
+				var $span = $html.find('span')
 				$span.each(function(i, field) {
-					var style = field.style;
-					var s = style['font-weight']==700
-					var ul = style['text-decoration']=='underline'
-					var fs = style['font-style']=='italic'
-					$(field).html(`${s?'<strong>':''}${fs?'<em>':''}${ul?'<u>':''}${field.innerHTML}${ul?'</u>':''}${fs?'</em>':''}${s?'</strong>':''}`)
+					var style = field.style
+					var s = style['font-weight'] == 700
+					var ul = style['text-decoration'] == 'underline'
+					var fs = style['font-style'] == 'italic'
+					$(field).html(
+						`${s ? '<strong>' : ''}${fs ? '<em>' : ''}${ul ? '<u>' : ''}${field.innerHTML}${ul ? '</u>' : ''}${fs ? '</em>' : ''}${s ? '</strong>' : ''}`
+					)
 				})
 				var newHTML = $html.html()
 				// console.log(newHTML)
-				return newHTML;
+				return newHTML
 			}
 		}
 	}
