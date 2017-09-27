@@ -157,6 +157,8 @@ class FroalaEditor extends React.Component {
 	}
 
 	render() {
+		const { sid } = this.props
+
 		let newConfig = this.state.froalaConfig
 		newConfig.tableColors = [
 			this.context.setting.publisher.theme.secondaryColor,
