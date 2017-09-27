@@ -87,7 +87,7 @@ class EditorMain extends React.Component {
 	render() {
 		const { story, changeTitle, changeHighlight, changeHtml } = this.props
 		const { title, highlight, html, focusWord } = story
-		
+
 		return (
 			<Container>
 				<Title

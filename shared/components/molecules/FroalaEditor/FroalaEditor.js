@@ -140,6 +140,19 @@ class FroalaEditor extends React.Component {
 		}
 	}
 
+	componentDidMount = () => {
+		const { sid } = this.props
+		let { froalaConfig } = this.state
+
+		if (sid && froalaConfig.imageUploadURL === undefined) {
+			froalaConfig.imageUploadURL = this.props.imgURL
+				? this.props.imgURL
+				: `${BACKURL}/stories/${sid}/image`
+
+			this.setState({ froalaConfig })
+		}
+	}
+
 	componentWillReceiveProps = nextProps => {
 		let { froalaConfig } = this.state
 
