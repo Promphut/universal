@@ -5,19 +5,21 @@ import config from '../../config';
 
 const cspConfig = {
   directives: {
-    childSrc: ["'self'"],
+    childSrc: ["'self'", "*"],
     // Note: Setting this to stricter than * breaks the service worker. :(
     // I can't figure out how to get around this, so if you know of a safer
     // implementation that is kinder to service workers please let me know.
     connectSrc: ['*'], // ["'self'", 'ws:'],
-    defaultSrc: ["'self'"],
+    defaultSrc: ["*"],
     imgSrc: [
       "'self'",
       // If you use Base64 encoded images (i.e. inlined images), then you will
       // need the following:
-      // 'data:',
+      'blob:',
+      'data: https:',
+      'data: http:',
     ],
-    fontSrc: ["'self'", 'data:'],
+    fontSrc: ["'self'", 'data: https:'],
     objectSrc: ["'self'"],
     mediaSrc: ["'self'"],
     manifestSrc: ["'self'"],
@@ -29,17 +31,20 @@ const cspConfig = {
       // This is useful for guarding your application whilst allowing an inline
       // script to do data store rehydration (redux/mobx/apollo) for example.
       // @see https://helmetjs.github.io/docs/csp/
-      (req, res) => `'nonce-${res.locals.nonce}'`,
+      // (req, res) => `'nonce-${res.locals.nonce}'`,
       // This is a know workaround for browsers that don't support nonces.
       // It will be ignored by browsers that do support nonces as they will
       // recognise that we have also provided a nonce configuration and
       // use the stricter rule.
       "'unsafe-inline'",
+      "'unsafe-eval'",
+      "*"
     ],
     styleSrc: [
       "'self'",
       // Webpack generates JS that loads our CSS, so this is needed:
       "'unsafe-inline'",
+      "*",
       'blob:',
     ],
   },
@@ -86,7 +91,7 @@ const securityMiddleware = [
 
   // Frameguard mitigates clickjacking attacks by setting the X-Frame-Options header.
   // @see https://helmetjs.github.io/docs/frameguard/
-  helmet.frameguard('deny'),
+  helmet.frameguard({ action: 'sameorigin' }),
 
   // Sets the X-Download-Options to prevent Internet Explorer from executing
   // downloads in your site’s context.

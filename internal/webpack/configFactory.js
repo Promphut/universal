@@ -5,6 +5,7 @@ import nodeExternals from 'webpack-node-externals';
 import path from 'path';
 import webpack from 'webpack';
 import WebpackMd5Hash from 'webpack-md5-hash';
+import fs from 'fs';
 
 import { happyPackPlugin } from '../utils';
 import { ifElse } from '../../shared/utils/logic';
@@ -60,6 +61,8 @@ export default function webpackConfigFactory(buildOptions) {
   if (!bundleConfig) {
     throw new Error('No bundle configuration exists for target:', target);
   }
+
+  const localIdentName = ifDev('[name]_[local]_[hash:base64:5]', '[hash:base64:10]');
 
   let webpackConfig = {
     // Define our entry chunks for our bundle.
@@ -204,7 +207,24 @@ export default function webpackConfigFactory(buildOptions) {
       ),
     ]),
 
+    devServer: ifDevClient({
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+      port: config('clientDevServerPort'),
+      https: {
+        key: fs.readFileSync('./private/keys/localhost.key'),
+        cert: fs.readFileSync('./private/keys/localhost.crt'),
+        passphrase: 'thepublisher',
+      },
+    }),
     plugins: removeNil([
+      ifClient(() => 
+        new webpack.ProvidePlugin({
+          $: "jquery",
+          jQuery: "jquery"
+        })
+      ),
       // This grants us source map support, which combined with our webpack
       // source maps will give us nice stack traces for our node executed
       // bundles.
@@ -370,15 +390,17 @@ export default function webpackConfigFactory(buildOptions) {
                 presets: [
                   // JSX
                   'react',
+                  'es2015',
                   // Stage 3 javascript syntax.
                   // "Candidate: complete spec and initial browser implementations."
                   // Add anything lower than stage 3 at your own risk. :)
+                  'stage-2',
                   'stage-3',
                   // For our client bundles we transpile all the latest ratified
                   // ES201X code into ES5, safe for browsers.  We exclude module
                   // transilation as webpack takes care of this for us, doing
                   // tree shaking in the process.
-                  ifClient(['env', { es2015: { modules: false } }]),
+                  // ifClient(['env', { es2015: { modules: true } }]),
                   // For a node bundle we use the specific target against
                   // babel-preset-env so that only the unsupported features of
                   // our target node version gets transpiled.
@@ -394,6 +416,8 @@ export default function webpackConfigFactory(buildOptions) {
                   // Adding this will give us the path to our components in the
                   // react dev tools.
                   ifDev('transform-react-jsx-source'),
+
+                  ifProd('transform-react-remove-prop-types'),
                   // Replaces the React.createElement function with one that is
                   // more optimized for production.
                   // NOTE: Symbol needs to be polyfilled. Ensure this feature
@@ -418,12 +442,29 @@ export default function webpackConfigFactory(buildOptions) {
         happyPackPlugin({
           name: 'happypack-devclient-css',
           loaders: [
+            'classnames-loader',
             'style-loader',
-            {
-              path: 'css-loader',
-              // Include sourcemaps for dev experience++.
-              query: { sourceMap: true },
-            },
+            'css-loader',
+            'postcss-loader',
+            'sass-loader'
+            // {
+            //   path: 'css-loader',
+            //   // Include sourcemaps for dev experience++.
+            //   query: {
+            //     sourceMap: true,
+            //     modules: true,
+            //     importLoaders: 1,
+            //     localIdentName,
+            //   },
+            // },
+            // { path: 'postcss-loader' },
+            // {
+            //   path: 'sass-loader',
+            //   options: {
+            //     outputStyle: 'expanded',
+            //     sourceMap: true,
+            //   },
+            // },
           ],
         }),
       ),
@@ -460,9 +501,7 @@ export default function webpackConfigFactory(buildOptions) {
             // server.
             ifElse(isClient || isServer)(
               mergeDeep(
-                {
-                  test: /\.css$/,
-                },
+                { test: /(\.scss|\.css)$/ },
                 // For development clients we will defer all our css processing to the
                 // happypack plugin named "happypack-devclient-css".
                 // See the respective plugin within the plugins section for full
@@ -477,15 +516,27 @@ export default function webpackConfigFactory(buildOptions) {
                 // Note: The ExtractTextPlugin needs to be registered within the
                 // plugins section too.
                 ifProdClient(() => ({
-                  loader: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: ['css-loader'],
-                  }),
+                  use: [
+                    'classnames-loader',
+                    ...ExtractTextPlugin.extract({
+                      fallback: 'style-loader',
+                      use: [
+                        `css-loader`,
+                        'postcss-loader',
+                        'sass-loader',
+                      ],
+                    }),
+                  ],
                 })),
                 // When targetting the server we use the "/locals" version of the
                 // css loader, as we don't need any css files for the server.
                 ifNode({
-                  loaders: ['css-loader/locals'],
+                  use: [
+                    'classnames-loader',
+                    `css-loader/locals?modules=1&sourceMap&importLoaders=1&localIdentName=${localIdentName}`,
+                    'postcss-loader',
+                    'sass-loader?outputStyle=expanded&sourceMap',
+                  ],
                 }),
               ),
             ),
